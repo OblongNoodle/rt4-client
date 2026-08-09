@@ -9,72 +9,72 @@ import org.openrs2.deob.annotation.Pc;
 public final class ShapedTile {
 
 	@OriginalMember(owner = "client!fg", name = "i", descriptor = "[[I")
-	public static final int[][] anIntArrayArray12 = new int[][]{{1, 3, 5, 7}, {1, 3, 5, 7}, {1, 3, 5, 7}, {1, 3, 5, 7, 6}, {1, 3, 5, 7, 6}, {1, 3, 5, 7, 6}, {1, 3, 5, 7, 6}, {1, 3, 5, 7, 2, 6}, {1, 3, 5, 7, 2, 8}, {1, 3, 5, 7, 2, 8}, {1, 3, 5, 7, 11, 12}, {1, 3, 5, 7, 11, 12}, {1, 3, 5, 7, 13, 14}};
+	public static final int[][] VERTEX_INDICES = new int[][]{{1, 3, 5, 7}, {1, 3, 5, 7}, {1, 3, 5, 7}, {1, 3, 5, 7, 6}, {1, 3, 5, 7, 6}, {1, 3, 5, 7, 6}, {1, 3, 5, 7, 6}, {1, 3, 5, 7, 2, 6}, {1, 3, 5, 7, 2, 8}, {1, 3, 5, 7, 2, 8}, {1, 3, 5, 7, 11, 12}, {1, 3, 5, 7, 11, 12}, {1, 3, 5, 7, 13, 14}};
 	@OriginalMember(owner = "client!fg", name = "j", descriptor = "[[I")
-	public static final int[][] anIntArrayArray13 = new int[][]{{0, 1, 2, 3, 0, 0, 1, 3}, {1, 1, 2, 3, 1, 0, 1, 3}, {0, 1, 2, 3, 1, 0, 1, 3}, {0, 0, 1, 2, 0, 0, 2, 4, 1, 0, 4, 3}, {0, 0, 1, 4, 0, 0, 4, 3, 1, 1, 2, 4}, {0, 0, 4, 3, 1, 0, 1, 2, 1, 0, 2, 4}, {0, 1, 2, 4, 1, 0, 1, 4, 1, 0, 4, 3}, {0, 4, 1, 2, 0, 4, 2, 5, 1, 0, 4, 5, 1, 0, 5, 3}, {0, 4, 1, 2, 0, 4, 2, 3, 0, 4, 3, 5, 1, 0, 4, 5}, {0, 0, 4, 5, 1, 4, 1, 2, 1, 4, 2, 3, 1, 4, 3, 5}, {0, 0, 1, 5, 0, 1, 4, 5, 0, 1, 2, 4, 1, 0, 5, 3, 1, 5, 4, 3, 1, 4, 2, 3}, {1, 0, 1, 5, 1, 1, 4, 5, 1, 1, 2, 4, 0, 0, 5, 3, 0, 5, 4, 3, 0, 4, 2, 3}, {1, 0, 5, 4, 1, 0, 1, 5, 0, 0, 4, 3, 0, 4, 5, 3, 0, 5, 2, 3, 0, 1, 2, 5}};
+	public static final int[][] TRIANGLE_INDICES = new int[][]{{0, 1, 2, 3, 0, 0, 1, 3}, {1, 1, 2, 3, 1, 0, 1, 3}, {0, 1, 2, 3, 1, 0, 1, 3}, {0, 0, 1, 2, 0, 0, 2, 4, 1, 0, 4, 3}, {0, 0, 1, 4, 0, 0, 4, 3, 1, 1, 2, 4}, {0, 0, 4, 3, 1, 0, 1, 2, 1, 0, 2, 4}, {0, 1, 2, 4, 1, 0, 1, 4, 1, 0, 4, 3}, {0, 4, 1, 2, 0, 4, 2, 5, 1, 0, 4, 5, 1, 0, 5, 3}, {0, 4, 1, 2, 0, 4, 2, 3, 0, 4, 3, 5, 1, 0, 4, 5}, {0, 0, 4, 5, 1, 4, 1, 2, 1, 4, 2, 3, 1, 4, 3, 5}, {0, 0, 1, 5, 0, 1, 4, 5, 0, 1, 2, 4, 1, 0, 5, 3, 1, 5, 4, 3, 1, 4, 2, 3}, {1, 0, 1, 5, 1, 1, 4, 5, 1, 1, 2, 4, 0, 0, 5, 3, 0, 5, 4, 3, 0, 4, 2, 3}, {1, 0, 5, 4, 1, 0, 1, 5, 0, 0, 4, 3, 0, 4, 5, 3, 0, 5, 2, 3, 0, 1, 2, 5}};
 	@OriginalMember(owner = "client!fg", name = "s", descriptor = "Z")
-	public boolean aBoolean113 = true;
+	public boolean flat = true;
 
 	@OriginalMember(owner = "client!fg", name = "a", descriptor = "I")
-	public final int anInt1966;
+	public final int shape;
 
 	@OriginalMember(owner = "client!fg", name = "b", descriptor = "I")
-	public final int anInt1967;
+	public final int rotation;
 
 	@OriginalMember(owner = "client!fg", name = "p", descriptor = "I")
-	public final int anInt1969;
+	public final int textureId;
 
 	@OriginalMember(owner = "client!fg", name = "k", descriptor = "I")
-	public final int anInt1968;
+	public final int flatColor;
 
 	@OriginalMember(owner = "client!fg", name = "q", descriptor = "[I")
-	public final int[] anIntArray168;
+	public final int[] vertexX;
 
 	@OriginalMember(owner = "client!fg", name = "e", descriptor = "[I")
-	public final int[] anIntArray160;
+	public final int[] vertexY;
 
 	@OriginalMember(owner = "client!fg", name = "h", descriptor = "[I")
-	public final int[] anIntArray163;
+	public final int[] vertexZ;
 
 	@OriginalMember(owner = "client!fg", name = "n", descriptor = "[I")
-	public final int[] anIntArray166;
+	public final int[] triangleVertexA;
 
 	@OriginalMember(owner = "client!fg", name = "g", descriptor = "[I")
-	public final int[] anIntArray162;
+	public final int[] triangleVertexB;
 
 	@OriginalMember(owner = "client!fg", name = "c", descriptor = "[I")
-	public final int[] anIntArray158;
+	public final int[] triangleVertexC;
 
 	@OriginalMember(owner = "client!fg", name = "o", descriptor = "[I")
-	public final int[] anIntArray167;
+	public final int[] triangleColorA;
 
 	@OriginalMember(owner = "client!fg", name = "v", descriptor = "[I")
-	public final int[] anIntArray172;
+	public final int[] triangleColorB;
 
 	@OriginalMember(owner = "client!fg", name = "u", descriptor = "[I")
-	public final int[] anIntArray171;
+	public final int[] triangleColorC;
 
 	@OriginalMember(owner = "client!fg", name = "f", descriptor = "[I")
-	public int[] anIntArray161;
+	public int[] triangleTextureId;
 
 	@OriginalMember(owner = "client!fg", name = "<init>", descriptor = "(IIIIIIIIIIIIIIIIIII)V")
 	public ShapedTile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12, @OriginalArg(13) int arg13, @OriginalArg(14) int arg14, @OriginalArg(15) int arg15, @OriginalArg(16) int arg16, @OriginalArg(17) int arg17, @OriginalArg(18) int arg18) {
 		if (arg5 != arg6 || arg5 != arg7 || arg5 != arg8) {
-			this.aBoolean113 = false;
+			this.flat = false;
 		}
-		this.anInt1966 = arg0;
-		this.anInt1967 = arg1;
-		this.anInt1969 = arg17;
-		this.anInt1968 = arg18;
+		this.shape = arg0;
+		this.rotation = arg1;
+		this.textureId = arg17;
+		this.flatColor = arg18;
 		@Pc(30) short local30 = 128;
 		@Pc(34) int local34 = local30 / 2;
 		@Pc(38) int local38 = local30 / 4;
 		@Pc(44) int local44 = local30 * 3 / 4;
-		@Pc(48) int[] local48 = anIntArrayArray12[arg0];
+		@Pc(48) int[] local48 = VERTEX_INDICES[arg0];
 		@Pc(51) int local51 = local48.length;
-		this.anIntArray168 = new int[local51];
-		this.anIntArray160 = new int[local51];
-		this.anIntArray163 = new int[local51];
+		this.vertexX = new int[local51];
+		this.vertexY = new int[local51];
+		this.vertexZ = new int[local51];
 		@Pc(66) int[] local66 = new int[local51];
 		@Pc(69) int[] local69 = new int[local51];
 		@Pc(73) int local73 = arg3 * local30;
@@ -193,22 +193,22 @@ public final class ShapedTile {
 				local148 = arg12;
 				local150 = arg16;
 			}
-			this.anIntArray168[local79] = local142;
-			this.anIntArray160[local79] = local146;
-			this.anIntArray163[local79] = local144;
+			this.vertexX[local79] = local142;
+			this.vertexY[local79] = local146;
+			this.vertexZ[local79] = local144;
 			local66[local79] = local148;
 			local69[local79] = local150;
 		}
-		@Pc(534) int[] local534 = anIntArrayArray13[arg0];
+		@Pc(534) int[] local534 = TRIANGLE_INDICES[arg0];
 		local86 = local534.length / 4;
-		this.anIntArray166 = new int[local86];
-		this.anIntArray162 = new int[local86];
-		this.anIntArray158 = new int[local86];
-		this.anIntArray167 = new int[local86];
-		this.anIntArray172 = new int[local86];
-		this.anIntArray171 = new int[local86];
+		this.triangleVertexA = new int[local86];
+		this.triangleVertexB = new int[local86];
+		this.triangleVertexC = new int[local86];
+		this.triangleColorA = new int[local86];
+		this.triangleColorB = new int[local86];
+		this.triangleColorC = new int[local86];
 		if (arg2 != -1) {
-			this.anIntArray161 = new int[local86];
+			this.triangleTextureId = new int[local86];
 		}
 		local142 = 0;
 		for (local144 = 0; local144 < local86; local144++) {
@@ -226,22 +226,22 @@ public final class ShapedTile {
 			if (local599 < 4) {
 				local599 = local599 - arg1 & 0x3;
 			}
-			this.anIntArray166[local144] = local148;
-			this.anIntArray162[local144] = local150;
-			this.anIntArray158[local144] = local599;
+			this.triangleVertexA[local144] = local148;
+			this.triangleVertexB[local144] = local150;
+			this.triangleVertexC[local144] = local599;
 			if (local146 == 0) {
-				this.anIntArray167[local144] = local66[local148];
-				this.anIntArray172[local144] = local66[local150];
-				this.anIntArray171[local144] = local66[local599];
-				if (this.anIntArray161 != null) {
-					this.anIntArray161[local144] = -1;
+				this.triangleColorA[local144] = local66[local148];
+				this.triangleColorB[local144] = local66[local150];
+				this.triangleColorC[local144] = local66[local599];
+				if (this.triangleTextureId != null) {
+					this.triangleTextureId[local144] = -1;
 				}
 			} else {
-				this.anIntArray167[local144] = local69[local148];
-				this.anIntArray172[local144] = local69[local150];
-				this.anIntArray171[local144] = local69[local599];
-				if (this.anIntArray161 != null) {
-					this.anIntArray161[local144] = arg2;
+				this.triangleColorA[local144] = local69[local148];
+				this.triangleColorB[local144] = local69[local150];
+				this.triangleColorC[local144] = local69[local599];
+				if (this.triangleTextureId != null) {
+					this.triangleTextureId[local144] = arg2;
 				}
 			}
 		}

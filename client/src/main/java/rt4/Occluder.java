@@ -6,76 +6,76 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!pe")
-public final class SceneGraph_Class120 {
+public final class Occluder {
 
 	@OriginalMember(owner = "client!pe", name = "b", descriptor = "I")
-	public int anInt4444;
+	public int minY;
 
 	@OriginalMember(owner = "client!pe", name = "c", descriptor = "I")
-	public int anInt4445;
+	public int maxX;
 
 	@OriginalMember(owner = "client!pe", name = "e", descriptor = "I")
-	public int anInt4446;
+	public int maxTileX;
 
 	@OriginalMember(owner = "client!pe", name = "f", descriptor = "I")
-	public int anInt4447;
+	public int maxY;
 
 	@OriginalMember(owner = "client!pe", name = "g", descriptor = "I")
-	public int anInt4448;
+	public int farXSlope;
 
 	@OriginalMember(owner = "client!pe", name = "h", descriptor = "I")
-	public int anInt4449;
+	public int maxZ;
 
 	@OriginalMember(owner = "client!pe", name = "i", descriptor = "I")
-	public int anInt4450;
+	public int farZSlope;
 
 	@OriginalMember(owner = "client!pe", name = "k", descriptor = "I")
-	public int anInt4452;
+	public int minTileX;
 
 	@OriginalMember(owner = "client!pe", name = "l", descriptor = "I")
-	public int anInt4453;
+	public int nearZSlope;
 
 	@OriginalMember(owner = "client!pe", name = "m", descriptor = "I")
-	public int anInt4454;
+	public int type;
 
 	@OriginalMember(owner = "client!pe", name = "p", descriptor = "I")
-	public int anInt4456;
+	public int nearXSlope;
 
 	@OriginalMember(owner = "client!pe", name = "s", descriptor = "I")
-	public int anInt4458;
+	public int minZ;
 
 	@OriginalMember(owner = "client!pe", name = "t", descriptor = "I")
-	public int anInt4459;
+	public int nearYSlope;
 
 	@OriginalMember(owner = "client!pe", name = "u", descriptor = "I")
-	public int anInt4460;
+	public int minX;
 
 	@OriginalMember(owner = "client!pe", name = "v", descriptor = "I")
-	public int anInt4461;
+	public int minTileZ;
 
 	@OriginalMember(owner = "client!pe", name = "w", descriptor = "I")
-	public int anInt4462;
+	public int direction;
 
 	@OriginalMember(owner = "client!pe", name = "x", descriptor = "I")
-	public int anInt4463;
+	public int farYSlope;
 
 	@OriginalMember(owner = "client!pe", name = "y", descriptor = "I")
-	public int anInt4464;
+	public int maxTileZ;
 
 	@OriginalMember(owner = "client!wj", name = "a", descriptor = "(IIIIIII)V")
-	public static void method4647(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		@Pc(3) SceneGraph_Class120 local3 = new SceneGraph_Class120();
-		local3.anInt4452 = arg1 / 128;
-		local3.anInt4446 = arg2 / 128;
-		local3.anInt4461 = arg3 / 128;
-		local3.anInt4464 = arg4 / 128;
-		local3.anInt4453 = arg0;
-		local3.anInt4460 = arg1;
-		local3.anInt4445 = arg2;
-		local3.anInt4458 = arg3;
-		local3.anInt4449 = arg4;
-		local3.anInt4444 = arg5;
-		local3.anInt4447 = arg6;
-		SceneGraph.aClass120Array1[SceneGraph.anInt917++] = local3;
+	public static void add(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+		@Pc(3) Occluder local3 = new Occluder();
+		local3.minTileX = arg1 / 128;
+		local3.maxTileX = arg2 / 128;
+		local3.minTileZ = arg3 / 128;
+		local3.maxTileZ = arg4 / 128;
+		local3.type = arg0;
+		local3.minX = arg1;
+		local3.maxX = arg2;
+		local3.minZ = arg3;
+		local3.maxZ = arg4;
+		local3.minY = arg5;
+		local3.maxY = arg6;
+		SceneGraph.occluders[SceneGraph.occluderCount++] = local3;
 	}
 }

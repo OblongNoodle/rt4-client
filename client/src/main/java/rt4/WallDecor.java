@@ -7,7 +7,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class WallDecor {
 
 	@OriginalMember(owner = "client!df", name = "a", descriptor = "I")
-	public int anInt1388;
+	public int yFine;
 
 	@OriginalMember(owner = "client!df", name = "d", descriptor = "Lclient!th;")
 	public Entity secondary;
@@ -16,7 +16,7 @@ public final class WallDecor {
 	public int xFine;
 
 	@OriginalMember(owner = "client!df", name = "f", descriptor = "I")
-	public int anInt1391;
+	public int orientation;
 
 	@OriginalMember(owner = "client!df", name = "g", descriptor = "I")
 	public int zOffset;
@@ -31,7 +31,7 @@ public final class WallDecor {
 	public int xOffset;
 
 	@OriginalMember(owner = "client!df", name = "m", descriptor = "I")
-	public int anInt1395;
+	public int flags;
 
 	@OriginalMember(owner = "client!df", name = "i", descriptor = "J")
 	public long key = 0L;

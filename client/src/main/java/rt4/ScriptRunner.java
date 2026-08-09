@@ -1099,18 +1099,18 @@ public final class ScriptRunner {
 						if (local130 && arg3[local150][local108][local122] != null) {
 							if (arg3[local150][local108][local122].wall != null) {
 								local191 = SceneGraph.method2251(local94);
-								if (arg3[local150][local108][local122].wall.anInt3049 == local191 || arg3[local150][local108][local122].wall.anInt3052 == local191) {
+								if (arg3[local150][local108][local122].wall.primaryFlags == local191 || arg3[local150][local108][local122].wall.secondaryFlags == local191) {
 									continue;
 								}
 								if (local102 != 0) {
 									local227 = SceneGraph.method2251(local102);
-									if (local227 == arg3[local150][local108][local122].wall.anInt3049 || arg3[local150][local108][local122].wall.anInt3052 == local227) {
+									if (local227 == arg3[local150][local108][local122].wall.primaryFlags || arg3[local150][local108][local122].wall.secondaryFlags == local227) {
 										continue;
 									}
 								}
 								if (local116 != 0) {
 									local227 = SceneGraph.method2251(local116);
-									if (local227 == arg3[local150][local108][local122].wall.anInt3049 || local227 == arg3[local150][local108][local122].wall.anInt3052) {
+									if (local227 == arg3[local150][local108][local122].wall.primaryFlags || local227 == arg3[local150][local108][local122].wall.secondaryFlags) {
 										continue;
 									}
 								}

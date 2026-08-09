@@ -53,7 +53,7 @@ public class MiniMap {
 		@Pc(13) PlainTile local13 = local7.plainTile;
 		@Pc(23) int local23;
 		if (local13 != null) {
-			@Pc(18) int local18 = local13.anInt4871;
+			@Pc(18) int local18 = local13.flatColor;
 			if (local18 != 0) {
 				for (local23 = 0; local23 < 4; local23++) {
 					pixels[index] = local18;
@@ -69,10 +69,10 @@ public class MiniMap {
 		if (local58 == null) {
 			return;
 		}
-		local23 = local58.anInt1966;
-		@Pc(67) int local67 = local58.anInt1967;
-		@Pc(70) int local70 = local58.anInt1969;
-		@Pc(73) int local73 = local58.anInt1968;
+		local23 = local58.shape;
+		@Pc(67) int local67 = local58.rotation;
+		@Pc(70) int local70 = local58.textureId;
+		@Pc(73) int local73 = local58.flatColor;
 		@Pc(77) int[] local77 = anIntArrayArray24[local23];
 		@Pc(81) int[] local81 = anIntArrayArray46[local67];
 		@Pc(83) int local83 = 0;

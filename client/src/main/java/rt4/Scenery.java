@@ -16,22 +16,22 @@ public final class Scenery {
 	public int zMax;
 
 	@OriginalMember(owner = "client!ec", name = "f", descriptor = "I")
-	public int anInt1699;
+	public int xFine;
 
 	@OriginalMember(owner = "client!ec", name = "h", descriptor = "I")
 	public int xMin;
 
 	@OriginalMember(owner = "client!ec", name = "j", descriptor = "I")
-	public int anInt1703;
+	public int zFine;
 
 	@OriginalMember(owner = "client!ec", name = "m", descriptor = "I")
-	public int anInt1705;
+	public int drawPriority;
 
 	@OriginalMember(owner = "client!ec", name = "o", descriptor = "I")
-	public int anInt1706;
+	public int yFine;
 
 	@OriginalMember(owner = "client!ec", name = "p", descriptor = "I")
-	public int anInt1707;
+	public int drawCycle;
 
 	@OriginalMember(owner = "client!ec", name = "s", descriptor = "I")
 	public int level;
@@ -40,7 +40,7 @@ public final class Scenery {
 	public int xMax;
 
 	@OriginalMember(owner = "client!ec", name = "x", descriptor = "I")
-	public int anInt1714;
+	public int orientation;
 
 	@OriginalMember(owner = "client!ec", name = "A", descriptor = "J")
 	public long key = 0L;
