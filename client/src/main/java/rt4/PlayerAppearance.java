@@ -244,7 +244,7 @@ public final class PlayerAppearance {
 	}
 
 	@OriginalMember(owner = "client!hh", name = "a", descriptor = "([Lclient!ub;ILclient!tk;Lclient!tk;IIIIZII)Lclient!ak;")
-	public final Model method1954(@OriginalArg(0) PathingEntity_Class147[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) SeqType arg2, @OriginalArg(3) SeqType arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(9) int arg7, @OriginalArg(10) int arg8) {
+	public final Model method1954(@OriginalArg(0) SlotAnimation[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) SeqType arg2, @OriginalArg(3) SeqType arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(9) int arg7, @OriginalArg(10) int arg8) {
 		if (this.npcId != -1) {
 			return NpcTypeList.get(this.npcId).getBodyModel(arg0, arg5, arg8, arg1, arg6, arg7, arg2, arg4, arg3);
 		}
@@ -409,12 +409,12 @@ public final class PlayerAppearance {
 		@Pc(979) int local979;
 		for (local353 = 0; local353 < local346; local353++) {
 			if (arg0[local353] != null) {
-				@Pc(858) SeqType local858 = SeqTypeList.get(arg0[local353].anInt5396);
+				@Pc(858) SeqType local858 = SeqTypeList.get(arg0[local353].seqId);
 				if (local858.frames != null) {
 					local158 = true;
 					aClass144Array2[local353] = local858;
-					local374 = arg0[local353].anInt5399;
-					local367 = arg0[local353].anInt5398;
+					local374 = arg0[local353].currentFrame;
+					local367 = arg0[local353].nextFrame;
 					local381 = local858.frames[local374];
 					aClass3_Sub2_Sub7Array8[local353] = SeqTypeList.getAnimFrameset(local381 >>> 16);
 					local381 &= 0xFFFF;
@@ -426,7 +426,7 @@ public final class PlayerAppearance {
 					}
 					if ((local858.tween || SeqType.applyTweening) && local367 != -1 && local367 < local858.frames.length) {
 						anIntArray515[local353] = local858.frameDelay[local374];
-						anIntArray183[local353] = arg0[local353].anInt5404;
+						anIntArray183[local353] = arg0[local353].delayClock;
 						local979 = local858.frames[local367];
 						aClass3_Sub2_Sub7Array7[local353] = SeqTypeList.getAnimFrameset(local979 >>> 16);
 						@Pc(991) int local991 = local979 & 0xFFFF;

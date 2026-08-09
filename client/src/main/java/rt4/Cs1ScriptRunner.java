@@ -1234,10 +1234,10 @@ public class Cs1ScriptRunner {
 				arg0.modelYAngle = (int) (Math.sin((double) client.loop / 40.0D) * 256.0D) & 0x7FF;
 				arg0.modelType = 5;
 				arg0.modelId = ((int) PlayerList.self.username.encode37() << 11) + 2047;
-				arg0.anInt496 = PlayerList.self.anInt3388;
+				arg0.anInt496 = PlayerList.self.movementSeqNextFrame;
 				arg0.anInt500 = 0;
 				arg0.modelSeqId = PlayerList.self.movementSeqId;
-				arg0.anInt510 = PlayerList.self.anInt3407;
+				arg0.anInt510 = PlayerList.self.movementSeqFrame;
 			}
 		}
 	}

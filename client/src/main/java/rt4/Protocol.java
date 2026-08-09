@@ -345,8 +345,8 @@ public class Protocol {
 							local1188 = local1232.modelRotateTranslate[local1194][0];
 							local224 -= local1232.modelRotateTranslate[local1194][1];
 							@Pc(1264) int local1264 = local1232.modelRotateTranslate[local1194][2];
-							@Pc(1269) int local1269 = MathUtils.sin[local1198.anInt3381];
-							@Pc(1274) int local1274 = MathUtils.cos[local1198.anInt3381];
+							@Pc(1269) int local1269 = MathUtils.sin[local1198.currentAngle];
+							@Pc(1274) int local1274 = MathUtils.cos[local1198.currentAngle];
 							@Pc(1284) int local1284 = local1188 * local1274 + local1264 * local1269 >> 16;
 							@Pc(1295) int local1295 = local1274 * local1264 - local1188 * local1269 >> 16;
 							local19 += local1295;
@@ -631,7 +631,7 @@ public class Protocol {
 			player.forceMoveCyclesToDest = inboundBuffer.ig2() + client.loop;
 			player.forceMoveDirection = inboundBuffer.g1neg();
 			player.movementQueueSize = 1;
-			player.anInt3405 = 0;
+			player.seqMovementSteps = 0;
 		}
 		if ((flags & 0x20) != 0) {
 			player.chatMessage = inboundBuffer.gjstr();
@@ -675,14 +675,14 @@ public class Protocol {
 			@Pc(573) boolean local573 = int1 == -1 || player.spotAnimId == -1 || SeqTypeList.get(SpotAnimTypeList.get(int1).seqId).priority >= SeqTypeList.get(SpotAnimTypeList.get(player.spotAnimId).seqId).priority;
 			if (local573) {
 				player.spotAnimStart = (int2 & 0xFFFF) + client.loop;
-				player.anInt3361 = 0;
-				player.anInt3399 = 0;
+				player.spotAnimDelayClock = 0;
+				player.spotAnimFrame = 0;
 				player.spotAnimId = int1;
 				if (player.spotAnimStart > client.loop) {
-					player.anInt3399 = -1;
+					player.spotAnimFrame = -1;
 				}
 				player.spotAnimY = int2 >> 16;
-				player.anInt3418 = 1;
+				player.spotAnimNextFrame = 1;
 				if (player.spotAnimId != -1 && client.loop == player.spotAnimStart) {
 					local24 = SpotAnimTypeList.get(player.spotAnimId).seqId;
 					if (local24 != -1) {
@@ -865,7 +865,7 @@ public class Protocol {
 						local92 -= 32;
 					}
 					if (local27) {
-						local65.anInt3400 = local65.anInt3381 = local99;
+						local65.targetAngle = local65.currentAngle = local99;
 					}
 					@Pc(116) int local116 = inboundBuffer.gBits(1);
 					@Pc(121) int local121 = inboundBuffer.gBits(5);
@@ -1370,15 +1370,15 @@ public class Protocol {
 						}
 						boolean animated = gfxId == -1 || npc.spotAnimId == -1 || SeqTypeList.get(SpotAnimTypeList.get(gfxId).seqId).priority >= SeqTypeList.get(SpotAnimTypeList.get(npc.spotAnimId).seqId).priority;
 						if (animated) {
-							npc.anInt3361 = 0;
+							npc.spotAnimDelayClock = 0;
 							npc.spotAnimId = gfxId;
 							npc.spotAnimStart = client.loop + delay;
-							npc.anInt3399 = 0;
+							npc.spotAnimFrame = 0;
 							if (npc.spotAnimStart > client.loop) {
-								npc.anInt3399 = -1;
+								npc.spotAnimFrame = -1;
 							}
 							npc.spotAnimY = height;
-							npc.anInt3418 = 1;
+							npc.spotAnimNextFrame = 1;
 							if (npc.spotAnimId != -1 && client.loop == npc.spotAnimStart) {
 								int seqId = SpotAnimTypeList.get(npc.spotAnimId).seqId;
 								if (seqId != -1) {
@@ -1407,11 +1407,11 @@ public class Protocol {
 							player.spotAnimStart = delay + client.loop;
 							player.spotAnimY = height;
 							player.spotAnimId = gfxId;
-							player.anInt3418 = 1;
-							player.anInt3361 = 0;
-							player.anInt3399 = 0;
+							player.spotAnimNextFrame = 1;
+							player.spotAnimDelayClock = 0;
+							player.spotAnimFrame = 0;
 							if (player.spotAnimStart > client.loop) {
-								player.anInt3399 = -1;
+								player.spotAnimFrame = -1;
 							}
 							if (player.spotAnimId != -1 && player.spotAnimStart == client.loop) {
 								int seqId = SpotAnimTypeList.get(player.spotAnimId).seqId;
@@ -3067,12 +3067,12 @@ public class Protocol {
 				if (local147) {
 					npc.spotAnimId = local43;
 					npc.spotAnimStart = (local47 & 0xFFFF) + client.loop;
-					npc.anInt3361 = 0;
-					npc.anInt3399 = 0;
+					npc.spotAnimDelayClock = 0;
+					npc.spotAnimFrame = 0;
 					npc.spotAnimY = local47 >> 16;
-					npc.anInt3418 = 1;
+					npc.spotAnimNextFrame = 1;
 					if (npc.spotAnimStart > client.loop) {
-						npc.anInt3399 = -1;
+						npc.spotAnimFrame = -1;
 					}
 					if (npc.spotAnimId != -1 && npc.spotAnimStart == client.loop) {
 						@Pc(227) int seqId = SpotAnimTypeList.get(npc.spotAnimId).seqId;
@@ -3093,7 +3093,7 @@ public class Protocol {
 				}
 				npc.setNpcType(NpcTypeList.get(inboundBuffer.ig2()));
 				npc.setSize(npc.type.size);
-				npc.anInt3365 = npc.type.bastypeid;
+				npc.basTypeId = npc.type.bastypeid;
 				if (npc.type.hasAreaSound()) {
 					AreaSoundManager.add(npc.movementQueueZ[0], null, 0, npc, npc.movementQueueX[0], Player.plane, null);
 				}
@@ -3240,7 +3240,7 @@ public class Protocol {
 					@Pc(66) int local66 = inboundBuffer.gBits(1);
 					@Pc(73) int angle = PathingEntity.ANGLES[inboundBuffer.gBits(3)];
 					if (local19) {
-						npc.anInt3400 = npc.anInt3381 = angle;
+						npc.targetAngle = npc.currentAngle = angle;
 					}
 					@Pc(86) int local86 = inboundBuffer.gBits(1);
 					if (local86 == 1) {
@@ -3256,12 +3256,12 @@ public class Protocol {
 						local124 -= 32;
 					}
 					npc.setSize(npc.type.size);
-					npc.anInt3365 = npc.type.bastypeid;
-					npc.anInt3376 = npc.type.rotationspeed;
-					if (npc.anInt3376 == 0) {
-						npc.anInt3381 = 0;
+					npc.basTypeId = npc.type.bastypeid;
+					npc.turnSpeed = npc.type.rotationspeed;
+					if (npc.turnSpeed == 0) {
+						npc.currentAngle = 0;
 					}
-					npc.method2683(npc.getSize(), PlayerList.self.movementQueueX[0] + local124, local105 + PlayerList.self.movementQueueZ[0], local66 == 1);
+					npc.teleport(npc.getSize(), PlayerList.self.movementQueueX[0] + local124, local105 + PlayerList.self.movementQueueZ[0], local66 == 1);
 					if (npc.type.hasAreaSound()) {
 						AreaSoundManager.add(npc.movementQueueZ[0], null, 0, npc, npc.movementQueueX[0], Player.plane, null);
 					}
@@ -3335,40 +3335,40 @@ public class Protocol {
 			@Pc(15) int local15 = arg3[local3];
 			@Pc(19) int local19 = arg0[local3];
 			@Pc(23) int local23 = arg2[local3];
-			for (@Pc(25) int local25 = 0; local19 != 0 && arg1.aClass147Array3.length > local25; local25++) {
+			for (@Pc(25) int local25 = 0; local19 != 0 && arg1.slotAnimations.length > local25; local25++) {
 				if ((local19 & 0x1) != 0) {
 					if (local15 == -1) {
-						arg1.aClass147Array3[local25] = null;
+						arg1.slotAnimations[local25] = null;
 					} else {
 						@Pc(60) SeqType local60 = SeqTypeList.get(local15);
-						@Pc(65) PathingEntity_Class147 local65 = arg1.aClass147Array3[local25];
+						@Pc(65) SlotAnimation local65 = arg1.slotAnimations[local25];
 						@Pc(68) int local68 = local60.exactmove;
 						if (local65 != null) {
-							if (local15 == local65.anInt5396) {
+							if (local15 == local65.seqId) {
 								if (local68 == 0) {
-									local65 = arg1.aClass147Array3[local25] = null;
+									local65 = arg1.slotAnimations[local25] = null;
 								} else if (local68 == 1) {
-									local65.anInt5399 = 0;
-									local65.anInt5400 = 0;
-									local65.anInt5398 = 1;
-									local65.anInt5404 = 0;
-									local65.anInt5408 = local23;
+									local65.currentFrame = 0;
+									local65.replayCount = 0;
+									local65.nextFrame = 1;
+									local65.delayClock = 0;
+									local65.startDelay = local23;
 									SoundPlayer.playSeqSound(arg1.zFine, local60, arg1.xFine, false, 0);
 								} else if (local68 == 2) {
-									local65.anInt5400 = 0;
+									local65.replayCount = 0;
 								}
-							} else if (local60.priority >= SeqTypeList.get(local65.anInt5396).priority) {
-								local65 = arg1.aClass147Array3[local25] = null;
+							} else if (local60.priority >= SeqTypeList.get(local65.seqId).priority) {
+								local65 = arg1.slotAnimations[local25] = null;
 							}
 						}
 						if (local65 == null) {
-							local65 = arg1.aClass147Array3[local25] = new PathingEntity_Class147();
-							local65.anInt5398 = 1;
-							local65.anInt5404 = 0;
-							local65.anInt5408 = local23;
-							local65.anInt5396 = local15;
-							local65.anInt5400 = 0;
-							local65.anInt5399 = 0;
+							local65 = arg1.slotAnimations[local25] = new SlotAnimation();
+							local65.nextFrame = 1;
+							local65.delayClock = 0;
+							local65.startDelay = local23;
+							local65.seqId = local15;
+							local65.replayCount = 0;
+							local65.currentFrame = 0;
 							SoundPlayer.playSeqSound(arg1.zFine, local60, arg1.xFine, false, 0);
 						}
 					}
@@ -3384,26 +3384,26 @@ public class Protocol {
 			@Pc(10) SeqType seqType = SeqTypeList.get(animationId);
 			@Pc(13) int local13 = seqType.exactmove;
 			if (local13 == 1) {
-				npc.anInt3373 = 1;
-				npc.anInt3425 = 0;
-				npc.anInt3360 = 0;
-				npc.anInt3371 = 0;
-				npc.anInt3420 = arg0;
-				SoundPlayer.playSeqSound(npc.zFine, seqType, npc.xFine, false, npc.anInt3425);
+				npc.seqNextFrame = 1;
+				npc.seqFrame = 0;
+				npc.seqDelayClock = 0;
+				npc.seqReplayCount = 0;
+				npc.seqDelay = arg0;
+				SoundPlayer.playSeqSound(npc.zFine, seqType, npc.xFine, false, npc.seqFrame);
 			}
 			if (local13 == 2) {
-				npc.anInt3371 = 0;
+				npc.seqReplayCount = 0;
 			}
 		} else if (animationId == -1 || npc.seqId == -1 || SeqTypeList.get(animationId).priority >= SeqTypeList.get(npc.seqId).priority) {
-			npc.anInt3360 = 0;
+			npc.seqDelayClock = 0;
 			npc.seqId = animationId;
-			npc.anInt3373 = 1;
-			npc.anInt3371 = 0;
-			npc.anInt3420 = arg0;
-			npc.anInt3405 = npc.movementQueueSize;
-			npc.anInt3425 = 0;
+			npc.seqNextFrame = 1;
+			npc.seqReplayCount = 0;
+			npc.seqDelay = arg0;
+			npc.seqMovementSteps = npc.movementQueueSize;
+			npc.seqFrame = 0;
 			if (npc.seqId != -1) {
-				SoundPlayer.playSeqSound(npc.zFine, SeqTypeList.get(npc.seqId), npc.xFine, false, npc.anInt3425);
+				SoundPlayer.playSeqSound(npc.zFine, SeqTypeList.get(npc.seqId), npc.xFine, false, npc.seqFrame);
 			}
 		}
 	}

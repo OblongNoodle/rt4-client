@@ -48,7 +48,7 @@ public final class ProjAnim extends Entity {
 	private boolean isMobile = false;
 
 	@OriginalMember(owner = "client!ra", name = "x", descriptor = "I")
-	private int anInt4798 = -1;
+	private int seqNextFrame = -1;
 
 	@OriginalMember(owner = "client!ra", name = "fb", descriptor = "I")
 	private int seqFrame = 0;
@@ -120,9 +120,9 @@ public final class ProjAnim extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ra", name = "b", descriptor = "(I)Lclient!ak;")
-	private Model method3703() {
+	private Model getModel() {
 		@Pc(14) SpotAnimType seq = SpotAnimTypeList.get(this.spotanimId);
-		@Pc(24) Model model = seq.constructModel(this.anInt4798, this.seqFrame, this.frameCycle);
+		@Pc(24) Model model = seq.constructModel(this.seqNextFrame, this.seqFrame, this.frameCycle);
 		if (model == null) {
 			return null;
 		} else {
@@ -162,11 +162,11 @@ public final class ProjAnim extends Entity {
 							this.seqFrame = 0;
 						}
 					}
-					this.anInt4798 = this.seqFrame + 1;
-				} while (this.seq.frames.length > this.anInt4798);
-				this.anInt4798 -= this.seq.replayoff;
-			} while (this.anInt4798 >= 0 && this.anInt4798 < this.seq.frames.length);
-			this.anInt4798 = -1;
+					this.seqNextFrame = this.seqFrame + 1;
+				} while (this.seq.frames.length > this.seqNextFrame);
+				this.seqNextFrame -= this.seq.replayoff;
+			} while (this.seqNextFrame >= 0 && this.seqNextFrame < this.seq.frames.length);
+			this.seqNextFrame = -1;
 		}
 	}
 
@@ -198,7 +198,7 @@ public final class ProjAnim extends Entity {
 	@OriginalMember(owner = "client!ra", name = "a", descriptor = "(IIIIIIIIJILclient!ga;)V")
 	@Override
 	public final void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) long arg8, @OriginalArg(9) int arg9, @OriginalArg(10) ParticleSystem arg10) {
-		@Pc(3) Model local3 = this.method3703();
+		@Pc(3) Model local3 = this.getModel();
 		if (local3 != null) {
 			local3.render(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, this.particleSystem);
 			this.minY = local3.getMinY();

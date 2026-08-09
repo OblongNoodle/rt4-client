@@ -1344,13 +1344,13 @@ public class LoginManager {
 						local198.lastSeenLoop = client.loop;
 						local198.setNpcType(local148);
 						local198.setSize(local198.type.size);
-						local198.anInt3400 = local198.anInt3381 = PathingEntity.ANGLES[local198.type.spawndirection];
-						local198.anInt3376 = local198.type.rotationspeed;
-						if (local198.anInt3376 == 0) {
-							local198.anInt3381 = 0;
+						local198.targetAngle = local198.currentAngle = PathingEntity.ANGLES[local198.type.spawndirection];
+						local198.turnSpeed = local198.type.rotationspeed;
+						if (local198.turnSpeed == 0) {
+							local198.currentAngle = 0;
 						}
-						local198.anInt3365 = local198.type.bastypeid;
-						local198.method2683(local198.getSize(), local125, local142, true);
+						local198.basTypeId = local198.type.bastypeid;
+						local198.teleport(local198.getSize(), local125, local142, true);
 					}
 				}
 			}

@@ -50,9 +50,9 @@ public final class Npc extends PathingEntity {
 			return;
 		}
 
-		@Pc(29) SeqType local29 = this.seqId != -1 && this.anInt3420 == 0 ? SeqTypeList.get(this.seqId) : null;
+		@Pc(29) SeqType local29 = this.seqId != -1 && this.seqDelay == 0 ? SeqTypeList.get(this.seqId) : null;
 		@Pc(53) SeqType local53 = this.movementSeqId == -1 || this.movementSeqId == this.getBasType().idleAnimationId && local29 != null ? null : SeqTypeList.get(this.movementSeqId);
-		@Pc(74) Model body = this.type.getBodyModel(this.aClass147Array3, this.anInt3388, this.anInt3407, this.anInt3373, this.anInt3360, this.anInt3425, local53, this.anInt3396, local29);
+		@Pc(74) Model body = this.type.getBodyModel(this.slotAnimations, this.movementSeqNextFrame, this.movementSeqFrame, this.seqNextFrame, this.seqDelayClock, this.seqFrame, local53, this.movementSeqDelayClock, local29);
 		if (body == null) {
 			return;
 		}
@@ -65,7 +65,7 @@ public final class Npc extends PathingEntity {
 
 		@Pc(140) Model model;
 		if (Preferences.characterShadowsOn && local84.hasshadow) {
-			model = ShadowModelList.method1043(this.type.shadowcolormodifier1, this.aBoolean171, local53 == null ? local29 : local53, this.xFine, this.type.shadowcolor2, this.zFine, this.type.shadowcolor1, this.type.size, body, orientation, local53 == null ? this.anInt3425 : this.anInt3407, this.anInt3424, this.type.shadowcolormodifier2);
+			model = ShadowModelList.method1043(this.type.shadowcolormodifier1, this.seqStretches, local53 == null ? local29 : local53, this.xFine, this.type.shadowcolor2, this.zFine, this.type.shadowcolor1, this.type.size, body, orientation, local53 == null ? this.seqFrame : this.movementSeqFrame, this.tileHeight, this.type.shadowcolormodifier2);
 			if (GlRenderer.enabled) {
 				@Pc(144) float local144 = GlRenderer.method4179();
 				@Pc(146) float local146 = GlRenderer.method4166();
@@ -79,25 +79,25 @@ public final class Npc extends PathingEntity {
 			}
 		}
 
-		this.method2687(body);
-		this.method2685(body, orientation);
+		this.applyBodyLean(body);
+		this.alignToTerrain(body, orientation);
 
 		model = null;
-		if (this.spotAnimId != -1 && this.anInt3399 != -1) {
+		if (this.spotAnimId != -1 && this.spotAnimFrame != -1) {
 			@Pc(211) SpotAnimType spotAnimType = SpotAnimTypeList.get(this.spotAnimId);
-			model = spotAnimType.constructModel(this.anInt3418, this.anInt3399, this.anInt3361);
+			model = spotAnimType.constructModel(this.spotAnimNextFrame, this.spotAnimFrame, this.spotAnimDelayClock);
 			if (model != null) {
 				model.translate(0, -this.spotAnimY, 0);
 
 				if (spotAnimType.aBoolean100) {
-					if (PathingEntity.anInt2640 != 0) {
-						model.rotateX(PathingEntity.anInt2640);
+					if (PathingEntity.terrainPitchAngle != 0) {
+						model.rotateX(PathingEntity.terrainPitchAngle);
 					}
-					if (PathingEntity.anInt2680 != 0) {
-						model.rotateZ(PathingEntity.anInt2680);
+					if (PathingEntity.terrainRollAngle != 0) {
+						model.rotateZ(PathingEntity.terrainRollAngle);
 					}
-					if (PathingEntity.anInt1938 != 0) {
-						model.translate(0, PathingEntity.anInt1938, 0);
+					if (PathingEntity.terrainYOffset != 0) {
+						model.translate(0, PathingEntity.terrainYOffset, 0);
 					}
 				}
 			}
@@ -139,7 +139,7 @@ public final class Npc extends PathingEntity {
 				return local17.bastypeid;
 			}
 		}
-		return this.anInt3365;
+		return this.basTypeId;
 	}
 
 	@OriginalMember(owner = "client!km", name = "a", descriptor = "(IIIII)V")

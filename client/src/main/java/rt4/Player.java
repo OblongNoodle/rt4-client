@@ -92,26 +92,26 @@ public final class Player extends PathingEntity {
 			@Pc(89) SeqType local89 = SeqTypeList.get(arg1);
 			@Pc(92) int local92 = local89.exactmove;
 			if (local92 == 1) {
-				arg2.anInt3420 = arg0;
-				arg2.anInt3360 = 0;
-				arg2.anInt3373 = 1;
-				arg2.anInt3425 = 0;
-				arg2.anInt3371 = 0;
-				SoundPlayer.playSeqSound(arg2.zFine, local89, arg2.xFine, PlayerList.self == arg2, arg2.anInt3425);
+				arg2.seqDelay = arg0;
+				arg2.seqDelayClock = 0;
+				arg2.seqNextFrame = 1;
+				arg2.seqFrame = 0;
+				arg2.seqReplayCount = 0;
+				SoundPlayer.playSeqSound(arg2.zFine, local89, arg2.xFine, PlayerList.self == arg2, arg2.seqFrame);
 			}
 			if (local92 == 2) {
-				arg2.anInt3371 = 0;
+				arg2.seqReplayCount = 0;
 			}
 		} else if (arg1 == -1 || arg2.seqId == -1 || SeqTypeList.get(arg1).priority >= SeqTypeList.get(arg2.seqId).priority) {
-			arg2.anInt3373 = 1;
-			arg2.anInt3425 = 0;
-			arg2.anInt3420 = arg0;
-			arg2.anInt3405 = arg2.movementQueueSize;
-			arg2.anInt3371 = 0;
-			arg2.anInt3360 = 0;
+			arg2.seqNextFrame = 1;
+			arg2.seqFrame = 0;
+			arg2.seqDelay = arg0;
+			arg2.seqMovementSteps = arg2.movementQueueSize;
+			arg2.seqReplayCount = 0;
+			arg2.seqDelayClock = 0;
 			arg2.seqId = arg1;
 			if (arg2.seqId != -1) {
-				SoundPlayer.playSeqSound(arg2.zFine, SeqTypeList.get(arg2.seqId), arg2.xFine, arg2 == PlayerList.self, arg2.anInt3425);
+				SoundPlayer.playSeqSound(arg2.zFine, SeqTypeList.get(arg2.seqId), arg2.xFine, arg2 == PlayerList.self, arg2.seqFrame);
 			}
 		}
 	}
@@ -123,40 +123,40 @@ public final class Player extends PathingEntity {
 			@Pc(24) int local24 = arg3[local7];
 			@Pc(28) int local28 = arg0[local7];
 			@Pc(30) int local30 = 0;
-			while (local24 != 0 && local30 < arg2.aClass147Array3.length) {
+			while (local24 != 0 && local30 < arg2.slotAnimations.length) {
 				if ((local24 & 0x1) != 0) {
 					if (local20 == -1) {
-						arg2.aClass147Array3[local30] = null;
+						arg2.slotAnimations[local30] = null;
 					} else {
 						@Pc(68) SeqType local68 = SeqTypeList.get(local20);
 						@Pc(71) int local71 = local68.exactmove;
-						@Pc(76) PathingEntity_Class147 local76 = arg2.aClass147Array3[local30];
+						@Pc(76) SlotAnimation local76 = arg2.slotAnimations[local30];
 						if (local76 != null) {
-							if (local20 == local76.anInt5396) {
+							if (local20 == local76.seqId) {
 								if (local71 == 0) {
-									local76 = arg2.aClass147Array3[local30] = null;
+									local76 = arg2.slotAnimations[local30] = null;
 								} else if (local71 == 1) {
-									local76.anInt5400 = 0;
-									local76.anInt5398 = 1;
-									local76.anInt5399 = 0;
-									local76.anInt5408 = local28;
-									local76.anInt5404 = 0;
+									local76.replayCount = 0;
+									local76.nextFrame = 1;
+									local76.currentFrame = 0;
+									local76.startDelay = local28;
+									local76.delayClock = 0;
 									SoundPlayer.playSeqSound(arg2.zFine, local68, arg2.xFine, arg2 == PlayerList.self, 0);
 								} else if (local71 == 2) {
-									local76.anInt5400 = 0;
+									local76.replayCount = 0;
 								}
-							} else if (local68.priority >= SeqTypeList.get(local76.anInt5396).priority) {
-								local76 = arg2.aClass147Array3[local30] = null;
+							} else if (local68.priority >= SeqTypeList.get(local76.seqId).priority) {
+								local76 = arg2.slotAnimations[local30] = null;
 							}
 						}
 						if (local76 == null) {
-							local76 = arg2.aClass147Array3[local30] = new PathingEntity_Class147();
-							local76.anInt5396 = local20;
-							local76.anInt5398 = 1;
-							local76.anInt5404 = 0;
-							local76.anInt5408 = local28;
-							local76.anInt5399 = 0;
-							local76.anInt5400 = 0;
+							local76 = arg2.slotAnimations[local30] = new SlotAnimation();
+							local76.seqId = local20;
+							local76.nextFrame = 1;
+							local76.delayClock = 0;
+							local76.startDelay = local28;
+							local76.currentFrame = 0;
+							local76.replayCount = 0;
 							SoundPlayer.playSeqSound(arg2.zFine, local68, arg2.xFine, arg2 == PlayerList.self, 0);
 						}
 					}
@@ -301,7 +301,7 @@ public final class Player extends PathingEntity {
 	@OriginalMember(owner = "client!e", name = "b", descriptor = "(I)I")
 	@Override
 	public final int getBasId() {
-		return this.anInt3365;
+		return this.basTypeId;
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(ILclient!wa;)V")
@@ -356,7 +356,7 @@ public final class Player extends PathingEntity {
 			}
 			local197[local111] = local127;
 		}
-		this.anInt3365 = arg0.g2();
+		this.basTypeId = arg0.g2();
 		@Pc(236) long local236 = arg0.g8();
 		this.username = Base37.decode37(local236).toTitleCase();
 		this.combatLevel = arg0.g1();
@@ -393,7 +393,7 @@ public final class Player extends PathingEntity {
 			this.appearance = new PlayerAppearance();
 		}
 		local175 = this.appearance.npcId;
-		this.appearance.set(local197, local22, local26 == 1, local44, this.anInt3365);
+		this.appearance.set(local197, local22, local26 == 1, local44, this.basTypeId);
 		if (local175 != local22) {
 			this.xFine = this.movementQueueX[0] * 128 + this.getSize() * 64;
 			this.zFine = this.movementQueueZ[0] * 128 + this.getSize() * 64;
@@ -409,9 +409,9 @@ public final class Player extends PathingEntity {
 		if (this.appearance == null) {
 			return;
 		}
-		@Pc(25) SeqType local25 = this.seqId != -1 && this.anInt3420 == 0 ? SeqTypeList.get(this.seqId) : null;
+		@Pc(25) SeqType local25 = this.seqId != -1 && this.seqDelay == 0 ? SeqTypeList.get(this.seqId) : null;
 		@Pc(54) SeqType local54 = this.movementSeqId == -1 || this.aBoolean98 || this.movementSeqId == this.getBasType().idleAnimationId && local25 != null ? null : SeqTypeList.get(this.movementSeqId);
-		@Pc(76) Model local76 = this.appearance.method1954(this.aClass147Array3, this.anInt3373, local54, local25, this.anInt3396, this.anInt3388, this.anInt3360, this.anInt3425, this.anInt3407);
+		@Pc(76) Model local76 = this.appearance.method1954(this.slotAnimations, this.seqNextFrame, local54, local25, this.movementSeqDelayClock, this.movementSeqNextFrame, this.seqDelayClock, this.seqFrame, this.movementSeqFrame);
 		@Pc(79) int local79 = PlayerAppearance.getModelCacheSize();
 		if (GlRenderer.enabled && GameShell.maxMemory < 96 && local79 > 50) {
 			method501();
@@ -434,7 +434,7 @@ public final class Player extends PathingEntity {
 		this.minY = local76.getMinY();
 		@Pc(184) Model local184;
 		if (Preferences.characterShadowsOn && (this.appearance.npcId == -1 || NpcTypeList.get(this.appearance.npcId).hasshadow)) {
-			local184 = ShadowModelList.method1043(160, this.aBoolean171, local54 == null ? local25 : local54, this.xFine, 0, this.zFine, 0, 1, local76, arg0, local54 == null ? this.anInt3425 : this.anInt3407, this.anInt3424, 240);
+			local184 = ShadowModelList.method1043(160, this.seqStretches, local54 == null ? local25 : local54, this.xFine, 0, this.zFine, 0, 1, local76, arg0, local54 == null ? this.seqFrame : this.movementSeqFrame, this.tileHeight, 240);
 			if (GlRenderer.enabled) {
 				@Pc(188) float local188 = GlRenderer.method4179();
 				@Pc(190) float local190 = GlRenderer.method4166();
@@ -477,23 +477,23 @@ public final class Player extends PathingEntity {
 				}
 			}
 		}
-		this.method2687(local76);
-		this.method2685(local76, arg0);
+		this.applyBodyLean(local76);
+		this.alignToTerrain(local76, arg0);
 		local184 = null;
-		if (!this.aBoolean98 && this.spotAnimId != -1 && this.anInt3399 != -1) {
+		if (!this.aBoolean98 && this.spotAnimId != -1 && this.spotAnimFrame != -1) {
 			@Pc(471) SpotAnimType local471 = SpotAnimTypeList.get(this.spotAnimId);
-			local184 = local471.constructModel(this.anInt3418, this.anInt3399, this.anInt3361);
+			local184 = local471.constructModel(this.spotAnimNextFrame, this.spotAnimFrame, this.spotAnimDelayClock);
 			if (local184 != null) {
 				local184.translate(0, -this.spotAnimY, 0);
 				if (local471.aBoolean100) {
-					if (PathingEntity.anInt2640 != 0) {
-						local184.rotateX(PathingEntity.anInt2640);
+					if (PathingEntity.terrainPitchAngle != 0) {
+						local184.rotateX(PathingEntity.terrainPitchAngle);
 					}
-					if (PathingEntity.anInt2680 != 0) {
-						local184.rotateZ(PathingEntity.anInt2680);
+					if (PathingEntity.terrainRollAngle != 0) {
+						local184.rotateZ(PathingEntity.terrainRollAngle);
 					}
-					if (PathingEntity.anInt1938 != 0) {
-						local184.translate(0, PathingEntity.anInt1938, 0);
+					if (PathingEntity.terrainYOffset != 0) {
+						local184.translate(0, PathingEntity.terrainYOffset, 0);
 					}
 				}
 			}
@@ -509,12 +509,12 @@ public final class Player extends PathingEntity {
 				} else {
 					local515 = (Model) this.attachment;
 				}
-				local515.translate(this.attachmentXFine - this.xFine, this.attachmentY + -this.anInt3424, this.attachmentZFine - this.zFine);
-				if (this.anInt3400 == 512) {
+				local515.translate(this.attachmentXFine - this.xFine, this.attachmentY + -this.tileHeight, this.attachmentZFine - this.zFine);
+				if (this.targetAngle == 512) {
 					local515.method4578();
-				} else if (this.anInt3400 == 1024) {
+				} else if (this.targetAngle == 1024) {
 					local515.method4552();
-				} else if (this.anInt3400 == 1536) {
+				} else if (this.targetAngle == 1536) {
 					local515.rotateCounterClockwise();
 				}
 			}
@@ -539,14 +539,14 @@ public final class Player extends PathingEntity {
 		if (local515 == null) {
 			return;
 		}
-		if (this.anInt3400 == 512) {
+		if (this.targetAngle == 512) {
 			local515.rotateCounterClockwise();
-		} else if (this.anInt3400 == 1024) {
+		} else if (this.targetAngle == 1024) {
 			local515.method4552();
-		} else if (this.anInt3400 == 1536) {
+		} else if (this.targetAngle == 1536) {
 			local515.method4578();
 		}
-		local515.translate(this.xFine - this.attachmentXFine, -this.attachmentY + this.anInt3424, this.zFine - this.attachmentZFine);
+		local515.translate(this.xFine - this.attachmentXFine, -this.attachmentY + this.tileHeight, this.zFine - this.attachmentZFine);
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(Lclient!ga;ILclient!ak;IIIIIIIIIIII)V")
@@ -556,7 +556,7 @@ public final class Player extends PathingEntity {
 			return;
 		}
 		@Pc(34) int local34 = (int) (Math.atan2(arg3, arg1) * 325.949D) & 0x7FF;
-		@Pc(46) Model local46 = HintArrowManager.getModel(local34, this.zFine, arg11, this.xFine, arg2, this.anInt3424);
+		@Pc(46) Model local46 = HintArrowManager.getModel(local34, this.zFine, arg11, this.xFine, arg2, this.tileHeight);
 		if (local46 == null) {
 			return;
 		}
@@ -598,7 +598,7 @@ public final class Player extends PathingEntity {
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(BIZI)V")
 	public final void teleport(@OriginalArg(1) int arg0, @OriginalArg(2) boolean arg1, @OriginalArg(3) int arg2) {
-		super.method2683(this.getSize(), arg0, arg2, arg1);
+		super.teleport(this.getSize(), arg0, arg2, arg1);
 	}
 
 	@OriginalMember(owner = "client!e", name = "finalize", descriptor = "()V")

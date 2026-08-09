@@ -12,13 +12,13 @@ public abstract class PathingEntity extends Entity {
 	public static final int[] ANGLES = new int[]{768, 1024, 1280, 512, 1536, 256, 0, 1792};
 
 	@OriginalMember(owner = "client!hn", name = "Y", descriptor = "I")
-	public static int anInt2680 = 0;
+	public static int terrainRollAngle = 0;
 
 	@OriginalMember(owner = "client!hm", name = "ab", descriptor = "I")
-	public static int anInt2640 = 0;
+	public static int terrainPitchAngle = 0;
 
 	@OriginalMember(owner = "client!f", name = "V", descriptor = "I")
-	public static int anInt1938 = 0;
+	public static int terrainYOffset = 0;
 
 	@OriginalMember(owner = "client!fe", name = "A", descriptor = "I")
 	public int spotAnimStart;
@@ -36,7 +36,7 @@ public abstract class PathingEntity extends Entity {
 	public int forceMoveStartX;
 
 	@OriginalMember(owner = "client!fe", name = "cb", descriptor = "I")
-	public int anInt3381;
+	public int currentAngle;
 
 	@OriginalMember(owner = "client!fe", name = "fb", descriptor = "I")
 	public int atachmentX0;
@@ -60,7 +60,7 @@ public abstract class PathingEntity extends Entity {
 	protected ParticleSystem particleSystem;
 
 	@OriginalMember(owner = "client!fe", name = "Ab", descriptor = "I")
-	public int anInt3400;
+	public int targetAngle;
 
 	@OriginalMember(owner = "client!fe", name = "Jb", descriptor = "I")
 	public int attachmentY;
@@ -81,7 +81,7 @@ public abstract class PathingEntity extends Entity {
 	public int zFine;
 
 	@OriginalMember(owner = "client!fe", name = "dc", descriptor = "I")
-	public int anInt3424;
+	public int tileHeight;
 
 	@OriginalMember(owner = "client!fe", name = "fc", descriptor = "I")
 	public int attachmentZFine;
@@ -96,7 +96,7 @@ public abstract class PathingEntity extends Entity {
 	public final int[] movementQueueZ = new int[10];
 
 	@OriginalMember(owner = "client!fe", name = "z", descriptor = "I")
-	public int anInt3358 = 0;
+	public int movementSpeed = 0;
 
 	@OriginalMember(owner = "client!fe", name = "J", descriptor = "I")
 	private int anInt3367 = 0;
@@ -108,7 +108,7 @@ public abstract class PathingEntity extends Entity {
 	public final int[] movementQueueX = new int[10];
 
 	@OriginalMember(owner = "client!fe", name = "B", descriptor = "I")
-	public int anInt3360 = 0;
+	public int seqDelayClock = 0;
 
 	@OriginalMember(owner = "client!fe", name = "O", descriptor = "I")
 	public int seqId = -1;
@@ -117,13 +117,13 @@ public abstract class PathingEntity extends Entity {
 	private boolean aBoolean169 = false;
 
 	@OriginalMember(owner = "client!fe", name = "M", descriptor = "Z")
-	public boolean aBoolean167 = false;
+	public boolean yawAccelerating = false;
 
 	@OriginalMember(owner = "client!fe", name = "db", descriptor = "I")
 	public int faceX = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Q", descriptor = "I")
-	public int anInt3371 = 0;
+	public int seqReplayCount = 0;
 
 	@OriginalMember(owner = "client!fe", name = "E", descriptor = "I")
 	public int faceY = 0;
@@ -132,10 +132,10 @@ public abstract class PathingEntity extends Entity {
 	private int anInt3398 = 0;
 
 	@OriginalMember(owner = "client!fe", name = "G", descriptor = "I")
-	public int anInt3365 = -1;
+	public int basTypeId = -1;
 
 	@OriginalMember(owner = "client!fe", name = "gb", descriptor = "I")
-	public int anInt3385 = 0;
+	public int standingTurnCounter = 0;
 
 	@OriginalMember(owner = "client!fe", name = "pb", descriptor = "I")
 	public int attachmentSetAt = 0;
@@ -144,7 +144,7 @@ public abstract class PathingEntity extends Entity {
 	public final byte[] movementQueueSpeed = new byte[10];
 
 	@OriginalMember(owner = "client!fe", name = "W", descriptor = "I")
-	public int anInt3376 = 32;
+	public int turnSpeed = 32;
 
 	@OriginalMember(owner = "client!fe", name = "P", descriptor = "I")
 	public int faceEntity = -1;
@@ -156,13 +156,13 @@ public abstract class PathingEntity extends Entity {
 	private int anInt3383 = 0;
 
 	@OriginalMember(owner = "client!fe", name = "ib", descriptor = "I")
-	public int anInt3387 = 0;
+	public int yawDistanceTraveled = 0;
 
 	@OriginalMember(owner = "client!fe", name = "X", descriptor = "I")
-	public int anInt3377 = 0;
+	public int preciseYaw = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Eb", descriptor = "[Lclient!ub;")
-	public final PathingEntity_Class147[] aClass147Array3 = new PathingEntity_Class147[12];
+	public final SlotAnimation[] slotAnimations = new SlotAnimation[12];
 
 	@OriginalMember(owner = "client!fe", name = "Lb", descriptor = "I")
 	public int chatLoops = 100;
@@ -180,13 +180,13 @@ public abstract class PathingEntity extends Entity {
 	public int movementQueueSize = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Zb", descriptor = "I")
-	public int anInt3420 = 0;
+	public int seqDelay = 0;
 
 	@OriginalMember(owner = "client!fe", name = "cc", descriptor = "I")
 	private int anInt3423 = 0;
 
 	@OriginalMember(owner = "client!fe", name = "C", descriptor = "I")
-	public int anInt3361 = 0;
+	public int spotAnimDelayClock = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Yb", descriptor = "I")
 	private int anInt3419 = 0;
@@ -198,31 +198,31 @@ public abstract class PathingEntity extends Entity {
 	public final int[] hitTypes = new int[4];
 
 	@OriginalMember(owner = "client!fe", name = "zb", descriptor = "I")
-	public int anInt3399 = 0;
+	public int spotAnimFrame = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Db", descriptor = "I")
-	public int anInt3402 = 0;
+	public int preciseTargetYaw = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Vb", descriptor = "I")
-	public int anInt3417 = 0;
+	public int movementCatchupTicks = 0;
 
 	@OriginalMember(owner = "client!fe", name = "s", descriptor = "I")
 	public int chatEffect = 0;
 
 	@OriginalMember(owner = "client!fe", name = "T", descriptor = "I")
-	public int anInt3373 = -1;
+	public int seqNextFrame = -1;
 
 	@OriginalMember(owner = "client!fe", name = "Fb", descriptor = "Z")
-	public boolean aBoolean171 = false;
+	public boolean seqStretches = false;
 
 	@OriginalMember(owner = "client!fe", name = "xb", descriptor = "I")
-	public int anInt3397 = 0;
+	public int yawDecelThreshold = 0;
 
 	@OriginalMember(owner = "client!fe", name = "kb", descriptor = "I")
-	public int anInt3388 = -1;
+	public int movementSeqNextFrame = -1;
 
 	@OriginalMember(owner = "client!fe", name = "Sb", descriptor = "I")
-	public int anInt3414 = 0;
+	public int yawVelocity = 0;
 
 	@OriginalMember(owner = "client!fe", name = "H", descriptor = "I")
 	public int movementSeqId = -1;
@@ -234,19 +234,19 @@ public abstract class PathingEntity extends Entity {
 	private int size = 1;
 
 	@OriginalMember(owner = "client!fe", name = "Kb", descriptor = "I")
-	public int anInt3407 = 0;
+	public int movementSeqFrame = 0;
 
 	@OriginalMember(owner = "client!fe", name = "ic", descriptor = "[I")
 	public final int[] hitDamages = new int[4];
 
 	@OriginalMember(owner = "client!fe", name = "Ib", descriptor = "I")
-	public int anInt3405 = 0;
+	public int seqMovementSteps = 0;
 
 	@OriginalMember(owner = "client!fe", name = "y", descriptor = "I")
 	private int anInt3357 = 0;
 
 	@OriginalMember(owner = "client!fe", name = "wb", descriptor = "I")
-	public int anInt3396 = 0;
+	public int movementSeqDelayClock = 0;
 
 	@OriginalMember(owner = "client!fe", name = "jc", descriptor = "I")
 	public int chatColor = 0;
@@ -255,7 +255,7 @@ public abstract class PathingEntity extends Entity {
 	public int lastSeenLoop = 0;
 
 	@OriginalMember(owner = "client!fe", name = "ec", descriptor = "I")
-	public int anInt3425 = 0;
+	public int seqFrame = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Wb", descriptor = "Lclient!na;")
 	public JagString chatMessage = null;
@@ -264,7 +264,7 @@ public abstract class PathingEntity extends Entity {
 	public int spotAnimId = -1;
 
 	@OriginalMember(owner = "client!fe", name = "Xb", descriptor = "I")
-	public int anInt3418 = -1;
+	public int spotAnimNextFrame = -1;
 
 	@OriginalMember(owner = "client!fe", name = "b", descriptor = "(Z)Lclient!ck;")
 	public final BasType getBasType() {
@@ -278,7 +278,7 @@ public abstract class PathingEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(IIIIZ)V")
-	public final void method2683(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) boolean arg3) {
+	public final void teleport(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) boolean arg3) {
 		if (this.seqId != -1 && SeqTypeList.get(this.seqId).movetype == 1) {
 			this.seqId = -1;
 		}
@@ -300,11 +300,11 @@ public abstract class PathingEntity extends Entity {
 				return;
 			}
 		}
-		this.anInt3417 = 0;
+		this.movementCatchupTicks = 0;
 		this.movementQueueX[0] = arg1;
 		this.movementQueueZ[0] = arg2;
 		this.movementQueueSize = 0;
-		this.anInt3405 = 0;
+		this.seqMovementSteps = 0;
 		this.zFine = arg0 * 64 + this.movementQueueZ[0] * 128;
 		this.xFine = arg0 * 64 + this.movementQueueX[0] * 128;
 		if (GlRenderer.enabled && PlayerList.self == this) {
@@ -361,10 +361,10 @@ public abstract class PathingEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(BLclient!ak;I)V")
-	protected final void method2685(@OriginalArg(1) Model arg0, @OriginalArg(2) int arg1) {
-		anInt2680 = 0;
-		anInt2640 = 0;
-		anInt1938 = 0;
+	protected final void alignToTerrain(@OriginalArg(1) Model arg0, @OriginalArg(2) int arg1) {
+		terrainRollAngle = 0;
+		terrainPitchAngle = 0;
+		terrainYOffset = 0;
 		@Pc(21) BasType type = this.getBasType();
 		@Pc(24) int local24 = type.anInt1059;
 		@Pc(27) int local27 = type.anInt1050;
@@ -397,21 +397,21 @@ public abstract class PathingEntity extends Entity {
 		@Pc(231) int local231 = local224 > local201 ? local201 : local224;
 		@Pc(238) int local238 = local224 > local134 ? local134 : local224;
 		@Pc(245) int local245 = local201 <= local87 ? local201 : local87;
-		anInt2640 = (int) (Math.atan2(local212 - local231, local27) * 325.95D) & 0x7FF;
-		if (anInt2640 != 0) {
-			arg0.rotateX(anInt2640);
+		terrainPitchAngle = (int) (Math.atan2(local212 - local231, local27) * 325.95D) & 0x7FF;
+		if (terrainPitchAngle != 0) {
+			arg0.rotateX(terrainPitchAngle);
 		}
-		anInt2680 = (int) (Math.atan2(local245 - local238, local24) * 325.95D) & 0x7FF;
-		if (anInt2680 != 0) {
-			arg0.rotateZ(anInt2680);
+		terrainRollAngle = (int) (Math.atan2(local245 - local238, local24) * 325.95D) & 0x7FF;
+		if (terrainRollAngle != 0) {
+			arg0.rotateZ(terrainRollAngle);
 		}
-		anInt1938 = local224 + local87;
-		if (local201 + local134 < anInt1938) {
-			anInt1938 = local201 + local134;
+		terrainYOffset = local224 + local87;
+		if (local201 + local134 < terrainYOffset) {
+			terrainYOffset = local201 + local134;
 		}
-		anInt1938 = (anInt1938 >> 1) - this.anInt3424;
-		if (anInt1938 != 0) {
-			arg0.translate(0, anInt1938, 0);
+		terrainYOffset = (terrainYOffset >> 1) - this.tileHeight;
+		if (terrainYOffset != 0) {
+			arg0.translate(0, terrainYOffset, 0);
 		}
 	}
 
@@ -428,16 +428,16 @@ public abstract class PathingEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(Lclient!ak;B)V")
-	protected final void method2687(@OriginalArg(0) Model arg0) {
+	protected final void applyBodyLean(@OriginalArg(0) Model arg0) {
 		@Pc(16) BasType local16 = this.getBasType();
 		if (local16.rollTargetAngle == 0 && local16.pitchTargetAngle == 0) {
 			return;
 		}
 		@Pc(26) int local26 = 0;
 		@Pc(28) int local28 = 0;
-		if (this.aBoolean167 && this.anInt3414 != 0) {
+		if (this.yawAccelerating && this.yawVelocity != 0) {
 			local28 = local16.pitchTargetAngle;
-			if (this.anInt3414 >= 0) {
+			if (this.yawVelocity >= 0) {
 				local26 = local16.rollTargetAngle;
 			} else {
 				local26 = -local16.rollTargetAngle;
@@ -631,13 +631,13 @@ public abstract class PathingEntity extends Entity {
 	public abstract int getBasId();
 
 	@OriginalMember(owner = "client!fe", name = "c", descriptor = "(I)V")
-	public final void method2689() {
+	public final void resetMovementQueue() {
 		this.movementQueueSize = 0;
-		this.anInt3405 = 0;
+		this.seqMovementSteps = 0;
 	}
 
 	@OriginalMember(owner = "client!fe", name = "d", descriptor = "(I)I")
-	public final int method2691() {
+	public final int getModelHeight() {
 		return this.minY == -32768 ? 200 : -this.minY;
 	}
 

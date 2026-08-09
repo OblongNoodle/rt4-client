@@ -371,7 +371,7 @@ public final class ScriptRunner {
 				entity = NpcList.npcs[NpcList.ids[local5 - PlayerList.size]];
 			}
 			if (entity != null && entity.isVisible()) {
-				setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.method2691() + 15, arg1 >> 1);
+				setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight() + 15, arg1 >> 1);
 				if (local5 >= PlayerList.size) {
 					PluginRepository.NPCOverheadDraw((Npc) entity,arg2 + anInt1951, arg0 + anInt548);
 				} else {
@@ -396,7 +396,7 @@ public final class ScriptRunner {
 					}
 					if (local58.headicon >= 0 && Sprites.headiconPrayers.length > local58.headicon) {
 						if (local58.iconHeight == -1) {
-							local265 = entity.method2691() + 15;
+							local265 = entity.getModelHeight() + 15;
 						} else {
 							local265 = local58.iconHeight + 15;
 						}
@@ -410,7 +410,7 @@ public final class ScriptRunner {
 						@Pc(322) MapMarker local322 = local308[local310];
 						if (local322 != null && local322.type == 1 && local322.actorTargetId == NpcList.ids[local5 - PlayerList.size] && client.loop % 20 < 10) {
 							if (local58.iconHeight == -1) {
-								local359 = entity.method2691() + 15;
+								local359 = entity.getModelHeight() + 15;
 							} else {
 								local359 = local58.iconHeight + 15;
 							}
@@ -424,7 +424,7 @@ public final class ScriptRunner {
 					local74 = 30;
 					@Pc(77) Player local77 = (Player) entity;
 					if (local77.anInt1669 != -1 || local77.anInt1649 != -1) {
-						setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.method2691() + 15, arg1 >> 1);
+						setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight() + 15, arg1 >> 1);
 						if (anInt1951 > -1) {
 							if (local77.anInt1669 != -1) {
 								Sprites.headiconPks[local77.anInt1669].render(anInt1951 + arg2 - 12, arg0 + -30 + anInt548);
@@ -441,7 +441,7 @@ public final class ScriptRunner {
 						for (local161 = 0; local161 < local159.length; local161++) {
 							@Pc(173) MapMarker local173 = local159[local161];
 							if (local173 != null && local173.type == 10 && PlayerList.ids[local5] == local173.actorTargetId) {
-								setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.method2691() + 15, arg1 >> 1);
+								setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight() + 15, arg1 >> 1);
 								if (anInt1951 > -1) {
 									Sprites.headhints[local173.anInt4048].render(arg2 + anInt1951 - 12, arg0 + (anInt548 - local74));
 								}
@@ -450,7 +450,7 @@ public final class ScriptRunner {
 					}
 				}
 				if (entity.chatMessage != null && (local5 >= PlayerList.size || Chat.publicFilter == 0 || Chat.publicFilter == 3 || Chat.publicFilter == 1 && FriendsList.contains(((Player) entity).username))) {
-					setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.method2691(), arg1 >> 1);
+					setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight(), arg1 >> 1);
 					if (anInt1951 > -1 && OverheadChat.size < OverheadChat.CAPACITY) {
 						OverheadChat.anIntArray389[OverheadChat.size] = Fonts.b12Full.getStringWidth(entity.chatMessage) / 2;
 						OverheadChat.anIntArray387[OverheadChat.size] = Fonts.b12Full.lineHeight;
@@ -481,12 +481,12 @@ public final class ScriptRunner {
 						}
 						@Pc(571) NpcType local571 = local518.type;
 						if (local571.iconHeight == -1) {
-							local310 = entity.method2691();
+							local310 = entity.getModelHeight();
 						} else {
 							local310 = local571.iconHeight;
 						}
 					} else {
-						local310 = entity.method2691();
+						local310 = entity.getModelHeight();
 					}
 					setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, local508.height + local310 + 10, arg1 >> 1);
 					if (anInt1951 > -1) {
@@ -514,12 +514,12 @@ public final class ScriptRunner {
 							@Pc(725) Npc local725 = (Npc) entity;
 							@Pc(728) NpcType local728 = local725.type;
 							if (local728.iconHeight == -1) {
-								local265 = entity.method2691() / 2;
+								local265 = entity.getModelHeight() / 2;
 							} else {
 								local265 = local728.iconHeight / 2;
 							}
 						} else {
-							local265 = entity.method2691() / 2;
+							local265 = entity.getModelHeight() / 2;
 						}
 						setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, local265, arg1 >> 1);
 						if (anInt1951 > -1) {
@@ -790,12 +790,12 @@ public final class ScriptRunner {
 					}
 				}
 				if (local39.attachment == null || client.loop < local39.attachmentSetAt || local39.attachmentResetAt <= client.loop) {
-					local39.anInt3424 = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.zFine);
-					SceneGraph.add(Player.plane, local39.xFine, local39.zFine, local39.anInt3424, (local82 - 1) * 64 + 60, local39, local39.anInt3381, local272, local39.aBoolean171);
+					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.zFine);
+					SceneGraph.add(Player.plane, local39.xFine, local39.zFine, local39.tileHeight, (local82 - 1) * 64 + 60, local39, local39.currentAngle, local272, local39.seqStretches);
 				} else {
 					local39.aBoolean98 = false;
-					local39.anInt3424 = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.zFine);
-					method3387(Player.plane, local39.xFine, local39.zFine, local39.anInt3424, local39, local39.anInt3381, local272, local39.atachmentX0, local39.attachmentZ0, local39.attachmentX1, local39.attachmentZ1);
+					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.zFine);
+					method3387(Player.plane, local39.xFine, local39.zFine, local39.tileHeight, local39, local39.currentAngle, local272, local39.atachmentX0, local39.attachmentZ0, local39.attachmentX1, local39.attachmentZ1);
 				}
 			}
 		}
@@ -911,8 +911,8 @@ public final class ScriptRunner {
 				if (!local16.type.interactive) {
 					local262 |= Long.MIN_VALUE;
 				}
-				local16.anInt3424 = SceneGraph.getTileHeight(Player.plane, local16.xFine, local16.zFine);
-				SceneGraph.add(Player.plane, local16.xFine, local16.zFine, local16.anInt3424, local107 * 64 + 60 - 64, local16, local16.anInt3381, local262, local16.aBoolean171);
+				local16.tileHeight = SceneGraph.getTileHeight(Player.plane, local16.xFine, local16.zFine);
+				SceneGraph.add(Player.plane, local16.xFine, local16.zFine, local16.tileHeight, local107 * 64 + 60 - 64, local16, local16.currentAngle, local262, local16.seqStretches);
 			}
 		}
 	}
@@ -952,14 +952,14 @@ public final class ScriptRunner {
 	public static void method4239() {
 		for (@Pc(9) SpotAnimNode local9 = (SpotAnimNode) SceneGraph.spotanims.head(); local9 != null; local9 = (SpotAnimNode) SceneGraph.spotanims.next()) {
 			@Pc(15) SpotAnim local15 = local9.aClass8_Sub2_1;
-			if (local15.anInt606 != Player.plane || local15.aBoolean41) {
+			if (local15.plane != Player.plane || local15.finished) {
 				local9.unlink();
-			} else if (local15.anInt590 <= client.loop) {
-				local15.method558(Protocol.sceneDelta);
-				if (local15.aBoolean41) {
+			} else if (local15.endLoop <= client.loop) {
+				local15.advanceAnimation(Protocol.sceneDelta);
+				if (local15.finished) {
 					local9.unlink();
 				} else {
-					SceneGraph.add(local15.anInt606, local15.anInt604, local15.anInt598, local15.anInt599, 60, local15, 0, -1L, false);
+					SceneGraph.add(local15.plane, local15.posX, local15.posZ, local15.y, 60, local15, 0, -1L, false);
 				}
 			}
 		}
