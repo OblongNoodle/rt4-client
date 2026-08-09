@@ -915,7 +915,7 @@ public final class Component {
 				if (arg5 == null) {
 					return null;
 				}
-				local61 = arg5.method1956(arg3, arg1, arg2, arg0);
+				local61 = arg5.getHeadModel(arg3, arg1, arg2, arg0);
 				if (local61 == null) {
 					aBoolean72 = true;
 					return null;
@@ -947,7 +947,7 @@ public final class Component {
 				@Pc(227) int local227 = this.modelId >>> 16;
 				@Pc(232) int local232 = this.modelId & 0xFFFF;
 				@Pc(235) int local235 = this.anInt498;
-				@Pc(246) Model local246 = arg5.method1946(arg0, local235, local227, arg3, arg1, arg2, local232);
+				@Pc(246) Model local246 = arg5.getPartialHeadModel(arg0, local235, local227, arg3, arg1, arg2, local232);
 				if (local246 == null) {
 					aBoolean72 = true;
 					return null;

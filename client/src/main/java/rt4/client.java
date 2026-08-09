@@ -460,10 +460,10 @@ public final class client extends GameShell {
 		PlayerAppearance.clear();
 		Component.clear();
 		if (modeWhat != 0) {
-			for (@Pc(54) int i = 0; i < Player.aByteArrayArray8.length; i++) {
-				Player.aByteArrayArray8[i] = null;
+			for (@Pc(54) int i = 0; i < Player.glPaddingBuffers.length; i++) {
+				Player.glPaddingBuffers[i] = null;
 			}
-			Player.anInt2863 = 0;
+			Player.glPaddingCount = 0;
 		}
 		HintArrowManager.clear();
 		ShadowModelList.clear();
@@ -590,7 +590,7 @@ public final class client extends GameShell {
 		LightingManager.anInt2875 = -1;
 		unload();
 		DeadClass.cache.clear();
-		LocType.aClass139_1 = new LocEntity();
+		LocType.tempLocEntity = new LocEntity();
 		((Js5GlTextureProvider) Rasteriser.textureProvider).clear();
 		LightingManager.lightCount = 0;
 		LightingManager.lights = new Light[255];
@@ -1052,7 +1052,7 @@ public final class client extends GameShell {
 		js5NetQueue = new Js5NetQueue();
 
 		if (modeWhat != 0) {
-			Player.aByteArrayArray8 = new byte[50][];
+			Player.glPaddingBuffers = new byte[50][];
 		}
 
 		Preferences.read(GameShell.signLink);
@@ -1083,13 +1083,13 @@ public final class client extends GameShell {
 			FogManager.defaulFogColorRgb = 0;
 			PlayerAppearance.destinationBodyColors = PlayerAppearance.GAME1_DESTINATION_BODY_COLORS;
 			PlayerAppearance.destinationSkinColors = PlayerAppearance.GAME1_DESTINATION_SKIN_COLORS;
-			PlayerAppearance.aShortArray65 = PlayerAppearance.GAME1_SOURCE_BODY_COLORS;
-			PlayerAppearance.aShortArray41 = PlayerAppearance.GAME1_SOURCE_SKIN_COLORS;
+			PlayerAppearance.sourceBodyColors = PlayerAppearance.GAME1_SOURCE_BODY_COLORS;
+			PlayerAppearance.sourceSkinColors = PlayerAppearance.GAME1_SOURCE_SKIN_COLORS;
 		} else {
 			PlayerAppearance.destinationBodyColors = PlayerAppearance.GAME0_DESTINATION_BODY_COLORS;
-			PlayerAppearance.aShortArray41 = PlayerAppearance.GAME0_SOURCE_SKIN_COLORS;
+			PlayerAppearance.sourceSkinColors = PlayerAppearance.GAME0_SOURCE_SKIN_COLORS;
 			PlayerAppearance.destinationSkinColors = PlayerAppearance.GAME0_DESTINATION_SKIN_COLORS;
-			PlayerAppearance.aShortArray65 = PlayerAppearance.GAME0_SOURCE_BODY_COLORS;
+			PlayerAppearance.sourceBodyColors = PlayerAppearance.GAME0_SOURCE_BODY_COLORS;
 		}
 
 		alternatePort = worldListAlternatePort;
@@ -1190,9 +1190,9 @@ public final class client extends GameShell {
 							}
 						}
 					}
-					NpcList.method2247(local66);
-					NpcList.method949(local66);
-					NpcList.method879(local66);
+					NpcList.processMovement(local66);
+					NpcList.processFacing(local66);
+					NpcList.processAnimations(local66);
 					PathFinder.collisionMaps[Player.plane].flagScenery(local66.xFine >> 7, false, local66.zFine >> 7, local66.getSize(), local66.getSize());
 				}
 			}

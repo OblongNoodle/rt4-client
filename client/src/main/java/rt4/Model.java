@@ -361,7 +361,7 @@ public abstract class Model extends Entity {
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(IIIII)V")
 	@Override
-	public final void method4545(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void updateModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 	}
 
 	@OriginalMember(owner = "client!ak", name = "c", descriptor = "(III)V")

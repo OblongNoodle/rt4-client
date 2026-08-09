@@ -351,7 +351,7 @@ public class MiniMap {
 							break;
 						}
 					}
-					@Pc(682) boolean local682 = PlayerList.self.anInt1650 != 0 && local591.anInt1650 != 0 && local591.anInt1650 == PlayerList.self.anInt1650;
+					@Pc(682) boolean local682 = PlayerList.self.team != 0 && local591.team != 0 && local591.team == PlayerList.self.team;
 					if (local626) {
 						method1446(arg3, Sprites.mapdots[3], local154, local150, arg1, arg2);
 					} else if (local660) {

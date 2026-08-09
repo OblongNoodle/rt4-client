@@ -187,13 +187,13 @@ public final class Loc extends Entity {
 		if (arg7 < 3) {
 			local158 = SceneGraph.tileHeights[arg7 + 1];
 		}
-		@Pc(215) LocEntity local215 = arg0.method3428(arg2, local80, local120, arg4, local148, local158, false, null, true, local88);
+		@Pc(215) LocEntity local215 = arg0.getStaticEntity(arg2, local80, local120, arg4, local148, local158, false, null, true, local88);
 		ShadowManager.method4207(local215.sprite, local80 - arg3, local122, local88 - arg1);
 	}
 
 	@OriginalMember(owner = "client!dc", name = "a", descriptor = "(IIIII)V")
 	@Override
-	public final void method4545(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void updateModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (GlRenderer.enabled) {
 			this.method1048(true);
 		} else {
@@ -345,9 +345,9 @@ public final class Loc extends Entity {
 		@Pc(356) boolean local356 = this.sprite2 == null;
 		@Pc(389) LocEntity local389;
 		if (this.aClass144_2 == null) {
-			local389 = local19.method3428(this.anInt1295, local302, local267, this.anInt1307, local293, local314, false, local356 ? sprite1 : this.sprite2, local256, local311);
+			local389 = local19.getStaticEntity(this.anInt1295, local302, local267, this.anInt1307, local293, local314, false, local356 ? sprite1 : this.sprite2, local256, local311);
 		} else {
-			local389 = local19.method3429(local311, local302, local356 ? sprite1 : this.sprite2, local293, this.aClass144_2, this.anInt1295, local267, local256, this.anInt1297, local314, this.anInt1304, this.anInt1307, this.anInt1317);
+			local389 = local19.getAnimatedEntity(local311, local302, local356 ? sprite1 : this.sprite2, local293, this.aClass144_2, this.anInt1295, local267, local256, this.anInt1297, local314, this.anInt1304, this.anInt1307, this.anInt1317);
 		}
 		if (local389 == null) {
 			return null;

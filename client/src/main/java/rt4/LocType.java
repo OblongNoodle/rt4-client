@@ -41,7 +41,7 @@ public final class LocType {
 	public static final RawModel[] tempModels = new RawModel[4];
 
 	@OriginalMember(owner = "client!ni", name = "n", descriptor = "Lclient!sm;")
-	public static LocEntity aClass139_1 = new LocEntity();
+	public static LocEntity tempLocEntity = new LocEntity();
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "[S")
 	private short[] retex_s;
@@ -86,15 +86,15 @@ public final class LocType {
 	public int length = 1;
 
 	@OriginalMember(owner = "client!pb", name = "C", descriptor = "Z")
-	public boolean aBoolean211 = false;
+	public boolean clipped = false;
 
 	@OriginalMember(owner = "client!pb", name = "u", descriptor = "I")
 	private int ambient = 0;
 
 	@OriginalMember(owner = "client!gg", name = "W", descriptor = "Lclient!na;")
-	public static final JagString aClass100_475 = JagString.parse("null");
+	public static final JagString DEFAULT_NAME = JagString.parse("null");
 	@OriginalMember(owner = "client!pb", name = "E", descriptor = "Lclient!na;")
-	public JagString name = aClass100_475;
+	public JagString name = DEFAULT_NAME;
 
 	@OriginalMember(owner = "client!pb", name = "D", descriptor = "Z")
 	public boolean castshadow = true;
@@ -127,7 +127,7 @@ public final class LocType {
 	public int mapfunction = -1;
 
 	@OriginalMember(owner = "client!pb", name = "L", descriptor = "Z")
-	public boolean aBoolean214 = false;
+	public boolean dynamic = false;
 
 	@OriginalMember(owner = "client!pb", name = "Y", descriptor = "I")
 	public int cursor2Op = -1;
@@ -282,7 +282,7 @@ public final class LocType {
 				if (local10) {
 					local60 += 65536;
 				}
-				local7 = (RawModel) LocTypeList.aClass99_24.get(local60);
+				local7 = (RawModel) LocTypeList.rawModelCache.get(local60);
 				if (local7 == null) {
 					local7 = RawModel.create(LocTypeList.modelsArchive, local60 & 0xFFFF);
 					if (local7 == null) {
@@ -291,7 +291,7 @@ public final class LocType {
 					if (local10) {
 						local7.method1673();
 					}
-					LocTypeList.aClass99_24.put(local7, local60);
+					LocTypeList.rawModelCache.put(local7, local60);
 				}
 				if (local46 > 1) {
 					tempModels[local48] = local7;
@@ -315,7 +315,7 @@ public final class LocType {
 			if (local10) {
 				local48 += 65536;
 			}
-			local7 = (RawModel) LocTypeList.aClass99_24.get(local48);
+			local7 = (RawModel) LocTypeList.rawModelCache.get(local48);
 			if (local7 == null) {
 				local7 = RawModel.create(LocTypeList.modelsArchive, local48 & 0xFFFF);
 				if (local7 == null) {
@@ -324,7 +324,7 @@ public final class LocType {
 				if (local10) {
 					local7.method1673();
 				}
-				LocTypeList.aClass99_24.put(local7, local48);
+				LocTypeList.rawModelCache.put(local7, local48);
 			}
 		}
 		@Pc(211) boolean local211;
@@ -588,7 +588,7 @@ public final class LocType {
 		} else if (opcode == 89) {
 			this.allowrandomizedanimation = false;
 		} else if (opcode == 90) {
-			this.aBoolean211 = true;
+			this.clipped = true;
 		} else if (opcode == 91) {
 			this.members = true;
 		} else if (opcode == 93) {
@@ -603,7 +603,7 @@ public final class LocType {
 		} else if (opcode == 97) {
 			this.mapSceneRotated = true;
 		} else if (opcode == 98) {
-			this.aBoolean214 = true;
+			this.dynamic = true;
 		} else if (opcode == 99) {
 			this.cursor1Op = buffer.g1();
 			this.cursor1 = buffer.g2();
@@ -671,7 +671,7 @@ public final class LocType {
 			if (arg1) {
 				local135 = ~local135;
 			}
-			local79 = (GlModel) LocTypeList.aClass99_24.get(local135);
+			local79 = (GlModel) LocTypeList.rawModelCache.get(local135);
 			if (local79 == null) {
 				@Pc(175) RawModel local175 = null;
 				for (local177 = 0; local177 < local24; local177++) {
@@ -687,7 +687,7 @@ public final class LocType {
 					local175 = new RawModel(tempModels, local24);
 				}
 				local79 = new GlModel(local175, local10, local17, arg1);
-				LocTypeList.aClass99_24.put(local79, local135);
+				LocTypeList.rawModelCache.put(local79, local135);
 			}
 		} else {
 			local24 = -1;
@@ -705,14 +705,14 @@ public final class LocType {
 			if (arg1) {
 				local26 += 65536;
 			}
-			local79 = (GlModel) LocTypeList.aClass99_24.get(local26);
+			local79 = (GlModel) LocTypeList.rawModelCache.get(local26);
 			if (local79 == null) {
 				@Pc(90) RawModel local90 = RawModel.create(LocTypeList.modelsArchive, local26 & 0xFFFF);
 				if (local90 == null) {
 					return null;
 				}
 				local79 = new GlModel(local90, local10, local17, arg1);
-				LocTypeList.aClass99_24.put(local79, local26);
+				LocTypeList.rawModelCache.put(local79, local26);
 			}
 		}
 		@Pc(236) boolean local236 = this.mirror;
@@ -763,7 +763,7 @@ public final class LocType {
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(II[[III[[IZLclient!ek;BZI)Lclient!sm;")
-	public LocEntity method3428(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[][] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[][] arg5, @OriginalArg(6) boolean arg6, @OriginalArg(7) SoftwareIndexedSprite arg7, @OriginalArg(9) boolean arg8, @OriginalArg(10) int arg9) {
+	public LocEntity getStaticEntity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[][] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[][] arg5, @OriginalArg(6) boolean arg6, @OriginalArg(7) SoftwareIndexedSprite arg7, @OriginalArg(9) boolean arg8, @OriginalArg(10) int arg9) {
 		@Pc(29) long local29;
 		if (GlRenderer.enabled) {
 			if (this.shapes == null) {
@@ -771,15 +771,15 @@ public final class LocType {
 			} else {
 				local29 = arg0 + (this.id << 10) + (arg3 << 3);
 			}
-			@Pc(225) LocEntity local225 = (LocEntity) LocTypeList.aClass99_14.get(local29);
+			@Pc(225) LocEntity local225 = (LocEntity) LocTypeList.staticEntityCache.get(local29);
 			@Pc(235) GlModel local235;
 			@Pc(265) SoftwareIndexedSprite local265;
 			if (local225 == null) {
 				local235 = this.getGlModel(arg0, false, arg3);
 				if (local235 == null) {
-					aClass139_1.model = null;
-					aClass139_1.sprite = null;
-					return aClass139_1;
+					tempLocEntity.model = null;
+					tempLocEntity.sprite = null;
+					return tempLocEntity;
 				}
 				if (arg3 == 10 && arg0 > 3) {
 					local235.rotateY(256);
@@ -792,7 +792,7 @@ public final class LocType {
 				local225 = new LocEntity();
 				local225.model = local235;
 				local225.sprite = local265;
-				LocTypeList.aClass99_14.put(local225, local29);
+				LocTypeList.staticEntityCache.put(local225, local29);
 			} else {
 				local235 = (GlModel) local225.model;
 				local265 = local225.sprite;
@@ -802,11 +802,11 @@ public final class LocType {
 			if (this.hillskewType != 0) {
 				local330.method4110(this.hillskewType, this.hillskewAmount, local235, arg2, arg5, arg1, arg4, arg9);
 			}
-			local330.method4111(this.interactable == 0 && !this.aBoolean214, true, true, this.interactable == 0, true, false);
-			aClass139_1.model = local330;
+			local330.method4111(this.interactable == 0 && !this.dynamic, true, true, this.interactable == 0, true, false);
+			tempLocEntity.model = local330;
 			local330.aBoolean259 = local298;
-			aClass139_1.sprite = local265;
-			return aClass139_1;
+			tempLocEntity.sprite = local265;
+			return tempLocEntity;
 		}
 		if (this.shapes == null) {
 			local29 = (this.id << 10) + arg0;
@@ -820,12 +820,12 @@ public final class LocType {
 		} else {
 			local50 = false;
 		}
-		@Pc(60) Entity local60 = (Entity) LocTypeList.aClass99_14.get(local29);
+		@Pc(60) Entity local60 = (Entity) LocTypeList.staticEntityCache.get(local29);
 		if (local60 == null) {
 			@Pc(69) RawModel local69 = this.getRawModel(arg0, arg3);
 			if (local69 == null) {
-				aClass139_1.model = null;
-				return aClass139_1;
+				tempLocEntity.model = null;
+				return tempLocEntity;
 			}
 			local69.resetBones();
 			if (arg3 == 10 && arg0 > 3) {
@@ -839,7 +839,7 @@ public final class LocType {
 			} else {
 				local60 = new SoftwareModel(local69, this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50);
 			}
-			LocTypeList.aClass99_14.put(local60, local29);
+			LocTypeList.staticEntityCache.put(local60, local29);
 		}
 		if (local50) {
 			local60 = ((RawModel) local60).method1675();
@@ -851,12 +851,12 @@ public final class LocType {
 				local60 = ((RawModel) local60).method1670(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9);
 			}
 		}
-		aClass139_1.model = local60;
-		return aClass139_1;
+		tempLocEntity.model = local60;
+		return tempLocEntity;
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(IILclient!ek;ILclient!tk;I[[IZII[[IIII)Lclient!sm;")
-	public LocEntity method3429(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) SoftwareIndexedSprite arg2, @OriginalArg(3) int arg3, @OriginalArg(4) SeqType arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int[][] arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(10) int[][] arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11, @OriginalArg(13) int arg12) {
+	public LocEntity getAnimatedEntity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) SoftwareIndexedSprite arg2, @OriginalArg(3) int arg3, @OriginalArg(4) SeqType arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int[][] arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(10) int[][] arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11, @OriginalArg(13) int arg12) {
 		@Pc(30) long local30;
 		if (!GlRenderer.enabled) {
 			if (this.shapes == null) {
@@ -864,14 +864,14 @@ public final class LocType {
 			} else {
 				local30 = arg5 + (this.id << 10) + (arg11 << 3);
 			}
-			@Pc(195) SoftwareModel local195 = (SoftwareModel) LocTypeList.aClass99_36.get(local30);
+			@Pc(195) SoftwareModel local195 = (SoftwareModel) LocTypeList.animatedEntityCache.get(local30);
 			if (local195 == null) {
 				@Pc(204) RawModel local204 = this.getRawModel(arg5, arg11);
 				if (local204 == null) {
 					return null;
 				}
 				local195 = new SoftwareModel(local204, this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50);
-				LocTypeList.aClass99_36.put(local195, local30);
+				LocTypeList.animatedEntityCache.put(local195, local30);
 			}
 			@Pc(234) boolean local234 = false;
 			if (arg4 != null) {
@@ -891,15 +891,15 @@ public final class LocType {
 				}
 				local195 = local195.method4586(this.hillskewType, this.hillskewAmount, arg6, arg9, arg1, arg3, arg0, false);
 			}
-			aClass139_1.model = local195;
-			return aClass139_1;
+			tempLocEntity.model = local195;
+			return tempLocEntity;
 		}
 		if (this.shapes == null) {
 			local30 = arg5 + (this.id << 10);
 		} else {
 			local30 = (arg11 << 3) + ((this.id << 10) + arg5);
 		}
-		@Pc(46) GlModel local46 = (GlModel) LocTypeList.aClass99_36.get(local30);
+		@Pc(46) GlModel local46 = (GlModel) LocTypeList.animatedEntityCache.get(local30);
 		if (local46 == null) {
 			local46 = this.getGlModel(arg5, true, arg11);
 			if (local46 == null) {
@@ -907,7 +907,7 @@ public final class LocType {
 			}
 			local46.createBones();
 			local46.method4111(false, false, false, false, false, true);
-			LocTypeList.aClass99_36.put(local46, local30);
+			LocTypeList.animatedEntityCache.put(local46, local30);
 		}
 		@Pc(80) boolean local80 = false;
 		@Pc(82) GlModel local82 = local46;
@@ -923,9 +923,9 @@ public final class LocType {
 			local82.rotateY(256);
 		}
 		if (arg7) {
-			aClass139_1.sprite = local82.method4124(arg2);
+			tempLocEntity.sprite = local82.method4124(arg2);
 		} else {
-			aClass139_1.sprite = null;
+			tempLocEntity.sprite = null;
 		}
 		if (this.hillskewType != 0) {
 			if (!local80) {
@@ -933,8 +933,8 @@ public final class LocType {
 			}
 			local82.method4110(this.hillskewType, this.hillskewAmount, local46, arg6, arg9, arg1, arg3, arg0);
 		}
-		aClass139_1.model = local82;
-		return aClass139_1;
+		tempLocEntity.model = local82;
+		return tempLocEntity;
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(Lclient!na;II)Lclient!na;")

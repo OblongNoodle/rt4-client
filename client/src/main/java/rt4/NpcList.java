@@ -13,24 +13,24 @@ public class NpcList {
 	public static int size = 0;
 
 	@OriginalMember(owner = "client!ig", name = "a", descriptor = "(I)V")
-	public static void method2274() {
+	public static void processAllNpcs() {
 		for (@Pc(7) int local7 = 0; local7 < size; local7++) {
 			@Pc(18) int local18 = ids[local7];
 			@Pc(22) Npc local22 = npcs[local18];
 			if (local22 != null) {
-				method4514(local22.type.size, local22);
+				processEntity(local22.type.size, local22);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!vg", name = "a", descriptor = "(IILclient!fe;)V")
-	public static void method4514(@OriginalArg(0) int arg0, @OriginalArg(2) PathingEntity arg1) {
+	public static void processEntity(@OriginalArg(0) int arg0, @OriginalArg(2) PathingEntity arg1) {
 		if (client.loop < arg1.forceMoveCyclesToStart) {
 			lerpToForceMoveStart(arg1);
 		} else if (arg1.forceMoveCyclesToDest >= client.loop) {
 			lerpToForceMoveDest(arg1);
 		} else {
-			method2247(arg1);
+			processMovement(arg1);
 		}
 		if (arg1.xFine < 128 || arg1.zFine < 128 || arg1.xFine >= 13184 || arg1.zFine >= 13184) {
 			arg1.seqId = -1;
@@ -50,8 +50,8 @@ public class NpcList {
 			arg1.zFine = arg1.movementQueueZ[0] * 128 + arg1.getSize() * 64;
 			arg1.resetMovementQueue();
 		}
-		method949(arg1);
-		method879(arg1);
+		processFacing(arg1);
+		processAnimations(arg1);
 	}
 
 	@OriginalMember(owner = "client!bh", name = "a", descriptor = "(Lclient!fe;Z)V")
@@ -105,7 +105,7 @@ public class NpcList {
 	}
 
 	@OriginalMember(owner = "client!ia", name = "a", descriptor = "(BLclient!fe;)V")
-	public static void method2247(@OriginalArg(1) PathingEntity arg0) {
+	public static void processMovement(@OriginalArg(1) PathingEntity arg0) {
 		@Pc(9) BasType local9 = arg0.getBasType();
 		arg0.movementSeqId = local9.idleAnimationId;
 		if (arg0.movementQueueSize == 0) {
@@ -297,7 +297,7 @@ public class NpcList {
 	}
 
 	@OriginalMember(owner = "client!cm", name = "a", descriptor = "(ILclient!fe;)V")
-	public static void method949(@OriginalArg(1) PathingEntity arg0) {
+	public static void processFacing(@OriginalArg(1) PathingEntity arg0) {
 		if (arg0.turnSpeed == 0) {
 			return;
 		}
@@ -477,7 +477,7 @@ public class NpcList {
 	}
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "(Lclient!fe;I)V")
-	public static void method879(@OriginalArg(0) PathingEntity entity) {
+	public static void processAnimations(@OriginalArg(0) PathingEntity entity) {
 		entity.seqStretches = false;
 		@Pc(18) SeqType local18;
 		if (entity.movementSeqId != -1) {

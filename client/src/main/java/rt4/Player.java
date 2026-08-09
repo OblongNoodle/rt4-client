@@ -35,9 +35,9 @@ public final class Player extends PathingEntity {
 	@OriginalMember(owner = "client!sm", name = "k", descriptor = "Lsignlink!im;")
 	public static PrivilegedRequest lastLogAddress;
 	@OriginalMember(owner = "client!ib", name = "l", descriptor = "I")
-	public static int anInt2863 = 0;
+	public static int glPaddingCount = 0;
 	@OriginalMember(owner = "client!ea", name = "r", descriptor = "[[B")
-	public static byte[][] aByteArrayArray8;
+	public static byte[][] glPaddingBuffers;
 	@OriginalMember(owner = "client!e", name = "Bc", descriptor = "Lclient!hh;")
 	public PlayerAppearance appearance;
 
@@ -45,13 +45,13 @@ public final class Player extends PathingEntity {
 	public JagString username;
 
 	@OriginalMember(owner = "client!e", name = "tc", descriptor = "I")
-	public int anInt1649 = -1;
+	public int prayerHeadIcon = -1;
 
 	@OriginalMember(owner = "client!e", name = "wc", descriptor = "I")
-	private int anInt1651 = 0;
+	private int titleIndex = 0;
 
 	@OriginalMember(owner = "client!e", name = "uc", descriptor = "I")
-	public int anInt1650 = 0;
+	public int team = 0;
 
 	@OriginalMember(owner = "client!e", name = "yc", descriptor = "I")
 	public int combatLevel = 0;
@@ -60,31 +60,31 @@ public final class Player extends PathingEntity {
 	public int combatLevelWithSummoning = 0;
 
 	@OriginalMember(owner = "client!e", name = "Cc", descriptor = "I")
-	public int anInt1654 = -1;
+	public int walkSound = -1;
 
 	@OriginalMember(owner = "client!e", name = "qc", descriptor = "I")
-	public int anInt1648 = -1;
+	public int idleSound = -1;
 
 	@OriginalMember(owner = "client!e", name = "Pc", descriptor = "I")
 	public int soundRadius = 0;
 
 	@OriginalMember(owner = "client!e", name = "Hc", descriptor = "I")
-	public int anInt1658 = -1;
+	public int crawlSound = -1;
 
 	@OriginalMember(owner = "client!e", name = "Sc", descriptor = "I")
 	public int combatRange = -1;
 
 	@OriginalMember(owner = "client!e", name = "Oc", descriptor = "Z")
-	public boolean aBoolean98 = false;
+	public boolean lowDetail = false;
 
 	@OriginalMember(owner = "client!e", name = "Xc", descriptor = "I")
 	public int skill = 0;
 
 	@OriginalMember(owner = "client!e", name = "Vc", descriptor = "I")
-	public int anInt1669 = -1;
+	public int skullHeadIcon = -1;
 
 	@OriginalMember(owner = "client!e", name = "Wc", descriptor = "I")
-	public int anInt1670 = -1;
+	public int runSound = -1;
 
 	@OriginalMember(owner = "client!pa", name = "a", descriptor = "(IIILclient!e;)V")
 	public static void animate(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) Player arg2) {
@@ -117,7 +117,7 @@ public final class Player extends PathingEntity {
 	}
 
 	@OriginalMember(owner = "client!ci", name = "a", descriptor = "([I[ILclient!e;B[I)V")
-	public static void method865(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) Player arg2, @OriginalArg(4) int[] arg3) {
+	public static void applySlotAnimations(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) Player arg2, @OriginalArg(4) int[] arg3) {
 		for (@Pc(7) int local7 = 0; local7 < arg1.length; local7++) {
 			@Pc(20) int local20 = arg1[local7];
 			@Pc(24) int local24 = arg3[local7];
@@ -169,14 +169,14 @@ public final class Player extends PathingEntity {
 
 	@OriginalMember(owner = "client!la", name = "a", descriptor = "(ILclient!e;)I")
 	public static int getSound(@OriginalArg(1) Player arg0) {
-		@Pc(14) int local14 = arg0.anInt1654;
+		@Pc(14) int local14 = arg0.walkSound;
 		@Pc(18) BasType local18 = arg0.getBasType();
 		if (local18.idleAnimationId == arg0.movementSeqId) {
-			local14 = arg0.anInt1648;
+			local14 = arg0.idleSound;
 		} else if (local18.runAnimationId == arg0.movementSeqId || arg0.movementSeqId == local18.runFullTurnAnimationId || arg0.movementSeqId == local18.runCWTurnAnimationId || local18.runCCWTurnAnimationId == arg0.movementSeqId) {
-			local14 = arg0.anInt1670;
+			local14 = arg0.runSound;
 		} else if (arg0.movementSeqId == local18.slowWalkAnimationId || arg0.movementSeqId == local18.slowWalkFullTurnAnimationId || arg0.movementSeqId == local18.slowWalkCWTurnAnimationId || arg0.movementSeqId == local18.slowWalkCCWTurnAnimationId) {
-			local14 = arg0.anInt1658;
+			local14 = arg0.crawlSound;
 		}
 		return local14;
 	}
@@ -198,7 +198,7 @@ public final class Player extends PathingEntity {
 	}
 
 	@OriginalMember(owner = "client!rg", name = "a", descriptor = "(Lclient!e;I)V")
-	public static void method4359(@OriginalArg(0) Player arg0) {
+	public static void updateAreaSound(@OriginalArg(0) Player arg0) {
 		@Pc(12) AreaSound local12 = (AreaSound) AreaSoundManager.playerSounds.get(arg0.username.encode37());
 		if (local12 == null) {
 			AreaSoundManager.add(arg0.movementQueueZ[0], null, 0, null, arg0.movementQueueX[0], plane, arg0);
@@ -208,7 +208,7 @@ public final class Player extends PathingEntity {
 	}
 
 	@OriginalMember(owner = "client!bf", name = "c", descriptor = "(I)V")
-	public static void method501() {
+	public static void invalidateGlModels() {
 		if (!GlRenderer.enabled || LoginManager.aBoolean252) {
 			return;
 		}
@@ -282,7 +282,7 @@ public final class Player extends PathingEntity {
 	}
 
 	@OriginalMember(owner = "client!ja", name = "a", descriptor = "(IIIIB)V")
-	public static void method2310(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static void renderCross(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		if (Cross.type == 1) {
 			Sprites.crosses[Cross.milliseconds / 100].render(Cross.x - 8, Cross.y + -8);
 		}
@@ -314,12 +314,12 @@ public final class Player extends PathingEntity {
 		@Pc(41) int local41 = super.getSize();
 		@Pc(44) int[] local44 = new int[12];
 		this.setSize((local20 >> 3 & 0x7) + 1);
-		this.anInt1651 = local20 >> 6 & 0x3;
+		this.titleIndex = local20 >> 6 & 0x3;
 		this.xFine += (this.getSize() - local41) * 64;
 		this.zFine += (this.getSize() - local41) * 64;
-		this.anInt1669 = arg0.g1b();
-		this.anInt1649 = arg0.g1b();
-		this.anInt1650 = 0;
+		this.skullHeadIcon = arg0.g1b();
+		this.prayerHeadIcon = arg0.g1b();
+		this.team = 0;
 		@Pc(111) int local111;
 		@Pc(127) int local127;
 		@Pc(134) int local134;
@@ -333,7 +333,7 @@ public final class Player extends PathingEntity {
 				local134 = (local111 << 8) + local127;
 				if (local102 == 0 && local134 == 65535) {
 					local22 = arg0.g2();
-					this.anInt1650 = arg0.g1();
+					this.team = arg0.g1();
 					break;
 				}
 				if (local134 >= 32768) {
@@ -341,7 +341,7 @@ public final class Player extends PathingEntity {
 					local44[local102] = local134 | 0x40000000;
 					local175 = ObjTypeList.get(local134).team;
 					if (local175 != 0) {
-						this.anInt1650 = local175;
+						this.team = local175;
 					}
 				} else {
 					local44[local102] = local134 - 256 | Integer.MIN_VALUE;
@@ -377,16 +377,16 @@ public final class Player extends PathingEntity {
 		if (this.soundRadius == 0) {
 			AreaSoundManager.remove(this);
 		} else {
-			@Pc(309) int local309 = this.anInt1658;
-			@Pc(312) int local312 = this.anInt1654;
-			@Pc(315) int local315 = this.anInt1670;
-			local175 = this.anInt1648;
-			this.anInt1648 = arg0.g2();
-			this.anInt1658 = arg0.g2();
-			this.anInt1654 = arg0.g2();
-			this.anInt1670 = arg0.g2();
-			if (this.soundRadius != local134 || this.anInt1648 != local175 || this.anInt1658 != local309 || local312 != this.anInt1654 || this.anInt1670 != local315) {
-				method4359(this);
+			@Pc(309) int local309 = this.crawlSound;
+			@Pc(312) int local312 = this.walkSound;
+			@Pc(315) int local315 = this.runSound;
+			local175 = this.idleSound;
+			this.idleSound = arg0.g2();
+			this.crawlSound = arg0.g2();
+			this.walkSound = arg0.g2();
+			this.runSound = arg0.g2();
+			if (this.soundRadius != local134 || this.idleSound != local175 || this.crawlSound != local309 || local312 != this.walkSound || this.runSound != local315) {
+				updateAreaSound(this);
 			}
 		}
 		if (this.appearance == null) {
@@ -410,22 +410,22 @@ public final class Player extends PathingEntity {
 			return;
 		}
 		@Pc(25) SeqType local25 = this.seqId != -1 && this.seqDelay == 0 ? SeqTypeList.get(this.seqId) : null;
-		@Pc(54) SeqType local54 = this.movementSeqId == -1 || this.aBoolean98 || this.movementSeqId == this.getBasType().idleAnimationId && local25 != null ? null : SeqTypeList.get(this.movementSeqId);
-		@Pc(76) Model local76 = this.appearance.method1954(this.slotAnimations, this.seqNextFrame, local54, local25, this.movementSeqDelayClock, this.movementSeqNextFrame, this.seqDelayClock, this.seqFrame, this.movementSeqFrame);
+		@Pc(54) SeqType local54 = this.movementSeqId == -1 || this.lowDetail || this.movementSeqId == this.getBasType().idleAnimationId && local25 != null ? null : SeqTypeList.get(this.movementSeqId);
+		@Pc(76) Model local76 = this.appearance.getBodyModel(this.slotAnimations, this.seqNextFrame, local54, local25, this.movementSeqDelayClock, this.movementSeqNextFrame, this.seqDelayClock, this.seqFrame, this.movementSeqFrame);
 		@Pc(79) int local79 = PlayerAppearance.getModelCacheSize();
 		if (GlRenderer.enabled && GameShell.maxMemory < 96 && local79 > 50) {
-			method501();
+			invalidateGlModels();
 		}
 		@Pc(102) int local102;
 		if (client.modeWhat != 0 && local79 < 50) {
 			local102 = 50 - local79;
-			while (anInt2863 < local102) {
-				aByteArrayArray8[anInt2863] = new byte[102400];
-				anInt2863++;
+			while (glPaddingCount < local102) {
+				glPaddingBuffers[glPaddingCount] = new byte[102400];
+				glPaddingCount++;
 			}
-			while (anInt2863 > local102) {
-				anInt2863--;
-				aByteArrayArray8[anInt2863] = null;
+			while (glPaddingCount > local102) {
+				glPaddingCount--;
+				glPaddingBuffers[glPaddingCount] = null;
 			}
 		}
 		if (local76 == null) {
@@ -458,20 +458,20 @@ public final class Player extends PathingEntity {
 						if (local278 != null) {
 							local291 = local278.xFine / 32 - PlayerList.self.xFine / 32;
 							local302 = local278.zFine / 32 - PlayerList.self.zFine / 32;
-							this.method1263(null, local302, local76, local291, arg5, arg9, arg0, arg7, arg4, arg3, arg1, local245.playerModelId, arg2, arg6);
+							this.renderHintArrow(null, local302, local76, local291, arg5, arg9, arg0, arg7, arg4, arg3, arg1, local245.playerModelId, arg2, arg6);
 						}
 					}
 					if (local245.type == 2) {
 						@Pc(340) int local340 = (local245.targetX - Camera.originX) * 4 + 2 - PlayerList.self.xFine / 32;
 						local291 = (local245.anInt4046 - Camera.originZ) * 4 + 2 - PlayerList.self.zFine / 32;
-						this.method1263(null, local291, local76, local340, arg5, arg9, arg0, arg7, arg4, arg3, arg1, local245.playerModelId, arg2, arg6);
+						this.renderHintArrow(null, local291, local76, local340, arg5, arg9, arg0, arg7, arg4, arg3, arg1, local245.playerModelId, arg2, arg6);
 					}
 					if (local245.type == 10 && local245.actorTargetId >= 0 && PlayerList.players.length > local245.actorTargetId) {
 						@Pc(395) Player local395 = PlayerList.players[local245.actorTargetId];
 						if (local395 != null) {
 							local291 = local395.xFine / 32 - PlayerList.self.xFine / 32;
 							local302 = local395.zFine / 32 - PlayerList.self.zFine / 32;
-							this.method1263(null, local302, local76, local291, arg5, arg9, arg0, arg7, arg4, arg3, arg1, local245.playerModelId, arg2, arg6);
+							this.renderHintArrow(null, local302, local76, local291, arg5, arg9, arg0, arg7, arg4, arg3, arg1, local245.playerModelId, arg2, arg6);
 						}
 					}
 				}
@@ -480,7 +480,7 @@ public final class Player extends PathingEntity {
 		this.applyBodyLean(local76);
 		this.alignToTerrain(local76, arg0);
 		local184 = null;
-		if (!this.aBoolean98 && this.spotAnimId != -1 && this.spotAnimFrame != -1) {
+		if (!this.lowDetail && this.spotAnimId != -1 && this.spotAnimFrame != -1) {
 			@Pc(471) SpotAnimType local471 = SpotAnimTypeList.get(this.spotAnimId);
 			local184 = local471.constructModel(this.spotAnimNextFrame, this.spotAnimFrame, this.spotAnimDelayClock);
 			if (local184 != null) {
@@ -499,7 +499,7 @@ public final class Player extends PathingEntity {
 			}
 		}
 		@Pc(515) Model local515 = null;
-		if (!this.aBoolean98 && this.attachment != null) {
+		if (!this.lowDetail && this.attachment != null) {
 			if (client.loop >= this.attachmentResetAt) {
 				this.attachment = null;
 			}
@@ -550,7 +550,7 @@ public final class Player extends PathingEntity {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(Lclient!ga;ILclient!ak;IIIIIIIIIIII)V")
-	private void method1263(@OriginalArg(0) ParticleSystem arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Model arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11, @OriginalArg(13) int arg12, @OriginalArg(14) int arg13) {
+	private void renderHintArrow(@OriginalArg(0) ParticleSystem arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Model arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11, @OriginalArg(13) int arg12, @OriginalArg(14) int arg13) {
 		@Pc(12) int local12 = arg3 * arg3 + arg1 * arg1;
 		if (local12 < 16 || local12 > 360000) {
 			return;
@@ -583,17 +583,17 @@ public final class Player extends PathingEntity {
 	public final JagString getName() {
 		@Pc(2) JagString local2 = this.username;
 		if (PlayerList.playerNames != null) {
-			local2 = JagString.concatenate(new JagString[]{PlayerList.playerNames[this.anInt1651], local2});
+			local2 = JagString.concatenate(new JagString[]{PlayerList.playerNames[this.titleIndex], local2});
 		}
 		if (PlayerList.playerNames2 != null) {
-			local2 = JagString.concatenate(new JagString[]{local2, PlayerList.playerNames2[this.anInt1651]});
+			local2 = JagString.concatenate(new JagString[]{local2, PlayerList.playerNames2[this.titleIndex]});
 		}
 		return local2;
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(IIIII)V")
 	@Override
-	public final void method4545(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void updateModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(BIZI)V")

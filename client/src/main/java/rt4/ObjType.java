@@ -60,9 +60,9 @@ public final class ObjType {
 	public int team = 0;
 
 	@OriginalMember(owner = "client!gd", name = "b", descriptor = "Lclient!na;")
-	public static final JagString aClass100_464 = JagString.parse("null");
+	public static final JagString DEFAULT_NAME = JagString.parse("null");
 	@OriginalMember(owner = "client!h", name = "E", descriptor = "Lclient!na;")
-	public JagString name = aClass100_464;
+	public JagString name = DEFAULT_NAME;
 
 	@OriginalMember(owner = "client!h", name = "J", descriptor = "I")
 	private int manWearZOff = 0;
@@ -177,7 +177,7 @@ public final class ObjType {
 	 * An example of this would be coins/arrows.
 	 */
 	@OriginalMember(owner = "client!h", name = "a", descriptor = "(II)Lclient!h;")
-	public final ObjType method1820(@OriginalArg(0) int count) {
+	public final ObjType getCountVariant(@OriginalArg(0) int count) {
 		if (this.countobj != null && count > 1) {
 			@Pc(23) int countId = -1;
 			for (@Pc(25) int i = 0; i < 10; i++) {

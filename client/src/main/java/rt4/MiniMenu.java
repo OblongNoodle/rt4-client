@@ -1541,8 +1541,8 @@ public class MiniMenu {
 						if (other.combatLevel > PlayerList.self.combatLevel) {
 							local291 = 2000;
 						}
-						if (PlayerList.self.anInt1650 != 0 && other.anInt1650 != 0) {
-							if (PlayerList.self.anInt1650 == other.anInt1650) {
+						if (PlayerList.self.team != 0 && other.team != 0) {
+							if (PlayerList.self.team == other.team) {
 								local291 = 2000;
 							} else {
 								local291 = 0;

@@ -881,7 +881,7 @@ public final class RawModel extends Entity {
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIII)V")
 	@Override
-	public final void method4545(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void updateModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "c", descriptor = "(III)V")
@@ -911,7 +911,7 @@ public final class RawModel extends Entity {
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "()Z")
 	@Override
-	public final boolean method4543() {
+	public final boolean canMerge() {
 		return true;
 	}
 
@@ -1403,7 +1403,7 @@ public final class RawModel extends Entity {
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(Lclient!th;IIIZ)V")
 	@Override
-	public final void method4544(@OriginalArg(0) Entity arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
+	public final void mergeNormals(@OriginalArg(0) Entity arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
 		@Pc(2) RawModel m = (RawModel) arg0;
 		m.calculateBounds();
 		m.calculateNormals();

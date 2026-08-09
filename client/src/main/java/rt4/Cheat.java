@@ -132,7 +132,7 @@ public class Cheat {
 				local29 = Runtime.getRuntime();
 				local38 = (int) ((local29.totalMemory() - local29.freeMemory()) / 1024L);
 				Chat.add(null, 0, JagString.concatenate(new JagString[]{aClass100_893, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
-				Player.method501();
+				Player.invalidateGlModels();
 				client.unloadSoft();
 				for (local117 = 0; local117 < 10; local117++) {
 					System.gc();

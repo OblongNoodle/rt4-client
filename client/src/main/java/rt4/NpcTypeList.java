@@ -34,7 +34,7 @@ public class NpcTypeList {
 		if (data != null) {
 			npc.decode(new Buffer(data));
 		}
-		npc.method2942();
+		npc.postDecode();
 		types.put(npc, id);
 		return npc;
 	}

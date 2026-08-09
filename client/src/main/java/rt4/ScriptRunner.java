@@ -329,7 +329,7 @@ public final class ScriptRunner {
 			MiniMap.method4000(arg3, arg2, arg0, 256, 256, arg4);
 		}
 		((Js5GlTextureProvider) Rasteriser.textureProvider).method3239(Protocol.sceneDelta);
-		Player.method2310(arg3, arg4, arg0, arg2);
+		Player.renderCross(arg3, arg4, arg0, arg2);
 		Camera.cameraPitch = local123;
 		Camera.renderZ = local121;
 		Camera.anInt40 = local57;
@@ -423,15 +423,15 @@ public final class ScriptRunner {
 				} else {
 					local74 = 30;
 					@Pc(77) Player local77 = (Player) entity;
-					if (local77.anInt1669 != -1 || local77.anInt1649 != -1) {
+					if (local77.skullHeadIcon != -1 || local77.prayerHeadIcon != -1) {
 						setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight() + 15, arg1 >> 1);
 						if (anInt1951 > -1) {
-							if (local77.anInt1669 != -1) {
-								Sprites.headiconPks[local77.anInt1669].render(anInt1951 + arg2 - 12, arg0 + -30 + anInt548);
+							if (local77.skullHeadIcon != -1) {
+								Sprites.headiconPks[local77.skullHeadIcon].render(anInt1951 + arg2 - 12, arg0 + -30 + anInt548);
 								local74 += 25;
 							}
-							if (local77.anInt1649 != -1) {
-								Sprites.headiconPrayers[local77.anInt1649].render(arg2 + anInt1951 - 12, arg0 - (-anInt548 + local74));
+							if (local77.prayerHeadIcon != -1) {
+								Sprites.headiconPrayers[local77.prayerHeadIcon].render(arg2 + anInt1951 - 12, arg0 - (-anInt548 + local74));
 								local74 += 25;
 							}
 						}
@@ -734,7 +734,7 @@ public final class ScriptRunner {
 				local272 = (long) PlayerList.ids[local28] << 32;
 			}
 			if (local39 != null && local39.isVisible()) {
-				local39.aBoolean98 = (Preferences.manyIdleAnimations && PlayerList.size > 200 || PlayerList.size > 50) && !arg0 && local39.movementSeqId == local39.getBasType().idleAnimationId;
+				local39.lowDetail = (Preferences.manyIdleAnimations && PlayerList.size > 200 || PlayerList.size > 50) && !arg0 && local39.movementSeqId == local39.getBasType().idleAnimationId;
 				local82 = local39.getSize();
 				if (local82 == 1) {
 					if ((local39.xFine & 0x7F) == 64 && (local39.zFine & 0x7F) == 64) {
@@ -793,7 +793,7 @@ public final class ScriptRunner {
 					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.zFine);
 					SceneGraph.add(Player.plane, local39.xFine, local39.zFine, local39.tileHeight, (local82 - 1) * 64 + 60, local39, local39.currentAngle, local272, local39.seqStretches);
 				} else {
-					local39.aBoolean98 = false;
+					local39.lowDetail = false;
 					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.zFine);
 					method3387(Player.plane, local39.xFine, local39.zFine, local39.tileHeight, local39, local39.currentAngle, local272, local39.atachmentX0, local39.attachmentZ0, local39.attachmentX1, local39.attachmentZ1);
 				}
@@ -2559,7 +2559,7 @@ public final class ScriptRunner {
 								}
 								if (opcode == 1202) {
 									component.modelType = 3;
-									component.modelId = PlayerList.self.appearance.method1952();
+									component.modelId = PlayerList.self.appearance.getAppearanceHash();
 									if (component.createdComponentId == -1) {
 										DelayedStateChange.method4600(component.id);
 									}
@@ -4823,13 +4823,13 @@ public final class ScriptRunner {
 														string = stringStack[ssp];
 														if (string.length() > 0) {
 															if (PlayerList.playerNames == null) {
-																PlayerList.playerNames = new JagString[PlayerList.anIntArray309[client.game]];
+																PlayerList.playerNames = new JagString[PlayerList.nameSlotCounts[client.game]];
 															}
 															PlayerList.playerNames[int2] = string;
 														}
 														if (str1.length() > 0) {
 															if (PlayerList.playerNames2 == null) {
-																PlayerList.playerNames2 = new JagString[PlayerList.anIntArray309[client.game]];
+																PlayerList.playerNames2 = new JagString[PlayerList.nameSlotCounts[client.game]];
 															}
 															PlayerList.playerNames2[int2] = str1;
 														}

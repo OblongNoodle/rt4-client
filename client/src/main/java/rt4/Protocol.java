@@ -664,7 +664,7 @@ public class Protocol {
 				delays[i] = inboundBuffer.g1add();
 				slotMasks[i] = inboundBuffer.g2();
 			}
-			Player.method865(delays, seqIds, player, slotMasks);
+			Player.applySlotAnimations(delays, seqIds, player, slotMasks);
 		}
 		if ((flags & 0x100) != 0) {
 			int1 = inboundBuffer.ig2();
@@ -2068,7 +2068,7 @@ public class Protocol {
 			setVerifyId(tracknum);
 			int set = 0;
 			if (PlayerList.self.appearance != null) {
-				set = PlayerList.self.appearance.method1952();
+				set = PlayerList.self.appearance.getAppearanceHash();
 			}
 			DelayedStateChange.updateComponentModel(-1, 3, id, set);
 			opcode = -1;
@@ -2563,8 +2563,8 @@ public class Protocol {
 			method3279();
 			return;
 		}
-		PlayerList.method1444();
-		NpcList.method2274();
+		PlayerList.processAllPlayers();
+		NpcList.processAllNpcs();
 		OverheadChat.loop();
 		if (WorldMap.component != null) {
 			WorldMap.method447();

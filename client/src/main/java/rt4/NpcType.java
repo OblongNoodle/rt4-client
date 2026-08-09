@@ -9,19 +9,19 @@ import org.openrs2.deob.annotation.Pc;
 public final class NpcType {
 
 	@OriginalMember(owner = "client!id", name = "e", descriptor = "[I")
-	public static final int[] anIntArray259 = new int[14];
+	public static final int[] slotCurrentFrames = new int[14];
 	@OriginalMember(owner = "client!lg", name = "c", descriptor = "[Lclient!tk;")
-	public static final SeqType[] aClass144Array1 = new SeqType[14];
+	public static final SeqType[] slotSeqTypes = new SeqType[14];
 	@OriginalMember(owner = "client!ag", name = "cb", descriptor = "[Lclient!cl;")
-	public static final AnimFrameset[] aClass3_Sub2_Sub7Array1 = new AnimFrameset[14];
+	public static final AnimFrameset[] slotCurrentFramesets = new AnimFrameset[14];
 	@OriginalMember(owner = "client!fk", name = "k", descriptor = "[I")
-	public static final int[] anIntArray147 = new int[14];
+	public static final int[] slotFrameDelays = new int[14];
 	@OriginalMember(owner = "client!rg", name = "A", descriptor = "[I")
-	public static final int[] anIntArray492 = new int[14];
+	public static final int[] slotDelayClocks = new int[14];
 	@OriginalMember(owner = "client!kd", name = "mb", descriptor = "[Lclient!cl;")
-	public static final AnimFrameset[] aClass3_Sub2_Sub7Array5 = new AnimFrameset[14];
+	public static final AnimFrameset[] slotTweenFramesets = new AnimFrameset[14];
 	@OriginalMember(owner = "client!en", name = "t", descriptor = "[I")
-	public static final int[] anIntArray148 = new int[14];
+	public static final int[] slotTweenFrames = new int[14];
 	@OriginalMember(owner = "client!me", name = "b", descriptor = "[S")
 	private short[] retex_d;
 
@@ -38,7 +38,7 @@ public final class NpcType {
 	private short[] recol_d;
 
 	@OriginalMember(owner = "client!me", name = "t", descriptor = "[[I")
-	private int[][] anIntArrayArray28;
+	private int[][] modelTransformCache;
 
 	@OriginalMember(owner = "client!me", name = "z", descriptor = "[[I")
 	private int[][] modeloffsets;
@@ -77,9 +77,9 @@ public final class NpcType {
 	public short shadowcolor2 = 0;
 
 	@OriginalMember(owner = "client!vk", name = "d", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1010 = JagString.parse("null");
+	public static final JagString DEFAULT_NAME = JagString.parse("null");
 	@OriginalMember(owner = "client!me", name = "L", descriptor = "Lclient!na;")
-	public JagString name = aClass100_1010;
+	public JagString name = DEFAULT_NAME;
 
 	@OriginalMember(owner = "client!me", name = "x", descriptor = "I")
 	public int combatLevel = -1;
@@ -283,11 +283,11 @@ public final class NpcType {
 						local221 = local156.modelRotateTranslate[local173][1];
 						local228 = local156.modelRotateTranslate[local173][5];
 						local235 = local156.modelRotateTranslate[local173][0];
-						if (this.anIntArrayArray28 == null) {
-							this.anIntArrayArray28 = new int[local156.modelRotateTranslate.length][];
+						if (this.modelTransformCache == null) {
+							this.modelTransformCache = new int[local156.modelRotateTranslate.length][];
 						}
-						if (this.anIntArrayArray28[local173] == null) {
-							@Pc(259) int[] local259 = this.anIntArrayArray28[local173] = new int[15];
+						if (this.modelTransformCache[local173] == null) {
+							@Pc(259) int[] local259 = this.modelTransformCache[local173] = new int[15];
 							if (local207 == 0 && local214 == 0 && local228 == 0) {
 								local259[13] = -local221;
 								local259[14] = -local200;
@@ -363,35 +363,35 @@ public final class NpcType {
 			if (seqs[local235] != null) {
 				@Pc(753) SeqType local753 = SeqTypeList.get(seqs[local235].seqId);
 				if (local753.frames != null) {
-					aClass144Array1[local235] = local753;
+					slotSeqTypes[local235] = local753;
 					local207 = seqs[local235].nextFrame;
 					local46 = true;
 					local200 = seqs[local235].currentFrame;
 					local214 = local753.frames[local200];
-					aClass3_Sub2_Sub7Array1[local235] = SeqTypeList.getAnimFrameset(local214 >>> 16);
+					slotCurrentFramesets[local235] = SeqTypeList.getAnimFrameset(local214 >>> 16);
 					local214 &= 0xFFFF;
-					anIntArray259[local235] = local214;
-					if (aClass3_Sub2_Sub7Array1[local235] != null) {
-						local723 |= aClass3_Sub2_Sub7Array1[local235].isColorTransformed(local214);
-						local721 |= aClass3_Sub2_Sub7Array1[local235].isAlphaTransformed(local214);
+					slotCurrentFrames[local235] = local214;
+					if (slotCurrentFramesets[local235] != null) {
+						local723 |= slotCurrentFramesets[local235].isColorTransformed(local214);
+						local721 |= slotCurrentFramesets[local235].isAlphaTransformed(local214);
 						local725 |= local753.aBoolean278;
 					}
 					if ((local753.tween || SeqType.applyTweening) && local207 != -1 && local753.frames.length > local207) {
-						anIntArray147[local235] = local753.frameDelay[local200];
-						anIntArray492[local235] = seqs[local235].delayClock;
+						slotFrameDelays[local235] = local753.frameDelay[local200];
+						slotDelayClocks[local235] = seqs[local235].delayClock;
 						local228 = local753.frames[local207];
-						aClass3_Sub2_Sub7Array5[local235] = SeqTypeList.getAnimFrameset(local228 >>> 16);
+						slotTweenFramesets[local235] = SeqTypeList.getAnimFrameset(local228 >>> 16);
 						local228 &= 0xFFFF;
-						anIntArray148[local235] = local228;
-						if (aClass3_Sub2_Sub7Array5[local235] != null) {
-							local723 |= aClass3_Sub2_Sub7Array5[local235].isColorTransformed(local228);
-							local721 |= aClass3_Sub2_Sub7Array5[local235].isAlphaTransformed(local228);
+						slotTweenFrames[local235] = local228;
+						if (slotTweenFramesets[local235] != null) {
+							local723 |= slotTweenFramesets[local235].isColorTransformed(local228);
+							local721 |= slotTweenFramesets[local235].isAlphaTransformed(local228);
 						}
 					} else {
-						anIntArray147[local235] = 0;
-						anIntArray492[local235] = 0;
-						aClass3_Sub2_Sub7Array5[local235] = null;
-						anIntArray148[local235] = -1;
+						slotFrameDelays[local235] = 0;
+						slotDelayClocks[local235] = 0;
+						slotTweenFramesets[local235] = null;
+						slotTweenFrames[local235] = -1;
 					}
 				}
 			}
@@ -469,8 +469,8 @@ public final class NpcType {
 		@Pc(1218) Model local1218 = local40.method4572(!local721, !local723, !local725);
 		local330 = 1;
 		for (local318 = 0; local318 < local173; local318++) {
-			if (aClass3_Sub2_Sub7Array1[local318] != null) {
-				local1218.method4565(aClass3_Sub2_Sub7Array1[local318], anIntArray259[local318], aClass3_Sub2_Sub7Array5[local318], anIntArray148[local318], anIntArray492[local318] - 1, anIntArray147[local318], local330, aClass144Array1[local318].aBoolean278, this.anIntArrayArray28[local318]);
+			if (slotCurrentFramesets[local318] != null) {
+				local1218.method4565(slotCurrentFramesets[local318], slotCurrentFrames[local318], slotTweenFramesets[local318], slotTweenFrames[local318], slotDelayClocks[local318] - 1, slotFrameDelays[local318], local330, slotSeqTypes[local318].aBoolean278, this.modelTransformCache[local318]);
 			}
 			local330 <<= 0x1;
 		}
@@ -482,9 +482,9 @@ public final class NpcType {
 			local1218.method4558(local1088, local228, local1092, local1040, arg7 - 1, local300, seqType1.aBoolean278);
 		}
 		for (local318 = 0; local318 < local173; local318++) {
-			aClass3_Sub2_Sub7Array1[local318] = null;
-			aClass3_Sub2_Sub7Array5[local318] = null;
-			aClass144Array1[local318] = null;
+			slotCurrentFramesets[local318] = null;
+			slotTweenFramesets[local318] = null;
+			slotSeqTypes[local318] = null;
 		}
 		if (this.resizeX != 128 || this.resizeY != 128) {
 			local1218.resize(this.resizeX, this.resizeY, this.resizeX);
@@ -514,7 +514,7 @@ public final class NpcType {
 	}
 
 	@OriginalMember(owner = "client!me", name = "b", descriptor = "(I)V")
-	public final void method2942() {
+	public final void postDecode() {
 	}
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(Lclient!tk;IIII)Lclient!ak;")
