@@ -655,13 +655,13 @@ public final class client extends GameShell {
 			Chat.messages[local3506] = null;
 		}
 		MiniMenu.anInt5014 = 0;
-		Camera.anInt3291 = (int) (Math.random() * 100.0D) - 50;
+		Camera.cameraOffsetX = (int) (Math.random() * 100.0D) - 50;
 		LoginManager.mapFlagZ = 0;
 		Camera.yawTarget = (int) (Math.random() * 20.0D) - 10 & 0x7FF;
 		LightingManager.anInt2875 = -1;
 		PlayerList.size = 0;
 		MiniMap.state = 0;
-		Camera.anInt4774 = (int) (Math.random() * 110.0D) - 55;
+		Camera.cameraOffsetZ = (int) (Math.random() * 110.0D) - 55;
 		MiniMenu.aBoolean302 = false;
 		MiniMap.anInt4130 = (int) (Math.random() * 30.0D) - 20;
 		SoundPlayer.size = 0;
@@ -694,16 +694,16 @@ public final class client extends GameShell {
 		FriendsList.size = 0;
 		VarpDomain.reset();
 		DelayedStateChange.clear();
-		Camera.anInt5230 = 0;
-		Camera.anInt5217 = 0;
-		Camera.anInt5765 = 0;
-		Camera.anInt5203 = 0;
-		Camera.anInt4232 = 0;
-		Camera.anInt5375 = 0;
-		Camera.anInt1744 = 0;
-		Camera.anInt5449 = 0;
-		Camera.anInt4612 = 0;
-		Camera.anInt5225 = 0;
+		Camera.lockedMinStep = 0;
+		Camera.lockedAngleSpeed = 0;
+		Camera.lockedLookAtZ = 0;
+		Camera.lockedTargetHeight = 0;
+		Camera.lockedTargetZ = 0;
+		Camera.lockedTargetX = 0;
+		Camera.lockedLookAtHeight = 0;
+		Camera.lockedLookAtX = 0;
+		Camera.lockedMoveSpeed = 0;
+		Camera.lockedMinMoveStep = 0;
 		for (local3506 = 0; local3506 < VarcDomain.varcs.length; local3506++) {
 			VarcDomain.varcs[local3506] = -1;
 		}

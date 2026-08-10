@@ -229,15 +229,15 @@ public final class ScriptRunner {
 		if (Camera.cameraType == 1) {
 			local57 = Camera.anInt5161 + (int) Camera.yawTarget & 0x7FF;
 			local59 = (int) Camera.pitchTarget;
-			if (local59 < Camera.anInt5245 / 256) {
-				local59 = Camera.anInt5245 / 256;
+			if (local59 < Camera.maxPitchDistance / 256) {
+				local59 = Camera.maxPitchDistance / 256;
 			}
 			if (Camera.customCameraActive[4] && Camera.cameraAmplitude[4] + 128 > local59) {
 				local59 = Camera.cameraAmplitude[4] + 128;
 			}
-			Camera.method555(Camera.cameraX, arg0, SceneGraph.getTileHeight(Player.plane, PlayerList.self.xFine, PlayerList.self.zFine) - 50, Camera.ZOOM - -(local59 * 3), local57, Camera.cameraZ, local59);
+			Camera.calculateRenderPosition(Camera.cameraX, arg0, SceneGraph.getTileHeight(Player.plane, PlayerList.self.xFine, PlayerList.self.zFine) - 50, Camera.ZOOM - -(local59 * 3), local57, Camera.cameraZ, local59);
 		}
-		local57 = Camera.anInt40;
+		local57 = Camera.renderY;
 		local59 = Camera.renderX;
 		@Pc(121) int local121 = Camera.renderZ;
 		@Pc(123) int local123 = Camera.cameraPitch;
@@ -263,7 +263,7 @@ public final class ScriptRunner {
 					Camera.renderZ += local171;
 				}
 				if (local127 == 1) {
-					Camera.anInt40 += local171;
+					Camera.renderY += local171;
 				}
 				if (local127 == 0) {
 					Camera.renderX += local171;
@@ -276,8 +276,8 @@ public final class ScriptRunner {
 			@Pc(248) float local248 = (float) Camera.cameraPitch * 0.17578125F;
 			@Pc(253) float local253 = (float) Camera.cameraYaw * 0.17578125F;
 			if (Camera.cameraType == 3) {
-				local248 = Camera.aFloat15 * 360.0F / 6.2831855F;
-				local253 = Camera.aFloat10 * 360.0F / 6.2831855F;
+				local248 = Camera.pitchRadians * 360.0F / 6.2831855F;
+				local253 = Camera.yawRadians * 360.0F / 6.2831855F;
 			}
 			GlRenderer.method4171(arg2, arg4, arg3, arg0, arg3 / 2 + arg2, arg4 - -(arg0 / 2), local248, local253, anInt5029, anInt5029);
 		} else {
@@ -310,9 +310,9 @@ public final class ScriptRunner {
 			}
 			LightingManager.method2394(client.loop, !Preferences.flickeringEffectsOn);
 			GlRenderer.clearColorAndDepthBuffers(local171);
-			MaterialManager.method2731(Camera.cameraPitch, Camera.renderZ, Camera.anInt40, Camera.renderX, Camera.cameraYaw);
+			MaterialManager.method2731(Camera.cameraPitch, Camera.renderZ, Camera.renderY, Camera.renderX, Camera.cameraYaw);
 			GlRenderer.anInt5323 = client.loop;
-			SceneGraph.method2954(Camera.renderX, Camera.anInt40, Camera.renderZ, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.zFine >> 7);
+			SceneGraph.setPlainTile(Camera.renderX, Camera.renderY, Camera.renderZ, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.zFine >> 7);
 			aBoolean299 = true;
 			LightingManager.method2390();
 			MaterialManager.method2731(0, 0, 0, 0, 0);
@@ -322,7 +322,7 @@ public final class ScriptRunner {
 			MiniMap.method4000(arg3, arg2, arg0, anInt5029, anInt5029, arg4);
 		} else {
 			SoftwareRaster.fillRect(arg2, arg4, arg3, arg0, 0);
-			SceneGraph.method2954(Camera.renderX, Camera.anInt40, Camera.renderZ, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.zFine >> 7);
+			SceneGraph.setPlainTile(Camera.renderX, Camera.renderY, Camera.renderZ, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.zFine >> 7);
 			client.audioLoop();
 			method3858();
 			drawOverheads(arg4, arg3, arg2, 256, arg0, 256);
@@ -332,7 +332,7 @@ public final class ScriptRunner {
 		Player.renderCross(arg3, arg4, arg0, arg2);
 		Camera.cameraPitch = local123;
 		Camera.renderZ = local121;
-		Camera.anInt40 = local57;
+		Camera.renderY = local57;
 		Camera.renderX = local59;
 		Camera.cameraYaw = local125;
 		if (aBoolean43 && client.js5NetQueue.getUrgentRequestCount() == 0) {
@@ -1098,18 +1098,18 @@ public final class ScriptRunner {
 						@Pc(358) int local358;
 						if (local130 && arg3[local150][local108][local122] != null) {
 							if (arg3[local150][local108][local122].wall != null) {
-								local191 = SceneGraph.method2251(local94);
+								local191 = SceneGraph.getLocCollisionMask(local94);
 								if (arg3[local150][local108][local122].wall.primaryFlags == local191 || arg3[local150][local108][local122].wall.secondaryFlags == local191) {
 									continue;
 								}
 								if (local102 != 0) {
-									local227 = SceneGraph.method2251(local102);
+									local227 = SceneGraph.getLocCollisionMask(local102);
 									if (local227 == arg3[local150][local108][local122].wall.primaryFlags || arg3[local150][local108][local122].wall.secondaryFlags == local227) {
 										continue;
 									}
 								}
 								if (local116 != 0) {
-									local227 = SceneGraph.method2251(local116);
+									local227 = SceneGraph.getLocCollisionMask(local116);
 									if (local227 == arg3[local150][local108][local122].wall.primaryFlags || local227 == arg3[local150][local108][local122].wall.secondaryFlags) {
 										continue;
 									}
@@ -1269,7 +1269,7 @@ public final class ScriptRunner {
 		}
 		@Pc(38) int local38 = SceneGraph.getTileHeight(Player.plane, arg5, arg2) - arg3;
 		@Pc(42) int local42 = arg2 - Camera.renderZ;
-		@Pc(46) int local46 = local38 - Camera.anInt40;
+		@Pc(46) int local46 = local38 - Camera.renderY;
 		@Pc(50) int local50 = arg5 - Camera.renderX;
 		@Pc(54) int local54 = MathUtils.sin[Camera.cameraPitch];
 		@Pc(58) int local58 = MathUtils.cos[Camera.cameraPitch];
@@ -1324,7 +1324,7 @@ public final class ScriptRunner {
 
 	@OriginalMember(owner = "client!ol", name = "a", descriptor = "(IIIILclient!th;IJIIII)Z")
 	public static boolean method3387(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) Entity arg4, @OriginalArg(5) int arg5, @OriginalArg(6) long arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10) {
-		return arg4 == null || SceneGraph.method2256(arg0, arg7, arg8, arg9 + 1 - arg7, arg10 - arg8 + 1, arg1, arg2, arg3, arg4, arg5, true, arg6);
+		return arg4 == null || SceneGraph.addSceneryEntity(arg0, arg7, arg8, arg9 + 1 - arg7, arg10 - arg8 + 1, arg1, arg2, arg3, arg4, arg5, true, arg6);
 	}
 
 	@OriginalMember(owner = "client!vl", name = "a", descriptor = "(I)Z")
@@ -1367,7 +1367,7 @@ public final class ScriptRunner {
 		}
 		if (Camera.cameraType != 1) {
 			local33 = SceneGraph.getTileHeight(Player.plane, Camera.renderX, Camera.renderZ);
-			if (local33 - Camera.anInt40 < 800 && (SceneGraph.renderFlags[Player.plane][Camera.renderX >> 7][Camera.renderZ >> 7] & API.TILE_FLAG_UNDER_ROOF) != 0) {
+			if (local33 - Camera.renderY < 800 && (SceneGraph.renderFlags[Player.plane][Camera.renderX >> 7][Camera.renderZ >> 7] & API.TILE_FLAG_UNDER_ROOF) != 0) {
 				method4348(false, Camera.renderX >> 7, Camera.renderZ >> 7, SceneGraph.tiles, 1);
 			}
 			return;
@@ -4745,7 +4745,7 @@ public final class ScriptRunner {
 														int1 = intStack[isp];
 														int3 = intStack[isp + 1];
 														if (int1 >= 0 && int1 < 2) {
-															Camera.anIntArrayArrayArray9[int1] = new int[int3 << 1][4];
+															Camera.cameraPathData[int1] = new int[int3 << 1][4];
 														}
 														continue;
 													}
@@ -4758,15 +4758,15 @@ public final class ScriptRunner {
 														c = intStack[isp + 4];
 														@Pc(8108) int local8108 = intStack[isp + 6];
 														local1087 = intStack[isp + 5];
-														if (int1 >= 0 && int1 < 2 && Camera.anIntArrayArrayArray9[int1] != null && int3 >= 0 && Camera.anIntArrayArrayArray9[int1].length > int3) {
-															Camera.anIntArrayArrayArray9[int1][int3] = new int[]{(int2 >> 14 & 0x3FFF) * 128, local652, (int2 & 0x3FFF) * 128, local8108};
-															Camera.anIntArrayArrayArray9[int1][int3 + 1] = new int[]{(c >> 14 & 0x3FFF) * 128, local1087, (c & 0x3FFF) * 128};
+														if (int1 >= 0 && int1 < 2 && Camera.cameraPathData[int1] != null && int3 >= 0 && Camera.cameraPathData[int1].length > int3) {
+															Camera.cameraPathData[int1][int3] = new int[]{(int2 >> 14 & 0x3FFF) * 128, local652, (int2 & 0x3FFF) * 128, local8108};
+															Camera.cameraPathData[int1][int3 + 1] = new int[]{(c >> 14 & 0x3FFF) * 128, local1087, (c & 0x3FFF) * 128};
 														}
 														continue;
 													}
 													if (opcode == 5407) {
 														isp--;
-														int1 = Camera.anIntArrayArrayArray9[intStack[isp]].length >> 1;
+														int1 = Camera.cameraPathData[intStack[isp]].length >> 1;
 														intStack[isp++] = int1;
 														continue;
 													}
@@ -4884,7 +4884,7 @@ public final class ScriptRunner {
 														local652 = intStack[isp + 3];
 														int2 = intStack[isp + 2];
 														int3 = intStack[isp + 1];
-														Camera.method2722(false, int2, int3, local652, (int1 & 0x3FFF) - Camera.originZ, (int1 >> 14 & 0x3FFF) - Camera.originX);
+														Camera.setLockedPosition(false, int2, int3, local652, (int1 & 0x3FFF) - Camera.originZ, (int1 >> 14 & 0x3FFF) - Camera.originX);
 														continue;
 													}
 													if (opcode == Cs2Opcodes.cameraPointAt) {
@@ -4893,7 +4893,7 @@ public final class ScriptRunner {
 														int1 = intStack[isp];
 														local652 = intStack[isp + 3];
 														int2 = intStack[isp + 2];
-														Camera.method3849(int3, (int1 & 0x3FFF) - Camera.originZ, int2, (int1 >> 14 & 0x3FFF) - Camera.originX, local652);
+														Camera.setLockedLookAt(int3, (int1 & 0x3FFF) - Camera.originZ, int2, (int1 >> 14 & 0x3FFF) - Camera.originX, local652);
 														continue;
 													}
 													if (opcode == 5502) {
@@ -4902,25 +4902,25 @@ public final class ScriptRunner {
 														if (int1 >= 2) {
 															throw new RuntimeException();
 														}
-														Camera.anInt3718 = int1;
+														Camera.movePathId = int1;
 														int3 = intStack[isp + 1];
-														if (Camera.anIntArrayArrayArray9[Camera.anInt3718].length >> 1 <= int3 + 1) {
+														if (Camera.cameraPathData[Camera.movePathId].length >> 1 <= int3 + 1) {
 															throw new RuntimeException();
 														}
-														Camera.anInt3125 = int3;
-														Camera.anInt5224 = 0;
-														Camera.anInt5101 = intStack[isp + 2];
-														Camera.anInt5843 = intStack[isp + 3];
+														Camera.moveSplineIndex = int3;
+														Camera.splineProgress = 0;
+														Camera.moveSplineSpeedStart = intStack[isp + 2];
+														Camera.moveSplineSpeedEnd = intStack[isp + 3];
 														int2 = intStack[isp + 4];
 														if (int2 >= 2) {
 															throw new RuntimeException();
 														}
-														Camera.anInt1694 = int2;
+														Camera.lookAtPathId = int2;
 														local652 = intStack[isp + 5];
-														if (Camera.anIntArrayArrayArray9[Camera.anInt1694].length >> 1 <= local652 + 1) {
+														if (Camera.cameraPathData[Camera.lookAtPathId].length >> 1 <= local652 + 1) {
 															throw new RuntimeException();
 														}
-														Camera.anInt2119 = local652;
+														Camera.lookAtSplineIndex = local652;
 														Camera.cameraType = 3;
 														continue;
 													}

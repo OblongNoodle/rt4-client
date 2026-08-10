@@ -1032,7 +1032,7 @@ public class InterfaceList {
 									lowPriorityRequests.addTail(local1430);
 								}
 							}
-							if (Camera.aBoolean16 && component.onMinimapUnlock != null) {
+							if (Camera.splineJustFinished && component.onMinimapUnlock != null) {
 								request = new HookRequest();
 								request.source = component;
 								request.arguments = component.onMinimapUnlock;
@@ -1111,8 +1111,8 @@ public class InterfaceList {
 			return;
 		}
 		if (Camera.cameraType == 2) {
-			Camera.renderX = Camera.anInt5375 << 7;
-			Camera.renderZ = Camera.anInt4232 << 7;
+			Camera.renderX = Camera.lockedTargetX << 7;
+			Camera.renderZ = Camera.lockedTargetZ << 7;
 		} else {
 			Camera.updateLoginScreenCamera();
 		}

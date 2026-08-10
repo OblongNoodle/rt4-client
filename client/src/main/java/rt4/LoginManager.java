@@ -806,10 +806,10 @@ public class LoginManager {
 		if (arg4) {
 			Camera.renderX -= local86 * 128;
 			Camera.renderZ -= local81 * 128;
-			Camera.anInt4232 -= local81;
-			Camera.anInt5449 -= local86;
-			Camera.anInt5765 -= local81;
-			Camera.anInt5375 -= local86;
+			Camera.lockedTargetZ -= local81;
+			Camera.lockedLookAtX -= local86;
+			Camera.lockedLookAtZ -= local81;
+			Camera.lockedTargetX -= local86;
 		} else {
 			Camera.cameraType = 1;
 		}
@@ -1049,7 +1049,7 @@ public class LoginManager {
 		}
 		client.unload();
 		ClientProt.ping(true);
-		SceneGraph.method1169(PathFinder.collisionMaps, false);
+		SceneGraph.buildScene(PathFinder.collisionMaps, false);
 		if (GlRenderer.enabled) {
 			LightingManager.method2395();
 		}
@@ -1061,9 +1061,9 @@ public class LoginManager {
 		if (i < Player.plane - 1) {
 		}
 		if (SceneGraph.allLevelsAreVisible()) {
-			SceneGraph.method2750(0);
+			SceneGraph.setBaseLevel(0);
 		} else {
-			SceneGraph.method2750(SceneGraph.firstVisibleLevel);
+			SceneGraph.setBaseLevel(SceneGraph.firstVisibleLevel);
 		}
 		SceneGraph.unload();
 		if (GlRenderer.enabled && hasUnderWaterMap) {
@@ -1081,7 +1081,7 @@ public class LoginManager {
 			}
 			client.unload();
 			ClientProt.ping(true);
-			SceneGraph.method1169(PathFinder.collisionMaps, true);
+			SceneGraph.buildScene(PathFinder.collisionMaps, true);
 			ClientProt.ping(true);
 			SceneGraph.unload();
 			SceneGraph.setUnderwater(false);
@@ -1383,7 +1383,7 @@ public class LoginManager {
 							@Pc(98) int local98 = (local88 / 8 << 8) + local76 / 8;
 							for (@Pc(100) int local100 = 0; local100 < regionBitPacked.length; local100++) {
 								if (regionBitPacked[local100] == local98 && local13[local100] != null) {
-									SceneGraph.method4228(local82, local32 * 8, local21, PathFinder.collisionMaps, local39 * 8, local13[local100], local65, (local76 & 0x7) * 8, (local88 & 0x7) * 8, arg0);
+									SceneGraph.readDynamicTerrain(local82, local32 * 8, local21, PathFinder.collisionMaps, local39 * 8, local13[local100], local65, (local76 & 0x7) * 8, (local88 & 0x7) * 8, arg0);
 									local54 = true;
 									break;
 								}
@@ -1391,7 +1391,7 @@ public class LoginManager {
 						}
 					}
 					if (!local54) {
-						SceneGraph.method645(local21, local39 * 8, local32 * 8, 8, 8);
+						SceneGraph.clearTerrainRegion(local21, local39 * 8, local32 * 8, 8, 8);
 					}
 				}
 			}
@@ -1519,7 +1519,7 @@ public class LoginManager {
 			local53 = local9[local20];
 			if (local53 != null) {
 				client.audioLoop();
-				SceneGraph.method2203(PathFinder.collisionMaps, arg0, SceneGraph.centralZoneX * 8 - 48, local49, local38, (SceneGraph.centralZoneZ - 6) * 8, local53);
+				SceneGraph.readTerrain(PathFinder.collisionMaps, arg0, SceneGraph.centralZoneX * 8 - 48, local49, local38, (SceneGraph.centralZoneZ - 6) * 8, local53);
 			}
 		}
 		for (local20 = 0; local20 < local18; local20++) {
@@ -1529,7 +1529,7 @@ public class LoginManager {
 			if (local53 == null && SceneGraph.centralZoneZ < 800) {
 				client.audioLoop();
 				for (@Pc(130) int local130 = 0; local130 < local7; local130++) {
-					SceneGraph.method645(local130, local49, local38, 64, 64);
+					SceneGraph.clearTerrainRegion(local130, local49, local38, 64, 64);
 				}
 			}
 		}

@@ -214,7 +214,7 @@ public class Protocol {
 			if (local218 == 65535) {
 				local218 = -1;
 			}
-			SceneGraph.method1881(Player.plane, local39, local31, local19, local45, local23, local218);
+			SceneGraph.addLoc(Player.plane, local39, local31, local19, local45, local23, local218);
 		} else if (opcode == ServerProt.LOC_ADD_CHANGE) {
 			int local15 = inboundBuffer.g1();
 			int local23 = local15 >> 2;
@@ -1314,7 +1314,7 @@ public class Protocol {
 			int step = inboundBuffer.g1();
 			int dur = inboundBuffer.g1();
 			setVerifyId(tracknum);
-			Camera.method3849(cy, tz, step, tx, dur);
+			Camera.setLockedLookAt(cy, tz, step, tx, dur);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.IF_SETANIM) {
@@ -1658,7 +1658,7 @@ public class Protocol {
 			int local1146 = inboundBuffer.g1();
 			int local277 = inboundBuffer.g1();
 			setVerifyId(tracknum);
-			Camera.method2722(true, local1146, counter, local277, modelId, local786);
+			Camera.setLockedPosition(true, local1146, counter, local277, modelId, local786);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.MESSAGE_QUICKCHAT_PRIVATE) {
@@ -1953,7 +1953,7 @@ public class Protocol {
 			x -= Camera.originX;
 			z -= Camera.originZ;
 			int plane = pos >> 28 & 0x3;
-			SceneGraph.method1881(plane, rotation, type, z, type2, x, seqId);
+			SceneGraph.addLoc(plane, rotation, type, z, type2, x, seqId);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.MESSAGE_PRIVATE) {
@@ -2551,7 +2551,7 @@ public class Protocol {
 			outboundBuffer.p4(Preferences.toInt());
 			Preferences.sentToServer = true;
 		}
-		SceneGraph.method846();
+		SceneGraph.checkPlaneChange();
 		if (client.gameState != 30) {
 			return;
 		}
@@ -2881,7 +2881,7 @@ public class Protocol {
 												}
 											}
 											if (Camera.cameraType == 1) {
-												Camera.method4273();
+												Camera.updatePlayerCamera();
 											} else if (Camera.cameraType == 2) {
 												Camera.updateLockedCamera();
 											} else {
@@ -2915,10 +2915,10 @@ public class Protocol {
 													Camera.anInt5161 += anInt4941;
 												}
 												if ((modelId & 0x2) == 2) {
-													Camera.anInt4774 += anInt659;
+													Camera.cameraOffsetZ += anInt659;
 												}
 												if ((modelId & 0x1) == 1) {
-													Camera.anInt3291 += Camera.anInt4229;
+													Camera.cameraOffsetX += Camera.anInt4229;
 												}
 											}
 											if (MiniMap.anInt2252 > 500) {
@@ -2931,7 +2931,7 @@ public class Protocol {
 													MiniMap.anInt4130 += MiniMap.anInt4262;
 												}
 											}
-											if (Camera.anInt3291 < -50) {
+											if (Camera.cameraOffsetX < -50) {
 												Camera.anInt4229 = 2;
 											}
 											if (MiniMap.anInt1814 < -60) {
@@ -2940,16 +2940,16 @@ public class Protocol {
 											if (MiniMap.anInt4130 < -20) {
 												MiniMap.anInt4262 = 1;
 											}
-											if (Camera.anInt4774 < -55) {
+											if (Camera.cameraOffsetZ < -55) {
 												anInt659 = 2;
 											}
-											if (Camera.anInt4774 > 55) {
+											if (Camera.cameraOffsetZ > 55) {
 												anInt659 = -2;
 											}
 											if (Camera.anInt5161 < -40) {
 												anInt4941 = 1;
 											}
-											if (Camera.anInt3291 > 50) {
+											if (Camera.cameraOffsetX > 50) {
 												Camera.anInt4229 = -2;
 											}
 											if (Camera.anInt5161 > 40) {
