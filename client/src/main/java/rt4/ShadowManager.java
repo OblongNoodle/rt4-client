@@ -20,7 +20,7 @@ public final class ShadowManager {
 	private static int anInt5346;
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(Lclient!ek;Lclient!ek;II)V")
-	private static void method4194(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	private static void addShadowSprite(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		arg2 += arg0.xOffset;
 		arg3 += arg0.yOffset;
 		@Pc(16) int local16 = arg2 + arg3 * arg1.width;
@@ -57,13 +57,13 @@ public final class ShadowManager {
 			local29 += local37;
 		}
 		if (local24 > 0 && local21 > 0) {
-			method4204(arg1.pixels, arg0.pixels, local18, local16, local24, local21, local29, local31);
-			method4196(arg2, arg3, local24, local21);
+			addPixels(arg1.pixels, arg0.pixels, local18, local16, local24, local21, local29, local31);
+			markDirtyRegion(arg2, arg3, local24, local21);
 		}
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "([B[BIIIIII)V")
-	private static void method4195(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	private static void subtractPixels(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		@Pc(4) int local4 = -(arg4 >> 2);
 		@Pc(9) int local9 = -(arg4 & 0x3);
 		for (@Pc(12) int local12 = -arg5; local12 < 0; local12++) {
@@ -89,7 +89,7 @@ public final class ShadowManager {
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(IIII)V")
-	private static void method4196(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	private static void markDirtyRegion(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		@Pc(5) int local5 = arg0 - 1 >> 7;
 		@Pc(15) int local15 = arg0 + arg2 - 1 - 1 >> 7;
 		@Pc(21) int local21 = arg1 - 1 >> 7;
@@ -102,7 +102,7 @@ public final class ShadowManager {
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(IIZZIIIIII)V")
-	public static void method4197(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
+	public static void addFloorShadow(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
 		if (arg2 && arg3 || (arg2 && arg0 == 1 || arg3 && arg0 == 0)) {
 			return;
 		}
@@ -112,14 +112,14 @@ public final class ShadowManager {
 		@Pc(43) int local43 = local19 - (local29 * FogManager.lightX >> 8) >> 3;
 		@Pc(53) int local53 = local33 - (local29 * FogManager.lightZ >> 8) >> 3;
 		if (arg0 != 0 && arg0 != 1 && (arg2 || arg3)) {
-			method4210(Sprites.floorShadows[arg0], shadowMapImage, local43 + 1, local53 + 1, arg1, arg2);
+			addRotatedFloorShadow(Sprites.floorShadows[arg0], shadowMapImage, local43 + 1, local53 + 1, arg1, arg2);
 		} else {
-			method4194(Sprites.floorShadows[1], shadowMapImage, local43 + 1, local53 + 1);
+			addShadowSprite(Sprites.floorShadows[1], shadowMapImage, local43 + 1, local53 + 1);
 		}
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(IIII[[Z[[I)V")
-	public static void method4198(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean[][] arg4, @OriginalArg(5) int[][] arg5) {
+	public static void renderShadowMapGL(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean[][] arg4, @OriginalArg(5) int[][] arg5) {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureCombineRgbMode(1);
 		GlRenderer.setTextureCombineAlphaMode(1);
@@ -156,7 +156,7 @@ public final class ShadowManager {
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "([BIIIII)Z")
-	private static boolean method4199(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private static boolean hasShadowPixel(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		@Pc(3) int local3 = arg2 % 8;
 		@Pc(9) int local9;
 		if (local3 == 0) {
@@ -183,7 +183,7 @@ public final class ShadowManager {
 	}
 
 	@OriginalMember(owner = "client!tj", name = "b", descriptor = "(Lclient!ek;Lclient!ek;II)Z")
-	private static boolean method4200(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	private static boolean testSpriteOverlap(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		arg2 += arg0.xOffset;
 		arg3 += arg0.yOffset;
 		@Pc(16) int local16 = arg2 + arg3 * arg1.width;
@@ -215,15 +215,15 @@ public final class ShadowManager {
 		}
 		if (local22 > 0 && local19 > 0) {
 			local27 += arg1.width * 7;
-			method4196(arg2, arg3, local22, local19);
-			return method4199(arg1.pixels, local16, local22, local19, local27);
+			markDirtyRegion(arg2, arg3, local22, local19);
+			return hasShadowPixel(arg1.pixels, local16, local22, local19, local27);
 		} else {
 			return false;
 		}
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(II)V")
-	public static void method4201() {
+	public static void init() {
 		anInt5346 = 13;
 		anInt5345 = 13;
 		shadowMapImage = new SoftwareIndexedSprite(anInt5346 * 128 + 2, anInt5345 * 128 + 2, 0);
@@ -236,7 +236,7 @@ public final class ShadowManager {
 	}
 
 	@OriginalMember(owner = "client!tj", name = "c", descriptor = "(Lclient!ek;Lclient!ek;II)V")
-	private static void method4202(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	private static void removeShadowSprite(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		arg2 += arg0.xOffset;
 		arg3 += arg0.yOffset;
 		@Pc(16) int local16 = arg2 + arg3 * arg1.width;
@@ -273,20 +273,20 @@ public final class ShadowManager {
 			local29 += local37;
 		}
 		if (local24 > 0 && local21 > 0) {
-			method4195(arg1.pixels, arg0.pixels, local18, local16, local24, local21, local29, local31);
-			method4196(arg2, arg3, local24, local21);
+			subtractPixels(arg1.pixels, arg0.pixels, local18, local16, local24, local21, local29, local31);
+			markDirtyRegion(arg2, arg3, local24, local21);
 		}
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "()V")
-	public static void method4203() {
+	public static void destroy() {
 		shadowMapImage = null;
 		Sprites.floorShadows = null;
 		shadows = null;
 	}
 
 	@OriginalMember(owner = "client!tj", name = "b", descriptor = "([B[BIIIIII)V")
-	private static void method4204(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	private static void addPixels(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		@Pc(4) int local4 = -(arg4 >> 2);
 		@Pc(9) int local9 = -(arg4 & 0x3);
 		for (@Pc(12) int local12 = -arg5; local12 < 0; local12++) {
@@ -312,7 +312,7 @@ public final class ShadowManager {
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "([B[BIIIII)V")
-	private static void method4206(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	private static void subtractRotatedPixels(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		for (@Pc(1) int local1 = -16; local1 < 0; local1++) {
 			for (@Pc(5) int local5 = -4; local5 < 0; local5++) {
 				@Pc(9) int local9 = arg3++;
@@ -334,16 +334,16 @@ public final class ShadowManager {
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(Lclient!ek;III)V")
-	public static void method4207(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static void removeObjectShadow(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		if (arg0 != null) {
 			@Pc(12) int local12 = arg1 - (arg2 * FogManager.lightX >> 8) >> 3;
 			@Pc(22) int local22 = arg3 - (arg2 * FogManager.lightZ >> 8) >> 3;
-			method4202(arg0, shadowMapImage, local12 + 1, local22 + 1);
+			removeShadowSprite(arg0, shadowMapImage, local12 + 1, local22 + 1);
 		}
 	}
 
 	@OriginalMember(owner = "client!tj", name = "b", descriptor = "([B[BIIIII)V")
-	private static void method4208(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	private static void addRotatedPixels(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		for (@Pc(1) int local1 = -16; local1 < 0; local1++) {
 			for (@Pc(5) int local5 = -4; local5 < 0; local5++) {
 				@Pc(9) int local9 = arg3++;
@@ -365,18 +365,18 @@ public final class ShadowManager {
 	}
 
 	@OriginalMember(owner = "client!tj", name = "b", descriptor = "(Lclient!ek;III)Z")
-	public static boolean method4209(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static boolean isObjectInShadow(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		if (arg0 == null) {
 			return false;
 		} else {
 			@Pc(13) int local13 = arg1 - (arg2 * FogManager.lightX >> 8) >> 3;
 			@Pc(23) int local23 = arg3 - (arg2 * FogManager.lightZ >> 8) >> 3;
-			return method4200(arg0, shadowMapImage, local13 + 1, local23 + 1);
+			return testSpriteOverlap(arg0, shadowMapImage, local13 + 1, local23 + 1);
 		}
 	}
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(Lclient!ek;Lclient!ek;IIIZ)V")
-	private static void method4210(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
+	private static void addRotatedFloorShadow(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
 		if (arg2 <= 0 || arg3 <= 0 || arg2 + 16 >= arg1.width || arg3 + 16 >= arg1.height) {
 			return;
 		}
@@ -403,19 +403,19 @@ public final class ShadowManager {
 			local41 = -255;
 		}
 		if (arg5) {
-			method4206(arg1.pixels, arg0.pixels, local32, local23, local28, local34, local41);
+			subtractRotatedPixels(arg1.pixels, arg0.pixels, local32, local23, local28, local34, local41);
 		} else {
-			method4208(arg1.pixels, arg0.pixels, local32, local23, local28, local34, local41);
+			addRotatedPixels(arg1.pixels, arg0.pixels, local32, local23, local28, local34, local41);
 		}
-		method4196(arg2, arg3, 16, 16);
+		markDirtyRegion(arg2, arg3, 16, 16);
 	}
 
 	@OriginalMember(owner = "client!tj", name = "c", descriptor = "(Lclient!ek;III)V")
-	public static void method4211(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static void addObjectShadow(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		if (arg0 != null) {
 			@Pc(12) int local12 = arg1 - (arg2 * FogManager.lightX >> 8) >> 3;
 			@Pc(22) int local22 = arg3 - (arg2 * FogManager.lightZ >> 8) >> 3;
-			method4194(arg0, shadowMapImage, local12 + 1, local22 + 1);
+			addShadowSprite(arg0, shadowMapImage, local12 + 1, local22 + 1);
 		}
 	}
 }

@@ -990,7 +990,7 @@ public class SceneGraph {
 							if (overlay == 0) {
 								setTile(local152, local168, local173, 0, 0, -1, local200, local202, local209, local349, ColorUtils.multiplyLightnessSafe(local267, local234), ColorUtils.multiplyLightnessSafe(local273, local234), ColorUtils.multiplyLightnessSafe(local326, local234), ColorUtils.multiplyLightnessSafe(local332, local234), 0, 0, 0, 0, local254, 0);
 								if (GlRenderer.enabled && local152 > 0 && local234 != -1 && FluTypeList.get(local178 - 1).blockShadow) {
-									ShadowManager.method4197(0, 0, true, false, local168, local173, local200 - tileHeights[0][local168][local173], -tileHeights[0][local168 + 1][local173] + local202, local209 - tileHeights[0][local168 + 1][local173 + 1], local349 - tileHeights[0][local168][local173 + 1]);
+									ShadowManager.addFloorShadow(0, 0, true, false, local168, local173, local200 - tileHeights[0][local168][local173], -tileHeights[0][local168 + 1][local173] + local202, local209 - tileHeights[0][local168 + 1][local173 + 1], local349 - tileHeights[0][local168][local173 + 1]);
 								}
 								if (GlRenderer.enabled && !underwater && anIntArrayArray11 != null && local152 == 0) {
 									for (local322 = local168 - 1; local322 <= local168 + 1; local322++) {
@@ -1072,7 +1072,7 @@ public class SceneGraph {
 								}
 								setTile(local152, local168, local173, local322, local1242, texture, local200, local202, local209, local349, ColorUtils.multiplyLightnessSafe(local267, local234), ColorUtils.multiplyLightnessSafe(local273, local234), ColorUtils.multiplyLightnessSafe(local326, local234), ColorUtils.multiplyLightnessSafe(local332, local234), ColorUtils.multiplyLightnessGrayscale(local1301, local267), ColorUtils.multiplyLightnessGrayscale(local1301, local273), ColorUtils.multiplyLightnessGrayscale(local1301, local326), ColorUtils.multiplyLightnessGrayscale(local1301, local332), local254, local1353);
 								if (GlRenderer.enabled && local152 > 0) {
-									ShadowManager.method4197(local322, local1242, local1301 == -2 || !local1248.aBoolean311, local234 == -1 || !FluTypeList.get(local178 - 1).blockShadow, local168, local173, local200 - tileHeights[0][local168][local173], local202 - tileHeights[0][local168 + 1][local173], local209 - tileHeights[0][local168 + 1][local173 + 1], -tileHeights[0][local168][local173 + 1] + local349);
+									ShadowManager.addFloorShadow(local322, local1242, local1301 == -2 || !local1248.aBoolean311, local234 == -1 || !FluTypeList.get(local178 - 1).blockShadow, local168, local173, local200 - tileHeights[0][local168][local173], local202 - tileHeights[0][local168 + 1][local173], local209 - tileHeights[0][local168 + 1][local173 + 1], -tileHeights[0][local168][local173 + 1] + local349);
 								}
 							}
 						}
@@ -2485,7 +2485,7 @@ public class SceneGraph {
 				if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 					local403 = loc.getStaticEntity(orientation, local165, currentHeightmap, LocType.GROUNDDECOR, averageY, heightmap, lowmem, null, local330, local173);
 					if (GlRenderer.enabled && local330) {
-						ShadowManager.method4211(local403.sprite, local165, diffAverageY, local173);
+						ShadowManager.addObjectShadow(local403.sprite, local165, diffAverageY, local173);
 					}
 					entity = local403.model;
 				} else {
@@ -2502,7 +2502,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local403 = loc.getStaticEntity(locType == LocType.CENTREPIECE_DIAGONAL ? orientation + 4 : orientation, local165, currentHeightmap, LocType.CENTREPIECE_STRAIGHT, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local403.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local403.sprite, local165, diffAverageY, local173);
 				}
 				entity = local403.model;
 			} else {
@@ -2536,7 +2536,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local403 = loc.getStaticEntity(orientation, local165, currentHeightmap, locType, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local403.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local403.sprite, local165, diffAverageY, local173);
 				}
 				entity = local403.model;
 			} else {
@@ -2555,7 +2555,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local403 = loc.getStaticEntity(orientation, local165, currentHeightmap, LocType.WALL_STRAIGHT, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local403.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local403.sprite, local165, diffAverageY, local173);
 				}
 				entity = local403.model;
 			} else {
@@ -2615,7 +2615,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local403 = loc.getStaticEntity(orientation, local165, currentHeightmap, LocType.WALL_DIAGONALCORNER, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local403.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local403.sprite, local165, diffAverageY, local173);
 				}
 				entity = local403.model;
 			} else {
@@ -2645,12 +2645,12 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				@Pc(1287) LocEntity local1287 = loc.getStaticEntity(orientation + 4, local165, currentHeightmap, LocType.WALL_L, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local1287.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local1287.sprite, local165, diffAverageY, local173);
 				}
 				local1254 = local1287.model;
 				local1287 = loc.getStaticEntity(local1226, local165, currentHeightmap, LocType.WALL_L, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local1287.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local1287.sprite, local165, diffAverageY, local173);
 				}
 				local1269 = local1287.model;
 			} else {
@@ -2683,7 +2683,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local403 = loc.getStaticEntity(orientation, local165, currentHeightmap, LocType.WALL_SQUARECORNER, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local403.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local403.sprite, local165, diffAverageY, local173);
 				}
 				entity = local403.model;
 			} else {
@@ -2708,7 +2708,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local403 = loc.getStaticEntity(orientation, local165, currentHeightmap, locType, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local403.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local403.sprite, local165, diffAverageY, local173);
 				}
 				entity = local403.model;
 			} else {
@@ -2725,7 +2725,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local403 = loc.getStaticEntity(orientation, local165, currentHeightmap, 4, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local403.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local403.sprite, local165, diffAverageY, local173);
 				}
 				entity = local403.model;
 			} else {
@@ -2741,7 +2741,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local1950 = loc.getStaticEntity(orientation, local165, currentHeightmap, 4, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local1950.sprite, local165 - WALL_DECO_ROT_SIZE_X_DIR[orientation] * 8, diffAverageY, local173 - WALL_DECO_ROT_SIZE_Y_DIR[orientation] * 8);
+					ShadowManager.addObjectShadow(local1950.sprite, local165 - WALL_DECO_ROT_SIZE_X_DIR[orientation] * 8, diffAverageY, local173 - WALL_DECO_ROT_SIZE_Y_DIR[orientation] * 8);
 				}
 				local1934 = local1950.model;
 			} else {
@@ -2757,7 +2757,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local1950 = loc.getStaticEntity(orientation + 4, local165, currentHeightmap, 4, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local1950.sprite, local165 - anIntArray565[orientation] * 8, diffAverageY, local173 - anIntArray154[orientation] * 8);
+					ShadowManager.addObjectShadow(local1950.sprite, local165 - anIntArray565[orientation] * 8, diffAverageY, local173 - anIntArray154[orientation] * 8);
 				}
 				local1934 = local1950.model;
 			} else {
@@ -2769,7 +2769,7 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				@Pc(2183) LocEntity local2183 = loc.getStaticEntity(local2137 + 4, local165, currentHeightmap, 4, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local2183.sprite, local165, diffAverageY, local173);
+					ShadowManager.addObjectShadow(local2183.sprite, local165, diffAverageY, local173);
 				}
 				entity = local2183.model;
 			} else {
@@ -2789,12 +2789,12 @@ public class SceneGraph {
 				@Pc(2303) int local2303 = anIntArray565[orientation] * 8;
 				@Pc(2319) LocEntity local2319 = loc.getStaticEntity(orientation + 4, local165, currentHeightmap, 4, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local2319.sprite, local165 - local2303, diffAverageY, local173 - local2297);
+					ShadowManager.addObjectShadow(local2319.sprite, local165 - local2303, diffAverageY, local173 - local2297);
 				}
 				local1934 = local2319.model;
 				local2319 = loc.getStaticEntity(local2244 + 4, local165, currentHeightmap, 4, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.method4211(local2319.sprite, local165 - local2303, diffAverageY, local173 - local2297);
+					ShadowManager.addObjectShadow(local2319.sprite, local165 - local2303, diffAverageY, local173 - local2297);
 				}
 				local2289 = local2319.model;
 			} else {
@@ -3080,7 +3080,7 @@ public class SceneGraph {
 					}
 					if (local32 == 0 && Preferences.sceneryShadowsType > 0) {
 						GlRenderer.method4159(101.5F);
-						ShadowManager.method4198(anInt4069, anInt4539, visibility, arg1, aBooleanArrayArray1, tileHeights[0]);
+						ShadowManager.renderShadowMapGL(anInt4069, anInt4539, visibility, arg1, aBooleanArrayArray1, tileHeights[0]);
 					}
 					local32++;
 				}

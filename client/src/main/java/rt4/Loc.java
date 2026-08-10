@@ -188,7 +188,7 @@ public final class Loc extends Entity {
 			local158 = SceneGraph.tileHeights[arg7 + 1];
 		}
 		@Pc(215) LocEntity local215 = arg0.getStaticEntity(arg2, local80, local120, arg4, local148, local158, false, null, true, local88);
-		ShadowManager.method4207(local215.sprite, local80 - arg3, local122, local88 - arg1);
+		ShadowManager.removeObjectShadow(local215.sprite, local80 - arg3, local122, local88 - arg1);
 	}
 
 	@OriginalMember(owner = "client!dc", name = "a", descriptor = "(IIIII)V")
@@ -213,7 +213,7 @@ public final class Loc extends Entity {
 	@OriginalMember(owner = "client!dc", name = "c", descriptor = "(I)V")
 	public final void resetShadow() {
 		if (this.sprite2 != null) {
-			ShadowManager.method4207(this.sprite2, this.shadowX, this.shadowElevation, this.shadowY);
+			ShadowManager.removeObjectShadow(this.sprite2, this.shadowX, this.shadowElevation, this.shadowY);
 		}
 		this.lastLocTypeId = -1;
 		this.lastSeqFrame = -1;
@@ -340,7 +340,7 @@ public final class Loc extends Entity {
 			local314 = SceneGraph.tileHeights[this.level + 1];
 		}
 		if (GlRenderer.enabled && local256) {
-			ShadowManager.method4207(this.sprite2, this.shadowX, this.shadowElevation, this.shadowY);
+			ShadowManager.removeObjectShadow(this.sprite2, this.shadowX, this.shadowElevation, this.shadowY);
 		}
 		@Pc(356) boolean local356 = this.sprite2 == null;
 		@Pc(389) LocEntity local389;
@@ -362,11 +362,11 @@ public final class Loc extends Entity {
 				local429 = local293 - (local439[local178][local192] + local439[local185][local192] + local439[local185][local201] + local439[local178][local201] >> 2);
 			}
 			@Pc(471) SoftwareIndexedSprite local471 = local389.sprite;
-			if (this.shadowDirty && ShadowManager.method4209(local471, local302, local429, local311)) {
+			if (this.shadowDirty && ShadowManager.isObjectInShadow(local471, local302, local429, local311)) {
 				this.shadowDirty = false;
 			}
 			if (!this.shadowDirty) {
-				ShadowManager.method4211(local471, local302, local429, local311);
+				ShadowManager.addObjectShadow(local471, local302, local429, local311);
 				this.sprite2 = local471;
 				this.shadowY = local311;
 				if (local356) {

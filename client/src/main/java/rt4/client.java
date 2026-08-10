@@ -595,7 +595,7 @@ public final class client extends GameShell {
 		LightingManager.lightCount = 0;
 		LightingManager.lights = new Light[255];
 		GlModel.method4120();
-		ShadowManager.method4203();
+		ShadowManager.destroy();
 		Sprites.clear();
 		WorldMap.clear(false);
 		TitleScreen.clear();
@@ -606,7 +606,7 @@ public final class client extends GameShell {
 			}
 		}
 		if (GlRenderer.enabled) {
-			ShadowManager.method4201();
+			ShadowManager.init();
 			ParticleSystem.load();
 		}
 		Fonts.load(js5Archive13, js5Archive8);
