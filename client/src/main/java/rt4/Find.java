@@ -99,7 +99,7 @@ public class Find {
 		arg0[local21] = arg0[arg1];
 		arg0[arg1] = local39;
 		for (@Pc(51) int local51 = arg3; local51 < arg1; local51++) {
-			if (local25 == null || arg2[local51] != null && arg2[local51].method3139(local25) < (local51 & 0x1)) {
+			if (local25 == null || arg2[local51] != null && arg2[local51].compareTo(local25) < (local51 & 0x1)) {
 				@Pc(80) JagString local80 = arg2[local51];
 				arg2[local51] = arg2[local14];
 				arg2[local14] = local80;

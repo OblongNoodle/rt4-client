@@ -132,12 +132,12 @@ public final class QuickChatPhraseType extends SecondaryNode {
 		if (this.aClass100Array35 == null) {
 			return aClass100_891;
 		}
-		local15.method3113(this.aClass100Array35[0]);
+		local15.appendString(this.aClass100Array35[0]);
 		for (@Pc(31) int local31 = 1; local31 < this.aClass100Array35.length; local31++) {
-			local15.method3113(aClass100_231);
-			local15.method3113(this.aClass100Array35[local31]);
+			local15.appendString(aClass100_231);
+			local15.appendString(this.aClass100Array35[local31]);
 		}
-		return local15.method3156();
+		return local15.compact();
 	}
 
 	@OriginalMember(owner = "client!cb", name = "a", descriptor = "(ILclient!wa;)Lclient!na;")
@@ -145,11 +145,11 @@ public final class QuickChatPhraseType extends SecondaryNode {
 		@Pc(17) JagString local17 = JagString.allocate(80);
 		if (this.anIntArray71 != null) {
 			for (@Pc(22) int local22 = 0; local22 < this.anIntArray71.length; local22++) {
-				local17.method3113(this.aClass100Array35[local22]);
-				local17.method3113(QuickChatPhraseTypeList.method1838(this.anIntArrayArray5[local22], arg0.gVarLong(anIntArray51[this.anIntArray71[local22]]), this.anIntArray71[local22]));
+				local17.appendString(this.aClass100Array35[local22]);
+				local17.appendString(QuickChatPhraseTypeList.method1838(this.anIntArrayArray5[local22], arg0.gVarLong(anIntArray51[this.anIntArray71[local22]]), this.anIntArray71[local22]));
 			}
 		}
-		local17.method3113(this.aClass100Array35[this.aClass100Array35.length - 1]);
-		return local17.method3156();
+		local17.appendString(this.aClass100Array35[this.aClass100Array35.length - 1]);
+		return local17.compact();
 	}
 }

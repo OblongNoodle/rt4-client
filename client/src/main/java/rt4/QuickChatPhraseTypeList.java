@@ -62,6 +62,6 @@ public class QuickChatPhraseTypeList {
 				return local17;
 			}
 		}
-		return JagString.method2929(arg1);
+		return JagString.parseLong(arg1);
 	}
 }

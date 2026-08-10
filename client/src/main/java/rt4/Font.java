@@ -158,9 +158,9 @@ public abstract class Font extends SecondaryNode {
 		for (local15 = 0; local15 < local3; local15++) {
 			@Pc(40) int local40 = arg0.charAt(local15);
 			if (local40 == 60) {
-				local30.method3113(aClass100_711);
+				local30.appendString(aClass100_711);
 			} else if (local40 == 62) {
-				local30.method3113(aClass100_706);
+				local30.appendString(aClass100_706);
 			} else {
 				local30.append(local40);
 			}
@@ -506,7 +506,7 @@ public abstract class Font extends SecondaryNode {
 		if (arg0 == null) {
 			return 0;
 		}
-		buffer.method3133(0);
+		buffer.setLength(0);
 		@Pc(9) int local9 = 0;
 		@Pc(11) int local11 = 0;
 		@Pc(13) int local13 = -1;
@@ -525,14 +525,14 @@ public abstract class Font extends SecondaryNode {
 					@Pc(57) JagString local57 = arg0.substring(local29, local19 + 1);
 					local19 = -1;
 					buffer.append(60);
-					buffer.method3113(local57);
+					buffer.appendString(local57);
 					buffer.append(62);
 					if (local57.strEquals(TAG_BR)) {
 						if (arg2[local23] == null) {
 							arg2[local23] = buffer.asString().substring(buffer.length(), local11);
 						} else {
-							arg2[local23].method3133(0);
-							arg2[local23].method3122(buffer, local11, buffer.length());
+							arg2[local23].setLength(0);
+							arg2[local23].appendSubstring(buffer, local11, buffer.length());
 						}
 						local23++;
 						local11 = buffer.length();
@@ -615,8 +615,8 @@ public abstract class Font extends SecondaryNode {
 						if (arg2[local23] == null) {
 							arg2[local23] = buffer.asString().substring(local13 - local17, local11);
 						} else {
-							arg2[local23].method3133(0);
-							arg2[local23] = arg2[local23].method3122(buffer, local11, local13 - local17);
+							arg2[local23].setLength(0);
+							arg2[local23] = arg2[local23].appendSubstring(buffer, local11, local13 - local17);
 						}
 						local23++;
 						local11 = local13;
@@ -636,8 +636,8 @@ public abstract class Font extends SecondaryNode {
 			if (arg2[local23] == null) {
 				arg2[local23] = buffer.asString().substring(buffer.length(), local11);
 			} else {
-				arg2[local23].method3133(0);
-				arg2[local23] = arg2[local23].method3122(buffer, local11, buffer.length());
+				arg2[local23].setLength(0);
+				arg2[local23] = arg2[local23].appendSubstring(buffer, local11, buffer.length());
 			}
 			local23++;
 		}

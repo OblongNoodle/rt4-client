@@ -97,13 +97,13 @@ class plugin : Plugin() {
         var text = component.text ?: return
 
         if (text.indexOf(GLOBAL_SYMBOL) >= 0) {
-            text = text.method3140(SD_GLOBAL, HD_GLOBAL)
-            text = text.method3140(SD_BRACKETS, HD_BRACKETS)
+            text = text.replaceAll(SD_GLOBAL, HD_GLOBAL)
+            text = text.replaceAll(SD_BRACKETS, HD_BRACKETS)
         } else {
-            text = text.method3140(SD_PUBLIC, HD_PUBLIC)
-            text = text.method3140(SD_TRADE, HD_TRADE)
-            text = text.method3140(SD_CLAN, HD_CLAN)
-            text = text.method3140(SD_CLAN_GOLD, HD_GOLD)
+            text = text.replaceAll(SD_PUBLIC, HD_PUBLIC)
+            text = text.replaceAll(SD_TRADE, HD_TRADE)
+            text = text.replaceAll(SD_CLAN, HD_CLAN)
+            text = text.replaceAll(SD_CLAN_GOLD, HD_GOLD)
         }
 
         component.text = text

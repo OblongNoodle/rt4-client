@@ -129,7 +129,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!ig", name = "a", descriptor = "(BI)V")
-	public static void method2275(@OriginalArg(1) int arg0) {
+	public static void unload(@OriginalArg(1) int arg0) {
 		if (arg0 == -1 || !aBooleanArray115[arg0]) {
 			return;
 		}
@@ -190,7 +190,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "d", descriptor = "(I)V")
-	public static void method1287() {
+	public static void reset() {
 		components = new Component[aClass153_84.capacity()][];
 		aBooleanArray115 = new boolean[aClass153_84.capacity()];
 	}
@@ -298,7 +298,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!gg", name = "e", descriptor = "(II)V")
-	public static void method1753(@OriginalArg(0) int arg0) {
+	public static void resetAnimations(@OriginalArg(0) int arg0) {
 		if (!load(arg0)) {
 			return;
 		}
@@ -314,38 +314,38 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!rb", name = "a", descriptor = "(ZB)V")
-	public static void method3712(@OriginalArg(0) boolean arg0) {
-		method4017(GameShell.canvasHeight, arg0, topLevelInterface, GameShell.canvasWidth);
+	public static void layoutTopLevel(@OriginalArg(0) boolean arg0) {
+		layoutInterface(GameShell.canvasHeight, arg0, topLevelInterface, GameShell.canvasWidth);
 	}
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(IZIII)V")
-	public static void method4017(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
+	public static void layoutInterface(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		if (load(arg2)) {
-			method4190(-1, arg1, arg3, arg0, components[arg2]);
+			layoutComponents(-1, arg1, arg3, arg0, components[arg2]);
 		}
 	}
 
 	@OriginalMember(owner = "client!bg", name = "a", descriptor = "(Lclient!be;ZI)V")
-	public static void method531(@OriginalArg(0) Component arg0, @OriginalArg(1) boolean arg1) {
+	public static void layoutComponent(@OriginalArg(0) Component arg0, @OriginalArg(1) boolean arg1) {
 		@Pc(20) int local20 = arg0.scrollMaxH == 0 ? arg0.width : arg0.scrollMaxH;
 		@Pc(32) int local32 = arg0.scrollMaxV == 0 ? arg0.height : arg0.scrollMaxV;
-		method4190(arg0.id, arg1, local20, local32, components[arg0.id >> 16]);
+		layoutComponents(arg0.id, arg1, local20, local32, components[arg0.id >> 16]);
 		if (arg0.createdComponents != null) {
-			method4190(arg0.id, arg1, local20, local32, arg0.createdComponents);
+			layoutComponents(arg0.id, arg1, local20, local32, arg0.createdComponents);
 		}
 		@Pc(66) ComponentPointer local66 = (ComponentPointer) openInterfaces.get(arg0.id);
 		if (local66 != null) {
-			method4017(local32, arg1, local66.interfaceId, local20);
+			layoutInterface(local32, arg1, local66.interfaceId, local20);
 		}
 	}
 
 	@OriginalMember(owner = "client!vk", name = "a", descriptor = "(IZIII[Lclient!be;)V")
-	public static void method4190(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) Component[] arg4) {
+	public static void layoutComponents(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) Component[] arg4) {
 		for (@Pc(3) int local3 = 0; local3 < arg4.length; local3++) {
 			@Pc(19) Component local19 = arg4[local3];
 			if (local19 != null && local19.overlayer == arg0) {
-				method2801(arg3, arg2, local19, arg1);
-				method2291(local19, arg3, arg2);
+				calculateSize(arg3, arg2, local19, arg1);
+				calculatePosition(local19, arg3, arg2);
 				if (local19.scrollMaxH - local19.width < local19.scrollX) {
 					local19.scrollX = local19.scrollMaxH - local19.width;
 				}
@@ -359,14 +359,14 @@ public class InterfaceList {
 					local19.scrollX = 0;
 				}
 				if (local19.type == 0) {
-					method531(local19, arg1);
+					layoutComponent(local19, arg1);
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!fn", name = "c", descriptor = "(II)V")
-	public static void method1626(@OriginalArg(0) int arg0) {
+	public static void runOnLoadScripts(@OriginalArg(0) int arg0) {
 		if (arg0 == -1 || !load(arg0)) {
 			return;
 		}
@@ -388,9 +388,9 @@ public class InterfaceList {
 		@Pc(16) int local16 = arg1.interfaceId;
 		arg1.unlink();
 		if (arg0) {
-			method2275(local16);
+			unload(local16);
 		}
-		method3214(local16);
+		removeProperties(local16);
 		@Pc(32) Component local32 = getComponent(local9);
 		if (local32 != null) {
 			redraw(local32);
@@ -398,7 +398,7 @@ public class InterfaceList {
 		@Pc(41) int local41 = MiniMenu.size;
 		@Pc(43) int local43;
 		for (local43 = 0; local43 < local41; local43++) {
-			if (method5(MiniMenu.actions[local43])) {
+			if (isInterfaceAction(MiniMenu.actions[local43])) {
 				MiniMenu.remove(local43);
 			}
 		}
@@ -423,7 +423,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!ii", name = "a", descriptor = "(Lclient!be;III)V")
-	public static void method2291(@OriginalArg(0) Component arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	public static void calculatePosition(@OriginalArg(0) Component arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		if (arg0.xMode == 0) {
 			arg0.y = arg0.baseY;
 		} else if (arg0.xMode == 1) {
@@ -467,7 +467,7 @@ public class InterfaceList {
 
 	@OriginalMember(owner = "client!fn", name = "a", descriptor = "(ILclient!be;)V")
 	public static void update(@OriginalArg(1) Component arg0) {
-		@Pc(7) Component local7 = method4668(arg0);
+		@Pc(7) Component local7 = getParent(arg0);
 		@Pc(19) int local19;
 		@Pc(17) int local17;
 		if (local7 == null) {
@@ -477,12 +477,12 @@ public class InterfaceList {
 			local17 = local7.height;
 			local19 = local7.width;
 		}
-		method2801(local17, local19, arg0, false);
-		method2291(arg0, local17, local19);
+		calculateSize(local17, local19, arg0, false);
+		calculatePosition(arg0, local17, local19);
 	}
 
 	@OriginalMember(owner = "client!lk", name = "a", descriptor = "(IIILclient!be;Z)V")
-	public static void method2801(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) Component arg2, @OriginalArg(4) boolean arg3) {
+	public static void calculateSize(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) Component arg2, @OriginalArg(4) boolean arg3) {
 		@Pc(4) int local4 = arg2.width;
 		@Pc(7) int local7 = arg2.height;
 		if (arg2.dynamicWidthValue == 0) {
@@ -542,7 +542,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(Lclient!be;I)Lclient!be;")
-	public static Component method4668(@OriginalArg(0) Component arg0) {
+	public static Component getParent(@OriginalArg(0) Component arg0) {
 		if (arg0.overlayer != -1) {
 			return getComponent(arg0.overlayer);
 		}
@@ -566,7 +566,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!we", name = "b", descriptor = "(BI)V")
-	public static void method3214(@OriginalArg(1) int arg0) {
+	public static void removeProperties(@OriginalArg(1) int arg0) {
 		for (@Pc(11) Node local11 = properties.head(); local11 != null; local11 = properties.next()) {
 			if ((local11.key >> 48 & 0xFFFFL) == (long) arg0) {
 				local11.unlink();
@@ -577,18 +577,18 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!ed", name = "a", descriptor = "(III)V")
 	public static void runScripts(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		if (load(arg1)) {
-			method7(components[arg1], arg0);
+			runScriptsRecursive(components[arg1], arg0);
 		}
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "([Lclient!be;ZI)V")
-	public static void method7(@OriginalArg(0) Component[] arg0, @OriginalArg(2) int arg1) {
+	public static void runScriptsRecursive(@OriginalArg(0) Component[] arg0, @OriginalArg(2) int arg1) {
 		for (@Pc(11) int local11 = 0; local11 < arg0.length; local11++) {
 			@Pc(23) Component local23 = arg0[local11];
 			if (local23 != null) {
 				if (local23.type == 0) {
 					if (local23.createdComponents != null) {
-						method7(local23.createdComponents, arg1);
+						runScriptsRecursive(local23.createdComponents, arg1);
 					}
 					@Pc(49) ComponentPointer local49 = (ComponentPointer) openInterfaces.get(local23.id);
 					if (local49 != null) {
@@ -619,17 +619,17 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!eg", name = "a", descriptor = "(IIIIIIII)V")
-	public static void method1320(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void processSubInterface(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		if (load(arg4)) {
-			method946(components[arg4], -1, arg5, arg1, arg3, arg6, arg0, arg2);
+			processComponents(components[arg4], -1, arg5, arg1, arg3, arg6, arg0, arg2);
 		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "([Lclient!be;IIIIIII)V")
-	public static void method946(@OriginalArg(0) Component[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	public static void processComponents(@OriginalArg(0) Component[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		for (@Pc(1) int local1 = 0; local1 < arg0.length; local1++) {
 			@Pc(9) Component component = arg0[local1];
-			if (component != null && component.overlayer == arg1 && (!component.if3 || component.type == 0 || component.aBoolean25 || getServerActiveProperties(component).events != 0 || component == Cs1ScriptRunner.aClass13_1 || component.clientCode == 1338) && (!component.if3 || !method947(component))) {
+			if (component != null && component.overlayer == arg1 && (!component.if3 || component.type == 0 || component.aBoolean25 || getServerActiveProperties(component).events != 0 || component == Cs1ScriptRunner.aClass13_1 || component.clientCode == 1338) && (!component.if3 || !isHidden(component))) {
 				@Pc(50) int local50 = component.x + arg6;
 				@Pc(55) int local55 = component.y + arg7;
 				@Pc(61) int local61;
@@ -660,7 +660,7 @@ public class InterfaceList {
 				}
 				if (!component.if3 || local61 < local65 && local63 < local67) {
 					if (component.type == 0) {
-						if (!component.if3 && method947(component) && aClass13_22 != component) {
+						if (!component.if3 && isHidden(component) && aClass13_22 != component) {
 							continue;
 						}
 						if (component.noClickThrough && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
@@ -1052,17 +1052,17 @@ public class InterfaceList {
 							Protocol.aClass13_11 = component;
 						}
 						if (component.scrollMaxV > component.height) {
-							method4049(Mouse.lastMouseY, component.height, component, Mouse.lastMouseX, local50 + component.width, local55, component.scrollMaxV);
+							handleScrollbar(Mouse.lastMouseY, component.height, component, Mouse.lastMouseX, local50 + component.width, local55, component.scrollMaxV);
 						}
 					}
 					if (component.type == 0) {
-						method946(arg0, component.id, local61, local63, local65, local67, local50 - component.scrollX, local55 - component.scrollY);
+						processComponents(arg0, component.id, local61, local63, local65, local67, local50 - component.scrollX, local55 - component.scrollY);
 						if (component.createdComponents != null) {
-							method946(component.createdComponents, component.id, local61, local63, local65, local67, local50 - component.scrollX, local55 - component.scrollY);
+							processComponents(component.createdComponents, component.id, local61, local63, local65, local67, local50 - component.scrollX, local55 - component.scrollY);
 						}
 						@Pc(1595) ComponentPointer local1595 = (ComponentPointer) openInterfaces.get(component.id);
 						if (local1595 != null) {
-							method1320(local50, local63, local55, local65, local1595.interfaceId, local61, local67);
+							processSubInterface(local50, local63, local55, local65, local1595.interfaceId, local61, local67);
 						}
 					}
 				}
@@ -1071,7 +1071,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(SI)Z")
-	public static boolean method5(@OriginalArg(0) short arg0) {
+	public static boolean isInterfaceAction(@OriginalArg(0) short arg0) {
 		if (arg0 == 47 || arg0 == 5 || arg0 == 43 || arg0 == 35 || arg0 == 58 || arg0 == 22 || arg0 == 40 || arg0 == 3) {
 			return true;
 		} else if (arg0 == 9 || arg0 == 12 || arg0 == 1006 || arg0 == 1003) {
@@ -1084,24 +1084,24 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!fm", name = "a", descriptor = "(ZI)V")
-	public static void method1596(@OriginalArg(0) boolean arg0) {
+	public static void resetToLoginScreen(@OriginalArg(0) boolean arg0) {
 		if (arg0) {
 			if (topLevelInterface != -1) {
-				method2275(topLevelInterface);
+				unload(topLevelInterface);
 			}
 			for (@Pc(18) ComponentPointer local18 = (ComponentPointer) openInterfaces.head(); local18 != null; local18 = (ComponentPointer) openInterfaces.next()) {
 				closeInterface(true, local18);
 			}
 			topLevelInterface = -1;
 			openInterfaces = new HashTable(8);
-			method1287();
+			reset();
 			topLevelInterface = LoginManager.loginScreenId;
-			method3712(false);
+			layoutTopLevel(false);
 			ScriptRunner.method1807();
-			method1626(topLevelInterface);
+			runOnLoadScripts(topLevelInterface);
 		}
 		MiniMenu.anInt1092 = -1;
-		method1750(ScriptRunner.anInt5794);
+		setCursor(ScriptRunner.anInt5794);
 		PlayerList.self = new Player();
 		PlayerList.self.yFine = 3000;
 		PlayerList.self.xFine = 3000;
@@ -1131,9 +1131,9 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!jm", name = "a", descriptor = "(Z)V")
-	public static void method2460() {
+	public static void updateLoginScreen() {
 		if (topLevelInterface != -1) {
-			method1949(topLevelInterface);
+			updateAnimations(topLevelInterface);
 		}
 		for (@Pc(15) int local15 = 0; local15 < rectangles; local15++) {
 			if (aBooleanArray100[local15]) {
@@ -1162,7 +1162,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!be;)Lclient!be;")
-	public static Component method938(@OriginalArg(0) Component arg0) {
+	public static Component getDragRenderParent(@OriginalArg(0) Component arg0) {
 		@Pc(4) int local4 = getServerActiveProperties(arg0).getDragDepth();
 		if (local4 == 0) {
 			return null;
@@ -1177,7 +1177,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(Lclient!be;)Z")
-	public static boolean method947(@OriginalArg(0) Component arg0) {
+	public static boolean isHidden(@OriginalArg(0) Component arg0) {
 		if (Cheat.qaOpTest) {
 			if (getServerActiveProperties(arg0).events != 0) {
 				return false;
@@ -1190,7 +1190,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!tc", name = "a", descriptor = "(IILclient!be;BIIII)V")
-	public static void method4049(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Component arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void handleScrollbar(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Component arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		if (aBoolean84) {
 			anInt1396 = 32;
 		} else {
@@ -1228,28 +1228,28 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!hh", name = "a", descriptor = "(II)V")
-	public static void method1949(@OriginalArg(1) int arg0) {
+	public static void updateAnimations(@OriginalArg(1) int arg0) {
 		if (load(arg0)) {
-			method2354(-1, components[arg0]);
+			updateAnimationsRecursive(-1, components[arg0]);
 		}
 	}
 
 	@OriginalMember(owner = "client!jd", name = "a", descriptor = "(II[Lclient!be;)V")
-	public static void method2354(@OriginalArg(1) int arg0, @OriginalArg(2) Component[] arg1) {
+	public static void updateAnimationsRecursive(@OriginalArg(1) int arg0, @OriginalArg(2) Component[] arg1) {
 		for (@Pc(7) int local7 = 0; local7 < arg1.length; local7++) {
 			@Pc(15) Component local15 = arg1[local7];
-			if (local15 != null && local15.overlayer == arg0 && (!local15.if3 || !method947(local15))) {
+			if (local15 != null && local15.overlayer == arg0 && (!local15.if3 || !isHidden(local15))) {
 				if (local15.type == 0) {
-					if (!local15.if3 && method947(local15) && local15 != aClass13_22) {
+					if (!local15.if3 && isHidden(local15) && local15 != aClass13_22) {
 						continue;
 					}
-					method2354(local15.id, arg1);
+					updateAnimationsRecursive(local15.id, arg1);
 					if (local15.createdComponents != null) {
-						method2354(local15.id, local15.createdComponents);
+						updateAnimationsRecursive(local15.id, local15.createdComponents);
 					}
 					@Pc(73) ComponentPointer local73 = (ComponentPointer) openInterfaces.get(local15.id);
 					if (local73 != null) {
-						method1949(local73.interfaceId);
+						updateAnimations(local73.interfaceId);
 					}
 				}
 				if (local15.type == 6) {
@@ -1301,7 +1301,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!gg", name = "c", descriptor = "(II)V")
-	public static void method1750(@OriginalArg(0) int arg0) {
+	public static void setCursor(@OriginalArg(0) int arg0) {
 		if (!Preferences.cursorsEnabled) {
 			arg0 = -1;
 		}

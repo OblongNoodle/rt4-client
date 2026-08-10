@@ -464,7 +464,7 @@ public class Protocol {
 					local20++;
 				}
 			}
-			LoginManager.method2463(local26, local60, local31, local64, false, local13);
+			LoginManager.loadRegion(local26, local60, local31, local64, false, local13);
 			return;
 		}
 		local13 = inboundBuffer.ig2add();
@@ -535,7 +535,7 @@ public class Protocol {
 				}
 			}
 		}
-		LoginManager.method2463(local26, local64, local20, local31, false, local13);
+		LoginManager.loadRegion(local26, local64, local20, local31, false, local13);
 	}
 
 	@OriginalMember(owner = "client!gk", name = "a", descriptor = "(IIBLclient!e;)V")
@@ -1195,7 +1195,7 @@ public class Protocol {
 				boolean local1245 = true;
 				count--;
 				for (int i = 0; i < count; i++) {
-					if (members[i].username.method3139(members[i + 1].username) > 0) {
+					if (members[i].username.compareTo(members[i + 1].username) > 0) {
 						local1245 = false;
 						@Pc(1279) ClanMember member = members[i];
 						members[i] = members[i + 1];
@@ -1273,9 +1273,9 @@ public class Protocol {
 				WorldMap.reset();
 			}
 			InterfaceList.topLevelInterface = parent;
-			InterfaceList.method1753(parent);
-			InterfaceList.method3712(false);
-			InterfaceList.method1626(InterfaceList.topLevelInterface);
+			InterfaceList.resetAnimations(parent);
+			InterfaceList.layoutTopLevel(false);
+			InterfaceList.runOnLoadScripts(InterfaceList.topLevelInterface);
 			for (int i = 0; i < 100; i++) {
 				InterfaceList.aBooleanArray100[i] = true;
 			}
@@ -1727,7 +1727,7 @@ public class Protocol {
 			component = InterfaceList.getComponent(target);
 			if (component != null) {
 				InterfaceList.redraw(component);
-				InterfaceList.method531(component, true);
+				InterfaceList.layoutComponent(component, true);
 			}
 			if (InterfaceList.topLevelInterface != -1) {
 				InterfaceList.runScripts(1, InterfaceList.topLevelInterface);
@@ -1826,7 +1826,7 @@ public class Protocol {
 			} else {
 				ScriptRunner.url = url;
 				newTab = true;
-				openUrlRequest = GameShell.signLink.openUrl(new String(url.method3148(), StandardCharsets.ISO_8859_1));
+				openUrlRequest = GameShell.signLink.openUrl(new String(url.toByteArray(), StandardCharsets.ISO_8859_1));
 			}
 			opcode = -1;
 			return true;
@@ -2224,7 +2224,7 @@ public class Protocol {
 				member.world = worldId;
 				int n;
 				for (n = ClanChat.size - 1; n >= 0; n--) {
-					int m = ClanChat.members[n].username.method3139(member.username);
+					int m = ClanChat.members[n].username.compareTo(member.username);
 					if (m == 0) {
 						ClanChat.members[n].world = worldId;
 						ClanChat.members[n].rank = rights;
@@ -2779,7 +2779,7 @@ public class Protocol {
 		}
 		WorldMap.component = null;
 		if (InterfaceList.topLevelInterface != -1) {
-			InterfaceList.method1320(0, 0, 0, GameShell.canvasWidth, InterfaceList.topLevelInterface, 0, GameShell.canvasHeight);
+			InterfaceList.processSubInterface(0, 0, 0, GameShell.canvasWidth, InterfaceList.topLevelInterface, 0, GameShell.canvasHeight);
 		}
 		InterfaceList.transmitTimer++;
 		while (true) {
@@ -3421,9 +3421,9 @@ public class Protocol {
 			if (arg0.length() == 0) {
 				local48 = JagString.concatenate(new JagString[]{local48, aClass100_1018});
 			} else {
-				local48 = JagString.concatenate(new JagString[]{local48, aClass100_1082, DateUtil.getDateString(MonotonicClock.currentTimeMillis() + 94608000000L), aClass100_431, JagString.method2929(94608000L)});
+				local48 = JagString.concatenate(new JagString[]{local48, aClass100_1082, DateUtil.getDateString(MonotonicClock.currentTimeMillis() + 94608000000L), aClass100_431, JagString.parseLong(94608000L)});
 			}
-			JagString.concatenate(new JagString[]{aClass100_821, local48, aClass100_946}).method3134(GameShell.signLink.applet);
+			JagString.concatenate(new JagString[]{aClass100_821, local48, aClass100_946}).evalInBrowser(GameShell.signLink.applet);
 		} catch (@Pc(124) Throwable local124) {
 		}
 	}
@@ -3477,7 +3477,7 @@ public class Protocol {
 		local9.anInt5879 = arg2;
 		local9.interfaceId = arg0;
 		InterfaceList.openInterfaces.put(local9, arg1);
-		InterfaceList.method1753(arg0);
+		InterfaceList.resetAnimations(arg0);
 		@Pc(28) Component local28 = InterfaceList.getComponent(arg1);
 		if (local28 != null) {
 			InterfaceList.redraw(local28);
@@ -3489,7 +3489,7 @@ public class Protocol {
 		@Pc(45) int local45 = MiniMenu.size;
 		@Pc(53) int local53;
 		for (local53 = 0; local53 < local45; local53++) {
-			if (InterfaceList.method5(MiniMenu.actions[local53])) {
+			if (InterfaceList.isInterfaceAction(MiniMenu.actions[local53])) {
 				MiniMenu.remove(local53);
 			}
 		}
@@ -3509,9 +3509,9 @@ public class Protocol {
 			InterfaceList.anInt436 = MiniMenu.size * 15 + (InterfaceList.aBoolean298 ? 26 : 22);
 		}
 		if (local28 != null) {
-			InterfaceList.method531(local28, false);
+			InterfaceList.layoutComponent(local28, false);
 		}
-		InterfaceList.method1626(arg0);
+		InterfaceList.runOnLoadScripts(arg0);
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.runScripts(1, InterfaceList.topLevelInterface);
 		}

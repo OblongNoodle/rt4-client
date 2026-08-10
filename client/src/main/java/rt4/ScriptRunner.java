@@ -1237,20 +1237,20 @@ public final class ScriptRunner {
 	public static void openUrl(@OriginalArg(0) JagString arg0, @OriginalArg(2) boolean arg1) {
 		if (!arg1) {
 			try {
-				GameShell.instance.getAppletContext().showDocument(arg0.method3127(GameShell.instance.getCodeBase()), "_top");
+				GameShell.instance.getAppletContext().showDocument(arg0.toRelativeUrl(GameShell.instance.getCodeBase()), "_top");
 			} catch (@Pc(22) Exception local22) {
 			}
 			return;
 		}
 		if (GlRenderer.enabled && GameShell.openWindowJavaScript) {
 			try {
-				BrowserControl.call(GameShell.signLink.applet, "openjs", new Object[]{arg0.method3127(GameShell.instance.getCodeBase()).toString()});
+				BrowserControl.call(GameShell.signLink.applet, "openjs", new Object[]{arg0.toRelativeUrl(GameShell.instance.getCodeBase()).toString()});
 				return;
 			} catch (@Pc(48) Throwable local48) {
 			}
 		}
 		try {
-			GameShell.instance.getAppletContext().showDocument(arg0.method3127(GameShell.instance.getCodeBase()), "_blank");
+			GameShell.instance.getAppletContext().showDocument(arg0.toRelativeUrl(GameShell.instance.getCodeBase()), "_blank");
 		} catch (@Pc(59) Exception local59) {
 		}
 	}
@@ -2038,7 +2038,7 @@ public final class ScriptRunner {
 					if (opcode == 37) {
 						id = intOperands[pc];
 						ssp -= id;
-						string = JagString.method2355(ssp, id, stringStack);
+						string = JagString.concatenateRange(ssp, id, stringStack);
 						stringStack[ssp++] = string;
 						continue;
 					}
@@ -2481,7 +2481,7 @@ public final class ScriptRunner {
 									component.scrollMaxV = intStack[isp + 1];
 									InterfaceList.redraw(component);
 									if (component.type == 0) {
-										InterfaceList.method531(component, false);
+										InterfaceList.layoutComponent(component, false);
 									}
 									continue;
 								}
@@ -4566,7 +4566,7 @@ public final class ScriptRunner {
 															str1 = WorldMap.labels.aClass100Array153[int1];
 															int2 = WorldMap.labels.method3894(int1);
 														}
-														str1 = str1.method3140(aClass100_639, aClass100_10);
+														str1 = str1.replaceAll(aClass100_639, aClass100_10);
 														stringStack[ssp++] = str1;
 														intStack[isp++] = int2;
 														continue;
@@ -4580,7 +4580,7 @@ public final class ScriptRunner {
 															str1 = WorldMap.labels.aClass100Array153[int1];
 															int2 = WorldMap.labels.method3894(int1);
 														}
-														str1 = str1.method3140(aClass100_639, aClass100_10);
+														str1 = str1.replaceAll(aClass100_639, aClass100_10);
 														stringStack[ssp++] = str1;
 														intStack[isp++] = int2;
 														continue;
@@ -4809,7 +4809,7 @@ public final class ScriptRunner {
 														if (GameShell.frame != null || local1552 && SignLink.anInt5928 != 3 && SignLink.osName.startsWith("win") && !client.haveIe6) {
 															Protocol.newTab = local1552;
 															url = local8356;
-															Protocol.openUrlRequest = GameShell.signLink.openUrl(new String(local8356.method3148(), StandardCharsets.ISO_8859_1));
+															Protocol.openUrlRequest = GameShell.signLink.openUrl(new String(local8356.toByteArray(), StandardCharsets.ISO_8859_1));
 															continue;
 														}
 														openUrl(local8356, local1552);
@@ -4862,7 +4862,7 @@ public final class ScriptRunner {
 														continue;
 													}
 													if (opcode == 5425) {
-														LoginManager.method4637();
+														LoginManager.clearLoginScreenSprites();
 														InterfaceList.aBoolean298 = false;
 														continue;
 													}
@@ -4955,12 +4955,12 @@ public final class ScriptRunner {
 														isp--;
 														int2 = intStack[isp];
 														if (client.gameState == 10 && LoginManager.anInt4937 == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
-															LoginManager.method3896(string, str1, int2);
+															LoginManager.startLogin(string, str1, int2);
 														}
 														continue;
 													}
 													if (opcode == Cs2Opcodes.skipLoginstage10) {
-														LoginManager.method3395();
+														LoginManager.continueDelayedLogin();
 														continue;
 													}
 													if (opcode == Cs2Opcodes.resetRCs) {
@@ -5807,7 +5807,7 @@ public final class ScriptRunner {
 												str1.append(c);
 											}
 										}
-										str1.method3156();
+										str1.compact();
 										stringStack[ssp++] = str1;
 										continue;
 									}
@@ -5907,7 +5907,7 @@ public final class ScriptRunner {
 								InterfaceList.redraw(component);
 								InterfaceList.update(component);
 								if (component.type == 0) {
-									InterfaceList.method531(component, false);
+									InterfaceList.layoutComponent(component, false);
 								}
 								continue;
 							}
@@ -5930,7 +5930,7 @@ public final class ScriptRunner {
 								InterfaceList.redraw(component);
 								InterfaceList.update(component);
 								if (component.type == 0) {
-									InterfaceList.method531(component, false);
+									InterfaceList.layoutComponent(component, false);
 								}
 								continue;
 							}
@@ -5952,18 +5952,18 @@ public final class ScriptRunner {
 				TracingException.report("CS2 - scr:" + script.key + " op:" + op, ex);
 			} else {
 				@Pc(14385) JagString str = JagString.allocate(30);
-				str.method3113(aClass100_928).method3113(script.name);
+				str.appendString(aClass100_928).appendString(script.name);
 				for (cycles = fp - 1; cycles >= 0; cycles--) {
-					str.method3113(aClass100_253).method3113(callStack[cycles].script.name);
+					str.appendString(aClass100_253).appendString(callStack[cycles].script.name);
 				}
 				if (op == 40) {
 					cycles = intOperands[pc];
-					str.method3113(aClass100_802).method3113(JagString.parseInt(cycles));
+					str.appendString(aClass100_802).appendString(JagString.parseInt(cycles));
 				}
 				if (client.modeWhere != 0) {
 					Chat.add(EMPTY_STRING, 0, JagString.concatenate(new JagString[]{aClass100_780, script.name}));
 				}
-				TracingException.report("CS2 - scr:" + script.key + " op:" + op + new String(str.method3148()), ex);
+				TracingException.report("CS2 - scr:" + script.key + " op:" + op + new String(str.toByteArray()), ex);
 			}
 		}
 	}

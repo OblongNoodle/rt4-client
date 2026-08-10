@@ -68,11 +68,11 @@ public final class JagString implements StringInterface {
 		if (arg0.length < 2) {
 			throw new IllegalArgumentException();
 		}
-		return method2355(0, arg0.length, arg0);
+		return concatenateRange(0, arg0.length, arg0);
 	}
 
 	@OriginalMember(owner = "client!jd", name = "a", descriptor = "(II[Lclient!na;I)Lclient!na;")
-	public static JagString method2355(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) JagString[] arg2) {
+	public static JagString concatenateRange(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) JagString[] arg2) {
 		@Pc(5) int local5 = 0;
 		for (@Pc(7) int local7 = 0; local7 < arg1; local7++) {
 			if (arg2[arg0 + local7] == null) {
@@ -160,8 +160,8 @@ public final class JagString implements StringInterface {
 				local13.chars[local13.length++] = (byte) local29;
 			}
 		}
-		local13.method3156();
-		return local13.method3151();
+		local13.compact();
+		return local13.intern();
 	}
 
 	@OriginalMember(owner = "client!jj", name = "b", descriptor = "(BI)Lclient!na;")
@@ -218,7 +218,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!bg", name = "d", descriptor = "(II)Z")
-	public static boolean method530(@OriginalArg(0) int arg0) {
+	public static boolean isLigature(@OriginalArg(0) int arg0) {
 		return arg0 == 198 || arg0 == 230 || arg0 == 156 || arg0 == 140 || arg0 == 223;
 	}
 
@@ -267,12 +267,12 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!md", name = "a", descriptor = "(JB)Lclient!na;")
-	public static JagString method2929(@OriginalArg(0) long arg0) {
-		return method1376(arg0);
+	public static JagString parseLong(@OriginalArg(0) long arg0) {
+		return parseLongImpl(arg0);
 	}
 
 	@OriginalMember(owner = "client!ej", name = "a", descriptor = "(IZIJ)Lclient!na;")
-	public static JagString method1376(@OriginalArg(3) long arg0) {
+	public static JagString parseLongImpl(@OriginalArg(3) long arg0) {
 		@Pc(35) long local35 = arg0 / (long) 10;
 		@Pc(37) int local37 = 1;
 		while (local35 != 0L) {
@@ -305,7 +305,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Z)Ljava/net/URL;")
-	public final URL method3107() throws MalformedURLException {
+	public final URL toUrl() throws MalformedURLException {
 		return new URL(new String(this.chars, 0, this.length));
 	}
 
@@ -404,7 +404,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!na;Z)Lclient!na;")
-	public final JagString method3113(@OriginalArg(0) JagString arg0) {
+	public final JagString appendString(@OriginalArg(0) JagString arg0) {
 		if (!this.aBoolean193) {
 			throw new IllegalArgumentException();
 		}
@@ -481,7 +481,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(ILclient!na;II)Lclient!na;")
-	public final JagString method3122(@OriginalArg(1) JagString arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	public final JagString appendSubstring(@OriginalArg(1) JagString arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		if (!this.aBoolean193) {
 			throw new IllegalArgumentException();
 		} else if (arg1 >= 0 && arg1 <= arg2 && arg2 <= arg0.length) {
@@ -503,11 +503,11 @@ public final class JagString implements StringInterface {
 
 	@OriginalMember(owner = "client!na", name = "f", descriptor = "(I)Z")
 	public final boolean isInt() {
-		return this.method3141();
+		return this.isValidInt();
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(Z)Lclient!na;")
-	public final JagString method3124() {
+	public final JagString reverse() {
 		@Pc(7) JagString local7 = new JagString();
 		local7.length = this.length;
 		local7.chars = new byte[local7.length];
@@ -560,7 +560,7 @@ public final class JagString implements StringInterface {
 				local12 = this.chars[local28] & 0xFF;
 				local28++;
 			}
-			if (method530(local12)) {
+			if (isLigature(local12)) {
 				local23++;
 			} else {
 				local20--;
@@ -575,7 +575,7 @@ public final class JagString implements StringInterface {
 				local14 = arg0.chars[local30] & 0xFF;
 				local30++;
 			}
-			if (method530(local14)) {
+			if (isLigature(local14)) {
 				local26++;
 			} else {
 				local17--;
@@ -595,7 +595,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Ljava/net/URL;Z)Ljava/net/URL;")
-	public final URL method3127(@OriginalArg(0) URL arg0) throws MalformedURLException {
+	public final URL toRelativeUrl(@OriginalArg(0) URL arg0) throws MalformedURLException {
 		return new URL(arg0, new String(this.chars, 0, this.length));
 	}
 
@@ -643,7 +643,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(IZ)V")
-	public final void method3133(@OriginalArg(0) int arg0) {
+	public final void setLength(@OriginalArg(0) int arg0) {
 		if (!this.aBoolean193) {
 			throw new IllegalArgumentException();
 		} else if (arg0 < 0) {
@@ -671,7 +671,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(ZLjava/applet/Applet;)V")
-	public final void method3134(@OriginalArg(1) Applet arg0) throws Throwable {
+	public final void evalInBrowser(@OriginalArg(1) Applet arg0) throws Throwable {
 		@Pc(16) String local16 = new String(this.chars, 0, this.length);
 		BrowserControl.eval(arg0, local16);
 	}
@@ -724,7 +724,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(Lclient!na;I)I")
-	public final int method3139(@OriginalArg(0) JagString arg0) {
+	public final int compareTo(@OriginalArg(0) JagString arg0) {
 		@Pc(20) int local20;
 		if (arg0.length < this.length) {
 			local20 = arg0.length;
@@ -749,7 +749,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!na;ZLclient!na;)Lclient!na;")
-	public final JagString method3140(@OriginalArg(0) JagString arg0, @OriginalArg(2) JagString arg1) {
+	public final JagString replaceAll(@OriginalArg(0) JagString arg0, @OriginalArg(2) JagString arg1) {
 		@Pc(8) int local8 = this.length;
 		@Pc(14) int local14 = arg0.length - arg1.length;
 		@Pc(16) int local16 = 0;
@@ -769,7 +769,7 @@ public final class JagString implements StringInterface {
 					while (local16 < local51) {
 						local45.append(this.chars[local16++] & 0xFF);
 					}
-					local45.method3113(arg0);
+					local45.appendString(arg0);
 					local16 += arg1.length;
 				}
 			}
@@ -785,7 +785,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(IZ)Z")
-	private boolean method3141() {
+	private boolean isValidInt() {
 		@Pc(18) boolean local18 = false;
 		@Pc(24) boolean local24 = false;
 		@Pc(26) int local26 = 0;
@@ -826,7 +826,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "d", descriptor = "(BLclient!na;)Z")
-	public final boolean method3142(@OriginalArg(1) JagString arg0) {
+	public final boolean startsWithIgnoreCase(@OriginalArg(1) JagString arg0) {
 		if (this.length < arg0.length) {
 			return false;
 		}
@@ -954,7 +954,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "i", descriptor = "(I)[B")
-	public final byte[] method3148() {
+	public final byte[] toByteArray() {
 		@Pc(7) byte[] local7 = new byte[this.length];
 		copy(this.chars, 0, local7, 0, this.length);
 		return local7;
@@ -966,7 +966,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(B)Lclient!na;")
-	public final JagString method3151() {
+	public final JagString intern() {
 		@Pc(9) long local9 = this.longHashCode();
 		@Pc(19) Class local19 = JagString.class;
 		synchronized (local19) {
@@ -1031,7 +1031,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "d", descriptor = "(B)Lclient!na;")
-	public final JagString method3156() {
+	public final JagString compact() {
 		if (!this.aBoolean193) {
 			throw new IllegalArgumentException();
 		}
@@ -1075,7 +1075,7 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "k", descriptor = "(I)Lclient!na;")
-	public final JagString method3159() {
+	public final JagString toBase37Name() {
 		@Pc(9) JagString local9 = Base37.decode37(this.encode37());
 		return local9 == null ? aClass100_967 : local9;
 	}

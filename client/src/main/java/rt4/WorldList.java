@@ -291,7 +291,7 @@ public class WorldList {
 		if (local3 == null) {
 			return false;
 		} else if (SignLink.anInt5928 == 1 || SignLink.anInt5928 == 2 || client.modeWhere == 2) {
-			@Pc(31) byte[] local31 = local3.hostname.method3148();
+			@Pc(31) byte[] local31 = local3.hostname.toByteArray();
 			client.hostname = new String(local31, 0, local31.length);
 			Player.worldId = local3.id;
 			if (client.modeWhere != 0) {
@@ -311,7 +311,7 @@ public class WorldList {
 			}
 			@Pc(182) JagString local182 = JagString.concatenate(new JagString[]{HTTP_PROTOCOL, local3.hostname, local62, aClass100_1107, JagString.parseInt(client.language), aClass100_801, JagString.parseInt(client.affiliate), local89, aClass100_659, client.objectTag ? aClass100_184 : aClass100_945, aClass100_420, client.javaScript ? aClass100_184 : aClass100_945, aClass100_260, client.advertSuppressed ? aClass100_184 : aClass100_945});
 			try {
-				client.instance.getAppletContext().showDocument(local182.method3107(), "_self");
+				client.instance.getAppletContext().showDocument(local182.toUrl(), "_self");
 				return true;
 			} catch (@Pc(191) Exception local191) {
 				return false;

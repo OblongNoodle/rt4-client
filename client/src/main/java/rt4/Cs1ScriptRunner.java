@@ -311,7 +311,7 @@ public class Cs1ScriptRunner {
 				}
 				component.rectangleLoop = client.loop;
 				component.rectangle = rectangle;
-				if (!component.if3 || !InterfaceList.method947(component)) {
+				if (!component.if3 || !InterfaceList.isHidden(component)) {
 					if (component.clientCode > 0) {
 						method13(component);
 					}
@@ -551,7 +551,7 @@ public class Cs1ScriptRunner {
 							}
 						}
 						if (component.type == 0) {
-							if (!component.if3 && InterfaceList.method947(component) && InterfaceList.aClass13_22 != component) {
+							if (!component.if3 && InterfaceList.isHidden(component) && InterfaceList.aClass13_22 != component) {
 								continue;
 							}
 							if (!component.if3) {
@@ -1337,7 +1337,7 @@ public class Cs1ScriptRunner {
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(ILclient!be;)Lclient!be;")
 	public static Component method1836(@OriginalArg(1) Component arg0) {
-		@Pc(12) Component local12 = InterfaceList.method938(arg0);
+		@Pc(12) Component local12 = InterfaceList.getDragRenderParent(arg0);
 		if (local12 == null) {
 			local12 = arg0.aClass13_5;
 		}
@@ -1393,7 +1393,7 @@ public class Cs1ScriptRunner {
 						local176.source = aClass13_14;
 						ScriptRunner.run(local176);
 					}
-					if (InterfaceList.aClass13_12 != null && InterfaceList.method938(aClass13_14) != null) {
+					if (InterfaceList.aClass13_12 != null && InterfaceList.getDragRenderParent(aClass13_14) != null) {
 						Protocol.outboundBuffer.p1isaac(79);
 						Protocol.outboundBuffer.mp4(aClass13_14.id);
 						Protocol.outboundBuffer.ip2(InterfaceList.aClass13_12.createdComponentId);

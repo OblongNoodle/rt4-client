@@ -57,7 +57,7 @@ public final class ChangeLocRequest extends Node {
 				if (local10.setLoops > 0) {
 					local10.setLoops--;
 				}
-				if (local10.setLoops == 0 && local10.x >= 1 && local10.y >= 1 && local10.x <= 102 && local10.y <= 102 && (local10.anInt929 < 0 || method3557(local10.anInt929, local10.anInt926))) {
+				if (local10.setLoops == 0 && local10.x >= 1 && local10.y >= 1 && local10.x <= 102 && local10.y <= 102 && (local10.anInt929 < 0 || isLocModelReady(local10.anInt929, local10.anInt926))) {
 					SceneGraph.addLocModel(local10.anInt929, local10.x, local10.level, local10.anInt922, local10.y, local10.anInt926, local10.layer);
 					local10.setLoops = -1;
 					if (local10.originalId == local10.anInt929 && local10.originalId == -1) {
@@ -66,7 +66,7 @@ public final class ChangeLocRequest extends Node {
 						local10.unlink();
 					}
 				}
-			} else if (local10.originalId < 0 || method3557(local10.originalId, local10.originalShape)) {
+			} else if (local10.originalId < 0 || isLocModelReady(local10.originalId, local10.originalShape)) {
 				SceneGraph.addLocModel(local10.originalId, local10.x, local10.level, local10.originalAngle, local10.y, local10.originalShape, local10.layer);
 				local10.unlink();
 			}
@@ -139,7 +139,7 @@ public final class ChangeLocRequest extends Node {
 	}
 
 	@OriginalMember(owner = "client!il", name = "a", descriptor = "(BII)Z")
-	public static boolean method3557(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public static boolean isLocModelReady(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		if (arg1 == 11) {
 			arg1 = 10;
 		}

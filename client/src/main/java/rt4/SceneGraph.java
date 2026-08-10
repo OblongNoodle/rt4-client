@@ -2808,7 +2808,7 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!ch", name = "c", descriptor = "(I)V")
 	public static void checkPlaneChange() {
 		if (!allLevelsAreVisible() && centralPlane != Player.plane) {
-			LoginManager.method2463(Player.plane, centralZoneY, centralZoneX, PlayerList.self.movementQueueY[0], false, PlayerList.self.movementQueueX[0]);
+			LoginManager.loadRegion(Player.plane, centralZoneY, centralZoneX, PlayerList.self.movementQueueY[0], false, PlayerList.self.movementQueueX[0]);
 		} else if (Player.plane != LightingManager.anInt2875 && MiniMap.renderMap(Player.plane)) {
 			LightingManager.anInt2875 = Player.plane;
 			ScriptRunner.method2218();

@@ -620,7 +620,7 @@ public final class client extends GameShell {
 			TitleScreen.load(js5Archive8);
 		}
 		if (gameState == 10) {
-			InterfaceList.method1596(false);
+			InterfaceList.resetToLoginScreen(false);
 		}
 		if (gameState == 30) {
 			setGameState(25);
@@ -708,14 +708,14 @@ public final class client extends GameShell {
 			VarcDomain.varcs[local3506] = -1;
 		}
 		if (InterfaceList.topLevelInterface != -1) {
-			InterfaceList.method2275(InterfaceList.topLevelInterface);
+			InterfaceList.unload(InterfaceList.topLevelInterface);
 		}
 		for (@Pc(3755) ComponentPointer local3755 = (ComponentPointer) InterfaceList.openInterfaces.head(); local3755 != null; local3755 = (ComponentPointer) InterfaceList.openInterfaces.next()) {
 			InterfaceList.closeInterface(true, local3755);
 		}
 		InterfaceList.topLevelInterface = -1;
 		InterfaceList.openInterfaces = new HashTable(8);
-		InterfaceList.method1287();
+		InterfaceList.reset();
 		Cs1ScriptRunner.aClass13_10 = null;
 		Cs1ScriptRunner.aBoolean108 = false;
 		MiniMenu.size = 0;
@@ -749,7 +749,7 @@ public final class client extends GameShell {
 		MiniMenu.walkText = LocalizedText.WALKHERE;
 		ScriptRunner.neverRemoveRoofs = false;
 		aShortArray88 = aShortArray19 = aShortArray74 = aShortArray87 = new short[256];
-		LoginManager.method4637();
+		LoginManager.clearLoginScreenSprites();
 		InterfaceList.aBoolean298 = false;
 		ClientProt.sendWindowDetails();
 	}
@@ -867,7 +867,7 @@ public final class client extends GameShell {
 		} else if (gameState == 5) {
 			LoadingBar.render(false, Fonts.b12Full);
 		} else if (gameState == 10) {
-			InterfaceList.method2460();
+			InterfaceList.updateLoginScreen();
 		} else if (gameState == 25 || gameState == 28) {
 			if (LoginManager.loadingScreenState == 1) {
 				if (anInt5150 < LoginManager.mapFilesMissingCount) {
@@ -885,7 +885,7 @@ public final class client extends GameShell {
 				Fonts.drawTextOnScreen(false, LocalizedText.LOADING);
 			}
 		} else if (gameState == 30) {
-			LoginManager.method1841();
+			LoginManager.processInterface();
 		} else if (gameState == 40) {
 			Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.CONLOST, JagString.aClass100_556, LocalizedText.ATTEMPT_TO_REESTABLISH}));
 		}
@@ -1159,7 +1159,7 @@ public final class client extends GameShell {
 		}
 		Protocol.sceneDelta++;
 		if (InterfaceList.topLevelInterface != -1) {
-			InterfaceList.method1320(0, 0, 0, GameShell.canvasWidth, InterfaceList.topLevelInterface, 0, GameShell.canvasHeight);
+			InterfaceList.processSubInterface(0, 0, 0, GameShell.canvasWidth, InterfaceList.topLevelInterface, 0, GameShell.canvasHeight);
 		}
 		InterfaceList.transmitTimer++;
 		if (GlRenderer.enabled) {
@@ -1684,7 +1684,7 @@ public final class client extends GameShell {
 			mainLoadState = 160;
 			mainLoadSecondaryText = LocalizedText.MAINLOAD150B;
 		} else if (mainLoadState == 160) {
-			InterfaceList.method1596(true);
+			InterfaceList.resetToLoginScreen(true);
 		}
 	}
 

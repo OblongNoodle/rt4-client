@@ -235,7 +235,7 @@ public final class DisplayMode {
 			if (Preferences.highDetailLighting) {
 				Rasteriser.setBrightness(0.7F);
 			}
-			LoginManager.method4637();
+			LoginManager.clearLoginScreenSprites();
 		} else if (newMode == 0 && currentMode > 0) { // This is when client switches from any other mode to SD Mode
 			GameShell.thread.setPriority(1);
 			if(resizableSD)
@@ -260,7 +260,7 @@ public final class DisplayMode {
 				}
 			}
 			GlTile.method1939();
-			LoginManager.method4637();
+			LoginManager.clearLoginScreenSprites();
 		}
 		SceneGraph.aBoolean130 = !SceneGraph.allLevelsAreVisible();
 		if (useHD) {
@@ -268,7 +268,7 @@ public final class DisplayMode {
 		}
 		resizable = newMode == 2; // resizeable should only be done in HD-Resizeable mode and not full screen mode.
 		if (InterfaceList.topLevelInterface != -1) {
-			InterfaceList.method3712(true);
+			InterfaceList.layoutTopLevel(true);
 		}
 		if (Protocol.socket != null && (client.gameState == 30 || client.gameState == 25)) {
 			ClientProt.sendWindowDetails();

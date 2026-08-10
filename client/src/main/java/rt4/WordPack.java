@@ -18,7 +18,7 @@ public class WordPack {
 	@OriginalMember(owner = "client!lg", name = "a", descriptor = "(ZLclient!wa;Lclient!na;)I")
 	public static int encode(@OriginalArg(1) Buffer arg0, @OriginalArg(2) JagString arg1) {
 		@Pc(6) int local6 = arg0.offset;
-		@Pc(14) byte[] local14 = arg1.method3148();
+		@Pc(14) byte[] local14 = arg1.toByteArray();
 		arg0.psmarts(local14.length);
 		arg0.offset += codec.encode(local14.length, arg0.data, local14, 0, arg0.offset);
 		return arg0.offset - local6;

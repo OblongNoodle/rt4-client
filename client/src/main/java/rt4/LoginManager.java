@@ -563,14 +563,14 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!p", name = "a", descriptor = "(I)V")
-	public static void method3395() {
+	public static void continueDelayedLogin() {
 		if (step == 5) {
 			step = 6;
 		}
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(Lclient!na;Lclient!na;IB)V")
-	public static void method3896(@OriginalArg(0) JagString arg0, @OriginalArg(1) JagString arg1, @OriginalArg(2) int arg2) {
+	public static void startLogin(@OriginalArg(0) JagString arg0, @OriginalArg(1) JagString arg1, @OriginalArg(2) int arg2) {
 		Player.password = arg1;
 		anInt39 = arg2;
 		Player.usernameInput = arg0;
@@ -642,7 +642,7 @@ public class LoginManager {
 			underWaterMapFileIds[local80] = -1;
 			underWaterLocationsMapFileIds[local80] = -1;
 		}
-		method2463(0, local23, local10, 8, true, 8);
+		loadRegion(0, local23, local10, 8, true, 8);
 	}
 
 	@OriginalMember(owner = "client!wj", name = "b", descriptor = "(B)V")
@@ -690,12 +690,12 @@ public class LoginManager {
 		Camera.resetCameraEffects();
 		Protocol.verifyId = 0;
 		VarpDomain.reset();
-		InterfaceList.method1596(true);
+		InterfaceList.resetToLoginScreen(true);
 		PluginRepository.OnLogout();
 	}
 
 	@OriginalMember(owner = "client!k", name = "a", descriptor = "(IIIIZIZ)V")
-	public static void method2463(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5) {
+	public static void loadRegion(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5) {
 		if (SceneGraph.centralZoneX == arg2 && arg1 == SceneGraph.centralZoneY && (SceneGraph.centralPlane == arg0 || SceneGraph.allLevelsAreVisible())) {
 			return;
 		}
@@ -862,7 +862,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!ca", name = "a", descriptor = "(ZI)V")
-	public static void method743(@OriginalArg(0) boolean arg0) {
+	public static void readStaticLocs(@OriginalArg(0) boolean arg0) {
 		@Pc(13) int local13 = mapFilesBuffer.length;
 		@Pc(19) byte[][] local19;
 		if (GlRenderer.enabled && arg0) {
@@ -958,7 +958,7 @@ public class LoginManager {
 					chunkY = 10;
 					chunkX = 10;
 				}
-				fileExists &= method1201(chunkX, chunkY, local294);
+				fileExists &= areLocModelsReady(chunkX, chunkY, local294);
 			}
 			if (GlRenderer.enabled) {
 				local294 = underWaterLocationsMapFilesBuffer[id];
@@ -969,7 +969,7 @@ public class LoginManager {
 						chunkY = 10;
 						chunkX = 10;
 					}
-					fileExists &= method1201(chunkX, chunkY, local294);
+					fileExists &= areLocModelsReady(chunkX, chunkY, local294);
 				}
 			}
 		}
@@ -1025,27 +1025,27 @@ public class LoginManager {
 		ClientProt.ping(true);
 		SceneGraph.load(false);
 		if (!SceneGraph.dynamicMapRegion) {
-			method1805(false);
+			readStaticTerrain(false);
 			ClientProt.ping(true);
 			if (GlRenderer.enabled) {
 				i = PlayerList.self.movementQueueX[0] >> 3;
 				chunkX = PlayerList.self.movementQueueY[0] >> 3;
 				FogManager.setLightPosition(chunkX, i);
 			}
-			method743(false);
+			readStaticLocs(false);
 			if (npcSpawnsFilesBuffer != null) {
 				decodeNpcFiles();
 			}
 		}
 		if (SceneGraph.dynamicMapRegion) {
-			method1835(false);
+			readDynamicTerrain(false);
 			ClientProt.ping(true);
 			if (GlRenderer.enabled) {
 				i = PlayerList.self.movementQueueX[0] >> 3;
 				chunkX = PlayerList.self.movementQueueY[0] >> 3;
 				FogManager.setLightPosition(chunkX, i);
 			}
-			method4002(false);
+			readDynamicLocs(false);
 		}
 		client.unload();
 		ClientProt.ping(true);
@@ -1070,14 +1070,14 @@ public class LoginManager {
 			SceneGraph.setUnderwater(true);
 			SceneGraph.load(true);
 			if (!SceneGraph.dynamicMapRegion) {
-				method1805(true);
+				readStaticTerrain(true);
 				ClientProt.ping(true);
-				method743(true);
+				readStaticLocs(true);
 			}
 			if (SceneGraph.dynamicMapRegion) {
-				method1835(true);
+				readDynamicTerrain(true);
 				ClientProt.ping(true);
-				method4002(true);
+				readDynamicLocs(true);
 			}
 			client.unload();
 			ClientProt.ping(true);
@@ -1135,7 +1135,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!dm", name = "a", descriptor = "(BII[B)Z")
-	public static boolean method1201(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) byte[] arg2) {
+	public static boolean areLocModelsReady(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) byte[] arg2) {
 		@Pc(15) boolean local15 = true;
 		@Pc(17) int local17 = -1;
 		@Pc(22) Buffer local22 = new Buffer(arg2);
@@ -1192,7 +1192,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!t", name = "a", descriptor = "(ZB)V")
-	public static void method4002(@OriginalArg(0) boolean arg0) {
+	public static void readDynamicLocs(@OriginalArg(0) boolean arg0) {
 		@Pc(19) byte local19;
 		@Pc(21) byte[][] local21;
 		if (GlRenderer.enabled && arg0) {
@@ -1216,7 +1216,7 @@ public class LoginManager {
 							@Pc(99) int local99 = local89 / 8 + (local83 / 8 << 8);
 							for (@Pc(101) int local101 = 0; local101 < regionBitPacked.length; local101++) {
 								if (regionBitPacked[local101] == local99 && local21[local101] != null) {
-									method3771(PathFinder.collisionMaps, local29, local21[local101], local67, local77, local36 * 8, local43 * 8, arg0, (local83 & 0x7) * 8, (local89 & 0x7) * 8);
+									readDynamicRegionLocs(PathFinder.collisionMaps, local29, local21[local101], local67, local77, local36 * 8, local43 * 8, arg0, (local83 & 0x7) * 8, (local89 & 0x7) * 8);
 									break;
 								}
 							}
@@ -1228,7 +1228,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!rj", name = "a", descriptor = "([Lclient!mj;I[BIIIIZIIB)V")
-	public static void method3771(@OriginalArg(0) CollisionMap[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
+	public static void readDynamicRegionLocs(@OriginalArg(0) CollisionMap[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
 		@Pc(7) int local7 = -1;
 		@Pc(12) Buffer local12 = new Buffer(arg2);
 		while (true) {
@@ -1252,8 +1252,8 @@ public class LoginManager {
 				@Pc(72) int local72 = local64 & 0x3;
 				if (arg3 == local60 && local56 >= arg8 && local56 < arg8 + 8 && arg9 <= local50 && arg9 + 8 > local50) {
 					@Pc(103) LocType local103 = LocTypeList.get(local7);
-					@Pc(120) int local120 = method1286(local50 & 0x7, arg4, local72, local103.length, local103.width, local56 & 0x7) + arg5;
-					@Pc(137) int local137 = method4541(local103.width, arg4, local103.length, local56 & 0x7, local72, local50 & 0x7) + arg6;
+					@Pc(120) int local120 = rotateLocX(local50 & 0x7, arg4, local72, local103.length, local103.width, local56 & 0x7) + arg5;
+					@Pc(137) int local137 = rotateLocY(local103.width, arg4, local103.length, local56 & 0x7, local72, local50 & 0x7) + arg6;
 					if (local120 > 0 && local137 > 0 && local120 < 103 && local137 < 103) {
 						@Pc(154) CollisionMap local154 = null;
 						if (!arg7) {
@@ -1273,7 +1273,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(IIIIIII)I")
-	public static int method1286(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5) {
+	public static int rotateLocX(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5) {
 		if ((arg2 & 0x1) == 1) {
 			@Pc(10) int local10 = arg4;
 			arg4 = arg3;
@@ -1292,7 +1292,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(IIBIIII)I")
-	public static int method4541(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
+	public static int rotateLocY(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
 		if ((arg4 & 0x1) == 1) {
 			@Pc(9) int local9 = arg0;
 			arg0 = arg2;
@@ -1358,7 +1358,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(ZB)V")
-	public static void method1835(@OriginalArg(0) boolean arg0) {
+	public static void readDynamicTerrain(@OriginalArg(0) boolean arg0) {
 		@Pc(11) byte local11;
 		@Pc(13) byte[][] local13;
 		if (GlRenderer.enabled && arg0) {
@@ -1399,7 +1399,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(I)V")
-	public static void method1841() {
+	public static void processInterface() {
 		if (!Cs1ScriptRunner.aBoolean108) {
 			if (MiniMenu.anInt3953 != 0) {
 				ScriptRunner.anInt3751 = Mouse.anInt5850;
@@ -1418,7 +1418,7 @@ public class LoginManager {
 			MiniMenu.cursors[0] = MiniMenu.anInt1092;
 		}
 		if (InterfaceList.topLevelInterface != -1) {
-			InterfaceList.method1949(InterfaceList.topLevelInterface);
+			InterfaceList.updateAnimations(InterfaceList.topLevelInterface);
 		}
 		@Pc(60) int local60;
 		for (local60 = 0; local60 < InterfaceList.rectangles; local60++) {
@@ -1460,11 +1460,11 @@ public class LoginManager {
 		} else if (Cs1ScriptRunner.anInt2503 != -1) {
 			MiniMenu.method1207(null, InterfaceList.anInt5574, Cs1ScriptRunner.anInt2503);
 		}
-		local60 = Cs1ScriptRunner.aBoolean108 ? -1 : method4044();
+		local60 = Cs1ScriptRunner.aBoolean108 ? -1 : getActiveCursorId();
 		if (local60 == -1) {
 			local60 = ScriptRunner.anInt5794;
 		}
-		InterfaceList.method1750(local60);
+		InterfaceList.setCursor(local60);
 		if (MiniMenu.anInt3096 == 1) {
 			MiniMenu.anInt3096 = 2;
 		}
@@ -1493,12 +1493,12 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!tb", name = "h", descriptor = "(I)I")
-	public static int method4044() {
+	public static int getActiveCursorId() {
 		return Cheat.shiftClick && Keyboard.pressedKeys[Keyboard.KEY_SHIFT] && MiniMenu.size > 2 ? MiniMenu.cursors[MiniMenu.size - 2] : MiniMenu.cursors[MiniMenu.size - 1];
 	}
 
 	@OriginalMember(owner = "client!gn", name = "a", descriptor = "(ZI)V")
-	public static void method1805(@OriginalArg(0) boolean arg0) {
+	public static void readStaticTerrain(@OriginalArg(0) boolean arg0) {
 		@Pc(7) byte local7;
 		@Pc(9) byte[][] local9;
 		if (GlRenderer.enabled && arg0) {
@@ -1536,7 +1536,7 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!j", name = "g", descriptor = "(I)V")
-	public static void method4637() {
+	public static void clearLoginScreenSprites() {
 		aClass3_Sub2_Sub1_8 = null;
 		aClass3_Sub2_Sub1_1 = null;
 		aClass3_Sub2_Sub1_6 = null;

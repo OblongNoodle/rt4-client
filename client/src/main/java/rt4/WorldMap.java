@@ -1041,7 +1041,7 @@ public class WorldMap {
 	@OriginalMember(owner = "client!rc", name = "a", descriptor = "(Lclient!na;Z)Lclient!na;")
 	public static JagString method923(@OriginalArg(0) JagString arg0) {
 		@Pc(12) int local12 = method3218(arg0);
-		return local12 == -1 ? aClass100_517 : labels.aClass100Array153[local12].method3140(aClass100_538, aClass100_872);
+		return local12 == -1 ? aClass100_517 : labels.aClass100Array153[local12].replaceAll(aClass100_538, aClass100_872);
 	}
 
 	@OriginalMember(owner = "client!rg", name = "d", descriptor = "(B)Lclient!bn;")
@@ -1105,7 +1105,7 @@ public class WorldMap {
 			return -1;
 		}
 		for (@Pc(20) int local20 = 0; local20 < labels.anInt5074; local20++) {
-			if (labels.aClass100Array153[local20].method3140(aClass100_538, aClass100_872).strEquals(arg0)) {
+			if (labels.aClass100Array153[local20].replaceAll(aClass100_538, aClass100_872).strEquals(arg0)) {
 				return local20;
 			}
 		}
@@ -1805,7 +1805,7 @@ public class WorldMap {
 			return -1;
 		}
 		for (@Pc(20) int local20 = 0; local20 < labels.anInt5074; local20++) {
-			if (labels.aClass100Array153[local20].method3140(aClass100_538, aClass100_872).method3142(arg0)) {
+			if (labels.aClass100Array153[local20].replaceAll(aClass100_538, aClass100_872).startsWithIgnoreCase(arg0)) {
 				return local20;
 			}
 		}
@@ -1876,7 +1876,7 @@ public class WorldMap {
 					for (@Pc(231) int local231 = 0; local231 < local211; local231++) {
 						@Pc(242) JagString local242 = aClass100Array53[local231];
 						if (local211 - 1 > local231) {
-							local242.method3133(local242.length() - 4);
+							local242.setLength(local242.length() - 4);
 						}
 						local84.renderStringCenter(local242, local59, local80, local82);
 						local80 += local84.method1503();

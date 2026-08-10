@@ -28,7 +28,7 @@ public class StringUtils {
 		@Pc(9) JagString local9 = JagString.allocate(0);
 		if (arg3 < 0L) {
 			arg3 = -arg3;
-			local9.method3113(aClass100_453);
+			local9.appendString(aClass100_453);
 		}
 		@Pc(26) JagString local26 = aClass100_1017;
 		@Pc(28) JagString local28 = aClass100_185;
@@ -47,7 +47,7 @@ public class StringUtils {
 		@Pc(59) JagString local59 = JagString.allocate(0);
 		@Pc(61) int local61;
 		for (local61 = 0; local61 < arg2; local61++) {
-			local59.method3113(JagString.parseInt((int) (arg3 % 10L)));
+			local59.appendString(JagString.parseInt((int) (arg3 % 10L)));
 			arg3 /= 10L;
 		}
 		local61 = 0;
@@ -58,17 +58,17 @@ public class StringUtils {
 			@Pc(95) JagString local95 = JagString.allocate(0);
 			while (arg3 > 0L) {
 				if (arg1 && local61 != 0 && local61 % 3 == 0) {
-					local95.method3113(local26);
+					local95.appendString(local26);
 				}
-				local95.method3113(JagString.parseInt((int) (arg3 % 10L)));
+				local95.appendString(JagString.parseInt((int) (arg3 % 10L)));
 				local61++;
 				arg3 /= 10L;
 			}
 			local137 = local95;
 		}
 		if (local59.length() > 0) {
-			local59.method3113(local28);
+			local59.appendString(local28);
 		}
-		return JagString.concatenate(new JagString[]{local9, local137.method3124(), local59.method3124()});
+		return JagString.concatenate(new JagString[]{local9, local137.reverse(), local59.reverse()});
 	}
 }

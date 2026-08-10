@@ -175,9 +175,9 @@ public final class ReflectionCheck extends Node {
 				@Pc(104) String local104;
 				@Pc(95) int local95;
 				if (local71 == 0 || local71 == 1 || local71 == 2) {
-					local93 = new String(arg1.gjstr().method3148());
+					local93 = new String(arg1.gjstr().toByteArray());
 					local95 = 0;
-					local104 = new String(arg1.gjstr().method3148());
+					local104 = new String(arg1.gjstr().toByteArray());
 					if (local71 == 1) {
 						local95 = arg1.g4();
 					}
@@ -185,12 +185,12 @@ public final class ReflectionCheck extends Node {
 					check.fieldValues[local59] = local95;
 					check.fieldRequests[local59] = arg0.getDeclaredField(local104, classForName(local93));
 				} else if (local71 == 3 || local71 == 4) {
-					local93 = new String(arg1.gjstr().method3148());
-					local104 = new String(arg1.gjstr().method3148());
+					local93 = new String(arg1.gjstr().toByteArray());
+					local104 = new String(arg1.gjstr().toByteArray());
 					local95 = arg1.g1();
 					@Pc(171) String[] local171 = new String[local95];
 					for (@Pc(173) int local173 = 0; local173 < local95; local173++) {
-						local171[local173] = new String(arg1.gjstr().method3148());
+						local171[local173] = new String(arg1.gjstr().toByteArray());
 					}
 					@Pc(193) byte[][] local193 = new byte[local95][];
 					@Pc(210) int local210;
