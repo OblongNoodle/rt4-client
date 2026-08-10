@@ -19,7 +19,7 @@ public class SoundPlayer {
 	public static int size = 0;
 
 	@OriginalMember(owner = "client!ma", name = "a", descriptor = "(ILclient!tk;IIZI)V")
-	public static void playSeqSound(@OriginalArg(0) int zFine, @OriginalArg(1) SeqType seqType, @OriginalArg(3) int xFine, @OriginalArg(4) boolean self, @OriginalArg(5) int index) {
+	public static void playSeqSound(@OriginalArg(0) int yFine, @OriginalArg(1) SeqType seqType, @OriginalArg(3) int xFine, @OriginalArg(4) boolean self, @OriginalArg(5) int index) {
 		if (size >= 50 || (seqType.soundeffect == null || index >= seqType.soundeffect.length || seqType.soundeffect[index] == null)) {
 			return;
 		}
@@ -40,7 +40,7 @@ public class SoundPlayer {
 		} else if (Preferences.ambientSoundsVolume != 0) {
 			ids[size] = id;
 			SoundPlayer.loops[size] = loops;
-			@Pc(111) int z = (zFine - 64) / 128;
+			@Pc(111) int z = (yFine - 64) / 128;
 			int x = (xFine - 64) / 128;
 			delays[size] = 0;
 			sounds[size] = null;
@@ -84,15 +84,15 @@ public class SoundPlayer {
 						@Pc(125) int minDistance = (positions[i] & 0xFF) * 128;
 						@Pc(133) int z = positions[i] >> 8 & 0xFF;
 						@Pc(141) int x = positions[i] >> 16 & 0xFF;
-						@Pc(151) int zFine = z * 128 + 64 - PlayerList.self.zFine;
-						if (zFine < 0) {
-							zFine = -zFine;
+						@Pc(151) int yFine = z * 128 + 64 - PlayerList.self.yFine;
+						if (yFine < 0) {
+							yFine = -yFine;
 						}
 						@Pc(167) int xFine = x * 128 + 64 - PlayerList.self.xFine;
 						if (xFine < 0) {
 							xFine = -xFine;
 						}
-						@Pc(180) int distance = xFine + zFine - 128;
+						@Pc(180) int distance = xFine + yFine - 128;
 						if (minDistance < distance) {
 							delays[i] = -100;
 							continue;

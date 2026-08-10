@@ -112,7 +112,7 @@ public final class AttachLocRequest extends Node {
 				if (attachment != null) {
 					ChangeLocRequest.push(Player.plane, request.z, 0, request.x, request.resetLoops + 1, -1, layer, 0, request.setLoops + 1);
 					entity.attachmentResetAt = request.resetLoops + client.loop;
-					entity.attachmentZFine = length * 64 + request.z * 128;
+					entity.attachmentYFine = length * 64 + request.z * 128;
 					entity.attachmentXFine = width * 64 + request.x * 128;
 					entity.attachment = attachment;
 					@Pc(292) int x0Delta = request.x0Delta;
@@ -133,8 +133,8 @@ public final class AttachLocRequest extends Node {
 						z0Delta = z1Delta;
 						z1Delta = temp;
 					}
-					entity.attachmentZ0 = request.z + z0Delta;
-					entity.attachmentZ1 = z1Delta + request.z;
+					entity.attachmentY0 = request.z + z0Delta;
+					entity.attachmentY1 = z1Delta + request.z;
 					entity.atachmentX0 = request.x + x0Delta;
 				}
 			}

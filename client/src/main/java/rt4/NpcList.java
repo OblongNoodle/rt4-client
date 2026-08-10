@@ -32,22 +32,22 @@ public class NpcList {
 		} else {
 			processMovement(arg1);
 		}
-		if (arg1.xFine < 128 || arg1.zFine < 128 || arg1.xFine >= 13184 || arg1.zFine >= 13184) {
+		if (arg1.xFine < 128 || arg1.yFine < 128 || arg1.xFine >= 13184 || arg1.yFine >= 13184) {
 			arg1.seqId = -1;
 			arg1.spotAnimId = -1;
 			arg1.forceMoveCyclesToStart = 0;
 			arg1.forceMoveCyclesToDest = 0;
 			arg1.xFine = arg1.movementQueueX[0] * 128 + arg1.getSize() * 64;
-			arg1.zFine = arg1.movementQueueZ[0] * 128 + arg1.getSize() * 64;
+			arg1.yFine = arg1.movementQueueY[0] * 128 + arg1.getSize() * 64;
 			arg1.resetMovementQueue();
 		}
-		if (arg1 == PlayerList.self && (arg1.xFine < 1536 || arg1.zFine < 1536 || arg1.xFine >= 11776 || arg1.zFine >= 11776)) {
+		if (arg1 == PlayerList.self && (arg1.xFine < 1536 || arg1.yFine < 1536 || arg1.xFine >= 11776 || arg1.yFine >= 11776)) {
 			arg1.spotAnimId = -1;
 			arg1.forceMoveCyclesToStart = 0;
 			arg1.forceMoveCyclesToDest = 0;
 			arg1.seqId = -1;
 			arg1.xFine = arg1.movementQueueX[0] * 128 + arg1.getSize() * 64;
-			arg1.zFine = arg1.movementQueueZ[0] * 128 + arg1.getSize() * 64;
+			arg1.yFine = arg1.movementQueueY[0] * 128 + arg1.getSize() * 64;
 			arg1.resetMovementQueue();
 		}
 		processFacing(arg1);
@@ -63,7 +63,7 @@ public class NpcList {
 			arg0.targetAngle = 1024;
 		}
 		arg0.xFine += (startXFine - arg0.xFine) / toStartCyclesLeft;
-		arg0.zFine += (startYFine - arg0.zFine) / toStartCyclesLeft;
+		arg0.yFine += (startYFine - arg0.yFine) / toStartCyclesLeft;
 		if (arg0.forceMoveDirection == 1) {
 			arg0.targetAngle = 1536;
 		}
@@ -86,7 +86,7 @@ public class NpcList {
 			@Pc(75) int destXFine = arg0.forceMoveDestX * 128 + arg0.getSize() * 64;
 			@Pc(86) int destYFine = arg0.forceMoveDestY * 128 + arg0.getSize() * 64;
 			arg0.xFine = (lerpCyclesRemaining * destXFine + startXFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
-			arg0.zFine = (destYFine * lerpCyclesRemaining + startYFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
+			arg0.yFine = (destYFine * lerpCyclesRemaining + startYFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
 		}
 		arg0.movementCatchupTicks = 0;
 		if (arg0.forceMoveDirection == 0) {
@@ -124,12 +124,12 @@ public class NpcList {
 			}
 		}
 		@Pc(79) int local79 = arg0.xFine;
-		@Pc(82) int local82 = arg0.zFine;
+		@Pc(82) int local82 = arg0.yFine;
 		@Pc(99) int local99 = arg0.movementQueueX[arg0.movementQueueSize - 1] * 128 + arg0.getSize() * 64;
-		@Pc(116) int local116 = arg0.movementQueueZ[arg0.movementQueueSize - 1] * 128 + arg0.getSize() * 64;
+		@Pc(116) int local116 = arg0.movementQueueY[arg0.movementQueueSize - 1] * 128 + arg0.getSize() * 64;
 		if (local99 - local79 > 256 || local99 - local79 < -256 || local116 - local82 > 256 || local116 - local82 < -256) {
 			arg0.xFine = local99;
-			arg0.zFine = local116;
+			arg0.yFine = local116;
 			return;
 		}
 		if (local99 <= local79) {
@@ -234,7 +234,7 @@ public class NpcList {
 			if (arg0.movementQueueSize == 1) {
 				@Pc(594) int local594 = (local99 >= arg0.xFine ? local99 - arg0.xFine : -local99 + arg0.xFine) << 7;
 				@Pc(600) int local600 = arg0.movementSpeed * arg0.movementSpeed;
-				@Pc(622) int local622 = (local116 < arg0.zFine ? arg0.zFine - local116 : -arg0.zFine + local116) << 7;
+				@Pc(622) int local622 = (local116 < arg0.yFine ? arg0.yFine - local116 : -arg0.yFine + local116) << 7;
 				@Pc(629) int local629 = local594 > local622 ? local594 : local622;
 				@Pc(636) int local636 = local9.movementAcceleration * 2 * local629;
 				if (local636 < local600) {
@@ -278,17 +278,17 @@ public class NpcList {
 			}
 		}
 		if (local82 < local116) {
-			arg0.zFine += local273;
-			if (arg0.zFine > local116) {
-				arg0.zFine = local116;
+			arg0.yFine += local273;
+			if (arg0.yFine > local116) {
+				arg0.yFine = local116;
 			}
 		} else if (local116 < local82) {
-			arg0.zFine -= local273;
-			if (local116 > arg0.zFine) {
-				arg0.zFine = local116;
+			arg0.yFine -= local273;
+			if (local116 > arg0.yFine) {
+				arg0.yFine = local116;
 			}
 		}
-		if (arg0.xFine == local99 && local116 == arg0.zFine) {
+		if (arg0.xFine == local99 && local116 == arg0.yFine) {
 			arg0.movementQueueSize--;
 			if (arg0.seqMovementSteps > 0) {
 				arg0.seqMovementSteps--;
@@ -307,7 +307,7 @@ public class NpcList {
 		if (arg0.faceEntity != -1 && arg0.faceEntity < 32768) {
 			@Pc(26) Npc local26 = npcs[arg0.faceEntity];
 			if (local26 != null) {
-				local36 = arg0.zFine - local26.zFine;
+				local36 = arg0.yFine - local26.yFine;
 				local43 = arg0.xFine - local26.xFine;
 				if (local43 != 0 || local36 != 0) {
 					arg0.targetAngle = (int) (Math.atan2(local43, local36) * 325.949D) & 0x7FF;
@@ -323,7 +323,7 @@ public class NpcList {
 			}
 			@Pc(83) Player local83 = PlayerList.players[local70];
 			if (local83 != null) {
-				local94 = arg0.zFine - local83.zFine;
+				local94 = arg0.yFine - local83.yFine;
 				local36 = arg0.xFine - local83.xFine;
 				if (local36 != 0 || local94 != 0) {
 					arg0.targetAngle = (int) (Math.atan2(local36, local94) * 325.949D) & 0x7FF;
@@ -332,7 +332,7 @@ public class NpcList {
 		}
 		if ((arg0.faceX != 0 || arg0.faceY != 0) && (arg0.movementQueueSize == 0 || arg0.movementCatchupTicks > 0)) {
 			local70 = arg0.xFine - (arg0.faceX - Camera.originX - Camera.originX) * 64;
-			local43 = arg0.zFine - (arg0.faceY - Camera.originZ - Camera.originZ) * 64;
+			local43 = arg0.yFine - (arg0.faceY - Camera.originZ - Camera.originZ) * 64;
 			if (local70 != 0 || local43 != 0) {
 				arg0.targetAngle = (int) (Math.atan2(local70, local43) * 325.949D) & 0x7FF;
 			}
@@ -490,12 +490,12 @@ public class NpcList {
 					entity.movementSeqDelayClock = 1;
 					entity.movementSeqFrame++;
 					entity.movementSeqNextFrame++;
-					SoundPlayer.playSeqSound(entity.zFine, local18, entity.xFine, entity == PlayerList.self, entity.movementSeqFrame);
+					SoundPlayer.playSeqSound(entity.yFine, local18, entity.xFine, entity == PlayerList.self, entity.movementSeqFrame);
 				}
 				if (entity.movementSeqFrame >= local18.frames.length) {
 					entity.movementSeqFrame = 0;
 					entity.movementSeqDelayClock = 0;
-					SoundPlayer.playSeqSound(entity.zFine, local18, entity.xFine, PlayerList.self == entity, entity.movementSeqFrame);
+					SoundPlayer.playSeqSound(entity.yFine, local18, entity.xFine, PlayerList.self == entity, entity.movementSeqFrame);
 				}
 				entity.movementSeqNextFrame = entity.movementSeqFrame + 1;
 				if (entity.movementSeqNextFrame >= local18.frames.length) {
@@ -515,13 +515,13 @@ public class NpcList {
 				} else {
 					if (entity.spotAnimFrame < 0) {
 						entity.spotAnimFrame = 0;
-						SoundPlayer.playSeqSound(entity.zFine, local165, entity.xFine, PlayerList.self == entity, 0);
+						SoundPlayer.playSeqSound(entity.yFine, local165, entity.xFine, PlayerList.self == entity, 0);
 					}
 					entity.spotAnimDelayClock++;
 					if (entity.spotAnimFrame < local165.frames.length && local165.frameDelay[entity.spotAnimFrame] < entity.spotAnimDelayClock) {
 						entity.spotAnimFrame++;
 						entity.spotAnimDelayClock = 1;
-						SoundPlayer.playSeqSound(entity.zFine, local165, entity.xFine, PlayerList.self == entity, entity.spotAnimFrame);
+						SoundPlayer.playSeqSound(entity.yFine, local165, entity.xFine, PlayerList.self == entity, entity.spotAnimFrame);
 					}
 					if (entity.spotAnimFrame >= local165.frames.length) {
 						entity.spotAnimId = -1;
@@ -549,7 +549,7 @@ public class NpcList {
 				if (entity.seqFrame < local18.frames.length && entity.seqDelayClock > local18.frameDelay[entity.seqFrame]) {
 					entity.seqDelayClock = 1;
 					entity.seqFrame++;
-					SoundPlayer.playSeqSound(entity.zFine, local18, entity.xFine, entity == PlayerList.self, entity.seqFrame);
+					SoundPlayer.playSeqSound(entity.yFine, local18, entity.xFine, entity == PlayerList.self, entity.seqFrame);
 				}
 				if (local18.frames.length <= entity.seqFrame) {
 					entity.seqFrame -= local18.replayoff;
@@ -557,7 +557,7 @@ public class NpcList {
 					if (entity.seqReplayCount >= local18.replaycount) {
 						entity.seqId = -1;
 					} else if (entity.seqFrame >= 0 && local18.frames.length > entity.seqFrame) {
-						SoundPlayer.playSeqSound(entity.zFine, local18, entity.xFine, PlayerList.self == entity, entity.seqFrame);
+						SoundPlayer.playSeqSound(entity.yFine, local18, entity.xFine, PlayerList.self == entity, entity.seqFrame);
 					} else {
 						entity.seqId = -1;
 					}
@@ -592,7 +592,7 @@ public class NpcList {
 						if (c147.currentFrame < local570.frames.length && c147.delayClock > local570.frameDelay[c147.currentFrame]) {
 							c147.currentFrame++;
 							c147.delayClock = 1;
-							SoundPlayer.playSeqSound(entity.zFine, local570, entity.xFine, entity == PlayerList.self, c147.currentFrame);
+							SoundPlayer.playSeqSound(entity.yFine, local570, entity.xFine, entity == PlayerList.self, c147.currentFrame);
 						}
 						if (local570.frames.length <= c147.currentFrame) {
 							c147.replayCount++;
@@ -600,7 +600,7 @@ public class NpcList {
 							if (local570.replaycount <= c147.replayCount) {
 								entity.slotAnimations[local156] = null;
 							} else if (c147.currentFrame >= 0 && c147.currentFrame < local570.frames.length) {
-								SoundPlayer.playSeqSound(entity.zFine, local570, entity.xFine, PlayerList.self == entity, c147.currentFrame);
+								SoundPlayer.playSeqSound(entity.yFine, local570, entity.xFine, PlayerList.self == entity, c147.currentFrame);
 							} else {
 								entity.slotAnimations[local156] = null;
 							}

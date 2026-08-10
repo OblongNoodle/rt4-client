@@ -13,13 +13,13 @@ public final class GroundDecor {
 	public int xFine;
 
 	@OriginalMember(owner = "client!bm", name = "i", descriptor = "I")
-	public int yFine;
+	public int zFine;
 
 	@OriginalMember(owner = "client!bm", name = "m", descriptor = "J")
 	public long key;
 
 	@OriginalMember(owner = "client!bm", name = "o", descriptor = "I")
-	public int zFine;
+	public int yFine;
 
 	@OriginalMember(owner = "client!bm", name = "n", descriptor = "Z")
 	public boolean flat = false;

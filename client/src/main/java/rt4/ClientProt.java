@@ -114,7 +114,7 @@ public class ClientProt {
 		}
 		arg0--;
 		@Pc(23) int local23 = PathFinder.queueX[arg0];
-		@Pc(27) int local27 = PathFinder.queueZ[arg0];
+		@Pc(27) int local27 = PathFinder.queueY[arg0];
 		if (arg1 == 0) {
 			Protocol.outboundBuffer.p1isaac(ClientProt.MOVE_GAMECLICK);
 			Protocol.outboundBuffer.p1(local13 + local13 + 3);
@@ -130,12 +130,12 @@ public class ClientProt {
 		Protocol.outboundBuffer.p1add(Keyboard.pressedKeys[Keyboard.KEY_CTRL] ? 1 : 0);
 		Protocol.outboundBuffer.p2(Camera.originX + local23);
 		Protocol.outboundBuffer.p2add(Camera.originZ + local27);
-		LoginManager.mapFlagZ = PathFinder.queueZ[0];
+		LoginManager.mapFlagZ = PathFinder.queueY[0];
 		LoginManager.mapFlagX = PathFinder.queueX[0];
 		for (@Pc(126) int local126 = 1; local126 < local13; local126++) {
 			arg0--;
 			Protocol.outboundBuffer.p1add(PathFinder.queueX[arg0] - local23);
-			Protocol.outboundBuffer.p1sub(PathFinder.queueZ[arg0] - local27);
+			Protocol.outboundBuffer.p1sub(PathFinder.queueY[arg0] - local27);
 		}
 	}
 
@@ -161,7 +161,7 @@ public class ClientProt {
 			@Pc(28) Player local28 = PlayerList.players[PlayerList.ids[local15]];
 			if (local28 != null && local28.username != null && local28.username.equalsIgnoreCase(local7)) {
 				local13 = true;
-				PathFinder.findPath(PlayerList.self.movementQueueZ[0], 0, 1, false, 0, local28.movementQueueX[0], 1, 0, 2, local28.movementQueueZ[0], PlayerList.self.movementQueueX[0]);
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local28.movementQueueX[0], 1, 0, 2, local28.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				if (arg0 == 1) {
 					Protocol.outboundBuffer.p1isaac(68);
 					Protocol.outboundBuffer.ip2add(PlayerList.ids[local15]);

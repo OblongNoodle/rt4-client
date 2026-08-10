@@ -602,7 +602,7 @@ public class LoginManager {
 	@OriginalMember(owner = "client!ca", name = "h", descriptor = "(I)V")
 	public static void setupLoadingScreenRegion() {
 		@Pc(10) int local10 = (Camera.renderX >> 10) + (Camera.originX >> 3);
-		@Pc(23) int local23 = (Camera.renderZ >> 10) + (Camera.originZ >> 3);
+		@Pc(23) int local23 = (Camera.renderY >> 10) + (Camera.originZ >> 3);
 		locationMapFilesBuffer = new byte[18][];
 		underWaterLocationsMapFileIds = new int[18];
 		npcSpawnsFilesBuffer = new byte[18][];
@@ -728,11 +728,11 @@ public class LoginManager {
 				local103 = NpcList.npcs[local96];
 				if (local103 != null) {
 					local103.xFine -= local86 * 128;
-					local103.zFine -= local81 * 128;
-					if (local103.xFine >= 0 && local103.xFine <= 13184 && local103.zFine >= 0 && local103.zFine <= 13184) {
+					local103.yFine -= local81 * 128;
+					if (local103.xFine >= 0 && local103.xFine <= 13184 && local103.yFine >= 0 && local103.yFine <= 13184) {
 						for (local109 = 0; local109 < 10; local109++) {
 							local103.movementQueueX[local109] -= local86;
-							local103.movementQueueZ[local109] -= local81;
+							local103.movementQueueY[local109] -= local81;
 						}
 						NpcList.ids[NpcList.size++] = local96;
 					} else {
@@ -747,10 +747,10 @@ public class LoginManager {
 				if (local103 != null) {
 					for (local109 = 0; local109 < 10; local109++) {
 						local103.movementQueueX[local109] -= local86;
-						local103.movementQueueZ[local109] -= local81;
+						local103.movementQueueY[local109] -= local81;
 					}
 					local103.xFine -= local86 * 128;
-					local103.zFine -= local81 * 128;
+					local103.yFine -= local81 * 128;
 				}
 			}
 		}
@@ -759,10 +759,10 @@ public class LoginManager {
 			if (local265 != null) {
 				for (local109 = 0; local109 < 10; local109++) {
 					local265.movementQueueX[local109] -= local86;
-					local265.movementQueueZ[local109] -= local81;
+					local265.movementQueueY[local109] -= local81;
 				}
 				local265.xFine -= local86 * 128;
-				local265.zFine -= local81 * 128;
+				local265.yFine -= local81 * 128;
 			}
 		}
 		Player.plane = arg0;
@@ -805,7 +805,7 @@ public class LoginManager {
 		}
 		if (arg4) {
 			Camera.renderX -= local86 * 128;
-			Camera.renderZ -= local81 * 128;
+			Camera.renderY -= local81 * 128;
 			Camera.lockedTargetZ -= local81;
 			Camera.lockedLookAtX -= local86;
 			Camera.lockedLookAtZ -= local81;
@@ -1029,7 +1029,7 @@ public class LoginManager {
 			ClientProt.ping(true);
 			if (GlRenderer.enabled) {
 				i = PlayerList.self.movementQueueX[0] >> 3;
-				chunkX = PlayerList.self.movementQueueZ[0] >> 3;
+				chunkX = PlayerList.self.movementQueueY[0] >> 3;
 				FogManager.setLightPosition(chunkX, i);
 			}
 			method743(false);
@@ -1042,7 +1042,7 @@ public class LoginManager {
 			ClientProt.ping(true);
 			if (GlRenderer.enabled) {
 				i = PlayerList.self.movementQueueX[0] >> 3;
-				chunkX = PlayerList.self.movementQueueZ[0] >> 3;
+				chunkX = PlayerList.self.movementQueueY[0] >> 3;
 				FogManager.setLightPosition(chunkX, i);
 			}
 			method4002(false);
@@ -1488,7 +1488,7 @@ public class LoginManager {
 				}
 			}
 		}
-		AreaSoundManager.redraw(Protocol.sceneDelta, PlayerList.self.xFine, PlayerList.self.zFine, Player.plane);
+		AreaSoundManager.redraw(Protocol.sceneDelta, PlayerList.self.xFine, PlayerList.self.yFine, Player.plane);
 		Protocol.sceneDelta = 0;
 	}
 

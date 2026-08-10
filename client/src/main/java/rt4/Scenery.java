@@ -7,13 +7,13 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class Scenery {
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "I")
-	public int zMin;
+	public int yMin;
 
 	@OriginalMember(owner = "client!ec", name = "c", descriptor = "Lclient!th;")
 	public Entity entity;
 
 	@OriginalMember(owner = "client!ec", name = "e", descriptor = "I")
-	public int zMax;
+	public int yMax;
 
 	@OriginalMember(owner = "client!ec", name = "f", descriptor = "I")
 	public int xFine;

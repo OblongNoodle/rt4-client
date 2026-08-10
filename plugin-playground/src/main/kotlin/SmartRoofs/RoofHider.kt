@@ -60,8 +60,8 @@ object RoofHider {
 
         override fun getPickScreenY(): Int = getHoverPickScreenY()
 
-        override fun reportTile(sceneX: Int, sceneZ: Int, plane: Int) {
-            setHoverTile(sceneX, sceneZ, plane)
+        override fun reportTile(sceneX: Int, sceneY: Int, plane: Int) {
+            setHoverTile(sceneX, sceneY, plane)
         }
 
         override fun isLocPickable(key: Long): Boolean = isHoverLocPickable(key)
@@ -72,12 +72,12 @@ object RoofHider {
 
         override fun beginGroup(group: Int) = beginBuildingFootprint(group)
 
-        override fun addGroupTile(group: Int, plane: Int, sceneX: Int, sceneZ: Int) {
-            addBuildingFootprintTile(group, plane, sceneX, sceneZ)
+        override fun addGroupTile(group: Int, plane: Int, sceneX: Int, sceneY: Int) {
+            addBuildingFootprintTile(group, plane, sceneX, sceneY)
         }
 
-        override fun setDestinationTarget(sceneX: Int, sceneZ: Int) {
-            this@RoofHider.setDestinationTarget(sceneX, sceneZ)
+        override fun setDestinationTarget(sceneX: Int, sceneY: Int) {
+            this@RoofHider.setDestinationTarget(sceneX, sceneY)
         }
 
         override fun clearDestinationTarget() = this@RoofHider.clearDestinationTarget()
@@ -89,14 +89,14 @@ object RoofHider {
     private var smartRoofsWasActive = false
 
     private var mapFlagRoofX = -1
-    private var mapFlagRoofZ = -1
+    private var mapFlagRoofY = -1
     private var mapFlagRoofRadius = 0
 
     private var hoverPickActive = false
     private var hoverPickScreenX = 0
     private var hoverPickScreenY = 0
     private val hoverTargetX = IntArray(HOVER_TARGET_LIMIT) { -1 }
-    private val hoverTargetZ = IntArray(HOVER_TARGET_LIMIT) { -1 }
+    private val hoverTargetY = IntArray(HOVER_TARGET_LIMIT) { -1 }
     private val hoverTargetPlane = IntArray(HOVER_TARGET_LIMIT) { -1 }
     private val hoverPrimaryHitX = IntArray(HOVER_TARGET_LIMIT) { Int.MIN_VALUE }
     private val hoverPrimaryHitY = IntArray(HOVER_TARGET_LIMIT) { Int.MIN_VALUE }
@@ -107,14 +107,14 @@ object RoofHider {
     private val buildingFootprintMaxY = IntArray(HOVER_TARGET_LIMIT) { Int.MIN_VALUE }
     private val buildingFootprintTiles = Array(HOVER_TARGET_LIMIT) { Array(104) { BooleanArray(104) } }
     private var lastHoverTileX = -1
-    private var lastHoverTileZ = -1
+    private var lastHoverTileY = -1
     private var lastHoverTilePlane = -1
     private var lastHoverTileValid = false
     private var lastHoverTileAt = 0L
     private var lastHoverHitAt = 0L
 
     private var destinationTargetX = -1
-    private var destinationTargetZ = -1
+    private var destinationTargetY = -1
     private var destinationTargetUntil = 0L
 
     fun isSmartRoofsActive(): Boolean {
@@ -187,41 +187,41 @@ object RoofHider {
         }
     }
 
-    fun setMapFlagRoof(sceneX: Int, sceneZ: Int, radius: Int) {
+    fun setMapFlagRoof(sceneX: Int, sceneY: Int, radius: Int) {
         if (!isSmartRoofsActive()) {
             clearMapFlagRoof()
             return
         }
-        if (!isInSceneBounds(sceneX, sceneZ)) {
+        if (!isInSceneBounds(sceneX, sceneY)) {
             clearMapFlagRoof()
             return
         }
         mapFlagRoofX = sceneX
-        mapFlagRoofZ = sceneZ
+        mapFlagRoofY = sceneY
         mapFlagRoofRadius = radius.coerceIn(0, 8)
     }
 
     fun clearMapFlagRoof() {
         mapFlagRoofX = -1
-        mapFlagRoofZ = -1
+        mapFlagRoofY = -1
         mapFlagRoofRadius = 0
     }
 
     private fun hideMapFlagRoof() {
-        hideRoofFromSeedTile(mapFlagRoofX, mapFlagRoofZ, mapFlagRoofRadius, MAP_FLAG_ROOF_GROUP, Player.plane)
+        hideRoofFromSeedTile(mapFlagRoofX, mapFlagRoofY, mapFlagRoofRadius, MAP_FLAG_ROOF_GROUP, Player.plane)
     }
 
-    private fun hideRoofFromSeedTile(sceneX: Int, sceneZ: Int, radius: Int, group: Int, plane: Int): Boolean {
+    private fun hideRoofFromSeedTile(sceneX: Int, sceneY: Int, radius: Int, group: Int, plane: Int): Boolean {
         if (sceneX == -1 || !isRoofHidePlane(plane) || ScriptRunner.anIntArray205.size <= group) {
             return false
         }
         for (currentRadius in 0..radius) {
             for (dx in -currentRadius..currentRadius) {
-                for (dz in -currentRadius..currentRadius) {
-                    if (abs(dx) != currentRadius && abs(dz) != currentRadius) {
+                for (dy in -currentRadius..currentRadius) {
+                    if (abs(dx) != currentRadius && abs(dy) != currentRadius) {
                         continue
                     }
-                    if (tryHideRoofFromTile(sceneX + dx, sceneZ + dz, group, plane)) {
+                    if (tryHideRoofFromTile(sceneX + dx, sceneY + dy, group, plane)) {
                         return true
                     }
                 }
@@ -230,16 +230,16 @@ object RoofHider {
         return false
     }
 
-    private fun tryHideRoofFromTile(sceneX: Int, sceneZ: Int, group: Int, plane: Int): Boolean {
-        if (!isHideableRoofTile(sceneX, sceneZ, plane)) {
+    private fun tryHideRoofFromTile(sceneX: Int, sceneY: Int, group: Int, plane: Int): Boolean {
+        if (!isHideableRoofTile(sceneX, sceneY, plane)) {
             return false
         }
         val masks = ScriptRunner.aByteArrayArrayArray15 ?: return false
         val currentRoofMask = (ScriptRunner.anInt3325 and 0xFF).toByte()
-        if (masks[plane][sceneX][sceneZ] == currentRoofMask) {
+        if (masks[plane][sceneX][sceneY] == currentRoofMask) {
             return true
         }
-        return ScriptRunner.hideRoofAt(sceneX, sceneZ, group, plane)
+        return ScriptRunner.hideRoofAt(sceneX, sceneY, group, plane)
     }
 
     fun updateHoverPick(entries: Array<out MiniMenuEntry>?) {
@@ -271,12 +271,12 @@ object RoofHider {
 
     private fun getHoverPickScreenY(): Int = hoverPickScreenY
 
-    private fun setHoverTile(sceneX: Int, sceneZ: Int, plane: Int) {
-        if (!isSmartRoofsActive() || !hoverPickActive || !isInSceneBounds(sceneX, sceneZ)) {
+    private fun setHoverTile(sceneX: Int, sceneY: Int, plane: Int) {
+        if (!isSmartRoofsActive() || !hoverPickActive || !isInSceneBounds(sceneX, sceneY)) {
             return
         }
-        val valid = updateHoverTarget(sceneX, sceneZ, Player.plane, plane)
-        rememberHoverTileHit(sceneX, sceneZ, plane, valid)
+        val valid = updateHoverTarget(sceneX, sceneY, Player.plane, plane)
+        rememberHoverTileHit(sceneX, sceneY, plane, valid)
         if (valid) {
             markHoverHit()
             return
@@ -298,32 +298,32 @@ object RoofHider {
             return
         }
         val sceneX = (key and 0x7F).toInt()
-        val sceneZ = ((key shr 7) and 0x7F).toInt()
-        if (!isInSceneBounds(sceneX, sceneZ)) {
+        val sceneY = ((key shr 7) and 0x7F).toInt()
+        if (!isInSceneBounds(sceneX, sceneY)) {
             return
         }
-        if (updateHoverTarget(sceneX, sceneZ, Player.plane, plane)) {
+        if (updateHoverTarget(sceneX, sceneY, Player.plane, plane)) {
             markHoverHit()
         }
     }
 
-    private fun updateHoverTarget(sceneX: Int, sceneZ: Int, plane: Int, hitPlane: Int): Boolean {
+    private fun updateHoverTarget(sceneX: Int, sceneY: Int, plane: Int, hitPlane: Int): Boolean {
         var targetX = sceneX
-        var targetZ = sceneZ
+        var targetY = sceneY
         val now = System.currentTimeMillis()
-        if (!isHideableRoofTile(targetX, targetZ, plane)) {
-            val packed = findNearbyHideableRoofTile(sceneX, sceneZ, plane, hitPlane)
+        if (!isHideableRoofTile(targetX, targetY, plane)) {
+            val packed = findNearbyHideableRoofTile(sceneX, sceneY, plane, hitPlane)
             if (packed == -1) {
                 return false
             }
             targetX = packed shr 7
-            targetZ = packed and 0x7F
+            targetY = packed and 0x7F
         }
-        if (!isHideableRoofTile(targetX, targetZ, plane)) {
+        if (!isHideableRoofTile(targetX, targetY, plane)) {
             return false
         }
 
-        val duplicateSlot = findHoverTargetByBuildingFootprint(targetX, targetZ, plane)
+        val duplicateSlot = findHoverTargetByBuildingFootprint(targetX, targetY, plane)
         if (duplicateSlot != -1) {
             updateHoverPrimaryHit(duplicateSlot)
             extendHoverTarget(duplicateSlot, now)
@@ -333,14 +333,14 @@ object RoofHider {
         var oldestSlot = 0
         var oldestUntil = Long.MAX_VALUE
         for (i in 0 until HOVER_TARGET_LIMIT) {
-            if (hoverTargetX[i] == targetX && hoverTargetZ[i] == targetZ && hoverTargetPlane[i] == plane) {
+            if (hoverTargetX[i] == targetX && hoverTargetY[i] == targetY && hoverTargetPlane[i] == plane) {
                 updateHoverPrimaryHit(i)
                 extendHoverTarget(i, now)
                 return true
             }
             if (hoverTargetX[i] == -1 || now > hoverTargetUntil[i]) {
                 hoverTargetX[i] = targetX
-                hoverTargetZ[i] = targetZ
+                hoverTargetY[i] = targetY
                 hoverTargetPlane[i] = plane
                 clearBuildingFootprint(i)
                 updateHoverPrimaryHit(i)
@@ -353,7 +353,7 @@ object RoofHider {
             }
         }
         hoverTargetX[oldestSlot] = targetX
-        hoverTargetZ[oldestSlot] = targetZ
+        hoverTargetY[oldestSlot] = targetY
         hoverTargetPlane[oldestSlot] = plane
         clearBuildingFootprint(oldestSlot)
         updateHoverPrimaryHit(oldestSlot)
@@ -361,20 +361,20 @@ object RoofHider {
         return true
     }
 
-    private fun findNearbyHideableRoofTile(sceneX: Int, sceneZ: Int, plane: Int, hitPlane: Int): Int {
+    private fun findNearbyHideableRoofTile(sceneX: Int, sceneY: Int, plane: Int, hitPlane: Int): Int {
         if (hitPlane <= plane) {
             return -1
         }
         for (radius in 1..HOVER_UPPER_PLANE_TILE_SEARCH_RADIUS) {
             for (dx in -radius..radius) {
-                for (dz in -radius..radius) {
-                    if (abs(dx) != radius && abs(dz) != radius) {
+                for (dy in -radius..radius) {
+                    if (abs(dx) != radius && abs(dy) != radius) {
                         continue
                     }
                     val targetX = sceneX + dx
-                    val targetZ = sceneZ + dz
-                    if (isHideableRoofTile(targetX, targetZ, plane)) {
-                        return (targetX shl 7) or targetZ
+                    val targetY = sceneY + dy
+                    if (isHideableRoofTile(targetX, targetY, plane)) {
+                        return (targetX shl 7) or targetY
                     }
                 }
             }
@@ -382,9 +382,9 @@ object RoofHider {
         return -1
     }
 
-    private fun rememberHoverTileHit(sceneX: Int, sceneZ: Int, plane: Int, valid: Boolean) {
+    private fun rememberHoverTileHit(sceneX: Int, sceneY: Int, plane: Int, valid: Boolean) {
         lastHoverTileX = sceneX
-        lastHoverTileZ = sceneZ
+        lastHoverTileY = sceneY
         lastHoverTilePlane = plane
         lastHoverTileValid = valid
         lastHoverTileAt = System.currentTimeMillis()
@@ -399,12 +399,12 @@ object RoofHider {
         clearHoverTargets()
     }
 
-    private fun findHoverTargetByBuildingFootprint(sceneX: Int, sceneZ: Int, plane: Int): Int {
+    private fun findHoverTargetByBuildingFootprint(sceneX: Int, sceneY: Int, plane: Int): Int {
         for (i in 0 until HOVER_TARGET_LIMIT) {
             if (hoverTargetX[i] == -1 || hoverTargetPlane[i] != plane) {
                 continue
             }
-            if (isBuildingFootprintTile(i, sceneX, sceneZ)) {
+            if (isBuildingFootprintTile(i, sceneX, sceneY)) {
                 return i
             }
         }
@@ -439,7 +439,7 @@ object RoofHider {
             clearHoverTarget(i)
         }
         lastHoverTileX = -1
-        lastHoverTileZ = -1
+        lastHoverTileY = -1
         lastHoverTilePlane = -1
         lastHoverTileValid = false
         lastHoverTileAt = 0L
@@ -448,7 +448,7 @@ object RoofHider {
 
     private fun clearHoverTarget(index: Int) {
         hoverTargetX[index] = -1
-        hoverTargetZ[index] = -1
+        hoverTargetY[index] = -1
         hoverTargetPlane[index] = -1
         hoverPrimaryHitX[index] = Int.MIN_VALUE
         hoverPrimaryHitY[index] = Int.MIN_VALUE
@@ -477,7 +477,7 @@ object RoofHider {
                 continue
             }
             val group = getHoverGroup(i)
-            hideRoofFromSeedTile(hoverTargetX[i], hoverTargetZ[i], 0, group, hoverTargetPlane[i])
+            hideRoofFromSeedTile(hoverTargetX[i], hoverTargetY[i], 0, group, hoverTargetPlane[i])
         }
     }
 
@@ -500,8 +500,8 @@ object RoofHider {
             return false
         }
         for (x in 0 until 104) {
-            for (z in 0 until 104) {
-                if (buildingFootprintTiles[index][x][z] && isPickInsideBuildingFootprintTile(index, x, z)) {
+            for (y in 0 until 104) {
+                if (buildingFootprintTiles[index][x][y] && isPickInsideBuildingFootprintTile(index, x, y)) {
                     return true
                 }
             }
@@ -530,31 +530,31 @@ object RoofHider {
         }
     }
 
-    private fun addBuildingFootprintTile(group: Int, plane: Int, sceneX: Int, sceneZ: Int) {
+    private fun addBuildingFootprintTile(group: Int, plane: Int, sceneX: Int, sceneY: Int) {
         val index = getHoverIndex(group)
         if (index == -1 || plane + 1 >= SceneGraph.tileHeights.size) {
             return
         }
-        buildingFootprintTiles[index][sceneX][sceneZ] = true
-        addBuildingFootprintTileBounds(index, plane, sceneX, sceneZ)
+        buildingFootprintTiles[index][sceneX][sceneY] = true
+        addBuildingFootprintTileBounds(index, plane, sceneX, sceneY)
     }
 
-    private fun addBuildingFootprintTileBounds(index: Int, plane: Int, sceneX: Int, sceneZ: Int) {
-        addBuildingFootprintBoundPoint(index, projectBuildingFootprintPoint(sceneX shl 7, sceneZ shl 7, SceneGraph.tileHeights[plane + 1][sceneX][sceneZ]))
-        addBuildingFootprintBoundPoint(index, projectBuildingFootprintPoint((sceneX + 1) shl 7, sceneZ shl 7, SceneGraph.tileHeights[plane + 1][sceneX + 1][sceneZ]))
-        addBuildingFootprintBoundPoint(index, projectBuildingFootprintPoint((sceneX + 1) shl 7, (sceneZ + 1) shl 7, SceneGraph.tileHeights[plane + 1][sceneX + 1][sceneZ + 1]))
-        addBuildingFootprintBoundPoint(index, projectBuildingFootprintPoint(sceneX shl 7, (sceneZ + 1) shl 7, SceneGraph.tileHeights[plane + 1][sceneX][sceneZ + 1]))
+    private fun addBuildingFootprintTileBounds(index: Int, plane: Int, sceneX: Int, sceneY: Int) {
+        addBuildingFootprintBoundPoint(index, projectBuildingFootprintPoint(sceneX shl 7, sceneY shl 7, SceneGraph.tileHeights[plane + 1][sceneX][sceneY]))
+        addBuildingFootprintBoundPoint(index, projectBuildingFootprintPoint((sceneX + 1) shl 7, sceneY shl 7, SceneGraph.tileHeights[plane + 1][sceneX + 1][sceneY]))
+        addBuildingFootprintBoundPoint(index, projectBuildingFootprintPoint((sceneX + 1) shl 7, (sceneY + 1) shl 7, SceneGraph.tileHeights[plane + 1][sceneX + 1][sceneY + 1]))
+        addBuildingFootprintBoundPoint(index, projectBuildingFootprintPoint(sceneX shl 7, (sceneY + 1) shl 7, SceneGraph.tileHeights[plane + 1][sceneX][sceneY + 1]))
     }
 
-    private fun isPickInsideBuildingFootprintTile(index: Int, sceneX: Int, sceneZ: Int): Boolean {
+    private fun isPickInsideBuildingFootprintTile(index: Int, sceneX: Int, sceneY: Int): Boolean {
         val plane = hoverTargetPlane[index]
         if (!isRoofHidePlane(plane) || plane + 1 >= SceneGraph.tileHeights.size) {
             return false
         }
-        val point0 = projectBuildingFootprintPoint(sceneX shl 7, sceneZ shl 7, SceneGraph.tileHeights[plane + 1][sceneX][sceneZ])
-        val point1 = projectBuildingFootprintPoint((sceneX + 1) shl 7, sceneZ shl 7, SceneGraph.tileHeights[plane + 1][sceneX + 1][sceneZ])
-        val point2 = projectBuildingFootprintPoint((sceneX + 1) shl 7, (sceneZ + 1) shl 7, SceneGraph.tileHeights[plane + 1][sceneX + 1][sceneZ + 1])
-        val point3 = projectBuildingFootprintPoint(sceneX shl 7, (sceneZ + 1) shl 7, SceneGraph.tileHeights[plane + 1][sceneX][sceneZ + 1])
+        val point0 = projectBuildingFootprintPoint(sceneX shl 7, sceneY shl 7, SceneGraph.tileHeights[plane + 1][sceneX][sceneY])
+        val point1 = projectBuildingFootprintPoint((sceneX + 1) shl 7, sceneY shl 7, SceneGraph.tileHeights[plane + 1][sceneX + 1][sceneY])
+        val point2 = projectBuildingFootprintPoint((sceneX + 1) shl 7, (sceneY + 1) shl 7, SceneGraph.tileHeights[plane + 1][sceneX + 1][sceneY + 1])
+        val point3 = projectBuildingFootprintPoint(sceneX shl 7, (sceneY + 1) shl 7, SceneGraph.tileHeights[plane + 1][sceneX][sceneY + 1])
         if (point0 == Long.MIN_VALUE || point1 == Long.MIN_VALUE || point2 == Long.MIN_VALUE || point3 == Long.MIN_VALUE) {
             return false
         }
@@ -578,11 +578,11 @@ object RoofHider {
         if (lastHoverTilePlane != hoverTargetPlane[index]) {
             return false
         }
-        return !isBuildingFootprintTile(index, lastHoverTileX, lastHoverTileZ)
+        return !isBuildingFootprintTile(index, lastHoverTileX, lastHoverTileY)
     }
 
-    private fun isBuildingFootprintTile(index: Int, sceneX: Int, sceneZ: Int): Boolean {
-        return isInSceneBounds(sceneX, sceneZ) && buildingFootprintTiles[index][sceneX][sceneZ]
+    private fun isBuildingFootprintTile(index: Int, sceneX: Int, sceneY: Int): Boolean {
+        return isInSceneBounds(sceneX, sceneY) && buildingFootprintTiles[index][sceneX][sceneY]
     }
 
     private fun addBuildingFootprintBoundPoint(index: Int, packedPoint: Long) {
@@ -605,21 +605,21 @@ object RoofHider {
         }
     }
 
-    private fun projectBuildingFootprintPoint(xFine: Int, zFine: Int, yFine: Int): Long {
+    private fun projectBuildingFootprintPoint(xFine: Int, yFine: Int, zFine: Int): Long {
         val localX = xFine - Camera.renderX
-        val localY = yFine - Camera.anInt40
+        val localY = yFine - Camera.renderY
         val localZ = zFine - Camera.renderZ
         val sinPitch = MathUtils.sin[Camera.cameraPitch]
         val cosPitch = MathUtils.cos[Camera.cameraPitch]
         val sinYaw = MathUtils.sin[Camera.cameraYaw]
         val cosYaw = MathUtils.cos[Camera.cameraYaw]
-        val rotatedX = localX * cosYaw + localZ * sinYaw shr 16
-        val rotatedZ = localZ * cosYaw - localX * sinYaw shr 16
-        val screenYDepth = rotatedZ * cosPitch + localY * sinPitch shr 16
+        val rotatedX = localX * cosYaw + localY * sinYaw shr 16
+        val rotatedZ = localY * cosYaw - localX * sinYaw shr 16
+        val screenYDepth = rotatedZ * cosPitch + localZ * sinPitch shr 16
         if (screenYDepth < 50) {
             return Long.MIN_VALUE
         }
-        val rotatedY = localY * cosPitch - rotatedZ * sinPitch shr 16
+        val rotatedY = localZ * cosPitch - rotatedZ * sinPitch shr 16
         val screenX = (rotatedX shl 9) / screenYDepth
         val screenY = (rotatedY shl 9) / screenYDepth
         return (screenX.toLong() shl 32) or (screenY.toLong() and 0xFFFFFFFFL)
@@ -635,13 +635,13 @@ object RoofHider {
             return
         }
         destinationTargetX = sceneX
-        destinationTargetZ = sceneZ
+        destinationTargetY = sceneZ
         destinationTargetUntil = System.currentTimeMillis() + DESTINATION_HOLD_MS
     }
 
     fun clearDestinationTarget() {
         destinationTargetX = -1
-        destinationTargetZ = -1
+        destinationTargetY = -1
         destinationTargetUntil = 0L
     }
 
@@ -656,7 +656,7 @@ object RoofHider {
         val self = PlayerList.self
         if (self != null &&
             abs(self.movementQueueX[0] - destinationTargetX) <= DESTINATION_REACHED_DISTANCE &&
-            abs(self.movementQueueZ[0] - destinationTargetZ) <= DESTINATION_REACHED_DISTANCE
+            abs(self.movementQueueY[0] - destinationTargetY) <= DESTINATION_REACHED_DISTANCE
         ) {
             clearDestinationTarget()
             return false
@@ -666,7 +666,7 @@ object RoofHider {
 
     private fun hideDestinationTarget() {
         if (hasDestinationTarget()) {
-            hideRoofFromSeedTile(destinationTargetX, destinationTargetZ, 0, DESTINATION_TARGET_GROUP, Player.plane)
+            hideRoofFromSeedTile(destinationTargetX, destinationTargetY, 0, DESTINATION_TARGET_GROUP, Player.plane)
         }
     }
 

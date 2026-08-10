@@ -57,7 +57,7 @@ public class Camera {
 	@OriginalMember(owner = "client!km", name = "Pc", descriptor = "I")
 	public static int renderX;
 	@OriginalMember(owner = "client!kh", name = "f", descriptor = "I")
-	public static int renderZ;
+	public static int renderY;
 	@OriginalMember(owner = "client!uc", name = "f", descriptor = "I")
 	public static int lockedTargetZ;
 	@OriginalMember(owner = "client!ug", name = "h", descriptor = "I")
@@ -88,7 +88,7 @@ public class Camera {
 	@OriginalMember(owner = "client!sj", name = "H", descriptor = "I")
 	public static int anInt5161 = 0;
 	@OriginalMember(owner = "client!af", name = "d", descriptor = "I")
-	public static int renderY;
+	public static int renderZ;
 	@OriginalMember(owner = "client!lg", name = "d", descriptor = "F")
 	public static float pitchRadians;
 	@OriginalMember(owner = "client!sk", name = "jb", descriptor = "I")
@@ -151,8 +151,8 @@ public class Camera {
 		@Pc(23) int local23 = SceneGraph.getTileHeight(Player.plane, local15, local9) - lockedTargetHeight;
 		if (lockedMoveSpeed >= 100) {
 			renderX = lockedTargetX * 128 + 64;
-			renderZ = lockedTargetZ * 128 + 64;
-			renderY = SceneGraph.getTileHeight(Player.plane, renderX, renderZ) - lockedTargetHeight;
+			renderY = lockedTargetZ * 128 + 64;
+			renderZ = SceneGraph.getTileHeight(Player.plane, renderX, renderY) - lockedTargetHeight;
 		} else {
 			if (renderX < local15) {
 				renderX += lockedMinMoveStep + lockedMoveSpeed * (local15 - renderX) / 1000;
@@ -160,10 +160,10 @@ public class Camera {
 					renderX = local15;
 				}
 			}
-			if (renderY < local23) {
-				renderY += (local23 - renderY) * lockedMoveSpeed / 1000 + lockedMinMoveStep;
-				if (renderY > local23) {
-					renderY = local23;
+			if (renderZ < local23) {
+				renderZ += (local23 - renderZ) * lockedMoveSpeed / 1000 + lockedMinMoveStep;
+				if (renderZ > local23) {
+					renderZ = local23;
 				}
 			}
 			if (renderX > local15) {
@@ -172,30 +172,30 @@ public class Camera {
 					renderX = local15;
 				}
 			}
-			if (renderZ < local9) {
-				renderZ += lockedMinMoveStep + lockedMoveSpeed * (local9 - renderZ) / 1000;
-				if (local9 < renderZ) {
-					renderZ = local9;
+			if (renderY < local9) {
+				renderY += lockedMinMoveStep + lockedMoveSpeed * (local9 - renderY) / 1000;
+				if (local9 < renderY) {
+					renderY = local9;
 				}
 			}
-			if (local23 < renderY) {
-				renderY -= (renderY - local23) * lockedMoveSpeed / 1000 + lockedMinMoveStep;
-				if (local23 > renderY) {
-					renderY = local23;
+			if (local23 < renderZ) {
+				renderZ -= (renderZ - local23) * lockedMoveSpeed / 1000 + lockedMinMoveStep;
+				if (local23 > renderZ) {
+					renderZ = local23;
 				}
 			}
-			if (renderZ > local9) {
-				renderZ -= lockedMinMoveStep + (renderZ - local9) * lockedMoveSpeed / 1000;
-				if (local9 > renderZ) {
-					renderZ = local9;
+			if (renderY > local9) {
+				renderY -= lockedMinMoveStep + (renderY - local9) * lockedMoveSpeed / 1000;
+				if (local9 > renderY) {
+					renderY = local9;
 				}
 			}
 		}
 		local9 = lockedLookAtZ * 128 + 64;
 		local15 = lockedLookAtX * 128 + 64;
 		local23 = SceneGraph.getTileHeight(Player.plane, local15, local9) - lockedLookAtHeight;
-		@Pc(236) int local236 = local23 - renderY;
-		@Pc(241) int local241 = local9 - renderZ;
+		@Pc(236) int local236 = local23 - renderZ;
+		@Pc(241) int local241 = local9 - renderY;
 		@Pc(246) int local246 = local15 - renderX;
 		@Pc(257) int local257 = (int) Math.sqrt(local246 * local246 + local241 * local241);
 		@Pc(268) int local268 = (int) (Math.atan2(local236, local257) * 325.949D) & 0x7FF;
@@ -280,9 +280,9 @@ public class Camera {
 			local173 = cameraPathData[movePathId][local70 + 2][local72] + local131 - local119 - local111;
 			renderCoordinates[local72] = (float) local119 + (((float) local173 * local66 + (float) local155) * local66 + (float) local146) * local66;
 		}
-		renderY = (int) renderCoordinates[1] * -1;
+		renderZ = (int) renderCoordinates[1] * -1;
 		renderX = (int) renderCoordinates[0] - originX * 128;
-		renderZ = (int) renderCoordinates[2] - originZ * 128;
+		renderY = (int) renderCoordinates[2] - originZ * 128;
 		@Pc(226) float[] local226 = new float[3];
 		local141 = lookAtSplineIndex * 2;
 		for (local131 = 0; local131 < 3; local131++) {
@@ -316,9 +316,9 @@ public class Camera {
 			@Pc(30) int local30 = lockedLookAtX * 128 + 64;
 			@Pc(36) int local36 = lockedLookAtZ * 128 + 64;
 			@Pc(44) int local44 = SceneGraph.getTileHeight(Player.plane, local30, local36) - lockedLookAtHeight;
-			@Pc(49) int local49 = local44 - renderY;
+			@Pc(49) int local49 = local44 - renderZ;
 			@Pc(54) int local54 = local30 - renderX;
-			@Pc(59) int local59 = local36 - renderZ;
+			@Pc(59) int local59 = local36 - renderY;
 			@Pc(70) int local70 = (int) Math.sqrt(local59 * local59 + local54 * local54);
 			cameraPitch = (int) (Math.atan2(local49, local70) * 325.949D) & 0x7FF;
 			cameraYaw = (int) (Math.atan2(local54, local59) * -325.949D) & 0x7FF;
@@ -341,8 +341,8 @@ public class Camera {
 		lockedTargetZ = arg4;
 		if (arg0 && lockedMoveSpeed >= 100) {
 			renderX = lockedTargetX * 128 + 64;
-			renderZ = lockedTargetZ * 128 + 64;
-			renderY = SceneGraph.getTileHeight(Player.plane, renderX, renderZ) - lockedTargetHeight;
+			renderY = lockedTargetZ * 128 + 64;
+			renderZ = SceneGraph.getTileHeight(Player.plane, renderX, renderY) - lockedTargetHeight;
 		}
 		cameraType = 2;
 	}
@@ -362,7 +362,7 @@ public class Camera {
 	@OriginalMember(owner = "client!uf", name = "a", descriptor = "(B)V")
 	public static void updatePlayerCamera() {
 		@Pc(14) int playerX = PlayerList.self.xFine + cameraOffsetX;
-		@Pc(20) int playerZ = PlayerList.self.zFine + cameraOffsetZ;
+		@Pc(20) int playerZ = PlayerList.self.yFine + cameraOffsetZ;
 		if (cameraX - playerX < -500 || cameraX - playerX > 500 || cameraZ - playerZ < -500 || cameraZ - playerZ > 500) {
 			cameraX = playerX;
 			cameraZ = playerZ;
@@ -425,8 +425,8 @@ public class Camera {
 		}
 		cameraPitch = arg6;
 		cameraYaw = arg4;
-		renderZ = arg5 - local57;
+		renderY = arg5 - local57;
 		renderX = arg0 - local55;
-		renderY = arg2 - local59;
+		renderZ = arg2 - local59;
 	}
 }

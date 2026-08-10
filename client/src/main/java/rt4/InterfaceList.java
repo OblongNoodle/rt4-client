@@ -1103,7 +1103,7 @@ public class InterfaceList {
 		MiniMenu.anInt1092 = -1;
 		method1750(ScriptRunner.anInt5794);
 		PlayerList.self = new Player();
-		PlayerList.self.zFine = 3000;
+		PlayerList.self.yFine = 3000;
 		PlayerList.self.xFine = 3000;
 		if (!GlRenderer.enabled) {
 			Flames.load(client.js5Archive8);
@@ -1112,7 +1112,7 @@ public class InterfaceList {
 		}
 		if (Camera.cameraType == 2) {
 			Camera.renderX = Camera.lockedTargetX << 7;
-			Camera.renderZ = Camera.lockedTargetZ << 7;
+			Camera.renderY = Camera.lockedTargetZ << 7;
 		} else {
 			Camera.updateLoginScreenCamera();
 		}

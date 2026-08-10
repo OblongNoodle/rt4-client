@@ -19,7 +19,7 @@ public final class ObjStackEntity {
 	public Entity primary;
 
 	@OriginalMember(owner = "client!jj", name = "k", descriptor = "I")
-	public int zFine;
+	public int yFine;
 
 	@OriginalMember(owner = "client!jj", name = "n", descriptor = "I")
 	public int anInt3063;

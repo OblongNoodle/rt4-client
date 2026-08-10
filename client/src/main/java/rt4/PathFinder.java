@@ -14,7 +14,7 @@ public class PathFinder {
 	@OriginalMember(owner = "client!vc", name = "eb", descriptor = "[I")
 	public static final int[] queueX = new int[4096];
 	@OriginalMember(owner = "client!gk", name = "c", descriptor = "[I")
-	public static final int[] queueZ = new int[4096];
+	public static final int[] queueY = new int[4096];
 	@OriginalMember(owner = "client!s", name = "d", descriptor = "I")
 	public static int anInt4364 = 0;
 
@@ -48,12 +48,12 @@ public class PathFinder {
 		@Pc(59) boolean local59 = false;
 		@Pc(61) int local61 = 0;
 		@Pc(64) int queueWriterIndex = local53 + 1;
-		queueZ[0] = arg3;
+		queueY[0] = arg3;
 		@Pc(71) int[][] flags = collisionMaps[Player.plane].flags;
 		@Pc(193) int cost;
 		while (local61 != queueWriterIndex) {
 			x = queueX[local61];
-			z = queueZ[local61];
+			z = queueY[local61];
 			local61 = local61 + 1 & 0xFFF;
 			if (arg8 == x && arg4 == z) {
 				local59 = true;
@@ -76,56 +76,56 @@ public class PathFinder {
 			cost = costs[x][z] + 1;
 			if (x > 0 && parents[x - 1][z] == 0 && (flags[x - 1][z] & 0x12C010E) == 0 && (flags[x - 1][z + 1] & 0x12C0138) == 0) {
 				queueX[queueWriterIndex] = x - 1;
-				queueZ[queueWriterIndex] = z;
+				queueY[queueWriterIndex] = z;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 				parents[x - 1][z] = 2;
 				costs[x - 1][z] = cost;
 			}
 			if (x < 102 && parents[x + 1][z] == 0 && (flags[x + 2][z] & 0x12C0183) == 0 && (flags[x + 2][z + 1] & 0x12C01E0) == 0) {
 				queueX[queueWriterIndex] = x + 1;
-				queueZ[queueWriterIndex] = z;
+				queueY[queueWriterIndex] = z;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 				parents[x + 1][z] = 8;
 				costs[x + 1][z] = cost;
 			}
 			if (z > 0 && parents[x][z - 1] == 0 && (flags[x][z - 1] & 0x12C010E) == 0 && (flags[x + 1][z - 1] & 0x12C0183) == 0) {
 				queueX[queueWriterIndex] = x;
-				queueZ[queueWriterIndex] = z - 1;
+				queueY[queueWriterIndex] = z - 1;
 				parents[x][z - 1] = 1;
 				costs[x][z - 1] = cost;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 			}
 			if (z < 102 && parents[x][z + 1] == 0 && (flags[x][z + 2] & 0x12C0138) == 0 && (flags[x + 1][z + 2] & 0x12C01E0) == 0) {
 				queueX[queueWriterIndex] = x;
-				queueZ[queueWriterIndex] = z + 1;
+				queueY[queueWriterIndex] = z + 1;
 				parents[x][z + 1] = 4;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 				costs[x][z + 1] = cost;
 			}
 			if (x > 0 && z > 0 && parents[x - 1][z - 1] == 0 && (flags[x - 1][z] & 0x12C0138) == 0 && (flags[x - 1][z - 1] & 0x12C010E) == 0 && (flags[x][z - 1] & 0x12C0183) == 0) {
 				queueX[queueWriterIndex] = x - 1;
-				queueZ[queueWriterIndex] = z - 1;
+				queueY[queueWriterIndex] = z - 1;
 				parents[x - 1][z - 1] = 3;
 				costs[x - 1][z - 1] = cost;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 			}
 			if (x < 102 && z > 0 && parents[x + 1][z - 1] == 0 && (flags[x + 1][z - 1] & 0x12C010E) == 0 && (flags[x + 2][z - 1] & 0x12C0183) == 0 && (flags[x + 2][z] & 0x12C01E0) == 0) {
 				queueX[queueWriterIndex] = x + 1;
-				queueZ[queueWriterIndex] = z - 1;
+				queueY[queueWriterIndex] = z - 1;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 				parents[x + 1][z - 1] = 9;
 				costs[x + 1][z - 1] = cost;
 			}
 			if (x > 0 && z < 102 && parents[x - 1][z + 1] == 0 && (flags[x - 1][z + 1] & 0x12C010E) == 0 && (flags[x - 1][z + 2] & 0x12C0138) == 0 && (flags[x][z + 2] & 0x12C01E0) == 0) {
 				queueX[queueWriterIndex] = x - 1;
-				queueZ[queueWriterIndex] = z + 1;
+				queueY[queueWriterIndex] = z + 1;
 				parents[x - 1][z + 1] = 6;
 				costs[x - 1][z + 1] = cost;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 			}
 			if (x < 102 && z < 102 && parents[x + 1][z + 1] == 0 && (flags[x + 1][z + 2] & 0x12C0138) == 0 && (flags[x + 2][z + 2] & 0x12C01E0) == 0 && (flags[x + 2][z + 1] & 0x12C0183) == 0) {
 				queueX[queueWriterIndex] = x + 1;
-				queueZ[queueWriterIndex] = z + 1;
+				queueY[queueWriterIndex] = z + 1;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 				parents[x + 1][z + 1] = 12;
 				costs[x + 1][z + 1] = cost;
@@ -175,12 +175,12 @@ public class PathFinder {
 		@Pc(1121) byte local1121 = 0;
 		queueX[0] = x;
 		local61 = local1121 + 1;
-		queueZ[0] = z;
+		queueY[0] = z;
 		cost = local921 = parents[x][z];
 		while (arg10 != x || arg3 != z) {
 			if (local921 != cost) {
 				queueX[local61] = x;
-				queueZ[local61++] = z;
+				queueY[local61++] = z;
 				local921 = cost;
 			}
 			if ((cost & 0x2) != 0) {
@@ -220,11 +220,11 @@ public class PathFinder {
 		@Pc(64) int local64 = 0;
 		queueX[0] = arg2;
 		@Pc(71) int local71 = local51 + 1;
-		queueZ[0] = arg9;
+		queueY[0] = arg9;
 		@Pc(78) int[][] local78 = collisionMaps[Player.plane].flags;
 		@Pc(198) int local198;
 		while (local71 != local64) {
-			local10 = queueZ[local64];
+			local10 = queueY[local64];
 			local3 = queueX[local64];
 			local64 = local64 + 1 & 0xFFF;
 			if (local3 == arg0 && local10 == arg3) {
@@ -248,56 +248,56 @@ public class PathFinder {
 			local198 = costs[local3][local10] + 1;
 			if (local3 > 0 && parents[local3 - 1][local10] == 0 && (local78[local3 - 1][local10] & 0x12C0108) == 0) {
 				queueX[local71] = local3 - 1;
-				queueZ[local71] = local10;
+				queueY[local71] = local10;
 				local71 = local71 + 1 & 0xFFF;
 				parents[local3 - 1][local10] = 2;
 				costs[local3 - 1][local10] = local198;
 			}
 			if (local3 < 103 && parents[local3 + 1][local10] == 0 && (local78[local3 + 1][local10] & 0x12C0180) == 0) {
 				queueX[local71] = local3 + 1;
-				queueZ[local71] = local10;
+				queueY[local71] = local10;
 				local71 = local71 + 1 & 0xFFF;
 				parents[local3 + 1][local10] = 8;
 				costs[local3 + 1][local10] = local198;
 			}
 			if (local10 > 0 && parents[local3][local10 - 1] == 0 && (local78[local3][local10 - 1] & 0x12C0102) == 0) {
 				queueX[local71] = local3;
-				queueZ[local71] = local10 - 1;
+				queueY[local71] = local10 - 1;
 				parents[local3][local10 - 1] = 1;
 				local71 = local71 + 1 & 0xFFF;
 				costs[local3][local10 - 1] = local198;
 			}
 			if (local10 < 103 && parents[local3][local10 + 1] == 0 && (local78[local3][local10 + 1] & 0x12C0120) == 0) {
 				queueX[local71] = local3;
-				queueZ[local71] = local10 + 1;
+				queueY[local71] = local10 + 1;
 				local71 = local71 + 1 & 0xFFF;
 				parents[local3][local10 + 1] = 4;
 				costs[local3][local10 + 1] = local198;
 			}
 			if (local3 > 0 && local10 > 0 && parents[local3 - 1][local10 - 1] == 0 && (local78[local3 - 1][local10 - 1] & 0x12C010E) == 0 && (local78[local3 - 1][local10] & 0x12C0108) == 0 && (local78[local3][local10 - 1] & 0x12C0102) == 0) {
 				queueX[local71] = local3 - 1;
-				queueZ[local71] = local10 - 1;
+				queueY[local71] = local10 - 1;
 				local71 = local71 + 1 & 0xFFF;
 				parents[local3 - 1][local10 - 1] = 3;
 				costs[local3 - 1][local10 - 1] = local198;
 			}
 			if (local3 < 103 && local10 > 0 && parents[local3 + 1][local10 - 1] == 0 && (local78[local3 + 1][local10 - 1] & 0x12C0183) == 0 && (local78[local3 + 1][local10] & 0x12C0180) == 0 && (local78[local3][local10 - 1] & 0x12C0102) == 0) {
 				queueX[local71] = local3 + 1;
-				queueZ[local71] = local10 - 1;
+				queueY[local71] = local10 - 1;
 				local71 = local71 + 1 & 0xFFF;
 				parents[local3 + 1][local10 - 1] = 9;
 				costs[local3 + 1][local10 - 1] = local198;
 			}
 			if (local3 > 0 && local10 < 103 && parents[local3 - 1][local10 + 1] == 0 && (local78[local3 - 1][local10 + 1] & 0x12C0138) == 0 && (local78[local3 - 1][local10] & 0x12C0108) == 0 && (local78[local3][local10 + 1] & 0x12C0120) == 0) {
 				queueX[local71] = local3 - 1;
-				queueZ[local71] = local10 + 1;
+				queueY[local71] = local10 + 1;
 				parents[local3 - 1][local10 + 1] = 6;
 				local71 = local71 + 1 & 0xFFF;
 				costs[local3 - 1][local10 + 1] = local198;
 			}
 			if (local3 < 103 && local10 < 103 && parents[local3 + 1][local10 + 1] == 0 && (local78[local3 + 1][local10 + 1] & 0x12C01E0) == 0 && (local78[local3 + 1][local10] & 0x12C0180) == 0 && (local78[local3][local10 + 1] & 0x12C0120) == 0) {
 				queueX[local71] = local3 + 1;
-				queueZ[local71] = local10 + 1;
+				queueY[local71] = local10 + 1;
 				parents[local3 + 1][local10 + 1] = 12;
 				local71 = local71 + 1 & 0xFFF;
 				costs[local3 + 1][local10 + 1] = local198;
@@ -347,13 +347,13 @@ public class PathFinder {
 		@Pc(1032) byte local1032 = 0;
 		queueX[0] = local3;
 		local64 = local1032 + 1;
-		queueZ[0] = local10;
+		queueY[0] = local10;
 		local198 = local839 = parents[local3][local10];
 		while (arg2 != local3 || local10 != arg9) {
 			if (local839 != local198) {
 				local839 = local198;
 				queueX[local64] = local3;
-				queueZ[local64++] = local10;
+				queueY[local64++] = local10;
 			}
 			if ((local198 & 0x2) != 0) {
 				local3++;
@@ -390,7 +390,7 @@ public class PathFinder {
 		@Pc(53) byte local53 = 0;
 		queueX[0] = arg8;
 		@Pc(65) int local65 = local53 + 1;
-		queueZ[0] = arg11;
+		queueY[0] = arg11;
 		@Pc(69) int local69 = 0;
 		@Pc(71) boolean local71 = false;
 		@Pc(76) int[][] local76 = collisionMaps[Player.plane].flags;
@@ -399,7 +399,7 @@ public class PathFinder {
 		label397:
 		while (local69 != local65) {
 			local3 = queueX[local69];
-			local10 = queueZ[local69];
+			local10 = queueY[local69];
 			local69 = local69 + 1 & 0xFFF;
 			if (arg5 == local3 && local10 == arg0) {
 				local71 = true;
@@ -425,7 +425,7 @@ public class PathFinder {
 				while (true) {
 					if (arg4 - 1 <= local242) {
 						queueX[local65] = local3 - 1;
-						queueZ[local65] = local10;
+						queueY[local65] = local10;
 						parents[local3 - 1][local10] = 2;
 						local65 = local65 + 1 & 0xFFF;
 						costs[local3 - 1][local10] = local201;
@@ -442,7 +442,7 @@ public class PathFinder {
 				while (true) {
 					if (local242 >= arg4 - 1) {
 						queueX[local65] = local3 + 1;
-						queueZ[local65] = local10;
+						queueY[local65] = local10;
 						parents[local3 + 1][local10] = 8;
 						costs[local3 + 1][local10] = local201;
 						local65 = local65 + 1 & 0xFFF;
@@ -459,7 +459,7 @@ public class PathFinder {
 				while (true) {
 					if (arg4 - 1 <= local242) {
 						queueX[local65] = local3;
-						queueZ[local65] = local10 - 1;
+						queueY[local65] = local10 - 1;
 						parents[local3][local10 - 1] = 1;
 						local65 = local65 + 1 & 0xFFF;
 						costs[local3][local10 - 1] = local201;
@@ -476,7 +476,7 @@ public class PathFinder {
 				while (true) {
 					if (local242 >= arg4 - 1) {
 						queueX[local65] = local3;
-						queueZ[local65] = local10 + 1;
+						queueY[local65] = local10 + 1;
 						parents[local3][local10 + 1] = 4;
 						costs[local3][local10 + 1] = local201;
 						local65 = local65 + 1 & 0xFFF;
@@ -493,7 +493,7 @@ public class PathFinder {
 				while (true) {
 					if (arg4 - 1 <= local242) {
 						queueX[local65] = local3 - 1;
-						queueZ[local65] = local10 - 1;
+						queueY[local65] = local10 - 1;
 						local65 = local65 + 1 & 0xFFF;
 						parents[local3 - 1][local10 - 1] = 3;
 						costs[local3 - 1][local10 - 1] = local201;
@@ -510,7 +510,7 @@ public class PathFinder {
 				while (true) {
 					if (local242 >= arg4 - 1) {
 						queueX[local65] = local3 + 1;
-						queueZ[local65] = local10 - 1;
+						queueY[local65] = local10 - 1;
 						local65 = local65 + 1 & 0xFFF;
 						parents[local3 + 1][local10 - 1] = 9;
 						costs[local3 + 1][local10 - 1] = local201;
@@ -527,7 +527,7 @@ public class PathFinder {
 				while (true) {
 					if (arg4 - 1 <= local242) {
 						queueX[local65] = local3 - 1;
-						queueZ[local65] = local10 + 1;
+						queueY[local65] = local10 + 1;
 						local65 = local65 + 1 & 0xFFF;
 						parents[local3 - 1][local10 + 1] = 6;
 						costs[local3 - 1][local10 + 1] = local201;
@@ -546,7 +546,7 @@ public class PathFinder {
 					}
 				}
 				queueX[local65] = local3 + 1;
-				queueZ[local65] = local10 + 1;
+				queueY[local65] = local10 + 1;
 				parents[local3 + 1][local10 + 1] = 12;
 				costs[local3 + 1][local10 + 1] = local201;
 				local65 = local65 + 1 & 0xFFF;
@@ -595,13 +595,13 @@ public class PathFinder {
 		@Pc(1438) byte local1438 = 0;
 		queueX[0] = local3;
 		local69 = local1438 + 1;
-		queueZ[0] = local10;
+		queueY[0] = local10;
 		local201 = local242 = parents[local3][local10];
 		while (local3 != arg8 || arg11 != local10) {
 			if (local242 != local201) {
 				queueX[local69] = local3;
 				local242 = local201;
-				queueZ[local69++] = local10;
+				queueY[local69++] = local10;
 			}
 			if ((local201 & 0x2) != 0) {
 				local3++;
@@ -641,9 +641,9 @@ public class PathFinder {
 			if (angle != 0) {
 				local73 = (local73 << angle & 0xF) + (local73 >> 4 - angle);
 			}
-			findPath(PlayerList.self.movementQueueZ[0], 0, local59, true, local73, arg2, local62, 0, 2, arg1, PlayerList.self.movementQueueX[0]);
+			findPath(PlayerList.self.movementQueueY[0], 0, local59, true, local73, arg2, local62, 0, 2, arg1, PlayerList.self.movementQueueX[0]);
 		} else {
-			findPath(PlayerList.self.movementQueueZ[0], angle, 0, true, 0, arg2, 0, shape + 1, 2, arg1, PlayerList.self.movementQueueX[0]);
+			findPath(PlayerList.self.movementQueueY[0], angle, 0, true, 0, arg2, 0, shape + 1, 2, arg1, PlayerList.self.movementQueueX[0]);
 		}
 		Cross.y = Mouse.clickY;
 		Cross.milliseconds = 0;

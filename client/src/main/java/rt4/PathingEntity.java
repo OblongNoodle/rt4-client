@@ -27,7 +27,7 @@ public abstract class PathingEntity extends Entity {
 	public int hitpointsBar;
 
 	@OriginalMember(owner = "client!fe", name = "U", descriptor = "I")
-	public int attachmentZ0;
+	public int attachmentY0;
 
 	@OriginalMember(owner = "client!fe", name = "Z", descriptor = "I")
 	public int attachmentXFine;
@@ -66,7 +66,7 @@ public abstract class PathingEntity extends Entity {
 	public int attachmentY;
 
 	@OriginalMember(owner = "client!fe", name = "Ob", descriptor = "I")
-	public int attachmentZ1;
+	public int attachmentY1;
 
 	@OriginalMember(owner = "client!fe", name = "Pb", descriptor = "I")
 	public int attachmentX1;
@@ -78,13 +78,13 @@ public abstract class PathingEntity extends Entity {
 	public int forceMoveDestX;
 
 	@OriginalMember(owner = "client!fe", name = "ac", descriptor = "I")
-	public int zFine;
+	public int yFine;
 
 	@OriginalMember(owner = "client!fe", name = "dc", descriptor = "I")
 	public int tileHeight;
 
 	@OriginalMember(owner = "client!fe", name = "fc", descriptor = "I")
-	public int attachmentZFine;
+	public int attachmentYFine;
 
 	@OriginalMember(owner = "client!fe", name = "hc", descriptor = "I")
 	public int forceMoveStartY;
@@ -93,7 +93,7 @@ public abstract class PathingEntity extends Entity {
 	public int forceMoveDirection;
 
 	@OriginalMember(owner = "client!fe", name = "w", descriptor = "[I")
-	public final int[] movementQueueZ = new int[10];
+	public final int[] movementQueueY = new int[10];
 
 	@OriginalMember(owner = "client!fe", name = "z", descriptor = "I")
 	public int movementSpeed = 0;
@@ -284,28 +284,28 @@ public abstract class PathingEntity extends Entity {
 		}
 		if (!arg3) {
 			@Pc(32) int local32 = arg1 - this.movementQueueX[0];
-			@Pc(40) int local40 = arg2 - this.movementQueueZ[0];
+			@Pc(40) int local40 = arg2 - this.movementQueueY[0];
 			if (local32 >= -8 && local32 <= 8 && local40 >= -8 && local40 <= 8) {
 				if (this.movementQueueSize < 9) {
 					this.movementQueueSize++;
 				}
 				for (@Pc(72) int local72 = this.movementQueueSize; local72 > 0; local72--) {
 					this.movementQueueX[local72] = this.movementQueueX[local72 - 1];
-					this.movementQueueZ[local72] = this.movementQueueZ[local72 - 1];
+					this.movementQueueY[local72] = this.movementQueueY[local72 - 1];
 					this.movementQueueSpeed[local72] = this.movementQueueSpeed[local72 - 1];
 				}
 				this.movementQueueSpeed[0] = 1;
 				this.movementQueueX[0] = arg1;
-				this.movementQueueZ[0] = arg2;
+				this.movementQueueY[0] = arg2;
 				return;
 			}
 		}
 		this.movementCatchupTicks = 0;
 		this.movementQueueX[0] = arg1;
-		this.movementQueueZ[0] = arg2;
+		this.movementQueueY[0] = arg2;
 		this.movementQueueSize = 0;
 		this.seqMovementSteps = 0;
-		this.zFine = arg0 * 64 + this.movementQueueZ[0] * 128;
+		this.yFine = arg0 * 64 + this.movementQueueY[0] * 128;
 		this.xFine = arg0 * 64 + this.movementQueueX[0] * 128;
 		if (GlRenderer.enabled && PlayerList.self == this) {
 			FogManager.setInstantFade();
@@ -315,7 +315,7 @@ public abstract class PathingEntity extends Entity {
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(IBI)V")
 	public final void move(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(10) int local10 = this.movementQueueX[0];
-		@Pc(15) int local15 = this.movementQueueZ[0];
+		@Pc(15) int local15 = this.movementQueueY[0];
 		if (arg1 == 0) {
 			local10--;
 			local15++;
@@ -328,7 +328,7 @@ public abstract class PathingEntity extends Entity {
 		}
 		for (@Pc(50) int local50 = this.movementQueueSize; local50 > 0; local50--) {
 			this.movementQueueX[local50] = this.movementQueueX[local50 - 1];
-			this.movementQueueZ[local50] = this.movementQueueZ[local50 - 1];
+			this.movementQueueY[local50] = this.movementQueueY[local50 - 1];
 			this.movementQueueSpeed[local50] = this.movementQueueSpeed[local50 - 1];
 		}
 		if (arg1 == 1) {
@@ -357,7 +357,7 @@ public abstract class PathingEntity extends Entity {
 			local10++;
 		}
 		this.movementQueueX[0] = local10;
-		this.movementQueueZ[0] = local15;
+		this.movementQueueY[0] = local15;
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(BLclient!ak;I)V")
@@ -377,13 +377,13 @@ public abstract class PathingEntity extends Entity {
 		@Pc(53) int local53 = -local27 / 2;
 		@Pc(64) int local64 = local53 * local43 - local48 * local39 >> 16;
 		@Pc(75) int local75 = local39 * local53 + local43 * local48 >> 16;
-		@Pc(87) int local87 = SceneGraph.getTileHeight(Player.plane, local75 + this.xFine, this.zFine + local64);
+		@Pc(87) int local87 = SceneGraph.getTileHeight(Player.plane, local75 + this.xFine, this.yFine + local64);
 		@Pc(91) int local91 = local24 / 2;
 		@Pc(96) int local96 = -local27 / 2;
 		@Pc(106) int local106 = local91 * local43 + local96 * local39 >> 16;
 		@Pc(110) int local110 = local27 / 2;
 		@Pc(121) int local121 = local96 * local43 - local91 * local39 >> 16;
-		@Pc(134) int local134 = SceneGraph.getTileHeight(Player.plane, local106 + this.xFine, this.zFine - -local121);
+		@Pc(134) int local134 = SceneGraph.getTileHeight(Player.plane, local106 + this.xFine, this.yFine - -local121);
 		@Pc(139) int local139 = -local24 / 2;
 		@Pc(150) int local150 = local110 * local43 - local39 * local139 >> 16;
 		@Pc(154) int local154 = local27 / 2;
@@ -391,9 +391,9 @@ public abstract class PathingEntity extends Entity {
 		@Pc(169) int local169 = local39 * local110 + local43 * local139 >> 16;
 		@Pc(179) int local179 = local154 * local43 - local39 * local158 >> 16;
 		@Pc(189) int local189 = local39 * local154 + local43 * local158 >> 16;
-		@Pc(201) int local201 = SceneGraph.getTileHeight(Player.plane, this.xFine + local169, local150 + this.zFine);
+		@Pc(201) int local201 = SceneGraph.getTileHeight(Player.plane, this.xFine + local169, local150 + this.yFine);
 		@Pc(212) int local212 = local134 > local87 ? local87 : local134;
-		@Pc(224) int local224 = SceneGraph.getTileHeight(Player.plane, local189 + this.xFine, local179 + this.zFine);
+		@Pc(224) int local224 = SceneGraph.getTileHeight(Player.plane, local189 + this.xFine, local179 + this.yFine);
 		@Pc(231) int local231 = local224 > local201 ? local201 : local224;
 		@Pc(238) int local238 = local224 > local134 ? local134 : local224;
 		@Pc(245) int local245 = local201 <= local87 ? local201 : local87;

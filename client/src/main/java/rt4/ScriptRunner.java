@@ -235,11 +235,11 @@ public final class ScriptRunner {
 			if (Camera.customCameraActive[4] && Camera.cameraAmplitude[4] + 128 > local59) {
 				local59 = Camera.cameraAmplitude[4] + 128;
 			}
-			Camera.calculateRenderPosition(Camera.cameraX, arg0, SceneGraph.getTileHeight(Player.plane, PlayerList.self.xFine, PlayerList.self.zFine) - 50, Camera.ZOOM - -(local59 * 3), local57, Camera.cameraZ, local59);
+			Camera.calculateRenderPosition(Camera.cameraX, arg0, SceneGraph.getTileHeight(Player.plane, PlayerList.self.xFine, PlayerList.self.yFine) - 50, Camera.ZOOM - -(local59 * 3), local57, Camera.cameraZ, local59);
 		}
-		local57 = Camera.renderY;
+		local57 = Camera.renderZ;
 		local59 = Camera.renderX;
-		@Pc(121) int local121 = Camera.renderZ;
+		@Pc(121) int local121 = Camera.renderY;
 		@Pc(123) int local123 = Camera.cameraPitch;
 		@Pc(125) int local125 = Camera.cameraYaw;
 		@Pc(127) int local127;
@@ -260,10 +260,10 @@ public final class ScriptRunner {
 					}
 				}
 				if (local127 == 2) {
-					Camera.renderZ += local171;
+					Camera.renderY += local171;
 				}
 				if (local127 == 1) {
-					Camera.renderY += local171;
+					Camera.renderZ += local171;
 				}
 				if (local127 == 0) {
 					Camera.renderX += local171;
@@ -304,15 +304,15 @@ public final class ScriptRunner {
 			GlRenderer.setDepthTestEnabled(true);
 			GlRenderer.setFogEnabled(true);
 			if (client.gameState == 10) {
-				local171 = FogManager.method2235(Protocol.sceneDelta, Camera.renderZ >> 10, Preferences.brightness, Camera.renderX >> 10);
+				local171 = FogManager.method2235(Protocol.sceneDelta, Camera.renderY >> 10, Preferences.brightness, Camera.renderX >> 10);
 			} else {
-				local171 = FogManager.method2235(Protocol.sceneDelta, PlayerList.self.movementQueueZ[0] >> 3, Preferences.brightness, PlayerList.self.movementQueueX[0] >> 3);
+				local171 = FogManager.method2235(Protocol.sceneDelta, PlayerList.self.movementQueueY[0] >> 3, Preferences.brightness, PlayerList.self.movementQueueX[0] >> 3);
 			}
 			LightingManager.method2394(client.loop, !Preferences.flickeringEffectsOn);
 			GlRenderer.clearColorAndDepthBuffers(local171);
-			MaterialManager.method2731(Camera.cameraPitch, Camera.renderZ, Camera.renderY, Camera.renderX, Camera.cameraYaw);
+			MaterialManager.method2731(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
 			GlRenderer.anInt5323 = client.loop;
-			SceneGraph.setPlainTile(Camera.renderX, Camera.renderY, Camera.renderZ, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.zFine >> 7);
+			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			aBoolean299 = true;
 			LightingManager.method2390();
 			MaterialManager.method2731(0, 0, 0, 0, 0);
@@ -322,7 +322,7 @@ public final class ScriptRunner {
 			MiniMap.method4000(arg3, arg2, arg0, anInt5029, anInt5029, arg4);
 		} else {
 			SoftwareRaster.fillRect(arg2, arg4, arg3, arg0, 0);
-			SceneGraph.setPlainTile(Camera.renderX, Camera.renderY, Camera.renderZ, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.zFine >> 7);
+			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			client.audioLoop();
 			method3858();
 			drawOverheads(arg4, arg3, arg2, 256, arg0, 256);
@@ -331,8 +331,8 @@ public final class ScriptRunner {
 		((Js5GlTextureProvider) Rasteriser.textureProvider).method3239(Protocol.sceneDelta);
 		Player.renderCross(arg3, arg4, arg0, arg2);
 		Camera.cameraPitch = local123;
-		Camera.renderZ = local121;
-		Camera.renderY = local57;
+		Camera.renderY = local121;
+		Camera.renderZ = local57;
 		Camera.renderX = local59;
 		Camera.cameraYaw = local125;
 		if (aBoolean43 && client.js5NetQueue.getUrgentRequestCount() == 0) {
@@ -667,7 +667,7 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!cn", name = "b", descriptor = "(ZI)V")
 	public static void method964(@OriginalArg(0) boolean arg0) {
 		@Pc(3) int local3 = PlayerList.size;
-		if (LoginManager.mapFlagX == PlayerList.self.xFine >> 7 && PlayerList.self.zFine >> 7 == LoginManager.mapFlagZ) {
+		if (LoginManager.mapFlagX == PlayerList.self.xFine >> 7 && PlayerList.self.yFine >> 7 == LoginManager.mapFlagZ) {
 			LoginManager.mapFlagX = 0;
 		}
 		if (arg0) {
@@ -691,16 +691,16 @@ public final class ScriptRunner {
 				@Pc(55) int local55 = local39.getSize();
 				@Pc(77) int local77;
 				if (local55 == 1) {
-					if ((local39.xFine & 0x7F) == 64 && (local39.zFine & 0x7F) == 64) {
+					if ((local39.xFine & 0x7F) == 64 && (local39.yFine & 0x7F) == 64) {
 						local77 = local39.xFine >> 7;
-						local82 = local39.zFine >> 7;
+						local82 = local39.yFine >> 7;
 						if (local77 >= 0 && local77 < 104 && local82 >= 0 && local82 < 104) {
 							local106 = anIntArrayArray6[local77][local82]++;
 						}
 					}
-				} else if (((local55 & 0x1) != 0 || (local39.xFine & 0x7F) == 0 && (local39.zFine & 0x7F) == 0) && ((local55 & 0x1) != 1 || (local39.xFine & 0x7F) == 64 && (local39.zFine & 0x7F) == 64)) {
+				} else if (((local55 & 0x1) != 0 || (local39.xFine & 0x7F) == 0 && (local39.yFine & 0x7F) == 0) && ((local55 & 0x1) != 1 || (local39.xFine & 0x7F) == 64 && (local39.yFine & 0x7F) == 64)) {
 					local77 = local39.xFine - local55 * 64 >> 7;
-					local82 = local39.zFine - local55 * 64 >> 7;
+					local82 = local39.yFine - local55 * 64 >> 7;
 					local182 = local39.getSize() + local77;
 					if (local182 > 104) {
 						local182 = 104;
@@ -737,9 +737,9 @@ public final class ScriptRunner {
 				local39.lowDetail = (Preferences.manyIdleAnimations && PlayerList.size > 200 || PlayerList.size > 50) && !arg0 && local39.movementSeqId == local39.getBasType().idleAnimationId;
 				local82 = local39.getSize();
 				if (local82 == 1) {
-					if ((local39.xFine & 0x7F) == 64 && (local39.zFine & 0x7F) == 64) {
+					if ((local39.xFine & 0x7F) == 64 && (local39.yFine & 0x7F) == 64) {
 						local182 = local39.xFine >> 7;
-						local200 = local39.zFine >> 7;
+						local200 = local39.yFine >> 7;
 						if (local182 < 0 || local182 >= 104 || local200 < 0 || local200 >= 104) {
 							continue;
 						}
@@ -748,10 +748,10 @@ public final class ScriptRunner {
 							continue;
 						}
 					}
-				} else if ((local82 & 0x1) == 0 && (local39.xFine & 0x7F) == 0 && (local39.zFine & 0x7F) == 0 || (local82 & 0x1) == 1 && (local39.xFine & 0x7F) == 64 && (local39.zFine & 0x7F) == 0) {
+				} else if ((local82 & 0x1) == 0 && (local39.xFine & 0x7F) == 0 && (local39.yFine & 0x7F) == 0 || (local82 & 0x1) == 1 && (local39.xFine & 0x7F) == 64 && (local39.yFine & 0x7F) == 0) {
 					local182 = local39.xFine - local82 * 64 >> 7;
 					local214 = local82 + local182;
-					local200 = local39.zFine - local82 * 64 >> 7;
+					local200 = local39.yFine - local82 * 64 >> 7;
 					if (local214 > 104) {
 						local214 = 104;
 					}
@@ -790,12 +790,12 @@ public final class ScriptRunner {
 					}
 				}
 				if (local39.attachment == null || client.loop < local39.attachmentSetAt || local39.attachmentResetAt <= client.loop) {
-					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.zFine);
-					SceneGraph.add(Player.plane, local39.xFine, local39.zFine, local39.tileHeight, (local82 - 1) * 64 + 60, local39, local39.currentAngle, local272, local39.seqStretches);
+					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.yFine);
+					SceneGraph.add(Player.plane, local39.xFine, local39.yFine, local39.tileHeight, (local82 - 1) * 64 + 60, local39, local39.currentAngle, local272, local39.seqStretches);
 				} else {
 					local39.lowDetail = false;
-					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.zFine);
-					method3387(Player.plane, local39.xFine, local39.zFine, local39.tileHeight, local39, local39.currentAngle, local272, local39.atachmentX0, local39.attachmentZ0, local39.attachmentX1, local39.attachmentZ1);
+					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.yFine);
+					method3387(Player.plane, local39.xFine, local39.yFine, local39.tileHeight, local39, local39.currentAngle, local272, local39.atachmentX0, local39.attachmentY0, local39.attachmentX1, local39.attachmentY1);
 				}
 			}
 		}
@@ -817,16 +817,16 @@ public final class ScriptRunner {
 				@Pc(42) int local42 = local16.getSize();
 				@Pc(97) int local97;
 				if (local42 == 1) {
-					if ((local16.xFine & 0x7F) == 64 && (local16.zFine & 0x7F) == 64) {
+					if ((local16.xFine & 0x7F) == 64 && (local16.yFine & 0x7F) == 64) {
 						local97 = local16.xFine >> 7;
-						local107 = local16.zFine >> 7;
+						local107 = local16.yFine >> 7;
 						if (local97 >= 0 && local97 < 104 && local107 >= 0 && local107 < 104) {
 							local171 = anIntArrayArray6[local97][local107]++;
 						}
 					}
-				} else if (((local42 & 0x1) != 0 || (local16.xFine & 0x7F) == 0 && (local16.zFine & 0x7F) == 0) && ((local42 & 0x1) != 1 || (local16.xFine & 0x7F) == 64 && (local16.zFine & 0x7F) == 64)) {
+				} else if (((local42 & 0x1) != 0 || (local16.xFine & 0x7F) == 0 && (local16.yFine & 0x7F) == 0) && ((local42 & 0x1) != 1 || (local16.xFine & 0x7F) == 64 && (local16.yFine & 0x7F) == 64)) {
 					local97 = local16.xFine - local42 * 64 >> 7;
-					local107 = local16.zFine - local42 * 64 >> 7;
+					local107 = local16.yFine - local42 * 64 >> 7;
 					local113 = local16.getSize() + local97;
 					if (local97 < 0) {
 						local97 = 0;
@@ -856,9 +856,9 @@ public final class ScriptRunner {
 			if (local16 != null && local16.isVisible() && local16.type.toprenderpriority == arg0 && local16.type.isMultiNpcValid()) {
 				local107 = local16.getSize();
 				if (local107 == 1) {
-					if ((local16.xFine & 0x7F) == 64 && (local16.zFine & 0x7F) == 64) {
+					if ((local16.xFine & 0x7F) == 64 && (local16.yFine & 0x7F) == 64) {
 						local113 = local16.xFine >> 7;
-						local133 = local16.zFine >> 7;
+						local133 = local16.yFine >> 7;
 						if (local113 < 0 || local113 >= 104 || local133 < 0 || local133 >= 104) {
 							continue;
 						}
@@ -867,9 +867,9 @@ public final class ScriptRunner {
 							continue;
 						}
 					}
-				} else if ((local107 & 0x1) == 0 && (local16.xFine & 0x7F) == 0 && (local16.zFine & 0x7F) == 0 || (local107 & 0x1) == 1 && (local16.xFine & 0x7F) == 64 && (local16.zFine & 0x7F) == 64) {
+				} else if ((local107 & 0x1) == 0 && (local16.xFine & 0x7F) == 0 && (local16.yFine & 0x7F) == 0 || (local107 & 0x1) == 1 && (local16.xFine & 0x7F) == 64 && (local16.yFine & 0x7F) == 64) {
 					local113 = local16.xFine - local107 * 64 >> 7;
-					local133 = local16.zFine - local107 * 64 >> 7;
+					local133 = local16.yFine - local107 * 64 >> 7;
 					local158 = local133 + local107;
 					if (local133 < 0) {
 						local133 = 0;
@@ -911,8 +911,8 @@ public final class ScriptRunner {
 				if (!local16.type.interactive) {
 					local262 |= Long.MIN_VALUE;
 				}
-				local16.tileHeight = SceneGraph.getTileHeight(Player.plane, local16.xFine, local16.zFine);
-				SceneGraph.add(Player.plane, local16.xFine, local16.zFine, local16.tileHeight, local107 * 64 + 60 - 64, local16, local16.currentAngle, local262, local16.seqStretches);
+				local16.tileHeight = SceneGraph.getTileHeight(Player.plane, local16.xFine, local16.yFine);
+				SceneGraph.add(Player.plane, local16.xFine, local16.yFine, local16.tileHeight, local107 * 64 + 60 - 64, local16, local16.currentAngle, local262, local16.seqStretches);
 			}
 		}
 	}
@@ -926,8 +926,8 @@ public final class ScriptRunner {
 			} else if (client.loop >= local21.firstCycle) {
 				if (local21.targetIndex > 0) {
 					@Pc(54) Npc local54 = NpcList.npcs[local21.targetIndex - 1];
-					if (local54 != null && local54.xFine >= 0 && local54.xFine < 13312 && local54.zFine >= 0 && local54.zFine < 13312) {
-						local21.setTarget(local54.zFine, client.loop, SceneGraph.getTileHeight(local21.currentPlane, local54.xFine, local54.zFine) - local21.baseZ, local54.xFine);
+					if (local54 != null && local54.xFine >= 0 && local54.xFine < 13312 && local54.yFine >= 0 && local54.yFine < 13312) {
+						local21.setTarget(local54.yFine, client.loop, SceneGraph.getTileHeight(local21.currentPlane, local54.xFine, local54.yFine) - local21.baseZ, local54.xFine);
 					}
 				}
 				if (local21.targetIndex < 0) {
@@ -938,8 +938,8 @@ public final class ScriptRunner {
 					} else {
 						local107 = PlayerList.players[local102];
 					}
-					if (local107 != null && local107.xFine >= 0 && local107.xFine < 13312 && local107.zFine >= 0 && local107.zFine < 13312) {
-						local21.setTarget(local107.zFine, client.loop, SceneGraph.getTileHeight(local21.currentPlane, local107.xFine, local107.zFine) - local21.baseZ, local107.xFine);
+					if (local107 != null && local107.xFine >= 0 && local107.xFine < 13312 && local107.yFine >= 0 && local107.yFine < 13312) {
+						local21.setTarget(local107.yFine, client.loop, SceneGraph.getTileHeight(local21.currentPlane, local107.xFine, local107.yFine) - local21.baseZ, local107.xFine);
 					}
 				}
 				local21.update(Protocol.sceneDelta);
@@ -1056,8 +1056,8 @@ public final class ScriptRunner {
 	}
 
 
-	public static boolean hideRoofAt(int sceneX, int sceneZ, int group, int plane) {
-		return method4348(false, sceneX, sceneZ, SceneGraph.tiles, group, plane);
+	public static boolean hideRoofAt(int sceneX, int sceneY, int group, int plane) {
+		return method4348(false, sceneX, sceneY, SceneGraph.tiles, group, plane);
 	}
 
 	private static boolean method4348(boolean arg0, int arg1, int arg2, Tile[][][] arg3, int arg4, int plane) {
@@ -1075,14 +1075,14 @@ public final class ScriptRunner {
 			@Pc(49) byte local49 = 0;
 			PathFinder.queueX[0] = arg1;
 			@Pc(69) int local69 = local49 + 1;
-			PathFinder.queueZ[0] = arg2;
+			PathFinder.queueY[0] = arg2;
 			aByteArrayArrayArray15[plane][arg1][arg2] = local14;
 			while (local47 != local69) {
 				@Pc(94) int local94 = PathFinder.queueX[local47] >> 16 & 0xFF;
 				@Pc(102) int local102 = PathFinder.queueX[local47] >> 24 & 0xFF;
 				@Pc(108) int local108 = PathFinder.queueX[local47] & 0xFFFF;
-				@Pc(116) int local116 = PathFinder.queueZ[local47] >> 16 & 0xFF;
-				@Pc(122) int local122 = PathFinder.queueZ[local47] & 0xFFFF;
+				@Pc(116) int local116 = PathFinder.queueY[local47] >> 16 & 0xFF;
+				@Pc(122) int local122 = PathFinder.queueY[local47] & 0xFFFF;
 				local47 = local47 + 1 & 0xFFF;
 				@Pc(130) boolean local130 = false;
 				@Pc(132) boolean local132 = false;
@@ -1134,9 +1134,9 @@ public final class ScriptRunner {
 						if (local395 != null && local395.sceneryLen > 0) {
 							for (local227 = 0; local227 < local395.sceneryLen; local227++) {
 								@Pc(418) Scenery local418 = local395.scenery[local227];
-								if (local418.xMax != local418.xMin || local418.zMax != local418.zMin) {
+								if (local418.xMax != local418.xMin || local418.yMax != local418.yMin) {
 									for (local358 = local418.xMin; local358 <= local418.xMax; local358++) {
-										for (@Pc(450) int local450 = local418.zMin; local450 <= local418.zMax; local450++) {
+										for (@Pc(450) int local450 = local418.yMin; local450 <= local418.yMax; local450++) {
 											aByteArrayArrayArray15[local150][local358][local450] = local14;
 										}
 									}
@@ -1167,7 +1167,7 @@ public final class ScriptRunner {
 				if (!local130) {
 					if (local108 >= 1 && aByteArrayArrayArray15[plane][local108 - 1][local122] != local14) {
 						PathFinder.queueX[local69] = local108 - 1 | 0x120000 | 0xD3000000;
-						PathFinder.queueZ[local69] = local122 | 0x130000;
+						PathFinder.queueY[local69] = local122 | 0x130000;
 						local69 = local69 + 1 & 0xFFF;
 						aByteArrayArrayArray15[plane][local108 - 1][local122] = local14;
 					}
@@ -1175,19 +1175,19 @@ public final class ScriptRunner {
 					if (local122 < 104) {
 						if (local108 - 1 >= 0 && local14 != aByteArrayArrayArray15[plane][local108 - 1][local122] && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 - 1][local122 - 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 							PathFinder.queueX[local69] = 0x52000000 | 0x120000 | local108 - 1;
-							PathFinder.queueZ[local69] = local122 | 0x130000;
+							PathFinder.queueY[local69] = local122 | 0x130000;
 							aByteArrayArrayArray15[plane][local108 - 1][local122] = local14;
 							local69 = local69 + 1 & 0xFFF;
 						}
 						if (local14 != aByteArrayArrayArray15[plane][local108][local122]) {
 							PathFinder.queueX[local69] = local108 | 0x13000000 | 0x520000;
-							PathFinder.queueZ[local69] = local122 | 0x530000;
+							PathFinder.queueY[local69] = local122 | 0x530000;
 							local69 = local69 + 1 & 0xFFF;
 							aByteArrayArrayArray15[plane][local108][local122] = local14;
 						}
 						if (local108 + 1 < 104 && aByteArrayArrayArray15[plane][local108 + 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 + 1][local122 - 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 							PathFinder.queueX[local69] = 0x92000000 | 0x520000 | local108 + 1;
-							PathFinder.queueZ[local69] = local122 | 0x530000;
+							PathFinder.queueY[local69] = local122 | 0x530000;
 							aByteArrayArrayArray15[plane][local108 + 1][local122] = local14;
 							local69 = local69 + 1 & 0xFFF;
 						}
@@ -1195,7 +1195,7 @@ public final class ScriptRunner {
 					local122--;
 					if (local108 + 1 < 104 && local14 != aByteArrayArrayArray15[plane][local108 + 1][local122]) {
 						PathFinder.queueX[local69] = local108 + 1 | 0x920000 | 0x53000000;
-						PathFinder.queueZ[local69] = local122 | 0x930000;
+						PathFinder.queueY[local69] = local122 | 0x930000;
 						aByteArrayArrayArray15[plane][local108 + 1][local122] = local14;
 						local69 = local69 + 1 & 0xFFF;
 					}
@@ -1203,19 +1203,19 @@ public final class ScriptRunner {
 					if (local122 >= 0) {
 						if (local108 - 1 >= 0 && aByteArrayArrayArray15[plane][local108 - 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 - 1][local122 + 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 							PathFinder.queueX[local69] = local108 - 1 | 0xD20000 | 0x12000000;
-							PathFinder.queueZ[local69] = local122 | 0xD30000;
+							PathFinder.queueY[local69] = local122 | 0xD30000;
 							aByteArrayArrayArray15[plane][local108 - 1][local122] = local14;
 							local69 = local69 + 1 & 0xFFF;
 						}
 						if (local14 != aByteArrayArrayArray15[plane][local108][local122]) {
 							PathFinder.queueX[local69] = local108 | 0xD20000 | 0x93000000;
-							PathFinder.queueZ[local69] = local122 | 0xD30000;
+							PathFinder.queueY[local69] = local122 | 0xD30000;
 							local69 = local69 + 1 & 0xFFF;
 							aByteArrayArrayArray15[plane][local108][local122] = local14;
 						}
 						if (local108 + 1 < 104 && aByteArrayArrayArray15[plane][local108 + 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 + 1][local122 + 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 							PathFinder.queueX[local69] = local108 + 1 | 0xD2000000 | 0x920000;
-							PathFinder.queueZ[local69] = local122 | 0x930000;
+							PathFinder.queueY[local69] = local122 | 0x930000;
 							aByteArrayArrayArray15[plane][local108 + 1][local122] = local14;
 							local69 = local69 + 1 & 0xFFF;
 						}
@@ -1257,7 +1257,7 @@ public final class ScriptRunner {
 
 	@OriginalMember(owner = "client!og", name = "a", descriptor = "(BIILclient!fe;III)V")
 	public static void setOverheadScreenCoordinateOffsets(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) PathingEntity arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		method1026(arg5, arg1, arg2.zFine, arg4, arg0, arg2.xFine, arg3);
+		method1026(arg5, arg1, arg2.yFine, arg4, arg0, arg2.xFine, arg3);
 	}
 
 	@OriginalMember(owner = "client!q", name = "a", descriptor = "(IIIIIIBI)V")
@@ -1268,8 +1268,8 @@ public final class ScriptRunner {
 			return;
 		}
 		@Pc(38) int local38 = SceneGraph.getTileHeight(Player.plane, arg5, arg2) - arg3;
-		@Pc(42) int local42 = arg2 - Camera.renderZ;
-		@Pc(46) int local46 = local38 - Camera.renderY;
+		@Pc(42) int local42 = arg2 - Camera.renderY;
+		@Pc(46) int local46 = local38 - Camera.renderZ;
 		@Pc(50) int local50 = arg5 - Camera.renderX;
 		@Pc(54) int local54 = MathUtils.sin[Camera.cameraPitch];
 		@Pc(58) int local58 = MathUtils.cos[Camera.cameraPitch];
@@ -1366,14 +1366,14 @@ public final class ScriptRunner {
 			anIntArray134[local33] = 0;
 		}
 		if (Camera.cameraType != 1) {
-			local33 = SceneGraph.getTileHeight(Player.plane, Camera.renderX, Camera.renderZ);
-			if (local33 - Camera.renderY < 800 && (SceneGraph.renderFlags[Player.plane][Camera.renderX >> 7][Camera.renderZ >> 7] & API.TILE_FLAG_UNDER_ROOF) != 0) {
-				method4348(false, Camera.renderX >> 7, Camera.renderZ >> 7, SceneGraph.tiles, 1);
+			local33 = SceneGraph.getTileHeight(Player.plane, Camera.renderX, Camera.renderY);
+			if (local33 - Camera.renderZ < 800 && (SceneGraph.renderFlags[Player.plane][Camera.renderX >> 7][Camera.renderY >> 7] & API.TILE_FLAG_UNDER_ROOF) != 0) {
+				method4348(false, Camera.renderX >> 7, Camera.renderY >> 7, SceneGraph.tiles, 1);
 			}
 			return;
 		}
-		if ((SceneGraph.renderFlags[Player.plane][PlayerList.self.xFine >> 7][PlayerList.self.zFine >> 7] & API.TILE_FLAG_UNDER_ROOF) != 0) {
-			method4348(false, PlayerList.self.xFine >> 7, PlayerList.self.zFine >> 7, SceneGraph.tiles, 0);
+		if ((SceneGraph.renderFlags[Player.plane][PlayerList.self.xFine >> 7][PlayerList.self.yFine >> 7] & API.TILE_FLAG_UNDER_ROOF) != 0) {
+			method4348(false, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7, SceneGraph.tiles, 0);
 		}
 		if (roofVisibilityActive) {
 			API.ApplyRoofVisibilityRequests();
@@ -1381,8 +1381,8 @@ public final class ScriptRunner {
 		if (Camera.cameraPitch >= 310) {
 			return;
 		}
-		@Pc(135) int local135 = PlayerList.self.zFine >> 7;
-		local40 = Camera.renderZ >> 7;
+		@Pc(135) int local135 = PlayerList.self.yFine >> 7;
+		local40 = Camera.renderY >> 7;
 		@Pc(146) int local146;
 		if (local40 < local135) {
 			local146 = local135 - local40;
@@ -3195,7 +3195,7 @@ public final class ScriptRunner {
 									if (opcode == Cs2Opcodes.getMyLocation) {
 										int1 = Player.plane;
 										int3 = Camera.originX + (PlayerList.self.xFine >> 7);
-										int2 = (PlayerList.self.zFine >> 7) + Camera.originZ;
+										int2 = (PlayerList.self.yFine >> 7) + Camera.originZ;
 										intStack[isp++] = (int1 << 28) - (-(int3 << 14) - int2);
 										continue;
 									}

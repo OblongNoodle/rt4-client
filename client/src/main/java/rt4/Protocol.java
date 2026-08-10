@@ -372,7 +372,7 @@ public class Protocol {
 			int local45 = local31 & 0x7;
 			if (local23 >= 0 && local19 >= 0 && local23 < 104 && local19 < 104) {
 				int local224 = local39 + 1;
-				if (PlayerList.self.movementQueueX[0] >= local23 - local224 && local224 + local23 >= PlayerList.self.movementQueueX[0] && PlayerList.self.movementQueueZ[0] >= local19 - local224 && PlayerList.self.movementQueueZ[0] <= local224 + local19 && Preferences.ambientSoundsVolume != 0 && local45 > 0 && SoundPlayer.size < 50 && local27 != -1) {
+				if (PlayerList.self.movementQueueX[0] >= local23 - local224 && local224 + local23 >= PlayerList.self.movementQueueX[0] && PlayerList.self.movementQueueY[0] >= local19 - local224 && PlayerList.self.movementQueueY[0] <= local224 + local19 && Preferences.ambientSoundsVolume != 0 && local45 > 0 && SoundPlayer.size < 50 && local27 != -1) {
 					SoundPlayer.ids[SoundPlayer.size] = local27;
 					SoundPlayer.loops[SoundPlayer.size] = local45;
 					SoundPlayer.delays[SoundPlayer.size] = local218;
@@ -688,7 +688,7 @@ public class Protocol {
 					if (local24 != -1) {
 						@Pc(663) SeqType local663 = SeqTypeList.get(local24);
 						if (local663 != null && local663.frames != null) {
-							SoundPlayer.playSeqSound(player.zFine, local663, player.xFine, player == PlayerList.self, 0);
+							SoundPlayer.playSeqSound(player.yFine, local663, player.xFine, player == PlayerList.self, 0);
 						}
 					}
 				}
@@ -872,7 +872,7 @@ public class Protocol {
 					if (local121 > 15) {
 						local121 -= 32;
 					}
-					local65.teleport(local92 + PlayerList.self.movementQueueX[0], local116 == 1, PlayerList.self.movementQueueZ[0] + local121);
+					local65.teleport(local92 + PlayerList.self.movementQueueX[0], local116 == 1, PlayerList.self.movementQueueY[0] + local121);
 					continue;
 				}
 			}
@@ -1384,7 +1384,7 @@ public class Protocol {
 								if (seqId != -1) {
 									seq = SeqTypeList.get(seqId);
 									if (seq.frames != null) {
-										SoundPlayer.playSeqSound(npc.zFine, seq, npc.xFine, false, 0);
+										SoundPlayer.playSeqSound(npc.yFine, seq, npc.xFine, false, 0);
 									}
 								}
 							}
@@ -1418,7 +1418,7 @@ public class Protocol {
 								if (seqId != -1) {
 									seq = SeqTypeList.get(seqId);
 									if (seq.frames != null) {
-										SoundPlayer.playSeqSound(player.zFine, seq, player.xFine, player == PlayerList.self, 0);
+										SoundPlayer.playSeqSound(player.yFine, seq, player.xFine, player == PlayerList.self, 0);
 									}
 								}
 							}
@@ -2372,7 +2372,7 @@ public class Protocol {
 			return true;
 		} catch (@Pc(19) Exception ex) {
 			ex.printStackTrace();
-			@Pc(61) String local61 = "T2 - " + opcode + "," + opcode3 + "," + opcode4 + " - " + length + "," + (Camera.originX + PlayerList.self.movementQueueX[0]) + "," + (PlayerList.self.movementQueueZ[0] + Camera.originZ) + " - ";
+			@Pc(61) String local61 = "T2 - " + opcode + "," + opcode3 + "," + opcode4 + " - " + length + "," + (Camera.originX + PlayerList.self.movementQueueX[0]) + "," + (PlayerList.self.movementQueueY[0] + Camera.originZ) + " - ";
 			for (@Pc(63) int local63 = 0; local63 < length && local63 < 50; local63++) {
 				local61 = local61 + inboundBuffer.data[local63] + ",";
 			}
@@ -2811,7 +2811,7 @@ public class Protocol {
 													y = 3;
 												}
 												// Cheat
-												Cheat.teleport(PlayerList.self.movementQueueX[0] + Camera.originX, PlayerList.self.movementQueueZ[0] + Camera.originZ, y);
+												Cheat.teleport(PlayerList.self.movementQueueX[0] + Camera.originX, PlayerList.self.movementQueueY[0] + Camera.originZ, y);
 											}
 											if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT]) {
 												if (MiniMenu.anInt1742 != -1) {
@@ -2844,7 +2844,7 @@ public class Protocol {
 												}
 												anInt4422 = 0;
 											} else if (MiniMenu.anInt1742 != -1 && MiniMenu.anInt3096 == 0 && anInt4422 == 0) {
-												@Pc(1871) boolean local1871 = PathFinder.findPath(PlayerList.self.movementQueueZ[0], 0, 0, true, 0, MiniMenu.anInt1742, 0, 0, 0, MiniMenu.anInt2954, PlayerList.self.movementQueueX[0]);
+												@Pc(1871) boolean local1871 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, true, 0, MiniMenu.anInt1742, 0, 0, 0, MiniMenu.anInt2954, PlayerList.self.movementQueueX[0]);
 												if (local1871) {
 													Cross.y = Mouse.clickY;
 													Cross.milliseconds = 0;
@@ -3057,7 +3057,7 @@ public class Protocol {
 
 			boolean isKillingBlow = (local18 & 0x80) != 0;
 			if (isKillingBlow) {
-				PluginRepository.OnKillingBlowNPC(npc.type.id,npc.movementQueueX[0],npc.movementQueueZ[0]);
+				PluginRepository.OnKillingBlowNPC(npc.type.id,npc.movementQueueX[0],npc.movementQueueY[0]);
 				local43 = inboundBuffer.g2add();
 				if (local43 == 65535) {
 					local43 = -1;
@@ -3079,7 +3079,7 @@ public class Protocol {
 						if (seqId != -1) {
 							@Pc(236) SeqType seqType = SeqTypeList.get(seqId);
 							if (seqType.frames != null) {
-								SoundPlayer.playSeqSound(npc.zFine, seqType, npc.xFine, false, 0);
+								SoundPlayer.playSeqSound(npc.yFine, seqType, npc.xFine, false, 0);
 							}
 						}
 					}
@@ -3095,7 +3095,7 @@ public class Protocol {
 				npc.setSize(npc.type.size);
 				npc.basTypeId = npc.type.bastypeid;
 				if (npc.type.hasAreaSound()) {
-					AreaSoundManager.add(npc.movementQueueZ[0], null, 0, npc, npc.movementQueueX[0], Player.plane, null);
+					AreaSoundManager.add(npc.movementQueueY[0], null, 0, npc, npc.movementQueueX[0], Player.plane, null);
 				}
 			}
 
@@ -3261,9 +3261,9 @@ public class Protocol {
 					if (npc.turnSpeed == 0) {
 						npc.currentAngle = 0;
 					}
-					npc.teleport(npc.getSize(), PlayerList.self.movementQueueX[0] + local124, local105 + PlayerList.self.movementQueueZ[0], local66 == 1);
+					npc.teleport(npc.getSize(), PlayerList.self.movementQueueX[0] + local124, local105 + PlayerList.self.movementQueueY[0], local66 == 1);
 					if (npc.type.hasAreaSound()) {
-						AreaSoundManager.add(npc.movementQueueZ[0], null, 0, npc, npc.movementQueueX[0], Player.plane, null);
+						AreaSoundManager.add(npc.movementQueueY[0], null, 0, npc, npc.movementQueueX[0], Player.plane, null);
 					}
 					continue;
 				}
@@ -3353,7 +3353,7 @@ public class Protocol {
 									local65.nextFrame = 1;
 									local65.delayClock = 0;
 									local65.startDelay = local23;
-									SoundPlayer.playSeqSound(arg1.zFine, local60, arg1.xFine, false, 0);
+									SoundPlayer.playSeqSound(arg1.yFine, local60, arg1.xFine, false, 0);
 								} else if (local68 == 2) {
 									local65.replayCount = 0;
 								}
@@ -3369,7 +3369,7 @@ public class Protocol {
 							local65.seqId = local15;
 							local65.replayCount = 0;
 							local65.currentFrame = 0;
-							SoundPlayer.playSeqSound(arg1.zFine, local60, arg1.xFine, false, 0);
+							SoundPlayer.playSeqSound(arg1.yFine, local60, arg1.xFine, false, 0);
 						}
 					}
 				}
@@ -3389,7 +3389,7 @@ public class Protocol {
 				npc.seqDelayClock = 0;
 				npc.seqReplayCount = 0;
 				npc.seqDelay = arg0;
-				SoundPlayer.playSeqSound(npc.zFine, seqType, npc.xFine, false, npc.seqFrame);
+				SoundPlayer.playSeqSound(npc.yFine, seqType, npc.xFine, false, npc.seqFrame);
 			}
 			if (local13 == 2) {
 				npc.seqReplayCount = 0;
@@ -3403,7 +3403,7 @@ public class Protocol {
 			npc.seqMovementSteps = npc.movementQueueSize;
 			npc.seqFrame = 0;
 			if (npc.seqId != -1) {
-				SoundPlayer.playSeqSound(npc.zFine, SeqTypeList.get(npc.seqId), npc.xFine, false, npc.seqFrame);
+				SoundPlayer.playSeqSound(npc.yFine, SeqTypeList.get(npc.seqId), npc.xFine, false, npc.seqFrame);
 			}
 		}
 	}

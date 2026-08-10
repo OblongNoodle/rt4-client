@@ -179,7 +179,7 @@ public class Cs1ScriptRunner {
 					value = (PlayerList.self.xFine >> 7) + Camera.originX;
 				}
 				if (opcode == 19) {
-					value = (PlayerList.self.zFine >> 7) + Camera.originZ;
+					value = (PlayerList.self.yFine >> 7) + Camera.originZ;
 				}
 				if (opcode == 20) {
 					value = script[pc++];
@@ -426,7 +426,7 @@ public class Cs1ScriptRunner {
 								objId = cardMemory * local276 - color * local270 >> 11;
 								local556 = local276 * color + local270 * cardMemory >> 11;
 								local563 = PlayerList.self.xFine + local556 >> 7;
-								local571 = PlayerList.self.zFine - objId >> 7;
+								local571 = PlayerList.self.yFine - objId >> 7;
 								if (MiniMenu.aBoolean302 && (MiniMenu.anInt4999 & 0x40) != 0) {
 									@Pc(583) Component local583 = InterfaceList.method1418(MiniMenu.anInt2512, MiniMenu.anInt506);
 									if (local583 == null) {

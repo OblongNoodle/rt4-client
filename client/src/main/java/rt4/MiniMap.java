@@ -237,7 +237,7 @@ public class MiniMap {
 		if (state != 2 && state != 5 && sprite != null) {
 			@Pc(48) int local48 = anInt1814 + (int) Camera.yawTarget & 0x7FF;
 			@Pc(57) int local57 = PlayerList.self.xFine / 32 + 48;
-			@Pc(67) int local67 = 464 - PlayerList.self.zFine / 32;
+			@Pc(67) int local67 = 464 - PlayerList.self.yFine / 32;
 			if (GlRenderer.enabled) {
 				((GlSprite) sprite).renderRotatedTransparent(arg2, arg1, arg3.width, arg3.height, local57, local67, local48, anInt4130 + 256, (GlSprite) arg3.method489(false));
 			} else {
@@ -259,7 +259,7 @@ public class MiniMap {
 						local154 = MathUtils.cos[local48];
 						@Pc(156) Font local156 = Fonts.p11Full;
 						@Pc(164) int local164 = local150 * 256 / (anInt4130 + 256);
-						local181 = (LoginManager.mapElementList.aShortArray72[local117] - Camera.originZ) * 4 + 2 - PlayerList.self.zFine / 32;
+						local181 = (LoginManager.mapElementList.aShortArray72[local117] - Camera.originZ) * 4 + 2 - PlayerList.self.yFine / 32;
 						@Pc(189) int local189 = local154 * 256 / (anInt4130 + 256);
 						local200 = local181 * local189 - local146 * local164 >> 16;
 						if (LoginManager.mapElementList.method3894(local117) == 1) {
@@ -293,7 +293,7 @@ public class MiniMap {
 			}
 			for (local146 = 0; local146 < locs; local146++) {
 				local181 = locX[local146] * 4 + 2 - PlayerList.self.xFine / 32;
-				local150 = locZ[local146] * 4 + 2 - PlayerList.self.zFine / 32;
+				local150 = locZ[local146] * 4 + 2 - PlayerList.self.yFine / 32;
 				@Pc(382) LocType local382 = LocTypeList.get(locId[local146]);
 				if (local382.multiLocs != null) {
 					local382 = local382.getMultiLoc();
@@ -308,7 +308,7 @@ public class MiniMap {
 					@Pc(439) LinkedList local439 = SceneGraph.objStacks[Player.plane][local146][local181];
 					if (local439 != null) {
 						local154 = local146 * 4 + 2 - PlayerList.self.xFine / 32;
-						local231 = local181 * 4 + 2 - PlayerList.self.zFine / 32;
+						local231 = local181 * 4 + 2 - PlayerList.self.yFine / 32;
 						method1446(arg3, Sprites.mapdots[0], local231, local154, arg1, arg2);
 					}
 				}
@@ -322,7 +322,7 @@ public class MiniMap {
 					}
 					if (local507 != null && local507.minimapdisplay && local507.interactive) {
 						local154 = local498.xFine / 32 - PlayerList.self.xFine / 32;
-						local231 = local498.zFine / 32 - PlayerList.self.zFine / 32;
+						local231 = local498.yFine / 32 - PlayerList.self.yFine / 32;
 						if (local507.minimapmarkerobjectentry == -1) {
 							method1446(arg3, Sprites.mapdots[1], local231, local154, arg1, arg2);
 						} else {
@@ -334,7 +334,7 @@ public class MiniMap {
 			for (local146 = 0; local146 < PlayerList.size; local146++) {
 				@Pc(591) Player local591 = PlayerList.players[PlayerList.ids[local146]];
 				if (local591 != null && local591.isVisible()) {
-					local154 = local591.zFine / 32 - PlayerList.self.zFine / 32;
+					local154 = local591.yFine / 32 - PlayerList.self.yFine / 32;
 					local150 = local591.xFine / 32 - PlayerList.self.xFine / 32;
 					@Pc(624) long local624 = local591.username.encode37();
 					@Pc(626) boolean local626 = false;
@@ -371,19 +371,19 @@ public class MiniMap {
 						@Pc(804) Npc local804 = NpcList.npcs[local770.actorTargetId];
 						if (local804 != null) {
 							local231 = local804.xFine / 32 - PlayerList.self.xFine / 32;
-							local200 = local804.zFine / 32 - PlayerList.self.zFine / 32;
+							local200 = local804.yFine / 32 - PlayerList.self.yFine / 32;
 							method1960(local770.anInt4048, arg1, arg2, local231, local200, arg3);
 						}
 					}
 					if (local770.type == 2) {
 						local154 = (local770.targetX - Camera.originX) * 4 + 2 - PlayerList.self.xFine / 32;
-						local231 = (-Camera.originZ + local770.anInt4046) * 4 + 2 - PlayerList.self.zFine / 32;
+						local231 = (-Camera.originZ + local770.anInt4046) * 4 + 2 - PlayerList.self.yFine / 32;
 						method1960(local770.anInt4048, arg1, arg2, local154, local231, arg3);
 					}
 					if (local770.type == 10 && local770.actorTargetId >= 0 && PlayerList.players.length > local770.actorTargetId) {
 						@Pc(905) Player local905 = PlayerList.players[local770.actorTargetId];
 						if (local905 != null) {
-							local200 = local905.zFine / 32 - PlayerList.self.zFine / 32;
+							local200 = local905.yFine / 32 - PlayerList.self.yFine / 32;
 							local231 = local905.xFine / 32 - PlayerList.self.xFine / 32;
 							method1960(local770.anInt4048, arg1, arg2, local231, local200, arg3);
 						}
@@ -392,7 +392,7 @@ public class MiniMap {
 			}
 			if (LoginManager.mapFlagX != 0) {
 				local146 = LoginManager.mapFlagX * 4 + 2 - PlayerList.self.xFine / 32;
-				local181 = LoginManager.mapFlagZ * 4 + 2 - PlayerList.self.zFine / 32;
+				local181 = LoginManager.mapFlagZ * 4 + 2 - PlayerList.self.yFine / 32;
 				method1446(arg3, Sprites.mapflags, local181, local146, arg1, arg2);
 			}
 			if (GlRenderer.enabled) {

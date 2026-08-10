@@ -126,8 +126,8 @@ public class AreaSoundManager {
 			}
 			areaSound.minXFine = areaSound.npc.xFine;
 			areaSound.maxXFine = areaSound.npc.xFine + areaSound.npc.getSize() * 64;
-			areaSound.minZFine = areaSound.npc.zFine;
-			areaSound.maxZFine = areaSound.npc.zFine + areaSound.npc.getSize() * 64;
+			areaSound.minZFine = areaSound.npc.yFine;
+			areaSound.maxZFine = areaSound.npc.yFine + areaSound.npc.getSize() * 64;
 			redraw(arg1, areaSound, arg3, arg0, arg2);
 		}
 		for (areaSound = (AreaSound) playerSounds.head(); areaSound != null; areaSound = (AreaSound) playerSounds.next()) {
@@ -153,8 +153,8 @@ public class AreaSoundManager {
 			}
 			areaSound.minXFine = areaSound.player.xFine;
 			areaSound.maxXFine = areaSound.player.xFine + areaSound.player.getSize() * 64;
-			areaSound.minZFine = areaSound.player.zFine;
-			areaSound.maxZFine = areaSound.player.zFine + areaSound.player.getSize() * 64;
+			areaSound.minZFine = areaSound.player.yFine;
+			areaSound.maxZFine = areaSound.player.yFine + areaSound.player.getSize() * 64;
 			redraw(arg1, areaSound, arg3, arg0, arg2);
 		}
 	}
