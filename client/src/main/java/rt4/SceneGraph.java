@@ -3296,7 +3296,7 @@ public class SceneGraph {
 			@Pc(18) Light local18 = arg3[local7];
 			if (local18.level == arg4) {
 				@Pc(24) int local24 = 0;
-				@Pc(28) Light_Class45 local28 = new Light_Class45();
+				@Pc(28) LightMesh local28 = new LightMesh();
 				@Pc(37) int local37 = (local18.x >> 7) - local18.radius;
 				@Pc(46) int local46 = (local18.z >> 7) - local18.radius;
 				if (local46 < 0) {
@@ -3342,8 +3342,8 @@ public class SceneGraph {
 							}
 							if (arg7[local114][local72] != 0) {
 								local176 = anIntArrayArray35[arg7[local114][local72]];
-								local28.anInt2016 += ((local176.length >> 1) - 2) * 3;
-								local28.anInt2019 += local176.length >> 1;
+								local28.indexCapacity += ((local176.length >> 1) - 2) * 3;
+								local28.vertexCapacity += local176.length >> 1;
 								continue;
 							}
 						} else if (local133 != 0) {
@@ -3353,8 +3353,8 @@ public class SceneGraph {
 								local224 = arg7[local114][local72];
 								if (local224 != 0) {
 									local234 = anIntArrayArray8[local224];
-									local28.anInt2016 += ((local234.length >> 1) - 2) * 3;
-									local28.anInt2019 += local234.length >> 1;
+									local28.indexCapacity += ((local234.length >> 1) - 2) * 3;
+									local28.vertexCapacity += local234.length >> 1;
 								}
 								continue;
 							}
@@ -3418,8 +3418,8 @@ public class SceneGraph {
 									}
 								}
 								if (local234 != null) {
-									local28.anInt2016 += (local234.length >> 1) * 3 - 6;
-									local28.anInt2019 += local234.length >> 1;
+									local28.indexCapacity += (local234.length >> 1) * 3 - 6;
+									local28.vertexCapacity += local234.length >> 1;
 								}
 								continue;
 							}
@@ -3427,20 +3427,20 @@ public class SceneGraph {
 						if (local135) {
 							local234 = anIntArrayArray8[arg7[local114][local72]];
 							local176 = anIntArrayArray35[arg7[local114][local72]];
-							local28.anInt2016 += ((local176.length >> 1) - 2) * 3;
-							local28.anInt2016 += ((local234.length >> 1) - 2) * 3;
-							local28.anInt2019 += local176.length >> 1;
-							local28.anInt2019 += local234.length >> 1;
+							local28.indexCapacity += ((local176.length >> 1) - 2) * 3;
+							local28.indexCapacity += ((local234.length >> 1) - 2) * 3;
+							local28.vertexCapacity += local176.length >> 1;
+							local28.vertexCapacity += local234.length >> 1;
 						} else {
 							local176 = anIntArrayArray35[0];
-							local28.anInt2016 += ((local176.length >> 1) - 2) * 3;
-							local28.anInt2019 += local176.length >> 1;
+							local28.indexCapacity += ((local176.length >> 1) - 2) * 3;
+							local28.vertexCapacity += local176.length >> 1;
 						}
 					}
 					local24++;
 				}
 				local24 = 0;
-				local28.method1555();
+				local28.allocate();
 				if ((local18.z >> 7) - local18.radius < 0) {
 					local24 = local18.radius - (local18.z >> 7);
 				}
@@ -3556,9 +3556,9 @@ public class SceneGraph {
 					}
 					local24++;
 				}
-				if (local28.anInt2017 > 0 && local28.anInt2018 > 0) {
-					local28.method1554();
-					local18.aClass45_1 = local28;
+				if (local28.vertexCount > 0 && local28.indexCount > 0) {
+					local28.upload();
+					local18.mesh = local28;
 				}
 			}
 		}
@@ -4015,7 +4015,7 @@ public class SceneGraph {
 	}
 
 	@OriginalMember(owner = "client!kd", name = "a", descriptor = "([[F[[II[[FI[ILclient!fj;BLclient!gi;[[FI)V")
-	public static void applyLightToTile(@OriginalArg(0) float[][] arg0, @OriginalArg(1) int[][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) float[][] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[] arg5, @OriginalArg(6) Light_Class45 arg6, @OriginalArg(8) Light arg7, @OriginalArg(9) float[][] arg8, @OriginalArg(10) int arg9) {
+	public static void applyLightToTile(@OriginalArg(0) float[][] arg0, @OriginalArg(1) int[][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) float[][] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[] arg5, @OriginalArg(6) LightMesh arg6, @OriginalArg(8) Light arg7, @OriginalArg(9) float[][] arg8, @OriginalArg(10) int arg9) {
 		@Pc(7) int[] local7 = new int[arg5.length / 2];
 		for (@Pc(13) int local13 = 0; local13 < local7.length; local13++) {
 			@Pc(27) int local27 = arg5[local13 + local13];
@@ -4074,9 +4074,9 @@ public class SceneGraph {
 			@Pc(393) int local393 = (arg2 << 7) + local27;
 			@Pc(400) int local400 = (arg4 << 7) + local35;
 			@Pc(408) int local408 = interpolateHeight(local27, arg4, arg1, arg2, local35);
-			local7[local13] = arg6.method1553(arg7, local393, local408, local400, local115, local123, local107);
+			local7[local13] = arg6.addVertex(arg7, local393, local408, local400, local115, local123, local107);
 		}
-		arg6.method1557(local7);
+		arg6.addFan(local7);
 	}
 
 	@OriginalMember(owner = "client!jj", name = "a", descriptor = "()V")

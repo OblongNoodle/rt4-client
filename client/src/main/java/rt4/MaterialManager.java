@@ -113,16 +113,16 @@ public class MaterialManager {
 	public static void method2807() {
 		@Pc(11) byte[] local11;
 		if (textureBuffer == null) {
-			@Pc(5) MaterialManager_Class106_Sub1_Sub1 local5 = new MaterialManager_Class106_Sub1_Sub1();
-			local11 = local5.method3215();
+			@Pc(5) RidgedNoiseTexture local5 = new RidgedNoiseTexture();
+			local11 = local5.generateTexture();
 			textureBuffer = ByteBuffer.allocateDirect(local11.length);
 			textureBuffer.position(0);
 			textureBuffer.put(local11);
 			textureBuffer.flip();
 		}
 		if (aByteBuffer6 == null) {
-			@Pc(32) MaterialManager_Class106_Sub2_Sub1 local32 = new MaterialManager_Class106_Sub2_Sub1();
-			local11 = local32.method3854();
+			@Pc(32) FractalNoiseTexture local32 = new FractalNoiseTexture();
+			local11 = local32.generateTexture();
 			aByteBuffer6 = ByteBuffer.allocateDirect(local11.length);
 			aByteBuffer6.position(0);
 			aByteBuffer6.put(local11);

@@ -56,7 +56,7 @@ public final class Light {
 	public final boolean aBoolean126;
 
 	@OriginalMember(owner = "client!gi", name = "B", descriptor = "Lclient!fj;")
-	public Light_Class45 aClass45_1;
+	public LightMesh mesh;
 
 	@OriginalMember(owner = "client!gi", name = "C", descriptor = "I")
 	public final int color;

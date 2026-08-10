@@ -163,7 +163,7 @@ public final class GlModel extends Model {
 	private short[] aShortArray86;
 
 	@OriginalMember(owner = "client!td", name = "cb", descriptor = "Lclient!de;")
-	private GlModel_Class23 aClass23_1;
+	private GlModelRecoloring recoloring;
 
 	@OriginalMember(owner = "client!td", name = "db", descriptor = "[I")
 	private int[] vertexBones;
@@ -1250,31 +1250,31 @@ public final class GlModel extends Model {
 		@Pc(44) short[] local44;
 		@Pc(48) short[] local48;
 		@Pc(52) short[] local52;
-		if (this.aClass23_1 == null) {
+		if (this.recoloring == null) {
 			local40 = null;
 			local44 = null;
 			local48 = null;
 			local52 = null;
 		} else {
-			local40 = this.aClass23_1.aShortArray8;
-			local44 = this.aClass23_1.aShortArray10;
-			local48 = this.aClass23_1.aShortArray9;
-			local52 = this.aClass23_1.aShortArray7;
+			local40 = this.recoloring.recolorSrc;
+			local44 = this.recoloring.recolorDst;
+			local48 = this.recoloring.retextureSrc;
+			local52 = this.recoloring.retextureDst;
 		}
 		@Pc(68) short[] local68;
 		@Pc(72) short[] local72;
 		@Pc(76) short[] local76;
 		@Pc(80) short[] local80;
-		if (local2.aClass23_1 == null) {
+		if (local2.recoloring == null) {
 			local68 = null;
 			local72 = null;
 			local76 = null;
 			local80 = null;
 		} else {
-			local68 = local2.aClass23_1.aShortArray8;
-			local72 = local2.aClass23_1.aShortArray10;
-			local76 = local2.aClass23_1.aShortArray9;
-			local80 = local2.aClass23_1.aShortArray7;
+			local68 = local2.recoloring.recolorSrc;
+			local72 = local2.recoloring.recolorDst;
+			local76 = local2.recoloring.retextureSrc;
+			local80 = local2.recoloring.retextureDst;
 		}
 		@Pc(92) int[] local92 = local2.anIntArray462;
 		@Pc(95) short[] local95 = local2.aShortArray81;
@@ -1318,18 +1318,18 @@ public final class GlModel extends Model {
 									}
 									if (local237 != -1) {
 										if (local40 == null) {
-											this.aClass23_1 = new GlModel_Class23();
-											local40 = this.aClass23_1.aShortArray8 = ArrayUtils.copyOfNullable(this.aShortArray76);
-											local44 = this.aClass23_1.aShortArray10 = ArrayUtils.copyOfNullable(this.aShortArray79);
-											local48 = this.aClass23_1.aShortArray9 = ArrayUtils.copyOfNullable(this.aShortArray85);
-											local52 = this.aClass23_1.aShortArray7 = ArrayUtils.copyOfNullable(this.aShortArray86);
+											this.recoloring = new GlModelRecoloring();
+											local40 = this.recoloring.recolorSrc = ArrayUtils.copyOfNullable(this.aShortArray76);
+											local44 = this.recoloring.recolorDst = ArrayUtils.copyOfNullable(this.aShortArray79);
+											local48 = this.recoloring.retextureSrc = ArrayUtils.copyOfNullable(this.aShortArray85);
+											local52 = this.recoloring.retextureDst = ArrayUtils.copyOfNullable(this.aShortArray86);
 										}
 										if (local68 == null) {
-											@Pc(325) GlModel_Class23 local325 = local2.aClass23_1 = new GlModel_Class23();
-											local68 = local325.aShortArray8 = ArrayUtils.copyOfNullable(local24);
-											local72 = local325.aShortArray10 = ArrayUtils.copyOfNullable(local27);
-											local76 = local325.aShortArray9 = ArrayUtils.copyOfNullable(local30);
-											local80 = local325.aShortArray7 = ArrayUtils.copyOfNullable(local33);
+											@Pc(325) GlModelRecoloring local325 = local2.recoloring = new GlModelRecoloring();
+											local68 = local325.recolorSrc = ArrayUtils.copyOfNullable(local24);
+											local72 = local325.recolorDst = ArrayUtils.copyOfNullable(local27);
+											local76 = local325.retextureSrc = ArrayUtils.copyOfNullable(local30);
+											local80 = local325.retextureDst = ArrayUtils.copyOfNullable(local33);
 										}
 										@Pc(358) short local358 = this.aShortArray76[local175];
 										@Pc(363) short local363 = this.aShortArray79[local175];
@@ -2783,12 +2783,12 @@ public final class GlModel extends Model {
 	@Override
 	public final Entity createModel() {
 		this.aBoolean259 = false;
-		if (this.aClass23_1 != null) {
-			this.aShortArray76 = this.aClass23_1.aShortArray8;
-			this.aShortArray79 = this.aClass23_1.aShortArray10;
-			this.aShortArray85 = this.aClass23_1.aShortArray9;
-			this.aShortArray86 = this.aClass23_1.aShortArray7;
-			this.aClass23_1 = null;
+		if (this.recoloring != null) {
+			this.aShortArray76 = this.recoloring.recolorSrc;
+			this.aShortArray79 = this.recoloring.recolorDst;
+			this.aShortArray85 = this.recoloring.retextureSrc;
+			this.aShortArray86 = this.recoloring.retextureDst;
+			this.recoloring = null;
 		}
 		return this;
 	}

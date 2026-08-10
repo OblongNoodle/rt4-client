@@ -290,7 +290,7 @@ public final class MidiPcmStream extends PcmStream {
 		local133.sound = local126;
 		local133.instrument = local118;
 		local133.channel = arg1;
-		local133.aClass162_1 = local118.aClass162Array1[arg2];
+		local133.trackState = local118.trackStates[arg2];
 		local133.anInt3776 = local118.aByteArray44[arg2];
 		local133.anInt3779 = arg2;
 		local133.anInt3772 = local118.aByteArray45[arg2] * arg0 * arg0 * local118.anInt3078 + 1024 >> 11;
@@ -533,7 +533,7 @@ public final class MidiPcmStream extends PcmStream {
 			arg2.anInt3764 = local54;
 		}
 		arg2.stream.method410(this.method4439(arg2));
-		@Pc(103) Midi_Class162 local103 = arg2.aClass162_1;
+		@Pc(103) MidiTrackState local103 = arg2.trackState;
 		arg2.anInt3768 += local103.anInt5814;
 		arg2.anInt3774++;
 		@Pc(134) double local134 = (double) ((arg2.anInt3779 - 60 << 8) + (arg2.anInt3764 * arg2.anInt3781 >> 12)) * 5.086263020833333E-6D;
@@ -719,7 +719,7 @@ public final class MidiPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(BLclient!mf;)I")
 	private int method4439(@OriginalArg(1) MidiNote arg0) {
-		@Pc(6) Midi_Class162 local6 = arg0.aClass162_1;
+		@Pc(6) MidiTrackState local6 = arg0.trackState;
 		@Pc(17) int local17 = (arg0.anInt3781 * arg0.anInt3764 >> 12) + arg0.anInt3769;
 		local17 += this.anIntArray501[arg0.channel] * (this.anIntArray497[arg0.channel] - 8192) >> 12;
 		@Pc(62) int local62;
@@ -825,7 +825,7 @@ public final class MidiPcmStream extends PcmStream {
 		if (this.anIntArray507[arg0.channel] == 0) {
 			return 0;
 		}
-		@Pc(21) Midi_Class162 local21 = arg0.aClass162_1;
+		@Pc(21) MidiTrackState local21 = arg0.trackState;
 		@Pc(37) int local37 = this.anIntArray495[arg0.channel] * this.anIntArray505[arg0.channel] + 4096 >> 13;
 		@Pc(45) int local45 = local37 * local37 + 16384 >> 15;
 		@Pc(54) int local54 = arg0.anInt3772 * local45 + 16384 >> 15;

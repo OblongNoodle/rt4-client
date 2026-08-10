@@ -16,7 +16,7 @@ public final class MidiNote extends Node {
 	public int anInt3765;
 
 	@OriginalMember(owner = "client!mf", name = "w", descriptor = "Lclient!wh;")
-	public Midi_Class162 aClass162_1;
+	public MidiTrackState trackState;
 
 	@OriginalMember(owner = "client!mf", name = "y", descriptor = "I")
 	public int anInt3767;
@@ -71,7 +71,7 @@ public final class MidiNote extends Node {
 
 	@OriginalMember(owner = "client!mf", name = "d", descriptor = "(I)V")
 	public final void release() {
-		this.aClass162_1 = null;
+		this.trackState = null;
 		this.sound = null;
 		this.stream = null;
 		this.instrument = null;

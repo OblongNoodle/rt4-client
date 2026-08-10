@@ -405,7 +405,7 @@ public class LightingManager {
 			if (local63.aBoolean125) {
 				local66--;
 			}
-			if (local63.aClass45_1 != null) {
+			if (local63.mesh != null) {
 				@Pc(76) int local76 = 0;
 				@Pc(84) int local84 = (local63.z >> 7) - local63.radius;
 				@Pc(92) int local92 = (local63.z >> 7) + local63.radius;
@@ -434,7 +434,7 @@ public class LightingManager {
 						if (local66 < 0 || local160 != null && local160.visible) {
 							GlRenderer.method4159(201.5F - (float) local63.level * 50.0F - 1.5F);
 							gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, new float[]{0.0F, 0.0F, 0.0F, local63.alpha}, 0);
-							local63.aClass45_1.method1556();
+							local63.mesh.draw();
 							continue label71;
 						}
 					}
