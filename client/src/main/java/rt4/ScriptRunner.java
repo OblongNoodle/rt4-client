@@ -3108,7 +3108,7 @@ public final class ScriptRunner {
 										int1 = intStack[isp];
 										int2 = intStack[isp + 2];
 										local1063 = InterfaceList.getComponent(int2);
-										Cs1ScriptRunner.method1015(int3, int1, local1063);
+										Cs1ScriptRunner.startComponentDrag(int3, int1, local1063);
 										continue;
 									}
 									if (opcode == 3109) {
@@ -3116,7 +3116,7 @@ public final class ScriptRunner {
 										int1 = intStack[isp];
 										local1256 = local1020 ? staticActiveComponent1 : staticActiveComponent2;
 										int3 = intStack[isp + 1];
-										Cs1ScriptRunner.method1015(int3, int1, local1256);
+										Cs1ScriptRunner.startComponentDrag(int3, int1, local1256);
 										continue;
 									}
 									if (opcode == 3110) {
@@ -4486,21 +4486,21 @@ public final class ScriptRunner {
 													}
 													if (opcode == 5202) {
 														isp--;
-														WorldMap.method4444(intStack[isp]);
+														WorldMap.highlightMapElement(intStack[isp]);
 														continue;
 													}
 													if (opcode == 5203) {
 														ssp--;
-														WorldMap.method4656(stringStack[ssp]);
+														WorldMap.panToLabelByPrefix(stringStack[ssp]);
 														continue;
 													}
 													if (opcode == 5204) {
-														stringStack[ssp - 1] = WorldMap.method923(stringStack[ssp - 1]);
+														stringStack[ssp - 1] = WorldMap.getLabelTextByPrefix(stringStack[ssp - 1]);
 														continue;
 													}
 													if (opcode == Cs2Opcodes.loadDungeonmap) {
 														ssp--;
-														WorldMap.method1853(stringStack[ssp]);
+														WorldMap.switchMap(stringStack[ssp]);
 														continue;
 													}
 													if (opcode == Cs2Opcodes.getDungeonmap) {
@@ -4558,7 +4558,7 @@ public final class ScriptRunner {
 														continue;
 													}
 													if (opcode == 5212) {
-														int1 = WorldMap.method2352();
+														int1 = WorldMap.getFirstVisibleLabel();
 														int2 = 0;
 														if (int1 == -1) {
 															str1 = EMPTY_STRING;
@@ -4573,7 +4573,7 @@ public final class ScriptRunner {
 													}
 													if (opcode == 5213) {
 														int2 = 0;
-														int1 = WorldMap.method2385();
+														int1 = WorldMap.getNextVisibleLabel();
 														if (int1 == -1) {
 															str1 = EMPTY_STRING;
 														} else {
@@ -4588,7 +4588,7 @@ public final class ScriptRunner {
 													if (opcode == Cs2Opcodes.setPositionInMap) {
 														isp--;
 														int1 = intStack[isp];
-														WorldMap.method3616(int1 >> 14 & 0x3FFF, int1 & 0x3FFF);
+														WorldMap.panToCoords(int1 >> 14 & 0x3FFF, int1 & 0x3FFF);
 														continue;
 													}
 													if (opcode == Cs2Opcodes.dungeonmapContains) {
@@ -4638,7 +4638,7 @@ public final class ScriptRunner {
 													}
 													if (opcode == 5219) {
 														ssp--;
-														WorldMap.method1149(stringStack[ssp]);
+														WorldMap.panToLabelByExactName(stringStack[ssp]);
 														continue;
 													}
 													if (opcode == 5220) {

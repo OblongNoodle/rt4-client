@@ -2567,7 +2567,7 @@ public class Protocol {
 		NpcList.processAllNpcs();
 		OverheadChat.loop();
 		if (WorldMap.component != null) {
-			WorldMap.method447();
+			WorldMap.updateZoomAndScroll();
 		}
 		// VarpDomain
 		for (i = VarpDomain.poll(true); i != -1; i = VarpDomain.poll(false)) {
@@ -2754,10 +2754,10 @@ public class Protocol {
 						outboundBuffer.p2add(MiniMenu.clickedInventoryIndex);
 						outboundBuffer.p1sub(inserting);
 					}
-				} else if ((VarpDomain.anInt2952 == 1 || MiniMenu.method4640(MiniMenu.size - 1)) && MiniMenu.size > 2) {
+				} else if ((VarpDomain.anInt2952 == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
 					ScriptRunner.method3901();
 				} else if (MiniMenu.size > 0) {
-					MiniMenu.method1372();
+					MiniMenu.processClick();
 				}
 				Mouse.clickButton = 0;
 				MiniMenu.anInt2043 = 10;
@@ -3549,14 +3549,14 @@ public class Protocol {
 					}
 				}
 			}
-			if (local20 == 1 && (VarpDomain.anInt2952 == 1 && MiniMenu.size > 2 || MiniMenu.method4640(MiniMenu.size - 1))) {
+			if (local20 == 1 && (VarpDomain.anInt2952 == 1 && MiniMenu.size > 2 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1))) {
 				local20 = 2;
 			}
 			if (local20 == 2 && MiniMenu.size > 0 || MiniMenu.anInt3953 == 1) {
 				ScriptRunner.method3901();
 			}
 			if (local20 == 1 && MiniMenu.size > 0 || MiniMenu.anInt3953 == 2) {
-				MiniMenu.method1372();
+				MiniMenu.processClick();
 			}
 			return;
 		}

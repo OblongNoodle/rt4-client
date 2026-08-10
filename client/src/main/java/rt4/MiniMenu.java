@@ -609,7 +609,7 @@ public class MiniMenu {
 				if (API.IsRoofVisibilityActive()) {
 					API.ClearDestinationRoofTarget();
 				}
-				method3556(Player.plane, local15, local19);
+				setWalkDestination(Player.plane, local15, local19);
 			} else if (local36 == 1) {
 				if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT]) {
 					Cheat.teleport(Camera.originX + local15, Camera.originY + local19, Player.plane);
@@ -767,9 +767,9 @@ public class MiniMenu {
 		if (actionCode == UNKNOWN_32) {
 			local693 = InterfaceList.method1418(local19, local15);
 			if (local693 != null) {
-				method1294();
+				cancelTargeting();
 				@Pc(1493) ServerActiveProperties local1493 = InterfaceList.getServerActiveProperties(local693);
-				method4246(local19, local15, local1493.getTargetMask(), local1493.targetParam, local693.anInt499, local693.anInt484);
+				startTargeting(local19, local15, local1493.getTargetMask(), local1493.targetParam, local693.anInt499, local693.anInt484);
 				anInt5014 = 0;
 				aClass100_545 = MiniMap.getTargetVerb(local693);
 				if (aClass100_545 == null) {
@@ -923,7 +923,7 @@ public class MiniMenu {
 		if (actionCode == UNKNOWN_11) {
 			if (local36 == 0) {
 				anInt3096 = 1;
-				method3556(Player.plane, local15, local19);
+				setWalkDestination(Player.plane, local15, local19);
 			} else if (local36 == 1) {
 				Protocol.outboundBuffer.p1isaac(131);
 				Protocol.outboundBuffer.mp4(anInt2512);
@@ -936,7 +936,7 @@ public class MiniMenu {
 			local693 = InterfaceList.getComponent(local19);
 			@Pc(2287) boolean local2287 = true;
 			if (local693.clientCode > 0) {
-				local2287 = method4265(local693);
+				local2287 = handleSpecialButtonAction(local693);
 			}
 			if (local2287) {
 				Protocol.outboundBuffer.p1isaac(10);
@@ -1015,7 +1015,7 @@ public class MiniMenu {
 			}
 		}
 		if (actionCode == UNKNOWN_22) {
-			method1294();
+			cancelTargeting();
 			local693 = InterfaceList.getComponent(local19);
 			MiniMap.anInt5062 = local19;
 			anInt4370 = local15;
@@ -1091,7 +1091,7 @@ public class MiniMenu {
 		if (actionCode == UNKNOWN_36) {
 			if (local36 == 0) {
 				Protocol.anInt4422 = 1;
-				method3556(Player.plane, local15, local19);
+				setWalkDestination(Player.plane, local15, local19);
 			} else if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT]) {
 				Cheat.teleport(local15 + Camera.originX, Camera.originY - -local19, Player.plane);
 			} else {
@@ -1151,7 +1151,7 @@ public class MiniMenu {
 			InterfaceList.redraw(InterfaceList.getComponent(MiniMap.anInt5062));
 		}
 		if (aBoolean302) {
-			method1294();
+			cancelTargeting();
 		}
 		if (pressedInventoryComponent != null && anInt2043 == 0) {
 			InterfaceList.redraw(pressedInventoryComponent);
@@ -1194,7 +1194,7 @@ public class MiniMenu {
 			if (aBoolean302 && (anInt4999 & 0x40) != 0) {
 				@Pc(61) Component local61 = InterfaceList.method1418(anInt2512, anInt506);
 				if (local61 == null) {
-					method1294();
+					cancelTargeting();
 				} else {
 					add(anInt5393, 0L, aClass100_961, local33, (short) 11, aClass100_545, x);
 				}
@@ -1378,7 +1378,7 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!bc", name = "f", descriptor = "(B)Lclient!na;")
-	public static JagString method471() {
+	public static JagString getTooltipText() {
 		@Pc(32) JagString local32;
 		if (anInt5014 == 1 && size < 2) {
 			local32 = JagString.concatenate(new JagString[]{LocalizedText.USE, LocalizedText.MINISEPARATOR, aClass100_203, aClass100_961});
@@ -1579,7 +1579,7 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!il", name = "a", descriptor = "(III)V")
-	public static void method3556(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public static void setWalkDestination(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		aBoolean187 = true;
 		anInt3902 = arg0;
 		anInt2388 = arg1;
@@ -1589,7 +1589,7 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!wi", name = "c", descriptor = "(II)Z")
-	public static boolean method4640(@OriginalArg(0) int arg0) {
+	public static boolean isComponentOptionAction(@OriginalArg(0) int arg0) {
 		if (arg0 < 0) {
 			return false;
 		}
@@ -1601,7 +1601,7 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!ud", name = "a", descriptor = "(ILclient!be;)Z")
-	public static boolean method4265(@OriginalArg(1) Component arg0) {
+	public static boolean handleSpecialButtonAction(@OriginalArg(1) Component arg0) {
 		if (arg0.clientCode == 205) {
 			Protocol.anInt5775 = 250;
 			return true;
@@ -1611,7 +1611,7 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(B)V")
-	public static void method1294() {
+	public static void cancelTargeting() {
 		if (!aBoolean302) {
 			return;
 		}
@@ -1628,7 +1628,7 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!ub", name = "b", descriptor = "(IIIIIII)V")
-	public static void method4246(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5) {
+	public static void startTargeting(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5) {
 		@Pc(8) Component local8 = InterfaceList.method1418(arg0, arg1);
 		if (local8 != null && local8.onUse != null) {
 			@Pc(19) HookRequest local19 = new HookRequest();
@@ -1647,11 +1647,11 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!dm", name = "a", descriptor = "(Lclient!be;III)V")
-	public static void method1207(@OriginalArg(0) Component arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	public static void renderTooltip(@OriginalArg(0) Component arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		if (size < 2 && anInt5014 == 0 && !aBoolean302) {
 			return;
 		}
-		@Pc(24) JagString local24 = method471();
+		@Pc(24) JagString local24 = getTooltipText();
 		if (arg0 == null) {
 			@Pc(40) int local40 = Fonts.b12Full.method2859(local24, arg2 + 4, arg1 - -15, client.aRandom1, gregorianDateSeed);
 			InterfaceList.redrawScreen(arg2 + 4, Fonts.b12Full.getStringWidth(local24) + local40, arg1, 15);
@@ -1666,7 +1666,7 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!ej", name = "h", descriptor = "(I)V")
-	public static void method1372() {
+	public static void processClick() {
 		if (anInt3953 == 2) {
 			if (ScriptRunner.anInt3751 == Mouse.anInt5850 && ScriptRunner.anInt1892 == Mouse.anInt5895) {
 				anInt3953 = 0;

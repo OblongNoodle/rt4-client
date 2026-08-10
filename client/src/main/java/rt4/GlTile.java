@@ -118,7 +118,7 @@ public final class GlTile extends Node {
 	}
 
 	@OriginalMember(owner = "client!hg", name = "a", descriptor = "()V")
-	public static void method1939() {
+	public static void resetStaticBuffers() {
 		aClass3_Sub15_3 = null;
 		aClass3_Sub15_2 = null;
 		aByteBuffer5 = null;
@@ -126,7 +126,7 @@ public final class GlTile extends Node {
 	}
 
 	@OriginalMember(owner = "client!hg", name = "b", descriptor = "()V")
-	public final void method1940() {
+	public final void allocateBuffers() {
 		this.anIntArray232 = new int[this.anInt2482];
 		this.anIntArray230 = new int[this.anInt2482];
 		this.anIntArray229 = new int[this.anInt2482];
@@ -149,7 +149,7 @@ public final class GlTile extends Node {
 	}
 
 	@OriginalMember(owner = "client!hg", name = "a", descriptor = "(IIIFFFIF)I")
-	public final int method1941(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) float arg3, @OriginalArg(4) float arg4, @OriginalArg(5) float arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float arg7) {
+	public final int addVertex(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) float arg3, @OriginalArg(4) float arg4, @OriginalArg(5) float arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float arg7) {
 		@Pc(1) long local1 = 0L;
 		if ((arg0 & 0x7F) == 0 || (arg2 & 0x7F) == 0) {
 			local1 = (long) (arg0 + (arg2 << 16)) + ((long) arg6 << 32);
@@ -178,7 +178,7 @@ public final class GlTile extends Node {
 	}
 
 	@OriginalMember(owner = "client!hg", name = "d", descriptor = "()V")
-	public final void method1943() {
+	public final void uploadVertexData() {
 		@Pc(12) Buffer local12 = new Buffer((this.aBoolean139 ? 40 : 36) * this.anInt2483);
 		for (@Pc(14) int local14 = 0; local14 < this.anInt2483; local14++) {
 			if (GlRenderer.bigEndian) {
@@ -230,7 +230,7 @@ public final class GlTile extends Node {
 	}
 
 	@OriginalMember(owner = "client!hg", name = "a", descriptor = "([[[Lclient!bj;FZ)V")
-	public final void method1944(@OriginalArg(0) Tile[][][] arg0, @OriginalArg(1) float arg1, @OriginalArg(2) boolean arg2) {
+	public final void renderTiles(@OriginalArg(0) Tile[][][] arg0, @OriginalArg(1) float arg1, @OriginalArg(2) boolean arg2) {
 		if (aClass3_Sub15_3 == null || aClass3_Sub15_3.data.length < this.anInt2488 * 4) {
 			aClass3_Sub15_3 = new Buffer(this.anInt2488 * 4);
 		} else {
@@ -371,7 +371,7 @@ public final class GlTile extends Node {
 	}
 
 	@OriginalMember(owner = "client!hg", name = "a", descriptor = "(III[I[IZ)I")
-	public final int method1945(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[] arg3, @OriginalArg(4) int[] arg4, @OriginalArg(5) boolean arg5) {
+	public final int addFace(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[] arg3, @OriginalArg(4) int[] arg4, @OriginalArg(5) boolean arg5) {
 		if (this.blend) {
 			this.anIntArrayArray18[this.anInt2489] = arg4;
 			this.aBooleanArray54[this.anInt2489] = arg5;

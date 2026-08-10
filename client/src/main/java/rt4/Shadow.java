@@ -50,7 +50,7 @@ public final class Shadow {
 	}
 
 	@OriginalMember(owner = "client!wm", name = "a", descriptor = "([[III)V")
-	public final void method4676(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final void buildShadowMesh(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		@Pc(4) Buffer local4 = new Buffer(1620);
 		@Pc(11) int local11;
 		for (@Pc(6) int local6 = 0; local6 <= 8; local6++) {
@@ -111,7 +111,7 @@ public final class Shadow {
 	}
 
 	@OriginalMember(owner = "client!wm", name = "a", descriptor = "(Lclient!ek;II)Z")
-	public final boolean method4677(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final boolean updateShadowTexture(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		@Pc(2) byte[] local2 = arg0.pixels;
 		@Pc(5) int local5 = arg0.width;
 		@Pc(19) int local19 = arg1 * 128 + (arg2 * 128 + 1) * local5 + 1;
@@ -166,7 +166,7 @@ public final class Shadow {
 	}
 
 	@OriginalMember(owner = "client!wm", name = "b", descriptor = "()V")
-	public final void method4679() {
+	public final void renderShadow() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.anInt5901);
 		if (this.aClass155_7 == null) {

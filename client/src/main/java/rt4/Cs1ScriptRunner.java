@@ -430,7 +430,7 @@ public class Cs1ScriptRunner {
 								if (MiniMenu.aBoolean302 && (MiniMenu.anInt4999 & 0x40) != 0) {
 									@Pc(583) Component local583 = InterfaceList.method1418(MiniMenu.anInt2512, MiniMenu.anInt506);
 									if (local583 == null) {
-										MiniMenu.method1294();
+										MiniMenu.cancelTargeting();
 									} else {
 										MiniMenu.add(MiniMenu.anInt5393, 1L, MiniMenu.aClass100_961, local563, (short) 11, MiniMenu.aClass100_545, local571);
 									}
@@ -444,7 +444,7 @@ public class Cs1ScriptRunner {
 							}
 							if (component.clientCode == 1339) {
 								if (component.method478()) {
-									method3047(local123, local114, component, rectangle);
+									renderCompass(local123, local114, component, rectangle);
 									if (GlRenderer.enabled) {
 										GlRaster.setClip(arg0, arg6, arg4, arg7);
 									} else {
@@ -454,7 +454,7 @@ public class Cs1ScriptRunner {
 								continue;
 							}
 							if (component.clientCode == 1400) {
-								WorldMap.method2225(local123, local114, component.height, component.width);
+								WorldMap.render(local123, local114, component.height, component.width);
 								InterfaceList.aBooleanArray100[rectangle] = true;
 								InterfaceList.rectangleRedraw[rectangle] = true;
 								if (GlRenderer.enabled) {
@@ -586,7 +586,7 @@ public class Cs1ScriptRunner {
 						}
 						if (InterfaceList.aBooleanArray116[rectangle] || Cheat.rectDebug > 1) {
 							if (component.type == 0 && !component.if3 && component.scrollMaxV > component.height) {
-								method1624(component.scrollY, component.scrollMaxV, component.width + local123, local114, component.height);
+								renderScrollbar(component.scrollY, component.scrollMaxV, component.width + local123, local114, component.height);
 							}
 
 							if (component.type != 1) {
@@ -765,7 +765,7 @@ public class Cs1ScriptRunner {
 													local1934 = MiniMenu.NULL;
 												}
 												if ((local1989.stackable == 1 || component.objCount != 1) && component.objCount != -1) {
-													local1934 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local1934, JagString.aClass100_375, method1548(component.objCount)});
+													local1934 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local1934, JagString.aClass100_375, formatItemCount(component.objCount)});
 												}
 											}
 											if (aClass13_10 == component) {
@@ -1009,7 +1009,7 @@ public class Cs1ScriptRunner {
 															if (local2611.stackable != 1 && component.objCounts[local276] == 1) {
 																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.aClass100_978});
 															} else {
-																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.aClass100_375, method1548(component.objCounts[local276])});
+																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.aClass100_375, formatItemCount(component.objCounts[local276])});
 															}
 															local556 = local123 + memory * (component.invMarginX + 115);
 															objId = (component.invMarginY + 12) * local468 + local114;
@@ -1133,7 +1133,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(Z)V")
-	public static void method182() {
+	public static void renderTopLevelInterface() {
 		aClass13Array13 = null;
 		method86(InterfaceList.topLevelInterface, 0, GameShell.canvasWidth, 0, -1, GameShell.canvasHeight, 0, 0);
 		if (aClass13Array13 != null) {
@@ -1143,7 +1143,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!mj", name = "a", descriptor = "(IILclient!be;IB)V")
-	public static void method3047(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Component arg2, @OriginalArg(3) int arg3) {
+	public static void renderCompass(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Component arg2, @OriginalArg(3) int arg3) {
 		if (GlRenderer.enabled) {
 			GlRaster.setClip(arg0, arg1, arg2.width + arg0, arg2.height + arg1);
 		}
@@ -1165,7 +1165,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!fn", name = "a", descriptor = "(BIIIII)V")
-	public static void method1624(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void renderScrollbar(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		Sprites.scrollbars[0].renderTransparent(arg2, arg3);
 		Sprites.scrollbars[1].renderTransparent(arg2, arg4 + arg3 - 16);
 		@Pc(35) int local35 = arg4 * (arg4 - 32) / arg1;
@@ -1243,7 +1243,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!fi", name = "a", descriptor = "(BI)Lclient!na;")
-	public static JagString method1548(@OriginalArg(1) int arg0) {
+	public static JagString formatItemCount(@OriginalArg(1) int arg0) {
 		@Pc(9) JagString local9 = JagString.parseInt(arg0);
 		for (@Pc(21) int local21 = local9.length() - 3; local21 > 0; local21 -= 3) {
 			local9 = JagString.concatenate(new JagString[]{local9.substring(local21, 0), JagString.aClass100_760, local9.substring(local21)});
@@ -1272,7 +1272,7 @@ public class Cs1ScriptRunner {
 		if (WorldMap.aClass3_Sub2_Sub1_2 == null || arg2 != WorldMap.aClass3_Sub2_Sub1_2.width || WorldMap.aClass3_Sub2_Sub1_2.height != arg1) {
 			@Pc(63) SoftwareSprite local63 = new SoftwareSprite(arg2, arg1);
 			SoftwareRaster.setSize(local63.pixels, arg2, arg1);
-			WorldMap.method4364(arg2, 0, WorldMap.width, 0, 0, WorldMap.length, arg1, 0);
+			WorldMap.renderMapViewport(arg2, 0, WorldMap.width, 0, 0, WorldMap.length, arg1, 0);
 			if (GlRenderer.enabled) {
 				WorldMap.aClass3_Sub2_Sub1_2 = new GlSprite(local63);
 			} else {
@@ -1323,12 +1323,12 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!da", name = "a", descriptor = "(IIILclient!be;)V")
-	public static void method1015(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) Component arg2) {
-		if (aClass13_14 != null || aBoolean108 || (arg2 == null || method1836(arg2) == null)) {
+	public static void startComponentDrag(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) Component arg2) {
+		if (aClass13_14 != null || aBoolean108 || (arg2 == null || getDragParent(arg2) == null)) {
 			return;
 		}
 		aClass13_14 = arg2;
-		aClass13_1 = method1836(arg2);
+		aClass13_1 = getDragParent(arg2);
 		anInt5388 = arg1;
 		aBoolean172 = false;
 		anInt4851 = 0;
@@ -1336,7 +1336,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(ILclient!be;)Lclient!be;")
-	public static Component method1836(@OriginalArg(1) Component arg0) {
+	public static Component getDragParent(@OriginalArg(1) Component arg0) {
 		@Pc(12) Component local12 = InterfaceList.getDragRenderParent(arg0);
 		if (local12 == null) {
 			local12 = arg0.aClass13_5;
@@ -1400,10 +1400,10 @@ public class Cs1ScriptRunner {
 						Protocol.outboundBuffer.p4(InterfaceList.aClass13_12.id);
 						Protocol.outboundBuffer.ip2(aClass13_14.createdComponentId);
 					}
-				} else if ((VarpDomain.anInt2952 == 1 || MiniMenu.method4640(MiniMenu.size - 1)) && MiniMenu.size > 2) {
+				} else if ((VarpDomain.anInt2952 == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
 					ScriptRunner.method3901();
 				} else if (MiniMenu.size > 0) {
-					MiniMenu.method1372();
+					MiniMenu.processClick();
 				}
 				aClass13_14 = null;
 			}

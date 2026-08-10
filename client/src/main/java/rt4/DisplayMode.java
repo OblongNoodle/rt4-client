@@ -259,7 +259,7 @@ public final class DisplayMode {
 					Rasteriser.setBrightness(0.6F);
 				}
 			}
-			GlTile.method1939();
+			GlTile.resetStaticBuffers();
 			LoginManager.clearLoginScreenSprites();
 		}
 		SceneGraph.aBoolean130 = !SceneGraph.allLevelsAreVisible();

@@ -1089,7 +1089,7 @@ public class LoginManager {
 		if (GlRenderer.enabled) {
 			for (chunkX = 0; chunkX < 13; chunkX++) {
 				for (chunkY = 0; chunkY < 13; chunkY++) {
-					ShadowManager.shadows[chunkX][chunkY].method4676(SceneGraph.tileHeights[0], chunkX * 8, chunkY * 8);
+					ShadowManager.shadows[chunkX][chunkY].buildShadowMesh(SceneGraph.tileHeights[0], chunkX * 8, chunkY * 8);
 				}
 			}
 		}
@@ -1129,7 +1129,7 @@ public class LoginManager {
 				Protocol.outboundBuffer.p1isaac(110);
 			}
 		}
-		WorldMap.method2720();
+		WorldMap.restorePreviousMap();
 		client.audioLoop();
 		GameShell.resetTimer();
 	}
@@ -1438,7 +1438,7 @@ public class LoginManager {
 		InterfaceList.anInt4311 = client.loop;
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.rectangles = 0;
-			Cs1ScriptRunner.method182();
+			Cs1ScriptRunner.renderTopLevelInterface();
 		}
 		if (GlRenderer.enabled) {
 			GlRaster.method1177();
@@ -1456,9 +1456,9 @@ public class LoginManager {
 				MiniMenu.drawA();
 			}
 		} else if (aClass13_13 != null) {
-			MiniMenu.method1207(aClass13_13, Cs1ScriptRunner.anInt3484, Cs1ScriptRunner.anInt3260);
+			MiniMenu.renderTooltip(aClass13_13, Cs1ScriptRunner.anInt3484, Cs1ScriptRunner.anInt3260);
 		} else if (Cs1ScriptRunner.anInt2503 != -1) {
-			MiniMenu.method1207(null, InterfaceList.anInt5574, Cs1ScriptRunner.anInt2503);
+			MiniMenu.renderTooltip(null, InterfaceList.anInt5574, Cs1ScriptRunner.anInt2503);
 		}
 		local60 = Cs1ScriptRunner.aBoolean108 ? -1 : getActiveCursorId();
 		if (local60 == -1) {

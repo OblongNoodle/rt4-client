@@ -3060,7 +3060,7 @@ public class SceneGraph {
 						WaterMaterialRenderer.method619(local285.underwaterColor);
 						FogManager.setFogColor(WaterMaterialRenderer.method2422());
 					}
-					local285.method1944(tiles, local294, false);
+					local285.renderTiles(tiles, local294, false);
 				}
 				UnderwaterMaterialRenderer.method4608();
 			} else {
@@ -3076,7 +3076,7 @@ public class SceneGraph {
 						if (local336.texture != -1 && Rasteriser.textureProvider.getMaterialType(local336.texture) == MaterialManager.WATER && Preferences.highWaterDetail) {
 							WaterMaterialRenderer.method619(local336.underwaterColor);
 						}
-						local336.method1944(tiles, local350, false);
+						local336.renderTiles(tiles, local350, false);
 					}
 					if (local32 == 0 && Preferences.sceneryShadowsType > 0) {
 						GlRenderer.setDepthLayer(101.5F);
@@ -3655,7 +3655,7 @@ public class SceneGraph {
 		}
 		@Pc(493) GlTile local493;
 		for (local493 = (GlTile) local103.head(); local493 != null; local493 = (GlTile) local103.next()) {
-			local493.method1940();
+			local493.allocateBuffers();
 		}
 		for (local16 = 1; local16 <= 102; local16++) {
 			for (local112 = 1; local112 <= 102; local112++) {
@@ -3774,7 +3774,7 @@ public class SceneGraph {
 			if (local493.anInt2483 == 0) {
 				local493.unlink();
 			} else {
-				local493.method1943();
+				local493.uploadVertexData();
 			}
 		}
 		local16 = local103.size();
@@ -3801,7 +3801,7 @@ public class SceneGraph {
 			@Pc(88) int local88 = arg4[local53 + local53 + 1];
 			local31[local53] = computeGlTileVertex(local41, (float) arg12, local11, local51, arg0, local80, arg7, arg17, local25, arg18, false, arg3, arg9, arg5, local67, arg11, local88);
 		}
-		arg3.method1945(arg6, arg7, arg5, local31, null, false);
+		arg3.addFace(arg6, arg7, arg5, local31, null, false);
 	}
 
 	@OriginalMember(owner = "client!ge", name = "a", descriptor = "(IIIIIIII)V")
@@ -4521,7 +4521,7 @@ public class SceneGraph {
 		}
 		@Pc(1161) GlTile local1161;
 		for (local1161 = (GlTile) local10.head(); local1161 != null; local1161 = (GlTile) local10.next()) {
-			local1161.method1940();
+			local1161.allocateBuffers();
 		}
 		for (local12 = 1; local12 <= 102; local12++) {
 			for (local17 = 1; local17 <= 102; local17++) {
@@ -4780,7 +4780,7 @@ public class SceneGraph {
 							local2527[local2621++] = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2318[2], local2329, arg1, local17, 128, arg0, 64);
 						}
 						local2527[local2621++] = local2571;
-						local2329.method1945(local30, local12, local17, local2527, null, true);
+						local2329.addFace(local30, local12, local17, local2527, null, true);
 					}
 				}
 			}
@@ -4789,7 +4789,7 @@ public class SceneGraph {
 			if (local1161.anInt2483 == 0) {
 				local1161.unlink();
 			} else {
-				local1161.method1943();
+				local1161.uploadVertexData();
 			}
 		}
 		local12 = local10.size();
@@ -4969,7 +4969,7 @@ public class SceneGraph {
 				local87[9] = local39[2];
 			}
 		}
-		arg14.method1945(arg7, arg3, arg11, local39, local87, false);
+		arg14.addFace(arg7, arg3, arg11, local39, local87, false);
 	}
 
 	@OriginalMember(owner = "client!ql", name = "a", descriptor = "(IFII[[I[[II[[FIBIZLclient!hg;[[FII[[FI)I")
@@ -5036,7 +5036,7 @@ public class SceneGraph {
 		@Pc(405) int local405 = arg16 + (arg13 << 7);
 		@Pc(413) int local413 = interpolateHeight(arg14, arg13, arg5, arg6, arg16);
 		@Pc(420) int local420 = (arg6 << 7) + arg14;
-		return arg11.method1941(local420, local413, local405, local78, local66, local72, arg10 ? local80 & 0xFFFFFF00 : local80, arg4 == null ? 0.0F : (float) (local413 - interpolateHeight(arg14, arg13, arg4, arg6, arg16)) / arg1);
+		return arg11.addVertex(local420, local413, local405, local78, local66, local72, arg10 ? local80 & 0xFFFFFF00 : local80, arg4 == null ? 0.0F : (float) (local413 - interpolateHeight(arg14, arg13, arg4, arg6, arg16)) / arg1);
 	}
 
 	@OriginalMember(owner = "client!oj", name = "a", descriptor = "(IBI[[III)I")

@@ -708,7 +708,7 @@ public class InterfaceList {
 							}
 						}
 						if (local221) {
-							Cs1ScriptRunner.method1015(Mouse.clickY - local55, Mouse.clickX - local50, component);
+							Cs1ScriptRunner.startComponentDrag(Mouse.clickY - local55, Mouse.clickX - local50, component);
 						}
 						if (Cs1ScriptRunner.aClass13_14 != null && Cs1ScriptRunner.aClass13_14 != component && local207 && getServerActiveProperties(component).isDragTarget()) {
 							aClass13_12 = component;
@@ -773,8 +773,8 @@ public class InterfaceList {
 											anInt3337 = 2;
 										}
 										if (anInt3337 == 2) {
-											WorldMap.method1964(anInt4620 + (int) ((double) (Cs1ScriptRunner.anInt5388 - Mouse.lastMouseX) * 2.0D / (double) WorldMap.targetZoom));
-											WorldMap.method4641(anInt1885 + (int) ((double) (Cs1ScriptRunner.anInt4035 - Mouse.lastMouseY) * 2.0D / (double) WorldMap.targetZoom));
+											WorldMap.setViewX(anInt4620 + (int) ((double) (Cs1ScriptRunner.anInt5388 - Mouse.lastMouseX) * 2.0D / (double) WorldMap.targetZoom));
+											WorldMap.setViewY(anInt1885 + (int) ((double) (Cs1ScriptRunner.anInt4035 - Mouse.lastMouseY) * 2.0D / (double) WorldMap.targetZoom));
 										}
 										continue;
 									}
@@ -783,7 +783,7 @@ public class InterfaceList {
 								}
 								if (component.clientCode == 1401) {
 									if (local212) {
-										WorldMap.method2387(component.width, Mouse.lastMouseY - local55, Mouse.lastMouseX - local50, component.height);
+										WorldMap.setViewFromMousePosition(component.width, Mouse.lastMouseY - local55, Mouse.lastMouseX - local50, component.height);
 									}
 									continue;
 								}
@@ -1151,7 +1151,7 @@ public class InterfaceList {
 		anInt5574 = -1;
 		if (topLevelInterface != -1) {
 			rectangles = 0;
-			Cs1ScriptRunner.method182();
+			Cs1ScriptRunner.renderTopLevelInterface();
 		}
 		if (GlRenderer.enabled) {
 			GlRaster.method1177();

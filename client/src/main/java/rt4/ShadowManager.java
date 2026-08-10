@@ -136,12 +136,12 @@ public final class ShadowManager {
 							if (local51 - arg1 >= -arg2 && local51 - arg1 <= arg2 && arg4[local29 + arg2 - arg0][local51 + arg2 - arg1]) {
 								@Pc(89) Shadow local89 = shadows[local17][local22];
 								if (local89.outputToSprite) {
-									local89.method4677(shadowMapImage, local17, local22);
+									local89.updateShadowTexture(shadowMapImage, local17, local22);
 									local89.outputToSprite = false;
 								}
 								gl.glPushMatrix();
 								gl.glTranslatef((float) (local17 * 1024), 0.0F, (float) (local22 * 1024));
-								local89.method4679();
+								local89.renderShadow();
 								gl.glPopMatrix();
 								continue label52;
 							}
