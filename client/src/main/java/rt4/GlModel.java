@@ -923,7 +923,7 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public final Model method4560(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
+	public final Model copyForAnimation(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
 		return this.method4114(arg0, arg1, arg2, aClass8_Sub1_Sub1_4, aClass8_Sub1_Sub1_3);
 	}
 
@@ -1140,7 +1140,7 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "m", descriptor = "()V")
 	public final void method4093() {
 		if (this.aShortArray76 == null) {
-			this.method4578();
+			this.rotateClockwise();
 			return;
 		}
 		@Pc(7) int local7;
@@ -1227,7 +1227,7 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "b", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public final Model method4568(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
+	public final Model copyForLoc(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
 		return this.method4114(arg0, arg1, arg2, aClass8_Sub1_Sub1_6, aClass8_Sub1_Sub1_5);
 	}
 
@@ -1443,7 +1443,7 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(I[IIIIZI[I)V")
 	@Override
-	protected final void method4577(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7) {
+	protected final void transformMaskedBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7) {
 		@Pc(2) int local2 = arg1.length;
 		@Pc(18) int local18;
 		@Pc(26) int local26;
@@ -1947,7 +1947,7 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "p", descriptor = "()V")
 	public final void method4102() {
 		if (this.aShortArray76 == null) {
-			this.method4552();
+			this.rotate180();
 			return;
 		}
 		@Pc(7) int local7;
@@ -1980,13 +1980,13 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "c", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public final Model method4572(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
+	public final Model copyForEntity(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
 		return this.method4114(arg0, arg1, arg2, aClass8_Sub1_Sub1_2, aClass8_Sub1_Sub1_1);
 	}
 
 	@OriginalMember(owner = "client!td", name = "e", descriptor = "()V")
 	@Override
-	public final void method4552() {
+	public final void rotate180() {
 		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
 			this.vertexX[local1] = -this.vertexX[local1];
 			this.vertexZ[local1] = -this.vertexZ[local1];
@@ -2041,7 +2041,7 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "d", descriptor = "()Z")
 	@Override
-	protected final boolean method4551() {
+	protected final boolean hasAnimationBones() {
 		if (this.boneVertices == null) {
 			return false;
 		}
@@ -2217,7 +2217,7 @@ public final class GlModel extends Model {
 			} else if (arg0 == 3) {
 				local150 = (arg1 & 0xFF) * 4;
 				local161 = (arg1 >> 8 & 0xFF) * 4;
-				this.method4573(arg3, arg5, arg6, arg7, local150, local161);
+				this.alignToTerrain(arg3, arg5, arg6, arg7, local150, local161);
 			} else if (arg0 == 4) {
 				local150 = arg2.bounds.maxY - arg2.bounds.minY;
 				for (local161 = 0; local161 < this.vertexCount; local161++) {
@@ -2945,7 +2945,7 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(I[IIIIZ)V")
 	@Override
-	protected final void method4569(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
+	protected final void transformBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
 		@Pc(2) int local2 = arg1.length;
 		@Pc(18) int local18;
 		@Pc(26) int local26;
@@ -3169,7 +3169,7 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIII)V")
 	@Override
-	protected final void method4567(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	protected final void transformShadowBone(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		@Pc(3) int local3;
 		@Pc(11) int local11;
 		if (arg0 == 0) {
@@ -3407,7 +3407,7 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "f", descriptor = "()V")
 	@Override
-	protected final void method4557() {
+	protected final void resetAfterAnimation() {
 		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
 			this.vertexX[local1] = this.vertexX[local1] + 7 >> 4;
 			this.vertexY[local1] = this.vertexY[local1] + 7 >> 4;
@@ -3564,7 +3564,7 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "l", descriptor = "()V")
 	@Override
-	public final void method4578() {
+	public final void rotateClockwise() {
 		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
 			@Pc(10) int local10 = this.vertexZ[local1];
 			this.vertexZ[local1] = this.vertexX[local1];

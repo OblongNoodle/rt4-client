@@ -630,7 +630,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "e", descriptor = "()V")
 	@Override
-	public void method4552() {
+	public void rotate180() {
 		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
 			this.vertexX[local1] = -this.vertexX[local1];
 			this.vertexZ[local1] = -this.vertexZ[local1];
@@ -759,7 +759,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "d", descriptor = "()Z")
 	@Override
-	protected boolean method4551() {
+	protected boolean hasAnimationBones() {
 		if (this.boneVertices == null) {
 			return false;
 		} else {
@@ -1059,7 +1059,7 @@ public final class SoftwareModel extends Model {
 			} else if (arg0 == 3) {
 				local285 = (arg1 & 0xFF) * 4;
 				local296 = (arg1 >> 8 & 0xFF) * 4;
-				local150.method4573(arg2, arg4, arg5, arg6, local285, local296);
+				local150.alignToTerrain(arg2, arg4, arg5, arg6, local285, local296);
 			} else if (arg0 == 4) {
 				local285 = this.maxY - this.minY;
 				for (local296 = 0; local296 < this.vertexCount; local296++) {
@@ -1340,7 +1340,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "a", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public Model method4560(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean arg2) {
+	public Model copyForAnimation(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean arg2) {
 		if (!shareAlpha && aByteArray77.length < this.triangleCount) {
 			aByteArray77 = new byte[this.triangleCount + 100];
 		}
@@ -1378,7 +1378,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "f", descriptor = "()V")
 	@Override
-	protected void method4557() {
+	protected void resetAfterAnimation() {
 		if (this.aBoolean304) {
 			this.method4581();
 			this.aBoolean304 = false;
@@ -1401,7 +1401,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "a", descriptor = "(I[IIIIZ)V")
 	@Override
-	protected void method4569(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
+	protected void transformBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
 		@Pc(2) int local2 = arg1.length;
 		@Pc(6) int local6;
 		@Pc(14) int local14;
@@ -1577,7 +1577,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "c", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public Model method4572(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean arg2) {
+	public Model copyForEntity(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean arg2) {
 		if (!shareAlpha && aByteArray76.length < this.triangleCount) {
 			aByteArray76 = new byte[this.triangleCount + 100];
 		}
@@ -1904,7 +1904,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "l", descriptor = "()V")
 	@Override
-	public void method4578() {
+	public void rotateClockwise() {
 		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
 			@Pc(10) int local10 = this.vertexZ[local1];
 			this.vertexZ[local1] = this.vertexX[local1];
@@ -2027,7 +2027,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "a", descriptor = "(I[IIIIZI[I)V")
 	@Override
-	protected void method4577(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7) {
+	protected void transformMaskedBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7) {
 		@Pc(2) int local2 = arg1.length;
 		@Pc(6) int local6;
 		@Pc(14) int local14;
@@ -2403,7 +2403,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "a", descriptor = "(IIII)V")
 	@Override
-	protected void method4567(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	protected void transformShadowBone(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		@Pc(3) int local3;
 		@Pc(11) int local11;
 		if (arg0 == 0) {
@@ -2526,7 +2526,7 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "b", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public Model method4568(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean arg2) {
+	public Model copyForLoc(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean arg2) {
 		if (!shareAlpha && aByteArray78.length < this.triangleCount) {
 			aByteArray78 = new byte[this.triangleCount + 100];
 		}

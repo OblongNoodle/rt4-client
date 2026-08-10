@@ -509,22 +509,22 @@ public final class PlayerAppearance {
 				}
 			}
 		}
-		@Pc(1284) Model local1284 = local154.method4572(!local827, !local836, !local838);
+		@Pc(1284) Model local1284 = local154.copyForEntity(!local827, !local836, !local838);
 		local481 = 0;
 		local598 = 1;
 		while (local481 < local346) {
 			if (slotCurrentFramesets[local481] != null) {
-				local1284.method4565(slotCurrentFramesets[local481], slotCurrentFrames[local481], slotTweenFramesets[local481], slotTweenFrames[local481], slotDelayClocks[local481] - 1, slotFrameDelays[local481], local598, slotSeqTypes[local481].aBoolean278, this.modelTransformCache[local481]);
+				local1284.applyMaskedAnimation(slotCurrentFramesets[local481], slotCurrentFrames[local481], slotTweenFramesets[local481], slotTweenFrames[local481], slotDelayClocks[local481] - 1, slotFrameDelays[local481], local598, slotSeqTypes[local481].aBoolean278, this.modelTransformCache[local481]);
 			}
 			local481++;
 			local598 <<= 0x1;
 		}
 		if (local1042 != null && local1154 != null) {
-			local1284.method4570(local1042, local353, local1040, local360, arg6 - 1, local374, local1154, local979, local1156, local451, arg4 - 1, local457, arg3.framegroup, arg3.aBoolean278 | arg2.aBoolean278);
+			local1284.applyDualAnimation(local1042, local353, local1040, local360, arg6 - 1, local374, local1154, local979, local1156, local451, arg4 - 1, local457, arg3.framegroup, arg3.aBoolean278 | arg2.aBoolean278);
 		} else if (local1042 != null) {
-			local1284.method4558(local1042, local353, local1040, local360, arg6 - 1, local374, arg3.aBoolean278);
+			local1284.applyAnimation(local1042, local353, local1040, local360, arg6 - 1, local374, arg3.aBoolean278);
 		} else if (local1154 != null) {
-			local1284.method4558(local1154, local979, local1156, local451, arg4 - 1, local457, arg2.aBoolean278);
+			local1284.applyAnimation(local1154, local979, local1156, local451, arg4 - 1, local457, arg2.aBoolean278);
 		}
 		for (local481 = 0; local481 < local346; local481++) {
 			slotCurrentFramesets[local481] = null;

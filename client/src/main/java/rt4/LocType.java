@@ -881,13 +881,13 @@ public final class LocType {
 			if (arg11 == 10 && arg5 > 3) {
 				if (!local234) {
 					local234 = true;
-					local195 = (SoftwareModel) local195.method4568(true, true, true);
+					local195 = (SoftwareModel) local195.copyForLoc(true, true, true);
 				}
 				local195.rotateY(256);
 			}
 			if (this.hillskewType != 0) {
 				if (!local234) {
-					local195 = (SoftwareModel) local195.method4568(true, true, true);
+					local195 = (SoftwareModel) local195.copyForLoc(true, true, true);
 				}
 				local195 = local195.method4586(this.hillskewType, this.hillskewAmount, arg6, arg9, arg1, arg3, arg0, false);
 			}
@@ -917,7 +917,7 @@ public final class LocType {
 		}
 		if (arg11 == 10 && arg5 > 3) {
 			if (!local80) {
-				local82 = (GlModel) local82.method4568(true, true, true);
+				local82 = (GlModel) local82.copyForLoc(true, true, true);
 				local80 = true;
 			}
 			local82.rotateY(256);
@@ -929,7 +929,7 @@ public final class LocType {
 		}
 		if (this.hillskewType != 0) {
 			if (!local80) {
-				local82 = (GlModel) local82.method4568(true, true, true);
+				local82 = (GlModel) local82.copyForLoc(true, true, true);
 			}
 			local82.method4110(this.hillskewType, this.hillskewAmount, local46, arg6, arg9, arg1, arg3, arg0);
 		}

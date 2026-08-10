@@ -511,9 +511,9 @@ public final class Player extends PathingEntity {
 				}
 				local515.translate(this.attachmentXFine - this.xFine, this.attachmentY + -this.tileHeight, this.attachmentYFine - this.yFine);
 				if (this.targetAngle == 512) {
-					local515.method4578();
+					local515.rotateClockwise();
 				} else if (this.targetAngle == 1024) {
-					local515.method4552();
+					local515.rotate180();
 				} else if (this.targetAngle == 1536) {
 					local515.rotateCounterClockwise();
 				}
@@ -542,9 +542,9 @@ public final class Player extends PathingEntity {
 		if (this.targetAngle == 512) {
 			local515.rotateCounterClockwise();
 		} else if (this.targetAngle == 1024) {
-			local515.method4552();
+			local515.rotate180();
 		} else if (this.targetAngle == 1536) {
-			local515.method4578();
+			local515.rotateClockwise();
 		}
 		local515.translate(this.xFine - this.attachmentXFine, -this.attachmentY + this.tileHeight, this.yFine - this.attachmentYFine);
 	}

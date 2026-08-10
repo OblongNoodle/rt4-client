@@ -123,7 +123,7 @@ public final class SpotAnimType {
 		}
 		@Pc(118) Model local118;
 		if (this.seqId == -1 || arg1 == -1) {
-			local118 = local13.method4560(true, true, true);
+			local118 = local13.copyForAnimation(true, true, true);
 		} else {
 			local118 = SeqTypeList.get(this.seqId).method4219(arg0, arg2, arg1, local13);
 		}
@@ -135,10 +135,10 @@ public final class SpotAnimType {
 				local118.rotateCounterClockwise();
 			}
 			if (this.angle == 180) {
-				local118.method4552();
+				local118.rotate180();
 			}
 			if (this.angle == 270) {
-				local118.method4578();
+				local118.rotateClockwise();
 			}
 		}
 		return local118;

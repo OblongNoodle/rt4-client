@@ -15,7 +15,7 @@ public abstract class Model extends Entity {
 	public boolean pickable = false;
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "([[III)I")
-	public static int method4556(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public static int interpolateHeight(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		@Pc(3) int local3 = arg1 >> 7;
 		@Pc(7) int local7 = arg2 >> 7;
 		if (local3 < 0 || local7 < 0 || local3 >= arg0.length || local7 >= arg0[0].length) {
@@ -35,13 +35,13 @@ public abstract class Model extends Entity {
 	public abstract int getMinY();
 
 	@OriginalMember(owner = "client!ak", name = "d", descriptor = "()Z")
-	protected abstract boolean method4551();
+	protected abstract boolean hasAnimationBones();
 
 	@OriginalMember(owner = "client!ak", name = "e", descriptor = "()V")
-	public abstract void method4552();
+	public abstract void rotate180();
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!jm;Lclient!ne;Lclient!ne;II[ZZZI[I)V")
-	private void method4553(@OriginalArg(0) AnimBase arg0, @OriginalArg(1) AnimFrame arg1, @OriginalArg(2) AnimFrame arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean[] arg5, @OriginalArg(6) boolean arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int[] arg9) {
+	private void applyAnimationBlend(@OriginalArg(0) AnimBase arg0, @OriginalArg(1) AnimFrame arg1, @OriginalArg(2) AnimFrame arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean[] arg5, @OriginalArg(6) boolean arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int[] arg9) {
 		@Pc(5) int local5;
 		if (arg2 == null || arg3 == 0) {
 			for (local5 = 0; local5 < arg1.length; local5++) {
@@ -52,16 +52,16 @@ public abstract class Model extends Entity {
 					if (local32 != -1) {
 						local42 = arg8 & arg0.parts[local32];
 						if (local42 == 65535) {
-							this.method4569(0, arg0.bones[local32], 0, 0, 0, arg7);
+							this.transformBone(0, arg0.bones[local32], 0, 0, 0, arg7);
 						} else {
-							this.method4577(0, arg0.bones[local32], 0, 0, 0, arg7, local42, arg9);
+							this.transformMaskedBone(0, arg0.bones[local32], 0, 0, 0, arg7, local42, arg9);
 						}
 					}
 					local42 = arg8 & arg0.parts[local14];
 					if (local42 == 65535) {
-						this.method4569(arg0.types[local14], arg0.bones[local14], arg1.x[local5], arg1.y[local5], arg1.z[local5], arg7);
+						this.transformBone(arg0.types[local14], arg0.bones[local14], arg1.x[local5], arg1.y[local5], arg1.z[local5], arg7);
 					} else {
-						this.method4577(arg0.types[local14], arg0.bones[local14], arg1.x[local5], arg1.y[local5], arg1.z[local5], arg7, local42, arg9);
+						this.transformMaskedBone(arg0.types[local14], arg0.bones[local14], arg1.x[local5], arg1.y[local5], arg1.z[local5], arg7, local42, arg9);
 					}
 				}
 			}
@@ -157,23 +157,23 @@ public abstract class Model extends Entity {
 					if (local228 != -1) {
 						local308 = arg8 & arg0.parts[local228];
 						if (local308 == 65535) {
-							this.method4569(0, arg0.bones[local228], 0, 0, 0, arg7);
+							this.transformBone(0, arg0.bones[local228], 0, 0, 0, arg7);
 						} else {
-							this.method4577(0, arg0.bones[local228], 0, 0, 0, arg7, local308, arg9);
+							this.transformMaskedBone(0, arg0.bones[local228], 0, 0, 0, arg7, local308, arg9);
 						}
 					} else if (local267 != -1) {
 						local308 = arg8 & arg0.parts[local267];
 						if (local308 == 65535) {
-							this.method4569(0, arg0.bones[local267], 0, 0, 0, arg7);
+							this.transformBone(0, arg0.bones[local267], 0, 0, 0, arg7);
 						} else {
-							this.method4577(0, arg0.bones[local267], 0, 0, 0, arg7, local308, arg9);
+							this.transformMaskedBone(0, arg0.bones[local267], 0, 0, 0, arg7, local308, arg9);
 						}
 					}
 					local308 = arg8 & arg0.parts[local138];
 					if (local308 == 65535) {
-						this.method4569(local201, arg0.bones[local138], local294, local296, local298, arg7);
+						this.transformBone(local201, arg0.bones[local138], local294, local296, local298, arg7);
 					} else {
-						this.method4577(local201, arg0.bones[local138], local294, local296, local298, arg7, local308, arg9);
+						this.transformMaskedBone(local201, arg0.bones[local138], local294, local296, local298, arg7, local308, arg9);
 					}
 				} else {
 					if (local144) {
@@ -191,8 +191,8 @@ public abstract class Model extends Entity {
 	public abstract void rotateY(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;I)V")
-	public final void method4555(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1) {
-		if (arg1 == -1 || !this.method4551()) {
+	public final void applyShadowAnimation(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1) {
+		if (arg1 == -1 || !this.hasAnimationBones()) {
 			return;
 		}
 		@Pc(12) AnimFrame local12 = arg0.frames[arg1];
@@ -201,20 +201,20 @@ public abstract class Model extends Entity {
 			@Pc(26) short local26 = local12.indices[local17];
 			if (local15.shadow[local26]) {
 				if (local12.prevOriginIndices[local17] != -1) {
-					this.method4567(0, 0, 0, 0);
+					this.transformShadowBone(0, 0, 0, 0);
 				}
-				this.method4567(local15.types[local26], local12.x[local17], local12.y[local17], local12.z[local17]);
+				this.transformShadowBone(local15.types[local26], local12.x[local17], local12.y[local17], local12.z[local17]);
 			}
 		}
-		this.method4557();
+		this.resetAfterAnimation();
 	}
 
 	@OriginalMember(owner = "client!ak", name = "f", descriptor = "()V")
-	protected abstract void method4557();
+	protected abstract void resetAfterAnimation();
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;ILclient!cl;IIIZ)V")
-	public final void method4558(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
-		if (arg1 == -1 || !this.method4551()) {
+	public final void applyAnimation(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
+		if (arg1 == -1 || !this.hasAnimationBones()) {
 			return;
 		}
 		@Pc(12) AnimFrame local12 = arg0.frames[arg1];
@@ -226,15 +226,15 @@ public abstract class Model extends Entity {
 				local17 = null;
 			}
 		}
-		this.method4553(local15, local12, local17, arg4, arg5, null, false, arg6, 65535, null);
-		this.method4557();
+		this.applyAnimationBlend(local15, local12, local17, arg4, arg5, null, false, arg6, 65535, null);
+		this.resetAfterAnimation();
 	}
 
 	@OriginalMember(owner = "client!ak", name = "b", descriptor = "(III)V")
 	public abstract void resize(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(ZZZ)Lclient!ak;")
-	public abstract Model method4560(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
+	public abstract Model copyForAnimation(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
 
 	@OriginalMember(owner = "client!ak", name = "g", descriptor = "()I")
 	public abstract int getMaxX();
@@ -249,8 +249,8 @@ public abstract class Model extends Entity {
 	public abstract void rotateZ(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;ILclient!cl;IIIIZ[I)V")
-	public final void method4565(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int[] arg8) {
-		if (arg1 == -1 || !this.method4551()) {
+	public final void applyMaskedAnimation(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int[] arg8) {
+		if (arg1 == -1 || !this.hasAnimationBones()) {
 			return;
 		}
 		@Pc(12) AnimFrame local12 = arg0.frames[arg1];
@@ -262,30 +262,30 @@ public abstract class Model extends Entity {
 				local17 = null;
 			}
 		}
-		this.method4553(local15, local12, local17, arg4, arg5, null, false, arg7, arg6, arg8);
-		this.method4557();
+		this.applyAnimationBlend(local15, local12, local17, arg4, arg5, null, false, arg7, arg6, arg8);
+		this.resetAfterAnimation();
 	}
 
 	@OriginalMember(owner = "client!ak", name = "j", descriptor = "()I")
 	public abstract int getLengthXZ();
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(IIII)V")
-	protected abstract void method4567(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3);
+	protected abstract void transformShadowBone(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3);
 
 	@OriginalMember(owner = "client!ak", name = "b", descriptor = "(ZZZ)Lclient!ak;")
-	public abstract Model method4568(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
+	public abstract Model copyForLoc(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(I[IIIIZ)V")
-	protected abstract void method4569(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5);
+	protected abstract void transformBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;ILclient!cl;IIILclient!cl;ILclient!cl;III[ZZ)V")
-	public final void method4570(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) AnimFrameset arg6, @OriginalArg(7) int arg7, @OriginalArg(8) AnimFrameset arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) boolean[] arg12, @OriginalArg(13) boolean arg13) {
+	public final void applyDualAnimation(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) AnimFrameset arg6, @OriginalArg(7) int arg7, @OriginalArg(8) AnimFrameset arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) boolean[] arg12, @OriginalArg(13) boolean arg13) {
 		if (arg1 == -1) {
 			return;
 		}
 		if (arg12 == null || arg7 == -1) {
-			this.method4558(arg0, arg1, arg2, arg3, arg4, arg5, arg13);
-		} else if (this.method4551()) {
+			this.applyAnimation(arg0, arg1, arg2, arg3, arg4, arg5, arg13);
+		} else if (this.hasAnimationBones()) {
 			@Pc(27) AnimFrame local27 = arg0.frames[arg1];
 			@Pc(30) AnimBase local30 = local27.base;
 			@Pc(32) AnimFrame local32 = null;
@@ -303,10 +303,10 @@ public abstract class Model extends Entity {
 					local52 = null;
 				}
 			}
-			this.method4553(local30, local27, local32, arg4, arg5, arg12, false, arg13, 65535, null);
-			this.method4569(0, new int[0], 0, 0, 0, arg13);
-			this.method4553(local30, local50, local52, arg10, arg11, arg12, true, arg13, 65535, null);
-			this.method4557();
+			this.applyAnimationBlend(local30, local27, local32, arg4, arg5, arg12, false, arg13, 65535, null);
+			this.transformBone(0, new int[0], 0, 0, 0, arg13);
+			this.applyAnimationBlend(local30, local50, local52, arg10, arg11, arg12, true, arg13, 65535, null);
+			this.resetAfterAnimation();
 		}
 	}
 
@@ -314,22 +314,22 @@ public abstract class Model extends Entity {
 	public abstract void setCamera(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) long arg6);
 
 	@OriginalMember(owner = "client!ak", name = "c", descriptor = "(ZZZ)Lclient!ak;")
-	public abstract Model method4572(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
+	public abstract Model copyForEntity(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "([[IIIIII)V")
-	protected final void method4573(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	protected final void alignToTerrain(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		@Pc(10) int local10 = -arg4 / 2;
 		@Pc(15) int local15 = -arg5 / 2;
-		@Pc(24) int local24 = method4556(arg0, arg1 + local10, arg3 + local15);
+		@Pc(24) int local24 = interpolateHeight(arg0, arg1 + local10, arg3 + local15);
 		@Pc(28) int local28 = arg4 / 2;
 		@Pc(33) int local33 = -arg5 / 2;
-		@Pc(42) int local42 = method4556(arg0, arg1 + local28, arg3 + local33);
+		@Pc(42) int local42 = interpolateHeight(arg0, arg1 + local28, arg3 + local33);
 		@Pc(47) int local47 = -arg4 / 2;
 		@Pc(51) int local51 = arg5 / 2;
-		@Pc(60) int local60 = method4556(arg0, arg1 + local47, arg3 + local51);
+		@Pc(60) int local60 = interpolateHeight(arg0, arg1 + local47, arg3 + local51);
 		@Pc(64) int local64 = arg4 / 2;
 		@Pc(68) int local68 = arg5 / 2;
-		@Pc(77) int local77 = method4556(arg0, arg1 + local64, arg3 + local68);
+		@Pc(77) int local77 = interpolateHeight(arg0, arg1 + local64, arg3 + local68);
 		@Pc(84) int local84 = local24 < local42 ? local24 : local42;
 		@Pc(91) int local91 = local60 < local77 ? local60 : local77;
 		@Pc(98) int local98 = local42 < local77 ? local42 : local77;
@@ -374,8 +374,8 @@ public abstract class Model extends Entity {
 	public abstract void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) long arg8, @OriginalArg(9) int arg9, @OriginalArg(10) ParticleSystem arg10);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(I[IIIIZI[I)V")
-	protected abstract void method4577(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7);
+	protected abstract void transformMaskedBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7);
 
 	@OriginalMember(owner = "client!ak", name = "l", descriptor = "()V")
-	public abstract void method4578();
+	public abstract void rotateClockwise();
 }

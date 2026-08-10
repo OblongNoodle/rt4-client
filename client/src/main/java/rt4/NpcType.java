@@ -397,7 +397,7 @@ public final class NpcType {
 			}
 		}
 		if (!local46 && seqType2 == null && seqType1 == null) {
-			@Pc(933) Model local933 = local40.method4572(true, true, true);
+			@Pc(933) Model local933 = local40.copyForEntity(true, true, true);
 			if (this.resizeX != 128 || this.resizeY != 128) {
 				local933.resize(this.resizeX, this.resizeY, this.resizeX);
 			}
@@ -466,20 +466,20 @@ public final class NpcType {
 				}
 			}
 		}
-		@Pc(1218) Model local1218 = local40.method4572(!local721, !local723, !local725);
+		@Pc(1218) Model local1218 = local40.copyForEntity(!local721, !local723, !local725);
 		local330 = 1;
 		for (local318 = 0; local318 < local173; local318++) {
 			if (slotCurrentFramesets[local318] != null) {
-				local1218.method4565(slotCurrentFramesets[local318], slotCurrentFrames[local318], slotTweenFramesets[local318], slotTweenFrames[local318], slotDelayClocks[local318] - 1, slotFrameDelays[local318], local330, slotSeqTypes[local318].aBoolean278, this.modelTransformCache[local318]);
+				local1218.applyMaskedAnimation(slotCurrentFramesets[local318], slotCurrentFrames[local318], slotTweenFramesets[local318], slotTweenFrames[local318], slotDelayClocks[local318] - 1, slotFrameDelays[local318], local330, slotSeqTypes[local318].aBoolean278, this.modelTransformCache[local318]);
 			}
 			local330 <<= 0x1;
 		}
 		if (local962 != null && local1088 != null) {
-			local1218.method4570(local962, local235, local964, local221, arg4 - 1, local200, local1088, local228, local1092, local1040, arg7 - 1, local300, seqType2.framegroup, seqType2.aBoolean278 | seqType1.aBoolean278);
+			local1218.applyDualAnimation(local962, local235, local964, local221, arg4 - 1, local200, local1088, local228, local1092, local1040, arg7 - 1, local300, seqType2.framegroup, seqType2.aBoolean278 | seqType1.aBoolean278);
 		} else if (local962 != null) {
-			local1218.method4558(local962, local235, local964, local221, arg4 - 1, local200, seqType2.aBoolean278);
+			local1218.applyAnimation(local962, local235, local964, local221, arg4 - 1, local200, seqType2.aBoolean278);
 		} else if (local1088 != null) {
-			local1218.method4558(local1088, local228, local1092, local1040, arg7 - 1, local300, seqType1.aBoolean278);
+			local1218.applyAnimation(local1088, local228, local1092, local1040, arg7 - 1, local300, seqType1.aBoolean278);
 		}
 		for (local318 = 0; local318 < local173; local318++) {
 			slotCurrentFramesets[local318] = null;
