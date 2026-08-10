@@ -40,11 +40,11 @@ public class SoundPlayer {
 		} else if (Preferences.ambientSoundsVolume != 0) {
 			ids[size] = id;
 			SoundPlayer.loops[size] = loops;
-			@Pc(111) int z = (yFine - 64) / 128;
+			@Pc(111) int y = (yFine - 64) / 128;
 			int x = (xFine - 64) / 128;
 			delays[size] = 0;
 			sounds[size] = null;
-			positions[size] = minDistance + (x << 16) + (z << 8);
+			positions[size] = minDistance + (x << 16) + (y << 8);
 			size++;
 		}
 	}
@@ -82,9 +82,9 @@ public class SoundPlayer {
 						volume = Preferences.soundEffectVolume;
 					} else {
 						@Pc(125) int minDistance = (positions[i] & 0xFF) * 128;
-						@Pc(133) int z = positions[i] >> 8 & 0xFF;
+						@Pc(133) int y = positions[i] >> 8 & 0xFF;
 						@Pc(141) int x = positions[i] >> 16 & 0xFF;
-						@Pc(151) int yFine = z * 128 + 64 - PlayerList.self.yFine;
+						@Pc(151) int yFine = y * 128 + 64 - PlayerList.self.yFine;
 						if (yFine < 0) {
 							yFine = -yFine;
 						}

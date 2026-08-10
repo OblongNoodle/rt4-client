@@ -14,7 +14,7 @@ public class MiniMap {
 	@OriginalMember(owner = "client!lf", name = "d", descriptor = "[I")
 	public static final int[] locX = new int[1000];
 	@OriginalMember(owner = "client!he", name = "eb", descriptor = "[I")
-	public static final int[] locZ = new int[1000];
+	public static final int[] locY = new int[1000];
 	@OriginalMember(owner = "client!ld", name = "b", descriptor = "[Lclient!nc;")
 	public static final MapMarker[] hintMapMarkers = new MapMarker[4];
 	@OriginalMember(owner = "client!ld", name = "d", descriptor = "Lclient!na;")
@@ -175,7 +175,7 @@ public class MiniMap {
 							}
 							locId[locs] = local184.id;
 							locX[locs] = local194;
-							locZ[locs] = local237;
+							locY[locs] = local237;
 							locs++;
 						}
 					}
@@ -259,7 +259,7 @@ public class MiniMap {
 						local154 = MathUtils.cos[local48];
 						@Pc(156) Font local156 = Fonts.p11Full;
 						@Pc(164) int local164 = local150 * 256 / (anInt4130 + 256);
-						local181 = (LoginManager.mapElementList.aShortArray72[local117] - Camera.originZ) * 4 + 2 - PlayerList.self.yFine / 32;
+						local181 = (LoginManager.mapElementList.aShortArray72[local117] - Camera.originY) * 4 + 2 - PlayerList.self.yFine / 32;
 						@Pc(189) int local189 = local154 * 256 / (anInt4130 + 256);
 						local200 = local181 * local189 - local146 * local164 >> 16;
 						if (LoginManager.mapElementList.method3894(local117) == 1) {
@@ -293,7 +293,7 @@ public class MiniMap {
 			}
 			for (local146 = 0; local146 < locs; local146++) {
 				local181 = locX[local146] * 4 + 2 - PlayerList.self.xFine / 32;
-				local150 = locZ[local146] * 4 + 2 - PlayerList.self.yFine / 32;
+				local150 = locY[local146] * 4 + 2 - PlayerList.self.yFine / 32;
 				@Pc(382) LocType local382 = LocTypeList.get(locId[local146]);
 				if (local382.multiLocs != null) {
 					local382 = local382.getMultiLoc();
@@ -377,7 +377,7 @@ public class MiniMap {
 					}
 					if (local770.type == 2) {
 						local154 = (local770.targetX - Camera.originX) * 4 + 2 - PlayerList.self.xFine / 32;
-						local231 = (-Camera.originZ + local770.anInt4046) * 4 + 2 - PlayerList.self.yFine / 32;
+						local231 = (-Camera.originY + local770.anInt4046) * 4 + 2 - PlayerList.self.yFine / 32;
 						method1960(local770.anInt4048, arg1, arg2, local154, local231, arg3);
 					}
 					if (local770.type == 10 && local770.actorTargetId >= 0 && PlayerList.players.length > local770.actorTargetId) {
@@ -392,7 +392,7 @@ public class MiniMap {
 			}
 			if (LoginManager.mapFlagX != 0) {
 				local146 = LoginManager.mapFlagX * 4 + 2 - PlayerList.self.xFine / 32;
-				local181 = LoginManager.mapFlagZ * 4 + 2 - PlayerList.self.yFine / 32;
+				local181 = LoginManager.mapFlagY * 4 + 2 - PlayerList.self.yFine / 32;
 				method1446(arg3, Sprites.mapflags, local181, local146, arg1, arg2);
 			}
 			if (GlRenderer.enabled) {
@@ -518,7 +518,7 @@ public class MiniMap {
 		while (local5.length > local3) {
 			@Pc(17) MapMarker local17 = local5[local3];
 			if (local17 != null && local17.type == 2) {
-				ScriptRunner.method1026(arg0 >> 1, arg4, (local17.anInt4046 - Camera.originZ << 7) + local17.anInt4047, local17.anInt4050 * 2, arg2 >> 1, local17.anInt4045 + (local17.targetX - Camera.originX << 7), arg3);
+				ScriptRunner.method1026(arg0 >> 1, arg4, (local17.anInt4046 - Camera.originY << 7) + local17.anInt4047, local17.anInt4050 * 2, arg2 >> 1, local17.anInt4045 + (local17.targetX - Camera.originX << 7), arg3);
 				if (ScriptRunner.anInt1951 > -1 && client.loop % 20 < 10) {
 					Sprites.headhints[local17.anInt4048].render(arg1 + ScriptRunner.anInt1951 - 12, arg5 + -28 - -ScriptRunner.anInt548);
 				}

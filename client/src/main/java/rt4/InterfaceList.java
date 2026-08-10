@@ -756,7 +756,7 @@ public class InterfaceList {
 											k = WorldMap.anInt435 + i;
 											@Pc(516) int local516 = WorldMap.anInt919 + skill;
 											@Pc(520) int local520 = k + WorldMap.originX;
-											@Pc(528) int local528 = WorldMap.length + WorldMap.originZ - local516 - 1;
+											@Pc(528) int local528 = WorldMap.length + WorldMap.originY - local516 - 1;
 											Cheat.teleport(local520, local528, 0);
 											ClientProt.closeWidget();
 											continue;
@@ -1112,7 +1112,7 @@ public class InterfaceList {
 		}
 		if (Camera.cameraType == 2) {
 			Camera.renderX = Camera.lockedTargetX << 7;
-			Camera.renderY = Camera.lockedTargetZ << 7;
+			Camera.renderY = Camera.lockedTargetY << 7;
 		} else {
 			Camera.updateLoginScreenCamera();
 		}

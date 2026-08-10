@@ -20,7 +20,7 @@ public final class Light {
 	private int anInt2233;
 
 	@OriginalMember(owner = "client!gi", name = "i", descriptor = "I")
-	public int y;
+	public int z;
 
 	@OriginalMember(owner = "client!gi", name = "j", descriptor = "I")
 	public final int radius;
@@ -44,7 +44,7 @@ public final class Light {
 	public float alpha;
 
 	@OriginalMember(owner = "client!gi", name = "x", descriptor = "I")
-	public int z;
+	public int y;
 
 	@OriginalMember(owner = "client!gi", name = "y", descriptor = "I")
 	private int anInt2246;
@@ -82,8 +82,8 @@ public final class Light {
 		this.aBoolean126 = (this.level & 0x8) != 0;
 		this.level &= 0x7;
 		this.x = arg0.g2();
-		this.z = arg0.g2();
 		this.y = arg0.g2();
+		this.z = arg0.g2();
 		this.radius = arg0.g1();
 		this.method1763();
 		this.aShortArray30 = new short[this.radius * 2 + 1];

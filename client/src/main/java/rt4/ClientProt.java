@@ -129,8 +129,8 @@ public class ClientProt {
 		}
 		Protocol.outboundBuffer.p1add(Keyboard.pressedKeys[Keyboard.KEY_CTRL] ? 1 : 0);
 		Protocol.outboundBuffer.p2(Camera.originX + local23);
-		Protocol.outboundBuffer.p2add(Camera.originZ + local27);
-		LoginManager.mapFlagZ = PathFinder.queueY[0];
+		Protocol.outboundBuffer.p2add(Camera.originY + local27);
+		LoginManager.mapFlagY = PathFinder.queueY[0];
 		LoginManager.mapFlagX = PathFinder.queueX[0];
 		for (@Pc(126) int local126 = 1; local126 < local13; local126++) {
 			arg0--;

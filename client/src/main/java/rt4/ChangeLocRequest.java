@@ -12,7 +12,7 @@ public final class ChangeLocRequest extends Node {
 	public static LinkedList queue = new LinkedList();
 
 	@OriginalMember(owner = "client!cd", name = "r", descriptor = "I")
-	public int z;
+	public int y;
 
 	@OriginalMember(owner = "client!cd", name = "t", descriptor = "I")
 	public int level;
@@ -23,7 +23,7 @@ public final class ChangeLocRequest extends Node {
 	@OriginalMember(owner = "client!cd", name = "x", descriptor = "I")
 	public int originalId;
 
-	@OriginalMember(owner = "client!cd", name = "z", descriptor = "I")
+	@OriginalMember(owner = "client!cd", name = "y", descriptor = "I")
 	public int anInt922;
 
 	@OriginalMember(owner = "client!cd", name = "A", descriptor = "I")
@@ -57,8 +57,8 @@ public final class ChangeLocRequest extends Node {
 				if (local10.setLoops > 0) {
 					local10.setLoops--;
 				}
-				if (local10.setLoops == 0 && local10.x >= 1 && local10.z >= 1 && local10.x <= 102 && local10.z <= 102 && (local10.anInt929 < 0 || method3557(local10.anInt929, local10.anInt926))) {
-					SceneGraph.addLocModel(local10.anInt929, local10.x, local10.level, local10.anInt922, local10.z, local10.anInt926, local10.layer);
+				if (local10.setLoops == 0 && local10.x >= 1 && local10.y >= 1 && local10.x <= 102 && local10.y <= 102 && (local10.anInt929 < 0 || method3557(local10.anInt929, local10.anInt926))) {
+					SceneGraph.addLocModel(local10.anInt929, local10.x, local10.level, local10.anInt922, local10.y, local10.anInt926, local10.layer);
 					local10.setLoops = -1;
 					if (local10.originalId == local10.anInt929 && local10.originalId == -1) {
 						local10.unlink();
@@ -67,17 +67,17 @@ public final class ChangeLocRequest extends Node {
 					}
 				}
 			} else if (local10.originalId < 0 || method3557(local10.originalId, local10.originalShape)) {
-				SceneGraph.addLocModel(local10.originalId, local10.x, local10.level, local10.originalAngle, local10.z, local10.originalShape, local10.layer);
+				SceneGraph.addLocModel(local10.originalId, local10.x, local10.level, local10.originalAngle, local10.y, local10.originalShape, local10.layer);
 				local10.unlink();
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ce", name = "a", descriptor = "(IIIIIIIIII)V")
-	public static void push(@OriginalArg(0) int level, @OriginalArg(1) int z, @OriginalArg(3) int arg2, @OriginalArg(4) int x, @OriginalArg(5) int resetLoops, @OriginalArg(6) int arg5, @OriginalArg(7) int layer, @OriginalArg(8) int arg7, @OriginalArg(9) int setLoops) {
+	public static void push(@OriginalArg(0) int level, @OriginalArg(1) int y, @OriginalArg(3) int arg2, @OriginalArg(4) int x, @OriginalArg(5) int resetLoops, @OriginalArg(6) int arg5, @OriginalArg(7) int layer, @OriginalArg(8) int arg7, @OriginalArg(9) int setLoops) {
 		@Pc(9) ChangeLocRequest loc = null;
 		for (@Pc(14) ChangeLocRequest l = (ChangeLocRequest) queue.head(); l != null; l = (ChangeLocRequest) queue.next()) {
-			if (l.level == level && x == l.x && l.z == z && layer == l.layer) {
+			if (l.level == level && x == l.x && l.y == y && layer == l.layer) {
 				loc = l;
 				break;
 			}
@@ -85,7 +85,7 @@ public final class ChangeLocRequest extends Node {
 		if (loc == null) {
 			loc = new ChangeLocRequest();
 			loc.x = x;
-			loc.z = z;
+			loc.y = y;
 			loc.level = level;
 			loc.layer = layer;
 			init(loc);
@@ -104,17 +104,17 @@ public final class ChangeLocRequest extends Node {
 		@Pc(7) int originalId = -1;
 		@Pc(14) int originalShape = 0;
 		if (loc.layer == 0) {
-			key = SceneGraph.getWallKey(loc.level, loc.x, loc.z);
+			key = SceneGraph.getWallKey(loc.level, loc.x, loc.y);
 		}
 		@Pc(31) int originalAngle = 0;
 		if (loc.layer == 1) {
-			key = SceneGraph.getWallDecorKey(loc.level, loc.x, loc.z);
+			key = SceneGraph.getWallDecorKey(loc.level, loc.x, loc.y);
 		}
 		if (loc.layer == 2) {
-			key = SceneGraph.getSceneryKey(loc.level, loc.x, loc.z);
+			key = SceneGraph.getSceneryKey(loc.level, loc.x, loc.y);
 		}
 		if (loc.layer == 3) {
-			key = SceneGraph.getGroundDecorKey(loc.level, loc.x, loc.z);
+			key = SceneGraph.getGroundDecorKey(loc.level, loc.x, loc.y);
 		}
 		if (key != 0L) {
 			originalId = Integer.MAX_VALUE & (int) (key >>> 32);

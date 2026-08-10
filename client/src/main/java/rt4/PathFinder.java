@@ -32,16 +32,16 @@ public class PathFinder {
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(IIIIIZIIIIII)Z")
 	public static boolean findPath2(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(11) int arg10) {
 		@Pc(3) int x;
-		@Pc(8) int z;
+		@Pc(8) int y;
 		for (x = 0; x < 104; x++) {
-			for (z = 0; z < 104; z++) {
-				parents[x][z] = 0;
-				costs[x][z] = 99999999;
+			for (y = 0; y < 104; y++) {
+				parents[x][y] = 0;
+				costs[x][y] = 99999999;
 			}
 		}
 		parents[arg10][arg3] = 99;
 		costs[arg10][arg3] = 0;
-		z = arg3;
+		y = arg3;
 		x = arg10;
 		@Pc(53) byte local53 = 0;
 		queueX[0] = arg10;
@@ -53,82 +53,82 @@ public class PathFinder {
 		@Pc(193) int cost;
 		while (local61 != queueWriterIndex) {
 			x = queueX[local61];
-			z = queueY[local61];
+			y = queueY[local61];
 			local61 = local61 + 1 & 0xFFF;
-			if (arg8 == x && arg4 == z) {
+			if (arg8 == x && arg4 == y) {
 				local59 = true;
 				break;
 			}
 			if (arg1 != 0) {
-				if ((arg1 < 5 || arg1 == 10) && collisionMaps[Player.plane].isAtWall(arg4, x, z, arg8, arg1 - 1, 2, arg7)) {
+				if ((arg1 < 5 || arg1 == 10) && collisionMaps[Player.plane].isAtWall(arg4, x, y, arg8, arg1 - 1, 2, arg7)) {
 					local59 = true;
 					break;
 				}
-				if (arg1 < 10 && collisionMaps[Player.plane].isAtWallDecor(arg4, arg1 - 1, arg8, z, 2, arg7, x)) {
+				if (arg1 < 10 && collisionMaps[Player.plane].isAtWallDecor(arg4, arg1 - 1, arg8, y, 2, arg7, x)) {
 					local59 = true;
 					break;
 				}
 			}
-			if (arg0 != 0 && arg6 != 0 && collisionMaps[Player.plane].isInsideOrOutsideRect(arg8, z, x, 2, arg0, arg2, arg4, arg6)) {
+			if (arg0 != 0 && arg6 != 0 && collisionMaps[Player.plane].isInsideOrOutsideRect(arg8, y, x, 2, arg0, arg2, arg4, arg6)) {
 				local59 = true;
 				break;
 			}
-			cost = costs[x][z] + 1;
-			if (x > 0 && parents[x - 1][z] == 0 && (flags[x - 1][z] & 0x12C010E) == 0 && (flags[x - 1][z + 1] & 0x12C0138) == 0) {
+			cost = costs[x][y] + 1;
+			if (x > 0 && parents[x - 1][y] == 0 && (flags[x - 1][y] & 0x12C010E) == 0 && (flags[x - 1][y + 1] & 0x12C0138) == 0) {
 				queueX[queueWriterIndex] = x - 1;
-				queueY[queueWriterIndex] = z;
+				queueY[queueWriterIndex] = y;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
-				parents[x - 1][z] = 2;
-				costs[x - 1][z] = cost;
+				parents[x - 1][y] = 2;
+				costs[x - 1][y] = cost;
 			}
-			if (x < 102 && parents[x + 1][z] == 0 && (flags[x + 2][z] & 0x12C0183) == 0 && (flags[x + 2][z + 1] & 0x12C01E0) == 0) {
+			if (x < 102 && parents[x + 1][y] == 0 && (flags[x + 2][y] & 0x12C0183) == 0 && (flags[x + 2][y + 1] & 0x12C01E0) == 0) {
 				queueX[queueWriterIndex] = x + 1;
-				queueY[queueWriterIndex] = z;
+				queueY[queueWriterIndex] = y;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
-				parents[x + 1][z] = 8;
-				costs[x + 1][z] = cost;
+				parents[x + 1][y] = 8;
+				costs[x + 1][y] = cost;
 			}
-			if (z > 0 && parents[x][z - 1] == 0 && (flags[x][z - 1] & 0x12C010E) == 0 && (flags[x + 1][z - 1] & 0x12C0183) == 0) {
+			if (y > 0 && parents[x][y - 1] == 0 && (flags[x][y - 1] & 0x12C010E) == 0 && (flags[x + 1][y - 1] & 0x12C0183) == 0) {
 				queueX[queueWriterIndex] = x;
-				queueY[queueWriterIndex] = z - 1;
-				parents[x][z - 1] = 1;
-				costs[x][z - 1] = cost;
+				queueY[queueWriterIndex] = y - 1;
+				parents[x][y - 1] = 1;
+				costs[x][y - 1] = cost;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 			}
-			if (z < 102 && parents[x][z + 1] == 0 && (flags[x][z + 2] & 0x12C0138) == 0 && (flags[x + 1][z + 2] & 0x12C01E0) == 0) {
+			if (y < 102 && parents[x][y + 1] == 0 && (flags[x][y + 2] & 0x12C0138) == 0 && (flags[x + 1][y + 2] & 0x12C01E0) == 0) {
 				queueX[queueWriterIndex] = x;
-				queueY[queueWriterIndex] = z + 1;
-				parents[x][z + 1] = 4;
+				queueY[queueWriterIndex] = y + 1;
+				parents[x][y + 1] = 4;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
-				costs[x][z + 1] = cost;
+				costs[x][y + 1] = cost;
 			}
-			if (x > 0 && z > 0 && parents[x - 1][z - 1] == 0 && (flags[x - 1][z] & 0x12C0138) == 0 && (flags[x - 1][z - 1] & 0x12C010E) == 0 && (flags[x][z - 1] & 0x12C0183) == 0) {
+			if (x > 0 && y > 0 && parents[x - 1][y - 1] == 0 && (flags[x - 1][y] & 0x12C0138) == 0 && (flags[x - 1][y - 1] & 0x12C010E) == 0 && (flags[x][y - 1] & 0x12C0183) == 0) {
 				queueX[queueWriterIndex] = x - 1;
-				queueY[queueWriterIndex] = z - 1;
-				parents[x - 1][z - 1] = 3;
-				costs[x - 1][z - 1] = cost;
+				queueY[queueWriterIndex] = y - 1;
+				parents[x - 1][y - 1] = 3;
+				costs[x - 1][y - 1] = cost;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 			}
-			if (x < 102 && z > 0 && parents[x + 1][z - 1] == 0 && (flags[x + 1][z - 1] & 0x12C010E) == 0 && (flags[x + 2][z - 1] & 0x12C0183) == 0 && (flags[x + 2][z] & 0x12C01E0) == 0) {
+			if (x < 102 && y > 0 && parents[x + 1][y - 1] == 0 && (flags[x + 1][y - 1] & 0x12C010E) == 0 && (flags[x + 2][y - 1] & 0x12C0183) == 0 && (flags[x + 2][y] & 0x12C01E0) == 0) {
 				queueX[queueWriterIndex] = x + 1;
-				queueY[queueWriterIndex] = z - 1;
+				queueY[queueWriterIndex] = y - 1;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
-				parents[x + 1][z - 1] = 9;
-				costs[x + 1][z - 1] = cost;
+				parents[x + 1][y - 1] = 9;
+				costs[x + 1][y - 1] = cost;
 			}
-			if (x > 0 && z < 102 && parents[x - 1][z + 1] == 0 && (flags[x - 1][z + 1] & 0x12C010E) == 0 && (flags[x - 1][z + 2] & 0x12C0138) == 0 && (flags[x][z + 2] & 0x12C01E0) == 0) {
+			if (x > 0 && y < 102 && parents[x - 1][y + 1] == 0 && (flags[x - 1][y + 1] & 0x12C010E) == 0 && (flags[x - 1][y + 2] & 0x12C0138) == 0 && (flags[x][y + 2] & 0x12C01E0) == 0) {
 				queueX[queueWriterIndex] = x - 1;
-				queueY[queueWriterIndex] = z + 1;
-				parents[x - 1][z + 1] = 6;
-				costs[x - 1][z + 1] = cost;
+				queueY[queueWriterIndex] = y + 1;
+				parents[x - 1][y + 1] = 6;
+				costs[x - 1][y + 1] = cost;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 			}
-			if (x < 102 && z < 102 && parents[x + 1][z + 1] == 0 && (flags[x + 1][z + 2] & 0x12C0138) == 0 && (flags[x + 2][z + 2] & 0x12C01E0) == 0 && (flags[x + 2][z + 1] & 0x12C0183) == 0) {
+			if (x < 102 && y < 102 && parents[x + 1][y + 1] == 0 && (flags[x + 1][y + 2] & 0x12C0138) == 0 && (flags[x + 2][y + 2] & 0x12C01E0) == 0 && (flags[x + 2][y + 1] & 0x12C0183) == 0) {
 				queueX[queueWriterIndex] = x + 1;
-				queueY[queueWriterIndex] = z + 1;
+				queueY[queueWriterIndex] = y + 1;
 				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
-				parents[x + 1][z + 1] = 12;
-				costs[x + 1][z + 1] = cost;
+				parents[x + 1][y + 1] = 12;
+				costs[x + 1][y + 1] = cost;
 			}
 		}
 		anInt4364 = 0;
@@ -156,7 +156,7 @@ public class PathFinder {
 						}
 						@Pc(1057) int local1057 = local978 * local978 + local980 * local980;
 						if (local1057 < cost || cost == local1057 && costs[local928][local942] < local921) {
-							z = local942;
+							y = local942;
 							local921 = costs[local928][local942];
 							cost = local1057;
 							x = local928;
@@ -167,7 +167,7 @@ public class PathFinder {
 			if (cost == 1000) {
 				return false;
 			}
-			if (arg10 == x && z == arg3) {
+			if (arg10 == x && y == arg3) {
 				return false;
 			}
 			anInt4364 = 1;
@@ -175,12 +175,12 @@ public class PathFinder {
 		@Pc(1121) byte local1121 = 0;
 		queueX[0] = x;
 		local61 = local1121 + 1;
-		queueY[0] = z;
-		cost = local921 = parents[x][z];
-		while (arg10 != x || arg3 != z) {
+		queueY[0] = y;
+		cost = local921 = parents[x][y];
+		while (arg10 != x || arg3 != y) {
 			if (local921 != cost) {
 				queueX[local61] = x;
-				queueY[local61++] = z;
+				queueY[local61++] = y;
 				local921 = cost;
 			}
 			if ((cost & 0x2) != 0) {
@@ -189,11 +189,11 @@ public class PathFinder {
 				x--;
 			}
 			if ((cost & 0x1) != 0) {
-				z++;
+				y++;
 			} else if ((cost & 0x4) != 0) {
-				z--;
+				y--;
 			}
-			cost = parents[x][z];
+			cost = parents[x][y];
 		}
 		if (local61 > 0) {
 			ClientProt.method3502(local61, arg9);

@@ -235,7 +235,7 @@ public final class ScriptRunner {
 			if (Camera.customCameraActive[4] && Camera.cameraAmplitude[4] + 128 > local59) {
 				local59 = Camera.cameraAmplitude[4] + 128;
 			}
-			Camera.calculateRenderPosition(Camera.cameraX, arg0, SceneGraph.getTileHeight(Player.plane, PlayerList.self.xFine, PlayerList.self.yFine) - 50, Camera.ZOOM - -(local59 * 3), local57, Camera.cameraZ, local59);
+			Camera.calculateRenderPosition(Camera.cameraX, arg0, SceneGraph.getTileHeight(Player.plane, PlayerList.self.xFine, PlayerList.self.yFine) - 50, Camera.ZOOM - -(local59 * 3), local57, Camera.cameraY, local59);
 		}
 		local57 = Camera.renderZ;
 		local59 = Camera.renderX;
@@ -667,7 +667,7 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!cn", name = "b", descriptor = "(ZI)V")
 	public static void method964(@OriginalArg(0) boolean arg0) {
 		@Pc(3) int local3 = PlayerList.size;
-		if (LoginManager.mapFlagX == PlayerList.self.xFine >> 7 && PlayerList.self.yFine >> 7 == LoginManager.mapFlagZ) {
+		if (LoginManager.mapFlagX == PlayerList.self.xFine >> 7 && PlayerList.self.yFine >> 7 == LoginManager.mapFlagY) {
 			LoginManager.mapFlagX = 0;
 		}
 		if (arg0) {
@@ -959,7 +959,7 @@ public final class ScriptRunner {
 				if (local15.finished) {
 					local9.unlink();
 				} else {
-					SceneGraph.add(local15.plane, local15.posX, local15.posZ, local15.y, 60, local15, 0, -1L, false);
+					SceneGraph.add(local15.plane, local15.posX, local15.posY, local15.z, 60, local15, 0, -1L, false);
 				}
 			}
 		}
@@ -3195,7 +3195,7 @@ public final class ScriptRunner {
 									if (opcode == Cs2Opcodes.getMyLocation) {
 										int1 = Player.plane;
 										int3 = Camera.originX + (PlayerList.self.xFine >> 7);
-										int2 = (PlayerList.self.yFine >> 7) + Camera.originZ;
+										int2 = (PlayerList.self.yFine >> 7) + Camera.originY;
 										intStack[isp++] = (int1 << 28) - (-(int3 << 14) - int2);
 										continue;
 									}
@@ -4532,7 +4532,7 @@ public final class ScriptRunner {
 													}
 													if (opcode == 5209) {
 														intStack[isp++] = WorldMap.originX + WorldMap.anInt435;
-														intStack[isp++] = WorldMap.originZ + WorldMap.length - WorldMap.anInt919 - 1;
+														intStack[isp++] = WorldMap.originY + WorldMap.length - WorldMap.anInt919 - 1;
 														continue;
 													}
 													if (opcode == Cs2Opcodes.getDungeonmapCenter) {
@@ -4542,7 +4542,7 @@ public final class ScriptRunner {
 															intStack[isp++] = 0;
 														} else {
 															intStack[isp++] = map.originX * 64;
-															intStack[isp++] = map.originZ * 64;
+															intStack[isp++] = map.originY * 64;
 														}
 														continue;
 													}
@@ -4884,7 +4884,7 @@ public final class ScriptRunner {
 														local652 = intStack[isp + 3];
 														int2 = intStack[isp + 2];
 														int3 = intStack[isp + 1];
-														Camera.setLockedPosition(false, int2, int3, local652, (int1 & 0x3FFF) - Camera.originZ, (int1 >> 14 & 0x3FFF) - Camera.originX);
+														Camera.setLockedPosition(false, int2, int3, local652, (int1 & 0x3FFF) - Camera.originY, (int1 >> 14 & 0x3FFF) - Camera.originX);
 														continue;
 													}
 													if (opcode == Cs2Opcodes.cameraPointAt) {
@@ -4893,7 +4893,7 @@ public final class ScriptRunner {
 														int1 = intStack[isp];
 														local652 = intStack[isp + 3];
 														int2 = intStack[isp + 2];
-														Camera.setLockedLookAt(int3, (int1 & 0x3FFF) - Camera.originZ, int2, (int1 >> 14 & 0x3FFF) - Camera.originX, local652);
+														Camera.setLockedLookAt(int3, (int1 & 0x3FFF) - Camera.originY, int2, (int1 >> 14 & 0x3FFF) - Camera.originX, local652);
 														continue;
 													}
 													if (opcode == 5502) {

@@ -25,7 +25,7 @@ public class Camera {
 	public static double pitchAccel = 0;
 
 	@OriginalMember(owner = "client!ii", name = "a", descriptor = "I")
-	public static int cameraZ;
+	public static int cameraY;
 	@OriginalMember(owner = "client!gg", name = "bb", descriptor = "I")
 	public static int cameraX;
 	@OriginalMember(owner = "client!tg", name = "b", descriptor = "I")
@@ -49,7 +49,7 @@ public class Camera {
 	@OriginalMember(owner = "client!me", name = "k", descriptor = "I")
 	public static int movePathId = -1;
 	@OriginalMember(owner = "client!lc", name = "n", descriptor = "I")
-	public static int originZ;
+	public static int originY;
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "I")
 	public static int originX;
 	@OriginalMember(owner = "client!bc", name = "I", descriptor = "Z")
@@ -59,11 +59,11 @@ public class Camera {
 	@OriginalMember(owner = "client!kh", name = "f", descriptor = "I")
 	public static int renderY;
 	@OriginalMember(owner = "client!uc", name = "f", descriptor = "I")
-	public static int lockedTargetZ;
+	public static int lockedTargetY;
 	@OriginalMember(owner = "client!ug", name = "h", descriptor = "I")
 	public static int lockedLookAtX;
 	@OriginalMember(owner = "client!vj", name = "d", descriptor = "I")
-	public static int lockedLookAtZ;
+	public static int lockedLookAtY;
 	@OriginalMember(owner = "client!tm", name = "g", descriptor = "I")
 	public static int lockedTargetX;
 	@OriginalMember(owner = "client!pa", name = "K", descriptor = "Z")
@@ -84,7 +84,7 @@ public class Camera {
 	@OriginalMember(owner = "client!ta", name = "B", descriptor = "I")
 	public static int maxPitchDistance = 0;
 	@OriginalMember(owner = "client!qk", name = "h", descriptor = "I")
-	public static int cameraOffsetZ = 0;
+	public static int cameraOffsetY = 0;
 	@OriginalMember(owner = "client!sj", name = "H", descriptor = "I")
 	public static int anInt5161 = 0;
 	@OriginalMember(owner = "client!af", name = "d", descriptor = "I")
@@ -112,8 +112,8 @@ public class Camera {
 		}
 		yawTarget = mod(yawTarget, 2047.0d);
 		@Pc(33) int local33 = cameraX >> 7;
-		@Pc(37) int local37 = cameraZ >> 7;
-		@Pc(43) int local43 = SceneGraph.getTileHeight(Player.plane, cameraX, cameraZ);
+		@Pc(37) int local37 = cameraY >> 7;
+		@Pc(43) int local43 = SceneGraph.getTileHeight(Player.plane, cameraX, cameraY);
 		@Pc(45) int local45 = 0;
 		@Pc(64) int local64;
 		if (local33 > 3 && local37 > 3 && local33 < 100 && local37 < 100) {
@@ -146,12 +146,12 @@ public class Camera {
 
 	@OriginalMember(owner = "client!jl", name = "c", descriptor = "(I)V")
 	public static void updateLockedCamera() {
-		@Pc(9) int local9 = lockedTargetZ * 128 + 64;
+		@Pc(9) int local9 = lockedTargetY * 128 + 64;
 		@Pc(15) int local15 = lockedTargetX * 128 + 64;
 		@Pc(23) int local23 = SceneGraph.getTileHeight(Player.plane, local15, local9) - lockedTargetHeight;
 		if (lockedMoveSpeed >= 100) {
 			renderX = lockedTargetX * 128 + 64;
-			renderY = lockedTargetZ * 128 + 64;
+			renderY = lockedTargetY * 128 + 64;
 			renderZ = SceneGraph.getTileHeight(Player.plane, renderX, renderY) - lockedTargetHeight;
 		} else {
 			if (renderX < local15) {
@@ -191,7 +191,7 @@ public class Camera {
 				}
 			}
 		}
-		local9 = lockedLookAtZ * 128 + 64;
+		local9 = lockedLookAtY * 128 + 64;
 		local15 = lockedLookAtX * 128 + 64;
 		local23 = SceneGraph.getTileHeight(Player.plane, local15, local9) - lockedLookAtHeight;
 		@Pc(236) int local236 = local23 - renderZ;
@@ -282,7 +282,7 @@ public class Camera {
 		}
 		renderZ = (int) renderCoordinates[1] * -1;
 		renderX = (int) renderCoordinates[0] - originX * 128;
-		renderY = (int) renderCoordinates[2] - originZ * 128;
+		renderY = (int) renderCoordinates[2] - originY * 128;
 		@Pc(226) float[] local226 = new float[3];
 		local141 = lookAtSplineIndex * 2;
 		for (local131 = 0; local131 < 3; local131++) {
@@ -308,13 +308,13 @@ public class Camera {
 	@OriginalMember(owner = "client!vd", name = "a", descriptor = "(IIIIBI)V")
 	public static void setLockedLookAt(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
 		lockedMinStep = arg2;
-		lockedLookAtZ = arg1;
+		lockedLookAtY = arg1;
 		lockedAngleSpeed = arg4;
 		lockedLookAtX = arg3;
 		lockedLookAtHeight = arg0;
 		if (lockedAngleSpeed >= 100) {
 			@Pc(30) int local30 = lockedLookAtX * 128 + 64;
-			@Pc(36) int local36 = lockedLookAtZ * 128 + 64;
+			@Pc(36) int local36 = lockedLookAtY * 128 + 64;
 			@Pc(44) int local44 = SceneGraph.getTileHeight(Player.plane, local30, local36) - lockedLookAtHeight;
 			@Pc(49) int local49 = local44 - renderZ;
 			@Pc(54) int local54 = local30 - renderX;
@@ -338,10 +338,10 @@ public class Camera {
 		lockedTargetHeight = arg2;
 		lockedTargetX = arg5;
 		lockedMinMoveStep = arg1;
-		lockedTargetZ = arg4;
+		lockedTargetY = arg4;
 		if (arg0 && lockedMoveSpeed >= 100) {
 			renderX = lockedTargetX * 128 + 64;
-			renderY = lockedTargetZ * 128 + 64;
+			renderY = lockedTargetY * 128 + 64;
 			renderZ = SceneGraph.getTileHeight(Player.plane, renderX, renderY) - lockedTargetHeight;
 		}
 		cameraType = 2;
@@ -362,13 +362,13 @@ public class Camera {
 	@OriginalMember(owner = "client!uf", name = "a", descriptor = "(B)V")
 	public static void updatePlayerCamera() {
 		@Pc(14) int playerX = PlayerList.self.xFine + cameraOffsetX;
-		@Pc(20) int playerZ = PlayerList.self.yFine + cameraOffsetZ;
-		if (cameraX - playerX < -500 || cameraX - playerX > 500 || cameraZ - playerZ < -500 || cameraZ - playerZ > 500) {
+		@Pc(20) int playerY = PlayerList.self.yFine + cameraOffsetY;
+		if (cameraX - playerX < -500 || cameraX - playerX > 500 || cameraY - playerY < -500 || cameraY - playerY > 500) {
 			cameraX = playerX;
-			cameraZ = playerZ;
+			cameraY = playerY;
 		}
-		if (cameraZ != playerZ) {
-			cameraZ += (playerZ - cameraZ) / 16;
+		if (cameraY != playerY) {
+			cameraY += (playerY - cameraY) / 16;
 		}
 		if (cameraX != playerX) {
 			cameraX += (playerX - cameraX) / 16;

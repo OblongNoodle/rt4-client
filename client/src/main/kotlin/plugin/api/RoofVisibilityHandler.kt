@@ -17,7 +17,7 @@ interface RoofVisibilityHandler {
 
     fun getPickScreenY(): Int
 
-    fun reportTile(sceneX: Int, sceneZ: Int, plane: Int)
+    fun reportTile(sceneX: Int, sceneY: Int, plane: Int)
 
     fun isLocPickable(key: Long): Boolean
 
@@ -25,9 +25,9 @@ interface RoofVisibilityHandler {
 
     fun beginGroup(group: Int)
 
-    fun addGroupTile(group: Int, plane: Int, sceneX: Int, sceneZ: Int)
+    fun addGroupTile(group: Int, plane: Int, sceneX: Int, sceneY: Int)
 
-    fun setDestinationTarget(sceneX: Int, sceneZ: Int)
+    fun setDestinationTarget(sceneX: Int, sceneY: Int)
 
     fun clearDestinationTarget()
 }

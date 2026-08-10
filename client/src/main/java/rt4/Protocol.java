@@ -131,14 +131,14 @@ public class Protocol {
 			int local27 = Loc.LAYERS[local23];
 			int local31 = inboundBuffer.g1();
 			int local39 = (local31 >> 4 & 0x7) + SceneGraph.currentChunkX;
-			int local45 = (local31 & 0x7) + SceneGraph.currentChunkZ;
+			int local45 = (local31 & 0x7) + SceneGraph.currentChunkY;
 			if (local39 >= 0 && local45 >= 0 && local39 < 104 && local45 < 104) {
 				ChangeLocRequest.push(Player.plane, local45, local19, local39, -1, -1, local27, local23, 0);
 			}
 		} else if (opcode == ServerProt.OBJ_REVEAL) {
 			int local15 = inboundBuffer.ig2();
 			int local23 = inboundBuffer.g1();
-			int local27 = (local23 & 0x7) + SceneGraph.currentChunkZ;
+			int local27 = (local23 & 0x7) + SceneGraph.currentChunkY;
 			int local19 = (local23 >> 4 & 0x7) + SceneGraph.currentChunkX;
 			int local31 = inboundBuffer.g2add();
 			if (local19 >= 0 && local27 >= 0 && local19 < 104 && local27 < 104) {
@@ -154,7 +154,7 @@ public class Protocol {
 		} else if (opcode == ServerProt.MAP_PROJANIM_3) {
 			int local15 = inboundBuffer.g1();
 			int local23 = SceneGraph.currentChunkX * 2 + (local15 >> 4 & 0xF);
-			int local19 = (local15 & 0xF) + SceneGraph.currentChunkZ * 2;
+			int local19 = (local15 & 0xF) + SceneGraph.currentChunkY * 2;
 			int local27 = local23 + inboundBuffer.g1b();
 			int local31 = inboundBuffer.g1b() + local19;
 			int local39 = inboundBuffer.g2b();
@@ -180,7 +180,7 @@ public class Protocol {
 		} else if (opcode == ServerProt.SPOTANIM_SPECIFIC) {
 			int local15 = inboundBuffer.g1();
 			int local23 = SceneGraph.currentChunkX + (local15 >> 4 & 0x7);
-			int local19 = SceneGraph.currentChunkZ + (local15 & 0x7);
+			int local19 = SceneGraph.currentChunkY + (local15 & 0x7);
 			int local27 = inboundBuffer.g2();
 			int local31 = inboundBuffer.g1();
 			int local39 = inboundBuffer.g2();
@@ -197,7 +197,7 @@ public class Protocol {
 			int local27 = Loc.LAYERS[local23];
 			int local31 = inboundBuffer.g1();
 			int local39 = SceneGraph.currentChunkX + (local31 >> 4 & 0x7);
-			int local45 = (local31 & 0x7) + SceneGraph.currentChunkZ;
+			int local45 = (local31 & 0x7) + SceneGraph.currentChunkY;
 			int local218 = inboundBuffer.g2add();
 			if (local39 >= 0 && local45 >= 0 && local39 < 104 && local45 < 104) {
 				ChangeLocRequest.push(Player.plane, local45, local19, local39, -1, local218, local27, local23, 0);
@@ -205,7 +205,7 @@ public class Protocol {
 		} else if (opcode == ServerProt.LOC_ANIM) {
 			int local15 = inboundBuffer.g1sub();
 			int local23 = (local15 >> 4 & 0x7) + SceneGraph.currentChunkX;
-			int local19 = SceneGraph.currentChunkZ + (local15 & 0x7);
+			int local19 = SceneGraph.currentChunkY + (local15 & 0x7);
 			int local27 = inboundBuffer.g1sub();
 			int local31 = local27 >> 2;
 			int local39 = local27 & 0x3;
@@ -221,7 +221,7 @@ public class Protocol {
 			int local19 = local15 & 0x3;
 			int local27 = inboundBuffer.g1();
 			int local31 = (local27 >> 4 & 0x7) + SceneGraph.currentChunkX;
-			int local39 = (local27 & 0x7) + SceneGraph.currentChunkZ;
+			int local39 = (local27 & 0x7) + SceneGraph.currentChunkY;
 			@Pc(605) byte local605 = inboundBuffer.g1badd();
 			@Pc(609) byte local609 = inboundBuffer.g1badd();
 			@Pc(613) byte local613 = inboundBuffer.g1bsub();
@@ -235,7 +235,7 @@ public class Protocol {
 			}
 		} else if (opcode == ServerProt.OBJ_COUNT) {
 			int local15 = inboundBuffer.g1();
-			int local19 = SceneGraph.currentChunkZ + (local15 & 0x7);
+			int local19 = SceneGraph.currentChunkY + (local15 & 0x7);
 			int local23 = (local15 >> 4 & 0x7) + SceneGraph.currentChunkX;
 			int local27 = inboundBuffer.g2();
 			int local31 = inboundBuffer.g2();
@@ -256,7 +256,7 @@ public class Protocol {
 		} else if (opcode == ServerProt.OBJ_ADD) {
 			int local15 = inboundBuffer.ig2add();
 			int local23 = inboundBuffer.g1neg();
-			int local27 = SceneGraph.currentChunkZ + (local23 & 0x7);
+			int local27 = SceneGraph.currentChunkY + (local23 & 0x7);
 			int local19 = (local23 >> 4 & 0x7) + SceneGraph.currentChunkX;
 			int local31 = inboundBuffer.ig2();
 			int local39 = inboundBuffer.ig2();
@@ -273,7 +273,7 @@ public class Protocol {
 		} else if (opcode == ServerProt.MAP_PROJANIM_2) {
 			int local15 = inboundBuffer.g1();
 			int local23 = SceneGraph.currentChunkX + (local15 >> 4 & 0x7);
-			int local19 = (local15 & 0x7) + SceneGraph.currentChunkZ;
+			int local19 = (local15 & 0x7) + SceneGraph.currentChunkY;
 			int local27 = local23 + inboundBuffer.g1b();
 			int local31 = inboundBuffer.g1b() + local19;
 			int local39 = inboundBuffer.g2b();
@@ -298,7 +298,7 @@ public class Protocol {
 			}
 		} else if (opcode == ServerProt.MAP_PROJANIM) {
 			int local15 = inboundBuffer.g1();
-			int local19 = SceneGraph.currentChunkZ * 2 + (local15 & 0xF);
+			int local19 = SceneGraph.currentChunkY * 2 + (local15 & 0xF);
 			int local23 = SceneGraph.currentChunkX * 2 + (local15 >> 4 & 0xF);
 			int local27 = inboundBuffer.g1b() + local23;
 			int local31 = inboundBuffer.g1b() + local19;
@@ -361,7 +361,7 @@ public class Protocol {
 		} else if (opcode == ServerProt.SOUND_AREA) {
 			int local15 = inboundBuffer.g1();
 			int local23 = SceneGraph.currentChunkX + (local15 >> 4 & 0x7);
-			int local19 = SceneGraph.currentChunkZ + (local15 & 0x7);
+			int local19 = SceneGraph.currentChunkY + (local15 & 0x7);
 			int local27 = inboundBuffer.g2();
 			if (local27 == 65535) {
 				local27 = -1;
@@ -383,7 +383,7 @@ public class Protocol {
 			}
 		} else if (opcode == ServerProt.OBJ_DEL) {
 			int local15 = inboundBuffer.g1sub();
-			int local19 = SceneGraph.currentChunkZ + (local15 & 0x7);
+			int local19 = SceneGraph.currentChunkY + (local15 & 0x7);
 			int local23 = (local15 >> 4 & 0x7) + SceneGraph.currentChunkX;
 			int local27 = inboundBuffer.g2();
 			if (local23 >= 0 && local19 >= 0 && local23 < 104 && local19 < 104) {
@@ -1087,7 +1087,7 @@ public class Protocol {
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.UPDATE_ZONE_PARTIAL_ENCLOSED) {
-			SceneGraph.currentChunkZ = inboundBuffer.g1add();
+			SceneGraph.currentChunkY = inboundBuffer.g1add();
 			SceneGraph.currentChunkX = inboundBuffer.g1sub();
 			while (length > inboundBuffer.offset) {
 				opcode = inboundBuffer.g1();
@@ -1428,11 +1428,11 @@ public class Protocol {
 			} else {
 				int plane = target >> 28 & 0x3;
 				int posX = (target >> 14 & 0x3FFF) - Camera.originX;
-				int posZ = (target & 0x3FFF) - Camera.originZ;
-				if (posX >= 0 && posZ >= 0 && posX < 104 && posZ < 104) {
-					posZ = posZ * 128 + 64;
+				int posY = (target & 0x3FFF) - Camera.originY;
+				if (posX >= 0 && posY >= 0 && posX < 104 && posY < 104) {
+					posY = posY * 128 + 64;
 					posX = posX * 128 + 64;
-					@Pc(2241) SpotAnim spotAnim = new SpotAnim(gfxId, plane, posX, posZ, SceneGraph.getTileHeight(plane, posX, posZ) - height, delay, client.loop);
+					@Pc(2241) SpotAnim spotAnim = new SpotAnim(gfxId, plane, posX, posY, SceneGraph.getTileHeight(plane, posX, posY) - height, delay, client.loop);
 					SceneGraph.spotanims.addTail(new SpotAnimNode(spotAnim));
 				}
 			}
@@ -1508,17 +1508,17 @@ public class Protocol {
 			return true;
 		} else if (opcode == ServerProt.UPDATE_ZONE_FULL_FOLLOWS) {
 			SceneGraph.currentChunkX = inboundBuffer.g1();
-			SceneGraph.currentChunkZ = inboundBuffer.g1neg();
+			SceneGraph.currentChunkY = inboundBuffer.g1neg();
 			for (int x = SceneGraph.currentChunkX; x < SceneGraph.currentChunkX + 8; x++) {
-				for (int z = SceneGraph.currentChunkZ; z < SceneGraph.currentChunkZ + 8; z++) {
-					if (SceneGraph.objStacks[Player.plane][x][z] != null) {
-						SceneGraph.objStacks[Player.plane][x][z] = null;
-						spawnGroundObject(z, x);
+				for (int y = SceneGraph.currentChunkY; y < SceneGraph.currentChunkY + 8; y++) {
+					if (SceneGraph.objStacks[Player.plane][x][y] != null) {
+						SceneGraph.objStacks[Player.plane][x][y] = null;
+						spawnGroundObject(y, x);
 					}
 				}
 			}
 			for (@Pc(2604) ChangeLocRequest loc = (ChangeLocRequest) ChangeLocRequest.queue.head(); loc != null; loc = (ChangeLocRequest) ChangeLocRequest.queue.next()) {
-				if (loc.x >= SceneGraph.currentChunkX && SceneGraph.currentChunkX + 8 > loc.x && loc.z >= SceneGraph.currentChunkZ && loc.z < SceneGraph.currentChunkZ + 8 && loc.level == Player.plane) {
+				if (loc.x >= SceneGraph.currentChunkX && SceneGraph.currentChunkX + 8 > loc.x && loc.y >= SceneGraph.currentChunkY && loc.y < SceneGraph.currentChunkY + 8 && loc.level == Player.plane) {
 					loc.resetLoops = 0;
 				}
 			}
@@ -1948,12 +1948,12 @@ public class Protocol {
 			if (seqId == 65535) {
 				seqId = -1;
 			}
-			int z = pos & 0x3FFF;
+			int y = pos & 0x3FFF;
 			int x = pos >> 14 & 0x3FFF;
 			x -= Camera.originX;
-			z -= Camera.originZ;
+			y -= Camera.originY;
 			int plane = pos >> 28 & 0x3;
-			SceneGraph.addLoc(plane, rotation, type, z, type2, x, seqId);
+			SceneGraph.addLoc(plane, rotation, type, y, type2, x, seqId);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.MESSAGE_PRIVATE) {
@@ -2335,7 +2335,7 @@ public class Protocol {
 			return true;
 		} else if (opcode == ServerProt.UPDATE_ZONE_PARTIAL_FOLLOWS) {
 			SceneGraph.currentChunkX = inboundBuffer.g1neg();
-			SceneGraph.currentChunkZ = inboundBuffer.g1();
+			SceneGraph.currentChunkY = inboundBuffer.g1();
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.MIDI_SONG) {
@@ -2372,7 +2372,7 @@ public class Protocol {
 			return true;
 		} catch (@Pc(19) Exception ex) {
 			ex.printStackTrace();
-			@Pc(61) String local61 = "T2 - " + opcode + "," + opcode3 + "," + opcode4 + " - " + length + "," + (Camera.originX + PlayerList.self.movementQueueX[0]) + "," + (PlayerList.self.movementQueueY[0] + Camera.originZ) + " - ";
+			@Pc(61) String local61 = "T2 - " + opcode + "," + opcode3 + "," + opcode4 + " - " + length + "," + (Camera.originX + PlayerList.self.movementQueueX[0]) + "," + (PlayerList.self.movementQueueY[0] + Camera.originY) + " - ";
 			for (@Pc(63) int local63 = 0; local63 < length && local63 < 50; local63++) {
 				local61 = local61 + inboundBuffer.data[local63] + ",";
 			}
@@ -2811,11 +2811,11 @@ public class Protocol {
 													y = 3;
 												}
 												// Cheat
-												Cheat.teleport(PlayerList.self.movementQueueX[0] + Camera.originX, PlayerList.self.movementQueueY[0] + Camera.originZ, y);
+												Cheat.teleport(PlayerList.self.movementQueueX[0] + Camera.originX, PlayerList.self.movementQueueY[0] + Camera.originY, y);
 											}
 											if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT]) {
 												if (MiniMenu.anInt1742 != -1) {
-													Cheat.teleport(Camera.originX + MiniMenu.anInt1742, Camera.originZ - -MiniMenu.anInt2954, Player.plane);
+													Cheat.teleport(Camera.originX + MiniMenu.anInt1742, Camera.originY - -MiniMenu.anInt2954, Player.plane);
 												}
 												anInt4422 = 0;
 												MiniMenu.anInt3096 = 0;
@@ -2825,7 +2825,7 @@ public class Protocol {
 													outboundBuffer.mp4(MiniMenu.anInt2512);
 													outboundBuffer.p2add(Camera.originX + MiniMenu.anInt1742);
 													outboundBuffer.ip2add(MiniMenu.anInt506);
-													outboundBuffer.p2add(MiniMenu.anInt2954 + Camera.originZ);
+													outboundBuffer.p2add(MiniMenu.anInt2954 + Camera.originY);
 													Cross.type = 1;
 													Cross.milliseconds = 0;
 													Cross.y = Mouse.clickY;
@@ -2835,7 +2835,7 @@ public class Protocol {
 											} else if (anInt4422 == 2) {
 												if (MiniMenu.anInt1742 != -1) {
 													outboundBuffer.p1isaac(179);
-													outboundBuffer.p2(Camera.originZ + MiniMenu.anInt2954);
+													outboundBuffer.p2(Camera.originY + MiniMenu.anInt2954);
 													outboundBuffer.p2(MiniMenu.anInt1742 + Camera.originX);
 													Cross.milliseconds = 0;
 													Cross.type = 1;
@@ -2915,7 +2915,7 @@ public class Protocol {
 													Camera.anInt5161 += anInt4941;
 												}
 												if ((modelId & 0x2) == 2) {
-													Camera.cameraOffsetZ += anInt659;
+													Camera.cameraOffsetY += anInt659;
 												}
 												if ((modelId & 0x1) == 1) {
 													Camera.cameraOffsetX += Camera.anInt4229;
@@ -2940,10 +2940,10 @@ public class Protocol {
 											if (MiniMap.anInt4130 < -20) {
 												MiniMap.anInt4262 = 1;
 											}
-											if (Camera.cameraOffsetZ < -55) {
+											if (Camera.cameraOffsetY < -55) {
 												anInt659 = 2;
 											}
-											if (Camera.cameraOffsetZ > 55) {
+											if (Camera.cameraOffsetY > 55) {
 												anInt659 = -2;
 											}
 											if (Camera.anInt5161 < -40) {

@@ -16,9 +16,9 @@ public final class LocType {
 	public static final int WALL_DIAGONAL = 9;
 
 	public static final int WALLDECOR_STRAIGHT_XOFFSET = 4;
-	public static final int WALLDECOR_STRAIGHT_ZOFFSET = 5;
+	public static final int WALLDECOR_STRAIGHT_YOFFSET = 5;
 	public static final int WALLDECOR_DIAGONAL_XOFFSET = 6;
-	public static final int WALLDECOR_DIAGONAL_ZOFFSET = 7;
+	public static final int WALLDECOR_DIAGONAL_YOFFSET = 7;
 	public static final int WALLDECOR_DIAGONAL_BOTH = 8;
 
 	public static final int ROOF_STRAIGHT = 12;

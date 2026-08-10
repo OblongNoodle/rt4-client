@@ -656,12 +656,12 @@ public final class client extends GameShell {
 		}
 		MiniMenu.anInt5014 = 0;
 		Camera.cameraOffsetX = (int) (Math.random() * 100.0D) - 50;
-		LoginManager.mapFlagZ = 0;
+		LoginManager.mapFlagY = 0;
 		Camera.yawTarget = (int) (Math.random() * 20.0D) - 10 & 0x7FF;
 		LightingManager.anInt2875 = -1;
 		PlayerList.size = 0;
 		MiniMap.state = 0;
-		Camera.cameraOffsetZ = (int) (Math.random() * 110.0D) - 55;
+		Camera.cameraOffsetY = (int) (Math.random() * 110.0D) - 55;
 		MiniMenu.aBoolean302 = false;
 		MiniMap.anInt4130 = (int) (Math.random() * 30.0D) - 20;
 		SoundPlayer.size = 0;
@@ -696,9 +696,9 @@ public final class client extends GameShell {
 		DelayedStateChange.clear();
 		Camera.lockedMinStep = 0;
 		Camera.lockedAngleSpeed = 0;
-		Camera.lockedLookAtZ = 0;
+		Camera.lockedLookAtY = 0;
 		Camera.lockedTargetHeight = 0;
-		Camera.lockedTargetZ = 0;
+		Camera.lockedTargetY = 0;
 		Camera.lockedTargetX = 0;
 		Camera.lockedLookAtHeight = 0;
 		Camera.lockedLookAtX = 0;

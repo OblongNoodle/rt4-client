@@ -785,20 +785,20 @@ public final class SoftwareModel extends Model {
 
 	@OriginalMember(owner = "client!w", name = "a", descriptor = "(IIIIIIIIJILclient!ga;)V")
 	@Override
-	public void render(@OriginalArg(0) int yaw, @OriginalArg(1) int sinCameraPitch, @OriginalArg(2) int cosCameraPitch, @OriginalArg(3) int sinCameraYaw, @OriginalArg(4) int cosCameraYaw, @OriginalArg(5) int sceneX, @OriginalArg(6) int sceneY, @OriginalArg(7) int sceneZ, @OriginalArg(8) long key, @OriginalArg(9) int arg9, @OriginalArg(10) ParticleSystem arg10) {
+	public void render(@OriginalArg(0) int yaw, @OriginalArg(1) int sinCameraPitch, @OriginalArg(2) int cosCameraPitch, @OriginalArg(3) int sinCameraYaw, @OriginalArg(4) int cosCameraYaw, @OriginalArg(5) int sceneX, @OriginalArg(6) int sceneZ, @OriginalArg(7) int sceneY, @OriginalArg(8) long key, @OriginalArg(9) int arg9, @OriginalArg(10) ParticleSystem arg10) {
 		if (!this.boundsValid) {
 			this.calculateBounds();
 		}
 
-		@Pc(14) int a = sceneZ * cosCameraYaw - sceneX * sinCameraYaw >> 16;
-		@Pc(24) int b = sceneY * sinCameraPitch + a * cosCameraPitch >> 16;
+		@Pc(14) int a = sceneY * cosCameraYaw - sceneX * sinCameraYaw >> 16;
+		@Pc(24) int b = sceneZ * sinCameraPitch + a * cosCameraPitch >> 16;
 		@Pc(38) int c = b + (this.lengthXZ * cosCameraPitch + this.maxY * sinCameraPitch >> 16);
 		@Pc(53) int d = b + (-this.lengthXZ * cosCameraPitch + this.minY * sinCameraPitch >> 16);
 		if (c <= 50 || d >= 3500) { // near and far clip
 			return;
 		}
 
-		@Pc(71) int e = sceneZ * sinCameraYaw + sceneX * cosCameraYaw >> 16;
+		@Pc(71) int e = sceneY * sinCameraYaw + sceneX * cosCameraYaw >> 16;
 		@Pc(78) int minScreenX = e + this.lengthXZ << 9;
 		if (minScreenX / c <= Rasteriser.screenLowerX) {
 			return;
@@ -807,7 +807,7 @@ public final class SoftwareModel extends Model {
 		if (maxScreenX / c >= Rasteriser.screenUpperX) {
 			return;
 		}
-		@Pc(107) int f = sceneY * cosCameraPitch - a * sinCameraPitch >> 16;
+		@Pc(107) int f = sceneZ * cosCameraPitch - a * sinCameraPitch >> 16;
 		@Pc(123) int minScreenY = f + (this.lengthXZ * sinCameraPitch + this.maxY * cosCameraPitch >> 16) << 9;
 		if (minScreenY / c <= Rasteriser.screenLowerY) {
 			return;
@@ -870,8 +870,8 @@ public final class SoftwareModel extends Model {
 						local394 = local414;
 					}
 					local394 += sceneX;
-					local398 += sceneY;
-					local402 += sceneZ;
+					local398 += sceneZ;
+					local402 += sceneY;
 					local414 = local402 * sinCameraYaw + local394 * cosCameraYaw >> 16;
 					local402 = local402 * cosCameraYaw - local394 * sinCameraYaw >> 16;
 					local394 = local414;
@@ -919,8 +919,8 @@ public final class SoftwareModel extends Model {
 				x = w;
 			}
 			x += sceneX;
-			y += sceneY;
-			z += sceneZ;
+			y += sceneZ;
+			z += sceneY;
 			w = z * sinCameraYaw + x * cosCameraYaw >> 16;
 			z = z * cosCameraYaw - x * sinCameraYaw >> 16;
 			x = w;

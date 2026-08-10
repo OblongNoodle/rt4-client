@@ -43,7 +43,7 @@ public class WorldMap {
 	@OriginalMember(owner = "client!mh", name = "S", descriptor = "I")
 	public static int originX;
 	@OriginalMember(owner = "client!aa", name = "j", descriptor = "I")
-	public static int originZ;
+	public static int originY;
 	@OriginalMember(owner = "client!oi", name = "m", descriptor = "I")
 	public static int length;
 	@OriginalMember(owner = "client!dl", name = "e", descriptor = "I")
@@ -129,8 +129,8 @@ public class WorldMap {
 
 		if (loadPercentage == 10) {
 			originX = currentMap.displayMinX >> 6 << 6;
-			originZ = currentMap.displayMaxX >> 6 << 6;
-			length = (currentMap.displayMinZ >> 6 << 6) + 64 - originZ;
+			originY = currentMap.displayMaxX >> 6 << 6;
+			length = (currentMap.displayMinZ >> 6 << 6) + 64 - originY;
 			width = (currentMap.displayMaxZ >> 6 << 6) + 64 - originX;
 			if (currentMap.defaultZoom == 37) {
 				zoom = 3.0F;
@@ -154,13 +154,13 @@ public class WorldMap {
 
 			@Pc(144) int local144 = (PlayerList.self.xFine >> 7) + Camera.originX - originX;
 			@Pc(153) int local153 = local144 + (int) (Math.random() * 10.0D) - 5;
-			@Pc(168) int local168 = originZ + length - Camera.originZ - (PlayerList.self.yFine >> 7) - 1;
+			@Pc(168) int local168 = originY + length - Camera.originY - (PlayerList.self.yFine >> 7) - 1;
 			@Pc(177) int local177 = local168 + (int) (Math.random() * 10.0D) - 5;
 			if (local153 >= 0 && width > local153 && local177 >= 0 && local177 < length) {
 				anInt435 = local153;
 				anInt919 = local177;
 			} else {
-				anInt919 = originZ + length - currentMap.originZ * 64 - 1;
+				anInt919 = originY + length - currentMap.originY * 64 - 1;
 				anInt435 = currentMap.originX * 64 - originX;
 			}
 
@@ -297,7 +297,7 @@ public class WorldMap {
 			@Pc(57) int local57 = data.g1();
 			@Pc(61) int local61 = data.g1();
 			@Pc(68) int local68 = local57 * 64 - originX;
-			@Pc(78) int local78 = length + originZ - local61 * 64 - 1;
+			@Pc(78) int local78 = length + originY - local61 * 64 - 1;
 			if (local68 >= 0 && local78 - 63 >= 0 && width > local68 + 63 && length > local78) {
 				for (local102 = 0; local102 < 64; local102++) {
 					@Pc(112) byte[] underlay = underlays[local68 + local102];
@@ -413,7 +413,7 @@ public class WorldMap {
 				}
 				@Pc(46) int local46 = arg0.g1();
 				@Pc(50) int local50 = arg0.g1();
-				@Pc(62) int local62 = originZ + length - local50 * 64 - 1;
+				@Pc(62) int local62 = originY + length - local50 * 64 - 1;
 				@Pc(69) int local69 = local46 * 64 - originX;
 				@Pc(147) byte local147;
 				@Pc(91) int local91;
@@ -476,7 +476,7 @@ public class WorldMap {
 				@Pc(46) int local46 = arg0.g1();
 				@Pc(50) int local50 = arg0.g1();
 				@Pc(57) int local57 = local46 * 64 - originX;
-				@Pc(68) int local68 = length + originZ - local50 * 64 - 1;
+				@Pc(68) int local68 = length + originY - local50 * 64 - 1;
 				@Pc(146) byte local146;
 				@Pc(96) int local96;
 				if (local57 >= 0 && local68 - 63 >= 0 && width > local57 + 63 && local68 < length) {
@@ -538,7 +538,7 @@ public class WorldMap {
 				@Pc(42) int local42 = arg0.g1();
 				@Pc(46) int local46 = arg0.g1();
 				@Pc(53) int local53 = local42 * 64 - originX;
-				@Pc(65) int local65 = originZ + length - local46 * 64 - 1;
+				@Pc(65) int local65 = originY + length - local46 * 64 - 1;
 				@Pc(84) int local84;
 				@Pc(95) int local95;
 				if (local53 >= 0 && local65 - 63 >= 0 && width > local53 + 63 && local65 < length) {
@@ -1077,7 +1077,7 @@ public class WorldMap {
 		if (local24 < 0) {
 			anInt3482 = (int) ((float) component.width / zoom);
 		}
-		anInt4901 = length + originZ - arg1 - 1;
+		anInt4901 = length + originY - arg1 - 1;
 		@Pc(61) int local61 = (int) ((float) component.height / zoom) + anInt4901;
 		@Pc(70) int local70 = anInt4901 - (int) ((float) component.height / zoom);
 		if (local33 > width) {
@@ -1817,7 +1817,7 @@ public class WorldMap {
 		for (@Pc(11) int local11 = 0; local11 < labels.anInt5074; local11++) {
 			if (labels.method3890(local11)) {
 				@Pc(32) int local32 = labels.aShortArray73[local11] - originX;
-				@Pc(43) int local43 = originZ + length - labels.aShortArray72[local11] - 1;
+				@Pc(43) int local43 = originY + length - labels.aShortArray72[local11] - 1;
 				@Pc(59) int local59 = arg0 + (arg3 - arg0) * (local32 - arg2) / (arg6 - arg2);
 				@Pc(64) int local64 = labels.method3894(local11);
 				@Pc(80) int local80 = (arg7 - arg1) * (local43 - arg5) / (arg4 - arg5) + arg1;

@@ -332,7 +332,7 @@ public class NpcList {
 		}
 		if ((arg0.faceX != 0 || arg0.faceY != 0) && (arg0.movementQueueSize == 0 || arg0.movementCatchupTicks > 0)) {
 			local70 = arg0.xFine - (arg0.faceX - Camera.originX - Camera.originX) * 64;
-			local43 = arg0.yFine - (arg0.faceY - Camera.originZ - Camera.originZ) * 64;
+			local43 = arg0.yFine - (arg0.faceY - Camera.originY - Camera.originY) * 64;
 			if (local70 != 0 || local43 != 0) {
 				arg0.targetAngle = (int) (Math.atan2(local70, local43) * 325.949D) & 0x7FF;
 			}

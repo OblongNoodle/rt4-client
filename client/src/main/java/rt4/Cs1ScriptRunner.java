@@ -179,7 +179,7 @@ public class Cs1ScriptRunner {
 					value = (PlayerList.self.xFine >> 7) + Camera.originX;
 				}
 				if (opcode == 19) {
-					value = (PlayerList.self.yFine >> 7) + Camera.originZ;
+					value = (PlayerList.self.yFine >> 7) + Camera.originY;
 				}
 				if (opcode == 20) {
 					value = script[pc++];

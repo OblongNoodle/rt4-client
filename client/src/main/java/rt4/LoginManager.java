@@ -106,7 +106,7 @@ public class LoginManager {
 	@OriginalMember(owner = "client!ja", name = "n", descriptor = "I")
 	public static int mapFlagX = 0;
 	@OriginalMember(owner = "client!gk", name = "h", descriptor = "I")
-	public static int mapFlagZ = 0;
+	public static int mapFlagY = 0;
 	@OriginalMember(owner = "client!qf", name = "M", descriptor = "I")
 	public static int anInt1862 = 0;
 	@OriginalMember(owner = "client!nm", name = "U", descriptor = "I")
@@ -602,7 +602,7 @@ public class LoginManager {
 	@OriginalMember(owner = "client!ca", name = "h", descriptor = "(I)V")
 	public static void setupLoadingScreenRegion() {
 		@Pc(10) int local10 = (Camera.renderX >> 10) + (Camera.originX >> 3);
-		@Pc(23) int local23 = (Camera.renderY >> 10) + (Camera.originZ >> 3);
+		@Pc(23) int local23 = (Camera.renderY >> 10) + (Camera.originY >> 3);
 		locationMapFilesBuffer = new byte[18][];
 		underWaterLocationsMapFileIds = new int[18];
 		npcSpawnsFilesBuffer = new byte[18][];
@@ -664,9 +664,9 @@ public class LoginManager {
 		MusicPlayer.groupId = -1;
 		AreaSoundManager.clear(true);
 		SceneGraph.dynamicMapRegion = false;
-		Camera.originZ = 0;
+		Camera.originY = 0;
 		SceneGraph.centralZoneX = 0;
-		SceneGraph.centralZoneZ = 0;
+		SceneGraph.centralZoneY = 0;
 		Camera.originX = 0;
 		for (i = 0; i < MiniMap.hintMapMarkers.length; i++) {
 			MiniMap.hintMapMarkers[i] = null;
@@ -682,8 +682,8 @@ public class LoginManager {
 		}
 		for (int level = 0; level < 4; level++) {
 			for (@Pc(115) int x = 0; x < 104; x++) {
-				for (@Pc(122) int z = 0; z < 104; z++) {
-					SceneGraph.objStacks[level][x][z] = null;
+				for (@Pc(122) int y = 0; y < 104; y++) {
+					SceneGraph.objStacks[level][x][y] = null;
 				}
 			}
 		}
@@ -696,11 +696,11 @@ public class LoginManager {
 
 	@OriginalMember(owner = "client!k", name = "a", descriptor = "(IIIIZIZ)V")
 	public static void method2463(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5) {
-		if (SceneGraph.centralZoneX == arg2 && arg1 == SceneGraph.centralZoneZ && (SceneGraph.centralPlane == arg0 || SceneGraph.allLevelsAreVisible())) {
+		if (SceneGraph.centralZoneX == arg2 && arg1 == SceneGraph.centralZoneY && (SceneGraph.centralPlane == arg0 || SceneGraph.allLevelsAreVisible())) {
 			return;
 		}
 		SceneGraph.centralZoneX = arg2;
-		SceneGraph.centralZoneZ = arg1;
+		SceneGraph.centralZoneY = arg1;
 		SceneGraph.centralPlane = arg0;
 		if (SceneGraph.allLevelsAreVisible()) {
 			SceneGraph.centralPlane = 0;
@@ -711,12 +711,12 @@ public class LoginManager {
 			client.setGameState(25);
 		}
 		Fonts.drawTextOnScreen(true, LocalizedText.LOADING);
-		@Pc(53) int local53 = Camera.originZ;
+		@Pc(53) int local53 = Camera.originY;
 		@Pc(55) int local55 = Camera.originX;
-		Camera.originZ = arg1 * 8 - 48;
+		Camera.originY = arg1 * 8 - 48;
 		Camera.originX = (arg2 - 6) * 8;
-		map = MapList.getContainingSource(SceneGraph.centralZoneX * 8, SceneGraph.centralZoneZ * 8);
-		@Pc(81) int local81 = Camera.originZ - local53;
+		map = MapList.getContainingSource(SceneGraph.centralZoneX * 8, SceneGraph.centralZoneY * 8);
+		@Pc(81) int local81 = Camera.originY - local53;
 		@Pc(86) int local86 = Camera.originX - local55;
 		mapElementList = null;
 		@Pc(96) int local96;
@@ -797,25 +797,25 @@ public class LoginManager {
 			}
 		}
 		for (@Pc(451) ChangeLocRequest local451 = (ChangeLocRequest) ChangeLocRequest.queue.head(); local451 != null; local451 = (ChangeLocRequest) ChangeLocRequest.queue.next()) {
-			local451.z -= local81;
+			local451.y -= local81;
 			local451.x -= local86;
-			if (local451.x < 0 || local451.z < 0 || local451.x >= 104 || local451.z >= 104) {
+			if (local451.x < 0 || local451.y < 0 || local451.x >= 104 || local451.y >= 104) {
 				local451.unlink();
 			}
 		}
 		if (arg4) {
 			Camera.renderX -= local86 * 128;
 			Camera.renderY -= local81 * 128;
-			Camera.lockedTargetZ -= local81;
+			Camera.lockedTargetY -= local81;
 			Camera.lockedLookAtX -= local86;
-			Camera.lockedLookAtZ -= local81;
+			Camera.lockedLookAtY -= local81;
 			Camera.lockedTargetX -= local86;
 		} else {
 			Camera.cameraType = 1;
 		}
 		SoundPlayer.size = 0;
 		if (mapFlagX != 0) {
-			mapFlagZ -= local81;
+			mapFlagY -= local81;
 			mapFlagX -= local86;
 		}
 		if (GlRenderer.enabled && arg4 && (Math.abs(local86) > 104 || Math.abs(local81) > 104)) {
@@ -874,7 +874,7 @@ public class LoginManager {
 			@Pc(32) byte[] local32 = local19[local25];
 			if (local32 != null) {
 				@Pc(45) int local45 = (regionBitPacked[local25] >> 8) * 64 - Camera.originX;
-				@Pc(56) int local56 = (regionBitPacked[local25] & 0xFF) * 64 - Camera.originZ;
+				@Pc(56) int local56 = (regionBitPacked[local25] & 0xFF) * 64 - Camera.originY;
 				client.audioLoop();
 				SceneGraph.readLocs(local45, arg0, local32, local56, PathFinder.collisionMaps);
 			}
@@ -948,28 +948,28 @@ public class LoginManager {
 		anInt5804 = 0;
 		fileExists = true;
 		@Pc(320) int chunkX;
-		@Pc(309) int chunkZ;
+		@Pc(309) int chunkY;
 		for (id = 0; id < mapFilesBuffer.length; id++) {
 			@Pc(294) byte[] local294 = locationMapFilesBuffer[id];
 			if (local294 != null) {
-				chunkZ = (regionBitPacked[id] & 0xFF) * 64 - Camera.originZ;
+				chunkY = (regionBitPacked[id] & 0xFF) * 64 - Camera.originY;
 				chunkX = (regionBitPacked[id] >> 8) * 64 - Camera.originX;
 				if (SceneGraph.dynamicMapRegion) {
-					chunkZ = 10;
+					chunkY = 10;
 					chunkX = 10;
 				}
-				fileExists &= method1201(chunkX, chunkZ, local294);
+				fileExists &= method1201(chunkX, chunkY, local294);
 			}
 			if (GlRenderer.enabled) {
 				local294 = underWaterLocationsMapFilesBuffer[id];
 				if (local294 != null) {
 					chunkX = (regionBitPacked[id] >> 8) * 64 - Camera.originX;
-					chunkZ = (regionBitPacked[id] & 0xFF) * 64 - Camera.originZ;
+					chunkY = (regionBitPacked[id] & 0xFF) * 64 - Camera.originY;
 					if (SceneGraph.dynamicMapRegion) {
-						chunkZ = 10;
+						chunkY = 10;
 						chunkX = 10;
 					}
-					fileExists &= method1201(chunkX, chunkZ, local294);
+					fileExists &= method1201(chunkX, chunkY, local294);
 				}
 			}
 		}
@@ -1000,8 +1000,8 @@ public class LoginManager {
 		}
 		for (i = 0; i < 4; i++) {
 			for (chunkX = 0; chunkX < 104; chunkX++) {
-				for (chunkZ = 0; chunkZ < 104; chunkZ++) {
-					SceneGraph.renderFlags[i][chunkX][chunkZ] = 0;
+				for (chunkY = 0; chunkY < 104; chunkY++) {
+					SceneGraph.renderFlags[i][chunkX][chunkY] = 0;
 				}
 			}
 		}
@@ -1088,14 +1088,14 @@ public class LoginManager {
 		}
 		if (GlRenderer.enabled) {
 			for (chunkX = 0; chunkX < 13; chunkX++) {
-				for (chunkZ = 0; chunkZ < 13; chunkZ++) {
-					ShadowManager.shadows[chunkX][chunkZ].method4676(SceneGraph.tileHeights[0], chunkX * 8, chunkZ * 8);
+				for (chunkY = 0; chunkY < 13; chunkY++) {
+					ShadowManager.shadows[chunkX][chunkY].method4676(SceneGraph.tileHeights[0], chunkX * 8, chunkY * 8);
 				}
 			}
 		}
 		for (chunkX = 0; chunkX < 104; chunkX++) {
-			for (chunkZ = 0; chunkZ < 104; chunkZ++) {
-				Protocol.spawnGroundObject(chunkZ, chunkX);
+			for (chunkY = 0; chunkY < 104; chunkY++) {
+				Protocol.spawnGroundObject(chunkY, chunkX);
 			}
 		}
 		ScriptRunner.method2218();
@@ -1108,13 +1108,13 @@ public class LoginManager {
 			Protocol.outboundBuffer.p4(1057001181);
 		}
 		if (!SceneGraph.dynamicMapRegion) {
-			@Pc(815) int local815 = (SceneGraph.centralZoneZ + 6) / 8;
-			@Pc(821) int local821 = (SceneGraph.centralZoneZ - 6) / 8;
+			@Pc(815) int local815 = (SceneGraph.centralZoneY + 6) / 8;
+			@Pc(821) int local821 = (SceneGraph.centralZoneY - 6) / 8;
 			chunkX = (SceneGraph.centralZoneX - 6) / 8;
-			chunkZ = (SceneGraph.centralZoneX + 6) / 8;
-			for (@Pc(837) int local837 = chunkX - 1; local837 <= chunkZ + 1; local837++) {
+			chunkY = (SceneGraph.centralZoneX + 6) / 8;
+			for (@Pc(837) int local837 = chunkX - 1; local837 <= chunkY + 1; local837++) {
 				for (@Pc(850) int local850 = local821 - 1; local850 <= local815 + 1; local850++) {
-					if (local837 < chunkX || local837 > chunkZ || local850 < local821 || local850 > local815) {
+					if (local837 < chunkX || local837 > chunkY || local850 < local821 || local850 > local815) {
 						client.js5Archive5.prefetchGroup(JagString.concatenate(new JagString[]{aClass100_558, JagString.parseInt(local837), UNDERSCORE, JagString.parseInt(local850)}));
 						client.js5Archive5.prefetchGroup(JagString.concatenate(new JagString[]{aClass100_1090, JagString.parseInt(local837), UNDERSCORE, JagString.parseInt(local850)}));
 					}
@@ -1335,7 +1335,7 @@ public class LoginManager {
 					@Pc(113) int local113 = local103 >> 7 & 0x3F;
 					@Pc(125) int local125 = local113 + (regionBitPacked[local16] >> 8) * 64 - Camera.originX;
 					@Pc(129) int local129 = local103 & 0x3F;
-					@Pc(142) int local142 = local129 + (regionBitPacked[local16] & 0xFF) * 64 - Camera.originZ;
+					@Pc(142) int local142 = local129 + (regionBitPacked[local16] & 0xFF) * 64 - Camera.originY;
 					@Pc(148) NpcType local148 = NpcTypeList.get(local74.g2());
 					if (NpcList.npcs[local97] == null && (local148.loginscreenproperties & 0x1) > 0 && local107 == SceneGraph.centralPlane && local125 >= 0 && local148.size + local125 < 104 && local142 >= 0 && local142 + local148.size < 104) {
 						NpcList.npcs[local97] = new Npc();
@@ -1515,18 +1515,18 @@ public class LoginManager {
 		@Pc(53) byte[] local53;
 		for (local20 = 0; local20 < local18; local20++) {
 			local38 = (regionBitPacked[local20] >> 8) * 64 - Camera.originX;
-			local49 = (regionBitPacked[local20] & 0xFF) * 64 - Camera.originZ;
+			local49 = (regionBitPacked[local20] & 0xFF) * 64 - Camera.originY;
 			local53 = local9[local20];
 			if (local53 != null) {
 				client.audioLoop();
-				SceneGraph.readTerrain(PathFinder.collisionMaps, arg0, SceneGraph.centralZoneX * 8 - 48, local49, local38, (SceneGraph.centralZoneZ - 6) * 8, local53);
+				SceneGraph.readTerrain(PathFinder.collisionMaps, arg0, SceneGraph.centralZoneX * 8 - 48, local49, local38, (SceneGraph.centralZoneY - 6) * 8, local53);
 			}
 		}
 		for (local20 = 0; local20 < local18; local20++) {
 			local38 = (regionBitPacked[local20] >> 8) * 64 - Camera.originX;
-			local49 = (regionBitPacked[local20] & 0xFF) * 64 - Camera.originZ;
+			local49 = (regionBitPacked[local20] & 0xFF) * 64 - Camera.originY;
 			local53 = local9[local20];
-			if (local53 == null && SceneGraph.centralZoneZ < 800) {
+			if (local53 == null && SceneGraph.centralZoneY < 800) {
 				client.audioLoop();
 				for (@Pc(130) int local130 = 0; local130 < local7; local130++) {
 					SceneGraph.clearTerrainRegion(local130, local49, local38, 64, 64);

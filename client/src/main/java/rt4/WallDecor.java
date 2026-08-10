@@ -19,7 +19,7 @@ public final class WallDecor {
 	public int orientation;
 
 	@OriginalMember(owner = "client!df", name = "g", descriptor = "I")
-	public int zOffset;
+	public int yOffset;
 
 	@OriginalMember(owner = "client!df", name = "h", descriptor = "I")
 	public int yFine;

@@ -269,12 +269,12 @@ public class LightingManager {
 			}
 			for (@Pc(26) int local26 = local11; local26 <= local19; local26++) {
 				@Pc(31) int local31 = 0;
-				@Pc(39) int local39 = (local8.z >> 7) - local8.radius;
+				@Pc(39) int local39 = (local8.y >> 7) - local8.radius;
 				if (local39 < 0) {
 					local31 = -local39;
 					local39 = 0;
 				}
-				@Pc(55) int local55 = (local8.z >> 7) + local8.radius;
+				@Pc(55) int local55 = (local8.y >> 7) + local8.radius;
 				if (local55 > length - 1) {
 					local55 = length - 1;
 				}
@@ -407,8 +407,8 @@ public class LightingManager {
 			}
 			if (local63.mesh != null) {
 				@Pc(76) int local76 = 0;
-				@Pc(84) int local84 = (local63.z >> 7) - local63.radius;
-				@Pc(92) int local92 = (local63.z >> 7) + local63.radius;
+				@Pc(84) int local84 = (local63.y >> 7) - local63.radius;
+				@Pc(92) int local92 = (local63.y >> 7) + local63.radius;
 				if (local92 >= anInt4866) {
 					local92 = anInt4866 - 1;
 				}
@@ -461,8 +461,8 @@ public class LightingManager {
 		gl.glLightf(local5, GL2.GL_QUADRATIC_ATTENUATION, arg1.aFloat9);
 		gl.glLightfv(local5, GL2.GL_DIFFUSE, arg1.diffuse, 0);
 		aFloatArray17[0] = arg1.x - arg2;
-		aFloatArray17[1] = arg1.y - arg3;
-		aFloatArray17[2] = arg1.z - arg4;
+		aFloatArray17[1] = arg1.z - arg3;
+		aFloatArray17[2] = arg1.y - arg4;
 		gl.glLightfv(local5, GL2.GL_POSITION, aFloatArray17, 0);
 	}
 

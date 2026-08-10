@@ -614,28 +614,28 @@ object RoofHider {
         val sinYaw = MathUtils.sin[Camera.cameraYaw]
         val cosYaw = MathUtils.cos[Camera.cameraYaw]
         val rotatedX = localX * cosYaw + localY * sinYaw shr 16
-        val rotatedZ = localY * cosYaw - localX * sinYaw shr 16
-        val screenYDepth = rotatedZ * cosPitch + localZ * sinPitch shr 16
-        if (screenYDepth < 50) {
+        val rotatedY = localY * cosYaw - localX * sinYaw shr 16
+        val screenZDepth = rotatedY * cosPitch + localZ * sinPitch shr 16
+        if (screenZDepth < 50) {
             return Long.MIN_VALUE
         }
-        val rotatedY = localZ * cosPitch - rotatedZ * sinPitch shr 16
-        val screenX = (rotatedX shl 9) / screenYDepth
-        val screenY = (rotatedY shl 9) / screenYDepth
-        return (screenX.toLong() shl 32) or (screenY.toLong() and 0xFFFFFFFFL)
+        val rotatedZ = localZ * cosPitch - rotatedY * sinPitch shr 16
+        val screenX = (rotatedX shl 9) / screenZDepth
+        val screenZ = (rotatedZ shl 9) / screenZDepth
+        return (screenX.toLong() shl 32) or (screenZ.toLong() and 0xFFFFFFFFL)
     }
 
-    fun setDestinationTarget(sceneX: Int, sceneZ: Int) {
+    fun setDestinationTarget(sceneX: Int, sceneY: Int) {
         if (!isSmartRoofsActive()) {
             clearDestinationTarget()
             return
         }
-        if (!isInSceneBounds(sceneX, sceneZ)) {
+        if (!isInSceneBounds(sceneX, sceneY)) {
             clearDestinationTarget()
             return
         }
         destinationTargetX = sceneX
-        destinationTargetY = sceneZ
+        destinationTargetY = sceneY
         destinationTargetUntil = System.currentTimeMillis() + DESTINATION_HOLD_MS
     }
 
@@ -670,17 +670,17 @@ object RoofHider {
         }
     }
 
-    private fun isInSceneBounds(sceneX: Int, sceneZ: Int): Boolean {
-        return sceneX in 0 until 104 && sceneZ in 0 until 104
+    private fun isInSceneBounds(sceneX: Int, sceneY: Int): Boolean {
+        return sceneX in 0 until 104 && sceneY in 0 until 104
     }
 
-    private fun isHideableRoofTile(sceneX: Int, sceneZ: Int, plane: Int): Boolean {
+    private fun isHideableRoofTile(sceneX: Int, sceneY: Int, plane: Int): Boolean {
         if (ScriptRunner.aByteArrayArrayArray15 == null) {
             return false
         }
         return isRoofHidePlane(plane) &&
-            isInSceneBounds(sceneX, sceneZ) &&
-            (SceneGraph.renderFlags[plane][sceneX][sceneZ].toInt() and TILE_FLAG_UNDER_ROOF) != 0
+            isInSceneBounds(sceneX, sceneY) &&
+            (SceneGraph.renderFlags[plane][sceneX][sceneY].toInt() and TILE_FLAG_UNDER_ROOF) != 0
     }
 
     private fun isRoofHidePlane(plane: Int): Boolean {
@@ -694,9 +694,9 @@ object RoofHider {
             shape == LocType.WALL_SQUARECORNER ||
             shape == LocType.WALL_DIAGONAL ||
             shape == LocType.WALLDECOR_STRAIGHT_XOFFSET ||
-            shape == LocType.WALLDECOR_STRAIGHT_ZOFFSET ||
+            shape == LocType.WALLDECOR_STRAIGHT_YOFFSET ||
             shape == LocType.WALLDECOR_DIAGONAL_XOFFSET ||
-            shape == LocType.WALLDECOR_DIAGONAL_ZOFFSET ||
+            shape == LocType.WALLDECOR_DIAGONAL_YOFFSET ||
             shape == LocType.WALLDECOR_DIAGONAL_BOTH
     }
 

@@ -28,9 +28,9 @@ public class AreaSoundManager {
 	}
 
 	@OriginalMember(owner = "client!jh", name = "a", descriptor = "(IZLclient!pb;ILclient!km;IILclient!e;)V")
-	public static void add(@OriginalArg(0) int z, @OriginalArg(2) LocType loc, @OriginalArg(3) int arg2, @OriginalArg(4) Npc npc, @OriginalArg(5) int x, @OriginalArg(6) int level, @OriginalArg(7) Player player) {
+	public static void add(@OriginalArg(0) int y, @OriginalArg(2) LocType loc, @OriginalArg(3) int arg2, @OriginalArg(4) Npc npc, @OriginalArg(5) int x, @OriginalArg(6) int level, @OriginalArg(7) Player player) {
 		@Pc(13) AreaSound sound = new AreaSound();
-		sound.minZFine = z * 128;
+		sound.minZFine = y * 128;
 		sound.minXFine = x * 128;
 		sound.level = level;
 		if (loc != null) {
@@ -46,7 +46,7 @@ public class AreaSoundManager {
 				local57 = loc.length;
 				local60 = loc.width;
 			}
-			sound.maxZFine = (local60 + z) * 128;
+			sound.maxZFine = (local60 + y) * 128;
 			sound.maxXFine = (x + local57) * 128;
 			if (loc.multiLocs != null) {
 				sound.multiLocOrNpc = true;
@@ -64,7 +64,7 @@ public class AreaSoundManager {
 				npcType = npcType.getMultiNpc();
 			}
 			if (npcType != null) {
-				sound.maxZFine = (npcType.size + z) * 128;
+				sound.maxZFine = (npcType.size + y) * 128;
 				sound.maxXFine = (npcType.size + x) * 128;
 				sound.sound = Npc.getSound(npc);
 				sound.radius = npcType.soundRadius * 128;
@@ -73,7 +73,7 @@ public class AreaSoundManager {
 		} else if (player != null) {
 			sound.player = player;
 			sound.maxXFine = (player.getSize() + x) * 128;
-			sound.maxZFine = (player.getSize() + z) * 128;
+			sound.maxZFine = (player.getSize() + y) * 128;
 			sound.sound = Player.getSound(player);
 			sound.radius = player.soundRadius * 128;
 			playerSounds.put(sound, player.username.encode37());
@@ -175,9 +175,9 @@ public class AreaSoundManager {
 	}
 
 	@OriginalMember(owner = "client!ra", name = "a", descriptor = "(ILclient!pb;BII)V")
-	public static void remove(@OriginalArg(0) int x, @OriginalArg(1) LocType locType, @OriginalArg(3) int z, @OriginalArg(4) int level) {
+	public static void remove(@OriginalArg(0) int x, @OriginalArg(1) LocType locType, @OriginalArg(3) int y, @OriginalArg(4) int level) {
 		for (@Pc(10) AreaSound areaSound = (AreaSound) locSounds.head(); areaSound != null; areaSound = (AreaSound) locSounds.next()) {
-			if (level == areaSound.level && areaSound.minXFine == x * 128 && areaSound.minZFine == z * 128 && locType.id == areaSound.locType.id) {
+			if (level == areaSound.level && areaSound.minXFine == x * 128 && areaSound.minZFine == y * 128 && locType.id == areaSound.locType.id) {
 				if (areaSound.primaryStream != null) {
 					client.soundStream.removeSubStream(areaSound.primaryStream);
 					areaSound.primaryStream = null;
@@ -226,7 +226,7 @@ public class AreaSoundManager {
 	}
 
 	@OriginalMember(owner = "client!lk", name = "a", descriptor = "(ILclient!fl;IIII)V")
-	public static void redraw(@OriginalArg(0) int x, @OriginalArg(1) AreaSound areaSound, @OriginalArg(2) int level, @OriginalArg(3) int loops, @OriginalArg(4) int z) {
+	public static void redraw(@OriginalArg(0) int x, @OriginalArg(1) AreaSound areaSound, @OriginalArg(2) int level, @OriginalArg(3) int loops, @OriginalArg(4) int y) {
 		if (areaSound.sound == -1 && areaSound.sounds == null) {
 			return;
 		}
@@ -236,10 +236,10 @@ public class AreaSoundManager {
 		} else if (areaSound.minXFine > x) {
 			distance = areaSound.minXFine - x;
 		}
-		if (areaSound.maxZFine < z) {
-			distance += z - areaSound.maxZFine;
-		} else if (z < areaSound.minZFine) {
-			distance += areaSound.minZFine - z;
+		if (areaSound.maxZFine < y) {
+			distance += y - areaSound.maxZFine;
+		} else if (y < areaSound.minZFine) {
+			distance += areaSound.minZFine - y;
 		}
 		if (areaSound.radius == 0 || areaSound.radius < distance - 64 || Preferences.ambientSoundsVolume == 0 || level != areaSound.level) {
 			if (areaSound.primaryStream != null) {
