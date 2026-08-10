@@ -1488,54 +1488,54 @@ public class SceneGraph {
 		}
 		if (shape == 2) {
 			if (local100 instanceof Loc) {
-				((Loc) local100).method1046();
+				((Loc) local100).resetShadow();
 			} else {
-				Loc.method181(type, 0, angle + 4, 0, shape, x, z, arg4);
+				Loc.buildStaticShadow(type, 0, angle + 4, 0, shape, x, z, arg4);
 			}
 			if (local102 instanceof Loc) {
-				((Loc) local102).method1046();
+				((Loc) local102).resetShadow();
 			} else {
-				Loc.method181(type, 0, angle + 1 & 0x3, 0, shape, x, z, arg4);
+				Loc.buildStaticShadow(type, 0, angle + 1 & 0x3, 0, shape, x, z, arg4);
 			}
 		} else if (shape == 5) {
 			if (local100 instanceof Loc) {
-				((Loc) local100).method1046();
+				((Loc) local100).resetShadow();
 			} else {
-				Loc.method181(type, WALL_DECO_ROT_SIZE_Y_DIR[angle] * 8, angle, WALL_DECO_ROT_SIZE_X_DIR[angle] * 8, 4, x, z, arg4);
+				Loc.buildStaticShadow(type, WALL_DECO_ROT_SIZE_Y_DIR[angle] * 8, angle, WALL_DECO_ROT_SIZE_X_DIR[angle] * 8, 4, x, z, arg4);
 			}
 		} else if (shape == 6) {
 			if (local100 instanceof Loc) {
-				((Loc) local100).method1046();
+				((Loc) local100).resetShadow();
 			} else {
-				Loc.method181(type, anIntArray154[angle] * 8, angle + 4, anIntArray565[angle] * 8, 4, x, z, arg4);
+				Loc.buildStaticShadow(type, anIntArray154[angle] * 8, angle + 4, anIntArray565[angle] * 8, 4, x, z, arg4);
 			}
 		} else if (shape == 7) {
 			if (local100 instanceof Loc) {
-				((Loc) local100).method1046();
+				((Loc) local100).resetShadow();
 			} else {
-				Loc.method181(type, 0, (angle + 2 & 0x3) + 4, 0, 4, x, z, arg4);
+				Loc.buildStaticShadow(type, 0, (angle + 2 & 0x3) + 4, 0, 4, x, z, arg4);
 			}
 		} else if (shape == 8) {
 			if (local100 instanceof Loc) {
-				((Loc) local100).method1046();
+				((Loc) local100).resetShadow();
 			} else {
-				Loc.method181(type, anIntArray154[angle] * 8, angle + 4, anIntArray565[angle] * 8, 4, x, z, arg4);
+				Loc.buildStaticShadow(type, anIntArray154[angle] * 8, angle + 4, anIntArray565[angle] * 8, 4, x, z, arg4);
 			}
 			if (local102 instanceof Loc) {
-				((Loc) local102).method1046();
+				((Loc) local102).resetShadow();
 			} else {
-				Loc.method181(type, anIntArray154[angle] * 8, (angle + 2 & 0x3) + 4, anIntArray565[angle] * 8, 4, x, z, arg4);
+				Loc.buildStaticShadow(type, anIntArray154[angle] * 8, (angle + 2 & 0x3) + 4, anIntArray565[angle] * 8, 4, x, z, arg4);
 			}
 		} else if (shape == 11) {
 			if (local100 instanceof Loc) {
-				((Loc) local100).method1046();
+				((Loc) local100).resetShadow();
 			} else {
-				Loc.method181(type, 0, angle + 4, 0, 10, x, z, arg4);
+				Loc.buildStaticShadow(type, 0, angle + 4, 0, 10, x, z, arg4);
 			}
 		} else if (local100 instanceof Loc) {
-			((Loc) local100).method1046();
+			((Loc) local100).resetShadow();
 		} else {
-			Loc.method181(type, 0, angle, 0, shape, x, z, arg4);
+			Loc.buildStaticShadow(type, 0, angle, 0, shape, x, z, arg4);
 		}
 	}
 

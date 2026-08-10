@@ -505,7 +505,7 @@ public final class Player extends PathingEntity {
 			}
 			if (this.attachmentSetAt <= client.loop && this.attachmentResetAt > client.loop) {
 				if (this.attachment instanceof Loc) {
-					local515 = (Model) ((Loc) this.attachment).method1049();
+					local515 = (Model) ((Loc) this.attachment).getEntity();
 				} else {
 					local515 = (Model) this.attachment;
 				}
