@@ -46,14 +46,14 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!pi", name = "a", descriptor = "(Lclient!na;BI)V")
-	public static void method3498(@OriginalArg(0) JagString arg0, @OriginalArg(2) int arg1) {
+	public static void setVarcStrServer(@OriginalArg(0) JagString arg0, @OriginalArg(2) int arg1) {
 		@Pc(10) DelayedStateChange local10 = create(2, arg1);
 		local10.pushServer();
 		local10.stringArg = arg0;
 	}
 
 	@OriginalMember(owner = "client!mc", name = "c", descriptor = "(III)V")
-	public static void method2905(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public static void setComponentHiddenServer(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(14) DelayedStateChange local14 = create(7, arg0);
 		local14.pushServer();
 		local14.intArg1 = arg1;
@@ -76,7 +76,7 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(III)V")
-	public static void method3893(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static void setComponentAnimServer(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(14) DelayedStateChange local14 = create(5, arg0);
 		local14.pushServer();
 		local14.intArg1 = arg1;
@@ -99,7 +99,7 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(IIII)V")
-	public static void method4666(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
+	public static void setComponentPositionServer(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
 		@Pc(18) DelayedStateChange local18 = create(11, arg1);
 		local18.pushServer();
 		local18.intArg3 = arg2;
@@ -107,7 +107,7 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!gf", name = "a", descriptor = "(Lclient!na;II)V")
-	public static void method3617(@OriginalArg(0) JagString arg0, @OriginalArg(2) int arg1) {
+	public static void setComponentTextServer(@OriginalArg(0) JagString arg0, @OriginalArg(2) int arg1) {
 		@Pc(6) DelayedStateChange local6 = create(3, arg1);
 		local6.pushServer();
 		local6.stringArg = arg0;
@@ -142,13 +142,13 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!wc", name = "a", descriptor = "(ZI)V")
-	public static void method4600(@OriginalArg(1) int arg0) {
+	public static void setComponentModelClient(@OriginalArg(1) int arg0) {
 		@Pc(8) DelayedStateChange local8 = create(4, arg0);
 		local8.pushClient();
 	}
 
 	@OriginalMember(owner = "client!jd", name = "a", descriptor = "(IB)V")
-	public static void method2353(@OriginalArg(0) int arg0) {
+	public static void setComponentScrollClient(@OriginalArg(0) int arg0) {
 		@Pc(12) DelayedStateChange local12 = create(12, arg0);
 		local12.pushClient();
 	}
@@ -176,7 +176,7 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!lf", name = "a", descriptor = "(IIIIB)V")
-	public static void method2745(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static void setComponentModelOffsetServer(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		@Pc(8) DelayedStateChange local8 = create(10, arg0);
 		local8.pushServer();
 		local8.intArg3 = arg2;
@@ -185,19 +185,19 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!n", name = "a", descriptor = "(II)V")
-	public static void method3096(@OriginalArg(0) int arg0) {
+	public static void setComponentTextClient(@OriginalArg(0) int arg0) {
 		@Pc(8) DelayedStateChange local8 = create(3, arg0);
 		local8.pushClient();
 	}
 
 	@OriginalMember(owner = "client!oi", name = "b", descriptor = "(II)V")
-	public static void method3345(@OriginalArg(0) int arg0) {
+	public static void setComponentAnimClient(@OriginalArg(0) int arg0) {
 		@Pc(8) DelayedStateChange local8 = create(5, arg0);
 		local8.pushClient();
 	}
 
 	@OriginalMember(owner = "client!ra", name = "a", descriptor = "(BIII)V")
-	public static void method3707(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	public static void setComponentObjServer(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		@Pc(12) DelayedStateChange local12 = create(9, arg0);
 		local12.pushServer();
 		local12.intArg1 = arg2;
@@ -205,20 +205,20 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!si", name = "b", descriptor = "(IIB)V")
-	public static void method3938(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static void setComponentScrollServer(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(16) DelayedStateChange local16 = create(12, arg1);
 		local16.pushServer();
 		local16.intArg1 = arg0;
 	}
 
 	@OriginalMember(owner = "client!tm", name = "a", descriptor = "(II)V")
-	public static void method4224(@OriginalArg(0) int arg0) {
+	public static void setComponentColorClient(@OriginalArg(0) int arg0) {
 		@Pc(16) DelayedStateChange local16 = create(6, arg0);
 		local16.pushClient();
 	}
 
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(II)V")
-	public static void method4675(@OriginalArg(1) int arg0) {
+	public static void setComponentPositionClient(@OriginalArg(1) int arg0) {
 		@Pc(17) DelayedStateChange local17 = create(11, arg0);
 		local17.pushClient();
 	}
@@ -230,13 +230,13 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "b", descriptor = "(II)V")
-	public static void method1840(@OriginalArg(1) int arg0) {
+	public static void setVarcStrClient(@OriginalArg(1) int arg0) {
 		@Pc(8) DelayedStateChange local8 = create(2, arg0);
 		local8.pushClient();
 	}
 
 	@OriginalMember(owner = "client!he", name = "c", descriptor = "(II)V")
-	public static void method1906(@OriginalArg(1) int arg0) {
+	public static void setComponentHiddenClient(@OriginalArg(1) int arg0) {
 		@Pc(12) DelayedStateChange local12 = create(7, arg0);
 		local12.pushClient();
 	}

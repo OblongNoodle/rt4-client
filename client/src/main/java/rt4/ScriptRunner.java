@@ -2145,7 +2145,7 @@ public final class ScriptRunner {
 						id = intOperands[pc];
 						ssp--;
 						VarcDomain.varcstrs[id] = stringStack[ssp];
-						DelayedStateChange.method1840(id);
+						DelayedStateChange.setVarcStrClient(id);
 						continue;
 					}
 					if (opcode == 51) {
@@ -2324,7 +2324,7 @@ public final class ScriptRunner {
 									}
 									InterfaceList.redraw(component);
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method2353(component.id);
+										DelayedStateChange.setComponentScrollClient(component.id);
 									}
 									continue;
 								}
@@ -2333,7 +2333,7 @@ public final class ScriptRunner {
 									component.color = intStack[isp];
 									InterfaceList.redraw(component);
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method4224(component.id);
+										DelayedStateChange.setComponentColorClient(component.id);
 									}
 									continue;
 								}
@@ -2379,7 +2379,7 @@ public final class ScriptRunner {
 									component.modelId = intStack[isp];
 									InterfaceList.redraw(component);
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method4600(component.id);
+										DelayedStateChange.setComponentModelClient(component.id);
 									}
 									continue;
 								}
@@ -2409,7 +2409,7 @@ public final class ScriptRunner {
 										InterfaceList.redraw(component);
 									}
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method3345(component.id);
+										DelayedStateChange.setComponentAnimClient(component.id);
 									}
 									continue;
 								}
@@ -2427,7 +2427,7 @@ public final class ScriptRunner {
 										InterfaceList.redraw(component);
 									}
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method3096(component.id);
+										DelayedStateChange.setComponentTextClient(component.id);
 									}
 									continue;
 								}
@@ -2553,7 +2553,7 @@ public final class ScriptRunner {
 									isp--;
 									component.modelId = intStack[isp];
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method4600(component.id);
+										DelayedStateChange.setComponentModelClient(component.id);
 									}
 									continue;
 								}
@@ -2561,7 +2561,7 @@ public final class ScriptRunner {
 									component.modelType = 3;
 									component.modelId = PlayerList.self.appearance.getAppearanceHash();
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method4600(component.id);
+										DelayedStateChange.setComponentModelClient(component.id);
 									}
 									continue;
 								}
@@ -2570,7 +2570,7 @@ public final class ScriptRunner {
 									isp--;
 									component.modelId = intStack[isp];
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method4600(component.id);
+										DelayedStateChange.setComponentModelClient(component.id);
 									}
 									continue;
 								}
@@ -2579,7 +2579,7 @@ public final class ScriptRunner {
 									isp--;
 									component.modelId = intStack[isp];
 									if (component.createdComponentId == -1) {
-										DelayedStateChange.method4600(component.id);
+										DelayedStateChange.setComponentModelClient(component.id);
 									}
 									continue;
 								}
@@ -5880,7 +5880,7 @@ public final class ScriptRunner {
 								InterfaceList.redraw(component);
 								InterfaceList.update(component);
 								if (component.createdComponentId == -1) {
-									DelayedStateChange.method4675(component.id);
+									DelayedStateChange.setComponentPositionClient(component.id);
 								}
 								continue;
 							}
@@ -5919,7 +5919,7 @@ public final class ScriptRunner {
 									InterfaceList.redraw(component);
 								}
 								if (component.createdComponentId == -1) {
-									DelayedStateChange.method1906(component.id);
+									DelayedStateChange.setComponentHiddenClient(component.id);
 								}
 								continue;
 							}

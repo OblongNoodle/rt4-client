@@ -1083,7 +1083,7 @@ public class Protocol {
 			int tracknum = inboundBuffer.g2add();
 			JagString value = inboundBuffer.gjstr();
 			setVerifyId(tracknum);
-			DelayedStateChange.method3498(value, id);
+			DelayedStateChange.setVarcStrServer(value, id);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.UPDATE_ZONE_PARTIAL_ENCLOSED) {
@@ -1104,7 +1104,7 @@ public class Protocol {
 			int pos = inboundBuffer.ig2();
 			int tracknum = inboundBuffer.g2();
 			setVerifyId(tracknum);
-			DelayedStateChange.method3938(pos, id);
+			DelayedStateChange.setComponentScrollServer(pos, id);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.CLAN_QUICK_CHAT) {
@@ -1223,7 +1223,7 @@ public class Protocol {
 			JagString text = inboundBuffer.gjstr();
 			int id = inboundBuffer.ig2add();
 			setVerifyId(tracknum);
-			DelayedStateChange.method3498(text, id);
+			DelayedStateChange.setVarcStrServer(text, id);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.CHAT_FILTER_SETTINGS) {
@@ -1261,7 +1261,7 @@ public class Protocol {
 			int tracknum = inboundBuffer.g2();
 			int reset = inboundBuffer.ig4();
 			setVerifyId(tracknum);
-			DelayedStateChange.method2905(reset, parent);
+			DelayedStateChange.setComponentHiddenServer(reset, parent);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.IF_OPENSUB) {
@@ -1322,7 +1322,7 @@ public class Protocol {
 			int value = inboundBuffer.ig2b();
 			int tracknum = inboundBuffer.g2add();
 			setVerifyId(tracknum);
-			DelayedStateChange.method3893(id, value);
+			DelayedStateChange.setComponentAnimServer(id, value);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.WIDGETSTRUCT_SETTING) {
@@ -1935,7 +1935,7 @@ public class Protocol {
 			int x = inboundBuffer.g2b();
 			int y = inboundBuffer.g2badd();
 			setVerifyId(tracknum);
-			DelayedStateChange.method4666(x, ptr, y);
+			DelayedStateChange.setComponentPositionServer(x, ptr, y);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.LOC_ANIM_SPECIFIC) {
@@ -2078,7 +2078,7 @@ public class Protocol {
 			JagString text = inboundBuffer.gjstr();
 			int tracknum = inboundBuffer.g2add();
 			setVerifyId(tracknum);
-			DelayedStateChange.method3617(text, id);
+			DelayedStateChange.setComponentTextServer(text, id);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.VARBIT_LARGE) {
@@ -2271,10 +2271,10 @@ public class Protocol {
 			@Pc(5603) Component component = InterfaceList.getComponent(id);
 			@Pc(5615) ObjType objType;
 			if (component.if3) {
-				DelayedStateChange.method3707(id, slot, itemId);
+				DelayedStateChange.setComponentObjServer(id, slot, itemId);
 				objType = ObjTypeList.get(itemId);
 				DelayedStateChange.updateView(objType.zoom2d, id, objType.yAngle2D, objType.xAngle2D);
-				DelayedStateChange.method2745(id, objType.zAngle2D, objType.yOffset2D, objType.xOffset2D);
+				DelayedStateChange.setComponentModelOffsetServer(id, objType.zAngle2D, objType.yOffset2D, objType.xOffset2D);
 			} else if (itemId == -1) {
 				component.modelType = 0;
 				opcode = -1;
