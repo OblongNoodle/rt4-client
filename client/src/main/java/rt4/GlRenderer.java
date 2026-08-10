@@ -304,7 +304,7 @@ public final class GlRenderer {
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		FogManager.setup();
-		LightingManager.method2400();
+		LightingManager.initGlLightParameters();
 	}
 
 	@OriginalMember(owner = "client!tf", name = "g", descriptor = "()V")
@@ -544,7 +544,7 @@ public final class GlRenderer {
 		gl = null;
 		context = null;
 		drawable = null;
-		LightingManager.method2398(); // LightingManager
+		LightingManager.destroy(); // LightingManager
 		enabled = false;
 	}
 
@@ -849,7 +849,7 @@ public final class GlRenderer {
 		anInt5328 = local2[0];
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, anInt5328);
 		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, 4, 1, 1, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, IntBuffer.wrap(new int[]{-1}));
-		LightingManager.method2401();
+		LightingManager.allocateLightArrays();
 		MaterialManager.init();
 	}
 

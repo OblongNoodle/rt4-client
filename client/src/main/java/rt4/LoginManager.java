@@ -1015,7 +1015,7 @@ public class LoginManager {
 			}
 		}
 		if (GlRenderer.enabled) {
-			LightingManager.method2404();
+			LightingManager.clearLightGrid();
 		}
 		if (GlRenderer.enabled) {
 			FogManager.setDefaultChunksAtmosphere();
@@ -1051,7 +1051,7 @@ public class LoginManager {
 		ClientProt.ping(true);
 		SceneGraph.buildScene(PathFinder.collisionMaps, false);
 		if (GlRenderer.enabled) {
-			LightingManager.method2395();
+			LightingManager.buildLightGrid();
 		}
 		ClientProt.ping(true);
 		i = SceneGraph.firstVisibleLevel;
@@ -1443,7 +1443,7 @@ public class LoginManager {
 		if (GlRenderer.enabled) {
 			GlRaster.method1177();
 		} else {
-			SoftwareRaster.method2503();
+			SoftwareRaster.resetClip();
 		}
 		if (!Cs1ScriptRunner.aBoolean108) {
 			PluginRepository.OnMiniMenuCreate();

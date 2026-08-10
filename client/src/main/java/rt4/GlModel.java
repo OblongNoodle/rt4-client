@@ -210,7 +210,7 @@ public final class GlModel extends Model {
 		@Pc(23) int[] local23 = new int[model.triangleCount];
 		this.anIntArray462 = new int[model.vertexCount + 1];
 		for (@Pc(32) int local32 = 0; local32 < model.triangleCount; local32++) {
-			if ((model.triangleInfo == null || model.triangleInfo[local32] != 2) && (model.triangleTextures == null || model.triangleTextures[local32] == -1 || !Rasteriser.textureProvider.method3231(model.triangleTextures[local32] & 0xFFFF))) {
+			if ((model.triangleInfo == null || model.triangleInfo[local32] != 2) && (model.triangleTextures == null || model.triangleTextures[local32] == -1 || !Rasteriser.textureProvider.isTextureFlipped(model.triangleTextures[local32] & 0xFFFF))) {
 				local23[this.triangleCount++] = local32;
 				this.anIntArray462[model.triangleVertexA[local32]]++;
 				this.anIntArray462[model.triangleVertexB[local32]]++;
@@ -233,7 +233,7 @@ public final class GlModel extends Model {
 				local135 = model.triangleTextures[local125];
 				if (local135 != -1) {
 					local131 = Rasteriser.textureProvider.getMaterialType(local135 & 0xFFFF);
-					local133 = Rasteriser.textureProvider.method3228(local135 & 0xFFFF);
+					local133 = Rasteriser.textureProvider.getAnimationType(local135 & 0xFFFF);
 				}
 			}
 			@Pc(182) boolean local182 = model.triangleAlpha != null && model.triangleAlpha[local125] != 0 || local135 != -1 && !Rasteriser.textureProvider.isOpaque(local135 & 0xFFFF);
@@ -738,7 +738,7 @@ public final class GlModel extends Model {
 	public static int method4096(@OriginalArg(0) int arg0, @OriginalArg(1) short arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
 		@Pc(5) int local5 = Rasteriser.palette[ColorUtils.multiplyLightness2(arg0, arg2)];
 		if (arg1 != -1) {
-			@Pc(15) int local15 = Rasteriser.textureProvider.method3238(arg1 & 0xFFFF);
+			@Pc(15) int local15 = Rasteriser.textureProvider.getTextureBrightness(arg1 & 0xFFFF);
 			@Pc(21) int local21;
 			@Pc(44) int local44;
 			if (local15 != 0) {
@@ -756,7 +756,7 @@ public final class GlModel extends Model {
 					local5 = ((local21 & 0xFF00FF) * local15 + (local5 & 0xFF00FF) * local44 & 0xFF00FF00) + ((local21 & 0xFF00) * local15 + (local5 & 0xFF00) * local44 & 0xFF0000) >> 8;
 				}
 			}
-			local21 = Rasteriser.textureProvider.method3229(arg1 & 0xFFFF);
+			local21 = Rasteriser.textureProvider.getTextureSpeed(arg1 & 0xFFFF);
 			if (local21 != 0) {
 				local21 += 256;
 				@Pc(92) int local92 = (local5 >> 16 & 0xFF) * local21;
@@ -2067,14 +2067,14 @@ public final class GlModel extends Model {
 		local1 = 0;
 		@Pc(22) int local22 = 0;
 		if (arg0 != -1) {
-			local1 = Rasteriser.textureProvider.method3238(arg0 & 0xFFFF);
-			local22 = Rasteriser.textureProvider.method3229(arg0 & 0xFFFF);
+			local1 = Rasteriser.textureProvider.getTextureBrightness(arg0 & 0xFFFF);
+			local22 = Rasteriser.textureProvider.getTextureSpeed(arg0 & 0xFFFF);
 		}
 		@Pc(41) int local41 = 0;
 		@Pc(43) int local43 = 0;
 		if (arg1 != -1) {
-			local41 = Rasteriser.textureProvider.method3238(arg1 & 0xFFFF);
-			local43 = Rasteriser.textureProvider.method3229(arg1 & 0xFFFF);
+			local41 = Rasteriser.textureProvider.getTextureBrightness(arg1 & 0xFFFF);
+			local43 = Rasteriser.textureProvider.getTextureSpeed(arg1 & 0xFFFF);
 		}
 		if (local1 != local41 || local22 != local43) {
 			this.colorBuffer.valid = false;
@@ -3394,7 +3394,7 @@ public final class GlModel extends Model {
 				GlRenderer.setTextureId(-1);
 				MaterialManager.setMaterial(0, 0);
 			} else {
-				Rasteriser.textureProvider.method3227(local439 & 0xFFFF);
+				Rasteriser.textureProvider.bindTexture(local439 & 0xFFFF);
 			}
 			if (this.indexBuffer.vbo == null) {
 				this.indexBuffer.buffer.position(local427 * 12);

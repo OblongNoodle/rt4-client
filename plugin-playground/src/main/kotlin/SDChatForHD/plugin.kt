@@ -74,7 +74,7 @@ class plugin : Plugin() {
 
         if (chatButtonsUnderlay != null) {
             chatButtonsUnderlay.spriteId = CHAT_BUTTONS_UNDERLAY_SPRITE
-            chatButtonsUnderlay.method489(false)?.render(
+            chatButtonsUnderlay.getSprite(false)?.render(
                 chatButtonsUnderlay.x,
                 chatButtonsUnderlay.y,
             )

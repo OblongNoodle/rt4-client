@@ -376,7 +376,7 @@ public final class PlayerAppearance {
 								local404[10] = local353;
 							}
 							if (local374 != 0 || local367 != 0 || local381 != 0) {
-								local239[local250].method1684(local374, local367, local381);
+								local239[local250].rotateXYZ(local374, local367, local381);
 							}
 							if (local346 != 0 || local353 != 0 || local360 != 0) {
 								local239[local250].translate(local346, local353, local360);

@@ -308,13 +308,13 @@ public final class ScriptRunner {
 			} else {
 				local171 = FogManager.method2235(Protocol.sceneDelta, PlayerList.self.movementQueueY[0] >> 3, Preferences.brightness, PlayerList.self.movementQueueX[0] >> 3);
 			}
-			LightingManager.method2394(client.loop, !Preferences.flickeringEffectsOn);
+			LightingManager.updateAllLightAnimations(client.loop, !Preferences.flickeringEffectsOn);
 			GlRenderer.clearColorAndDepthBuffers(local171);
 			MaterialManager.method2731(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
 			GlRenderer.anInt5323 = client.loop;
 			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			aBoolean299 = true;
-			LightingManager.method2390();
+			LightingManager.resetActiveLights();
 			MaterialManager.method2731(0, 0, 0, 0, 0);
 			client.audioLoop();
 			method3858();
@@ -328,7 +328,7 @@ public final class ScriptRunner {
 			drawOverheads(arg4, arg3, arg2, 256, arg0, 256);
 			MiniMap.method4000(arg3, arg2, arg0, 256, 256, arg4);
 		}
-		((Js5GlTextureProvider) Rasteriser.textureProvider).method3239(Protocol.sceneDelta);
+		((Js5GlTextureProvider) Rasteriser.textureProvider).resetAnimatedTextures(Protocol.sceneDelta);
 		Player.renderCross(arg3, arg4, arg0, arg2);
 		Camera.cameraPitch = local123;
 		Camera.renderY = local121;
@@ -498,7 +498,7 @@ public final class ScriptRunner {
 						if (GlRenderer.enabled) {
 							GlRaster.method1183(local161, local359, local161 + local639, local359 + local642);
 						} else {
-							SoftwareRaster.method2498(local161, local359, local161 + local639, local642 + local359);
+							SoftwareRaster.shrinkClip(local161, local359, local161 + local639, local642 + local359);
 						}
 						local512.render(local161, local359);
 						if (GlRenderer.enabled) {
@@ -620,7 +620,7 @@ public final class ScriptRunner {
 					if (GlRenderer.enabled) {
 						GlRaster.method1183(anInt1951 + arg2 - 50, arg0, anInt1951 + arg2 + 50, arg4 + arg0);
 					} else {
-						SoftwareRaster.method2498(arg2 + anInt1951 - 50, arg0, anInt1951 + arg2 + 50, arg4 + arg0);
+						SoftwareRaster.shrinkClip(arg2 + anInt1951 - 50, arg0, anInt1951 + arg2 + 50, arg4 + arg0);
 					}
 					Fonts.b12Full.renderLeft(local962, arg2 + anInt1951 + 50 - local642, arg0 + anInt548, local639, 0);
 					if (GlRenderer.enabled) {
@@ -635,7 +635,7 @@ public final class ScriptRunner {
 					if (GlRenderer.enabled) {
 						GlRaster.method1183(arg2, anInt548 + arg0 - Fonts.b12Full.lineHeight - 1, arg1 + arg2, arg0 + anInt548 + 5);
 					} else {
-						SoftwareRaster.method2498(arg2, anInt548 + arg0 - Fonts.b12Full.lineHeight - 1, arg2 + arg1, anInt548 + arg0 + 5);
+						SoftwareRaster.shrinkClip(arg2, anInt548 + arg0 - Fonts.b12Full.lineHeight - 1, arg2 + arg1, anInt548 + arg0 + 5);
 					}
 					if (local642 < 25) {
 						local1372 = local642 - 25;
@@ -2596,7 +2596,7 @@ public final class ScriptRunner {
 									int3 = intStack[isp] - 1;
 									if (int3 >= 0 && int3 <= 9) {
 										ssp--;
-										component.method480(stringStack[ssp], int3);
+										component.setOp(stringStack[ssp], int3);
 										continue;
 									}
 									ssp--;
@@ -2651,7 +2651,7 @@ public final class ScriptRunner {
 									isp--;
 									int2 = intStack[isp];
 									if (int2 >= 1 && int2 <= 10) {
-										component.method477(int2 - 1, int3);
+										component.setDragTarget(int2 - 1, int3);
 									}
 									continue;
 								}
@@ -5085,7 +5085,7 @@ public final class ScriptRunner {
 													if (opcode == 6006) {
 														isp--;
 														Preferences.highDetailTextures = intStack[isp] == 1;
-														((Js5GlTextureProvider) Rasteriser.textureProvider).method3245(!Preferences.highDetailTextures);
+														((Js5GlTextureProvider) Rasteriser.textureProvider).setLowDetail(!Preferences.highDetailTextures);
 														Preferences.write(GameShell.signLink);
 														Preferences.sentToServer = false;
 														continue;

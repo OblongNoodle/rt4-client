@@ -518,7 +518,7 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(IIB)V")
-	public final void method477(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public final void setDragTarget(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		if (this.anIntArray39 == null || this.anIntArray39.length <= arg0) {
 			@Pc(18) int[] local18 = new int[arg0 + 1];
 			if (this.anIntArray39 != null) {
@@ -536,7 +536,7 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(I)Z")
-	public final boolean method478() {
+	public final boolean buildClickMask() {
 		if (this.anIntArray37 != null) {
 			return true;
 		}
@@ -570,7 +570,7 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(BLclient!na;I)V")
-	public final void method480(@OriginalArg(1) JagString arg0, @OriginalArg(2) int arg1) {
+	public final void setOp(@OriginalArg(1) JagString arg0, @OriginalArg(2) int arg1) {
 		if (this.ops == null || this.ops.length <= arg1) {
 			@Pc(23) JagString[] local23 = new JagString[arg1 + 1];
 			if (this.ops != null) {
@@ -805,7 +805,7 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(ZI)Lclient!qf;")
-	public final Sprite method482(@OriginalArg(1) int arg0) {
+	public final Sprite getInvSprite(@OriginalArg(1) int arg0) {
 		aBoolean72 = false;
 		if (arg0 < 0 || arg0 >= this.invSprite.length) {
 			return null;
@@ -828,7 +828,7 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "b", descriptor = "(ILclient!wa;)[Ljava/lang/Object;")
-	private Object[] method485(@OriginalArg(1) Buffer arg0) {
+	private Object[] decodeEventHandler(@OriginalArg(1) Buffer arg0) {
 		@Pc(11) int local11 = arg0.g1();
 		if (local11 == 0) {
 			return null;
@@ -847,7 +847,7 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(Lclient!wa;Z)[I")
-	private int[] method486(@OriginalArg(0) Buffer arg0) {
+	private int[] decodeTriggers(@OriginalArg(0) Buffer arg0) {
 		@Pc(9) int local9 = arg0.g1();
 		if (local9 == 0) {
 			return null;
@@ -871,7 +871,7 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(ILclient!tk;IIIZLclient!hh;)Lclient!ak;")
-	public final Model method488(@OriginalArg(0) int arg0, @OriginalArg(1) SeqType arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) PlayerAppearance arg5) {
+	public final Model getModel(@OriginalArg(0) int arg0, @OriginalArg(1) SeqType arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) PlayerAppearance arg5) {
 		aBoolean72 = false;
 		@Pc(10) int local10;
 		@Pc(13) int local13;
@@ -959,7 +959,7 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(BZ)Lclient!qf;")
-	public final Sprite method489(@OriginalArg(1) boolean arg0) {
+	public final Sprite getSprite(@OriginalArg(1) boolean arg0) {
 		aBoolean72 = false;
 		@Pc(12) int local12;
 		if (arg0) {
@@ -986,13 +986,13 @@ public final class Component {
 			return null;
 		}
 		if (this.vFlip) {
-			local85.method309();
+			local85.flipVertical();
 		}
 		if (this.hFlip) {
-			local85.method299();
+			local85.flipHorizontal();
 		}
 		if (this.outlineThickness > 0) {
-			local85.method298(this.outlineThickness);
+			local85.pad(this.outlineThickness);
 		}
 		if (this.outlineThickness >= 1) {
 			local85.drawOutline(1);
@@ -1170,35 +1170,35 @@ public final class Component {
 			}
 		}
 		this.properties = new ServerActiveProperties(local175, local567);
-		this.anObjectArray3 = this.method485(buffer);
-		this.onMouseOver = this.method485(buffer);
-		this.onMouseLeave = this.method485(buffer);
-		this.onUseWith = this.method485(buffer);
-		this.onUse = this.method485(buffer);
-		this.onVarpTransmit = this.method485(buffer);
-		this.onInvTransmit = this.method485(buffer);
-		this.onStatTransmit = this.method485(buffer);
-		this.onTimer = this.method485(buffer);
-		this.onOptionClick = this.method485(buffer);
-		this.onMouseRepeat = this.method485(buffer);
-		this.onClickRepeat = this.method485(buffer);
-		this.onDrag = this.method485(buffer);
-		this.onRelease = this.method485(buffer);
-		this.onHold = this.method485(buffer);
-		this.onDragStart = this.method485(buffer);
-		this.onDragRelease = this.method485(buffer);
-		this.onScroll = this.method485(buffer);
-		this.onVarcTransmit = this.method485(buffer);
-		this.onVarcstrTransmit = this.method485(buffer);
-		this.varpTriggers = this.method486(buffer);
-		this.inventoryTriggers = this.method486(buffer);
-		this.statTriggers = this.method486(buffer);
-		this.varcTriggers = this.method486(buffer);
-		this.varcstrTriggers = this.method486(buffer);
+		this.anObjectArray3 = this.decodeEventHandler(buffer);
+		this.onMouseOver = this.decodeEventHandler(buffer);
+		this.onMouseLeave = this.decodeEventHandler(buffer);
+		this.onUseWith = this.decodeEventHandler(buffer);
+		this.onUse = this.decodeEventHandler(buffer);
+		this.onVarpTransmit = this.decodeEventHandler(buffer);
+		this.onInvTransmit = this.decodeEventHandler(buffer);
+		this.onStatTransmit = this.decodeEventHandler(buffer);
+		this.onTimer = this.decodeEventHandler(buffer);
+		this.onOptionClick = this.decodeEventHandler(buffer);
+		this.onMouseRepeat = this.decodeEventHandler(buffer);
+		this.onClickRepeat = this.decodeEventHandler(buffer);
+		this.onDrag = this.decodeEventHandler(buffer);
+		this.onRelease = this.decodeEventHandler(buffer);
+		this.onHold = this.decodeEventHandler(buffer);
+		this.onDragStart = this.decodeEventHandler(buffer);
+		this.onDragRelease = this.decodeEventHandler(buffer);
+		this.onScroll = this.decodeEventHandler(buffer);
+		this.onVarcTransmit = this.decodeEventHandler(buffer);
+		this.onVarcstrTransmit = this.decodeEventHandler(buffer);
+		this.varpTriggers = this.decodeTriggers(buffer);
+		this.inventoryTriggers = this.decodeTriggers(buffer);
+		this.statTriggers = this.decodeTriggers(buffer);
+		this.varcTriggers = this.decodeTriggers(buffer);
+		this.varcstrTriggers = this.decodeTriggers(buffer);
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "([Lclient!ok;I)Lclient!rk;")
-	public final Font method491(@OriginalArg(0) IndexedSprite[] arg0) {
+	public final Font getFont(@OriginalArg(0) IndexedSprite[] arg0) {
 		aBoolean72 = false;
 		if (this.font == -1) {
 			return null;

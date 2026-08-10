@@ -348,7 +348,7 @@ public class GlSprite extends Sprite {
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "(IIIIII)V")
 	@Override
-	protected final void method1416(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	protected final void drawRotatedScaled(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		GlRenderer.begin2DReplace();
 		@Pc(2) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);

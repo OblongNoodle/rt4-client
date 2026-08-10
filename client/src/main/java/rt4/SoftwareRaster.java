@@ -37,7 +37,7 @@ public final class SoftwareRaster {
 	public static FrameBuffer frameBuffer;
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "()V")
-	public static void method2482() {
+	public static void clearLineMasks() {
 		anIntArray295 = null;
 		anIntArray296 = null;
 	}
@@ -81,14 +81,14 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(III)V")
-	private static void method2485(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	private static void drawDot(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		if (arg0 >= clipLeft && arg1 >= clipTop && arg0 < clipRight && arg1 < clipBottom) {
 			pixels[arg0 + arg1 * width] = 16776960;
 		}
 	}
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "([I[I)V")
-	public static void method2486(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1) {
+	public static void setLineMasks(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1) {
 		if (arg0.length != clipBottom - clipTop || arg1.length != clipBottom - clipTop) {
 			throw new IllegalArgumentException();
 		}
@@ -97,12 +97,12 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "b", descriptor = "(IIIIII)V")
-	public static void method2487(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		method2493(arg0, arg1, arg2, arg4, arg5);
-		method2493(arg0, arg1 + arg3 - 1, arg2, arg4, arg5);
+	public static void drawRectAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+		drawHorizontalLineAlpha(arg0, arg1, arg2, arg4, arg5);
+		drawHorizontalLineAlpha(arg0, arg1 + arg3 - 1, arg2, arg4, arg5);
 		if (arg3 >= 3) {
-			method2499(arg0, arg1 + 1, arg3 - 2, arg4, arg5);
-			method2499(arg0 + arg2 - 1, arg1 + 1, arg3 - 2, arg4, arg5);
+			drawVerticalLineAlpha(arg0, arg1 + 1, arg3 - 2, arg4, arg5);
+			drawVerticalLineAlpha(arg0 + arg2 - 1, arg1 + 1, arg3 - 2, arg4, arg5);
 		}
 	}
 
@@ -112,7 +112,7 @@ public final class SoftwareRaster {
 		clipTop = arg0[1];
 		clipRight = arg0[2];
 		clipBottom = arg0[3];
-		method2482();
+		clearLineMasks();
 	}
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(IIII)V")
@@ -186,7 +186,7 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "b", descriptor = "(IIIII)V")
-	private static void method2493(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private static void drawHorizontalLineAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (arg1 < clipTop || arg1 >= clipBottom) {
 			return;
 		}
@@ -212,7 +212,7 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "c", descriptor = "(IIIIII)V")
-	public static void method2494(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	public static void drawThickLine(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		@Pc(3) int local3 = arg2 - arg0;
 		@Pc(7) int local7 = arg3 - arg1;
 		@Pc(14) int local14 = local3 >= 0 ? local3 : -local3;
@@ -295,7 +295,7 @@ public final class SoftwareRaster {
 		clipTop = arg1;
 		clipRight = arg2;
 		clipBottom = arg3;
-		method2482();
+		clearLineMasks();
 	}
 
 	@OriginalMember(owner = "client!kb", name = "b", descriptor = "([I)V")
@@ -307,7 +307,7 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "d", descriptor = "(IIII)V")
-	public static void method2498(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static void shrinkClip(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		if (clipLeft < arg0) {
 			clipLeft = arg0;
 		}
@@ -320,11 +320,11 @@ public final class SoftwareRaster {
 		if (clipBottom > arg3) {
 			clipBottom = arg3;
 		}
-		method2482();
+		clearLineMasks();
 	}
 
 	@OriginalMember(owner = "client!kb", name = "d", descriptor = "(IIIII)V")
-	private static void method2499(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private static void drawVerticalLineAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (arg0 < clipLeft || arg0 >= clipRight) {
 			return;
 		}
@@ -351,7 +351,7 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "e", descriptor = "(IIIII)V")
-	public static void method2500(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public static void drawLine(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		arg2 -= arg0;
 		arg3 -= arg1;
 		if (arg3 == 0) {
@@ -420,9 +420,9 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "e", descriptor = "(IIII)V")
-	private static void method2501(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	private static void fillCircle(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		if (arg2 == 0) {
-			method2485(arg0, arg1);
+			drawDot(arg0, arg1);
 			return;
 		}
 		if (arg2 < 0) {
@@ -499,12 +499,12 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "f", descriptor = "(IIIII)V")
-	public static void method2502(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
+	public static void fillCircleAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
 		if (arg3 == 0) {
 			return;
 		}
 		if (arg3 == 256) {
-			method2501(arg0, arg1, arg2);
+			fillCircle(arg0, arg1, arg2);
 			return;
 		}
 		@Pc(20) int local20 = 256 - arg3;
@@ -594,16 +594,16 @@ public final class SoftwareRaster {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "c", descriptor = "()V")
-	public static void method2503() {
+	public static void resetClip() {
 		clipLeft = 0;
 		clipTop = 0;
 		clipRight = width;
 		clipBottom = height;
-		method2482();
+		clearLineMasks();
 	}
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(III[I[I)V")
-	public static void method2504(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int[] arg2, @OriginalArg(4) int[] arg3) {
+	public static void clearMaskedRegion(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int[] arg2, @OriginalArg(4) int[] arg3) {
 		@Pc(5) int local5 = arg0 + arg1 * width;
 		for (@Pc(7) int local7 = 0; local7 < arg2.length; local7++) {
 			@Pc(17) int local17 = local5 + arg2[local7];

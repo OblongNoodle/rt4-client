@@ -1037,7 +1037,7 @@ public class SceneGraph {
 									}
 								}
 								texture = local1248.texture;
-								if (texture >= 0 && !Rasteriser.textureProvider.method3236(texture)) {
+								if (texture >= 0 && !Rasteriser.textureProvider.isTextureRepeating(texture)) {
 									texture = -1;
 								}
 								@Pc(1458) int local1458;
@@ -1753,9 +1753,9 @@ public class SceneGraph {
 												if (var22 != null) {
 													if (GlRenderer.enabled) {
 														if ((var22.primaryFlags & local8.wallDrawFlags) == 0) {
-															LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														} else {
-															LightingManager.method2388(var22.primaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
+															LightingManager.updateLightsForWallPiece(var22.primaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
 														}
 													}
 													var22.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, var22.xFine - cameraX, var22.zFine - cameraZ, var22.yFine - cameraY, var22.key, local24, null);
@@ -1764,7 +1764,7 @@ public class SceneGraph {
 													var25 = local153.scenery[local65];
 													if (var25 != null) {
 														if (GlRenderer.enabled) {
-															LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														}
 														var25.entity.render(var25.orientation, anInt2886, anInt3038, anInt5205, anInt2222, var25.xFine - cameraX, var25.zFine - cameraZ, var25.yFine - cameraY, var25.key, local24, null);
 													}
@@ -1798,7 +1798,7 @@ public class SceneGraph {
 														GlRenderer.setDepthLayer(local33 + 50.0F - 1.5F);
 													}
 													if (GlRenderer.enabled) {
-														LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													local549.entity.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local549.xFine - cameraX, local549.zFine - cameraZ, local549.yFine - cameraY, local549.key, local24, null);
 													if (GlRenderer.enabled && local549.flat) {
@@ -1846,13 +1846,13 @@ public class SceneGraph {
 												}
 												if ((local616.primaryFlags & local65) != 0 && !isWallVisible(local27, local18, local21, local616.primaryFlags)) {
 													if (GlRenderer.enabled) {
-														LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													local616.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local616.xFine - cameraX, local616.zFine - cameraZ, local616.yFine - cameraY, local616.key, local24, null);
 												}
 												if ((local616.secondaryFlags & local65) != 0 && !isWallVisible(local27, local18, local21, local616.secondaryFlags)) {
 													if (GlRenderer.enabled) {
-														LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													local616.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local616.xFine - cameraX, local616.zFine - cameraZ, local616.yFine - cameraY, local616.key, local24, null);
 												}
@@ -1863,7 +1863,7 @@ public class SceneGraph {
 												}
 												if ((local619.flags & local65) != 0) {
 													if (GlRenderer.enabled) {
-														LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													local619.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local619.xFine + local619.xOffset - cameraX, local619.orientation - cameraZ, local619.yFine + local619.yOffset - cameraY, local619.key, local24, null);
 												} else if (local619.flags == 256) {
@@ -1884,12 +1884,12 @@ public class SceneGraph {
 													}
 													if (local928 < var18) {
 														if (GlRenderer.enabled) {
-															LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														}
 														local619.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local894 + local619.xOffset, local899, local904 + local619.yOffset, local619.key, local24, null);
 													} else if (local619.secondary != null) {
 														if (GlRenderer.enabled) {
-															LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														}
 														local619.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local894, local899, local904, local619.key, local24, null);
 													}
@@ -1905,7 +1905,7 @@ public class SceneGraph {
 														GlRenderer.setDepthLayer(local33 + 50.0F - 1.5F);
 													}
 													if (GlRenderer.enabled) {
-														LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													local1001.entity.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1001.xFine - cameraX, local1001.zFine - cameraZ, local1001.yFine - cameraY, local1001.key, local24, null);
 													if (GlRenderer.enabled && local1001.flat) {
@@ -1915,7 +1915,7 @@ public class SceneGraph {
 												@Pc(1064) ObjStackEntity local1064 = local8.objStack;
 												if (local1064 != null && local1064.anInt3063 == 0) {
 													if (GlRenderer.enabled) {
-														LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													if (local1064.secondary != null) {
 														local1064.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1064.xFine - cameraX, local1064.anInt3057 - cameraZ, local1064.yFine - cameraY, local1064.key, local24, null);
@@ -1979,33 +1979,33 @@ public class SceneGraph {
 																	local65 -= 64;
 																	local115 += 64;
 																	if (local115 < local65 && local18 > 0 && local21 < length - 1) {
-																		LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18 - 1, local21 + 1);
+																		LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18 - 1, local21 + 1);
 																		break label882;
 																	}
 																} else if (local1332 == 1) {
 																	local65 += 64;
 																	local115 += 64;
 																	if (local115 < -local65 && local18 < width - 1 && local21 < length - 1) {
-																		LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18 + 1, local21 + 1);
+																		LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18 + 1, local21 + 1);
 																		break label882;
 																	}
 																} else if (local1332 == 2) {
 																	local65 += 64;
 																	local115 -= 64;
 																	if (local115 > local65 && local18 < width - 1 && local21 > 0) {
-																		LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18 + 1, local21 - 1);
+																		LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18 + 1, local21 - 1);
 																		break label882;
 																	}
 																} else if (local1332 == 3) {
 																	local65 -= 64;
 																	local115 -= 64;
 																	if (local115 > -local65 && local18 > 0 && local21 > 0) {
-																		LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18 - 1, local21 - 1);
+																		LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18 - 1, local21 - 1);
 																		break label882;
 																	}
 																}
 															}
-															LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														}
 													}
 													var22.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, var22.xFine - cameraX, var22.zFine - cameraZ, var22.yFine - cameraY, var22.key, local24, null);
@@ -2095,23 +2095,23 @@ public class SceneGraph {
 												if (!isAreaVisible(local27, local1697.xMin, local1697.xMax, local1697.yMin, local1697.yMax, local1697.entity.getMinY())) {
 													if (GlRenderer.enabled) {
 														if ((local1697.key & 0xFC000L) == 147456L) {
-															LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 															local894 = local1697.xFine - cameraX;
 															local899 = local1697.yFine - cameraY;
 															local904 = (int) (local1697.key >> 20 & 0x3L);
 															if (local904 == 1 || local904 == 3) {
 																if (local899 > -local894) {
-																	LightingManager.method2397(local24, local18, local21 - 1, local18 - 1, local21);
+																	LightingManager.pruneInactiveLights(local24, local18, local21 - 1, local18 - 1, local21);
 																} else {
-																	LightingManager.method2397(local24, local18, local21 + 1, local18 + 1, local21);
+																	LightingManager.pruneInactiveLights(local24, local18, local21 + 1, local18 + 1, local21);
 																}
 															} else if (local899 > local894) {
-																LightingManager.method2397(local24, local18, local21 - 1, local18 + 1, local21);
+																LightingManager.pruneInactiveLights(local24, local18, local21 - 1, local18 + 1, local21);
 															} else {
-																LightingManager.method2397(local24, local18, local21 + 1, local18 - 1, local21);
+																LightingManager.pruneInactiveLights(local24, local18, local21 + 1, local18 - 1, local21);
 															}
 														} else {
-															LightingManager.method2391(cameraX, cameraZ, cameraY, local24, local1697.xMin, local1697.yMin, local1697.xMax, local1697.yMax);
+															LightingManager.updateLightsForRegion(cameraX, cameraZ, cameraY, local24, local1697.xMin, local1697.yMin, local1697.xMax, local1697.yMax);
 														}
 													}
 													local1697.entity.render(local1697.orientation, anInt2886, anInt3038, anInt5205, anInt2222, local1697.xFine - cameraX, local1697.zFine - cameraZ, local1697.yFine - cameraY, local1697.key, local24, null);
@@ -2162,7 +2162,7 @@ public class SceneGraph {
 			@Pc(1999) ObjStackEntity local1999 = local8.objStack;
 			if (local1999 != null && local1999.anInt3063 != 0) {
 				if (GlRenderer.enabled) {
-					LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+					LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 				}
 				if (local1999.secondary != null) {
 					local1999.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1999.xFine - cameraX, local1999.anInt3057 - cameraZ - local1999.anInt3063, local1999.yFine - cameraY, local1999.key, local24, null);
@@ -2179,7 +2179,7 @@ public class SceneGraph {
 				if (local2109 != null && !isTileVisible(local27, local18, local21, local2109.primary.getMinY())) {
 					if ((local2109.flags & local8.wallDrawFlags) != 0) {
 						if (GlRenderer.enabled) {
-							LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+							LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 						}
 						local2109.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local2109.xFine + local2109.xOffset - cameraX, local2109.orientation - cameraZ, local2109.yFine + local2109.yOffset - cameraY, local2109.key, local24, null);
 					} else if (local2109.flags == 256) {
@@ -2199,12 +2199,12 @@ public class SceneGraph {
 						}
 						if (local904 >= local899) {
 							if (GlRenderer.enabled) {
-								LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+								LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 							}
 							local2109.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local65 + local2109.xOffset, local115, local1332 + local2109.yOffset, local2109.key, local24, null);
 						} else if (local2109.secondary != null) {
 							if (GlRenderer.enabled) {
-								LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
+								LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 							}
 							local2109.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local65, local115, local1332, local2109.key, local24, null);
 						}
@@ -2214,13 +2214,13 @@ public class SceneGraph {
 				if (local2275 != null) {
 					if ((local2275.secondaryFlags & local8.wallDrawFlags) != 0 && !isWallVisible(local27, local18, local21, local2275.secondaryFlags)) {
 						if (GlRenderer.enabled) {
-							LightingManager.method2388(local2275.secondaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
+							LightingManager.updateLightsForWallPiece(local2275.secondaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
 						}
 						local2275.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local2275.xFine - cameraX, local2275.zFine - cameraZ, local2275.yFine - cameraY, local2275.key, local24, null);
 					}
 					if ((local2275.primaryFlags & local8.wallDrawFlags) != 0 && !isWallVisible(local27, local18, local21, local2275.primaryFlags)) {
 						if (GlRenderer.enabled) {
-							LightingManager.method2388(local2275.primaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
+							LightingManager.updateLightsForWallPiece(local2275.primaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
 						}
 						local2275.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local2275.xFine - cameraX, local2275.zFine - cameraZ, local2275.yFine - cameraY, local2275.key, local24, null);
 					}
@@ -2976,7 +2976,7 @@ public class SceneGraph {
 				MaterialManager.renderingUnderwater = false;
 				MaterialManager.setMaterial(0, 0);
 				FogManager.setFogColor(null);
-				LightingManager.method2390();
+				LightingManager.resetActiveLights();
 			}
 			setUnderwater(false);
 		}
@@ -3067,7 +3067,7 @@ public class SceneGraph {
 				local32 = anInt5276;
 				while (true) {
 					if (local32 >= levels) {
-						LightingManager.method2402(anInt4069, anInt4539, tiles);
+						LightingManager.renderLightMeshes(anInt4069, anInt4539, tiles);
 						break;
 					}
 					for (local37 = 0; local37 < underwaterHdTiles[local32].length; local37++) {
@@ -4818,7 +4818,7 @@ public class SceneGraph {
 	public static int getTexturedColor(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
 		@Pc(19) int local19 = Rasteriser.palette[ColorUtils.multiplyLightness2(arg1, arg2)];
 		if (arg0 > 0) {
-			@Pc(31) int local31 = Rasteriser.textureProvider.method3238(arg0 & 0xFFFF);
+			@Pc(31) int local31 = Rasteriser.textureProvider.getTextureBrightness(arg0 & 0xFFFF);
 			@Pc(49) int local49;
 			@Pc(73) int local73;
 			if (local31 != 0) {
@@ -4836,7 +4836,7 @@ public class SceneGraph {
 					local19 = ((local49 & 0xFF00) * local31 + local73 * (local19 & 0xFF00) & 0xFF0000) + (local31 * (local49 & 0xFF00FF) + ((local19 & 0xFF00FF) * local73) & 0xFF00FF00) >> 8;
 				}
 			}
-			local49 = Rasteriser.textureProvider.method3229(arg0 & 0xFFFF);
+			local49 = Rasteriser.textureProvider.getTextureSpeed(arg0 & 0xFFFF);
 			if (local49 != 0) {
 				local49 += 256;
 				@Pc(125) int local125 = (local19 >> 16 & 0xFF) * local49;
@@ -5283,7 +5283,7 @@ public class SceneGraph {
 					if (local190 >= 0 && local194 >= 0 && local190 < 104 && local194 < 104) {
 						local529.aBoolean125 = (renderFlags[1][local190][local194] & 0x2) != 0;
 						local529.y = tileHeights[local529.level][local190][local194] - local529.y;
-						LightingManager.method2389(local529);
+						LightingManager.addLight(local529);
 					}
 				}
 			}
@@ -5449,7 +5449,7 @@ public class SceneGraph {
 						if (local417 >= 0 && local255 >= 0 && local417 < 104 && local255 < 104) {
 							local517.aBoolean125 = (renderFlags[1][local417][local255] & 0x2) != 0;
 							local517.y = tileHeights[local517.level][local417][local255] - local517.y;
-							LightingManager.method2389(local517);
+							LightingManager.addLight(local517);
 						}
 					}
 				}

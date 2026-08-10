@@ -228,8 +228,8 @@ public class Sprites {
 		headhints = SpriteLoader.loadAlphaSprites(hintHeadId, archive);
 		mapmarkhints = SpriteLoader.loadAlphaSprites(hintMapMarkId, archive);
 		mapflags = SpriteLoader.loadSprites(mapflagId, archive);
-		crosses = SpriteLoader.method2580(crossId, archive);
-		mapdots = SpriteLoader.method2580(mapdotsId, archive);
+		crosses = SpriteLoader.loadOpaqueSprites(crossId, archive);
+		mapdots = SpriteLoader.loadOpaqueSprites(mapdotsId, archive);
 		scrollbars = SpriteLoader.loadIndexedSprites(archive, scrollbarId);
 		nameIcons = SpriteLoader.loadIndexedSprites(archive, nameIconsId);
 		Fonts.p11Full.setNameIcons(nameIcons, null);
@@ -267,7 +267,7 @@ public class Sprites {
 		@Pc(217) int local217 = (int) (Math.random() * 41.0D) - 20;
 		@Pc(219) int local219;
 		for (local219 = 0; local219 < mapfunctions.length; local219++) {
-			mapfunctions[local219].method315(local145 + local217, local217 + local196, local217 + local210);
+			mapfunctions[local219].adjustRgb(local145 + local217, local217 + local196, local217 + local210);
 		}
 		if (GlRenderer.enabled) {
 			mapfuncs = new Sprite[mapfunctions.length];

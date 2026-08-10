@@ -239,7 +239,7 @@ public class MiniMap {
 			@Pc(57) int local57 = PlayerList.self.xFine / 32 + 48;
 			@Pc(67) int local67 = 464 - PlayerList.self.yFine / 32;
 			if (GlRenderer.enabled) {
-				((GlSprite) sprite).renderRotatedTransparent(arg2, arg1, arg3.width, arg3.height, local57, local67, local48, anInt4130 + 256, (GlSprite) arg3.method489(false));
+				((GlSprite) sprite).renderRotatedTransparent(arg2, arg1, arg3.width, arg3.height, local57, local67, local48, anInt4130 + 256, (GlSprite) arg3.getSprite(false));
 			} else {
 				((SoftwareSprite) sprite).renderRotated(arg2, arg1, arg3.width, arg3.height, local57, local67, local48, anInt4130 + 256, arg3.anIntArray37, arg3.anIntArray45);
 			}
@@ -277,15 +277,15 @@ public class MiniMap {
 								local271 = LoginManager.mapElementList.anIntArray444[local117];
 							}
 							if (GlRenderer.enabled) {
-								GlFont.method1188((GlSprite) arg3.method489(false));
+								GlFont.method1188((GlSprite) arg3.getSprite(false));
 							} else {
-								SoftwareRaster.method2486(arg3.anIntArray37, arg3.anIntArray45);
+								SoftwareRaster.setLineMasks(arg3.anIntArray37, arg3.anIntArray45);
 							}
 							local156.renderParagraphAlpha(LoginManager.mapElementList.aClass100Array153[local117], arg2 + local245 + arg3.width / 2, arg1 + arg3.height / 2 + -local200, local239, 50, local271, 0, 1, 0, 0);
 							if (GlRenderer.enabled) {
 								GlFont.method1173();
 							} else {
-								SoftwareRaster.method2482();
+								SoftwareRaster.clearLineMasks();
 							}
 						}
 					}
@@ -401,12 +401,12 @@ public class MiniMap {
 				SoftwareRaster.fillRect(arg3.width / 2 + arg2 - 1, arg3.height / 2 + -1 + arg1, 3, 3, 16777215);
 			}
 		} else if (GlRenderer.enabled) {
-			@Pc(1041) Sprite local1041 = arg3.method489(false);
+			@Pc(1041) Sprite local1041 = arg3.getSprite(false);
 			if (local1041 != null) {
 				local1041.render(arg2, arg1);
 			}
 		} else {
-			SoftwareRaster.method2504(arg2, arg1, arg3.anIntArray37, arg3.anIntArray45);
+			SoftwareRaster.clearMaskedRegion(arg2, arg1, arg3.anIntArray37, arg3.anIntArray45);
 		}
 		InterfaceList.rectangleRedraw[arg0] = true;
 	}
@@ -429,9 +429,9 @@ public class MiniMap {
 		@Pc(81) int local81 = local58 * arg2 + arg3 * local70 >> 16;
 		@Pc(92) int local92 = local70 * arg2 - arg3 * local58 >> 16;
 		if (GlRenderer.enabled) {
-			((GlSprite) arg1).method1425(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, arg0.height / 2 + arg4 - (local92 + arg1.anInt1866 / 2), (GlSprite) arg0.method489(false));
+			((GlSprite) arg1).method1425(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, arg0.height / 2 + arg4 - (local92 + arg1.anInt1866 / 2), (GlSprite) arg0.getSprite(false));
 		} else {
-			((SoftwareSprite) arg1).method312(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, -(arg1.anInt1866 / 2) + arg0.height / 2 + arg4 + -local92, arg0.anIntArray37, arg0.anIntArray45);
+			((SoftwareSprite) arg1).drawClipped(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, -(arg1.anInt1866 / 2) + arg0.height / 2 + arg4 + -local92, arg0.anIntArray37, arg0.anIntArray45);
 		}
 	}
 
@@ -460,7 +460,7 @@ public class MiniMap {
 		if (GlRenderer.enabled) {
 			((GlSprite) Sprites.hintMapEdge[arg0]).method1428((arg5.width / 2 + arg2 + local117) * 16, (arg5.height / 2 + arg1 - local124) * 16, (int) (local110 * 10430.378D));
 		} else {
-			((SoftwareSprite) Sprites.hintMapEdge[arg0]).method306(local117 + arg5.width / 2 + arg2 - 10, arg5.height / 2 + -10 + arg1 + -local124, local110);
+			((SoftwareSprite) Sprites.hintMapEdge[arg0]).drawRotatedFixed(local117 + arg5.width / 2 + arg2 - 10, arg5.height / 2 + -10 + arg1 + -local124, local110);
 		}
 	}
 

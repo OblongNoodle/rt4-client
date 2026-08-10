@@ -11,22 +11,22 @@ public interface TextureProvider {
 	boolean isOpaque(@OriginalArg(1) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "a", descriptor = "(IZ)V")
-	void method3227(@OriginalArg(0) int arg0);
+	void bindTexture(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "b", descriptor = "(IZ)I")
-	int method3228(@OriginalArg(0) int arg0);
+	int getAnimationType(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "a", descriptor = "(II)I")
-	int method3229(@OriginalArg(1) int arg0);
+	int getTextureSpeed(@OriginalArg(1) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "b", descriptor = "(II)Z")
-	boolean method3230(@OriginalArg(1) int arg0);
+	boolean isTextureLoaded(@OriginalArg(1) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "c", descriptor = "(II)Z")
-	boolean method3231(@OriginalArg(0) int arg0);
+	boolean isTextureFlipped(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "a", descriptor = "(IZF)[I")
-	int[] method3232(@OriginalArg(0) int arg0, @OriginalArg(2) float arg1);
+	int[] getAnimatedPixels(@OriginalArg(0) int arg0, @OriginalArg(2) float arg1);
 
 	@OriginalMember(owner = "client!m", name = "b", descriptor = "(BI)Z")
 	boolean isLowDetail(@OriginalArg(1) int arg0);
@@ -38,11 +38,11 @@ public interface TextureProvider {
 	int[] getPixels(@OriginalArg(1) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "f", descriptor = "(II)Z")
-	boolean method3236(@OriginalArg(0) int arg0);
+	boolean isTextureRepeating(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "g", descriptor = "(II)I")
 	int getMaterialType(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!m", name = "h", descriptor = "(II)I")
-	int method3238(@OriginalArg(1) int arg0);
+	int getTextureBrightness(@OriginalArg(1) int arg0);
 }

@@ -1657,7 +1657,7 @@ public class MiniMenu {
 			InterfaceList.redrawScreen(arg2 + 4, Fonts.b12Full.getStringWidth(local24) + local40, arg1, 15);
 			return;
 		}
-		@Pc(59) Font local59 = arg0.method491(Sprites.nameIcons);
+		@Pc(59) Font local59 = arg0.getFont(Sprites.nameIcons);
 		if (local59 == null) {
 			local59 = Fonts.b12Full;
 		}

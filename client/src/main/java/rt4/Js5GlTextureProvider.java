@@ -133,7 +133,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(ZI)V")
-	public final void method3239(@OriginalArg(1) int arg0) {
+	public final void resetAnimatedTextures(@OriginalArg(1) int arg0) {
 		for (@Pc(19) GlTexture local19 = (GlTexture) this.glTextures.method1808(); local19 != null; local19 = (GlTexture) this.glTextures.next()) {
 			if (local19.aBoolean287) {
 				local19.method4300(arg0);
@@ -145,27 +145,27 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	@OriginalMember(owner = "client!nk", name = "e", descriptor = "(II)[I")
 	@Override
 	public final int[] getPixels(@OriginalArg(1) int arg0) {
-		@Pc(16) GlTexture local16 = this.method3242(arg0);
+		@Pc(16) GlTexture local16 = this.getOrLoadGlTexture(arg0);
 		return local16 == null ? null : local16.method4297(this.lowDetail || this.aBooleanArray89[arg0], this, this.aClass153_72);
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(IZ)V")
 	@Override
-	public final void method3227(@OriginalArg(0) int arg0) {
+	public final void bindTexture(@OriginalArg(0) int arg0) {
 		MaterialManager.setMaterial(this.aByteArray61[arg0] & 0xFF, this.aByteArray62[arg0] & 0xFF);
 		@Pc(23) boolean local23 = false;
-		@Pc(28) GlTexture local28 = this.method3242(arg0);
+		@Pc(28) GlTexture local28 = this.getOrLoadGlTexture(arg0);
 		if (local28 != null) {
 			local23 = local28.method4296(this.aClass153_72, this, this.lowDetail || this.aBooleanArray89[arg0]);
 		}
 		if (!local23) {
-			@Pc(56) GlSolidColorTexture local56 = this.method3244(arg0);
+			@Pc(56) GlSolidColorTexture local56 = this.getOrCreateSolidColorTexture(arg0);
 			local56.method3887();
 		}
 	}
 
 	@OriginalMember(owner = "client!nk", name = "i", descriptor = "(II)Lclient!uh;")
-	private GlTexture method3242(@OriginalArg(0) int arg0) {
+	private GlTexture getOrLoadGlTexture(@OriginalArg(0) int arg0) {
 		@Pc(14) GlTexture local14 = (GlTexture) this.glTextures.get(arg0);
 		if (local14 != null) {
 			return local14;
@@ -183,7 +183,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(IZ)I")
 	@Override
-	public final int method3228(@OriginalArg(0) int arg0) {
+	public final int getAnimationType(@OriginalArg(0) int arg0) {
 		return this.aByteArray61[arg0] & 0xFF;
 	}
 
@@ -195,7 +195,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(II)I")
 	@Override
-	public final int method3229(@OriginalArg(1) int arg0) {
+	public final int getTextureSpeed(@OriginalArg(1) int arg0) {
 		return this.aByteArray59[arg0] & 0xFF;
 	}
 
@@ -206,7 +206,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	}
 
 	@OriginalMember(owner = "client!nk", name = "j", descriptor = "(II)Lclient!sd;")
-	private GlSolidColorTexture method3244(@OriginalArg(1) int arg0) {
+	private GlSolidColorTexture getOrCreateSolidColorTexture(@OriginalArg(1) int arg0) {
 		@Pc(19) GlSolidColorTexture local19 = (GlSolidColorTexture) this.solidColorSprites.get(arg0);
 		if (local19 == null) {
 			local19 = new GlSolidColorTexture(this.aShortArray59[arg0] & 0xFFFF);
@@ -219,26 +219,26 @@ public final class Js5GlTextureProvider implements TextureProvider {
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(II)Z")
 	@Override
-	public final boolean method3230(@OriginalArg(1) int arg0) {
-		@Pc(15) GlTexture local15 = this.method3242(arg0);
+	public final boolean isTextureLoaded(@OriginalArg(1) int arg0) {
+		@Pc(15) GlTexture local15 = this.getOrLoadGlTexture(arg0);
 		return local15 != null && local15.method4299(this, this.aClass153_72);
 	}
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(ZI)V")
-	public final void method3245(@OriginalArg(0) boolean arg0) {
+	public final void setLowDetail(@OriginalArg(0) boolean arg0) {
 		this.lowDetail = arg0;
 		this.clear();
 	}
 
 	@OriginalMember(owner = "client!nk", name = "c", descriptor = "(II)Z")
 	@Override
-	public final boolean method3231(@OriginalArg(0) int arg0) {
+	public final boolean isTextureFlipped(@OriginalArg(0) int arg0) {
 		return this.aBooleanArray93[arg0];
 	}
 
 	@OriginalMember(owner = "client!nk", name = "h", descriptor = "(II)I")
 	@Override
-	public final int method3238(@OriginalArg(1) int arg0) {
+	public final int getTextureBrightness(@OriginalArg(1) int arg0) {
 		return this.aByteArray60[arg0] & 0xFF;
 	}
 
@@ -263,7 +263,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	}
 
 	@OriginalMember(owner = "client!nk", name = "k", descriptor = "(II)V")
-	public final void method3248(@OriginalArg(0) int capacity) {
+	public final void setCapacity(@OriginalArg(0) int capacity) {
 		this.capacity = capacity;
 		this.glTextures = new LruHashTable(this.capacity);
 		if (GlRenderer.enabled) {
@@ -275,14 +275,14 @@ public final class Js5GlTextureProvider implements TextureProvider {
 
 	@OriginalMember(owner = "client!nk", name = "f", descriptor = "(II)Z")
 	@Override
-	public final boolean method3236(@OriginalArg(0) int arg0) {
+	public final boolean isTextureRepeating(@OriginalArg(0) int arg0) {
 		return this.aBooleanArray90[arg0];
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(IZF)[I")
 	@Override
-	public final int[] method3232(@OriginalArg(0) int arg0, @OriginalArg(2) float arg1) {
-		@Pc(8) GlTexture local8 = this.method3242(arg0);
+	public final int[] getAnimatedPixels(@OriginalArg(0) int arg0, @OriginalArg(2) float arg1) {
+		@Pc(8) GlTexture local8 = this.getOrLoadGlTexture(arg0);
 		if (local8 == null) {
 			return null;
 		} else {

@@ -42,7 +42,7 @@ public class ShadowModelList {
 			}
 			@Pc(83) int[] local83 = new int[]{64, 96, 128};
 			@Pc(103) RawModel local103 = new RawModel(local41 * 3 + 1, -local41 + local41 * 3 * 2, 0);
-			local109 = local103.method1685(0, 0);
+			local109 = local103.addOrReuseGroundVertex(0, 0);
 			@Pc(113) int[][] local113 = new int[3][local41];
 			for (local115 = 0; local115 < 3; local115++) {
 				local126 = local83[local115];
@@ -51,7 +51,7 @@ public class ShadowModelList {
 					@Pc(141) int local141 = (local132 << 11) / local41;
 					@Pc(152) int local152 = arg5 + MathUtils.cos[local141] * local130 >> 16;
 					local162 = arg3 + MathUtils.sin[local141] * local126 >> 16;
-					local113[local115][local132] = local103.method1685(local162, local152);
+					local113[local115][local132] = local103.addOrReuseGroundVertex(local162, local152);
 				}
 			}
 			for (local115 = 0; local115 < 3; local115++) {

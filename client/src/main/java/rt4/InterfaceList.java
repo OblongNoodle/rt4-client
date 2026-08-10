@@ -1156,7 +1156,7 @@ public class InterfaceList {
 		if (GlRenderer.enabled) {
 			GlRaster.method1177();
 		} else {
-			SoftwareRaster.method2503();
+			SoftwareRaster.resetClip();
 		}
 		Protocol.sceneDelta = 0;
 	}
@@ -1314,7 +1314,7 @@ public class InterfaceList {
 			if (local28 == null) {
 				arg0 = -1;
 			} else {
-				GameShell.signLink.setCursor(local28.method301(), local28.anInt1860, GameShell.canvas, new Point(local24.hotSpotX, local24.hotSpotY), local28.anInt1866);
+				GameShell.signLink.setCursor(local28.toFullImage(), local28.anInt1860, GameShell.canvas, new Point(local24.hotSpotX, local24.hotSpotY), local28.anInt1866);
 				anInt2941 = arg0;
 			}
 		}

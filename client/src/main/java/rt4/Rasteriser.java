@@ -67,7 +67,7 @@ public final class Rasteriser {
 
 	@OriginalMember(owner = "client!hf", name = "a", descriptor = "(IIIIIIIIIIIIIIIIIII)V")
 	public static void fillTexturedTriangle(@OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(6) int colorA, @OriginalArg(7) int colorB, @OriginalArg(8) int colorC, @OriginalArg(9) int viewXA, @OriginalArg(10) int viewXB, @OriginalArg(11) int viewXC, @OriginalArg(12) int viewYA, @OriginalArg(13) int viewYB, @OriginalArg(14) int viewYC, @OriginalArg(15) int viewZA, @OriginalArg(16) int viewZB, @OriginalArg(17) int viewZC, @OriginalArg(18) int textureId) {
-		@Pc(5) int[] texels = textureProvider.method3232(textureId, brightness);
+		@Pc(5) int[] texels = textureProvider.getAnimatedPixels(textureId, brightness);
 		if (texels == null) {
 			int averageColor = textureProvider.getAverageColor(textureId);
 			fillGouraudTriangle(yA, yB, yC, xA, xB, xC, ColorUtils.multiplyLightness(averageColor, colorA), ColorUtils.multiplyLightness(averageColor, colorB), ColorUtils.multiplyLightness(averageColor, colorC));
@@ -690,7 +690,7 @@ public final class Rasteriser {
 
 	@OriginalMember(owner = "client!hf", name = "b", descriptor = "(IIIIIIIIIIIIIIIIIII)V")
 	public static void fillTexturedAlphaTriangle(@OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(6) int colorA, @OriginalArg(7) int colorB, @OriginalArg(8) int colorC, @OriginalArg(9) int viewXA, @OriginalArg(10) int viewXB, @OriginalArg(11) int viewXC, @OriginalArg(12) int viewYA, @OriginalArg(13) int viewYB, @OriginalArg(14) int viewYC, @OriginalArg(15) int viewZA, @OriginalArg(16) int viewZB, @OriginalArg(17) int viewZC, @OriginalArg(18) int textureId) {
-		@Pc(5) int[] texels = textureProvider.method3232(textureId, brightness);
+		@Pc(5) int[] texels = textureProvider.getAnimatedPixels(textureId, brightness);
 		if (texels == null || alpha > 10) {
 			int average = textureProvider.getAverageColor(textureId);
 			textureHasTransparency = true;

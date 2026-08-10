@@ -398,7 +398,7 @@ public class Cs1ScriptRunner {
 								continue;
 							}
 							if (component.clientCode == 1338) {
-								if (!component.method478()) {
+								if (!component.buildClickMask()) {
 									continue;
 								}
 								MiniMap.render(rectangle, local114, local123, component);
@@ -443,7 +443,7 @@ public class Cs1ScriptRunner {
 								continue;
 							}
 							if (component.clientCode == 1339) {
-								if (component.method478()) {
+								if (component.buildClickMask()) {
 									renderCompass(local123, local114, component, rectangle);
 									if (GlRenderer.enabled) {
 										GlRaster.setClip(arg0, arg6, arg4, arg7);
@@ -690,7 +690,7 @@ public class Cs1ScriptRunner {
 													}
 												}
 											} else if (component.invSprite != null && local270 < 20) {
-												@Pc(1381) Sprite local1381 = component.method482(local270);
+												@Pc(1381) Sprite local1381 = component.getInvSprite(local270);
 												if (local1381 != null) {
 													local1381.render(x, y);
 												} else if (Component.aBoolean72) {
@@ -735,13 +735,13 @@ public class Cs1ScriptRunner {
 									} else if (GlRenderer.enabled) {
 										GlRaster.drawRectAlpha(local123, local114, component.width, component.height, local270, 256 - (alpha & 0xFF));
 									} else {
-										SoftwareRaster.method2487(local123, local114, component.width, component.height, local270, 256 - (alpha & 0xFF));
+										SoftwareRaster.drawRectAlpha(local123, local114, component.width, component.height, local270, 256 - (alpha & 0xFF));
 									}
 									PluginRepository.ComponentDraw(i, component, local123, local114);
 								} else {
 									@Pc(1921) Font local1921;
 									if (component.type == 4) {
-										local1921 = component.method491(Sprites.nameIcons);
+										local1921 = component.getFont(Sprites.nameIcons);
 										if (local1921 != null) {
 											@Pc(1934) JagString local1934 = component.text;
 											if (isTrue(component)) {
@@ -784,7 +784,7 @@ public class Cs1ScriptRunner {
 										@Pc(2094) Sprite sprite = null;
 										if (component.if3) {
 											if (component.objId == -1) {
-												sprite = component.method489(false);
+												sprite = component.getSprite(false);
 											} else {
 												sprite = Inv.getObjectSprite(component.outlineThickness, component.objId, component.objDrawText, component.objCount, component.shadowColor);
 											}
@@ -843,7 +843,7 @@ public class Cs1ScriptRunner {
 
 														GlRaster.setClip(arg0, arg6, arg4, arg7);
 													} else {
-														SoftwareRaster.method2498(local123, local114, local123 + component.width, local114 - -component.height);
+														SoftwareRaster.shrinkClip(local123, local114, local123 + component.width, local114 - -component.height);
 														for (cardMemory = 0; cardMemory < memory; cardMemory++) {
 															for (local556 = 0; local556 < color; local556++) {
 																if (component.angle2d != 0) {
@@ -877,7 +877,7 @@ public class Cs1ScriptRunner {
 												InterfaceList.redraw(component);
 											}
 										} else {
-											sprite = component.method489(isTrue(component));
+											sprite = component.getSprite(isTrue(component));
 											if (sprite != null) {
 												sprite.render(local123, local114);
 											} else if (Component.aBoolean72) {
@@ -922,13 +922,13 @@ public class Cs1ScriptRunner {
 													}
 												}
 											} else if (local276 == -1) {
-												local2589 = component.method488(-1, null, -1, 0, local2587, PlayerList.self.appearance);
+												local2589 = component.getModel(-1, null, -1, 0, local2587, PlayerList.self.appearance);
 												if (local2589 == null && Component.aBoolean72) {
 													InterfaceList.redraw(component);
 												}
 											} else {
 												@Pc(2689) SeqType local2689 = SeqTypeList.get(local276);
-												local2589 = component.method488(component.anInt496, local2689, component.anInt510, component.anInt500, local2587, PlayerList.self.appearance);
+												local2589 = component.getModel(component.anInt496, local2689, component.anInt510, component.anInt500, local2587, PlayerList.self.appearance);
 												if (local2589 == null && Component.aBoolean72) {
 													InterfaceList.redraw(component);
 												}
@@ -993,7 +993,7 @@ public class Cs1ScriptRunner {
 											PluginRepository.ComponentDraw(i, component, local123 + component.width / 2, local114 + component.height / 2);
 										} else {
 											if (component.type == 7) {
-												local1921 = component.method491(Sprites.nameIcons);
+												local1921 = component.getFont(Sprites.nameIcons);
 												if (local1921 == null) {
 													if (Component.aBoolean72) {
 														InterfaceList.redraw(component);
@@ -1099,12 +1099,12 @@ public class Cs1ScriptRunner {
 													if (GlRenderer.enabled) {
 														GlRaster.method1185(local123, local276, local468, memory, component.color);
 													} else {
-														SoftwareRaster.method2500(local123, local276, local468, memory, component.color);
+														SoftwareRaster.drawLine(local123, local276, local468, memory, component.color);
 													}
 												} else if (GlRenderer.enabled) {
 													GlRaster.method1181(local123, local276, local468, memory, component.color, component.lineWidth);
 												} else {
-													SoftwareRaster.method2494(local123, local276, local468, memory, component.color, component.lineWidth);
+													SoftwareRaster.drawThickLine(local123, local276, local468, memory, component.color, component.lineWidth);
 												}
 												PluginRepository.ComponentDraw(i, component, local468, local276);
 											}
@@ -1149,15 +1149,15 @@ public class Cs1ScriptRunner {
 		}
 		if (MiniMap.state >= 3) {
 			if (GlRenderer.enabled) {
-				@Pc(44) Sprite local44 = arg2.method489(false);
+				@Pc(44) Sprite local44 = arg2.getSprite(false);
 				if (local44 != null) {
 					local44.render(arg0, arg1);
 				}
 			} else {
-				SoftwareRaster.method2504(arg0, arg1, arg2.anIntArray37, arg2.anIntArray45);
+				SoftwareRaster.clearMaskedRegion(arg0, arg1, arg2.anIntArray37, arg2.anIntArray45);
 			}
 		} else if (GlRenderer.enabled) {
-			((GlSprite) Sprites.compass).renderRotatedTransparent(arg0, arg1, arg2.width, arg2.height, Sprites.compass.width / 2, Sprites.compass.height / 2, (int) Camera.yawTarget, 256, (GlSprite) arg2.method489(false));
+			((GlSprite) Sprites.compass).renderRotatedTransparent(arg0, arg1, arg2.width, arg2.height, Sprites.compass.width / 2, Sprites.compass.height / 2, (int) Camera.yawTarget, 256, (GlSprite) arg2.getSprite(false));
 		} else {
 			((SoftwareSprite) Sprites.compass).renderRotated(arg0, arg1, arg2.width, arg2.height, Sprites.compass.width / 2, Sprites.compass.height / 2, (int) Camera.yawTarget, arg2.anIntArray37, arg2.anIntArray45);
 		}

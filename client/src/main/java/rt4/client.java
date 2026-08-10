@@ -1405,7 +1405,7 @@ public final class client extends GameShell {
 		}
 		@Pc(98) int percentage;
 		if (mainLoadState == 10) {
-			LightingManager.method2392();
+			LightingManager.initLightGrid();
 			for (percentage = 0; percentage < 4; percentage++) {
 				PathFinder.collisionMaps[percentage] = new CollisionMap(104, 104);
 			}

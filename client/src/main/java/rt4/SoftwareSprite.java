@@ -31,7 +31,7 @@ public class SoftwareSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!mm", name = "a", descriptor = "([I[IIIIIIII)V")
-	public static void method300(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
+	public static void blitOpaque(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
 		@Pc(4) int local4 = -(arg4 >> 2);
 		@Pc(9) int local9 = -(arg4 & 0x3);
 		for (@Pc(12) int local12 = -arg5; local12 < 0; local12++) {
@@ -77,7 +77,7 @@ public class SoftwareSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!mm", name = "b", descriptor = "([I[IIIIIIII)V")
-	public static void method302(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
+	public static void blitOpaqueReverse(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
 		@Pc(4) int local4 = -(arg4 >> 2);
 		@Pc(9) int local9 = -(arg4 & 0x3);
 		for (@Pc(12) int local12 = -arg5; local12 < 0; local12++) {
@@ -123,7 +123,7 @@ public class SoftwareSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!mm", name = "a", descriptor = "([I[IIIIIII)V")
-	public static void method305(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	public static void blitAllPixels(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		for (@Pc(2) int local2 = -arg5; local2 < 0; local2++) {
 			@Pc(10) int local10 = arg3 + arg4 - 3;
 			while (arg3 < local10) {
@@ -142,7 +142,7 @@ public class SoftwareSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!mm", name = "a", descriptor = "([I[IIIIIIIIIIII)V")
-	public static void method307(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11) {
+	public static void blitResizedAlpha(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11) {
 		@Pc(3) int local3 = 256 - arg11;
 		@Pc(5) int local5 = arg2;
 		for (@Pc(8) int local8 = -arg7; local8 < 0; local8++) {
@@ -204,11 +204,11 @@ public class SoftwareSprite extends Sprite {
 
 	@OriginalMember(owner = "client!gf", name = "a", descriptor = "(Lclient!ve;IIB)Lclient!mm;")
 	public static SoftwareSprite loadSoftwareAlphaSprite(@OriginalArg(0) Js5 arg0, @OriginalArg(2) int arg1) {
-		return SpriteLoader.decode(arg0, 0, arg1) ? method2071() : null;
+		return SpriteLoader.decode(arg0, 0, arg1) ? createSoftwareAlphaSprite() : null;
 	}
 
 	@OriginalMember(owner = "client!hn", name = "d", descriptor = "(I)Lclient!mm;")
-	public static SoftwareSprite method2071() {
+	public static SoftwareSprite createSoftwareAlphaSprite() {
 		@Pc(13) int local13 = SpriteLoader.innerHeights[0] * SpriteLoader.innerWidths[0];
 		@Pc(17) byte[] local17 = SpriteLoader.pixels[0];
 		@Pc(78) SoftwareSprite local78;
@@ -231,7 +231,7 @@ public class SoftwareSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!mm", name = "d", descriptor = "(I)V")
-	public final void method298(@OriginalArg(0) int arg0) {
+	public final void pad(@OriginalArg(0) int arg0) {
 		if (this.width == this.anInt1860 && this.height == this.anInt1866) {
 			return;
 		}
@@ -267,7 +267,7 @@ public class SoftwareSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!mm", name = "a", descriptor = "()V")
-	public final void method299() {
+	public final void flipHorizontal() {
 		@Pc(6) int[] local6 = new int[this.width * this.height];
 		@Pc(8) int local8 = 0;
 		for (@Pc(10) int local10 = 0; local10 < this.height; local10++) {
@@ -317,12 +317,12 @@ public class SoftwareSprite extends Sprite {
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			method305(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
+			blitAllPixels(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
 		}
 	}
 
 	@OriginalMember(owner = "client!mm", name = "b", descriptor = "()[I")
-	public final int[] method301() {
+	public final int[] toFullImage() {
 		@Pc(6) int[] local6 = new int[this.anInt1860 * this.anInt1866];
 		for (@Pc(8) int local8 = 0; local8 < this.height; local8++) {
 			@Pc(17) int local17 = local8 * this.width;
@@ -337,7 +337,7 @@ public class SoftwareSprite extends Sprite {
 
 	@OriginalMember(owner = "client!mm", name = "a", descriptor = "(IIIIII)V")
 	@Override
-	protected void method1416(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	protected void drawRotatedScaled(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		if (arg5 == 0) {
 			return;
 		}
@@ -813,7 +813,7 @@ public class SoftwareSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!mm", name = "a", descriptor = "(IIIIIIDI)V")
-	public void method306(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(6) double arg2) {
+	public void drawRotatedFixed(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(6) double arg2) {
 		try {
 			@Pc(15) int local15 = (int) (Math.sin(arg2) * 65536.0D);
 			@Pc(21) int local21 = (int) (Math.cos(arg2) * 65536.0D);
@@ -882,7 +882,7 @@ public class SoftwareSprite extends Sprite {
 			local36 += local47;
 		}
 		if (local32 > 0 && local29 > 0) {
-			method302(SoftwareRaster.pixels, this.pixels, local26, local21, local32, local29, local36, local40);
+			blitOpaqueReverse(SoftwareRaster.pixels, this.pixels, local26, local21, local32, local29, local36, local40);
 		}
 	}
 
@@ -966,12 +966,12 @@ public class SoftwareSprite extends Sprite {
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			method300(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
+			blitOpaque(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
 		}
 	}
 
 	@OriginalMember(owner = "client!mm", name = "d", descriptor = "()V")
-	public final void method309() {
+	public final void flipVertical() {
 		@Pc(6) int[] local6 = new int[this.width * this.height];
 		@Pc(8) int local8 = 0;
 		for (@Pc(13) int local13 = this.height - 1; local13 >= 0; local13--) {
@@ -1055,7 +1055,7 @@ public class SoftwareSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!mm", name = "a", descriptor = "(II[I[I)V")
-	public final void method312(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int[] arg3) {
+	public final void drawClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int[] arg3) {
 		if (SoftwareRaster.clipBottom - SoftwareRaster.clipTop != arg2.length) {
 			throw new IllegalStateException();
 		}
@@ -1266,11 +1266,11 @@ public class SoftwareSprite extends Sprite {
 			local12 += local26 * local150;
 			local130 += local150;
 		}
-		method307(SoftwareRaster.pixels, this.pixels, local12, local14, local46, local130, arg2, arg3, local26, local32, local7, arg4);
+		blitResizedAlpha(SoftwareRaster.pixels, this.pixels, local12, local14, local46, local130, arg2, arg3, local26, local32, local7, arg4);
 	}
 
 	@OriginalMember(owner = "client!mm", name = "b", descriptor = "(III)V")
-	public final void method315(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final void adjustRgb(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		for (@Pc(1) int local1 = 0; local1 < this.pixels.length; local1++) {
 			@Pc(11) int local11 = this.pixels[local1];
 			if (local11 != 0) {

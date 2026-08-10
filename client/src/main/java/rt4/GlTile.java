@@ -303,7 +303,7 @@ public final class GlTile extends Node {
 			GlRenderer.setTextureId(-1);
 			MaterialManager.setMaterial(0, 0);
 		} else {
-			Rasteriser.textureProvider.method3227(this.texture);
+			Rasteriser.textureProvider.bindTexture(this.texture);
 		}
 		@Pc(282) int i = this.aBoolean139 ? 40 : 36;
 		if (this.aClass155_3 == null) {

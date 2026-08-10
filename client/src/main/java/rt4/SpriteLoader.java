@@ -156,36 +156,36 @@ public class SpriteLoader {
 
 	@OriginalMember(owner = "client!ra", name = "a", descriptor = "(IBILclient!ve;)[Lclient!qf;")
 	public static Sprite[] loadAlphaSprites(@OriginalArg(2) int arg0, @OriginalArg(3) Js5 arg1) {
-		return decode(arg1, 0, arg0) ? method3730() : null;
+		return decode(arg1, 0, arg0) ? createAlphaSprites() : null;
 	}
 
 	@OriginalMember(owner = "client!vj", name = "a", descriptor = "(IIILclient!ve;)[Lclient!mm;")
 	public static SoftwareSprite[] loadSoftwareSprites(@OriginalArg(2) int arg0, @OriginalArg(3) Js5 arg1) {
-		return decode(arg1, 0, arg0) ? method474() : null;
+		return decode(arg1, 0, arg0) ? createSoftwareSprites() : null;
 	}
 
 	@OriginalMember(owner = "client!gd", name = "a", descriptor = "(ILclient!ve;II)Lclient!mm;")
 	public static SoftwareSprite loadSoftwareSprite(@OriginalArg(0) int arg0, @OriginalArg(1) Js5 arg1, @OriginalArg(3) int arg2) {
-		return decode(arg1, arg0, arg2) ? method3537() : null;
+		return decode(arg1, arg0, arg2) ? createSingleSoftwareSprite() : null;
 	}
 
 	@OriginalMember(owner = "client!lg", name = "a", descriptor = "(Lclient!ve;BII)[Lclient!ok;")
 	public static IndexedSprite[] loadIndexedSprites(@OriginalArg(0) Js5 arg0, @OriginalArg(3) int arg1) {
-		return decode(arg0, 0, arg1) ? method4331() : null;
+		return decode(arg0, 0, arg1) ? createIndexedSprites() : null;
 	}
 
 	@OriginalMember(owner = "client!kd", name = "a", descriptor = "(IIILclient!ve;)[Lclient!qf;")
-	public static Sprite[] method2580(@OriginalArg(2) int arg0, @OriginalArg(3) Js5 arg1) {
-		return decode(arg1, 0, arg0) ? method870() : null;
+	public static Sprite[] loadOpaqueSprites(@OriginalArg(2) int arg0, @OriginalArg(3) Js5 arg1) {
+		return decode(arg1, 0, arg0) ? createOpaqueSprites() : null;
 	}
 
 	@OriginalMember(owner = "client!lk", name = "a", descriptor = "(IIBLclient!ve;)Lclient!qf;")
 	public static Sprite loadSprites(@OriginalArg(1) int arg0, @OriginalArg(3) Js5 arg1) {
-		return decode(arg1, 0, arg0) ? method1764() : null;
+		return decode(arg1, 0, arg0) ? createSingleSprite() : null;
 	}
 
 	@OriginalMember(owner = "client!re", name = "b", descriptor = "(I)[Lclient!qf;")
-	public static Sprite[] method3730() {
+	public static Sprite[] createAlphaSprites() {
 		@Pc(14) Sprite[] local14 = new Sprite[frames];
 		for (@Pc(16) int local16 = 0; local16 < frames; local16++) {
 			@Pc(23) byte[] local23 = pixels[local16];
@@ -218,7 +218,7 @@ public class SpriteLoader {
 	}
 
 	@OriginalMember(owner = "client!bd", name = "a", descriptor = "(Z)[Lclient!mm;")
-	public static SoftwareSprite[] method474() {
+	public static SoftwareSprite[] createSoftwareSprites() {
 		@Pc(4) SoftwareSprite[] local4 = new SoftwareSprite[frames];
 		for (@Pc(12) int local12 = 0; local12 < frames; local12++) {
 			@Pc(27) int local27 = innerHeights[local12] * innerWidths[local12];
@@ -234,7 +234,7 @@ public class SpriteLoader {
 	}
 
 	@OriginalMember(owner = "client!pl", name = "a", descriptor = "(I)Lclient!mm;")
-	public static SoftwareSprite method3537() {
+	public static SoftwareSprite createSingleSoftwareSprite() {
 		@Pc(13) int local13 = innerWidths[0] * innerHeights[0];
 		@Pc(17) byte[] local17 = pixels[0];
 		@Pc(20) int[] local20 = new int[local13];
@@ -247,7 +247,7 @@ public class SpriteLoader {
 	}
 
 	@OriginalMember(owner = "client!ui", name = "h", descriptor = "(I)[Lclient!ok;")
-	public static IndexedSprite[] method4331() {
+	public static IndexedSprite[] createIndexedSprites() {
 		@Pc(8) IndexedSprite[] local8 = new IndexedSprite[frames];
 		for (@Pc(10) int local10 = 0; local10 < frames; local10++) {
 			if (GlRenderer.enabled) {
@@ -261,7 +261,7 @@ public class SpriteLoader {
 	}
 
 	@OriginalMember(owner = "client!cj", name = "a", descriptor = "(I)[Lclient!qf;")
-	public static Sprite[] method870() {
+	public static Sprite[] createOpaqueSprites() {
 		@Pc(6) Sprite[] local6 = new Sprite[frames];
 		for (@Pc(15) int local15 = 0; local15 < frames; local15++) {
 			@Pc(30) int local30 = innerWidths[local15] * innerHeights[local15];
@@ -281,7 +281,7 @@ public class SpriteLoader {
 	}
 
 	@OriginalMember(owner = "client!gi", name = "b", descriptor = "(I)Lclient!qf;")
-	public static Sprite method1764() {
+	public static Sprite createSingleSprite() {
 		@Pc(9) byte[] local9 = pixels[0];
 		@Pc(17) int local17 = innerWidths[0] * innerHeights[0];
 		@Pc(20) int[] local20 = new int[local17];
@@ -316,16 +316,16 @@ public class SpriteLoader {
 
 	@OriginalMember(owner = "client!da", name = "a", descriptor = "(ILclient!ve;Z)Lclient!ok;")
 	public static IndexedSprite loadIndexedSpriteAutoDetect(@OriginalArg(0) int arg0, @OriginalArg(1) Js5 arg1) {
-		return decode(arg1, arg0) ? method4614() : null;
+		return decode(arg1, arg0) ? createSingleIndexedSprite() : null;
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(ILclient!ve;I)Lclient!qf;")
 	public static Sprite loadSpriteAutoDetect(@OriginalArg(1) Js5 arg0, @OriginalArg(2) int arg1) {
-		return decode(arg0, arg1) ? method1764() : null;
+		return decode(arg0, arg1) ? createSingleSprite() : null;
 	}
 
 	@OriginalMember(owner = "client!wh", name = "b", descriptor = "(B)Lclient!ok;")
-	public static IndexedSprite method4614() {
+	public static IndexedSprite createSingleIndexedSprite() {
 		@Pc(27) IndexedSprite local27;
 		if (GlRenderer.enabled) {
 			local27 = new GlIndexedSprite(width, height, xOffsets[0], yOffsets[0], innerWidths[0], innerHeights[0], pixels[0], palette);
@@ -338,16 +338,16 @@ public class SpriteLoader {
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(IZILclient!ve;)Lclient!ek;")
 	public static SoftwareIndexedSprite loadSoftwareIndexedSprite(@OriginalArg(2) int arg0, @OriginalArg(3) Js5 arg1) {
-		return decode(arg1, 0, arg0) ? method2619() : null;
+		return decode(arg1, 0, arg0) ? createSingleSoftwareIndexedSprite() : null;
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!ve;IZ)Lclient!mm;")
 	public static SoftwareSprite loadSoftwareSpriteAutoDetect(@OriginalArg(0) Js5 arg0, @OriginalArg(1) int arg1) {
-		return decode(arg0, arg1) ? method3537() : null;
+		return decode(arg0, arg1) ? createSingleSoftwareSprite() : null;
 	}
 
 	@OriginalMember(owner = "client!kh", name = "a", descriptor = "(B)Lclient!ek;")
-	public static SoftwareIndexedSprite method2619() {
+	public static SoftwareIndexedSprite createSingleSoftwareIndexedSprite() {
 		@Pc(25) SoftwareIndexedSprite local25 = new SoftwareIndexedSprite(width, height, xOffsets[0], yOffsets[0], innerWidths[0], innerHeights[0], pixels[0], palette);
 		clear();
 		return local25;

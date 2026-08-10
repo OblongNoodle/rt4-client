@@ -1747,10 +1747,10 @@ public class WorldMap {
 			}
 		}
 		for (@Pc(285) MapElement local285 = (MapElement) aClass69_97.head(); local285 != null; local285 = (MapElement) aClass69_97.next()) {
-			SoftwareRaster.method2502(local285.anInt4307, local285.anInt4314, 15, local11);
-			SoftwareRaster.method2502(local285.anInt4307, local285.anInt4314, 13, local11);
-			SoftwareRaster.method2502(local285.anInt4307, local285.anInt4314, 11, local11);
-			SoftwareRaster.method2502(local285.anInt4307, local285.anInt4314, 9, local11);
+			SoftwareRaster.fillCircleAlpha(local285.anInt4307, local285.anInt4314, 15, local11);
+			SoftwareRaster.fillCircleAlpha(local285.anInt4307, local285.anInt4314, 13, local11);
+			SoftwareRaster.fillCircleAlpha(local285.anInt4307, local285.anInt4314, 11, local11);
+			SoftwareRaster.fillCircleAlpha(local285.anInt4307, local285.anInt4314, 9, local11);
 			MapList.sprites[local285.id].render(local285.anInt4307 - 7, local285.anInt4314 + -7);
 		}
 		aClass69_97.clear();
@@ -1762,7 +1762,7 @@ public class WorldMap {
 			@Pc(18) FloType local18 = FloTypeList.method4395(local11);
 			if (local18 != null) {
 				@Pc(24) int local24 = local18.texture;
-				if (local24 >= 0 && !Rasteriser.textureProvider.method3236(local24)) {
+				if (local24 >= 0 && !Rasteriser.textureProvider.isTextureRepeating(local24)) {
 					local24 = -1;
 				}
 				@Pc(53) int local53;

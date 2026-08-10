@@ -289,7 +289,7 @@ public final class LocType {
 						return null;
 					}
 					if (local10) {
-						local7.method1673();
+						local7.negateZAndReverseFaces();
 					}
 					LocTypeList.rawModelCache.put(local7, local60);
 				}
@@ -322,7 +322,7 @@ public final class LocType {
 					return null;
 				}
 				if (local10) {
-					local7.method1673();
+					local7.negateZAndReverseFaces();
 				}
 				LocTypeList.rawModelCache.put(local7, local48);
 			}
@@ -333,7 +333,7 @@ public final class LocType {
 		local230 = this.xoff != 0 || this.yoff != 0 || this.zoff != 0;
 		@Pc(265) RawModel local265 = new RawModel(local7, arg0 == 0 && !local211 && !local230, this.recol_s == null, this.retex_s == null, true);
 		if (arg1 == 4 && arg0 > 3) {
-			local265.method1682();
+			local265.rotate256();
 			local265.translate(45, 0, -45);
 		}
 		@Pc(285) int local285 = arg0 & 0x3;
@@ -342,7 +342,7 @@ public final class LocType {
 		} else if (local285 == 2) {
 			local265.negateXz();
 		} else if (local285 == 3) {
-			local265.method1689();
+			local265.rotateCounterClockwiseXY();
 		}
 		@Pc(315) int local315;
 		if (this.recol_s != null) {
@@ -829,7 +829,7 @@ public final class LocType {
 			}
 			local69.resetBones();
 			if (arg3 == 10 && arg0 > 3) {
-				local69.method1682();
+				local69.rotate256();
 			}
 			if (local50) {
 				local69.aShort19 = (short) (this.ambient + 64);
@@ -842,13 +842,13 @@ public final class LocType {
 			LocTypeList.staticEntityCache.put(local60, local29);
 		}
 		if (local50) {
-			local60 = ((RawModel) local60).method1675();
+			local60 = ((RawModel) local60).shallowCopy();
 		}
 		if (this.hillskewType != 0) {
 			if (local60 instanceof SoftwareModel) {
 				local60 = ((SoftwareModel) local60).method4586(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9, true);
 			} else if (local60 instanceof RawModel) {
-				local60 = ((RawModel) local60).method1670(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9);
+				local60 = ((RawModel) local60).placeOnTerrain(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9);
 			}
 		}
 		tempLocEntity.model = local60;

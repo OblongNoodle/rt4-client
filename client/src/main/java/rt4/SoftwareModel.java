@@ -303,7 +303,7 @@ public final class SoftwareModel extends Model {
 			this.aShortArray92 = new short[this.triangleCount];
 			for (i = 0; i < this.triangleCount; i++) {
 				@Pc(142) short local142 = model.triangleTextures[i];
-				if (local142 != -1 && Rasteriser.textureProvider.method3236(local142)) {
+				if (local142 != -1 && Rasteriser.textureProvider.isTextureRepeating(local142)) {
 					this.aShortArray92[i] = local142;
 				} else {
 					this.aShortArray92[i] = -1;

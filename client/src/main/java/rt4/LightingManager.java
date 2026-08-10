@@ -50,31 +50,31 @@ public class LightingManager {
 	private static int width;
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIIII)V")
-	public static void method2388(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	public static void updateLightsForWallPiece(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		if (!Preferences.highDetailLighting) {
 			return;
 		}
 		if (arg0 == 1 && arg5 > 0) {
-			method2393(arg1, arg2, arg3, arg4, arg5 - 1, arg6);
+			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 - 1, arg6);
 		} else if (arg0 == 4 && arg5 < width - 1) {
-			method2393(arg1, arg2, arg3, arg4, arg5 + 1, arg6);
+			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 + 1, arg6);
 		} else if (arg0 == 8 && arg6 > 0) {
-			method2393(arg1, arg2, arg3, arg4, arg5, arg6 - 1);
+			updateLightsForTile(arg1, arg2, arg3, arg4, arg5, arg6 - 1);
 		} else if (arg0 == 2 && arg6 < length - 1) {
-			method2393(arg1, arg2, arg3, arg4, arg5, arg6 + 1);
+			updateLightsForTile(arg1, arg2, arg3, arg4, arg5, arg6 + 1);
 		} else if (arg0 == 16 && arg5 > 0 && arg6 < length - 1) {
-			method2393(arg1, arg2, arg3, arg4, arg5 - 1, arg6 + 1);
+			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 - 1, arg6 + 1);
 		} else if (arg0 == 32 && arg5 < width - 1 && arg6 < length - 1) {
-			method2393(arg1, arg2, arg3, arg4, arg5 + 1, arg6 + 1);
+			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 + 1, arg6 + 1);
 		} else if (arg0 == 128 && arg5 > 0 && arg6 > 0) {
-			method2393(arg1, arg2, arg3, arg4, arg5 - 1, arg6 - 1);
+			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 - 1, arg6 - 1);
 		} else if (arg0 == 64 && arg5 < width - 1 && arg6 > 0) {
-			method2393(arg1, arg2, arg3, arg4, arg5 + 1, arg6 - 1);
+			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 + 1, arg6 - 1);
 		}
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(Lclient!gi;)V")
-	public static void method2389(@OriginalArg(0) Light arg0) {
+	public static void addLight(@OriginalArg(0) Light arg0) {
 		if (lightCount >= 255) {
 			System.out.println("Number of lights added exceeds maximum!");
 		} else {
@@ -99,7 +99,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "()V")
-	public static void method2390() {
+	public static void resetActiveLights() {
 		for (@Pc(1) int local1 = 0; local1 < 4; local1++) {
 			anIntArray284[local1] = -1;
 			disableLight(local1);
@@ -107,7 +107,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIIIII)V")
-	public static void method2391(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	public static void updateLightsForRegion(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		if (!Preferences.highDetailLighting || anInt3031 == arg3 && anInt3033 == arg4 && anInt3029 == arg5 && anInt3035 == arg6 && anInt3030 == arg7) {
 			return;
 		}
@@ -166,7 +166,7 @@ public class LightingManager {
 				if (!aBooleanArray66[local40]) {
 					anIntArray284[local40] = anIntArray283[local35];
 					aBooleanArray66[local40] = true;
-					method2403(local40, lights[anIntArray283[local35]], arg0, arg1, arg2);
+					enableGlLight(local40, lights[anIntArray283[local35]], arg0, arg1, arg2);
 					break;
 				}
 			}
@@ -185,7 +185,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(III)V")
-	public static void method2392() {
+	public static void initLightGrid() {
 		anInt3032 = 4;
 		width = 104;
 		length = 104;
@@ -193,7 +193,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIII)V")
-	public static void method2393(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	public static void updateLightsForTile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		if (!Preferences.highDetailLighting || anInt3031 == arg3 && anInt3033 == arg4 && anInt3029 == arg5 && anInt3035 == arg4 && anInt3030 == arg5) {
 			return;
 		}
@@ -223,7 +223,7 @@ public class LightingManager {
 					if (!aBooleanArray66[local53]) {
 						anIntArray284[local53] = anIntArray283[local47];
 						aBooleanArray66[local53] = true;
-						method2403(local53, lights[anIntArray283[local47]], arg0, arg1, arg2);
+						enableGlLight(local53, lights[anIntArray283[local47]], arg0, arg1, arg2);
 						break;
 					}
 				}
@@ -244,7 +244,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IZ)V")
-	public static void method2394(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1) {
+	public static void updateAllLightAnimations(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1) {
 		for (@Pc(1) int local1 = 0; local1 < lightCount; local1++) {
 			lights[local1].method1765(arg1, arg0);
 		}
@@ -256,7 +256,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "b", descriptor = "()V")
-	public static void method2395() {
+	public static void buildLightGrid() {
 		for (@Pc(1) int local1 = 0; local1 < lightCount; local1++) {
 			@Pc(8) Light local8 = lights[local1];
 			@Pc(11) int local11 = local8.level;
@@ -316,7 +316,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIII)V")
-	public static void method2397(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public static void pruneInactiveLights(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (!Preferences.highDetailLighting) {
 			return;
 		}
@@ -347,7 +347,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "c", descriptor = "()V")
-	public static void method2398() {
+	public static void destroy() {
 		lights = null;
 		anIntArray284 = null;
 		enabledLights = null;
@@ -357,7 +357,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "e", descriptor = "()V")
-	public static void method2400() {
+	public static void initGlLightParameters() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		@Pc(3) int local3;
 		for (local3 = 0; local3 < 4; local3++) {
@@ -373,7 +373,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "f", descriptor = "()V")
-	public static void method2401() {
+	public static void allocateLightArrays() {
 		lights = new Light[255];
 		anIntArray284 = new int[4];
 		enabledLights = new boolean[4];
@@ -383,7 +383,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(II[[[Lclient!bj;)V")
-	public static void method2402(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Tile[][][] arg2) {
+	public static void renderLightMeshes(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Tile[][][] arg2) {
 		if (!Preferences.highDetailLighting) {
 			return;
 		}
@@ -451,7 +451,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(ILclient!gi;III)V")
-	private static void method2403(@OriginalArg(0) int arg0, @OriginalArg(1) Light arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private static void enableGlLight(@OriginalArg(0) int arg0, @OriginalArg(1) Light arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		@Pc(5) int local5 = arg0 + 16384 + 4;
 		@Pc(7) GL2 gl = GlRenderer.gl;
 		if (!enabledLights[arg0]) {
@@ -467,7 +467,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "g", descriptor = "()V")
-	public static void method2404() {
+	public static void clearLightGrid() {
 		lightCount = 0;
 		for (@Pc(3) int local3 = 0; local3 < anInt3032; local3++) {
 			for (@Pc(8) int local8 = 0; local8 < width; local8++) {

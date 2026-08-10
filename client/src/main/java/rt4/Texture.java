@@ -423,7 +423,7 @@ public final class Texture {
 			}
 		}
 		for (local10 = 0; local10 < this.anIntArray328.length; local10++) {
-			if (!arg0.method3230(this.anIntArray328[local10])) {
+			if (!arg0.isTextureLoaded(this.anIntArray328[local10])) {
 				return false;
 			}
 		}

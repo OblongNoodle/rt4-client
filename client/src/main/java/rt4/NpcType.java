@@ -320,7 +320,7 @@ public final class NpcType {
 							local259[11] = local200;
 						}
 						if (local207 != 0 || local214 != 0 || local228 != 0) {
-							local84[local173].method1684(local207, local214, local228);
+							local84[local173].rotateXYZ(local207, local214, local228);
 						}
 						if (local235 != 0 || local221 != 0 || local200 != 0) {
 							local84[local173].translate(local235, local221, local200);

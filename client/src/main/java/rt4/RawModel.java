@@ -439,7 +439,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "([[III)I")
-	public static int method1680(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public static int interpolateHeight(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		@Pc(3) int local3 = arg1 >> 7;
 		@Pc(7) int local7 = arg2 >> 7;
 		if (local3 < 0 || local7 < 0 || local3 >= arg0.length || local7 >= arg0[0].length) {
@@ -584,19 +584,19 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "([[IIIIII)V")
-	private void method1667(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	private void alignToTerrain(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		@Pc(10) int local10 = -arg4 / 2;
 		@Pc(15) int local15 = -arg5 / 2;
-		@Pc(24) int local24 = method1680(arg0, arg1 + local10, arg3 + local15);
+		@Pc(24) int local24 = interpolateHeight(arg0, arg1 + local10, arg3 + local15);
 		@Pc(28) int local28 = arg4 / 2;
 		@Pc(33) int local33 = -arg5 / 2;
-		@Pc(42) int local42 = method1680(arg0, arg1 + local28, arg3 + local33);
+		@Pc(42) int local42 = interpolateHeight(arg0, arg1 + local28, arg3 + local33);
 		@Pc(47) int local47 = -arg4 / 2;
 		@Pc(51) int local51 = arg5 / 2;
-		@Pc(60) int local60 = method1680(arg0, arg1 + local47, arg3 + local51);
+		@Pc(60) int local60 = interpolateHeight(arg0, arg1 + local47, arg3 + local51);
 		@Pc(64) int local64 = arg4 / 2;
 		@Pc(68) int local68 = arg5 / 2;
-		@Pc(77) int local77 = method1680(arg0, arg1 + local64, arg3 + local68);
+		@Pc(77) int local77 = interpolateHeight(arg0, arg1 + local64, arg3 + local68);
 		@Pc(84) int local84 = local24 < local42 ? local24 : local42;
 		@Pc(91) int local91 = local60 < local77 ? local60 : local77;
 		@Pc(98) int local98 = local42 < local77 ? local42 : local77;
@@ -604,7 +604,7 @@ public final class RawModel extends Entity {
 		if (arg5 != 0) {
 			@Pc(120) int local120 = (int) (Math.atan2(local84 - local91, arg5) * 325.95D) & 0x7FF;
 			if (local120 != 0) {
-				this.method1677(local120);
+				this.rotateX(local120);
 			}
 		}
 		if (arg4 != 0) {
@@ -719,7 +719,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(II[[I[[IIIIZZ)Lclient!gb;")
-	public final RawModel method1670(@OriginalArg(0) int orientation, @OriginalArg(1) int arg1, @OriginalArg(2) int[][] arg2, @OriginalArg(3) int[][] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	public final RawModel placeOnTerrain(@OriginalArg(0) int orientation, @OriginalArg(1) int arg1, @OriginalArg(2) int[][] arg2, @OriginalArg(3) int[][] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		this.calculateBounds();
 		@Pc(6) int local6 = arg4 + this.minX;
 		@Pc(11) int local11 = arg4 + this.maxX;
@@ -835,7 +835,7 @@ public final class RawModel extends Entity {
 			} else if (orientation == 3) {
 				local326 = (arg1 & 0xFF) * 4;
 				local337 = (arg1 >> 8 & 0xFF) * 4;
-				this.method1667(arg2, arg4, arg5, arg6, local326, local337);
+				this.alignToTerrain(arg2, arg4, arg5, arg6, local326, local337);
 			} else if (orientation == 4) {
 				local326 = this.maxY - this.minY;
 				for (local337 = 0; local337 < this.vertexCount; local337++) {
@@ -896,7 +896,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "h", descriptor = "()V")
-	public final void method1673() {
+	public final void negateZAndReverseFaces() {
 		@Pc(1) int local1;
 		for (local1 = 0; local1 < this.vertexCount; local1++) {
 			this.vertexZ[local1] = -this.vertexZ[local1];
@@ -1294,7 +1294,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "i", descriptor = "()Lclient!gb;")
-	public final RawModel method1675() {
+	public final RawModel shallowCopy() {
 		@Pc(3) RawModel m = new RawModel();
 		if (this.triangleInfo != null) {
 			m.triangleInfo = new byte[this.triangleCount];
@@ -1353,7 +1353,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "c", descriptor = "(I)V")
-	private void method1677(@OriginalArg(0) int arg0) {
+	private void rotateX(@OriginalArg(0) int arg0) {
 		@Pc(3) int local3 = SIN[arg0];
 		@Pc(7) int local7 = COS[arg0];
 		for (@Pc(9) int local9 = 0; local9 < this.vertexCount; local9++) {
@@ -1478,7 +1478,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "d", descriptor = "(I)V")
-	public final void method1682() {
+	public final void rotate256() {
 		@Pc(3) int sin = SIN[256];
 		@Pc(7) int cos = COS[256];
 		for (@Pc(9) int i = 0; i < this.vertexCount; i++) {
@@ -1544,7 +1544,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "d", descriptor = "(III)V")
-	public final void method1684(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final void rotateXYZ(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		@Pc(5) int local5;
 		@Pc(9) int local9;
 		@Pc(11) int local11;
@@ -1580,7 +1580,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "e", descriptor = "(III)I")
-	public final int method1685(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public final int addOrReuseGroundVertex(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
 			if (this.vertexX[local1] == arg0 && this.vertexY[local1] == 0 && this.vertexZ[local1] == arg1) {
 				return local1;
@@ -1887,7 +1887,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "m", descriptor = "()V")
-	public final void method1689() {
+	public final void rotateCounterClockwiseXY() {
 		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
 			@Pc(10) int local10 = this.vertexZ[local1];
 			this.vertexZ[local1] = this.vertexX[local1];
