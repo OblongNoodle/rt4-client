@@ -159,7 +159,7 @@ public class SceneGraph {
 	public static int[] anIntArray8;
 	@OriginalMember(owner = "client!jg", name = "a", descriptor = "I")
 	public static int anInt3038;
-	@OriginalMember(owner = "client!ma", name = "y", descriptor = "I")
+	@OriginalMember(owner = "client!ma", name = "z", descriptor = "I")
 	public static int anInt3604 = -1;
 	@OriginalMember(owner = "client!ig", name = "i", descriptor = "I")
 	public static int anInt2886;

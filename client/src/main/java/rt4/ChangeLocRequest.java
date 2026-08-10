@@ -23,7 +23,7 @@ public final class ChangeLocRequest extends Node {
 	@OriginalMember(owner = "client!cd", name = "x", descriptor = "I")
 	public int originalId;
 
-	@OriginalMember(owner = "client!cd", name = "y", descriptor = "I")
+	@OriginalMember(owner = "client!cd", name = "z", descriptor = "I")
 	public int anInt922;
 
 	@OriginalMember(owner = "client!cd", name = "A", descriptor = "I")
