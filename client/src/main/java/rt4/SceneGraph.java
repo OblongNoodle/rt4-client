@@ -3753,19 +3753,19 @@ public class SceneGraph {
 					@Pc(969) int local969 = (local655 >> 16) - 1;
 					@Pc(975) int local975 = (local712 >> 16) - 1;
 					@Pc(981) GlTile local981 = (GlTile) local103.get(local861);
-					method1291(arg13, local655 <= local655, getTexturedColor(local969, local883, local931), local981, local614, local112, local155, local16, local655 <= local712, arg8, local754 >= local655, arg4, local169, getTexturedColor(local969, local925, local957), getTexturedColor(local969, local901, local949), local655 <= local678, arg12, arg10, local628, getTexturedColor(local969, local909, local939), local574);
+					addGlTileVertices(arg13, local655 <= local655, getTexturedColor(local969, local883, local931), local981, local614, local112, local155, local16, local655 <= local712, arg8, local754 >= local655, arg4, local169, getTexturedColor(local969, local925, local957), getTexturedColor(local969, local901, local949), local655 <= local678, arg12, arg10, local628, getTexturedColor(local969, local909, local939), local574);
 					@Pc(1050) int local1050 = (local754 >> 16) - 1;
 					if (local869 != local861) {
 						local981 = (GlTile) local103.get(local869);
-						method1291(arg13, local678 <= local655, getTexturedColor(local963, local883, local931), local981, local614, local112, local155, local16, local712 >= local678, arg8, local678 <= local754, arg4, local169, getTexturedColor(local963, local925, local957), getTexturedColor(local963, local901, local949), local678 <= local678, arg12, arg10, local628, getTexturedColor(local963, local909, local939), local574);
+						addGlTileVertices(arg13, local678 <= local655, getTexturedColor(local963, local883, local931), local981, local614, local112, local155, local16, local712 >= local678, arg8, local678 <= local754, arg4, local169, getTexturedColor(local963, local925, local957), getTexturedColor(local963, local901, local949), local678 <= local678, arg12, arg10, local628, getTexturedColor(local963, local909, local939), local574);
 					}
 					if (local877 != local861 && local877 != local869) {
 						local981 = (GlTile) local103.get(local877);
-						method1291(arg13, local655 >= local712, getTexturedColor(local975, local883, local931), local981, local614, local112, local155, local16, local712 <= local712, arg8, local712 <= local754, arg4, local169, getTexturedColor(local975, local925, local957), getTexturedColor(local975, local901, local949), local678 >= local712, arg12, arg10, local628, getTexturedColor(local975, local909, local939), local574);
+						addGlTileVertices(arg13, local655 >= local712, getTexturedColor(local975, local883, local931), local981, local614, local112, local155, local16, local712 <= local712, arg8, local712 <= local754, arg4, local169, getTexturedColor(local975, local925, local957), getTexturedColor(local975, local901, local949), local678 >= local712, arg12, arg10, local628, getTexturedColor(local975, local909, local939), local574);
 					}
 					if (local917 != local861 && local917 != local869 && local917 != local877) {
 						local981 = (GlTile) local103.get(local917);
-						method1291(arg13, local754 <= local655, getTexturedColor(local1050, local883, local931), local981, local614, local112, local155, local16, local754 <= local712, arg8, local754 >= local754, arg4, local169, getTexturedColor(local1050, local925, local957), getTexturedColor(local1050, local901, local949), local678 >= local754, arg12, arg10, local628, getTexturedColor(local1050, local909, local939), local574);
+						addGlTileVertices(arg13, local754 <= local655, getTexturedColor(local1050, local883, local931), local981, local614, local112, local155, local16, local754 <= local712, arg8, local754 >= local754, arg4, local169, getTexturedColor(local1050, local925, local957), getTexturedColor(local1050, local901, local949), local678 >= local754, arg12, arg10, local628, getTexturedColor(local1050, local909, local939), local574);
 					}
 				}
 			}
@@ -3789,7 +3789,7 @@ public class SceneGraph {
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "([[IZILclient!hg;[IIIIZ[[FZI[[FIIIZ[[I[[FBI[Z)V")
-	public static void method1291(@OriginalArg(0) int[][] arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) GlTile arg3, @OriginalArg(4) int[] arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) boolean arg8, @OriginalArg(9) float[][] arg9, @OriginalArg(10) boolean arg10, @OriginalArg(12) float[][] arg11, @OriginalArg(13) int arg12, @OriginalArg(14) int arg13, @OriginalArg(15) int arg14, @OriginalArg(16) boolean arg15, @OriginalArg(17) int[][] arg16, @OriginalArg(18) float[][] arg17, @OriginalArg(19) byte arg18, @OriginalArg(20) int arg19, @OriginalArg(21) boolean[] arg20) {
+	public static void addGlTileVertices(@OriginalArg(0) int[][] arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) GlTile arg3, @OriginalArg(4) int[] arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) boolean arg8, @OriginalArg(9) float[][] arg9, @OriginalArg(10) boolean arg10, @OriginalArg(12) float[][] arg11, @OriginalArg(13) int arg12, @OriginalArg(14) int arg13, @OriginalArg(15) int arg14, @OriginalArg(16) boolean arg15, @OriginalArg(17) int[][] arg16, @OriginalArg(18) float[][] arg17, @OriginalArg(19) byte arg18, @OriginalArg(20) int arg19, @OriginalArg(21) boolean[] arg20) {
 		@Pc(11) int local11 = (arg2 << 8) + (arg1 ? 255 : 0);
 		@Pc(25) int local25 = (arg8 ? 255 : 0) + (arg14 << 8);
 		@Pc(31) int[] local31 = new int[arg4.length / 2];
@@ -3799,7 +3799,7 @@ public class SceneGraph {
 			@Pc(67) int local67 = arg4[local53 + local53];
 			@Pc(80) int[][] local80 = arg0 == null || arg20 == null || !arg20[local53] ? arg16 : arg0;
 			@Pc(88) int local88 = arg4[local53 + local53 + 1];
-			local31[local53] = method3683(local41, (float) arg12, local11, local51, arg0, local80, arg7, arg17, local25, arg18, false, arg3, arg9, arg5, local67, arg11, local88);
+			local31[local53] = computeGlTileVertex(local41, (float) arg12, local11, local51, arg0, local80, arg7, arg17, local25, arg18, false, arg3, arg9, arg5, local67, arg11, local88);
 		}
 		arg3.method1945(arg6, arg7, arg5, local31, null, false);
 	}
@@ -4752,32 +4752,32 @@ public class SceneGraph {
 						@Pc(2489) int local2489 = local2463 + local1068.length - 2;
 						@Pc(2496) int local2496 = local2489 + local1086.length - 2;
 						@Pc(2503) int local2503 = local2496 + local2318.length - 2;
-						@Pc(2524) int local2524 = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, true, local2329, arg1, local17, 64, arg0, 64);
+						@Pc(2524) int local2524 = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, true, local2329, arg1, local17, 64, arg0, 64);
 						@Pc(2527) int[] local2527 = new int[local2503];
 						@Pc(2529) byte local2529 = 0;
-						@Pc(2550) int local2550 = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2456, local2329, arg1, local17, 0, arg0, 128);
-						@Pc(2571) int local2571 = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2441, local2329, arg1, local17, 128, arg0, 128);
-						@Pc(2592) int local2592 = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2422, local2329, arg1, local17, 0, arg0, 0);
-						@Pc(2613) int local2613 = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2482, local2329, arg1, local17, 128, arg0, 0);
+						@Pc(2550) int local2550 = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2456, local2329, arg1, local17, 0, arg0, 128);
+						@Pc(2571) int local2571 = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2441, local2329, arg1, local17, 128, arg0, 128);
+						@Pc(2592) int local2592 = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2422, local2329, arg1, local17, 0, arg0, 0);
+						@Pc(2613) int local2613 = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2482, local2329, arg1, local17, 128, arg0, 0);
 						@Pc(2616) int local2616 = local2529 + 1;
 						local2527[0] = local2524;
 						@Pc(2621) int local2621 = local2616 + 1;
 						local2527[1] = local2571;
 						if (local1055.length > 2) {
 							local2621++;
-							local2527[2] = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local1055[2], local2329, arg1, local17, 64, arg0, 128);
+							local2527[2] = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local1055[2], local2329, arg1, local17, 64, arg0, 128);
 						}
 						local2527[local2621++] = local2550;
 						if (local1068.length > 2) {
-							local2527[local2621++] = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local1068[2], local2329, arg1, local17, 0, arg0, 64);
+							local2527[local2621++] = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local1068[2], local2329, arg1, local17, 0, arg0, 64);
 						}
 						local2527[local2621++] = local2592;
 						if (local1086.length > 2) {
-							local2527[local2621++] = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local1086[2], local2329, arg1, local17, 64, arg0, 0);
+							local2527[local2621++] = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local1086[2], local2329, arg1, local17, 64, arg0, 0);
 						}
 						local2527[local2621++] = local2613;
 						if (local2318.length > 2) {
-							local2527[local2621++] = method3683(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2318[2], local2329, arg1, local17, 128, arg0, 64);
+							local2527[local2621++] = computeGlTileVertex(local2403, 0.0F, local2345, local2365, null, arg2, local12, arg4, local2385, 0, local2318[2], local2329, arg1, local17, 128, arg0, 64);
 						}
 						local2527[local2621++] = local2571;
 						local2329.method1945(local30, local12, local17, local2527, null, true);
@@ -4867,19 +4867,19 @@ public class SceneGraph {
 		@Pc(39) int[] local39 = new int[local33.length >> 1];
 		@Pc(41) int local41;
 		for (local41 = 0; local41 < local39.length; local41++) {
-			local39[local41] = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, false, arg14, arg2, arg11, local33[local41 + local41], arg4, local33[local41 + local41 + 1]);
+			local39[local41] = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, false, arg14, arg2, arg11, local33[local41 + local41], arg4, local33[local41 + local41 + 1]);
 		}
 		@Pc(87) int[] local87 = null;
 		if (arg9) {
 			@Pc(191) int local191;
 			if (arg10 == 1) {
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 64, arg4, 128);
-				local191 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 64);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 64, arg4, 128);
+				local191 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 64);
 				local87 = new int[]{local191, local41, local39[2], local41, local39[0], local39[2]};
 			} else if (arg10 == 2) {
 				local87 = new int[6];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 128);
-				local191 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 64, arg4, 0);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 128);
+				local191 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 64, arg4, 0);
 				local87[2] = local41;
 				local87[0] = local39[0];
 				local87[5] = local39[0];
@@ -4888,8 +4888,8 @@ public class SceneGraph {
 				local87[4] = local39[1];
 			} else if (arg10 == 3) {
 				local87 = new int[6];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 128);
-				local191 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 64, arg4, 0);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 128);
+				local191 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 64, arg4, 0);
 				local87[4] = local191;
 				local87[1] = local39[1];
 				local87[0] = local39[2];
@@ -4898,20 +4898,20 @@ public class SceneGraph {
 				local87[5] = local39[2];
 			} else if (arg10 == 4) {
 				local87 = new int[3];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 128);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 128);
 				local87[0] = local39[3];
 				local87[2] = local39[0];
 				local87[1] = local41;
 			} else if (arg10 == 5) {
 				local87 = new int[3];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 128);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 128);
 				local87[1] = local41;
 				local87[0] = local39[2];
 				local87[2] = local39[3];
 			} else if (arg10 == 6) {
 				local87 = new int[6];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 0);
-				local191 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 128);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 0);
+				local191 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 128);
 				local87[1] = local41;
 				local87[0] = local39[3];
 				local87[2] = local191;
@@ -4920,8 +4920,8 @@ public class SceneGraph {
 				local87[5] = local39[3];
 			} else if (arg10 == 7) {
 				local87 = new int[6];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 128);
-				local191 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 0);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 128);
+				local191 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 0);
 				local87[3] = local41;
 				local87[2] = local41;
 				local87[0] = local39[1];
@@ -4930,18 +4930,18 @@ public class SceneGraph {
 				local87[5] = local39[1];
 			} else if (arg10 == 8) {
 				local87 = new int[3];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 0);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 0);
 				local87[2] = local39[4];
 				local87[0] = local39[3];
 				local87[1] = local41;
 			} else if (arg10 == 9) {
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 64);
-				local191 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 96, arg4, 32);
-				@Pc(715) int local715 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 64, arg4, 0);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 64);
+				local191 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 96, arg4, 32);
+				@Pc(715) int local715 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 64, arg4, 0);
 				local87 = new int[]{local191, local41, local39[4], local191, local39[4], local39[3], local191, local39[3], local39[2], local191, local39[2], local39[1], local191, local39[1], local715};
 			} else if (arg10 == 10) {
 				local87 = new int[9];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 128);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 128);
 				local87[0] = local39[2];
 				local87[8] = local39[0];
 				local87[1] = local41;
@@ -4953,8 +4953,8 @@ public class SceneGraph {
 				local87[6] = local39[4];
 			} else if (arg10 == 11) {
 				local87 = new int[12];
-				local41 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 64);
-				local191 = method3683(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 64);
+				local41 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 0, arg4, 64);
+				local191 = computeGlTileVertex(local29, 0.0F, local11, local17, null, arg1, arg3, arg12, local23, arg6, true, arg14, arg2, arg11, 128, arg4, 64);
 				local87[5] = local41;
 				local87[1] = local41;
 				local87[8] = local41;
@@ -4973,7 +4973,7 @@ public class SceneGraph {
 	}
 
 	@OriginalMember(owner = "client!ql", name = "a", descriptor = "(IFII[[I[[II[[FIBIZLclient!hg;[[FII[[FI)I")
-	public static int method3683(@OriginalArg(0) int arg0, @OriginalArg(1) float arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int[][] arg4, @OriginalArg(5) int[][] arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float[][] arg7, @OriginalArg(8) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) boolean arg10, @OriginalArg(12) GlTile arg11, @OriginalArg(13) float[][] arg12, @OriginalArg(14) int arg13, @OriginalArg(15) int arg14, @OriginalArg(16) float[][] arg15, @OriginalArg(17) int arg16) {
+	public static int computeGlTileVertex(@OriginalArg(0) int arg0, @OriginalArg(1) float arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int[][] arg4, @OriginalArg(5) int[][] arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float[][] arg7, @OriginalArg(8) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) boolean arg10, @OriginalArg(12) GlTile arg11, @OriginalArg(13) float[][] arg12, @OriginalArg(14) int arg13, @OriginalArg(15) int arg14, @OriginalArg(16) float[][] arg15, @OriginalArg(17) int arg16) {
 		@Pc(20) int local20;
 		if (arg9 == 1) {
 			local20 = arg14;
