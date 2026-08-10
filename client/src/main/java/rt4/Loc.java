@@ -36,7 +36,7 @@ public final class Loc extends Entity {
 	private final int MIN_Y = -32768;
 
 	@OriginalMember(owner = "client!dc", name = "eb", descriptor = "I")
-	private int shadowZ = 0;
+	private int shadowY = 0;
 
 	@OriginalMember(owner = "client!dc", name = "gb", descriptor = "I")
 	private int lastLocTypeId = -1;
@@ -60,7 +60,7 @@ public final class Loc extends Entity {
 	private final int locId;
 
 	@OriginalMember(owner = "client!dc", name = "D", descriptor = "I")
-	private final int tileZ;
+	private final int tileY;
 
 	@OriginalMember(owner = "client!dc", name = "u", descriptor = "Lclient!tk;")
 	private SeqType seq;
@@ -84,7 +84,7 @@ public final class Loc extends Entity {
 		this.tileX = arg4;
 		this.shape = arg1;
 		this.locId = arg0;
-		this.tileZ = arg5;
+		this.tileY = arg5;
 		@Pc(67) LocType local67;
 		if (GlRenderer.enabled && arg8 != null) {
 			if (arg8 instanceof Loc) {
@@ -95,7 +95,7 @@ public final class Loc extends Entity {
 					local67 = local67.getMultiLoc();
 				}
 				if (local67 != null) {
-					buildStaticShadow(local67, 0, this.orientation, 0, this.shape, this.tileX, this.tileZ, this.level);
+					buildStaticShadow(local67, 0, this.orientation, 0, this.shape, this.tileX, this.tileY, this.level);
 				}
 			}
 		}
@@ -213,7 +213,7 @@ public final class Loc extends Entity {
 	@OriginalMember(owner = "client!dc", name = "c", descriptor = "(I)V")
 	public final void resetShadow() {
 		if (this.sprite2 != null) {
-			ShadowManager.method4207(this.sprite2, this.shadowX, this.shadowElevation, this.shadowZ);
+			ShadowManager.method4207(this.sprite2, this.shadowX, this.shadowElevation, this.shadowY);
 		}
 		this.lastLocTypeId = -1;
 		this.lastSeqFrame = -1;
@@ -322,8 +322,8 @@ public final class Loc extends Entity {
 		}
 		@Pc(178) int local178 = this.tileX + (local160 + 1 >> 1);
 		@Pc(185) int local185 = (local160 >> 1) + this.tileX;
-		@Pc(192) int local192 = (local157 >> 1) + this.tileZ;
-		@Pc(201) int local201 = (local157 + 1 >> 1) + this.tileZ;
+		@Pc(192) int local192 = (local157 >> 1) + this.tileY;
+		@Pc(201) int local201 = (local157 + 1 >> 1) + this.tileY;
 		this.advanceAnimation(local192 * 128, local185 * 128);
 		@Pc(256) boolean local256 = !local12 && local19.castshadow && (local19.id != this.lastLocTypeId || (this.seqFrame != this.lastSeqFrame || this.seq != null && (this.seq.aBoolean280 || SeqType.applyTweening) && this.seqFrame != this.seqNextFrame) && Preferences.sceneryShadowsType >= 2);
 		if (arg0 && !local256) {
@@ -332,7 +332,7 @@ public final class Loc extends Entity {
 		@Pc(267) int[][] local267 = SceneGraph.tileHeights[this.level];
 		@Pc(293) int local293 = local267[local178][local201] + local267[local185][local201] + local267[local185][local192] + local267[local178][local192] >> 2;
 		@Pc(302) int local302 = (local160 << 6) + (this.tileX << 7);
-		@Pc(311) int local311 = (local157 << 6) + (this.tileZ << 7);
+		@Pc(311) int local311 = (local157 << 6) + (this.tileY << 7);
 		@Pc(314) int[][] local314 = null;
 		if (local12) {
 			local314 = SceneGraph.surfaceTileHeights[0];
@@ -340,7 +340,7 @@ public final class Loc extends Entity {
 			local314 = SceneGraph.tileHeights[this.level + 1];
 		}
 		if (GlRenderer.enabled && local256) {
-			ShadowManager.method4207(this.sprite2, this.shadowX, this.shadowElevation, this.shadowZ);
+			ShadowManager.method4207(this.sprite2, this.shadowX, this.shadowElevation, this.shadowY);
 		}
 		@Pc(356) boolean local356 = this.sprite2 == null;
 		@Pc(389) LocEntity local389;
@@ -368,7 +368,7 @@ public final class Loc extends Entity {
 			if (!this.shadowDirty) {
 				ShadowManager.method4211(local471, local302, local429, local311);
 				this.sprite2 = local471;
-				this.shadowZ = local311;
+				this.shadowY = local311;
 				if (local356) {
 					sprite1 = null;
 				}

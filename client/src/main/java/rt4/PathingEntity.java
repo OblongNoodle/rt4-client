@@ -99,7 +99,7 @@ public abstract class PathingEntity extends Entity {
 	public int movementSpeed = 0;
 
 	@OriginalMember(owner = "client!fe", name = "J", descriptor = "I")
-	private int anInt3367 = 0;
+	private int pitchTarget = 0;
 
 	@OriginalMember(owner = "client!fe", name = "L", descriptor = "[I")
 	public final int[] hitVisibleUntil = new int[4];
@@ -114,7 +114,7 @@ public abstract class PathingEntity extends Entity {
 	public int seqId = -1;
 
 	@OriginalMember(owner = "client!fe", name = "ab", descriptor = "Z")
-	private boolean aBoolean169 = false;
+	private boolean pitchAccelerating = false;
 
 	@OriginalMember(owner = "client!fe", name = "M", descriptor = "Z")
 	public boolean yawAccelerating = false;
@@ -129,7 +129,7 @@ public abstract class PathingEntity extends Entity {
 	public int faceY = 0;
 
 	@OriginalMember(owner = "client!fe", name = "yb", descriptor = "I")
-	private int anInt3398 = 0;
+	private int rollMidpoint = 0;
 
 	@OriginalMember(owner = "client!fe", name = "G", descriptor = "I")
 	public int basTypeId = -1;
@@ -150,10 +150,10 @@ public abstract class PathingEntity extends Entity {
 	public int faceEntity = -1;
 
 	@OriginalMember(owner = "client!fe", name = "Bb", descriptor = "Z")
-	private boolean aBoolean170 = false;
+	private boolean rollAccelerating = false;
 
 	@OriginalMember(owner = "client!fe", name = "eb", descriptor = "I")
-	private int anInt3383 = 0;
+	private int rollAngle = 0;
 
 	@OriginalMember(owner = "client!fe", name = "ib", descriptor = "I")
 	public int yawDistanceTraveled = 0;
@@ -183,16 +183,16 @@ public abstract class PathingEntity extends Entity {
 	public int seqDelay = 0;
 
 	@OriginalMember(owner = "client!fe", name = "cc", descriptor = "I")
-	private int anInt3423 = 0;
+	private int pitchVelocity = 0;
 
 	@OriginalMember(owner = "client!fe", name = "C", descriptor = "I")
 	public int spotAnimDelayClock = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Yb", descriptor = "I")
-	private int anInt3419 = 0;
+	private int rollTarget = 0;
 
 	@OriginalMember(owner = "client!fe", name = "v", descriptor = "I")
-	private int anInt3355 = 0;
+	private int rollVelocity = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Mb", descriptor = "[I")
 	public final int[] hitTypes = new int[4];
@@ -228,7 +228,7 @@ public abstract class PathingEntity extends Entity {
 	public int movementSeqId = -1;
 
 	@OriginalMember(owner = "client!fe", name = "gc", descriptor = "I")
-	private int anInt3427 = 0;
+	private int pitchAngle = 0;
 
 	@OriginalMember(owner = "client!fe", name = "Tb", descriptor = "I")
 	private int size = 1;
@@ -243,7 +243,7 @@ public abstract class PathingEntity extends Entity {
 	public int seqMovementSteps = 0;
 
 	@OriginalMember(owner = "client!fe", name = "y", descriptor = "I")
-	private int anInt3357 = 0;
+	private int pitchMidpoint = 0;
 
 	@OriginalMember(owner = "client!fe", name = "wb", descriptor = "I")
 	public int movementSeqDelayClock = 0;
@@ -447,179 +447,179 @@ public abstract class PathingEntity extends Entity {
 		@Pc(106) int local106;
 		@Pc(134) int local134;
 		@Pc(138) int local138;
-		if (this.anInt3419 != local26) {
-			this.anInt3419 = local26;
-			if (this.anInt3355 > 0 && this.anInt3383 < local26) {
-				local101 = this.anInt3355 * this.anInt3355 / (local16.rollAcceleration * 2);
-				local106 = local26 - this.anInt3383;
+		if (this.rollTarget != local26) {
+			this.rollTarget = local26;
+			if (this.rollVelocity > 0 && this.rollAngle < local26) {
+				local101 = this.rollVelocity * this.rollVelocity / (local16.rollAcceleration * 2);
+				local106 = local26 - this.rollAngle;
 				if (local101 <= local106) {
-					this.aBoolean170 = true;
-					this.anInt3398 = (local26 + this.anInt3383 - local101) / 2;
+					this.rollAccelerating = true;
+					this.rollMidpoint = (local26 + this.rollAngle - local101) / 2;
 					local134 = local16.rollMaxSpeed * local16.rollMaxSpeed / (local16.rollAcceleration * 2);
 					local138 = local26 - local134;
-					if (this.anInt3398 < local138) {
-						this.anInt3398 = local138;
+					if (this.rollMidpoint < local138) {
+						this.rollMidpoint = local138;
 					}
 				} else {
-					this.aBoolean170 = false;
+					this.rollAccelerating = false;
 				}
-			} else if (this.anInt3355 < 0 && this.anInt3383 > local26) {
-				local101 = this.anInt3355 * this.anInt3355 / (local16.rollAcceleration * 2);
-				local106 = local26 - this.anInt3383;
+			} else if (this.rollVelocity < 0 && this.rollAngle > local26) {
+				local101 = this.rollVelocity * this.rollVelocity / (local16.rollAcceleration * 2);
+				local106 = local26 - this.rollAngle;
 				if (local106 >= local101) {
-					this.aBoolean170 = true;
-					this.anInt3398 = (this.anInt3383 + local101 + local26) / 2;
+					this.rollAccelerating = true;
+					this.rollMidpoint = (this.rollAngle + local101 + local26) / 2;
 					local134 = local16.rollMaxSpeed * local16.rollMaxSpeed / (local16.rollAcceleration * 2);
 					local138 = local134 + local26;
-					if (this.anInt3398 > local138) {
-						this.anInt3398 = local138;
+					if (this.rollMidpoint > local138) {
+						this.rollMidpoint = local138;
 					}
 				} else {
-					this.aBoolean170 = false;
+					this.rollAccelerating = false;
 				}
 			} else {
-				this.aBoolean170 = false;
+				this.rollAccelerating = false;
 			}
 		}
-		if (this.anInt3355 == 0) {
-			local101 = this.anInt3419 - this.anInt3383;
+		if (this.rollVelocity == 0) {
+			local101 = this.rollTarget - this.rollAngle;
 			if (-local16.rollAcceleration < local101 && local16.rollAcceleration > local101) {
-				this.anInt3383 = this.anInt3419;
+				this.rollAngle = this.rollTarget;
 			} else {
-				this.aBoolean170 = true;
+				this.rollAccelerating = true;
 				local106 = local16.rollMaxSpeed * local16.rollMaxSpeed / (local16.rollAcceleration * 2);
-				this.anInt3398 = (this.anInt3419 + this.anInt3383) / 2;
+				this.rollMidpoint = (this.rollTarget + this.rollAngle) / 2;
 				if (local101 >= 0) {
-					local134 = this.anInt3419 - local106;
-					this.anInt3355 = local16.rollAcceleration;
-					if (local134 > this.anInt3398) {
-						this.anInt3398 = local134;
+					local134 = this.rollTarget - local106;
+					this.rollVelocity = local16.rollAcceleration;
+					if (local134 > this.rollMidpoint) {
+						this.rollMidpoint = local134;
 					}
 				} else {
-					this.anInt3355 = -local16.rollAcceleration;
-					local134 = local106 + this.anInt3419;
-					if (this.anInt3398 > local134) {
-						this.anInt3398 = local134;
+					this.rollVelocity = -local16.rollAcceleration;
+					local134 = local106 + this.rollTarget;
+					if (this.rollMidpoint > local134) {
+						this.rollMidpoint = local134;
 					}
 				}
 			}
-		} else if (this.anInt3355 > 0) {
-			if (this.anInt3383 >= this.anInt3398) {
-				this.aBoolean170 = false;
+		} else if (this.rollVelocity > 0) {
+			if (this.rollAngle >= this.rollMidpoint) {
+				this.rollAccelerating = false;
 			}
-			if (!this.aBoolean170) {
-				this.anInt3355 -= local16.rollAcceleration;
-				if (this.anInt3355 < 0) {
-					this.anInt3355 = 0;
+			if (!this.rollAccelerating) {
+				this.rollVelocity -= local16.rollAcceleration;
+				if (this.rollVelocity < 0) {
+					this.rollVelocity = 0;
 				}
-			} else if (local16.rollMaxSpeed > this.anInt3355) {
-				this.anInt3355 += local16.rollAcceleration;
+			} else if (local16.rollMaxSpeed > this.rollVelocity) {
+				this.rollVelocity += local16.rollAcceleration;
 			}
 		} else {
-			if (this.anInt3398 >= this.anInt3383) {
-				this.aBoolean170 = false;
+			if (this.rollMidpoint >= this.rollAngle) {
+				this.rollAccelerating = false;
 			}
-			if (!this.aBoolean170) {
-				this.anInt3355 += local16.rollAcceleration;
-				if (this.anInt3355 > 0) {
-					this.anInt3355 = 0;
+			if (!this.rollAccelerating) {
+				this.rollVelocity += local16.rollAcceleration;
+				if (this.rollVelocity > 0) {
+					this.rollVelocity = 0;
 				}
-			} else if (this.anInt3355 > -local16.rollMaxSpeed) {
-				this.anInt3355 -= local16.rollAcceleration;
+			} else if (this.rollVelocity > -local16.rollMaxSpeed) {
+				this.rollVelocity -= local16.rollAcceleration;
 			}
 		}
-		this.anInt3383 += this.anInt3355;
-		if (this.anInt3383 != 0) {
-			local101 = this.anInt3383 >> 5 & 0x7FF;
+		this.rollAngle += this.rollVelocity;
+		if (this.rollAngle != 0) {
+			local101 = this.rollAngle >> 5 & 0x7FF;
 			local106 = arg0.getMinY() / 2;
 			arg0.translate(0, -local106, 0);
 			arg0.rotateZ(local101);
 			arg0.translate(0, local106, 0);
 		}
-		if (local28 != this.anInt3367) {
-			this.anInt3367 = local28;
-			if (this.anInt3423 > 0 && this.anInt3427 < local28) {
-				local101 = this.anInt3423 * this.anInt3423 / (local16.pitchAcceleration * 2);
-				local106 = local28 - this.anInt3427;
+		if (local28 != this.pitchTarget) {
+			this.pitchTarget = local28;
+			if (this.pitchVelocity > 0 && this.pitchAngle < local28) {
+				local101 = this.pitchVelocity * this.pitchVelocity / (local16.pitchAcceleration * 2);
+				local106 = local28 - this.pitchAngle;
 				if (local101 > local106) {
-					this.aBoolean169 = false;
+					this.pitchAccelerating = false;
 				} else {
-					this.anInt3357 = (this.anInt3427 + local28 - local101) / 2;
-					this.aBoolean169 = true;
+					this.pitchMidpoint = (this.pitchAngle + local28 - local101) / 2;
+					this.pitchAccelerating = true;
 					local134 = local16.pitchMaxSpeed * local16.pitchMaxSpeed / (local16.pitchAcceleration * 2);
 					local138 = local28 - local134;
-					if (this.anInt3357 < local138) {
-						this.anInt3357 = local138;
+					if (this.pitchMidpoint < local138) {
+						this.pitchMidpoint = local138;
 					}
 				}
-			} else if (this.anInt3423 < 0 && this.anInt3427 > local28) {
-				local106 = local28 - this.anInt3427;
-				local101 = this.anInt3423 * this.anInt3423 / (local16.pitchAcceleration * 2);
+			} else if (this.pitchVelocity < 0 && this.pitchAngle > local28) {
+				local106 = local28 - this.pitchAngle;
+				local101 = this.pitchVelocity * this.pitchVelocity / (local16.pitchAcceleration * 2);
 				if (local106 >= local101) {
-					this.anInt3357 = (local101 + this.anInt3427 + local28) / 2;
-					this.aBoolean169 = true;
+					this.pitchMidpoint = (local101 + this.pitchAngle + local28) / 2;
+					this.pitchAccelerating = true;
 					local134 = local16.pitchMaxSpeed * local16.pitchMaxSpeed / (local16.pitchAcceleration * 2);
 					local138 = local134 + local28;
-					if (local138 < this.anInt3357) {
-						this.anInt3357 = local138;
+					if (local138 < this.pitchMidpoint) {
+						this.pitchMidpoint = local138;
 					}
 				} else {
-					this.aBoolean169 = false;
+					this.pitchAccelerating = false;
 				}
 			} else {
-				this.aBoolean169 = false;
+				this.pitchAccelerating = false;
 			}
 		}
-		if (this.anInt3423 == 0) {
-			local101 = this.anInt3367 - this.anInt3427;
+		if (this.pitchVelocity == 0) {
+			local101 = this.pitchTarget - this.pitchAngle;
 			if (local101 > -local16.pitchAcceleration && local16.pitchAcceleration > local101) {
-				this.anInt3427 = this.anInt3367;
+				this.pitchAngle = this.pitchTarget;
 			} else {
-				this.anInt3357 = (this.anInt3367 + this.anInt3427) / 2;
-				this.aBoolean169 = true;
+				this.pitchMidpoint = (this.pitchTarget + this.pitchAngle) / 2;
+				this.pitchAccelerating = true;
 				local106 = local16.pitchMaxSpeed * local16.pitchMaxSpeed / (local16.pitchAcceleration * 2);
 				if (local101 < 0) {
-					this.anInt3423 = -local16.pitchAcceleration;
-					local134 = local106 + this.anInt3367;
-					if (this.anInt3357 > local134) {
-						this.anInt3357 = local134;
+					this.pitchVelocity = -local16.pitchAcceleration;
+					local134 = local106 + this.pitchTarget;
+					if (this.pitchMidpoint > local134) {
+						this.pitchMidpoint = local134;
 					}
 				} else {
-					this.anInt3423 = local16.pitchAcceleration;
-					local134 = this.anInt3367 - local106;
-					if (this.anInt3357 < local134) {
-						this.anInt3357 = local134;
+					this.pitchVelocity = local16.pitchAcceleration;
+					local134 = this.pitchTarget - local106;
+					if (this.pitchMidpoint < local134) {
+						this.pitchMidpoint = local134;
 					}
 				}
 			}
-		} else if (this.anInt3423 > 0) {
-			if (this.anInt3427 >= this.anInt3357) {
-				this.aBoolean169 = false;
+		} else if (this.pitchVelocity > 0) {
+			if (this.pitchAngle >= this.pitchMidpoint) {
+				this.pitchAccelerating = false;
 			}
-			if (!this.aBoolean169) {
-				this.anInt3423 -= local16.pitchAcceleration;
-				if (this.anInt3423 < 0) {
-					this.anInt3423 = 0;
+			if (!this.pitchAccelerating) {
+				this.pitchVelocity -= local16.pitchAcceleration;
+				if (this.pitchVelocity < 0) {
+					this.pitchVelocity = 0;
 				}
-			} else if (this.anInt3423 < local16.pitchMaxSpeed) {
-				this.anInt3423 += local16.pitchAcceleration;
+			} else if (this.pitchVelocity < local16.pitchMaxSpeed) {
+				this.pitchVelocity += local16.pitchAcceleration;
 			}
 		} else {
-			if (this.anInt3357 >= this.anInt3427) {
-				this.aBoolean169 = false;
+			if (this.pitchMidpoint >= this.pitchAngle) {
+				this.pitchAccelerating = false;
 			}
-			if (!this.aBoolean169) {
-				this.anInt3423 += local16.pitchAcceleration;
-				if (this.anInt3423 > 0) {
-					this.anInt3423 = 0;
+			if (!this.pitchAccelerating) {
+				this.pitchVelocity += local16.pitchAcceleration;
+				if (this.pitchVelocity > 0) {
+					this.pitchVelocity = 0;
 				}
-			} else if (-local16.pitchMaxSpeed < this.anInt3423) {
-				this.anInt3423 -= local16.pitchAcceleration;
+			} else if (-local16.pitchMaxSpeed < this.pitchVelocity) {
+				this.pitchVelocity -= local16.pitchAcceleration;
 			}
 		}
-		this.anInt3427 += this.anInt3423;
-		if (this.anInt3427 != 0) {
-			local101 = this.anInt3427 >> 5 & 0x7FF;
+		this.pitchAngle += this.pitchVelocity;
+		if (this.pitchAngle != 0) {
+			local101 = this.pitchAngle >> 5 & 0x7FF;
 			local106 = arg0.getMinY() / 2;
 			arg0.translate(0, -local106, 0);
 			arg0.rotateX(local101);
