@@ -1694,10 +1694,10 @@ public class SceneGraph {
 													local115 = surfaceTileHeights[0][local18][local21] + surfaceTileHeights[0][local18 + 1][local21] + surfaceTileHeights[0][local18][local21 + 1] + surfaceTileHeights[0][local18 + 1][local21 + 1] >> 2;
 													MaterialManager.setMaterial(-local115, 3);
 													local33 = 201.5F;
-													GlRenderer.method4159(local33);
+													GlRenderer.setDepthLayer(local33);
 												} else {
 													local33 = 201.5F - (float) (local27 + 1) * 50.0F;
-													GlRenderer.method4159(local33);
+													GlRenderer.setDepthLayer(local33);
 												}
 											}
 											if (!local8.visible) {
@@ -1741,7 +1741,7 @@ public class SceneGraph {
 											if (local8.linkedTile != null) {
 												local153 = local8.linkedTile;
 												if (GlRenderer.enabled) {
-													GlRenderer.method4159(201.5F - (float) (local153.level + 1) * 50.0F);
+													GlRenderer.setDepthLayer(201.5F - (float) (local153.level + 1) * 50.0F);
 												}
 												if (local153.plainTile == null) {
 													if (local153.shapedTile != null) {
@@ -1770,7 +1770,7 @@ public class SceneGraph {
 													}
 												}
 												if (GlRenderer.enabled) {
-													GlRenderer.method4159(local33);
+													GlRenderer.setDepthLayer(local33);
 												}
 											}
 											var24 = false;
@@ -1795,14 +1795,14 @@ public class SceneGraph {
 												@Pc(549) GroundDecor local549 = local8.groundDecor;
 												if (local549 != null && (local549.key & 0x80000000L) != 0L) {
 													if (GlRenderer.enabled && local549.flat) {
-														GlRenderer.method4159(local33 + 50.0F - 1.5F);
+														GlRenderer.setDepthLayer(local33 + 50.0F - 1.5F);
 													}
 													if (GlRenderer.enabled) {
 														LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													local549.entity.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local549.xFine - cameraX, local549.zFine - cameraZ, local549.yFine - cameraY, local549.key, local24, null);
 													if (GlRenderer.enabled && local549.flat) {
-														GlRenderer.method4159(local33);
+														GlRenderer.setDepthLayer(local33);
 													}
 												}
 											}
@@ -1859,7 +1859,7 @@ public class SceneGraph {
 											}
 											if (local619 != null && !isTileVisible(local27, local18, local21, local619.primary.getMinY())) {
 												if (GlRenderer.enabled) {
-													GlRenderer.method4159(local33 - 0.5F);
+													GlRenderer.setDepthLayer(local33 - 0.5F);
 												}
 												if ((local619.flags & local65) != 0) {
 													if (GlRenderer.enabled) {
@@ -1895,21 +1895,21 @@ public class SceneGraph {
 													}
 												}
 												if (GlRenderer.enabled) {
-													GlRenderer.method4159(local33);
+													GlRenderer.setDepthLayer(local33);
 												}
 											}
 											if (var24) {
 												@Pc(1001) GroundDecor local1001 = local8.groundDecor;
 												if (local1001 != null && (local1001.key & 0x80000000L) == 0L) {
 													if (GlRenderer.enabled && local1001.flat) {
-														GlRenderer.method4159(local33 + 50.0F - 1.5F);
+														GlRenderer.setDepthLayer(local33 + 50.0F - 1.5F);
 													}
 													if (GlRenderer.enabled) {
 														LightingManager.method2393(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													local1001.entity.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1001.xFine - cameraX, local1001.zFine - cameraZ, local1001.yFine - cameraY, local1001.key, local24, null);
 													if (GlRenderer.enabled && local1001.flat) {
-														GlRenderer.method4159(local33);
+														GlRenderer.setDepthLayer(local33);
 													}
 												}
 												@Pc(1064) ObjStackEntity local1064 = local8.objStack;
@@ -3079,7 +3079,7 @@ public class SceneGraph {
 						local336.method1944(tiles, local350, false);
 					}
 					if (local32 == 0 && Preferences.sceneryShadowsType > 0) {
-						GlRenderer.method4159(101.5F);
+						GlRenderer.setDepthLayer(101.5F);
 						ShadowManager.renderShadowMapGL(anInt4069, anInt4539, visibility, arg1, aBooleanArrayArray1, tileHeights[0]);
 					}
 					local32++;

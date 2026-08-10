@@ -67,13 +67,13 @@ public final class Npc extends PathingEntity {
 		if (Preferences.characterShadowsOn && local84.hasshadow) {
 			model = ShadowModelList.method1043(this.type.shadowcolormodifier1, this.seqStretches, local53 == null ? local29 : local53, this.xFine, this.type.shadowcolor2, this.yFine, this.type.shadowcolor1, this.type.size, body, orientation, local53 == null ? this.seqFrame : this.movementSeqFrame, this.tileHeight, this.type.shadowcolormodifier2);
 			if (GlRenderer.enabled) {
-				@Pc(144) float local144 = GlRenderer.method4179();
-				@Pc(146) float local146 = GlRenderer.method4166();
+				@Pc(144) float local144 = GlRenderer.getProjectionDistance();
+				@Pc(146) float local146 = GlRenderer.getDepthBias();
 				GlRenderer.disableDepthMask();
-				GlRenderer.method4152(local144, local146 - 150.0F);
+				GlRenderer.setDepthBias(local144, local146 - 150.0F);
 				model.render(0, arg1, arg2, arg3, arg4, x, z, y, -1L, arg9, this.particleSystem);
 				GlRenderer.enableDepthMask();
-				GlRenderer.method4152(local144, local146);
+				GlRenderer.setDepthBias(local144, local146);
 			} else {
 				model.render(0, arg1, arg2, arg3, arg4, x, z, y, -1L, arg9, this.particleSystem);
 			}

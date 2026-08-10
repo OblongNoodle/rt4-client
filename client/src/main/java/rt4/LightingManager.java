@@ -432,7 +432,7 @@ public class LightingManager {
 							local160 = arg2[local66][local155][local112];
 						}
 						if (local66 < 0 || local160 != null && local160.visible) {
-							GlRenderer.method4159(201.5F - (float) local63.level * 50.0F - 1.5F);
+							GlRenderer.setDepthLayer(201.5F - (float) local63.level * 50.0F - 1.5F);
 							gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, new float[]{0.0F, 0.0F, 0.0F, local63.alpha}, 0);
 							local63.mesh.draw();
 							continue label71;

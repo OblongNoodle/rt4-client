@@ -135,21 +135,21 @@ public final class GlRenderer {
 	private static JAWTWindow window;
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(Ljava/lang/String;)Lclient!na;")
-	private static JagString method4147(@OriginalArg(0) String arg0) {
+	private static JagString toJagString(@OriginalArg(0) String arg0) {
 		@Pc(3) byte[] local3;
 		local3 = arg0.getBytes(StandardCharsets.ISO_8859_1);
 		return JagString.decodeString(local3, local3.length, 0);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(IIII)V")
-	public static void method4148(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		method4171(0, 0, canvasWidth, canvasHeight, arg0, arg1, 0.0F, 0.0F, arg2, arg3);
+	public static void setFullscreenCamera(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+		setupPerspectiveView(0, 0, canvasWidth, canvasHeight, arg0, arg1, 0.0F, 0.0F, arg2, arg3);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "()V")
-	public static void method4149() {
+	public static void begin2DReplace() {
 		MaterialManager.setMaterial(0, 0);
-		method4163();
+		setupOrthographic();
 		setTextureCombineRgbMode(1);
 		setTextureCombineAlphaMode(1);
 		setLightingEnabled(false);
@@ -169,9 +169,9 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "c", descriptor = "()V")
-	public static void method4151() {
+	public static void begin2DModulate() {
 		MaterialManager.setMaterial(0, 0); // MaterialManager
-		method4163();
+		setupOrthographic();
 		setTextureCombineRgbMode(0);
 		setTextureCombineAlphaMode(0);
 		setLightingEnabled(false);
@@ -181,7 +181,7 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(FF)V")
-	public static void method4152(@OriginalArg(0) float arg0, @OriginalArg(1) float arg1) {
+	public static void setDepthBias(@OriginalArg(0) float arg0, @OriginalArg(1) float arg1) {
 		if (aBoolean266 || arg0 == aFloat33 && arg1 == aFloat31) {
 			return;
 		}
@@ -248,9 +248,9 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "e", descriptor = "()V")
-	public static void method4155() {
+	public static void begin2DModulateAlt() {
 		MaterialManager.setMaterial(0, 0);
-		method4163();
+		setupOrthographic();
 		setTextureCombineRgbMode(0);
 		setTextureCombineAlphaMode(0);
 		setLightingEnabled(false);
@@ -260,7 +260,7 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "f", descriptor = "()V")
-	private static void method4156() {
+	private static void initGlState() {
 		aBoolean266 = false;
 		gl.glDisable(GL2.GL_TEXTURE_2D);
 		textureId = -1;
@@ -326,8 +326,8 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(F)V")
-	public static void method4159(@OriginalArg(0) float arg0) {
-		method4152(3000.0F, arg0 * 1.5F);
+	public static void setDepthLayer(@OriginalArg(0) float arg0) {
+		setDepthBias(3000.0F, arg0 * 1.5F);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "h", descriptor = "()V")
@@ -375,9 +375,9 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "i", descriptor = "()V")
-	public static void method4162() {
+	public static void begin2DNoTexture() {
 		MaterialManager.setMaterial(0, 0);
-		method4163();
+		setupOrthographic();
 		setTextureId(-1);
 		setLightingEnabled(false);
 		setDepthTestEnabled(false);
@@ -386,7 +386,7 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "j", descriptor = "()V")
-	private static void method4163() {
+	private static void setupOrthographic() {
 		if (aBoolean266) {
 			return;
 		}
@@ -413,7 +413,7 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "l", descriptor = "()F")
-	public static float method4166() {
+	public static float getDepthBias() {
 		return aFloat31;
 	}
 
@@ -470,7 +470,7 @@ public final class GlRenderer {
 		arbTextureCubeMapSupported = gl.isExtensionAvailable("GL_ARB_texture_cube_map");
 		arbVertexProgramSupported = gl.isExtensionAvailable("GL_ARB_vertex_program");
 		extTexture3dSupported = gl.isExtensionAvailable("GL_EXT_texture3D");
-		@Pc(176) JagString renderer = method4147(GlRenderer.renderer).toLowerCase();
+		@Pc(176) JagString renderer = toJagString(GlRenderer.renderer).toLowerCase();
 		if (renderer.indexOf(RADEON) != -1) {
 			@Pc(184) int v = 0;
 			@Pc(193) JagString[] rendererParts = renderer.replaceSlashWithSpace().split(32);
@@ -560,14 +560,14 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(IIIIIIFFII)V")
-	public static void method4171(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) float arg6, @OriginalArg(7) float arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
+	public static void setupPerspectiveView(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) float arg6, @OriginalArg(7) float arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
 		@Pc(7) int local7 = (arg0 - arg4 << 8) / arg8;
 		@Pc(17) int local17 = (arg0 + arg2 - arg4 << 8) / arg8;
 		@Pc(25) int local25 = (arg1 - arg5 << 8) / arg9;
 		@Pc(35) int local35 = (arg1 + arg3 - arg5 << 8) / arg9;
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glLoadIdentity();
-		method4175((float) local7 * aFloat34, (float) local17 * aFloat34, (float) -local35 * aFloat34, (float) -local25 * aFloat34, 50.0F, (float) GlobalConfig.VIEW_DISTANCE);
+		setPerspectiveFrustum((float) local7 * aFloat34, (float) local17 * aFloat34, (float) -local35 * aFloat34, (float) -local25 * aFloat34, 50.0F, (float) GlobalConfig.VIEW_DISTANCE);
 		setViewportBounds(arg0, canvasHeight - arg1 - arg3, arg2, arg3);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
@@ -627,7 +627,7 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(FFFFFF)V")
-	private static void method4175(@OriginalArg(0) float xMin, @OriginalArg(1) float xMax, @OriginalArg(2) float yMin, @OriginalArg(3) float yMax, @OriginalArg(4) float nearClip, @OriginalArg(5) float farClip) {
+	private static void setPerspectiveFrustum(@OriginalArg(0) float xMin, @OriginalArg(1) float xMax, @OriginalArg(2) float yMin, @OriginalArg(3) float yMax, @OriginalArg(4) float nearClip, @OriginalArg(5) float farClip) {
 		float width = xMax - xMin;
 		float height = yMax - yMin;
 
@@ -687,7 +687,7 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "r", descriptor = "()F")
-	public static float method4179() {
+	public static float getProjectionDistance() {
 		return aFloat33;
 	}
 
@@ -744,8 +744,8 @@ public final class GlRenderer {
 				quit();
 				return result;
 			}
-			method4184();
-			method4156();
+			initDefaultTexture();
+			initGlState();
 			gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 			swapBuffersAttempts = 0;
 			while (true) {
@@ -798,7 +798,7 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(IIIIII)V")
-	public static void method4182(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	public static void setupModelPreview(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		@Pc(2) int local2 = -arg0;
 		@Pc(6) int local6 = canvasWidth - arg0;
 		@Pc(9) int local9 = -arg1;
@@ -843,7 +843,7 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "s", descriptor = "()V")
-	private static void method4184() {
+	private static void initDefaultTexture() {
 		@Pc(2) int[] local2 = new int[1];
 		gl.glGenTextures(1, local2, 0);
 		anInt5328 = local2[0];
