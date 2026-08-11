@@ -1401,7 +1401,7 @@ public class Cs1ScriptRunner {
 						Protocol.outboundBuffer.ip2(aClass13_14.createdComponentId);
 					}
 				} else if ((VarpDomain.anInt2952 == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
-					ScriptRunner.method3901();
+					ScriptRunner.layoutMiniMenu();
 				} else if (MiniMenu.size > 0) {
 					MiniMenu.processClick();
 				}

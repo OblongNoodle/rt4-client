@@ -159,7 +159,7 @@ public final class Npc extends PathingEntity {
 	public final void setNpcType(@OriginalArg(1) NpcType arg0) {
 		this.type = arg0;
 		if (this.particleSystem != null) {
-			this.particleSystem.method1646();
+			this.particleSystem.update();
 		}
 	}
 }

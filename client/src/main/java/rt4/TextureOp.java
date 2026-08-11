@@ -58,7 +58,7 @@ public abstract class TextureOp extends Node {
 	}
 
 	@OriginalMember(owner = "client!j", name = "d", descriptor = "(B)I")
-	public int method4627() {
+	public int getRequiredTextureId() {
 		return -1;
 	}
 
@@ -71,12 +71,12 @@ public abstract class TextureOp extends Node {
 	}
 
 	@OriginalMember(owner = "client!j", name = "f", descriptor = "(I)I")
-	public int method4631() {
+	public int getRequiredSpriteId() {
 		return -1;
 	}
 
 	@OriginalMember(owner = "client!j", name = "b", descriptor = "(III)V")
-	public final void method4632(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public final void allocateImageCache(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(15) int local15 = this.anInt5840 == 255 ? arg0 : this.anInt5840;
 		if (this.monochrome) {
 			this.monochromeImageCache = new ColorImageCache(local15, arg0, arg1);

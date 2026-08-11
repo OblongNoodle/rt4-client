@@ -263,7 +263,7 @@ public final class Js5NetQueue {
 			this.socket = null;
 		}
 		this.socket = arg1;
-		this.method2331();
+		this.sendPing();
 		this.writeLoggedIn(arg0);
 		this.inBuffer.offset = 0;
 		this.current = null;
@@ -351,7 +351,7 @@ public final class Js5NetQueue {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "e", descriptor = "(B)V")
-	private void method2331() {
+	private void sendPing() {
 		if (this.socket == null) {
 			return;
 		}

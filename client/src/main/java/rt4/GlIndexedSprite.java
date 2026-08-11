@@ -88,7 +88,7 @@ public final class GlIndexedSprite extends IndexedSprite {
 
 	@OriginalMember(owner = "client!oh", name = "a", descriptor = "(III)V")
 	@Override
-	public final void method3335(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final void renderAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		GlRenderer.begin2DModulateAlt();
 		@Pc(5) int local5 = arg0 + this.xOffset;
 		@Pc(10) int local10 = arg1 + this.yOffset;

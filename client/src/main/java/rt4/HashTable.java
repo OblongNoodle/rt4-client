@@ -120,7 +120,7 @@ public final class HashTable {
 	}
 
 	@OriginalMember(owner = "client!sc", name = "a", descriptor = "([Lclient!ab;I)I")
-	public final int method3865(@OriginalArg(0) Node[] arg0) {
+	public final int toArray(@OriginalArg(0) Node[] arg0) {
 		@Pc(13) int local13 = 0;
 		for (@Pc(15) int local15 = 0; local15 < this.anInt5023; local15++) {
 			@Pc(24) Node local24 = this.nodes[local15];

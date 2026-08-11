@@ -59,7 +59,7 @@ public final class Packet extends Buffer {
 	}
 
 	@OriginalMember(owner = "client!i", name = "q", descriptor = "(II)I")
-	public final int method2241(@OriginalArg(0) int arg0) {
+	public final int availableBits(@OriginalArg(0) int arg0) {
 		return arg0 * 8 - this.bitOffset;
 	}
 

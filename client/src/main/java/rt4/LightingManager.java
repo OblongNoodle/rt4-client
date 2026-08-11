@@ -246,7 +246,7 @@ public class LightingManager {
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IZ)V")
 	public static void updateAllLightAnimations(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1) {
 		for (@Pc(1) int local1 = 0; local1 < lightCount; local1++) {
-			lights[local1].method1765(arg1, arg0);
+			lights[local1].updateAnimation(arg1, arg0);
 		}
 		anInt3031 = -1;
 		anInt3033 = -1;

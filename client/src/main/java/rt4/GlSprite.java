@@ -43,7 +43,7 @@ public class GlSprite extends Sprite {
 		this.width = arg4;
 		this.height = arg5;
 		this.pixels = arg6;
-		this.method1430(arg6);
+		this.uploadPixels(arg6);
 		this.method1431();
 	}
 
@@ -56,7 +56,7 @@ public class GlSprite extends Sprite {
 		this.width = arg0.width;
 		this.height = arg0.height;
 		this.pixels = arg0.pixels;
-		this.method1430(arg0.pixels);
+		this.uploadPixels(arg0.pixels);
 		this.method1431();
 	}
 
@@ -77,7 +77,7 @@ public class GlSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "(IILclient!cf;)V")
-	public final void method1425(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) GlSprite arg2) {
+	public final void renderClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) GlSprite arg2) {
 		if (arg2 == null) {
 			return;
 		}
@@ -250,7 +250,7 @@ public class GlSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!cf", name = "b", descriptor = "(IIIIII)V")
-	public final void method1428(@OriginalArg(2) int arg0, @OriginalArg(3) int arg1, @OriginalArg(4) int arg2) {
+	public final void renderRotatedFixed(@OriginalArg(2) int arg0, @OriginalArg(3) int arg1, @OriginalArg(4) int arg2) {
 		GlRenderer.begin2DReplace();
 		@Pc(2) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
@@ -447,7 +447,7 @@ public class GlSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "([I)V")
-	protected void method1430(@OriginalArg(0) int[] arg0) {
+	protected void uploadPixels(@OriginalArg(0) int[] arg0) {
 		this.powerOfTwoWidth = IntUtils.clp2(this.width);
 		this.powerOfTwoHeight = IntUtils.clp2(this.height);
 		@Pc(20) byte[] local20 = new byte[this.powerOfTwoWidth * this.powerOfTwoHeight * 4];

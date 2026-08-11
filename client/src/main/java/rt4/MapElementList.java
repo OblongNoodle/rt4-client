@@ -56,22 +56,22 @@ public final class MapElementList {
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(IB)Z")
-	public final boolean method3890(@OriginalArg(0) int arg0) {
+	public final boolean isTextLabel(@OriginalArg(0) int arg0) {
 		return (this.aByteArray69[arg0] & 0x8) != 0;
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(II)Z")
-	public final boolean method3892(@OriginalArg(0) int arg0) {
+	public final boolean isMinimapLabelVisible(@OriginalArg(0) int arg0) {
 		return (this.aByteArray69[arg0] & 0x4) != 0;
 	}
 
 	@OriginalMember(owner = "client!se", name = "b", descriptor = "(II)I")
-	public final int method3894(@OriginalArg(0) int arg0) {
+	public final int getLabelSize(@OriginalArg(0) int arg0) {
 		return this.aByteArray69[arg0] & 0x3;
 	}
 
 	@OriginalMember(owner = "client!se", name = "c", descriptor = "(II)Z")
-	public final boolean method3897(@OriginalArg(0) int arg0) {
+	public final boolean isVisible(@OriginalArg(0) int arg0) {
 		return (this.aByteArray69[arg0] & 0x10) == 0;
 	}
 }

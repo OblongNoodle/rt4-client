@@ -176,7 +176,7 @@ public final class MidiPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "()I")
 	@Override
-	public final synchronized int method4404() {
+	public final synchronized int getActiveChannelCount() {
 		return 0;
 	}
 
@@ -804,7 +804,7 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "f", descriptor = "(B)V")
-	public final synchronized void method4446() {
+	public final synchronized void reset() {
 		this.method4448(true);
 	}
 

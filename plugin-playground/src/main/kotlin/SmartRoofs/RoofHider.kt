@@ -137,7 +137,7 @@ object RoofHider {
         }
         clearSmartRoofsState()
         smartRoofsWasActive = false
-        ScriptRunner.method2218()
+        ScriptRunner.updateRoofRemovalMode()
     }
 
     private fun clearSmartRoofsState() {
@@ -172,7 +172,7 @@ object RoofHider {
             ScriptRunner.aByteArrayArrayArray15 == null ||
             ScriptRunner.anIntArray205.size < SELECTIVE_ROOF_GROUP_COUNT
         if (rebuild) {
-            ScriptRunner.method2218()
+            ScriptRunner.updateRoofRemovalMode()
         } else {
             ensureSelectiveRoofBuffers()
         }

@@ -56,11 +56,11 @@ public final class Js5Index {
 		if (arg1 != this.checksum) {
 			throw new RuntimeException();
 		}
-		this.method2293(arg0);
+		this.decode(arg0);
 	}
 
 	@OriginalMember(owner = "client!ii", name = "a", descriptor = "(I[B)V")
-	private void method2293(@OriginalArg(1) byte[] arg0) {
+	private void decode(@OriginalArg(1) byte[] arg0) {
 		@Pc(12) Buffer local12 = new Buffer(Js5Compression.uncompress(arg0));
 		@Pc(16) int local16 = local12.g1();
 		if (local16 != 5 && local16 != 6) {

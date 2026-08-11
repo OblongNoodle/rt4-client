@@ -23,7 +23,7 @@ public final class GlAlphaSprite extends GlSprite {
 
 	@OriginalMember(owner = "client!el", name = "a", descriptor = "([I)V")
 	@Override
-	protected final void method1430(@OriginalArg(0) int[] arg0) {
+	protected final void uploadPixels(@OriginalArg(0) int[] arg0) {
 		this.powerOfTwoWidth = IntUtils.clp2(this.width);
 		this.powerOfTwoHeight = IntUtils.clp2(this.height);
 		@Pc(20) byte[] local20 = new byte[this.powerOfTwoWidth * this.powerOfTwoHeight * 4];

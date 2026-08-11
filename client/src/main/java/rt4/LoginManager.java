@@ -208,17 +208,17 @@ public class LoginManager {
 				Protocol.socketRequest = null;
 				Protocol.socket.write(Protocol.outboundBuffer.data, Protocol.outboundBuffer.offset);
 				if (client.musicChannel != null) {
-					client.musicChannel.method3571();
+					client.musicChannel.pauseConsumptionCheck();
 				}
 				if (client.soundChannel != null) {
-					client.soundChannel.method3571();
+					client.soundChannel.pauseConsumptionCheck();
 				}
 				local126 = Protocol.socket.read();
 				if (client.musicChannel != null) {
-					client.musicChannel.method3571();
+					client.musicChannel.pauseConsumptionCheck();
 				}
 				if (client.soundChannel != null) {
-					client.soundChannel.method3571();
+					client.soundChannel.pauseConsumptionCheck();
 				}
 				if (local126 != 101) {
 					reply = local126;
@@ -317,17 +317,17 @@ public class LoginManager {
 				Protocol.outboundBuffer.p1(local120);
 				Protocol.socket.write(Protocol.outboundBuffer.data, 2);
 				if (client.musicChannel != null) {
-					client.musicChannel.method3571();
+					client.musicChannel.pauseConsumptionCheck();
 				}
 				if (client.soundChannel != null) {
-					client.soundChannel.method3571();
+					client.soundChannel.pauseConsumptionCheck();
 				}
 				@Pc(150) int local150 = Protocol.socket.read();
 				if (client.musicChannel != null) {
-					client.musicChannel.method3571();
+					client.musicChannel.pauseConsumptionCheck();
 				}
 				if (client.soundChannel != null) {
-					client.soundChannel.method3571();
+					client.soundChannel.pauseConsumptionCheck();
 				}
 				if (local150 != 0) {
 					reply = local150;
@@ -536,7 +536,7 @@ public class LoginManager {
 				Protocol.socket.read(0, Protocol.length, Protocol.inboundBuffer.data);
 				reply = 2;
 				step = 0;
-				client.method4221();
+				client.resetGameSessionState();
 				SceneGraph.centralZoneX = -1;
 				Protocol.readRebuildPacket(false);
 				Protocol.opcode = -1;
@@ -1098,7 +1098,7 @@ public class LoginManager {
 				Protocol.spawnGroundObject(chunkY, chunkX);
 			}
 		}
-		ScriptRunner.method2218();
+		ScriptRunner.updateRoofRemovalMode();
 		client.audioLoop();
 		ChangeLocRequest.flush();
 		client.unload();

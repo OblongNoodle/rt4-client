@@ -43,7 +43,7 @@ public class TextureOpSprite extends TextureOp {
 
 	@OriginalMember(owner = "client!nh", name = "f", descriptor = "(I)I")
 	@Override
-	public final int method4631() {
+	public final int getRequiredSpriteId() {
 		return this.spriteId;
 	}
 

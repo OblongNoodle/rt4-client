@@ -57,7 +57,7 @@ public final class GlRaster {
 		clipBottom = GlRenderer.canvasHeight;
 		@Pc(9) GL2 gl = GlRenderer.gl;
 		gl.glDisable(GL2.GL_SCISSOR_TEST);
-		GlFont.method1173();
+		GlFont.clearLineMask();
 	}
 
 	@OriginalMember(owner = "client!dj", name = "a", descriptor = "([IIIII)V")
@@ -196,7 +196,7 @@ public final class GlRaster {
 		} else {
 			gl.glScissor(0, 0, 0, 0);
 		}
-		GlFont.method1173();
+		GlFont.clearLineMask();
 	}
 
 	@OriginalMember(owner = "client!dj", name = "d", descriptor = "()V")
@@ -261,7 +261,7 @@ public final class GlRaster {
 		} else {
 			gl.glScissor(0, 0, 0, 0);
 		}
-		GlFont.method1173();
+		GlFont.clearLineMask();
 	}
 
 }

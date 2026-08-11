@@ -36,7 +36,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 	}
 
 	@OriginalMember(owner = "client!ek", name = "a", descriptor = "([I[B[IIIIIIIIII)V")
-	public static void method1391(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11) {
+	public static void blitScaledIndexed(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11) {
 		@Pc(1) int local1 = arg3;
 		for (@Pc(4) int local4 = -arg8; local4 < 0; local4++) {
 			@Pc(12) int local12 = (arg4 >> 16) * arg11;
@@ -56,7 +56,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 	}
 
 	@OriginalMember(owner = "client!ek", name = "a", descriptor = "([I[B[IIIIIIII)V")
-	public static void method1393(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
+	public static void blitIndexed(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
 		@Pc(4) int local4 = -(arg5 >> 2);
 		@Pc(9) int local9 = -(arg5 & 0x3);
 		for (@Pc(12) int local12 = -arg6; local12 < 0; local12++) {
@@ -102,7 +102,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 	}
 
 	@OriginalMember(owner = "client!ek", name = "a", descriptor = "([I[B[IIIIIIIIIII)V")
-	public static void method1394(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12) {
+	public static void blitScaledIndexedTinted(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12) {
 		@Pc(1) int local1 = arg3;
 		@Pc(7) int local7 = arg12 >> 16 & 0xFF;
 		@Pc(13) int local13 = arg12 >> 8 & 0xFF;
@@ -129,7 +129,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 	}
 
 	@OriginalMember(owner = "client!ek", name = "b", descriptor = "([I[B[IIIIIIII)V")
-	public static void method1397(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
+	public static void blitAlphaBlended(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
 		@Pc(3) int local3 = 256 - arg9;
 		for (@Pc(6) int local6 = -arg6; local6 < 0; local6++) {
 			for (@Pc(11) int local11 = -arg5; local11 < 0; local11++) {
@@ -176,7 +176,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 	}
 
 	@OriginalMember(owner = "client!ek", name = "a", descriptor = "(IIIII)V")
-	public final void method1390(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void renderScaledTinted(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		@Pc(2) int local2 = this.width;
 		@Pc(5) int local5 = this.height;
 		@Pc(7) int local7 = 0;
@@ -226,7 +226,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 			local7 += local21 * local145;
 			local125 += local145;
 		}
-		method1394(SoftwareRaster.pixels, this.pixels, this.pallet, local7, local9, local41, local125, arg2, arg3, local21, local27, local2, arg4);
+		blitScaledIndexedTinted(SoftwareRaster.pixels, this.pixels, this.pallet, local7, local9, local41, local125, arg2, arg3, local21, local27, local2, arg4);
 	}
 
 	@OriginalMember(owner = "client!ek", name = "a", descriptor = "()V")
@@ -273,7 +273,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 
 	@OriginalMember(owner = "client!ek", name = "a", descriptor = "(III)V")
 	@Override
-	public final void method3335(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final void renderAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		arg0 += this.xOffset;
 		arg1 += this.yOffset;
 		@Pc(15) int local15 = arg0 + arg1 * SoftwareRaster.width;
@@ -309,7 +309,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			method1397(SoftwareRaster.pixels, this.pixels, this.pallet, local17, local15, local23, local20, local27, local29, arg2);
+			blitAlphaBlended(SoftwareRaster.pixels, this.pixels, this.pallet, local17, local15, local23, local20, local27, local29, arg2);
 		}
 	}
 
@@ -333,7 +333,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 	}
 
 	@OriginalMember(owner = "client!ek", name = "a", descriptor = "(IIII)V")
-	public final void method1398(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public final void renderScaled(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		@Pc(2) int local2 = this.width;
 		@Pc(5) int local5 = this.height;
 		@Pc(7) int local7 = 0;
@@ -383,7 +383,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 			local7 += local21 * local145;
 			local125 += local145;
 		}
-		method1391(SoftwareRaster.pixels, this.pixels, this.pallet, local7, local9, local41, local125, arg2, arg3, local21, local27, local2);
+		blitScaledIndexed(SoftwareRaster.pixels, this.pixels, this.pallet, local7, local9, local41, local125, arg2, arg3, local21, local27, local2);
 	}
 
 	@OriginalMember(owner = "client!ek", name = "a", descriptor = "(II)V")
@@ -424,7 +424,7 @@ public final class SoftwareIndexedSprite extends IndexedSprite {
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			method1393(SoftwareRaster.pixels, this.pixels, this.pallet, local17, local15, local23, local20, local27, local29);
+			blitIndexed(SoftwareRaster.pixels, this.pixels, this.pallet, local17, local15, local23, local20, local27, local29);
 		}
 	}
 }

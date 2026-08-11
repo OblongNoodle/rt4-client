@@ -399,7 +399,7 @@ public final class Player extends PathingEntity {
 			this.yFine = this.movementQueueY[0] * 128 + this.getSize() * 64;
 		}
 		if (this.particleSystem != null) {
-			this.particleSystem.method1646();
+			this.particleSystem.update();
 		}
 	}
 

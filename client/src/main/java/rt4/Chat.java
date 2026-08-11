@@ -54,7 +54,7 @@ public class Chat {
 	}
 
 	@OriginalMember(owner = "client!fm", name = "a", descriptor = "(ILclient!na;Lclient!na;Lclient!na;I)V")
-	public static void method1598(@OriginalArg(1) JagString arg0, @OriginalArg(2) JagString arg1, @OriginalArg(3) JagString arg2) {
+	public static void addClanChannelMessage(@OriginalArg(1) JagString arg0, @OriginalArg(2) JagString arg1, @OriginalArg(3) JagString arg2) {
 		add(-1, 9, arg0, arg2, arg1);
 	}
 }

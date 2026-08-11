@@ -52,7 +52,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!wg", name = "f", descriptor = "()V")
-	public static void method4608() {
+	public static void disableSecondaryTexCoordArray() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		gl.glClientActiveTexture(method4607());
 		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
@@ -60,7 +60,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!wg", name = "g", descriptor = "()V")
-	public static void method4609() {
+	public static void enableSecondaryTexCoordArray() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		gl.glClientActiveTexture(method4607());
 		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
@@ -207,7 +207,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 				gl.glTexGenfv(GL2.GL_R, GL2.GL_EYE_PLANE, this.aFloatArray29, 0);
 				gl.glActiveTexture(GL2.GL_TEXTURE2);
 			}
-			gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, WaterMaterialRenderer.method2422(), 0);
+			gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, WaterMaterialRenderer.getWaterFogColor(), 0);
 			if (arg0 >= 0) {
 				this.aFloatArray29[0] = 0.0F;
 				this.aFloatArray29[1] = 1.0F / (float) anInt3241;

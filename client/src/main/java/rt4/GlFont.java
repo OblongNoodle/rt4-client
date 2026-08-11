@@ -36,12 +36,12 @@ public final class GlFont extends Font {
 	}
 
 	@OriginalMember(owner = "client!dj", name = "a", descriptor = "()V")
-	public static void method1173() {
+	public static void clearLineMask() {
 		masked = null;
 	}
 
 	@OriginalMember(owner = "client!dj", name = "a", descriptor = "(Lclient!cf;)V")
-	public static void method1188(@OriginalArg(0) GlSprite sprite) {
+	public static void setLineMask(@OriginalArg(0) GlSprite sprite) {
 		if (sprite.height != GlRaster.clipBottom - GlRaster.clipTop) {
 			throw new IllegalArgumentException();
 		}

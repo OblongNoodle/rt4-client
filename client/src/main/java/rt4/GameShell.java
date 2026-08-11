@@ -181,7 +181,7 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 	}
 
 	@OriginalMember(owner = "client!qh", name = "a", descriptor = "(Z)V")
-	public static void method3662() {
+	public static void updateCanvasSize() {
 		@Pc(8) Container local8;
 		if (fullScreenFrame != null) {
 			local8 = fullScreenFrame;
@@ -222,11 +222,11 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.layoutTopLevel(true);
 		}
-		method2704();
+		paintFrameLetterbox();
 	}
 
 	@OriginalMember(owner = "client!l", name = "b", descriptor = "(I)V")
-	public static void method2704() {
+	public static void paintFrameLetterbox() {
 		@Pc(7) int local7 = topMargin;
 		@Pc(9) int local9 = leftMargin;
 		@Pc(16) int local16 = frameHeight - canvasHeight - local7;

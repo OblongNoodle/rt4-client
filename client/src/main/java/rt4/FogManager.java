@@ -218,7 +218,7 @@ public final class FogManager {
 	}
 
 	@OriginalMember(owner = "client!i", name = "b", descriptor = "(IIIII)I")
-	public static int method2235(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static int updateAtmosphere(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		if (instantScreenFade) {
 			arg0 = 1000000;
 			instantScreenFade = false;

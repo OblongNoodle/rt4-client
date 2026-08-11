@@ -1139,7 +1139,7 @@ public final class SoundPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "()I")
 	@Override
-	public final int method4404() {
+	public final int getActiveChannelCount() {
 		return this.volume == 0 && this.anInt351 == 0 ? 0 : 1;
 	}
 

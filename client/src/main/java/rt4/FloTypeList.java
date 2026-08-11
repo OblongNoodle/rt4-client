@@ -19,7 +19,7 @@ public class FloTypeList {
 	}
 
 	@OriginalMember(owner = "client!um", name = "a", descriptor = "(BI)Lclient!wl;")
-	public static FloType method4395(@OriginalArg(1) int id) {
+	public static FloType get(@OriginalArg(1) int id) {
 		@Pc(6) FloType floorOverlay = (FloType) types.get(id);
 		if (floorOverlay != null) {
 			return floorOverlay;

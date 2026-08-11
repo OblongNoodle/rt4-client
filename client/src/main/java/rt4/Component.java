@@ -900,7 +900,7 @@ public final class Component {
 					models.put(local61, local13 + (local10 << 16));
 				}
 				if (arg1 != null) {
-					local61 = arg1.method4215(local61, arg0, arg3, arg2);
+					local61 = arg1.animateEntity(local61, arg0, arg3, arg2);
 				}
 				return local61;
 			} else if (local10 == 2) {

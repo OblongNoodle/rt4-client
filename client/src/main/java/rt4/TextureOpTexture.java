@@ -91,7 +91,7 @@ public final class TextureOpTexture extends TextureOp {
 
 	@OriginalMember(owner = "client!ui", name = "d", descriptor = "(B)I")
 	@Override
-	public final int method4627() {
+	public final int getRequiredTextureId() {
 		return this.textureId;
 	}
 }

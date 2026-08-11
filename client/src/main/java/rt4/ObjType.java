@@ -576,7 +576,7 @@ public final class ObjType {
 			ObjTypeList.models.put(model, this.id);
 		}
 		if (seqType != null) {
-			model = seqType.method4215(model, arg0, arg1, arg4);
+			model = seqType.animateEntity(model, arg0, arg1, arg4);
 		}
 		return model;
 	}

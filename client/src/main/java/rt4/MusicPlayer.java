@@ -12,7 +12,7 @@ public class MusicPlayer {
 	@OriginalMember(owner = "client!li", name = "a", descriptor = "(ZI)V")
 	public static void playSong(@OriginalArg(1) int arg0) {
 		if (arg0 == -1 && !MidiPlayer.jingle) {
-			MidiPlayer.method4548();
+			MidiPlayer.stop();
 		} else if (arg0 != -1 && (groupId != arg0 || !MidiPlayer.isPlaying()) && Preferences.musicVolume != 0 && !MidiPlayer.jingle) {
 			MidiPlayer.playFadeOut(arg0, client.js5Archive6, Preferences.musicVolume);
 		}

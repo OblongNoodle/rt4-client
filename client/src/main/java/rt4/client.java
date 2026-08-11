@@ -282,7 +282,7 @@ public final class client extends GameShell {
 			advertSuppressed = false;
 			try {
 				@Pc(63) byte[] local63 = arg0[2].getBytes(StandardCharsets.ISO_8859_1);
-				local15 = LangUtils.method2053(JagString.decodeString(local63, local63.length, 0));
+				local15 = LangUtils.getLanguageId(JagString.decodeString(local63, local63.length, 0));
 			} catch (@Pc(74) Exception local74) {
 			}
 			if (local15 != -1) {
@@ -584,7 +584,7 @@ public final class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!lb", name = "a", descriptor = "(Z)V")
-	public static void method2721() {
+	public static void reloadResourcesOnDisplayModeChange() {
 		SceneGraph.clear();
 		MiniMap.sprite = null;
 		LightingManager.anInt2875 = -1;
@@ -628,7 +628,7 @@ public final class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(Z)V")
-	public static void method4221() {
+	public static void resetGameSessionState() {
 		Protocol.anInt4762 = 0;
 		Protocol.prevFocus = true;
 		Mouse.prevClickTime = 0L;
@@ -810,9 +810,9 @@ public final class client extends GameShell {
 		if (gameState == 1000) {
 			return;
 		}
-		@Pc(15) boolean local15 = MidiPlayer.method2699();
+		@Pc(15) boolean local15 = MidiPlayer.tryStartLoadedSong();
 		if (local15 && MidiPlayer.jingle && musicChannel != null) {
-			musicChannel.method3570();
+			musicChannel.forceClose();
 		}
 		if ((gameState == 30 || gameState == 10) && (GameShell.replaceCanvas || DisplayMode.aLong89 != 0L && DisplayMode.aLong89 < MonotonicClock.currentTimeMillis())) {
 			DisplayMode.setWindowMode(GameShell.replaceCanvas, DisplayMode.getWindowMode(), Preferences.fullScreenWidth, Preferences.fullScreenHeight);
@@ -836,7 +836,7 @@ public final class client extends GameShell {
 				local84 -= local90.top + local90.bottom;
 			}
 			if (local80 != GameShell.frameWidth || local84 != GameShell.frameHeight) {
-				GameShell.method3662();
+				GameShell.updateCanvasSize();
 				DisplayMode.aLong89 = MonotonicClock.currentTimeMillis() + 500L;
 			}
 		}
@@ -855,7 +855,7 @@ public final class client extends GameShell {
 			GameShell.fullRedraw = false;
 		}
 		if (local158) {
-			GameShell.method2704(); // Creates a black background for SD Mode gameplay frame to render on top of.
+			GameShell.paintFrameLetterbox(); // Creates a black background for SD Mode gameplay frame to render on top of.
 		}
 		if (GlRenderer.enabled) {
 			for (local80 = 0; local80 < 100; local80++) {
@@ -969,20 +969,20 @@ public final class client extends GameShell {
 		js5CacheQueue.quit();
 		try {
 			if (cacheData != null) {
-				cacheData.method1455();
+				cacheData.close();
 			}
 			if (cacheIndexes != null) {
 				for (@Pc(95) int local95 = 0; local95 < cacheIndexes.length; local95++) {
 					if (cacheIndexes[local95] != null) {
-						cacheIndexes[local95].method1455();
+						cacheIndexes[local95].close();
 					}
 				}
 			}
 			if (cacheMasterIndex != null) {
-				cacheMasterIndex.method1455();
+				cacheMasterIndex.close();
 			}
 			if (uid != null) {
-				uid.method1455();
+				uid.close();
 			}
 		} catch (@Pc(129) IOException local129) {
 		}
@@ -1047,7 +1047,7 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "g", descriptor = "(I)V")
 	@Override
 	protected final void mainInit() {
-		GameShell.method3662();
+		GameShell.updateCanvasSize();
 		js5CacheQueue = new Js5CacheQueue();
 		js5NetQueue = new Js5NetQueue();
 
@@ -1176,7 +1176,7 @@ public final class client extends GameShell {
 							local66.movementQueueX[0] = local98 + (local66.xFine >> 7);
 							local66.movementQueueY[0] = local106 + (local66.yFine >> 7);
 							PathFinder.collisionMaps[Player.plane].unflagScenery(local66.xFine >> 7, local66.getSize(), false, 0, local66.getSize(), local66.yFine >> 7);
-							if (local66.movementQueueX[0] >= 0 && local66.movementQueueX[0] <= 104 - local66.getSize() && local66.movementQueueY[0] >= 0 && local66.movementQueueY[0] <= 104 - local66.getSize() && PathFinder.collisionMaps[Player.plane].method3054(local66.yFine >> 7, local66.movementQueueY[0], local66.movementQueueX[0], local66.xFine >> 7)) {
+							if (local66.movementQueueX[0] >= 0 && local66.movementQueueX[0] <= 104 - local66.getSize() && local66.movementQueueY[0] >= 0 && local66.movementQueueY[0] <= 104 - local66.getSize() && PathFinder.collisionMaps[Player.plane].isPathClear(local66.yFine >> 7, local66.movementQueueY[0], local66.movementQueueX[0], local66.xFine >> 7)) {
 								if (local66.getSize() > 1) {
 									for (@Pc(226) int local226 = local66.movementQueueX[0]; local66.movementQueueX[0] + local66.getSize() > local226; local226++) {
 										for (@Pc(246) int local246 = local66.movementQueueY[0]; local66.movementQueueY[0] + local66.getSize() > local246; local246++) {
@@ -1670,7 +1670,7 @@ public final class client extends GameShell {
 			mainLoadState = 150;
 			clean = true;
 		} else if (mainLoadState == 150) {
-			MaterialManager.method2807();
+			MaterialManager.initNoiseTextures();
 			if (Preferences.safeMode) {
 				Preferences.windowMode = 0;
 				Preferences.antiAliasingMode = 0;
@@ -1731,7 +1731,7 @@ public final class client extends GameShell {
 			LoginManager.loopAuto();
 			LoginManager.loop();
 		} else if (gameState == 30) {
-			Protocol.method1756();
+			Protocol.loop();
 		} else if (gameState == 40) {
 			LoginManager.loop();
 			if (LoginManager.reply != -3) {

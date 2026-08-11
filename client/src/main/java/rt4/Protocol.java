@@ -571,7 +571,7 @@ public class Protocol {
 					@Pc(106) int local106 = -1;
 					@Pc(127) JagString message;
 					if (local35) {
-						@Pc(112) QuickChatPhrase phrase = QuickChatPhraseType.method3568(chatBuffer);
+						@Pc(112) QuickChatPhrase phrase = QuickChatPhraseType.decodePhrase(chatBuffer);
 						int1 &= 0x7FFF;
 						local106 = phrase.id;
 						message = phrase.type.decodeMessage(chatBuffer);
@@ -841,7 +841,7 @@ public class Protocol {
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(I)V")
 	public static void readNewPlayerInfo() {
 		while (true) {
-			if (inboundBuffer.method2241(length) >= 11) {
+			if (inboundBuffer.availableBits(length) >= 11) {
 				@Pc(20) int local20 = inboundBuffer.gBits(11);
 				if (local20 != 2047) {
 					@Pc(27) boolean local27 = false;
@@ -1856,7 +1856,7 @@ public class Protocol {
 			if (ptr != null) {
 				InterfaceList.closeInterface(ptr.interfaceId != component, ptr);
 			}
-			method1148(component, pointer, type);
+			openTopLevelInterface(component, pointer, type);
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.RESET_ANIMS) {
@@ -2039,11 +2039,11 @@ public class Protocol {
 				Chat.messageCounter = (Chat.messageCounter + 1) % 100;
 				JagString message = Font.escape(formatChatMessage(inboundBuffer).encodeMessage());
 				if (rights == 2 || rights == 3) {
-					Chat.method1598(message, JagString.concatenate(new JagString[]{IMG1, Base37.decode37(name37).toTitleCase()}), Base37.decode37(chat37).toTitleCase());
+					Chat.addClanChannelMessage(message, JagString.concatenate(new JagString[]{IMG1, Base37.decode37(name37).toTitleCase()}), Base37.decode37(chat37).toTitleCase());
 				} else if (rights == 1) {
-					Chat.method1598(message, JagString.concatenate(new JagString[]{IMG0, Base37.decode37(name37).toTitleCase()}), Base37.decode37(chat37).toTitleCase());
+					Chat.addClanChannelMessage(message, JagString.concatenate(new JagString[]{IMG0, Base37.decode37(name37).toTitleCase()}), Base37.decode37(chat37).toTitleCase());
 				} else {
-					Chat.method1598(message, Base37.decode37(name37).toTitleCase(), Base37.decode37(chat37).toTitleCase());
+					Chat.addClanChannelMessage(message, Base37.decode37(name37).toTitleCase(), Base37.decode37(chat37).toTitleCase());
 				}
 			}
 			opcode = -1;
@@ -2330,7 +2330,7 @@ public class Protocol {
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.SET_SETTINGS_STRING) {
-			method3954(inboundBuffer.gjstr());
+			saveSettingsCookie(inboundBuffer.gjstr());
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.UPDATE_ZONE_PARTIAL_FOLLOWS) {
@@ -2368,7 +2368,7 @@ public class Protocol {
 			return readPacketInternal();
 		} catch (@Pc(14) IOException ex) {
 			ex.printStackTrace();
-			method3279();
+			handleConnectionLost();
 			return true;
 		} catch (@Pc(19) Exception ex) {
 			ex.printStackTrace();
@@ -2383,7 +2383,7 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!gg", name = "a", descriptor = "(Z)V")
-	public static void method1756() {
+	public static void loop() {
 		// todo: consolidate/rename static classes
 		if (anInt5775 > 0) {
 			anInt5775--;
@@ -2394,7 +2394,7 @@ public class Protocol {
 		}
 		if (LoginManager.aBoolean247) {
 			LoginManager.aBoolean247 = false;
-			method3279();
+			handleConnectionLost();
 			return;
 		}
 		for (@Pc(34) int i = 0; i < 100 && readPacket(); i++) {
@@ -2560,7 +2560,7 @@ public class Protocol {
 		SoundPlayer.loop();
 		LoginManager.anInt1862++;
 		if (LoginManager.anInt1862 > 750) {
-			method3279();
+			handleConnectionLost();
 			return;
 		}
 		PlayerList.processAllPlayers();
@@ -2755,7 +2755,7 @@ public class Protocol {
 						outboundBuffer.p1sub(inserting);
 					}
 				} else if ((VarpDomain.anInt2952 == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
-					ScriptRunner.method3901();
+					ScriptRunner.layoutMiniMenu();
 				} else if (MiniMenu.size > 0) {
 					MiniMenu.processClick();
 				}
@@ -2975,7 +2975,7 @@ public class Protocol {
 													outboundBuffer.offset = 0;
 												}
 											} catch (@Pc(2266) IOException local2266) {
-												method3279();
+												handleConnectionLost();
 											}
 											return;
 										}
@@ -3118,7 +3118,7 @@ public class Protocol {
 					local334[i1] = inboundBuffer.g1sub();
 					local337[i1] = inboundBuffer.g2();
 				}
-				method3037(local337, npc, local334, local331);
+				updateNpcSlotAnimations(local337, npc, local334, local331);
 			}
 
 			boolean hasFaceLocation = (local18 & 0x200) != 0;
@@ -3223,7 +3223,7 @@ public class Protocol {
 	@OriginalMember(owner = "client!wj", name = "a", descriptor = "(I)V")
 	public static void loadAreaNPCs() {
 		while (true) {
-			if (inboundBuffer.method2241(length) >= 27) {
+			if (inboundBuffer.availableBits(length) >= 27) {
 				@Pc(14) int npcIndex = inboundBuffer.gBits(15);
 				if (npcIndex != 32767) {
 					@Pc(19) boolean local19 = false;
@@ -3299,7 +3299,7 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!nm", name = "a", descriptor = "(Z)V")
-	public static void method3279() {
+	public static void handleConnectionLost() {
 		if (anInt5775 > 0) {
 			LoginManager.processLogout();
 		} else {
@@ -3311,11 +3311,11 @@ public class Protocol {
 
 	@OriginalMember(owner = "client!fc", name = "a", descriptor = "(Lclient!wa;I)Lclient!na;")
 	public static JagString formatChatMessage(@OriginalArg(0) Buffer arg0) {
-		return method4350(arg0);
+		return decodeHuffmanMessage(arg0);
 	}
 
 	@OriginalMember(owner = "client!uj", name = "a", descriptor = "(Lclient!wa;II)Lclient!na;")
-	public static JagString method4350(@OriginalArg(0) Buffer arg0) {
+	public static JagString decodeHuffmanMessage(@OriginalArg(0) Buffer arg0) {
 		try {
 			@Pc(7) int local7 = arg0.gsmarts();
 			if (local7 > 32767) {
@@ -3330,7 +3330,7 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!mi", name = "a", descriptor = "([IBLclient!km;[I[I)V")
-	public static void method3037(@OriginalArg(0) int[] arg0, @OriginalArg(2) Npc arg1, @OriginalArg(3) int[] arg2, @OriginalArg(4) int[] arg3) {
+	public static void updateNpcSlotAnimations(@OriginalArg(0) int[] arg0, @OriginalArg(2) Npc arg1, @OriginalArg(3) int[] arg2, @OriginalArg(4) int[] arg3) {
 		for (@Pc(3) int local3 = 0; local3 < arg3.length; local3++) {
 			@Pc(15) int local15 = arg3[local3];
 			@Pc(19) int local19 = arg0[local3];
@@ -3409,7 +3409,7 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!sj", name = "a", descriptor = "(ILclient!na;)V")
-	public static void method3954(@OriginalArg(1) JagString arg0) {
+	public static void saveSettingsCookie(@OriginalArg(1) JagString arg0) {
 		client.settings = arg0;
 		if (GameShell.signLink.applet == null) {
 			return;
@@ -3472,7 +3472,7 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!dh", name = "a", descriptor = "(IIII)Lclient!wk;")
-	public static ComponentPointer method1148(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	public static ComponentPointer openTopLevelInterface(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		@Pc(9) ComponentPointer local9 = new ComponentPointer();
 		local9.anInt5879 = arg2;
 		local9.interfaceId = arg0;
@@ -3553,7 +3553,7 @@ public class Protocol {
 				local20 = 2;
 			}
 			if (local20 == 2 && MiniMenu.size > 0 || MiniMenu.anInt3953 == 1) {
-				ScriptRunner.method3901();
+				ScriptRunner.layoutMiniMenu();
 			}
 			if (local20 == 1 && MiniMenu.size > 0 || MiniMenu.anInt3953 == 2) {
 				MiniMenu.processClick();

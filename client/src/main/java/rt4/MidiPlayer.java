@@ -35,7 +35,7 @@ public class MidiPlayer {
 	public static int songFileId;
 
 	@OriginalMember(owner = "client!km", name = "c", descriptor = "(Z)Z")
-	public static boolean method2699() {
+	public static boolean tryStartLoadedSong() {
 		try {
 			if (state == 2) {
 				if (song == null) {
@@ -60,7 +60,7 @@ public class MidiPlayer {
 			}
 		} catch (@Pc(68) Exception ex) {
 			ex.printStackTrace();
-			stream.method4446();
+			stream.reset();
 			songArchive = null;
 			song = null;
 			state = 0;
@@ -113,7 +113,7 @@ public class MidiPlayer {
 					stream.setVolume(volume);
 					return;
 				}
-				stream.method4446();
+				stream.reset();
 				stream.clearInstruments();
 				song = null;
 				soundBank = null;
@@ -125,7 +125,7 @@ public class MidiPlayer {
 			}
 		} catch (@Pc(62) Exception ex) {
 			ex.printStackTrace();
-			stream.method4446();
+			stream.reset();
 			songArchive = null;
 			song = null;
 			state = 0;
@@ -150,14 +150,14 @@ public class MidiPlayer {
 	}
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(Z)V")
-	public static void method4548() {
-		stream.method4446();
+	public static void stop() {
+		stream.reset();
 		state = 1;
 		songArchive = null;
 	}
 
 	@OriginalMember(owner = "client!sj", name = "c", descriptor = "(II)V")
-	public static void method3956(@OriginalArg(0) int arg0) {
+	public static void setVolume(@OriginalArg(0) int arg0) {
 		if (state == 0) {
 			stream.setVolume(arg0);
 		} else {

@@ -134,9 +134,9 @@ public final class Js5GlTextureProvider implements TextureProvider {
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(ZI)V")
 	public final void resetAnimatedTextures(@OriginalArg(1) int arg0) {
-		for (@Pc(19) GlTexture local19 = (GlTexture) this.glTextures.method1808(); local19 != null; local19 = (GlTexture) this.glTextures.next()) {
+		for (@Pc(19) GlTexture local19 = (GlTexture) this.glTextures.head(); local19 != null; local19 = (GlTexture) this.glTextures.next()) {
 			if (local19.aBoolean287) {
-				local19.method4300(arg0);
+				local19.scrollAnimation(arg0);
 				local19.aBoolean287 = false;
 			}
 		}
@@ -146,7 +146,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	@Override
 	public final int[] getPixels(@OriginalArg(1) int arg0) {
 		@Pc(16) GlTexture local16 = this.getOrLoadGlTexture(arg0);
-		return local16 == null ? null : local16.method4297(this.lowDetail || this.aBooleanArray89[arg0], this, this.aClass153_72);
+		return local16 == null ? null : local16.getPixels(this.lowDetail || this.aBooleanArray89[arg0], this, this.aClass153_72);
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(IZ)V")
@@ -156,11 +156,11 @@ public final class Js5GlTextureProvider implements TextureProvider {
 		@Pc(23) boolean local23 = false;
 		@Pc(28) GlTexture local28 = this.getOrLoadGlTexture(arg0);
 		if (local28 != null) {
-			local23 = local28.method4296(this.aClass153_72, this, this.lowDetail || this.aBooleanArray89[arg0]);
+			local23 = local28.bind(this.aClass153_72, this, this.lowDetail || this.aBooleanArray89[arg0]);
 		}
 		if (!local23) {
 			@Pc(56) GlSolidColorTexture local56 = this.getOrCreateSolidColorTexture(arg0);
-			local56.method3887();
+			local56.bind();
 		}
 	}
 
@@ -221,7 +221,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	@Override
 	public final boolean isTextureLoaded(@OriginalArg(1) int arg0) {
 		@Pc(15) GlTexture local15 = this.getOrLoadGlTexture(arg0);
-		return local15 != null && local15.method4299(this, this.aClass153_72);
+		return local15 != null && local15.isReady(this, this.aClass153_72);
 	}
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(ZI)V")
@@ -287,7 +287,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 			return null;
 		} else {
 			local8.aBoolean287 = true;
-			return local8.method4295(this, arg1, this.aClass153_72, this.lowDetail || this.aBooleanArray89[arg0]);
+			return local8.getAnimatedPixels(this, arg1, this.aClass153_72, this.lowDetail || this.aBooleanArray89[arg0]);
 		}
 	}
 }

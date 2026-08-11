@@ -190,7 +190,7 @@ public final class BufferedFile {
 	}
 
 	@OriginalMember(owner = "client!en", name = "b", descriptor = "(Z)V")
-	public final void method1455() throws IOException {
+	public final void close() throws IOException {
 		this.flush();
 		this.file.close();
 	}

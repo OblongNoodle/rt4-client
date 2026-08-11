@@ -263,7 +263,7 @@ public abstract class Font extends SecondaryNode {
 									if (alphaOverride == 256) {
 										local125.renderTransparent(arg1, local4 + this.lineHeight - local136);
 									} else {
-										local125.method3335(arg1, local4 + this.lineHeight - local136, alphaOverride);
+										local125.renderAlpha(arg1, local4 + this.lineHeight - local136, alphaOverride);
 									}
 									arg1 += local125.innerWidth;
 									local8 = 0;
@@ -944,7 +944,7 @@ public abstract class Font extends SecondaryNode {
 									if (alphaOverride == 256) {
 										local146.renderTransparent(arg1 + local121, local4 + this.lineHeight - local157 + local130);
 									} else {
-										local146.method3335(arg1 + local121, local4 + this.lineHeight - local157 + local130, alphaOverride);
+										local146.renderAlpha(arg1 + local121, local4 + this.lineHeight - local157 + local130, alphaOverride);
 									}
 									arg1 += local146.innerWidth;
 									local8 = 0;

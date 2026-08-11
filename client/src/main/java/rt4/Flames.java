@@ -99,7 +99,7 @@ public class Flames {
 	}
 
 	@OriginalMember(owner = "client!vl", name = "a", descriptor = "(II)V")
-	public static void method4528(@OriginalArg(0) int arg0) {
+	public static void updateFlames(@OriginalArg(0) int arg0) {
 		if (arg0 > 256) {
 			arg0 = 256;
 		}
@@ -232,7 +232,7 @@ public class Flames {
 	@OriginalMember(owner = "client!s", name = "b", descriptor = "(III)V")
 	public static void render(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 		if (flameCycle > 0) {
-			method4528(flameCycle);
+			updateFlames(flameCycle);
 			flameCycle = 0;
 		}
 		@Pc(20) int local20 = 0;

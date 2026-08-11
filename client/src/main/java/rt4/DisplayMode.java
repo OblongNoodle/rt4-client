@@ -184,7 +184,7 @@ public final class DisplayMode {
 					SoftwareRaster.frameBuffer.draw(graphics);
 				} catch (@Pc(277) Exception local277) {
 				}
-				GameShell.method2704(); // Creates a black background for SD Mode window, gameplay frame will render on top of.
+				GameShell.paintFrameLetterbox(); // Creates a black background for SD Mode window, gameplay frame will render on top of.
 				if (currentMode == 0) {
 					if(resizableSD)
 						SoftwareRaster.frameBuffer = FrameBuffer.create(GameShell.frameHeight, GameShell.frameWidth, GameShell.canvas);
@@ -264,7 +264,7 @@ public final class DisplayMode {
 		}
 		SceneGraph.aBoolean130 = !SceneGraph.allLevelsAreVisible();
 		if (useHD) {
-			client.method2721();
+			client.reloadResourcesOnDisplayModeChange();
 		}
 		resizable = newMode == 2; // resizeable should only be done in HD-Resizeable mode and not full screen mode.
 		if (InterfaceList.topLevelInterface != -1) {

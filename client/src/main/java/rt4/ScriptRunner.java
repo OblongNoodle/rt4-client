@@ -304,9 +304,9 @@ public final class ScriptRunner {
 			GlRenderer.setDepthTestEnabled(true);
 			GlRenderer.setFogEnabled(true);
 			if (client.gameState == 10) {
-				local171 = FogManager.method2235(Protocol.sceneDelta, Camera.renderY >> 10, Preferences.brightness, Camera.renderX >> 10);
+				local171 = FogManager.updateAtmosphere(Protocol.sceneDelta, Camera.renderY >> 10, Preferences.brightness, Camera.renderX >> 10);
 			} else {
-				local171 = FogManager.method2235(Protocol.sceneDelta, PlayerList.self.movementQueueY[0] >> 3, Preferences.brightness, PlayerList.self.movementQueueX[0] >> 3);
+				local171 = FogManager.updateAtmosphere(Protocol.sceneDelta, PlayerList.self.movementQueueY[0] >> 3, Preferences.brightness, PlayerList.self.movementQueueX[0] >> 3);
 			}
 			LightingManager.updateAllLightAnimations(client.loop, !Preferences.flickeringEffectsOn);
 			GlRenderer.clearColorAndDepthBuffers(local171);
@@ -319,14 +319,14 @@ public final class ScriptRunner {
 			client.audioLoop();
 			method3858();
 			drawOverheads(arg4, arg3, arg2, anInt5029, arg0, anInt5029);
-			MiniMap.method4000(arg3, arg2, arg0, anInt5029, anInt5029, arg4);
+			MiniMap.renderHeadHints(arg3, arg2, arg0, anInt5029, anInt5029, arg4);
 		} else {
 			SoftwareRaster.fillRect(arg2, arg4, arg3, arg0, 0);
 			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			client.audioLoop();
 			method3858();
 			drawOverheads(arg4, arg3, arg2, 256, arg0, 256);
-			MiniMap.method4000(arg3, arg2, arg0, 256, 256, arg4);
+			MiniMap.renderHeadHints(arg3, arg2, arg0, 256, 256, arg4);
 		}
 		((Js5GlTextureProvider) Rasteriser.textureProvider).resetAnimatedTextures(Protocol.sceneDelta);
 		Player.renderCross(arg3, arg4, arg0, arg2);
@@ -966,7 +966,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!wa", name = "o", descriptor = "(I)V")
-	public static void method2218() {
+	public static void updateRoofRemovalMode() {
 		@Pc(8) int local8 = method4047();
 		if (local8 == 0) {
 			aByteArrayArrayArray15 = null;
@@ -1257,11 +1257,11 @@ public final class ScriptRunner {
 
 	@OriginalMember(owner = "client!og", name = "a", descriptor = "(BIILclient!fe;III)V")
 	public static void setOverheadScreenCoordinateOffsets(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) PathingEntity arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		method1026(arg5, arg1, arg2.yFine, arg4, arg0, arg2.xFine, arg3);
+		projectToScreen(arg5, arg1, arg2.yFine, arg4, arg0, arg2.xFine, arg3);
 	}
 
 	@OriginalMember(owner = "client!q", name = "a", descriptor = "(IIIIIIBI)V")
-	public static void method1026(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6) {
+	public static void projectToScreen(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6) {
 		if (arg5 < 128 || arg2 < 128 || arg5 > 13056 || arg2 > 13056) {
 			anInt548 = -1;
 			anInt1951 = -1;
@@ -1467,7 +1467,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!sf", name = "b", descriptor = "(B)V")
-	public static void method3901() {
+	public static void layoutMiniMenu() {
 		@Pc(16) int local16 = Fonts.b12Full.getStringWidth(LocalizedText.CHOOSE_OPTION);
 		@Pc(18) int local18;
 		@Pc(27) int local27;
@@ -4564,7 +4564,7 @@ public final class ScriptRunner {
 															str1 = EMPTY_STRING;
 														} else {
 															str1 = WorldMap.labels.aClass100Array153[int1];
-															int2 = WorldMap.labels.method3894(int1);
+															int2 = WorldMap.labels.getLabelSize(int1);
 														}
 														str1 = str1.replaceAll(aClass100_639, aClass100_10);
 														stringStack[ssp++] = str1;
@@ -4578,7 +4578,7 @@ public final class ScriptRunner {
 															str1 = EMPTY_STRING;
 														} else {
 															str1 = WorldMap.labels.aClass100Array153[int1];
-															int2 = WorldMap.labels.method3894(int1);
+															int2 = WorldMap.labels.getLabelSize(int1);
 														}
 														str1 = str1.replaceAll(aClass100_639, aClass100_10);
 														stringStack[ssp++] = str1;
@@ -5061,7 +5061,7 @@ public final class ScriptRunner {
 														Preferences.setAllVisibleLevels(intStack[isp] == 1);
 														LocTypeList.clear();
 														method2742();
-														method2218();
+														updateRoofRemovalMode();
 														Preferences.write(GameShell.signLink);
 														Preferences.sentToServer = false;
 														continue;
@@ -5069,7 +5069,7 @@ public final class ScriptRunner {
 													if (opcode == 6003) {
 														isp--;
 														Preferences.removeRoofsSelectively = intStack[isp] == 1;
-														method2218();
+														updateRoofRemovalMode();
 														Preferences.write(GameShell.signLink);
 														Preferences.sentToServer = false;
 														continue;
@@ -5224,10 +5224,10 @@ public final class ScriptRunner {
 																MidiPlayer.playImmediate(client.js5Archive6, MusicPlayer.groupId, int1);
 																MidiPlayer.jingle = false;
 															} else if (int1 == 0) {
-																MidiPlayer.method4548();
+																MidiPlayer.stop();
 																MidiPlayer.jingle = false;
 															} else {
-																MidiPlayer.method3956(int1);
+																MidiPlayer.setVolume(int1);
 															}
 															Preferences.musicVolume = int1;
 														}
@@ -5252,7 +5252,7 @@ public final class ScriptRunner {
 													if (opcode == 6021) {
 														isp--;
 														neverRemoveRoofs = intStack[isp] == 1;
-														method2218();
+														updateRoofRemovalMode();
 														continue;
 													}
 													if (opcode == 6023) {

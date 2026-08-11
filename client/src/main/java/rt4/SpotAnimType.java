@@ -125,7 +125,7 @@ public final class SpotAnimType {
 		if (this.seqId == -1 || arg1 == -1) {
 			local118 = local13.copyForAnimation(true, true, true);
 		} else {
-			local118 = SeqTypeList.get(this.seqId).method4219(arg0, arg2, arg1, local13);
+			local118 = SeqTypeList.get(this.seqId).animateSpotAnim(arg0, arg2, arg1, local13);
 		}
 		if (this.resizeXZ != 128 || this.resizeY != 128) {
 			local118.resize(this.resizeXZ, this.resizeY, this.resizeXZ);

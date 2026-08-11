@@ -110,7 +110,7 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!lm", name = "a", descriptor = "()V")
-	public static void method2807() {
+	public static void initNoiseTextures() {
 		@Pc(11) byte[] local11;
 		if (textureBuffer == null) {
 			@Pc(5) RidgedNoiseTexture local5 = new RidgedNoiseTexture();
@@ -165,7 +165,7 @@ public class MaterialManager {
 	@OriginalMember(owner = "client!lm", name = "c", descriptor = "()V")
 	public static void method2809() {
 		allows3DTextureMapping = GlRenderer.extTexture3dSupported;
-		method2807();
+		initNoiseTextures();
 		method2811();
 		method2812();
 	}
@@ -225,7 +225,7 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!lh", name = "b", descriptor = "(II)V")
-	public static void method2761(@OriginalArg(0) int arg0) {
+	public static void setUnderwaterFogRange(@OriginalArg(0) int arg0) {
 		UnderwaterMaterialRenderer.anInt3241 = arg0;
 		resetArgument(3);
 		resetArgument(4);

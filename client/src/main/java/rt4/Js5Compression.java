@@ -32,7 +32,7 @@ public final class Js5Compression {
 			if (type == 1) {
 				Bzip2Decompressor.bunzip2(out, uncompressedLen, in, len);
 			} else {
-				GZIP_DECOMPRESSOR.method1842(out, buffer);
+				GZIP_DECOMPRESSOR.decompress(out, buffer);
 			}
 			return out;
 		}

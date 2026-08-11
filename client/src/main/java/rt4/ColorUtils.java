@@ -166,7 +166,7 @@ public class ColorUtils {
 	}
 
 	@OriginalMember(owner = "client!ed", name = "a", descriptor = "(IIII)I")
-	public static int method1309(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	public static int packHsl(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		if (arg0 > 243) {
 			arg1 >>= 0x4;
 		} else if (arg0 > 217) {

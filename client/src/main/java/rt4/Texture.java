@@ -59,11 +59,11 @@ public final class Texture {
 		@Pc(45) int local45;
 		@Pc(52) int local52;
 		for (local20 = 0; local20 < local7; local20++) {
-			local27 = method3680(arg0);
-			if (local27.method4631() >= 0) {
+			local27 = decodeTextureOp(arg0);
+			if (local27.getRequiredSpriteId() >= 0) {
 				local18++;
 			}
-			if (local27.method4627() >= 0) {
+			if (local27.getRequiredTextureId() >= 0) {
 				local16++;
 			}
 			local45 = local27.aClass3_Sub1Array42.length;
@@ -83,8 +83,8 @@ public final class Texture {
 			for (local52 = 0; local52 < local45; local52++) {
 				local27.aClass3_Sub1Array42[local52] = this.aClass3_Sub1Array22[local14[local20][local52]];
 			}
-			local52 = local27.method4631();
-			@Pc(136) int local136 = local27.method4627();
+			local52 = local27.getRequiredSpriteId();
+			@Pc(136) int local136 = local27.getRequiredTextureId();
 			if (local52 > 0) {
 				this.anIntArray327[local18++] = local52;
 			}
@@ -111,7 +111,7 @@ public final class Texture {
 	}
 
 	@OriginalMember(owner = "client!qk", name = "a", descriptor = "(BLclient!wa;)Lclient!j;")
-	public static TextureOp method3680(@OriginalArg(1) Buffer arg0) {
+	public static TextureOp decodeTextureOp(@OriginalArg(1) Buffer arg0) {
 		arg0.g1();
 		@Pc(13) int local13 = arg0.g1();
 		@Pc(17) TextureOp local17 = create(local13);
@@ -239,14 +239,14 @@ public final class Texture {
 	}
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(IZIDILclient!ve;Lclient!m;Z)[I")
-	public final int[] method2725(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) double arg3, @OriginalArg(5) Js5 arg4, @OriginalArg(6) TextureProvider arg5, @OriginalArg(7) boolean arg6) {
+	public final int[] generateArgbPixels(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) double arg3, @OriginalArg(5) Js5 arg4, @OriginalArg(6) TextureProvider arg5, @OriginalArg(7) boolean arg6) {
 		setBrightness(arg3);
 		provider = arg5;
 		spritesArchive = arg4;
 		setSize(arg0, arg2);
 		@Pc(20) int local20;
 		for (local20 = 0; local20 < this.aClass3_Sub1Array22.length; local20++) {
-			this.aClass3_Sub1Array22[local20].method4632(arg0, arg2);
+			this.aClass3_Sub1Array22[local20].allocateImageCache(arg0, arg2);
 		}
 		@Pc(56) int[] local56 = new int[arg0 * arg2];
 		@Pc(64) int local64;
@@ -318,7 +318,7 @@ public final class Texture {
 	}
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(IIZLclient!m;DILclient!ve;)[B")
-	public final byte[] method2728(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) TextureProvider arg3, @OriginalArg(4) double arg4, @OriginalArg(6) Js5 arg5) {
+	public final byte[] generateRgbaBytes(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) TextureProvider arg3, @OriginalArg(4) double arg4, @OriginalArg(6) Js5 arg5) {
 		@Pc(8) byte[] local8 = new byte[arg1 * 4 * arg0];
 		setBrightness(arg4);
 		spritesArchive = arg5;
@@ -326,7 +326,7 @@ public final class Texture {
 		setSize(arg0, arg1);
 		@Pc(31) int local31;
 		for (local31 = 0; local31 < this.aClass3_Sub1Array22.length; local31++) {
-			this.aClass3_Sub1Array22[local31].method4632(arg0, arg1);
+			this.aClass3_Sub1Array22[local31].allocateImageCache(arg0, arg1);
 		}
 		local31 = 0;
 		@Pc(53) int local53;
@@ -407,7 +407,7 @@ public final class Texture {
 	}
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(ZLclient!m;Lclient!ve;)Z")
-	public final boolean method2729(@OriginalArg(1) TextureProvider arg0, @OriginalArg(2) Js5 arg1) {
+	public final boolean isReady(@OriginalArg(1) TextureProvider arg0, @OriginalArg(2) Js5 arg1) {
 		@Pc(10) int local10;
 		if (spriteGroupId > 0) {
 			for (local10 = 0; local10 < this.anIntArray327.length; local10++) {

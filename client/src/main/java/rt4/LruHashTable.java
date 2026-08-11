@@ -44,7 +44,7 @@ public final class LruHashTable {
 	}
 
 	@OriginalMember(owner = "client!gn", name = "a", descriptor = "(I)Lclient!ab;")
-	public final Node method1808() {
+	public final Node head() {
 		return this.table.head();
 	}
 

@@ -941,7 +941,7 @@ public class SceneGraph {
 							overlay -= rowLightness[local234];
 						}
 						if (local209 >= 0 && local202 > 0) {
-							local142[local168][local209] = ColorUtils.method1309(overlay / local202, local178 / local202, local173 * 256 / local200);
+							local142[local168][local209] = ColorUtils.packHsl(overlay / local202, local178 / local202, local173 * 256 / local200);
 						}
 					}
 				}
@@ -962,7 +962,7 @@ public class SceneGraph {
 							local209 = tileHeights[local152][local168 + 1][local173 + 1];
 							if (local152 > 0) {
 								@Pc(1067) boolean local1067 = local178 != 0 || tileShapes[local152][local168][local173] == 0;
-								if (overlay > 0 && !FloTypeList.method4395(overlay - 1).occludeUnderlay) {
+								if (overlay > 0 && !FloTypeList.get(overlay - 1).occludeUnderlay) {
 									local1067 = false;
 								}
 								if (local1067 && local200 == local202 && local200 == local209 && local349 == local200) {
@@ -998,7 +998,7 @@ public class SceneGraph {
 											if ((local322 != local168 || local173 != local1794) && local322 >= 0 && local322 < 104 && local1794 >= 0 && local1794 < 104) {
 												@Pc(1834) int local1834 = tileOverlays[local152][local322][local1794] & 0xFF;
 												if (local1834 != 0) {
-													@Pc(1842) FloType local1842 = FloTypeList.method4395(local1834 - 1);
+													@Pc(1842) FloType local1842 = FloTypeList.get(local1834 - 1);
 													if (local1842.texture != -1 && Rasteriser.textureProvider.getMaterialType(local1842.texture) == MaterialManager.WATER) {
 														anIntArrayArray11[local168][local173] = local1842.waterColor + (local1842.waterOpacity << 24);
 														continue label771;
@@ -1011,7 +1011,7 @@ public class SceneGraph {
 							} else {
 								local322 = tileShapes[local152][local168][local173] + 1;
 								@Pc(1242) byte local1242 = tileAngles[local152][local168][local173];
-								@Pc(1248) FloType local1248 = FloTypeList.method4395(overlay - 1);
+								@Pc(1248) FloType local1248 = FloTypeList.get(overlay - 1);
 								@Pc(1301) int local1301;
 								@Pc(1353) int local1353;
 								@Pc(1288) int texture;
@@ -1025,7 +1025,7 @@ public class SceneGraph {
 												if ((local168 != texture || local1301 != local173) && texture >= 0 && texture < 104 && local1301 >= 0 && local1301 < 104) {
 													local1353 = tileOverlays[local152][texture][local1301] & 0xFF;
 													if (local1353 != 0) {
-														@Pc(1366) FloType local1366 = FloTypeList.method4395(local1353 - 1);
+														@Pc(1366) FloType local1366 = FloTypeList.get(local1353 - 1);
 														if (local1366.texture != -1 && Rasteriser.textureProvider.getMaterialType(local1366.texture) == MaterialManager.WATER) {
 															anIntArrayArray11[local168][local173] = local1366.waterColor + (local1366.waterOpacity << 24);
 															break label737;
@@ -1684,12 +1684,12 @@ public class SceneGraph {
 													if (var10 != anInt3604) {
 														anInt3604 = var10;
 														WaterMaterialRenderer.method619(var10);
-														FogManager.setFogColor(WaterMaterialRenderer.method2422());
+														FogManager.setFogColor(WaterMaterialRenderer.getWaterFogColor());
 													}
 													local65 = var9 >>> 24 << 3;
 													if (local65 != anInt730) {
 														anInt730 = local65;
-														MaterialManager.method2761(local65);
+														MaterialManager.setUnderwaterFogRange(local65);
 													}
 													local115 = surfaceTileHeights[0][local18][local21] + surfaceTileHeights[0][local18 + 1][local21] + surfaceTileHeights[0][local18][local21 + 1] + surfaceTileHeights[0][local18 + 1][local21 + 1] >> 2;
 													MaterialManager.setMaterial(-local115, 3);
@@ -2811,7 +2811,7 @@ public class SceneGraph {
 			LoginManager.loadRegion(Player.plane, centralZoneY, centralZoneX, PlayerList.self.movementQueueY[0], false, PlayerList.self.movementQueueX[0]);
 		} else if (Player.plane != LightingManager.anInt2875 && MiniMap.renderMap(Player.plane)) {
 			LightingManager.anInt2875 = Player.plane;
-			ScriptRunner.method2218();
+			ScriptRunner.updateRoofRemovalMode();
 		}
 	}
 
@@ -3049,7 +3049,7 @@ public class SceneGraph {
 				UnderwaterMaterialRenderer.applyFogFade();
 				MaterialManager.setMaterial(-1, 3);
 				MaterialManager.renderingUnderwater = true;
-				UnderwaterMaterialRenderer.method4609();
+				UnderwaterMaterialRenderer.enableSecondaryTexCoordArray();
 				anInt3604 = -1;
 				anInt730 = -1;
 				for (local32 = 0; local32 < underwaterHdTiles[0].length; local32++) {
@@ -3058,11 +3058,11 @@ public class SceneGraph {
 					if (local285.underwaterColor != anInt3604) {
 						anInt3604 = local285.underwaterColor;
 						WaterMaterialRenderer.method619(local285.underwaterColor);
-						FogManager.setFogColor(WaterMaterialRenderer.method2422());
+						FogManager.setFogColor(WaterMaterialRenderer.getWaterFogColor());
 					}
 					local285.renderTiles(tiles, local294, false);
 				}
-				UnderwaterMaterialRenderer.method4608();
+				UnderwaterMaterialRenderer.disableSecondaryTexCoordArray();
 			} else {
 				local32 = anInt5276;
 				while (true) {
@@ -3336,7 +3336,7 @@ public class SceneGraph {
 							if (local133 == 0) {
 								continue;
 							}
-							local151 = FloTypeList.method4395(local133 - 1);
+							local151 = FloTypeList.get(local133 - 1);
 							if (local151.baseColor == -1) {
 								continue;
 							}
@@ -3347,7 +3347,7 @@ public class SceneGraph {
 								continue;
 							}
 						} else if (local133 != 0) {
-							local151 = FloTypeList.method4395(local133 - 1);
+							local151 = FloTypeList.get(local133 - 1);
 							@Pc(224) byte local224;
 							if (local151.baseColor == -1) {
 								local224 = arg7[local114][local72];
@@ -3464,7 +3464,7 @@ public class SceneGraph {
 							if (local775 == 0) {
 								continue;
 							}
-							local805 = FloTypeList.method4395(local775 - 1);
+							local805 = FloTypeList.get(local775 - 1);
 							if (local805.baseColor == -1) {
 								continue;
 							}
@@ -3473,7 +3473,7 @@ public class SceneGraph {
 								continue;
 							}
 						} else if (local775 != 0) {
-							local805 = FloTypeList.method4395(local775 - 1);
+							local805 = FloTypeList.get(local775 - 1);
 							if (local805.baseColor == -1) {
 								applyLightToTile(arg0, arg9, local114, arg6, local72, anIntArrayArray8[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
 								continue;
@@ -3779,7 +3779,7 @@ public class SceneGraph {
 		}
 		local16 = local103.size();
 		@Pc(1348) GlTile[] local1348 = new GlTile[local16];
-		local103.method3865(local1348);
+		local103.toArray(local1348);
 		@Pc(1358) long[] local1358 = new long[local16];
 		for (local155 = 0; local155 < local16; local155++) {
 			local1358[local155] = local1348[local155].key;
@@ -4329,7 +4329,7 @@ public class SceneGraph {
 				local30 = arg8[local12][local17] & 0xFF;
 				local38 = arg9[local12][local17] & 0xFF;
 				if (local38 != 0) {
-					@Pc(50) FloType local50 = FloTypeList.method4395(local38 - 1);
+					@Pc(50) FloType local50 = FloTypeList.get(local38 - 1);
 					if (local50.baseColor == -1) {
 						continue;
 					}
@@ -4361,7 +4361,7 @@ public class SceneGraph {
 					@Pc(264) byte local264;
 					@Pc(287) int local287;
 					if (local180 != 0 && local38 != local180) {
-						local242 = FloTypeList.method4395(local180 - 1);
+						local242 = FloTypeList.get(local180 - 1);
 						if (local242.blendTexture && local242.baseColor != -1) {
 							local264 = arg5[local12 - 1][local17 + 1];
 							local274 = arg7[local12 - 1][local17 + 1];
@@ -4382,7 +4382,7 @@ public class SceneGraph {
 						}
 					}
 					if (local214 != 0 && local214 != local38) {
-						local242 = FloTypeList.method4395(local214 - 1);
+						local242 = FloTypeList.get(local214 - 1);
 						if (local242.blendTexture && local242.baseColor != -1) {
 							local264 = arg5[local12 - 1][local17 - 1];
 							local274 = arg7[local12 - 1][local17 - 1];
@@ -4402,7 +4402,7 @@ public class SceneGraph {
 						}
 					}
 					if (local202 != 0 && local38 != local202) {
-						local242 = FloTypeList.method4395(local202 - 1);
+						local242 = FloTypeList.get(local202 - 1);
 						if (local242.blendTexture && local242.baseColor != -1) {
 							local264 = arg5[local12 + 1][local17 - 1];
 							local274 = arg7[local12 + 1][local17 - 1];
@@ -4422,7 +4422,7 @@ public class SceneGraph {
 						}
 					}
 					if (local226 != 0 && local226 != local38) {
-						local242 = FloTypeList.method4395(local226 - 1);
+						local242 = FloTypeList.get(local226 - 1);
 						if (local242.blendTexture && local242.baseColor != -1) {
 							local264 = arg5[local12 + 1][local17 + 1];
 							local274 = arg7[local12 + 1][local17 + 1];
@@ -4442,7 +4442,7 @@ public class SceneGraph {
 						}
 					}
 					if (local143 != 0 && local38 != local143) {
-						local242 = FloTypeList.method4395(local143 - 1);
+						local242 = FloTypeList.get(local143 - 1);
 						if (local242.blendTexture && local242.baseColor != -1) {
 							local129 = anIntArray300[arg7[local12][local17 + 1] * 4 + (arg5[local12][local17 + 1] + 2 & 0x3)];
 							for (local777 = 0; local777 < 8; local777++) {
@@ -4457,7 +4457,7 @@ public class SceneGraph {
 						}
 					}
 					if (local163 != 0 && local38 != local163) {
-						local242 = FloTypeList.method4395(local163 - 1);
+						local242 = FloTypeList.get(local163 - 1);
 						if (local242.blendTexture && local242.baseColor != -1) {
 							local133 = anIntArray300[(arg5[local12 - 1][local17] + 3 & 0x3) + arg7[local12 - 1][local17] * 4];
 							for (local777 = 0; local777 < 8; local777++) {
@@ -4472,7 +4472,7 @@ public class SceneGraph {
 						}
 					}
 					if (local153 != 0 && local38 != local153) {
-						local242 = FloTypeList.method4395(local153 - 1);
+						local242 = FloTypeList.get(local153 - 1);
 						if (local242.blendTexture && local242.baseColor != -1) {
 							local131 = anIntArray300[(arg5[local12][local17 - 1] & 0x3) + arg7[local12][local17 - 1] * 4];
 							for (local777 = 0; local777 < 8; local777++) {
@@ -4487,7 +4487,7 @@ public class SceneGraph {
 						}
 					}
 					if (local190 != 0 && local38 != local190) {
-						local242 = FloTypeList.method4395(local190 - 1);
+						local242 = FloTypeList.get(local190 - 1);
 						if (local242.blendTexture && local242.baseColor != -1) {
 							local168 = anIntArray300[(arg5[local12 + 1][local17] + 1 & 0x3) + arg7[local12 + 1][local17] * 4];
 							for (local777 = 0; local777 < 8; local777++) {
@@ -4507,7 +4507,7 @@ public class SceneGraph {
 						local1068 = aBooleanArrayArray4[local777 == local153 ? local131 : 0];
 						@Pc(1077) boolean[] local1077 = aBooleanArrayArray4[local143 == local777 ? local129 : 0];
 						local1086 = aBooleanArrayArray4[local190 == local777 ? local168 : 0];
-						@Pc(1092) FloType local1092 = FloTypeList.method4395(local777 - 1);
+						@Pc(1092) FloType local1092 = FloTypeList.get(local777 - 1);
 						@Pc(1097) GlTile local1097 = getOrCreateGlTile(local10, local1092);
 						local1097.anInt2482 += 5;
 						local1097.anInt2482 += local1077.length - 2;
@@ -4535,7 +4535,7 @@ public class SceneGraph {
 					local30 = arg3;
 				}
 				if (local127 != 0) {
-					@Pc(1250) FloType local1250 = FloTypeList.method4395(local127 - 1);
+					@Pc(1250) FloType local1250 = FloTypeList.get(local127 - 1);
 					if (local1250.baseColor == -1) {
 						continue;
 					}
@@ -4569,7 +4569,7 @@ public class SceneGraph {
 					if (local214 == 0 || local214 == local127) {
 						local214 = 0;
 					} else {
-						local1496 = FloTypeList.method4395(local214 - 1);
+						local1496 = FloTypeList.get(local214 - 1);
 						if (local1496.blendTexture && local1496.baseColor != -1) {
 							local274 = arg5[local12 - 1][local17 + 1];
 							local1527 = arg7[local12 - 1][local17 + 1];
@@ -4596,7 +4596,7 @@ public class SceneGraph {
 					if (local202 == 0 || local127 == local202) {
 						local202 = 0;
 					} else {
-						local1496 = FloTypeList.method4395(local202 - 1);
+						local1496 = FloTypeList.get(local202 - 1);
 						if (local1496.blendTexture && local1496.baseColor != -1) {
 							local274 = arg5[local12 - 1][local17 - 1];
 							local1527 = arg7[local12 - 1][local17 - 1];
@@ -4622,7 +4622,7 @@ public class SceneGraph {
 					if (local226 == 0 || local226 == local127) {
 						local226 = 0;
 					} else {
-						local1496 = FloTypeList.method4395(local226 - 1);
+						local1496 = FloTypeList.get(local226 - 1);
 						if (local1496.blendTexture && local1496.baseColor != -1) {
 							local274 = arg5[local12 + 1][local17 - 1];
 							local1527 = arg7[local12 + 1][local17 - 1];
@@ -4648,7 +4648,7 @@ public class SceneGraph {
 					if (local1035 == 0 || local127 == local1035) {
 						local1035 = 0;
 					} else {
-						local1496 = FloTypeList.method4395(local1035 - 1);
+						local1496 = FloTypeList.get(local1035 - 1);
 						if (local1496.blendTexture && local1496.baseColor != -1) {
 							local1527 = arg7[local12 + 1][local17 + 1];
 							local274 = arg5[local12 + 1][local17 + 1];
@@ -4673,7 +4673,7 @@ public class SceneGraph {
 					}
 					@Pc(2003) int local2003;
 					if (local163 != 0 && local163 != local127) {
-						local1496 = FloTypeList.method4395(local163 - 1);
+						local1496 = FloTypeList.get(local163 - 1);
 						if (local1496.blendTexture && local1496.baseColor != -1) {
 							local133 = anIntArray300[arg7[local12][local17 + 1] * 4 + (arg5[local12][local17 + 1] + 2 & 0x3)];
 							for (local2003 = 0; local2003 < 8; local2003++) {
@@ -4688,7 +4688,7 @@ public class SceneGraph {
 						}
 					}
 					if (local153 != 0 && local127 != local153) {
-						local1496 = FloTypeList.method4395(local153 - 1);
+						local1496 = FloTypeList.get(local153 - 1);
 						if (local1496.blendTexture && local1496.baseColor != -1) {
 							local131 = anIntArray300[(arg5[local12 - 1][local17] + 3 & 0x3) + arg7[local12 - 1][local17] * 4];
 							for (local2003 = 0; local2003 < 8; local2003++) {
@@ -4703,7 +4703,7 @@ public class SceneGraph {
 						}
 					}
 					if (local190 != 0 && local190 != local127) {
-						local1496 = FloTypeList.method4395(local190 - 1);
+						local1496 = FloTypeList.get(local190 - 1);
 						if (local1496.blendTexture && local1496.baseColor != -1) {
 							local168 = anIntArray300[(arg5[local12][local17 - 1] & 0x3) + arg7[local12][local17 - 1] * 4];
 							for (local2003 = 0; local2003 < 8; local2003++) {
@@ -4718,7 +4718,7 @@ public class SceneGraph {
 						}
 					}
 					if (local180 != 0 && local180 != local127) {
-						local1496 = FloTypeList.method4395(local180 - 1);
+						local1496 = FloTypeList.get(local180 - 1);
 						if (local1496.blendTexture && local1496.baseColor != -1) {
 							local143 = anIntArray300[arg7[local12 + 1][local17] * 4 + (arg5[local12 + 1][local17] + 1 & 0x3)];
 							for (local2003 = 0; local2003 < 8; local2003++) {
@@ -4738,7 +4738,7 @@ public class SceneGraph {
 						local1068 = aBooleanArrayArray4[local153 == local2003 ? local131 : 0];
 						local1086 = aBooleanArrayArray4[local2003 == local190 ? local168 : 0];
 						@Pc(2318) boolean[] local2318 = aBooleanArrayArray4[local2003 == local180 ? local143 : 0];
-						@Pc(2324) FloType local2324 = FloTypeList.method4395(local2003 - 1);
+						@Pc(2324) FloType local2324 = FloTypeList.get(local2003 - 1);
 						@Pc(2329) GlTile local2329 = getOrCreateGlTile(local10, local2324);
 						@Pc(2345) int local2345 = getTexturedColor(local2324.texture, local2324.baseColor, arg6[local12][local17]) << 8 | 0xFF;
 						@Pc(2365) int local2365 = getTexturedColor(local2324.texture, local2324.baseColor, arg6[local12 + 1][local17]) << 8 | 0xFF;
@@ -4795,7 +4795,7 @@ public class SceneGraph {
 		local12 = local10.size();
 		@Pc(2823) GlTile[] local2823 = new GlTile[local12];
 		@Pc(2826) long[] local2826 = new long[local12];
-		local10.method3865(local2823);
+		local10.toArray(local2823);
 		for (local38 = 0; local38 < local12; local38++) {
 			local2826[local38] = local2823[local38].key;
 		}
@@ -5273,7 +5273,7 @@ public class SceneGraph {
 					@Pc(529) Light local529 = new Light(local95);
 					if (local529.anInt2243 == 31) {
 						@Pc(541) LightType local541 = LightTypeList.get(local95.g2());
-						local529.method1762(local541.anInt2865, local541.anInt2873, local541.anInt2867, local541.anInt2872);
+						local529.setFlickerParams(local541.anInt2865, local541.anInt2873, local541.anInt2867, local541.anInt2872);
 					}
 					local529.matchesStaticLightOverride = LightingManager.matchesStaticLightOverride(regionId, local529.x, local529.y, local529.level);
 					local529.y += arg3 << 7;
@@ -5435,7 +5435,7 @@ public class SceneGraph {
 					@Pc(517) Light local517 = new Light(local96);
 					if (local517.anInt2243 == 31) {
 						@Pc(529) LightType local529 = LightTypeList.get(local96.g2());
-						local517.method1762(local529.anInt2865, local529.anInt2873, local529.anInt2867, local529.anInt2872);
+						local517.setFlickerParams(local529.anInt2865, local529.anInt2873, local529.anInt2867, local529.anInt2872);
 					}
 					local417 = local517.x >> 7;
 					local255 = local517.y >> 7;

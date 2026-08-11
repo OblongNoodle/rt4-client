@@ -876,7 +876,7 @@ public final class LocType {
 			@Pc(234) boolean local234 = false;
 			if (arg4 != null) {
 				local234 = true;
-				local195 = (SoftwareModel) arg4.method4214(arg8, arg10, local195, arg5, arg12);
+				local195 = (SoftwareModel) arg4.animateLocSoftware(arg8, arg10, local195, arg5, arg12);
 			}
 			if (arg11 == 10 && arg5 > 3) {
 				if (!local234) {
@@ -912,7 +912,7 @@ public final class LocType {
 		@Pc(80) boolean local80 = false;
 		@Pc(82) GlModel local82 = local46;
 		if (arg4 != null) {
-			local82 = (GlModel) arg4.method4216(arg10, arg8, arg12, arg5, local46);
+			local82 = (GlModel) arg4.animateLocGl(arg10, arg8, arg12, arg5, local46);
 			local80 = true;
 		}
 		if (arg11 == 10 && arg5 > 3) {

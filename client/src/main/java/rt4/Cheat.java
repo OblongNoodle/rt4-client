@@ -149,7 +149,7 @@ public class Cheat {
 				System.out.println("oncard_texture:" + GlCleaner.onCardTexture);
 			}
 			if (arg0.equalsIgnoreCase(CLIENTDROP)) {
-				Protocol.method3279();
+				Protocol.handleConnectionLost();
 			}
 			if (arg0.equalsIgnoreCase(CLIENTJS5DROP)) {
 				client.js5NetQueue.quit();

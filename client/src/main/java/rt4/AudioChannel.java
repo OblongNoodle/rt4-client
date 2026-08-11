@@ -192,7 +192,7 @@ public class AudioChannel {
 								@Pc(101) Sound local101 = local96.sound;
 								if (local101 == null || local101.position <= local62) {
 									local96.active = true;
-									@Pc(125) int local125 = local96.method4404();
+									@Pc(125) int local125 = local96.getActiveChannelCount();
 									local45 += local125;
 									if (local101 != null) {
 										local101.position += local125;
@@ -351,7 +351,7 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!vh", name = "b", descriptor = "(B)V")
-	public final synchronized void method3570() {
+	public final synchronized void forceClose() {
 		this.skipConsumptionCheck = true;
 		try {
 			this.close();
@@ -363,7 +363,7 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!vh", name = "b", descriptor = "(I)V")
-	public final void method3571() {
+	public final void pauseConsumptionCheck() {
 		this.skipConsumptionCheck = true;
 	}
 

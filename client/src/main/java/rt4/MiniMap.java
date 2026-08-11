@@ -187,7 +187,7 @@ public class MiniMap {
 		local35 = (int) (Math.random() * 20.0D) + 238 - 10 << 16;
 		for (local37 = 1; local37 < 103; local37++) {
 			for (local76 = 1; local76 < 103; local76++) {
-				if ((SceneGraph.renderFlags[arg0][local76][local37] & 0x18) == 0 && !method3109(local76, local455, local37, local35, arg0)) {
+				if ((SceneGraph.renderFlags[arg0][local76][local37] & 0x18) == 0 && !renderMapTileFeatures(local76, local455, local37, local35, arg0)) {
 					if (GlRenderer.enabled) {
 						SoftwareRaster.pixels = null;
 					} else {
@@ -195,7 +195,7 @@ public class MiniMap {
 					}
 					return false;
 				}
-				if (arg0 < 3 && (SceneGraph.renderFlags[arg0 + 1][local76][local37] & 0x8) != 0 && !method3109(local76, local455, local37, local35, arg0 + 1)) {
+				if (arg0 < 3 && (SceneGraph.renderFlags[arg0 + 1][local76][local37] & 0x8) != 0 && !renderMapTileFeatures(local76, local455, local37, local35, arg0 + 1)) {
 					if (GlRenderer.enabled) {
 						SoftwareRaster.pixels = null;
 					} else {
@@ -253,7 +253,7 @@ public class MiniMap {
 			@Pc(271) int local271;
 			if (LoginManager.mapElementList != null) {
 				for (@Pc(117) int local117 = 0; local117 < LoginManager.mapElementList.anInt5074; local117++) {
-					if (LoginManager.mapElementList.method3892(local117)) {
+					if (LoginManager.mapElementList.isMinimapLabelVisible(local117)) {
 						local146 = (LoginManager.mapElementList.aShortArray73[local117] - Camera.originX) * 4 + 2 - PlayerList.self.xFine / 32;
 						local150 = MathUtils.sin[local48];
 						local154 = MathUtils.cos[local48];
@@ -262,10 +262,10 @@ public class MiniMap {
 						local181 = (LoginManager.mapElementList.aShortArray72[local117] - Camera.originY) * 4 + 2 - PlayerList.self.yFine / 32;
 						@Pc(189) int local189 = local154 * 256 / (anInt4130 + 256);
 						local200 = local181 * local189 - local146 * local164 >> 16;
-						if (LoginManager.mapElementList.method3894(local117) == 1) {
+						if (LoginManager.mapElementList.getLabelSize(local117) == 1) {
 							local156 = Fonts.p12Full;
 						}
-						if (LoginManager.mapElementList.method3894(local117) == 2) {
+						if (LoginManager.mapElementList.getLabelSize(local117) == 2) {
 							local156 = Fonts.b12Full;
 						}
 						local231 = local164 * local181 + local189 * local146 >> 16;
@@ -277,13 +277,13 @@ public class MiniMap {
 								local271 = LoginManager.mapElementList.anIntArray444[local117];
 							}
 							if (GlRenderer.enabled) {
-								GlFont.method1188((GlSprite) arg3.getSprite(false));
+								GlFont.setLineMask((GlSprite) arg3.getSprite(false));
 							} else {
 								SoftwareRaster.setLineMasks(arg3.anIntArray37, arg3.anIntArray45);
 							}
 							local156.renderParagraphAlpha(LoginManager.mapElementList.aClass100Array153[local117], arg2 + local245 + arg3.width / 2, arg1 + arg3.height / 2 + -local200, local239, 50, local271, 0, 1, 0, 0);
 							if (GlRenderer.enabled) {
-								GlFont.method1173();
+								GlFont.clearLineMask();
 							} else {
 								SoftwareRaster.clearLineMasks();
 							}
@@ -301,7 +301,7 @@ public class MiniMap {
 						continue;
 					}
 				}
-				method1446(arg3, Sprites.mapfuncs[local382.mapfunction], local150, local181, arg1, arg2);
+				renderMapIcon(arg3, Sprites.mapfuncs[local382.mapfunction], local150, local181, arg1, arg2);
 			}
 			for (local146 = 0; local146 < 104; local146++) {
 				for (local181 = 0; local181 < 104; local181++) {
@@ -309,7 +309,7 @@ public class MiniMap {
 					if (local439 != null) {
 						local154 = local146 * 4 + 2 - PlayerList.self.xFine / 32;
 						local231 = local181 * 4 + 2 - PlayerList.self.yFine / 32;
-						method1446(arg3, Sprites.mapdots[0], local231, local154, arg1, arg2);
+						renderMapIcon(arg3, Sprites.mapdots[0], local231, local154, arg1, arg2);
 					}
 				}
 			}
@@ -324,9 +324,9 @@ public class MiniMap {
 						local154 = local498.xFine / 32 - PlayerList.self.xFine / 32;
 						local231 = local498.yFine / 32 - PlayerList.self.yFine / 32;
 						if (local507.minimapmarkerobjectentry == -1) {
-							method1446(arg3, Sprites.mapdots[1], local231, local154, arg1, arg2);
+							renderMapIcon(arg3, Sprites.mapdots[1], local231, local154, arg1, arg2);
 						} else {
-							method1446(arg3, Sprites.mapfuncs[local507.minimapmarkerobjectentry], local231, local154, arg1, arg2);
+							renderMapIcon(arg3, Sprites.mapfuncs[local507.minimapmarkerobjectentry], local231, local154, arg1, arg2);
 						}
 					}
 				}
@@ -353,13 +353,13 @@ public class MiniMap {
 					}
 					@Pc(682) boolean local682 = PlayerList.self.team != 0 && local591.team != 0 && local591.team == PlayerList.self.team;
 					if (local626) {
-						method1446(arg3, Sprites.mapdots[3], local154, local150, arg1, arg2);
+						renderMapIcon(arg3, Sprites.mapdots[3], local154, local150, arg1, arg2);
 					} else if (local660) {
-						method1446(arg3, Sprites.mapdots[5], local154, local150, arg1, arg2);
+						renderMapIcon(arg3, Sprites.mapdots[5], local154, local150, arg1, arg2);
 					} else if (local682) {
-						method1446(arg3, Sprites.mapdots[4], local154, local150, arg1, arg2);
+						renderMapIcon(arg3, Sprites.mapdots[4], local154, local150, arg1, arg2);
 					} else {
-						method1446(arg3, Sprites.mapdots[2], local154, local150, arg1, arg2);
+						renderMapIcon(arg3, Sprites.mapdots[2], local154, local150, arg1, arg2);
 					}
 				}
 			}
@@ -372,20 +372,20 @@ public class MiniMap {
 						if (local804 != null) {
 							local231 = local804.xFine / 32 - PlayerList.self.xFine / 32;
 							local200 = local804.yFine / 32 - PlayerList.self.yFine / 32;
-							method1960(local770.anInt4048, arg1, arg2, local231, local200, arg3);
+							renderHintMarker(local770.anInt4048, arg1, arg2, local231, local200, arg3);
 						}
 					}
 					if (local770.type == 2) {
 						local154 = (local770.targetX - Camera.originX) * 4 + 2 - PlayerList.self.xFine / 32;
 						local231 = (-Camera.originY + local770.anInt4046) * 4 + 2 - PlayerList.self.yFine / 32;
-						method1960(local770.anInt4048, arg1, arg2, local154, local231, arg3);
+						renderHintMarker(local770.anInt4048, arg1, arg2, local154, local231, arg3);
 					}
 					if (local770.type == 10 && local770.actorTargetId >= 0 && PlayerList.players.length > local770.actorTargetId) {
 						@Pc(905) Player local905 = PlayerList.players[local770.actorTargetId];
 						if (local905 != null) {
 							local200 = local905.yFine / 32 - PlayerList.self.yFine / 32;
 							local231 = local905.xFine / 32 - PlayerList.self.xFine / 32;
-							method1960(local770.anInt4048, arg1, arg2, local231, local200, arg3);
+							renderHintMarker(local770.anInt4048, arg1, arg2, local231, local200, arg3);
 						}
 					}
 				}
@@ -393,7 +393,7 @@ public class MiniMap {
 			if (LoginManager.mapFlagX != 0) {
 				local146 = LoginManager.mapFlagX * 4 + 2 - PlayerList.self.xFine / 32;
 				local181 = LoginManager.mapFlagY * 4 + 2 - PlayerList.self.yFine / 32;
-				method1446(arg3, Sprites.mapflags, local181, local146, arg1, arg2);
+				renderMapIcon(arg3, Sprites.mapflags, local181, local146, arg1, arg2);
 			}
 			if (GlRenderer.enabled) {
 				GlRaster.fillRect(arg2 + arg3.width / 2 - 1, arg1 + -1 - -(arg3.height / 2), 3, 3, 16777215);
@@ -412,7 +412,7 @@ public class MiniMap {
 	}
 
 	@OriginalMember(owner = "client!em", name = "a", descriptor = "(Lclient!be;Lclient!qf;IIIBI)V")
-	public static void method1446(@OriginalArg(0) Component arg0, @OriginalArg(1) Sprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5) {
+	public static void renderMapIcon(@OriginalArg(0) Component arg0, @OriginalArg(1) Sprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5) {
 		if (arg1 == null) {
 			return;
 		}
@@ -429,21 +429,21 @@ public class MiniMap {
 		@Pc(81) int local81 = local58 * arg2 + arg3 * local70 >> 16;
 		@Pc(92) int local92 = local70 * arg2 - arg3 * local58 >> 16;
 		if (GlRenderer.enabled) {
-			((GlSprite) arg1).method1425(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, arg0.height / 2 + arg4 - (local92 + arg1.anInt1866 / 2), (GlSprite) arg0.getSprite(false));
+			((GlSprite) arg1).renderClipped(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, arg0.height / 2 + arg4 - (local92 + arg1.anInt1866 / 2), (GlSprite) arg0.getSprite(false));
 		} else {
 			((SoftwareSprite) arg1).drawClipped(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, -(arg1.anInt1866 / 2) + arg0.height / 2 + arg4 + -local92, arg0.anIntArray37, arg0.anIntArray45);
 		}
 	}
 
 	@OriginalMember(owner = "client!hi", name = "a", descriptor = "(IIIIILclient!be;Z)V")
-	public static void method1960(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) Component arg5) {
+	public static void renderHintMarker(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) Component arg5) {
 		@Pc(13) int local13 = arg3 * arg3 + arg4 * arg4;
 		if (local13 > 360000) {
 			return;
 		}
 		@Pc(30) int local30 = Math.min(arg5.width / 2, arg5.height / 2);
 		if (local30 * local30 >= local13) {
-			method1446(arg5, Sprites.mapmarkhints[arg0], arg4, arg3, arg1, arg2);
+			renderMapIcon(arg5, Sprites.mapmarkhints[arg0], arg4, arg3, arg1, arg2);
 			return;
 		}
 		local30 -= 10;
@@ -458,7 +458,7 @@ public class MiniMap {
 		@Pc(117) int local117 = (int) (Math.sin(local110) * (double) local30);
 		@Pc(124) int local124 = (int) (Math.cos(local110) * (double) local30);
 		if (GlRenderer.enabled) {
-			((GlSprite) Sprites.hintMapEdge[arg0]).method1428((arg5.width / 2 + arg2 + local117) * 16, (arg5.height / 2 + arg1 - local124) * 16, (int) (local110 * 10430.378D));
+			((GlSprite) Sprites.hintMapEdge[arg0]).renderRotatedFixed((arg5.width / 2 + arg2 + local117) * 16, (arg5.height / 2 + arg1 - local124) * 16, (int) (local110 * 10430.378D));
 		} else {
 			((SoftwareSprite) Sprites.hintMapEdge[arg0]).drawRotatedFixed(local117 + arg5.width / 2 + arg2 - 10, arg5.height / 2 + -10 + arg1 + -local124, local110);
 		}
@@ -504,21 +504,21 @@ public class MiniMap {
 			local66 = local49 * 4;
 		}
 		if (msiType.anInt11 == 0) {
-			local42.method1398(arg0 * 4 + 48, (-local52 + -arg2 + 104) * 4 + 48, local66, local69);
+			local42.renderScaled(arg0 * 4 + 48, (-local52 + -arg2 + 104) * 4 + 48, local66, local69);
 		} else {
-			local42.method1390(arg0 * 4 + 48, (-local52 + -arg2 + 104) * 4 + 48, local66, local69, msiType.anInt11);
+			local42.renderScaledTinted(arg0 * 4 + 48, (-local52 + -arg2 + 104) * 4 + 48, local66, local69, msiType.anInt11);
 		}
 		return true;
 	}
 
 	@OriginalMember(owner = "client!t", name = "a", descriptor = "(IIIZIII)V")
-	public static void method4000(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
+	public static void renderHeadHints(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
 		@Pc(3) int local3 = 0;
 		@Pc(5) MapMarker[] local5 = hintMapMarkers;
 		while (local5.length > local3) {
 			@Pc(17) MapMarker local17 = local5[local3];
 			if (local17 != null && local17.type == 2) {
-				ScriptRunner.method1026(arg0 >> 1, arg4, (local17.anInt4046 - Camera.originY << 7) + local17.anInt4047, local17.anInt4050 * 2, arg2 >> 1, local17.anInt4045 + (local17.targetX - Camera.originX << 7), arg3);
+				ScriptRunner.projectToScreen(arg0 >> 1, arg4, (local17.anInt4046 - Camera.originY << 7) + local17.anInt4047, local17.anInt4050 * 2, arg2 >> 1, local17.anInt4045 + (local17.targetX - Camera.originX << 7), arg3);
 				if (ScriptRunner.anInt1951 > -1 && client.loop % 20 < 10) {
 					Sprites.headhints[local17.anInt4048].render(arg1 + ScriptRunner.anInt1951 - 12, arg5 + -28 - -ScriptRunner.anInt548);
 				}
@@ -528,7 +528,7 @@ public class MiniMap {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(IIIIIIIZ)Z")
-	public static boolean method3109(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(6) int arg4) {
+	public static boolean renderMapTileFeatures(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(6) int arg4) {
 		@Pc(14) long local14 = SceneGraph.getWallKey(arg4, arg0 + 0, arg2);
 		@Pc(28) int local28;
 		@Pc(35) int local35;

@@ -165,7 +165,7 @@ public final class PlayerAppearance {
 			headModels.put(local30, local24);
 		}
 		if (arg4 != null) {
-			local30 = arg4.method4215(local30, arg0, arg3, arg5);
+			local30 = arg4.animateEntity(local30, arg0, arg3, arg5);
 		}
 		return local30;
 	}
@@ -587,7 +587,7 @@ public final class PlayerAppearance {
 			headModels.put(local30, this.checksum);
 		}
 		if (arg1 != null) {
-			local30 = arg1.method4215(local30, arg3, arg0, arg2);
+			local30 = arg1.animateEntity(local30, arg3, arg0, arg2);
 		}
 		return local30;
 	}

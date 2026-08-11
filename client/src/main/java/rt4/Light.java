@@ -122,7 +122,7 @@ public final class Light {
 	}
 
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "(BIIII)V")
-	public final void method1762(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
+	public final void setFlickerParams(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		this.anInt2233 = arg0;
 		this.alphaMin = arg2;
 		this.alphaMax = arg3;
@@ -136,7 +136,7 @@ public final class Light {
 	}
 
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "(ZII)V")
-	public final void method1765(@OriginalArg(0) boolean disableFlicker, @OriginalArg(1) int arg1) {
+	public final void updateAnimation(@OriginalArg(0) boolean disableFlicker, @OriginalArg(1) int arg1) {
 		@Pc(26) int t = this.anInt2249 + arg1 * this.anInt2246 / 50 & 0x7FF;
 		@Pc(29) int local29 = this.anInt2233;
 		@Pc(62) int alpha;

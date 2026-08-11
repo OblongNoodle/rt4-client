@@ -58,7 +58,7 @@ public final class TextureOp38 extends TextureOp {
 		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
 		if (this.monochromeImageCache.invalid) {
 			@Pc(28) int local28 = this.anInt5714 >> 1;
-			@Pc(33) int[][] local33 = this.monochromeImageCache.method3446();
+			@Pc(33) int[][] local33 = this.monochromeImageCache.getAll();
 			@Pc(40) Random local40 = new Random(this.anInt5716);
 			for (@Pc(42) int local42 = 0; local42 < this.anInt5712; local42++) {
 				@Pc(64) int local64 = this.anInt5714 > 0 ? this.anInt5709 + RandomUtils.nextInt(this.anInt5714, local40) - local28 : this.anInt5709;

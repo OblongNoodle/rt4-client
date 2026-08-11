@@ -77,7 +77,7 @@ public final class SeqType {
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(IIILclient!ak;II)Lclient!ak;")
-	public Model method4214(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) Model arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public Model animateLocSoftware(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) Model arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		@Pc(10) int local10 = this.frameDelay[arg0];
 		@Pc(15) int local15 = this.frames[arg0];
 		@Pc(23) AnimFrameset local23 = SeqTypeList.getAnimFrameset(local15 >> 16);
@@ -133,7 +133,7 @@ public final class SeqType {
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(Lclient!ak;BIII)Lclient!ak;")
-	public Model method4215(@OriginalArg(0) Model arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
+	public Model animateEntity(@OriginalArg(0) Model arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		@Pc(8) int local8 = this.frames[arg3];
 		@Pc(13) int local13 = this.frameDelay[arg3];
 		@Pc(19) AnimFrameset local19 = SeqTypeList.getAnimFrameset(local8 >> 16);
@@ -190,7 +190,7 @@ public final class SeqType {
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(IIIILclient!ak;I)Lclient!ak;")
-	public Model method4216(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) Model arg4) {
+	public Model animateLocGl(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) Model arg4) {
 		@Pc(6) int local6 = this.frameDelay[arg1];
 		@Pc(11) int local11 = this.frames[arg1];
 		@Pc(19) AnimFrameset local19 = SeqTypeList.getAnimFrameset(local11 >> 16);
@@ -265,7 +265,7 @@ public final class SeqType {
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(IIIBLclient!ak;)Lclient!ak;")
-	public Model method4219(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) Model arg3) {
+	public Model animateSpotAnim(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) Model arg3) {
 		@Pc(16) int local16 = this.frameDelay[arg2];
 		@Pc(21) int local21 = this.frames[arg2];
 		@Pc(27) AnimFrameset local27 = SeqTypeList.getAnimFrameset(local21 >> 16);

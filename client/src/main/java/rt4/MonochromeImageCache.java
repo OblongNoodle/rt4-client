@@ -50,7 +50,7 @@ public final class MonochromeImageCache {
 		}
 
 		for (@Pc(4) int local4 = 0; local4 < 4096; local4++) {
-			anIntArray1[local4] = method3211(local4);
+			anIntArray1[local4] = smoothstep(local4);
 		}
 	}
 
@@ -63,7 +63,7 @@ public final class MonochromeImageCache {
 	}
 
 	@OriginalMember(owner = "client!we", name = "a", descriptor = "(BI)I")
-	public static int method3211(@OriginalArg(1) int arg0) {
+	public static int smoothstep(@OriginalArg(1) int arg0) {
 		@Pc(13) int local13 = arg0 * (arg0 * arg0 >> 12) >> 12;
 		@Pc(26) int local26 = arg0 * 6 - 61440;
 		@Pc(34) int local34 = (arg0 * local26 >> 12) + 40960;

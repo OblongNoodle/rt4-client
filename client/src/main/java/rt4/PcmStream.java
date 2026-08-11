@@ -20,7 +20,7 @@ public abstract class PcmStream extends Node {
 	public volatile boolean active = true;
 
 	@OriginalMember(owner = "client!qb", name = "a", descriptor = "()I")
-	public abstract int method4404();
+	public abstract int getActiveChannelCount();
 
 	@OriginalMember(owner = "client!qb", name = "a", descriptor = "([III)V")
 	protected final void readIfActive(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {

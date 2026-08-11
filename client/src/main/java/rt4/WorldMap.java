@@ -376,7 +376,7 @@ public class WorldMap {
 					}
 					if (local367 >= 0 && local363 > 0) {
 						@Pc(462) int[] local462 = local355[local367 >> 6];
-						@Pc(480) int local480 = local361 == 0 ? 0 : ColorUtils.method1309(local293 / local363, local225 / local363, local114 * 256 / local361);
+						@Pc(480) int local480 = local361 == 0 ? 0 : ColorUtils.packHsl(local293 / local363, local225 / local363, local114 * 256 / local361);
 						if (underlays[local102][local367] != 0) {
 							if (local462 == null) {
 								local462 = local355[local367 >> 6] = new int[4096];
@@ -849,9 +849,9 @@ public class WorldMap {
 											}
 											if (local270 != 0 && local276 != 0) {
 												if (type.anInt11 == 0) {
-													sprite.method1398(local47, local145 + local162 - local276, local270, local276);
+													sprite.renderScaled(local47, local145 + local162 - local276, local270, local276);
 												} else {
-													sprite.method1390(local47, local145 + local162 - local276, local270, local276, type.anInt11);
+													sprite.renderScaledTinted(local47, local145 + local162 - local276, local270, local276, type.anInt11);
 												}
 											}
 										}
@@ -1061,7 +1061,7 @@ public class WorldMap {
 			return -1;
 		}
 		while (anInt5212 < labels.anInt5074) {
-			if (labels.method3897(anInt5212)) {
+			if (labels.isVisible(anInt5212)) {
 				return anInt5212++;
 			}
 			anInt5212++;
@@ -1759,7 +1759,7 @@ public class WorldMap {
 	@OriginalMember(owner = "client!fi", name = "a", descriptor = "(III)V")
 	public static void loadOverlayColors(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		for (@Pc(11) int local11 = 0; local11 < FloTypeList.capacity; local11++) {
-			@Pc(18) FloType local18 = FloTypeList.method4395(local11);
+			@Pc(18) FloType local18 = FloTypeList.get(local11);
 			if (local18 != null) {
 				@Pc(24) int local24 = local18.texture;
 				if (local24 >= 0 && !Rasteriser.textureProvider.isTextureRepeating(local24)) {
@@ -1815,11 +1815,11 @@ public class WorldMap {
 	@OriginalMember(owner = "client!cn", name = "a", descriptor = "(BIIIIIIII)V")
 	public static void renderMapLabels(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
 		for (@Pc(11) int local11 = 0; local11 < labels.anInt5074; local11++) {
-			if (labels.method3890(local11)) {
+			if (labels.isTextLabel(local11)) {
 				@Pc(32) int local32 = labels.aShortArray73[local11] - originX;
 				@Pc(43) int local43 = originY + length - labels.aShortArray72[local11] - 1;
 				@Pc(59) int local59 = arg0 + (arg3 - arg0) * (local32 - arg2) / (arg6 - arg2);
-				@Pc(64) int local64 = labels.method3894(local11);
+				@Pc(64) int local64 = labels.getLabelSize(local11);
 				@Pc(80) int local80 = (arg7 - arg1) * (local43 - arg5) / (arg4 - arg5) + arg1;
 				@Pc(82) int local82 = 16777215;
 				@Pc(84) WorldMapFont local84 = null;
@@ -1871,15 +1871,15 @@ public class WorldMap {
 				}
 				if (local84 != null) {
 					@Pc(211) int local211 = Fonts.p11Full.splitParagraph(labels.aClass100Array153[local11], null, aClass100Array53);
-					local80 -= local84.method1503() * (local211 - 1) / 2;
-					local80 += local84.method1511() / 2;
+					local80 -= local84.getLineHeight() * (local211 - 1) / 2;
+					local80 += local84.getAscent() / 2;
 					for (@Pc(231) int local231 = 0; local231 < local211; local231++) {
 						@Pc(242) JagString local242 = aClass100Array53[local231];
 						if (local211 - 1 > local231) {
 							local242.setLength(local242.length() - 4);
 						}
 						local84.renderStringCenter(local242, local59, local80, local82);
-						local80 += local84.method1503();
+						local80 += local84.getLineHeight();
 					}
 				}
 			}

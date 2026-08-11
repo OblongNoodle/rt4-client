@@ -34,7 +34,7 @@ public final class QuickChatPhraseType extends SecondaryNode {
 	public boolean aBoolean60 = true;
 
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "(ILclient!wa;)Lclient!bd;")
-	public static QuickChatPhrase method3568(@OriginalArg(1) Buffer arg0) {
+	public static QuickChatPhrase decodePhrase(@OriginalArg(1) Buffer arg0) {
 		@Pc(3) QuickChatPhrase local3 = new QuickChatPhrase();
 		local3.id = arg0.g2();
 		local3.type = QuickChatPhraseTypeList.get(local3.id);

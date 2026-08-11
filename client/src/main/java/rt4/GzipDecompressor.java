@@ -23,7 +23,7 @@ public final class GzipDecompressor {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "([BLclient!wa;Z)V")
-	public final void method1842(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Buffer arg1) {
+	public final void decompress(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg1.data[arg1.offset] != 31 || arg1.data[arg1.offset + 1] != -117) {
 			throw new RuntimeException("Invalid GZIP header!");
 		}

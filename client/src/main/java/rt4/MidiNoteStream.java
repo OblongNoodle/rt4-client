@@ -72,7 +72,7 @@ public final class MidiNoteStream extends PcmStream {
 
 	@OriginalMember(owner = "client!te", name = "a", descriptor = "()I")
 	@Override
-	public final int method4404() {
+	public final int getActiveChannelCount() {
 		return 0;
 	}
 

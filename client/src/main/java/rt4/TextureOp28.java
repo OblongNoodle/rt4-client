@@ -57,7 +57,7 @@ public final class TextureOp28 extends TextureOp {
 		if (!this.monochromeImageCache.invalid) {
 			return local19;
 		}
-		@Pc(29) int[][] local29 = this.monochromeImageCache.method3446();
+		@Pc(29) int[][] local29 = this.monochromeImageCache.getAll();
 		@Pc(31) int local31 = 0;
 		@Pc(33) int local33 = 0;
 		@Pc(35) int local35 = 0;

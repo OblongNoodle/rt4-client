@@ -91,7 +91,7 @@ public final class WorldMapFont {
 	}
 
 	@OriginalMember(owner = "client!fd", name = "a", descriptor = "()I")
-	public final int method1503() {
+	public final int getLineHeight() {
 		return this.data[8] - 1;
 	}
 
@@ -203,7 +203,7 @@ public final class WorldMapFont {
 	@OriginalMember(owner = "client!fd", name = "b", descriptor = "(Lclient!na;IIIZ)V")
 	public final void renderStringCenter(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		@Pc(5) int local5 = this.getStringWidth(arg0) / 2;
-		@Pc(8) int local8 = this.method1511();
+		@Pc(8) int local8 = this.getAscent();
 		if (arg1 - local5 <= SoftwareRaster.clipRight && (arg1 + local5 >= SoftwareRaster.clipLeft && (arg2 - local8 <= SoftwareRaster.clipBottom && arg2 >= 0))) {
 			this.renderString(arg0, arg1 - local5, arg2, arg3, true);
 		}
@@ -327,7 +327,7 @@ public final class WorldMapFont {
 	}
 
 	@OriginalMember(owner = "client!fd", name = "c", descriptor = "()I")
-	public final int method1511() {
+	public final int getAscent() {
 		return this.data[6];
 	}
 }

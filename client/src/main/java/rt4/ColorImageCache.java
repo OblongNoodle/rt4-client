@@ -86,7 +86,7 @@ public final class ColorImageCache {
 	}
 
 	@OriginalMember(owner = "client!pf", name = "a", descriptor = "(B)[[I")
-	public final int[][] method3446() {
+	public final int[][] getAll() {
 		if (this.capacity != this.height) {
 			throw new RuntimeException("Can only retrieve a full image cache");
 		}

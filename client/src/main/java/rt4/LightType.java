@@ -27,12 +27,12 @@ public final class LightType {
 			if (local5 == 0) {
 				return;
 			}
-			this.method2258(local5, arg0, arg1);
+			this.decode(local5, arg0, arg1);
 		}
 	}
 
 	@OriginalMember(owner = "client!ic", name = "a", descriptor = "(ILclient!wa;IZ)V")
-	private void method2258(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
+	private void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
 		if (arg0 == 1) {
 			this.anInt2865 = arg1.g1();
 		} else if (arg0 == 2) {

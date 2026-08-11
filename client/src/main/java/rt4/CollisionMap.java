@@ -798,7 +798,7 @@ public final class CollisionMap {
 	}
 
 	@OriginalMember(owner = "client!mj", name = "b", descriptor = "(IIIII)Z")
-	public final boolean method3054(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
+	public final boolean isPathClear(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		if (arg3 == arg2 && arg0 == arg1) {
 			return true;
 		}

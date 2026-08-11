@@ -235,7 +235,7 @@ public final class TextureOp29 extends TextureOp {
 	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
 		@Pc(13) int[] local13 = this.monochromeImageCache.get(arg0);
 		if (this.monochromeImageCache.invalid) {
-			this.method3934(this.monochromeImageCache.method3446());
+			this.method3934(this.monochromeImageCache.getAll());
 		}
 		return local13;
 	}

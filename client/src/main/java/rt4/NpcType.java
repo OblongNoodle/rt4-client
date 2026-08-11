@@ -565,7 +565,7 @@ public final class NpcType {
 				NpcTypeList.headModels.put(local41, this.id);
 			}
 			if (arg0 != null) {
-				local41 = arg0.method4215(local41, arg2, arg1, arg3);
+				local41 = arg0.animateEntity(local41, arg2, arg1, arg3);
 			}
 			return local41;
 		}
