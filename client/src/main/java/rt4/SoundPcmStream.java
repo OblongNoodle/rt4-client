@@ -1126,7 +1126,7 @@ public final class SoundPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "()I")
 	@Override
-	public final int method4407() {
+	public final int getEffectiveVolume() {
 		@Pc(6) int local6 = this.anInt348 * 3 >> 6;
 		local6 = (local6 ^ local6 >> 31) + (local6 >>> 31);
 		if (this.anInt350 == 0) {

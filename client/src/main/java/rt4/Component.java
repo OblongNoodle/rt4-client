@@ -1207,7 +1207,7 @@ public final class Component {
 		if (local21 != null) {
 			return local21;
 		}
-		local21 = Font.method2462(this.font, InterfaceList.aClass153_12, InterfaceList.aClass153_64);
+		local21 = Font.load(this.font, InterfaceList.aClass153_12, InterfaceList.aClass153_64);
 		if (local21 == null) {
 			aBoolean72 = true;
 		} else {

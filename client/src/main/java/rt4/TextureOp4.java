@@ -60,7 +60,7 @@ public final class TextureOp4 extends TextureOp {
 	@OriginalMember(owner = "client!mc", name = "e", descriptor = "(I)V")
 	@Override
 	public final void postDecode() {
-		this.method2908();
+		this.buildLookupTable();
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!wa;Z)V")
@@ -86,7 +86,7 @@ public final class TextureOp4 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "i", descriptor = "(I)V")
-	private void method2908() {
+	private void buildLookupTable() {
 		@Pc(8) Random local8 = new Random(this.anInt3677);
 		this.anInt3670 = 4096 / this.anInt3677;
 		this.anInt3671 = this.anInt3672 / 2;

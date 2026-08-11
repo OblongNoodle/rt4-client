@@ -196,7 +196,7 @@ public class PathFinder {
 			cost = parents[x][y];
 		}
 		if (local61 > 0) {
-			ClientProt.method3502(local61, arg9);
+			ClientProt.sendMovePacket(local61, arg9);
 			return true;
 		} else return arg9 != 1;
 	}
@@ -368,7 +368,7 @@ public class PathFinder {
 			local198 = parents[local3][local10];
 		}
 		if (local64 > 0) {
-			ClientProt.method3502(local64, arg4);
+			ClientProt.sendMovePacket(local64, arg4);
 			return true;
 		} else return arg4 != 1;
 	}
@@ -616,7 +616,7 @@ public class PathFinder {
 			local201 = parents[local3][local10];
 		}
 		if (local69 > 0) {
-			ClientProt.method3502(local69, arg2);
+			ClientProt.sendMovePacket(local69, arg2);
 			return true;
 		} else return arg2 != 1;
 	}

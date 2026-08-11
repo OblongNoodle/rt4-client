@@ -103,8 +103,8 @@ public final class MidiPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!va", name = "<init>", descriptor = "()V")
 	public MidiPcmStream() {
-		this.method4424();
-		this.method4441(true);
+		this.initChannelVolumeScalars();
+		this.stopAllNotes(true);
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(Lclient!rf;ILclient!ve;Lclient!le;I)Z")
@@ -116,14 +116,14 @@ public final class MidiPcmStream extends PcmStream {
 			@Pc(40) int local40 = (int) local34.key;
 			@Pc(48) MidiInstrument local48 = (MidiInstrument) this.aClass133_23.get(local40);
 			if (local48 == null) {
-				local48 = MidiInstrument.method2320(arg1, local40);
+				local48 = MidiInstrument.loadInstrument(arg1, local40);
 				if (local48 == null) {
 					local5 = false;
 					continue;
 				}
 				this.aClass133_23.put(local48, local40);
 			}
-			if (!local48.method2436(local20, arg2, local34.value)) {
+			if (!local48.resolveSounds(local20, arg2, local34.value)) {
 				local5 = false;
 			}
 		}
@@ -136,15 +136,15 @@ public final class MidiPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!va", name = "d", descriptor = "(B)V")
 	public final synchronized void releaseInstruments() {
 		for (@Pc(15) MidiInstrument local15 = (MidiInstrument) this.aClass133_23.head(); local15 != null; local15 = (MidiInstrument) this.aClass133_23.next()) {
-			local15.method2432();
+			local15.freeSoundTable();
 		}
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(III)V")
-	private void method4413() {
+	private void resetPercussionChannel() {
 		this.anIntArray499[9] = 128;
 		this.anIntArray502[9] = 128;
-		this.method4425(128, 9);
+		this.programChange(128, 9);
 	}
 
 	@OriginalMember(owner = "client!va", name = "d", descriptor = "(I)Z")
@@ -153,8 +153,8 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(ZLclient!rf;ZB)V")
-	private synchronized void method4416(@OriginalArg(0) boolean arg0, @OriginalArg(1) Song arg1, @OriginalArg(2) boolean arg2) {
-		this.method4448(arg2);
+	private synchronized void loadSong(@OriginalArg(0) boolean arg0, @OriginalArg(1) Song arg1, @OriginalArg(2) boolean arg2) {
+		this.stopPlayback(arg2);
 		this.aClass84_1.init(arg1.midiBytes);
 		this.aBoolean293 = arg0;
 		this.aLong189 = 0L;
@@ -170,7 +170,7 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "(III)V")
-	private void method4417(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	private void setPitchBend(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		this.anIntArray497[arg0] = arg1;
 	}
 
@@ -181,19 +181,19 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(IZI)V")
-	private void method4419(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	private void setChannelPressure(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(BII)V")
 	public final synchronized void init() {
-		this.method4413();
+		this.resetPercussionChannel();
 	}
 
 	@OriginalMember(owner = "client!va", name = "c", descriptor = "(II)V")
-	private void method4421(@OriginalArg(1) int arg0) {
+	private void resetAllControllers(@OriginalArg(1) int arg0) {
 		if (arg0 < 0) {
 			for (@Pc(10) int local10 = 0; local10 < 16; local10++) {
-				this.method4421(local10);
+				this.resetAllControllers(local10);
 			}
 			return;
 		}
@@ -203,17 +203,17 @@ public final class MidiPcmStream extends PcmStream {
 		this.anIntArray497[arg0] = 8192;
 		this.anIntArray500[arg0] = 0;
 		this.anIntArray504[arg0] = 8192;
-		this.method4443(arg0);
-		this.method4438(arg0);
+		this.releaseOrphanedPortamentoNotes(arg0);
+		this.releaseCustomHoldPedal(arg0);
 		this.channelFlags[arg0] = 0;
 		this.anIntArray498[arg0] = 32767;
 		this.anIntArray501[arg0] = 256;
 		this.anIntArray509[arg0] = 0;
-		this.method4423(arg0, 8192);
+		this.setDetune(arg0, 8192);
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(BI)V")
-	private void method4422(@OriginalArg(1) int arg0) {
+	private void allSoundOff(@OriginalArg(1) int arg0) {
 		for (@Pc(20) MidiNote local20 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.head(); local20 != null; local20 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.next()) {
 			if (arg0 < 0 || local20.channel == arg0) {
 				if (local20.stream != null) {
@@ -232,20 +232,20 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "(BII)V")
-	private void method4423(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	private void setDetune(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		this.anIntArray510[arg0] = arg1;
 		this.anIntArray503[arg0] = (int) (Math.pow(2.0D, (double) arg1 * 5.4931640625E-4D) * 2097152.0D + 0.5D);
 	}
 
 	@OriginalMember(owner = "client!va", name = "c", descriptor = "(III)V")
-	private synchronized void method4424() {
+	private synchronized void initChannelVolumeScalars() {
 		for (@Pc(5) int local5 = 0; local5 < 16; local5++) {
 			this.anIntArray507[local5] = 256;
 		}
 	}
 
 	@OriginalMember(owner = "client!va", name = "d", descriptor = "(III)V")
-	private void method4425(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	private void programChange(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		if (this.anIntArray506[arg1] != arg0) {
 			this.anIntArray506[arg1] = arg0;
 			for (@Pc(21) int local21 = 0; local21 < 128; local21++) {
@@ -262,8 +262,8 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(IIII)V")
-	private void method4427(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
-		this.method4434(arg2, 64, arg1);
+	private void noteOn(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
+		this.noteOff(arg2, 64, arg1);
 		if ((this.channelFlags[arg1] & 0x2) != 0) {
 			for (@Pc(28) MidiNote local28 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.tail(); local28 != null; local28 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.prev()) {
 				if (arg1 == local28.channel && local28.anInt3767 < 0) {
@@ -302,10 +302,10 @@ public final class MidiPcmStream extends PcmStream {
 		local133.anInt3782 = 0;
 		local133.anInt3763 = 0;
 		if (this.anIntArray509[arg1] == 0) {
-			local133.stream = SoundPcmStream.create(local126, this.method4439(local133), this.method4449(local133), this.method4437(local133));
+			local133.stream = SoundPcmStream.create(local126, this.calculatePitch(local133), this.calculateVolume(local133), this.calculatePan(local133));
 		} else {
-			local133.stream = SoundPcmStream.create(local126, this.method4439(local133), 0, this.method4437(local133));
-			this.method4442(local133, local118.aShortArray36[arg2] < 0);
+			local133.stream = SoundPcmStream.create(local126, this.calculatePitch(local133), 0, this.calculatePan(local133));
+			this.applyLoopStartOffset(local133, local118.aShortArray36[arg2] < 0);
 		}
 		if (local118.aShortArray36[arg2] < 0) {
 			local133.stream.setLoops(-1);
@@ -323,7 +323,7 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "(BI)V")
-	private void method4429(@OriginalArg(1) int arg0) {
+	private void dispatchMidiEvent(@OriginalArg(1) int arg0) {
 		@Pc(9) int local9 = arg0 & 0xF0;
 		@Pc(20) int local20;
 		@Pc(32) int local32;
@@ -332,21 +332,21 @@ public final class MidiPcmStream extends PcmStream {
 			local20 = arg0 & 0xF;
 			local26 = arg0 >> 16 & 0x7F;
 			local32 = arg0 >> 8 & 0x7F;
-			this.method4434(local32, local26, local20);
+			this.noteOff(local32, local26, local20);
 		} else if (local9 == 144) {
 			local32 = arg0 >> 8 & 0x7F;
 			local20 = arg0 & 0xF;
 			local26 = arg0 >> 16 & 0x7F;
 			if (local26 > 0) {
-				this.method4427(local26, local20, local32);
+				this.noteOn(local26, local20, local32);
 			} else {
-				this.method4434(local32, 64, local20);
+				this.noteOff(local32, 64, local20);
 			}
 		} else if (local9 == 160) {
 			local20 = arg0 & 0xF;
 			local32 = arg0 >> 8 & 0x7F;
 			local26 = arg0 >> 16 & 0x7F;
-			this.method4436(local26, local32, local20);
+			this.setPolyphonicAftertouch(local26, local32, local20);
 		} else if (local9 == 176) {
 			local32 = arg0 >> 8 & 0x7F;
 			local20 = arg0 & 0xF;
@@ -396,7 +396,7 @@ public final class MidiPcmStream extends PcmStream {
 			}
 			if (local32 == 65) {
 				if (local26 < 64) {
-					this.method4443(local20);
+					this.releaseOrphanedPortamentoNotes(local20);
 					this.channelFlags[local20] &= 0xFFFFFFFD;
 				} else {
 					this.channelFlags[local20] |= 0x2;
@@ -415,13 +415,13 @@ public final class MidiPcmStream extends PcmStream {
 				this.anIntArray498[local20] = local26 + (this.anIntArray498[local20] & 0x3F80) + 16384;
 			}
 			if (local32 == 120) {
-				this.method4422(local20);
+				this.allSoundOff(local20);
 			}
 			if (local32 == 121) {
-				this.method4421(local20);
+				this.resetAllControllers(local20);
 			}
 			if (local32 == 123) {
-				this.method4430(local20);
+				this.allNotesOff(local20);
 			}
 			@Pc(522) int local522;
 			if (local32 == 6) {
@@ -446,38 +446,38 @@ public final class MidiPcmStream extends PcmStream {
 				if (local26 >= 64) {
 					this.channelFlags[local20] |= 0x4;
 				} else {
-					this.method4438(local20);
+					this.releaseCustomHoldPedal(local20);
 					this.channelFlags[local20] &= 0xFFFFFFFB;
 				}
 			}
 			if (local32 == 17) {
-				this.method4423(local20, (local26 << 7) + (this.anIntArray510[local20] & 0xFFFFC07F));
+				this.setDetune(local20, (local26 << 7) + (this.anIntArray510[local20] & 0xFFFFC07F));
 			}
 			if (local32 == 49) {
-				this.method4423(local20, (this.anIntArray510[local20] & 0xFFFFFF80) + local26);
+				this.setDetune(local20, (this.anIntArray510[local20] & 0xFFFFFF80) + local26);
 			}
 		} else if (local9 == 192) {
 			local32 = arg0 >> 8 & 0x7F;
 			local20 = arg0 & 0xF;
-			this.method4425(this.anIntArray502[local20] + local32, local20);
+			this.programChange(this.anIntArray502[local20] + local32, local20);
 		} else if (local9 == 208) {
 			local20 = arg0 & 0xF;
 			local32 = arg0 >> 8 & 0x7F;
-			this.method4419(local20, local32);
+			this.setChannelPressure(local20, local32);
 		} else if (local9 == 224) {
 			local20 = arg0 & 0xF;
 			local32 = (arg0 >> 9 & 0x3F80) + ((arg0 & 0x7FBE) >> 8);
-			this.method4417(local20, local32);
+			this.setPitchBend(local20, local32);
 		} else {
 			local9 = arg0 & 0xFF;
 			if (local9 == 255) {
-				this.method4441(true);
+				this.stopAllNotes(true);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!va", name = "d", descriptor = "(II)V")
-	private void method4430(@OriginalArg(1) int arg0) {
+	private void allNotesOff(@OriginalArg(1) int arg0) {
 		for (@Pc(12) MidiNote local12 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.head(); local12 != null; local12 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.next()) {
 			if ((arg0 < 0 || arg0 == local12.channel) && local12.anInt3767 < 0) {
 				this.aClass3_Sub25ArrayArray1[local12.channel][local12.anInt3779] = null;
@@ -487,8 +487,8 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(ZLclient!rf;I)V")
-	public final synchronized void method4431(@OriginalArg(0) boolean arg0, @OriginalArg(1) Song arg1) {
-		this.method4416(arg0, arg1, true);
+	public final synchronized void playSong(@OriginalArg(0) boolean arg0, @OriginalArg(1) Song arg1) {
+		this.loadSong(arg0, arg1, true);
 	}
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "([III)V")
@@ -507,14 +507,14 @@ public final class MidiPcmStream extends PcmStream {
 				this.aClass3_Sub3_Sub3_1.read(arg0, arg1, local59);
 				arg2 -= local59;
 				arg1 += local59;
-				this.method4435();
+				this.advanceSequencer();
 			} while (this.aClass84_1.isValid());
 		}
 		this.aClass3_Sub3_Sub3_1.read(arg0, arg1, arg2);
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(IILclient!mf;B[I)Z")
-	public final boolean method4433(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) MidiNote arg2, @OriginalArg(4) int[] arg3) {
+	public final boolean advanceNoteEnvelope(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) MidiNote arg2, @OriginalArg(4) int[] arg3) {
 		arg2.anInt3771 = AudioChannel.sampleRate / 100;
 		if (arg2.anInt3767 >= 0 && (arg2.stream == null || arg2.stream.method411())) {
 			arg2.release();
@@ -532,7 +532,7 @@ public final class MidiPcmStream extends PcmStream {
 			}
 			arg2.anInt3764 = local54;
 		}
-		arg2.stream.method410(this.method4439(arg2));
+		arg2.stream.method410(this.calculatePitch(arg2));
 		@Pc(103) MidiTrackState local103 = arg2.trackState;
 		arg2.anInt3768 += local103.anInt5814;
 		arg2.anInt3774++;
@@ -575,7 +575,7 @@ public final class MidiPcmStream extends PcmStream {
 			}
 		}
 		if (!local136) {
-			arg2.stream.method417(arg2.anInt3771, this.method4449(arg2), this.method4437(arg2));
+			arg2.stream.method417(arg2.anInt3771, this.calculateVolume(arg2), this.calculatePan(arg2));
 			return false;
 		}
 		arg2.stream.method384(arg2.anInt3771);
@@ -604,7 +604,7 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(BIII)V")
-	private void method4434(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	private void noteOff(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		@Pc(12) MidiNote local12 = this.aClass3_Sub25ArrayArray1[arg2][arg0];
 		if (local12 == null) {
 			return;
@@ -623,13 +623,13 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "f", descriptor = "(I)V")
-	private void method4435() {
+	private void advanceSequencer() {
 		@Pc(8) int local8 = this.anInt5675;
 		@Pc(11) int local11 = this.anInt5674;
 		@Pc(20) long local20 = this.aLong188;
 		if (this.aClass3_Sub29_2 != null && local11 == this.anInt5676) {
-			this.method4416(this.aBoolean293, this.aClass3_Sub29_2, this.aBoolean294);
-			this.method4435();
+			this.loadSong(this.aBoolean293, this.aClass3_Sub29_2, this.aBoolean294);
+			this.advanceSequencer();
 			return;
 		}
 		while (this.anInt5674 == local11) {
@@ -641,12 +641,12 @@ public final class MidiPcmStream extends PcmStream {
 					this.aClass84_1.saveTrackPosition(local8);
 					if (this.aClass84_1.hasNextTrack()) {
 						if (this.aClass3_Sub29_2 != null) {
-							this.method4431(this.aBoolean293, this.aClass3_Sub29_2);
-							this.method4435();
+							this.playSong(this.aBoolean293, this.aClass3_Sub29_2);
+							this.advanceSequencer();
 							return;
 						}
 						if (!this.aBoolean293 || local11 == 0) {
-							this.method4441(true);
+							this.stopAllNotes(true);
 							this.aClass84_1.release();
 							return;
 						}
@@ -655,7 +655,7 @@ public final class MidiPcmStream extends PcmStream {
 					break;
 				}
 				if ((local64 & 0x80) != 0) {
-					this.method4429(local64);
+					this.dispatchMidiEvent(local64);
 				}
 				this.aClass84_1.addDeltaTime(local8);
 				this.aClass84_1.saveTrackPosition(local8);
@@ -675,11 +675,11 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "(IIII)V")
-	private void method4436(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
+	private void setPolyphonicAftertouch(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(ILclient!mf;)I")
-	private int method4437(@OriginalArg(1) MidiNote arg0) {
+	private int calculatePan(@OriginalArg(1) MidiNote arg0) {
 		@Pc(5) int local5 = this.anIntArray496[arg0.channel];
 		return local5 < 8192 ? arg0.anInt3765 * local5 + 32 >> 6 : 16384 - ((128 - arg0.anInt3765) * (-local5 + 16384) + 32 >> 6);
 	}
@@ -699,14 +699,14 @@ public final class MidiPcmStream extends PcmStream {
 				arg0 -= local57;
 				this.aLong189 += (long) local57 * (long) local15;
 				this.aClass3_Sub3_Sub3_1.skip(local57);
-				this.method4435();
+				this.advanceSequencer();
 			} while (this.aClass84_1.isValid());
 		}
 		this.aClass3_Sub3_Sub3_1.skip(arg0);
 	}
 
 	@OriginalMember(owner = "client!va", name = "e", descriptor = "(II)V")
-	private void method4438(@OriginalArg(0) int arg0) {
+	private void releaseCustomHoldPedal(@OriginalArg(0) int arg0) {
 		if ((this.channelFlags[arg0] & 0x4) == 0) {
 			return;
 		}
@@ -718,7 +718,7 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(BLclient!mf;)I")
-	private int method4439(@OriginalArg(1) MidiNote arg0) {
+	private int calculatePitch(@OriginalArg(1) MidiNote arg0) {
 		@Pc(6) MidiTrackState local6 = arg0.trackState;
 		@Pc(17) int local17 = (arg0.anInt3781 * arg0.anInt3764 >> 12) + arg0.anInt3769;
 		local17 += this.anIntArray501[arg0.channel] * (this.anIntArray497[arg0.channel] - 8192) >> 12;
@@ -743,13 +743,13 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(ZB)V")
-	private void method4441(@OriginalArg(0) boolean arg0) {
+	private void stopAllNotes(@OriginalArg(0) boolean arg0) {
 		if (arg0) {
-			this.method4422(-1);
+			this.allSoundOff(-1);
 		} else {
-			this.method4430(-1);
+			this.allNotesOff(-1);
 		}
-		this.method4421(-1);
+		this.resetAllControllers(-1);
 		@Pc(29) int local29;
 		for (local29 = 0; local29 < 16; local29++) {
 			this.anIntArray506[local29] = this.anIntArray499[local29];
@@ -760,7 +760,7 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(Lclient!mf;ZB)V")
-	public final void method4442(@OriginalArg(0) MidiNote arg0, @OriginalArg(1) boolean arg1) {
+	public final void applyLoopStartOffset(@OriginalArg(0) MidiNote arg0, @OriginalArg(1) boolean arg1) {
 		@Pc(8) int local8 = arg0.sound.samples.length;
 		@Pc(27) int local27;
 		if (arg1 && arg0.sound.aBoolean165) {
@@ -778,7 +778,7 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "f", descriptor = "(II)V")
-	private void method4443(@OriginalArg(0) int arg0) {
+	private void releaseOrphanedPortamentoNotes(@OriginalArg(0) int arg0) {
 		if ((this.channelFlags[arg0] & 0x2) == 0) {
 			return;
 		}
@@ -790,7 +790,7 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(Lclient!mf;I)Z")
-	public final boolean method4445(@OriginalArg(0) MidiNote arg0) {
+	public final boolean isNoteFinished(@OriginalArg(0) MidiNote arg0) {
 		if (arg0.stream != null) {
 			return false;
 		}
@@ -805,7 +805,7 @@ public final class MidiPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!va", name = "f", descriptor = "(B)V")
 	public final synchronized void reset() {
-		this.method4448(true);
+		this.stopPlayback(true);
 	}
 
 	@OriginalMember(owner = "client!va", name = "g", descriptor = "(II)V")
@@ -814,14 +814,14 @@ public final class MidiPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "(ZB)V")
-	private synchronized void method4448(@OriginalArg(0) boolean arg0) {
+	private synchronized void stopPlayback(@OriginalArg(0) boolean arg0) {
 		this.aClass84_1.release();
 		this.aClass3_Sub29_2 = null;
-		this.method4441(arg0);
+		this.stopAllNotes(arg0);
 	}
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "(BLclient!mf;)I")
-	private int method4449(@OriginalArg(1) MidiNote arg0) {
+	private int calculateVolume(@OriginalArg(1) MidiNote arg0) {
 		if (this.anIntArray507[arg0.channel] == 0) {
 			return 0;
 		}

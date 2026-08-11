@@ -19,7 +19,7 @@ public final class TextureOp23 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!je", name = "a", descriptor = "(IBI)V")
-	private void method2382(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	private void mapPolarSector(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(13) int local13 = Texture.widthFractions[arg1];
 		@Pc(17) int local17 = Texture.heightFractions[arg0];
 		@Pc(28) float local28 = (float) Math.atan2(local13 - 2048, local17 - 2048);
@@ -66,7 +66,7 @@ public final class TextureOp23 extends TextureOp {
 		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
 		if (this.monochromeImageCache.invalid) {
 			for (@Pc(26) int local26 = 0; local26 < Texture.width; local26++) {
-				this.method2382(arg0, local26);
+				this.mapPolarSector(arg0, local26);
 				@Pc(40) int[] local40 = this.getChildMonochromeOutput(0, anInt2433);
 				local19[local26] = local40[anInt5776];
 			}
@@ -83,7 +83,7 @@ public final class TextureOp23 extends TextureOp {
 			@Pc(32) int[] local32 = local15[2];
 			@Pc(36) int[] local36 = local15[1];
 			for (@Pc(38) int local38 = 0; local38 < Texture.width; local38++) {
-				this.method2382(arg0, local38);
+				this.mapPolarSector(arg0, local38);
 				@Pc(52) int[][] local52 = this.getChildColorOutput(anInt2433, 0);
 				local28[local38] = local52[0][anInt5776];
 				local36[local38] = local52[1][anInt5776];

@@ -2801,7 +2801,7 @@ public class Protocol {
 												InterfaceList.anInt3337 = 0;
 											}
 											if (Cs1ScriptRunner.aClass13_14 != null) {
-												Cs1ScriptRunner.method28();
+												Cs1ScriptRunner.updateComponentDrag();
 											}
 											if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT] && MouseWheel.wheelRotation != 0) {
 												y = Player.plane - MouseWheel.wheelRotation;

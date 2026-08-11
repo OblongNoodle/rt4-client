@@ -74,14 +74,14 @@ public final class TextureOp37 extends TextureOp {
 				@Pc(124) int local124 = local30 + this.anInt3854;
 				@Pc(133) int local133 = local124 < -2048 ? local124 + 4096 : local124;
 				@Pc(144) int local144 = local133 > 2048 ? local133 - 4096 : local133;
-				local19[local32] = this.method3012(local96, local71) || this.method3011(local118, local144) ? 4096 : 0;
+				local19[local32] = this.isInsidePrimaryWave(local96, local71) || this.isInsideSecondaryWave(local118, local144) ? 4096 : 0;
 			}
 		}
 		return local19;
 	}
 
 	@OriginalMember(owner = "client!mh", name = "a", descriptor = "(BII)Z")
-	private boolean method3011(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	private boolean isInsideSecondaryWave(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(12) int local12 = this.anInt3847 * (arg0 + arg1) >> 12;
 		@Pc(27) int local27 = TextureOp.COSINE[local12 * 255 >> 12 & 0xFF];
 		@Pc(34) int local34 = (local27 << 12) / this.anInt3847;
@@ -97,7 +97,7 @@ public final class TextureOp37 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!mh", name = "b", descriptor = "(IIB)Z")
-	private boolean method3012(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	private boolean isInsidePrimaryWave(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(8) int local8 = (arg1 - arg0) * this.anInt3847 >> 12;
 		@Pc(31) int local31 = TextureOp.COSINE[local8 * 255 >> 12 & 0xFF];
 		@Pc(38) int local38 = (local31 << 12) / this.anInt3847;

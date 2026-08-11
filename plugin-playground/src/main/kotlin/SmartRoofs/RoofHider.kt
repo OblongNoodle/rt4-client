@@ -168,7 +168,7 @@ object RoofHider {
             return
         }
         val rebuild = !wasActive ||
-            ScriptRunner.method4047() != 2 ||
+            ScriptRunner.getRoofRemovalMode() != 2 ||
             ScriptRunner.aByteArrayArrayArray15 == null ||
             ScriptRunner.anIntArray205.size < SELECTIVE_ROOF_GROUP_COUNT
         if (rebuild) {
@@ -183,7 +183,7 @@ object RoofHider {
             ScriptRunner.method960(((ScriptRunner.anInt3325 - 4) and 0xFF).toByte())
         }
         if (ScriptRunner.anIntArray205.size < SELECTIVE_ROOF_GROUP_COUNT) {
-            ScriptRunner.method3993(SELECTIVE_ROOF_GROUP_COUNT)
+            ScriptRunner.allocateRoofVisibilityGroupArrays(SELECTIVE_ROOF_GROUP_COUNT)
         }
     }
 

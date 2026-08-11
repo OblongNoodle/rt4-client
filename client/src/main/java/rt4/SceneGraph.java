@@ -212,14 +212,14 @@ public class SceneGraph {
 			return 0;
 		}
 		@Pc(36) int xFine2 = xFine & 0x7F;
-		@Pc(40) int zFine2 = yFine & 0x7F;
+		@Pc(40) int yFine2 = yFine & 0x7F;
 		@Pc(42) int virtualLevel = level;
 		if (level < 3 && (renderFlags[1][x][y] & 0x2) == 2) {
 			virtualLevel = level + 1;
 		}
 		@Pc(91) int heightZ0 = xFine2 * tileHeights[virtualLevel][x + 1][y + 1] + tileHeights[virtualLevel][x][y + 1] * (128 - xFine2) >> 7;
 		@Pc(118) int heightZ1 = xFine2 * tileHeights[virtualLevel][x + 1][y] + (128 - xFine2) * tileHeights[virtualLevel][x][y] >> 7;
-		return zFine2 * heightZ0 + (128 - zFine2) * heightZ1 >> 7;
+		return yFine2 * heightZ0 + (128 - yFine2) * heightZ1 >> 7;
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(III)Lclient!jh;")

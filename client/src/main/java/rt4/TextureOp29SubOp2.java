@@ -37,18 +37,18 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!fn", name = "a", descriptor = "(ZIIIIIII)V")
-	public static void method1623(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void drawEllipseBordered(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		if (arg3 == arg6) {
-			method2826(arg0, arg2, arg5, arg6, arg1, arg4);
+			drawCircleBordered(arg0, arg2, arg5, arg6, arg1, arg4);
 		} else if (arg1 - arg6 >= TextureOp29.anInt4164 && arg6 + arg1 <= TextureOp29.anInt5063 && TextureOp29.anInt5773 <= arg2 - arg3 && TextureOp29.anInt2869 >= arg2 + arg3) {
-			method4594(arg5, arg1, arg2, arg4, arg6, arg3, arg0);
+			drawEllipseBorderedFast(arg5, arg1, arg2, arg4, arg6, arg3, arg0);
 		} else {
-			TextureOp29.method3981(arg6, arg5, arg4, arg0, arg2, arg1, arg3);
+			TextureOp29.drawEllipseBorderedClipped(arg6, arg5, arg4, arg0, arg2, arg1, arg3);
 		}
 	}
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "(IIIIIIII)V")
-	public static void method4594(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void drawEllipseBorderedFast(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		@Pc(7) int local7 = 0;
 		@Pc(9) int local9 = arg5;
 		@Pc(11) int local11 = 0;
@@ -150,17 +150,17 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!ma", name = "a", descriptor = "(IIBIIII)V")
-	public static void method2826(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
+	public static void drawCircleBordered(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
 		if (arg4 - arg3 >= TextureOp29.anInt4164 && TextureOp29.anInt5063 >= arg4 + arg3 && TextureOp29.anInt5773 <= arg1 - arg3 && TextureOp29.anInt2869 >= arg3 + arg1) {
-			method120(arg5, arg0, arg1, arg2, arg3, arg4);
+			drawCircleBorderedFast(arg5, arg0, arg1, arg2, arg3, arg4);
 		} else {
-			method4670(arg2, arg1, arg3, arg5, arg0, arg4);
+			drawCircleBorderedClipped(arg2, arg1, arg3, arg5, arg0, arg4);
 		}
 	}
 
 	@OriginalMember(owner = "client!aj", name = "a", descriptor = "(IIIZIII)V")
-	public static void method120(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		method4278(arg4);
+	public static void drawCircleBorderedFast(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
+		ensureScratchBufferCapacity(arg4);
 		@Pc(8) int local8 = arg4 - arg1;
 		@Pc(10) int local10 = 0;
 		if (local8 < 0) {
@@ -244,9 +244,9 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(IBIIIII)V")
-	public static void method4670(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
+	public static void drawCircleBorderedClipped(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
 		@Pc(18) int local18 = arg2 - arg4;
-		method4278(arg2);
+		ensureScratchBufferCapacity(arg2);
 		@Pc(23) int local23 = 0;
 		if (local18 < 0) {
 			local18 = 0;
@@ -360,34 +360,34 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!ug", name = "a", descriptor = "(II)V")
-	public static void method4278(@OriginalArg(0) int arg0) {
+	public static void ensureScratchBufferCapacity(@OriginalArg(0) int arg0) {
 		if (anIntArray522 == null || anIntArray522.length < arg0) {
 			anIntArray522 = new int[arg0];
 		}
 	}
 
 	@OriginalMember(owner = "client!nb", name = "a", descriptor = "(IIIIII)V")
-	public static void method3163(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
+	public static void fillEllipseSingleColor(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
 		if (arg1 == arg4) {
-			method1760(arg4, arg2, arg0, arg3);
+			fillCircleSingleColor(arg4, arg2, arg0, arg3);
 		} else if (TextureOp29.anInt4164 <= arg2 - arg4 && arg2 + arg4 <= TextureOp29.anInt5063 && arg3 - arg1 >= TextureOp29.anInt5773 && arg3 + arg1 <= TextureOp29.anInt2869) {
-			method1568(arg3, arg2, arg4, arg1, arg0);
+			fillEllipseSingleColorFast(arg3, arg2, arg4, arg1, arg0);
 		} else {
-			method898(arg0, arg1, arg4, arg2, arg3);
+			fillEllipseSingleColorClipped(arg0, arg1, arg4, arg2, arg3);
 		}
 	}
 
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "(IIIIB)V")
-	public static void method1760(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static void fillCircleSingleColor(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		if (arg1 - arg0 >= TextureOp29.anInt4164 && TextureOp29.anInt5063 >= arg0 + arg1 && arg3 - arg0 >= TextureOp29.anInt5773 && TextureOp29.anInt2869 >= arg0 + arg3) {
-			TextureOp29SubOp4.method1206(arg1, arg0, arg2, arg3);
+			TextureOp29SubOp4.fillCircle(arg1, arg0, arg2, arg3);
 		} else {
-			method1843(arg2, arg3, arg0, arg1);
+			fillCircleSingleColorClipped(arg2, arg3, arg0, arg1);
 		}
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(IIIII)V")
-	public static void method1843(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
+	public static void fillCircleSingleColorClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
 		@Pc(7) int local7 = 0;
 		@Pc(9) int local9 = arg2;
 		@Pc(12) int local12 = -arg2;
@@ -435,7 +435,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!fl", name = "a", descriptor = "(IIIIII)V")
-	public static void method1568(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void fillEllipseSingleColorFast(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[arg0], arg1 - arg2, arg2 + arg1, arg4);
 		@Pc(17) int local17 = 0;
 		@Pc(21) int local21 = arg2 * arg2;
@@ -484,7 +484,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!cl", name = "a", descriptor = "(IIIBII)V")
-	public static void method898(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void fillEllipseSingleColorClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		@Pc(13) int local13 = arg2 * arg2;
 		@Pc(15) int local15 = 0;
 		@Pc(17) int local17 = arg1;
@@ -546,26 +546,26 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!kc", name = "c", descriptor = "(III)V")
 	@Override
-	public final void method4013(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(10) int local10 = this.anInt3165 * arg0 >> 12;
 		@Pc(17) int local17 = arg0 * this.anInt3159 >> 12;
 		@Pc(24) int local24 = this.anInt3163 * arg1 >> 12;
 		@Pc(31) int local31 = this.anInt3168 * arg1 >> 12;
-		method3163(this.anInt5228, local31, local10, local24, local17);
+		fillEllipseSingleColor(this.anInt5228, local31, local10, local24, local17);
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(IZI)V")
 	@Override
-	public final void method4009(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(III)V")
 	@Override
-	public final void method4007(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(6) int local6 = arg1 * this.anInt3165 >> 12;
 		@Pc(23) int local23 = this.anInt3168 * arg0 >> 12;
 		@Pc(30) int local30 = this.anInt3163 * arg0 >> 12;
 		@Pc(37) int local37 = this.anInt3159 * arg1 >> 12;
-		method1623(this.anInt5231, local6, local30, local23, this.anInt5229, this.anInt5228, local37);
+		drawEllipseBordered(this.anInt5231, local6, local30, local23, this.anInt5229, this.anInt5228, local37);
 	}
 }

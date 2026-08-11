@@ -25,7 +25,7 @@ public final class TextureOp29 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!id", name = "a", descriptor = "(IIBII)V")
-	public static void method2263(@OriginalArg(3) int arg0, @OriginalArg(4) int arg1) {
+	public static void setClipBounds(@OriginalArg(3) int arg0, @OriginalArg(4) int arg1) {
 		anInt5063 = arg1;
 		anInt4164 = 0;
 		anInt5773 = 0;
@@ -33,16 +33,16 @@ public final class TextureOp29 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!ed", name = "a", descriptor = "(ZIIII)V")
-	public static void method1306(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
+	public static void drawVerticalLineClamped(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		if (arg3 >= anInt4164 && arg3 <= anInt5063) {
 			@Pc(22) int local22 = IntUtils.clamp(anInt2869, arg1, anInt5773);
 			@Pc(28) int local28 = IntUtils.clamp(anInt2869, arg0, anInt5773);
-			TextureOp29SubOp4.method2054(local22, arg3, local28, arg2);
+			TextureOp29SubOp4.fillVerticalLine(local22, arg3, local28, arg2);
 		}
 	}
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(IIZII)V")
-	public static void method4019(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
+	public static void drawHorizontalLineClamped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		if (arg3 >= anInt5773 && arg3 <= anInt2869) {
 			@Pc(15) int local15 = IntUtils.clamp(anInt5063, arg0, anInt4164);
 			@Pc(21) int local21 = IntUtils.clamp(anInt5063, arg2, anInt4164);
@@ -51,15 +51,15 @@ public final class TextureOp29 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!sk", name = "a", descriptor = "(IIIIII)V")
-	public static void method3982(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void drawLine(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		@Pc(15) int local15 = arg4 - arg2;
 		@Pc(19) int local19 = arg1 - arg3;
 		if (local15 == 0) {
 			if (local19 != 0) {
-				method1306(arg1, arg3, arg0, arg2);
+				drawVerticalLineClamped(arg1, arg3, arg0, arg2);
 			}
 		} else if (local19 == 0) {
-			method4019(arg2, arg0, arg4, arg3);
+			drawHorizontalLineClamped(arg2, arg0, arg4, arg3);
 		} else {
 			@Pc(50) int local50 = (local19 << 12) / local15;
 			@Pc(59) int local59 = arg3 - (local50 * arg2 >> 12);
@@ -101,12 +101,12 @@ public final class TextureOp29 extends TextureOp {
 				local76 = anInt2869;
 				local68 = (anInt2869 - local59 << 12) / local50;
 			}
-			TextureOp29SubOp4.method4547(arg0, local118, local76, local109, local68);
+			TextureOp29SubOp4.plotLine(arg0, local118, local76, local109, local68);
 		}
 	}
 
 	@OriginalMember(owner = "client!sk", name = "a", descriptor = "(IIIIBIII)V")
-	public static void method3981(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void drawEllipseBorderedClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		@Pc(7) int local7 = 0;
 		@Pc(12) int local12 = arg0 - arg3;
 		@Pc(14) int local14 = 0;
@@ -235,17 +235,17 @@ public final class TextureOp29 extends TextureOp {
 	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
 		@Pc(13) int[] local13 = this.monochromeImageCache.get(arg0);
 		if (this.monochromeImageCache.invalid) {
-			this.method3934(this.monochromeImageCache.getAll());
+			this.rasterizeShapes(this.monochromeImageCache.getAll());
 		}
 		return local13;
 	}
 
 	@OriginalMember(owner = "client!si", name = "a", descriptor = "(I[[I)V")
-	private void method3934(@OriginalArg(1) int[][] arg0) {
+	private void rasterizeShapes(@OriginalArg(1) int[][] arg0) {
 		@Pc(7) int local7 = Texture.height;
 		@Pc(9) int local9 = Texture.width;
-		TextureOp29SubOp4.method1751(arg0);
-		method2263(Texture.heightMask, Texture.widthMask);
+		TextureOp29SubOp4.setCanvas(arg0);
+		setClipBounds(Texture.heightMask, Texture.widthMask);
 		if (this.aClass18Array1 == null) {
 			return;
 		}
@@ -255,12 +255,12 @@ public final class TextureOp29 extends TextureOp {
 			@Pc(39) int local39 = local33.anInt5229;
 			if (local36 >= 0) {
 				if (local39 < 0) {
-					local33.method4013(local9, local7);
+					local33.renderFilledShape(local9, local7);
 				} else {
-					local33.method4007(local7, local9);
+					local33.renderBorderedShape(local7, local9);
 				}
 			} else if (local39 >= 0) {
-				local33.method4009(local7, local9);
+				local33.renderOutlinedShape(local7, local9);
 			}
 		}
 	}
@@ -296,7 +296,7 @@ public final class TextureOp29 extends TextureOp {
 			@Pc(22) int local22 = Texture.height;
 			@Pc(26) int[][] local26 = new int[local22][local20];
 			@Pc(31) int[][][] local31 = this.colorImageCache.get();
-			this.method3934(local26);
+			this.rasterizeShapes(local26);
 			for (@Pc(37) int local37 = 0; local37 < Texture.height; local37++) {
 				@Pc(44) int[] local44 = local26[local37];
 				@Pc(48) int[][] local48 = local31[local37];

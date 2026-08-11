@@ -139,7 +139,7 @@ public final class TextureOp28 extends TextureOp {
 											local312 = Math.max(local224, local297);
 											local316 = Texture.width;
 										}
-										this.method3386(local285, local113, local33 + local312, -local312 + local316, local158 - local285, local29);
+										this.renderBranch(local285, local113, local33 + local312, -local312 + local316, local158 - local285, local29);
 									}
 								}
 							}
@@ -160,7 +160,7 @@ public final class TextureOp28 extends TextureOp {
 				}
 				@Pc(407) int[] local407;
 				if (local137 == Texture.width) {
-					this.method3386(local158, local113, local37 + local31, local123, local133, local29);
+					this.renderBranch(local158, local113, local37 + local31, local123, local133, local29);
 					if (local41) {
 						return local19;
 					}
@@ -202,7 +202,7 @@ public final class TextureOp28 extends TextureOp {
 					local407[1] = local137;
 					local407[2] = local133 + local158;
 					local407[0] = local31;
-					this.method3386(local158, local113, local31 + local37, local123, local133, local29);
+					this.renderBranch(local158, local113, local31 + local37, local123, local133, local29);
 					local31 = local137;
 				}
 			}
@@ -210,7 +210,7 @@ public final class TextureOp28 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!ol", name = "a", descriptor = "(ILjava/util/Random;IIBI[[I)V")
-	private void method3386(@OriginalArg(0) int arg0, @OriginalArg(1) Random arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int[][] arg5) {
+	private void renderBranch(@OriginalArg(0) int arg0, @OriginalArg(1) Random arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int[][] arg5) {
 		@Pc(26) int local26 = this.anInt4360 > 0 ? 4096 - RandomUtils.nextInt(this.anInt4360, arg1) : 4096;
 		@Pc(34) int local34 = this.anInt4344 * this.anInt4356 >> 12;
 		@Pc(47) int local47 = this.anInt4356 - (local34 > 0 ? RandomUtils.nextInt(local34, arg1) : 0);

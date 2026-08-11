@@ -67,7 +67,7 @@ public final class PcmResampler {
 	}
 
 	@OriginalMember(owner = "client!vj", name = "a", descriptor = "([BB)[B")
-	public final byte[] method4520(@OriginalArg(0) byte[] arg0) {
+	public final byte[] resample(@OriginalArg(0) byte[] arg0) {
 		if (this.anIntArrayArray40 != null) {
 			@Pc(31) int local31 = (int) ((long) arg0.length * (long) this.outputRate / (long) this.inputRate) + 14;
 			@Pc(34) int[] local34 = new int[local31];

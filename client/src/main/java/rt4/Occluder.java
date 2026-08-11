@@ -32,11 +32,11 @@ public final class Occluder {
 	@OriginalMember(owner = "client!pe", name = "k", descriptor = "I")
 	public int minTileX;
 
-	@OriginalMember(owner = "client!pe", name = "m", descriptor = "I")
-	public int nearYSlope;
-
 	@OriginalMember(owner = "client!pe", name = "l", descriptor = "I")
 	public int type;
+
+	@OriginalMember(owner = "client!pe", name = "m", descriptor = "I")
+	public int nearYSlope;
 
 	@OriginalMember(owner = "client!pe", name = "p", descriptor = "I")
 	public int nearXSlope;

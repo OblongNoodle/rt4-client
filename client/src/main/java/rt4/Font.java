@@ -169,7 +169,7 @@ public abstract class Font extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "([[B[[B[I[I[III)I")
-	public static int method2870(@OriginalArg(0) byte[][] arg0, @OriginalArg(1) byte[][] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int[] arg3, @OriginalArg(4) int[] arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	public static int calculateKerning(@OriginalArg(0) byte[][] arg0, @OriginalArg(1) byte[][] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int[] arg3, @OriginalArg(4) int[] arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		@Pc(3) int local3 = arg2[arg5];
 		@Pc(9) int local9 = local3 + arg4[arg5];
 		@Pc(13) int local13 = arg2[arg6];
@@ -200,7 +200,7 @@ public abstract class Font extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!ce", name = "a", descriptor = "(I[B)Lclient!rk;")
-	public static Font method799(@OriginalArg(1) byte[] arg0) {
+	public static Font createFont(@OriginalArg(1) byte[] arg0) {
 		if (arg0 == null) {
 			return null;
 		}
@@ -215,8 +215,8 @@ public abstract class Font extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!k", name = "a", descriptor = "(IIBLclient!ve;Lclient!ve;)Lclient!rk;")
-	public static Font method2462(@OriginalArg(1) int arg0, @OriginalArg(3) Js5 arg1, @OriginalArg(4) Js5 arg2) {
-		return SpriteLoader.decode(arg1, 0, arg0) ? method799(arg2.fetchFile(arg0, 0)) : null;
+	public static Font load(@OriginalArg(1) int arg0, @OriginalArg(3) Js5 arg1, @OriginalArg(4) Js5 arg2) {
+		return SpriteLoader.decode(arg1, 0, arg0) ? createFont(arg2.fetchFile(arg0, 0)) : null;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIIIIIII)I")
@@ -408,7 +408,7 @@ public abstract class Font extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIILjava/util/Random;I)I")
-	public final int method2859(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(5) Random arg3, @OriginalArg(6) int arg4) {
+	public final int renderWavyText(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(5) Random arg3, @OriginalArg(6) int arg4) {
 		if (arg0 == null) {
 			return 0;
 		}
@@ -824,7 +824,7 @@ public abstract class Font extends SecondaryNode {
 			if (local138 != 32 && local138 != 160) {
 				for (local109 = 0; local109 < 256; local109++) {
 					if (local109 != 32 && local109 != 160) {
-						this.kerning[(local138 << 8) + local109] = (byte) method2870(local93, local136, local58, this.glyphWidths, local55, local138, local109);
+						this.kerning[(local138 << 8) + local109] = (byte) calculateKerning(local93, local136, local58, this.glyphWidths, local55, local138, local109);
 					}
 				}
 			}
@@ -847,7 +847,7 @@ public abstract class Font extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIIIIIILjava/util/Random;I[I)I")
-	public final int method2878(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Random arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int[] arg11) {
+	public final int renderWavyTextAligned(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Random arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int[] arg11) {
 		if (arg0 == null) {
 			return 0;
 		}

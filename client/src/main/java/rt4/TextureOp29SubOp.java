@@ -24,11 +24,11 @@ public abstract class TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!kf", name = "a", descriptor = "(III)V")
-	public abstract void method4007(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1);
+	public abstract void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1);
 
 	@OriginalMember(owner = "client!kf", name = "a", descriptor = "(IZI)V")
-	public abstract void method4009(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1);
+	public abstract void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1);
 
 	@OriginalMember(owner = "client!kf", name = "c", descriptor = "(III)V")
-	public abstract void method4013(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1);
+	public abstract void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1);
 }

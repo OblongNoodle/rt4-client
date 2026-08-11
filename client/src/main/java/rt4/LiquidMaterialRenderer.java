@@ -58,8 +58,8 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 			local141.put(local58.data, 0, local58.offset);
 			local141.flip();
 			this.aFloatBuffer1 = local141.asFloatBuffer().asReadOnlyBuffer();
-			this.method3719();
-			this.method3720();
+			this.initDisplayLists();
+			this.uploadVertexProgram();
 		}
 	}
 
@@ -132,7 +132,7 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!rd", name = "e", descriptor = "()V")
-	private void method3719() {
+	private void initDisplayLists() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		this.anInt4831 = gl.glGenLists(2);
 		gl.glNewList(this.anInt4831, GL2.GL_COMPILE);
@@ -164,7 +164,7 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!rd", name = "f", descriptor = "()V")
-	private void method3720() {
+	private void uploadVertexProgram() {
 		if (this.anInt4831 < 0) {
 			return;
 		}

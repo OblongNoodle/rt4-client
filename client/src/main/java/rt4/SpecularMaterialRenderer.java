@@ -23,7 +23,7 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!vm", name = "<init>", descriptor = "()V")
 	public SpecularMaterialRenderer() {
 		if (GlRenderer.arbTextureCubeMapSupported && GlRenderer.maxTextureUnits >= 2) {
-			this.method4536();
+			this.createCubeMapTextures();
 			@Pc(19) GL2 gl = GlRenderer.gl;
 			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.anIntArray519[0]);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
@@ -45,11 +45,11 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
 			this.aBoolean301 = GlRenderer.maxTextureUnits < 3;
 		}
-		this.method4535();
+		this.initDisplayLists();
 	}
 
 	@OriginalMember(owner = "client!vm", name = "d", descriptor = "()V")
-	private void method4535() {
+	private void initDisplayLists() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		this.anInt5777 = gl.glGenLists(2);
 		gl.glNewList(this.anInt5777, GL2.GL_COMPILE);
@@ -166,7 +166,7 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!vm", name = "e", descriptor = "()V")
-	private void method4536() {
+	private void createCubeMapTextures() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		if (this.anIntArray519 == null) {
 			this.anIntArray519 = new int[3];

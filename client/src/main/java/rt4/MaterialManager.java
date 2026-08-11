@@ -85,12 +85,12 @@ public class MaterialManager {
 	@OriginalMember(owner = "client!nj", name = "a", descriptor = "(I)V")
 	public static void quit() {
 		renderers = null;
-		method2808();
+		deleteNoiseTextures();
 	}
 
 	@OriginalMember(owner = "client!te", name = "e", descriptor = "(I)V")
 	public static void init() {
-		method2809();
+		createNoiseTextures();
 		renderers = new MaterialRenderer[7];
 		renderers[1] = new SpecularMaterialRenderer();
 		renderers[2] = new LiquidMaterialRenderer();
@@ -101,7 +101,7 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!ld", name = "a", descriptor = "(IIIIZI)V")
-	public static void method2731(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
+	public static void setCameraTransform(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
 		anInt5158 = arg1;
 		anInt1815 = arg4;
 		anInt5559 = arg0;
@@ -131,7 +131,7 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!lm", name = "b", descriptor = "()V")
-	public static void method2808() {
+	public static void deleteNoiseTextures() {
 		@Pc(4) GL2 gl;
 		@Pc(11) int[] local11;
 		if (texture3D != -1) {
@@ -163,15 +163,15 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!lm", name = "c", descriptor = "()V")
-	public static void method2809() {
+	public static void createNoiseTextures() {
 		allows3DTextureMapping = GlRenderer.extTexture3dSupported;
 		initNoiseTextures();
-		method2811();
-		method2812();
+		uploadNoiseTexture();
+		uploadWaterfallNoiseTexture();
 	}
 
 	@OriginalMember(owner = "client!lm", name = "e", descriptor = "()V")
-	private static void method2811() {
+	private static void uploadNoiseTexture() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		if (allows3DTextureMapping) {
 			@Pc(6) int[] local6 = new int[1];
@@ -198,7 +198,7 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!lm", name = "f", descriptor = "()V")
-	private static void method2812() {
+	private static void uploadWaterfallNoiseTexture() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		if (allows3DTextureMapping) {
 			@Pc(6) int[] local6 = new int[1];

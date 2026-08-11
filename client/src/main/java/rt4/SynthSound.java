@@ -24,7 +24,7 @@ public final class SynthSound {
 			if (local14 != 0) {
 				arg0.offset--;
 				this.instruments[local7] = new SynthInstrument();
-				this.instruments[local7].method3506(arg0);
+				this.instruments[local7].decode(arg0);
 			}
 		}
 		this.start = arg0.g2();

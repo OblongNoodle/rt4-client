@@ -35,7 +35,7 @@ public abstract class PcmStream extends Node {
 	public abstract PcmStream firstSubStream();
 
 	@OriginalMember(owner = "client!qb", name = "c", descriptor = "()I")
-	public int method4407() {
+	public int getEffectiveVolume() {
 		return 255;
 	}
 

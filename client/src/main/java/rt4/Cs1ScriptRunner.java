@@ -313,7 +313,7 @@ public class Cs1ScriptRunner {
 				component.rectangle = rectangle;
 				if (!component.if3 || !InterfaceList.isHidden(component)) {
 					if (component.clientCode > 0) {
-						method13(component);
+						applyClientCode(component);
 					}
 					@Pc(114) int local114 = arg1 + component.y;
 					@Pc(117) int alpha = component.alpha;
@@ -389,7 +389,7 @@ public class Cs1ScriptRunner {
 								InterfaceList.aClass13_26 = component;
 								InterfaceList.anInt5574 = local114;
 								anInt2503 = local123;
-								ScriptRunner.method4326(component.height, component.clientCode == 1403, local123, component.width, local114);
+								ScriptRunner.renderGameScene(component.height, component.clientCode == 1403, local123, component.width, local114);
 								if (GlRenderer.enabled) {
 									GlRaster.setClip(arg0, arg6, arg4, arg7);
 								} else {
@@ -428,7 +428,7 @@ public class Cs1ScriptRunner {
 								local563 = PlayerList.self.xFine + local556 >> 7;
 								local571 = PlayerList.self.yFine - objId >> 7;
 								if (MiniMenu.aBoolean302 && (MiniMenu.anInt4999 & 0x40) != 0) {
-									@Pc(583) Component local583 = InterfaceList.method1418(MiniMenu.anInt2512, MiniMenu.anInt506);
+									@Pc(583) Component local583 = InterfaceList.getComponent(MiniMenu.anInt2512, MiniMenu.anInt506);
 									if (local583 == null) {
 										MiniMenu.cancelTargeting();
 									} else {
@@ -465,7 +465,7 @@ public class Cs1ScriptRunner {
 								continue;
 							}
 							if (component.clientCode == 1401) {
-								method4(local123, component.height, component.width, local114);
+								renderWorldMapOverview(local123, component.height, component.width, local114);
 								InterfaceList.aBooleanArray100[rectangle] = true;
 								InterfaceList.rectangleRedraw[rectangle] = true;
 								if (GlRenderer.enabled) {
@@ -575,7 +575,7 @@ public class Cs1ScriptRunner {
 									MiniMenu.actions[0] = 1005;
 									MiniMenu.opBases[0] = JagString.EMPTY;
 								}
-								method86(local1186.interfaceId, local166, local302, local123, rectangle, local291, local164, local114);
+								renderInterface(local1186.interfaceId, local166, local302, local123, rectangle, local291, local164, local114);
 							}
 							if (GlRenderer.enabled) {
 								GlRaster.setClip(arg0, arg6, arg4, arg7);
@@ -805,26 +805,26 @@ public class Cs1ScriptRunner {
 														@Pc(2282) GlSprite local2282 = (GlSprite) sprite;
 														if (local2274 && local2279) {
 															if (alpha == 0) {
-																local2282.method1429(local123, local114, memory, color);
+																local2282.renderTiled(local123, local114, memory, color);
 															} else {
-																local2282.method1426(local123, local114, 256 - (alpha & 0xFF), memory, color);
+																local2282.renderTiledAlpha(local123, local114, 256 - (alpha & 0xFF), memory, color);
 															}
 															PluginRepository.ComponentDraw(i, component, local123, local114);
 														} else if (local2274) {
 															for (local563 = 0; local563 < color; local563++) {
 																if (alpha == 0) {
-																	local2282.method1429(local123, local563 * local468 + local114, memory, 1);
+																	local2282.renderTiled(local123, local563 * local468 + local114, memory, 1);
 																} else {
-																	local2282.method1426(local123, local114 + local563 * local468, -(alpha & 0xFF) + 256, memory, 1);
+																	local2282.renderTiledAlpha(local123, local114 + local563 * local468, -(alpha & 0xFF) + 256, memory, 1);
 																}
 															}
 															PluginRepository.ComponentDraw(i, component, local123, local114);
 														} else if (local2279) {
 															for (local563 = 0; local563 < memory; local563++) {
 																if (alpha == 0) {
-																	local2282.method1429(local276 * local563 + local123, local114, 1, color);
+																	local2282.renderTiled(local276 * local563 + local123, local114, 1, color);
 																} else {
-																	local2282.method1426(local276 * local563 + local123, local114, 256 - (alpha & 0xFF), 1, color);
+																	local2282.renderTiledAlpha(local276 * local563 + local123, local114, 256 - (alpha & 0xFF), 1, color);
 																}
 															}
 															PluginRepository.ComponentDraw(i, component, local123, local114);
@@ -1120,7 +1120,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!ag", name = "a", descriptor = "(IIIIIIIII)V")
-	public static void method86(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
+	public static void renderInterface(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
 		if (InterfaceList.load(arg0)) {
 			renderComponent(arg1, arg7, arg3, InterfaceList.components[arg0], arg2, -1, arg6, arg5, arg4);
 		} else if (arg4 == -1) {
@@ -1135,7 +1135,7 @@ public class Cs1ScriptRunner {
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(Z)V")
 	public static void renderTopLevelInterface() {
 		aClass13Array13 = null;
-		method86(InterfaceList.topLevelInterface, 0, GameShell.canvasWidth, 0, -1, GameShell.canvasHeight, 0, 0);
+		renderInterface(InterfaceList.topLevelInterface, 0, GameShell.canvasWidth, 0, -1, GameShell.canvasHeight, 0, 0);
 		if (aClass13Array13 != null) {
 			renderComponent(0, anInt3126, anInt4696, aClass13Array13, GameShell.canvasWidth, -1412584499, 0, GameShell.canvasHeight, aClass13_1.rectangle);
 			aClass13Array13 = null;
@@ -1199,7 +1199,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(BLclient!be;)V")
-	public static void method13(@OriginalArg(1) Component arg0) {
+	public static void applyClientCode(@OriginalArg(1) Component arg0) {
 		@Pc(16) int local16 = arg0.clientCode;
 		if (local16 == 324) {
 			if (anInt3851 == -1) {
@@ -1258,7 +1258,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(IIIII)V")
-	public static void method4(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
+	public static void renderWorldMapOverview(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
 		if (GlRenderer.enabled) {
 			GlRaster.setClip(arg0, arg3, arg2 + arg0, arg1 + arg3);
 			GlRaster.fillRect(arg0, arg3, arg2, arg1, 0);
@@ -1345,7 +1345,7 @@ public class Cs1ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!ac", name = "b", descriptor = "(I)V")
-	public static void method28() {
+	public static void updateComponentDrag() {
 		InterfaceList.redraw(aClass13_14);
 		anInt4851++;
 		if (InterfaceList.aBoolean83 && InterfaceList.aBoolean174) {

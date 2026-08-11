@@ -29,7 +29,7 @@ public final class TextureOpCurve extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!wi", name = "h", descriptor = "(I)V")
-	private void method4639() {
+	private void buildLookupTable() {
 		@Pc(8) int local8 = this.anInt5852;
 		@Pc(29) int local29;
 		@Pc(27) int local27;
@@ -137,14 +137,14 @@ public final class TextureOpCurve extends TextureOp {
 			throw new RuntimeException("Curve operation requires at least two markers");
 		}
 		if (this.anInt5852 == 2) {
-			this.method4642();
+			this.initExtrapolationMarkers();
 		}
 		TextureOp.createTrigonometryTables();
-		this.method4639();
+		this.buildLookupTable();
 	}
 
 	@OriginalMember(owner = "client!wi", name = "a", descriptor = "(Z)V")
-	private void method4642() {
+	private void initExtrapolationMarkers() {
 		@Pc(8) int[] local8 = this.markers[0];
 		@Pc(20) int[] local20 = this.markers[1];
 		@Pc(29) int[] local29 = this.markers[this.markers.length - 2];

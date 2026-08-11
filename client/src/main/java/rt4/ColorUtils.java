@@ -123,7 +123,7 @@ public class ColorUtils {
 	}
 
 	@OriginalMember(owner = "client!w", name = "f", descriptor = "(I)I")
-	public static int method4582(@OriginalArg(0) int arg0) {
+	public static int clampLightness(@OriginalArg(0) int arg0) {
 		if (arg0 < 2) {
 			arg0 = 2;
 		} else if (arg0 > 126) {

@@ -41,7 +41,7 @@ public final class PcmSound extends Sound {
 
 	@OriginalMember(owner = "client!kj", name = "a", descriptor = "(Lclient!vj;)Lclient!kj;")
 	public final PcmSound resample(@OriginalArg(0) PcmResampler arg0) {
-		this.samples = arg0.method4520(this.samples);
+		this.samples = arg0.resample(this.samples);
 		this.rate = arg0.scaleRate(this.rate);
 		if (this.start == this.end) {
 			this.start = this.end = arg0.scalePosition(this.start);

@@ -36,21 +36,21 @@ public final class TextureOp29SubOp1 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!ci", name = "a", descriptor = "(III)V")
 	@Override
-	public final void method4007(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 	}
 
 	@OriginalMember(owner = "client!ci", name = "c", descriptor = "(III)V")
 	@Override
-	public final void method4013(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 	}
 
 	@OriginalMember(owner = "client!ci", name = "a", descriptor = "(IZI)V")
 	@Override
-	public final void method4009(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(10) int local10 = arg1 * this.anInt1010 >> 12;
 		@Pc(25) int local25 = this.anInt1017 * arg1 >> 12;
 		@Pc(32) int local32 = arg0 * this.anInt1012 >> 12;
 		@Pc(39) int local39 = arg0 * this.anInt1015 >> 12;
-		TextureOp29.method3982(this.anInt5229, local39, local10, local32, local25);
+		TextureOp29.drawLine(this.anInt5229, local39, local10, local32, local25);
 	}
 }

@@ -24,7 +24,7 @@ public final class QuickChatCatType extends SecondaryNode {
 	public int[] phrases;
 
 	@OriginalMember(owner = "client!si", name = "a", descriptor = "(ZB)I")
-	public static int method3933(@OriginalArg(1) byte arg0) {
+	public static int unsignedByte(@OriginalArg(1) byte arg0) {
 		return arg0 & 0xFF;
 	}
 
@@ -70,7 +70,7 @@ public final class QuickChatCatType extends SecondaryNode {
 			this.subcategoryShortcuts = new int[local28];
 			for (local38 = 0; local38 < local28; local38++) {
 				this.subcategories[local38] = buffer.g2();
-				this.subcategoryShortcuts[local38] = method3933(buffer.g1b());
+				this.subcategoryShortcuts[local38] = unsignedByte(buffer.g1b());
 			}
 		} else if (opcode == 3) {
 			local28 = buffer.g1();
@@ -78,7 +78,7 @@ public final class QuickChatCatType extends SecondaryNode {
 			this.phraseShortcuts = new int[local28];
 			for (local38 = 0; local38 < local28; local38++) {
 				this.phrases[local38] = buffer.g2();
-				this.phraseShortcuts[local38] = method3933(buffer.g1b());
+				this.phraseShortcuts[local38] = unsignedByte(buffer.g1b());
 			}
 		} else if (opcode == 4) {
 		}

@@ -44,7 +44,7 @@ public class Find {
 		for (@Pc(115) int local115 = 0; local115 < index; local115++) {
 			local113[local115] = QuickChatPhraseTypeList.get(local22[local115]).getText();
 		}
-		method3656(local113, results);
+		sortResults(local113, results);
 	}
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(ZLclient!na;I)V")
@@ -77,16 +77,16 @@ public class Find {
 		for (@Pc(119) int local119 = 0; local119 < index; local119++) {
 			local117[local119] = ObjTypeList.get(local8[local119]).name;
 		}
-		method3656(local117, results);
+		sortResults(local117, results);
 	}
 
 	@OriginalMember(owner = "client!qg", name = "a", descriptor = "([Lclient!na;[SI)V")
-	public static void method3656(@OriginalArg(0) JagString[] arg0, @OriginalArg(1) short[] arg1) {
-		method1307(arg1, arg0.length - 1, arg0, 0);
+	public static void sortResults(@OriginalArg(0) JagString[] arg0, @OriginalArg(1) short[] arg1) {
+		quicksort(arg1, arg0.length - 1, arg0, 0);
 	}
 
 	@OriginalMember(owner = "client!ed", name = "a", descriptor = "([SI[Lclient!na;II)V")
-	public static void method1307(@OriginalArg(0) short[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) JagString[] arg2, @OriginalArg(4) int arg3) {
+	public static void quicksort(@OriginalArg(0) short[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) JagString[] arg2, @OriginalArg(4) int arg3) {
 		if (arg1 <= arg3) {
 			return;
 		}
@@ -112,7 +112,7 @@ public class Find {
 		arg2[local14] = local25;
 		arg0[arg1] = arg0[local14];
 		arg0[local14] = local39;
-		method1307(arg0, local14 - 1, arg2, arg3);
-		method1307(arg0, arg1, arg2, local14 + 1);
+		quicksort(arg0, local14 - 1, arg2, arg3);
+		quicksort(arg0, arg1, arg2, local14 + 1);
 	}
 }

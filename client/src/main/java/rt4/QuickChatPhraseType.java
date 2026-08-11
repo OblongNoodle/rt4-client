@@ -146,7 +146,7 @@ public final class QuickChatPhraseType extends SecondaryNode {
 		if (this.anIntArray71 != null) {
 			for (@Pc(22) int local22 = 0; local22 < this.anIntArray71.length; local22++) {
 				local17.appendString(this.aClass100Array35[local22]);
-				local17.appendString(QuickChatPhraseTypeList.method1838(this.anIntArrayArray5[local22], arg0.gVarLong(anIntArray51[this.anIntArray71[local22]]), this.anIntArray71[local22]));
+				local17.appendString(QuickChatPhraseTypeList.formatDynamicValue(this.anIntArrayArray5[local22], arg0.gVarLong(anIntArray51[this.anIntArray71[local22]]), this.anIntArray71[local22]));
 			}
 		}
 		local17.appendString(this.aClass100Array35[this.aClass100Array35.length - 1]);

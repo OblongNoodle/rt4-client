@@ -40,7 +40,7 @@ public final class TextureOp32 extends TextureOp {
 	@OriginalMember(owner = "client!pk", name = "e", descriptor = "(I)V")
 	@Override
 	public final void postDecode() {
-		this.method3533();
+		this.computeDirectionVector();
 	}
 
 	@OriginalMember(owner = "client!pk", name = "a", descriptor = "(IB)[I")
@@ -83,7 +83,7 @@ public final class TextureOp32 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!pk", name = "g", descriptor = "(B)V")
-	private void method3533() {
+	private void computeDirectionVector() {
 		@Pc(7) double local7 = Math.cos((float) this.anInt4584 / 4096.0F);
 		this.anIntArray406[0] = (int) (local7 * 4096.0D * Math.sin((float) this.anInt4577 / 4096.0F));
 		this.anIntArray406[1] = (int) (Math.cos((float) this.anInt4577 / 4096.0F) * local7 * 4096.0D);

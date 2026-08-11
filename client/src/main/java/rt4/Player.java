@@ -434,7 +434,7 @@ public final class Player extends PathingEntity {
 		this.minY = local76.getMinY();
 		@Pc(184) Model local184;
 		if (Preferences.characterShadowsOn && (this.appearance.npcId == -1 || NpcTypeList.get(this.appearance.npcId).hasshadow)) {
-			local184 = ShadowModelList.method1043(160, this.seqStretches, local54 == null ? local25 : local54, this.xFine, 0, this.yFine, 0, 1, local76, arg0, local54 == null ? this.seqFrame : this.movementSeqFrame, this.tileHeight, 240);
+			local184 = ShadowModelList.getOrCreateShadow(160, this.seqStretches, local54 == null ? local25 : local54, this.xFine, 0, this.yFine, 0, 1, local76, arg0, local54 == null ? this.seqFrame : this.movementSeqFrame, this.tileHeight, 240);
 			if (GlRenderer.enabled) {
 				@Pc(188) float local188 = GlRenderer.getProjectionDistance();
 				@Pc(190) float local190 = GlRenderer.getDepthBias();

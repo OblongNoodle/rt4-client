@@ -22,7 +22,7 @@ public final class TracingException extends RuntimeException {
 		try {
 			@Pc(13) String local13 = "";
 			if (arg1 != null) {
-				local13 = method1961(arg1);
+				local13 = getStackTraceString(arg1);
 			}
 			if (arg0 != null) {
 				if (arg1 != null) {
@@ -30,11 +30,11 @@ public final class TracingException extends RuntimeException {
 				}
 				local13 = local13 + arg0;
 			}
-			method31(local13);
-			local13 = method1014(":", "%3a", local13);
-			local13 = method1014("@", "%40", local13);
-			local13 = method1014("&", "%26", local13);
-			local13 = method1014("#", "%23", local13);
+			printError(local13);
+			local13 = replaceAll(":", "%3a", local13);
+			local13 = replaceAll("@", "%40", local13);
+			local13 = replaceAll("&", "%26", local13);
+			local13 = replaceAll("#", "%23", local13);
 			if (GameShell.signLink2.applet == null) {
 				return;
 			}
@@ -52,12 +52,12 @@ public final class TracingException extends RuntimeException {
 	}
 
 	@OriginalMember(owner = "client!af", name = "a", descriptor = "(ILjava/lang/String;)V")
-	public static void method31(@OriginalArg(1) String arg0) {
-		System.out.println("Error: " + method1014("%0a", "\n", arg0));
+	public static void printError(@OriginalArg(1) String arg0) {
+		System.out.println("Error: " + replaceAll("%0a", "\n", arg0));
 	}
 
 	@OriginalMember(owner = "client!hi", name = "a", descriptor = "(ILjava/lang/Throwable;)Ljava/lang/String;")
-	public static String method1961(@OriginalArg(1) Throwable arg0) throws IOException {
+	public static String getStackTraceString(@OriginalArg(1) Throwable arg0) throws IOException {
 		@Pc(24) String local24;
 		if (arg0 instanceof TracingException) {
 			@Pc(11) TracingException local11 = (TracingException) arg0;
@@ -101,7 +101,7 @@ public final class TracingException extends RuntimeException {
 	}
 
 	@OriginalMember(owner = "client!da", name = "a", descriptor = "(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;")
-	public static String method1014(@OriginalArg(0) String arg0, @OriginalArg(1) String arg1, @OriginalArg(3) String arg2) {
+	public static String replaceAll(@OriginalArg(0) String arg0, @OriginalArg(1) String arg1, @OriginalArg(3) String arg2) {
 		for (@Pc(5) int local5 = arg2.indexOf(arg0); local5 != -1; local5 = arg2.indexOf(arg0, local5 + arg1.length())) {
 			arg2 = arg2.substring(0, local5) + arg1 + arg2.substring(arg0.length() + local5);
 		}

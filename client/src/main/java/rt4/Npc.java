@@ -65,7 +65,7 @@ public final class Npc extends PathingEntity {
 
 		@Pc(140) Model model;
 		if (Preferences.characterShadowsOn && local84.hasshadow) {
-			model = ShadowModelList.method1043(this.type.shadowcolormodifier1, this.seqStretches, local53 == null ? local29 : local53, this.xFine, this.type.shadowcolor2, this.yFine, this.type.shadowcolor1, this.type.size, body, orientation, local53 == null ? this.seqFrame : this.movementSeqFrame, this.tileHeight, this.type.shadowcolormodifier2);
+			model = ShadowModelList.getOrCreateShadow(this.type.shadowcolormodifier1, this.seqStretches, local53 == null ? local29 : local53, this.xFine, this.type.shadowcolor2, this.yFine, this.type.shadowcolor1, this.type.size, body, orientation, local53 == null ? this.seqFrame : this.movementSeqFrame, this.tileHeight, this.type.shadowcolormodifier2);
 			if (GlRenderer.enabled) {
 				@Pc(144) float local144 = GlRenderer.getProjectionDistance();
 				@Pc(146) float local146 = GlRenderer.getDepthBias();

@@ -46,12 +46,12 @@ public final class GlIndexedSprite extends IndexedSprite {
 		this.height = arg5;
 		this.pixels = arg6;
 		this.pallet = arg7;
-		this.method3337(arg6, arg7);
-		this.method3339();
+		this.uploadPixels(arg6, arg7);
+		this.compileDisplayList();
 	}
 
 	@OriginalMember(owner = "client!oh", name = "a", descriptor = "([B[I)V")
-	private void method3337(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1) {
+	private void uploadPixels(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1) {
 		this.anInt4287 = IntUtils.clp2(this.width);
 		this.anInt4286 = IntUtils.clp2(this.height);
 		@Pc(20) byte[] local20 = new byte[this.anInt4287 * this.anInt4286 * 4];
@@ -94,7 +94,7 @@ public final class GlIndexedSprite extends IndexedSprite {
 		@Pc(10) int local10 = arg1 + this.yOffset;
 		@Pc(12) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.anInt4281);
-		this.method3338();
+		this.setNearestFilter();
 		gl.glColor4f(1.0F, 1.0F, 1.0F, (float) arg2 / 256.0F);
 		gl.glTranslatef((float) local5, (float) (GlRenderer.canvasHeight - local10), 0.0F);
 		gl.glCallList(this.anInt4282);
@@ -102,7 +102,7 @@ public final class GlIndexedSprite extends IndexedSprite {
 	}
 
 	@OriginalMember(owner = "client!oh", name = "b", descriptor = "(I)V")
-	private void method3338() {
+	private void setNearestFilter() {
 		if (this.anInt4283 != 1) {
 			this.anInt4283 = 1;
 			@Pc(9) GL2 gl = GlRenderer.gl;
@@ -119,7 +119,7 @@ public final class GlIndexedSprite extends IndexedSprite {
 		@Pc(10) int local10 = arg1 + this.yOffset;
 		@Pc(12) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.anInt4281);
-		this.method3338();
+		this.setNearestFilter();
 		gl.glTranslatef((float) local5, (float) (GlRenderer.canvasHeight - local10), 0.0F);
 		gl.glCallList(this.anInt4282);
 		gl.glLoadIdentity();
@@ -141,7 +141,7 @@ public final class GlIndexedSprite extends IndexedSprite {
 	}
 
 	@OriginalMember(owner = "client!oh", name = "a", descriptor = "()V")
-	private void method3339() {
+	private void compileDisplayList() {
 		@Pc(7) float local7 = (float) this.width / (float) this.anInt4287;
 		@Pc(15) float local15 = (float) this.height / (float) this.anInt4286;
 		@Pc(17) GL2 gl = GlRenderer.gl;

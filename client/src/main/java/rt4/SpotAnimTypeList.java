@@ -26,7 +26,7 @@ public class SpotAnimTypeList {
 		if (spotAnim != null) {
 			return spotAnim;
 		}
-		@Pc(26) byte[] src = archive.fetchFile(method3681(id), method4010(id));
+		@Pc(26) byte[] src = archive.fetchFile(getArchiveId(id), getFileId(id));
 		spotAnim = new SpotAnimType();
 		spotAnim.id = id;
 		if (src != null) {
@@ -37,12 +37,12 @@ public class SpotAnimTypeList {
 	}
 
 	@OriginalMember(owner = "client!qk", name = "a", descriptor = "(ZI)I")
-	public static int method3681(@OriginalArg(1) int arg0) {
+	public static int getArchiveId(@OriginalArg(1) int arg0) {
 		return arg0 >>> 8;
 	}
 
 	@OriginalMember(owner = "client!kf", name = "a", descriptor = "(II)I")
-	public static int method4010(@OriginalArg(0) int arg0) {
+	public static int getFileId(@OriginalArg(0) int arg0) {
 		return arg0 & 0xFF;
 	}
 

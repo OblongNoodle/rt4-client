@@ -50,12 +50,12 @@ public class MapList {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "b", descriptor = "(II)Z")
-	public static boolean method1855(@OriginalArg(0) int arg0) {
+	public static boolean isMapVisible(@OriginalArg(0) int arg0) {
 		return arg0 >= 0 && aBooleanArray130.length > arg0 && aBooleanArray130[arg0];
 	}
 
 	@OriginalMember(owner = "client!ui", name = "d", descriptor = "(II)V")
-	public static void method4332(@OriginalArg(0) int arg0) {
+	public static void toggleMapVisibility(@OriginalArg(0) int arg0) {
 		if (arg0 >= 0 && aBooleanArray130.length > arg0) {
 			aBooleanArray130[arg0] = !aBooleanArray130[arg0];
 		}

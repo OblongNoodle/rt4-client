@@ -127,12 +127,12 @@ public final class SoftwareFont extends Font {
 	}
 
 	@OriginalMember(owner = "client!jh", name = "a", descriptor = "(IILclient!ve;Lclient!ve;I)Lclient!dd;")
-	public static SoftwareFont method2412(@OriginalArg(0) int arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) Js5 arg2) {
-		return SpriteLoader.decode(arg2, 0, arg0) ? method4635(arg1.fetchFile(arg0, 0)) : null;
+	public static SoftwareFont load(@OriginalArg(0) int arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) Js5 arg2) {
+		return SpriteLoader.decode(arg2, 0, arg0) ? createFont(arg1.fetchFile(arg0, 0)) : null;
 	}
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "([BI)Lclient!dd;")
-	public static SoftwareFont method4635(@OriginalArg(0) byte[] arg0) {
+	public static SoftwareFont createFont(@OriginalArg(0) byte[] arg0) {
 		if (arg0 == null) {
 			return null;
 		} else {

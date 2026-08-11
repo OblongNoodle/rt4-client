@@ -53,7 +53,7 @@ public final class TextureOp17 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!hk", name = "a", descriptor = "(IIII)V")
-	private void method1991(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
+	private void hslToRgb(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2) {
 		@Pc(35) int local35 = arg0 <= 2048 ? arg0 * (arg1 + 4096) >> 12 : arg0 + arg1 - (arg0 * arg1 >> 12);
 		if (local35 <= 0) {
 			this.anInt2554 = this.anInt2543 = this.anInt2553 = arg0;
@@ -96,7 +96,7 @@ public final class TextureOp17 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!hk", name = "a", descriptor = "(BIII)V")
-	private void method1992(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	private void rgbToHsl(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		@Pc(12) int local12 = arg0 > arg1 ? arg0 : arg1;
 		@Pc(31) int local31 = arg2 <= local12 ? local12 : arg2;
 		@Pc(38) int local38 = arg1 > arg0 ? arg0 : arg1;
@@ -138,7 +138,7 @@ public final class TextureOp17 extends TextureOp {
 			@Pc(48) int[] local48 = local17[2];
 			@Pc(52) int[] local52 = local17[0];
 			for (@Pc(54) int local54 = 0; local54 < Texture.width; local54++) {
-				this.method1992(local32[local54], local36[local54], local40[local54]);
+				this.rgbToHsl(local32[local54], local36[local54], local40[local54]);
 				this.anInt2556 += this.anInt2547;
 				if (this.anInt2556 < 0) {
 					this.anInt2556 = 0;
@@ -158,7 +158,7 @@ public final class TextureOp17 extends TextureOp {
 				while (this.anInt2551 > 4096) {
 					this.anInt2551 -= 4096;
 				}
-				this.method1991(this.anInt2556, this.anInt2557, this.anInt2551);
+				this.hslToRgb(this.anInt2556, this.anInt2557, this.anInt2551);
 				local52[local54] = this.anInt2554;
 				local44[local54] = this.anInt2543;
 				local48[local54] = this.anInt2553;

@@ -253,11 +253,11 @@ public class WorldList {
 
 	@OriginalMember(owner = "client!sh", name = "a", descriptor = "(IZBIZ)V")
 	public static void sortWorldList(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(3) int arg2, @OriginalArg(4) boolean arg3) {
-		method1697(arg0, arg2, sorted.length - 1, arg3, 0, arg1);
+		quicksort(arg0, arg2, sorted.length - 1, arg3, 0, arg1);
 	}
 
 	@OriginalMember(owner = "client!ge", name = "a", descriptor = "(IIIZIZZ)V")
-	public static void method1697(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
+	public static void quicksort(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
 		if (arg2 <= arg4) {
 			return;
 		}
@@ -267,7 +267,7 @@ public class WorldList {
 		sorted[local13] = sorted[arg2];
 		sorted[arg2] = local19;
 		for (@Pc(31) int local31 = arg4; local31 < arg2; local31++) {
-			if (method3115(local19, sorted[local31], arg0, arg1, arg3, arg5) <= 0) {
+			if (compareWorlds(local19, sorted[local31], arg0, arg1, arg3, arg5) <= 0) {
 				@Pc(53) World local53 = sorted[local31];
 				sorted[local31] = sorted[local15];
 				sorted[local15++] = local53;
@@ -275,8 +275,8 @@ public class WorldList {
 		}
 		sorted[arg2] = sorted[local15];
 		sorted[local15] = local19;
-		method1697(arg0, arg1, local15 - 1, arg3, arg4, arg5);
-		method1697(arg0, arg1, arg2, arg3, local15 + 1, arg5);
+		quicksort(arg0, arg1, local15 - 1, arg3, arg4, arg5);
+		quicksort(arg0, arg1, arg2, arg3, local15 + 1, arg5);
 	}
 
 	@OriginalMember(owner = "client!bh", name = "a", descriptor = "(B)Lclient!ba;")
@@ -320,20 +320,20 @@ public class WorldList {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!ba;Lclient!ba;IIIZZ)I")
-	public static int method3115(@OriginalArg(0) World arg0, @OriginalArg(1) World arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5) {
-		@Pc(8) int local8 = method4595(arg1, arg3, arg0, arg5);
+	public static int compareWorlds(@OriginalArg(0) World arg0, @OriginalArg(1) World arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5) {
+		@Pc(8) int local8 = compareWorldField(arg1, arg3, arg0, arg5);
 		if (local8 != 0) {
 			return arg5 ? -local8 : local8;
 		} else if (arg2 == -1) {
 			return 0;
 		} else {
-			@Pc(42) int local42 = method4595(arg1, arg2, arg0, arg4);
+			@Pc(42) int local42 = compareWorldField(arg1, arg2, arg0, arg4);
 			return arg4 ? -local42 : local42;
 		}
 	}
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "(Lclient!ba;IILclient!ba;Z)I")
-	public static int method4595(@OriginalArg(0) World arg0, @OriginalArg(1) int arg1, @OriginalArg(3) World arg2, @OriginalArg(4) boolean arg3) {
+	public static int compareWorldField(@OriginalArg(0) World arg0, @OriginalArg(1) int arg1, @OriginalArg(3) World arg2, @OriginalArg(4) boolean arg3) {
 		if (arg1 == 1) {
 			@Pc(11) int local11 = arg0.players;
 			@Pc(14) int local14 = arg2.players;

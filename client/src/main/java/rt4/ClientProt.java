@@ -34,8 +34,8 @@ public class ClientProt {
 	public static final int NO_TIMEOUT = 93; // assumed
 
 	@OriginalMember(owner = "client!vg", name = "a", descriptor = "(Lclient!na;IIBI)V")
-	public static void method4512(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
-		@Pc(8) Component local8 = InterfaceList.method1418(arg3, arg1);
+	public static void sendButtonClick(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
+		@Pc(8) Component local8 = InterfaceList.getComponent(arg3, arg1);
 		if (local8 == null) {
 			return;
 		}
@@ -107,7 +107,7 @@ public class ClientProt {
 	}
 
 	@OriginalMember(owner = "client!pi", name = "c", descriptor = "(III)V")
-	public static void method3502(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public static void sendMovePacket(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(13) int local13 = arg0;
 		if (arg0 > 25) {
 			local13 = 25;

@@ -50,7 +50,7 @@ public class MidiPlayer {
 				if (stream.isSongReady(song, instrumentsArchive, soundBank)) {
 					stream.releaseInstruments();
 					stream.setVolume(volume);
-					stream.method4431(aBoolean116, song);
+					stream.playSong(aBoolean116, song);
 					state = 0;
 					song = null;
 					soundBank = null;

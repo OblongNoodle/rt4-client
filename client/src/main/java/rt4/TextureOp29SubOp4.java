@@ -33,16 +33,16 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!bl", name = "a", descriptor = "(IIIIIIII)V")
-	public static void method644(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void drawFramedRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		if (TextureOp29.anInt4164 <= arg6 && TextureOp29.anInt5063 >= arg5 && arg4 >= TextureOp29.anInt5773 && arg1 <= TextureOp29.anInt2869) {
-			method2907(arg3, arg4, arg1, arg2, arg0, arg5, arg6);
+			drawFramedRectUnclamped(arg3, arg4, arg1, arg2, arg0, arg5, arg6);
 		} else {
-			method4222(arg5, arg2, arg1, arg0, arg3, arg4, arg6);
+			drawFramedRectClipped(arg5, arg2, arg1, arg0, arg3, arg4, arg6);
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(IIIIIIII)V")
-	public static void method2907(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void drawFramedRectUnclamped(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		@Pc(9) int local9 = arg4 + arg1;
 		@Pc(13) int local13 = arg4 + arg6;
 		@Pc(15) int local15;
@@ -63,7 +63,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!tl", name = "a", descriptor = "(IIIIIIII)V")
-	public static void method4222(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void drawFramedRectClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.anInt2869, arg5, TextureOp29.anInt5773);
 		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.anInt2869, arg2, TextureOp29.anInt5773);
 		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.anInt5063, arg6, TextureOp29.anInt4164);
@@ -88,23 +88,23 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!sj", name = "a", descriptor = "(IIBIII)V")
-	public static void method3950(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void fillSolidRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		if (arg0 >= TextureOp29.anInt4164 && arg3 <= TextureOp29.anInt5063 && TextureOp29.anInt5773 <= arg4 && TextureOp29.anInt2869 >= arg2) {
-			method3308(arg2, arg3, arg4, arg0, arg1);
+			fillSolidRectUnclamped(arg2, arg3, arg4, arg0, arg1);
 		} else {
-			method3105(arg1, arg3, arg4, arg0, arg2);
+			fillSolidRectClipped(arg1, arg3, arg4, arg0, arg2);
 		}
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(IIIIII)V")
-	public static void method3308(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void fillSolidRectUnclamped(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		for (@Pc(8) int local8 = arg2; local8 <= arg0; local8++) {
 			ArrayUtils.fillRange(anIntArrayArray10[local8], arg3, arg1, arg4);
 		}
 	}
 
 	@OriginalMember(owner = "client!n", name = "a", descriptor = "(IIIIII)V")
-	public static void method3105(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void fillSolidRectClipped(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.anInt2869, arg2, TextureOp29.anInt5773);
 		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.anInt2869, arg4, TextureOp29.anInt5773);
 		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.anInt5063, arg3, TextureOp29.anInt4164);
@@ -120,7 +120,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!dm", name = "a", descriptor = "(IBIII)V")
-	public static void method1206(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
+	public static void fillCircle(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		@Pc(15) int local15 = 0;
 		ArrayUtils.fillRange(anIntArrayArray10[arg3], arg0 - arg1, arg0 - -arg1, arg2);
 		@Pc(32) int local32 = -arg1;
@@ -159,7 +159,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!hm", name = "a", descriptor = "(IIIII)V")
-	public static void method2054(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
+	public static void fillVerticalLine(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		@Pc(8) int local8;
 		if (arg0 <= arg2) {
 			for (local8 = arg0; local8 < arg2; local8++) {
@@ -173,12 +173,12 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(BIIIII)V")
-	public static void method4547(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void plotLine(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		@Pc(9) int local9 = arg1 - arg2;
 		@Pc(14) int local14 = arg3 - arg4;
 		if (local14 == 0) {
 			if (local9 != 0) {
-				method2054(arg2, arg4, arg1, arg0);
+				fillVerticalLine(arg2, arg4, arg1, arg0);
 			}
 		} else if (local9 == 0) {
 			fillRange(arg0, arg2, arg3, arg4);
@@ -240,22 +240,22 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "(IIIIIII)V")
-	public static void method4244(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	public static void drawRectOutline(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		if (TextureOp29.anInt4164 <= arg1 && TextureOp29.anInt5063 >= arg3 && TextureOp29.anInt5773 <= arg2 && arg4 <= TextureOp29.anInt2869) {
 			if (arg5 == 1) {
-				method2622(arg0, arg3, arg2, arg4, arg1);
+				drawRectOutline1pxFast(arg0, arg3, arg2, arg4, arg1);
 			} else {
-				method3334(arg3, arg2, arg0, arg4, arg5, arg1);
+				drawThickRectOutlineFast(arg3, arg2, arg0, arg4, arg5, arg1);
 			}
 		} else if (arg5 == 1) {
-			method3246(arg0, arg1, arg4, arg3, arg2);
+			drawRectOutline1pxClipped(arg0, arg1, arg4, arg3, arg2);
 		} else {
-			method352(arg4, arg5, arg3, arg1, arg0, arg2);
+			drawThickRectOutlineClipped(arg4, arg5, arg3, arg1, arg0, arg2);
 		}
 	}
 
 	@OriginalMember(owner = "client!kh", name = "a", descriptor = "(IIIBII)V")
-	public static void method2622(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void drawRectOutline1pxFast(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		@Pc(8) int local8 = arg2 + 1;
 		ArrayUtils.fillRange(anIntArrayArray10[arg2], arg4, arg1, arg0);
 		@Pc(17) int local17 = arg3 - 1;
@@ -267,7 +267,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!ok", name = "a", descriptor = "(IIIIIII)V")
-	public static void method3334(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
+	public static void drawThickRectOutlineFast(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
 		@Pc(5) int local5 = arg4 + arg1;
 		@Pc(14) int local14 = arg3 - arg4;
 		@Pc(29) int local29 = arg4 + arg5;
@@ -287,7 +287,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(IIIIIB)V")
-	public static void method3246(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public static void drawRectOutline1pxClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (arg4 > TextureOp29.anInt2869 || arg2 < TextureOp29.anInt5773) {
 			return;
 		}
@@ -339,7 +339,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!an", name = "a", descriptor = "(IIIIIII)V")
-	public static void method352(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
+	public static void drawThickRectOutlineClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
 		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.anInt2869, arg5, TextureOp29.anInt5773);
 		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.anInt2869, arg0, TextureOp29.anInt5773);
 		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.anInt5063, arg3, TextureOp29.anInt4164);
@@ -363,37 +363,37 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!gg", name = "a", descriptor = "([[IZ)V")
-	public static void method1751(@OriginalArg(0) int[][] arg0) {
+	public static void setCanvas(@OriginalArg(0) int[][] arg0) {
 		anIntArrayArray10 = arg0;
 	}
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(IZI)V")
 	@Override
-	public final void method4009(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(10) int local10 = arg1 * this.anInt5238 >> 12;
 		@Pc(17) int local17 = this.anInt5244 * arg0 >> 12;
 		@Pc(24) int local24 = this.anInt5246 * arg1 >> 12;
 		@Pc(31) int local31 = this.anInt5247 * arg0 >> 12;
-		method4244(this.anInt5229, local24, local31, local10, local17, this.anInt5231);
+		drawRectOutline(this.anInt5229, local24, local31, local10, local17, this.anInt5231);
 	}
 
 	@OriginalMember(owner = "client!ta", name = "c", descriptor = "(III)V")
 	@Override
-	public final void method4013(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(10) int local10 = this.anInt5246 * arg0 >> 12;
 		@Pc(17) int local17 = arg0 * this.anInt5238 >> 12;
 		@Pc(24) int local24 = arg1 * this.anInt5247 >> 12;
 		@Pc(31) int local31 = arg1 * this.anInt5244 >> 12;
-		method3950(local10, this.anInt5228, local31, local17, local24);
+		fillSolidRect(local10, this.anInt5228, local31, local17, local24);
 	}
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(III)V")
 	@Override
-	public final void method4007(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(14) int local14 = arg1 * this.anInt5246 >> 12;
 		@Pc(21) int local21 = this.anInt5247 * arg0 >> 12;
 		@Pc(28) int local28 = arg1 * this.anInt5238 >> 12;
 		@Pc(35) int local35 = this.anInt5244 * arg0 >> 12;
-		method644(this.anInt5231, local35, this.anInt5228, this.anInt5229, local21, local28, local14);
+		drawFramedRect(this.anInt5231, local35, this.anInt5228, this.anInt5229, local21, local28, local14);
 	}
 }

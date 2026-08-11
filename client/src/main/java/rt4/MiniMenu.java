@@ -681,8 +681,8 @@ public class MiniMenu {
 			}
 		}
 		if (actionCode == UNKNOWN_41 && Cs1ScriptRunner.aClass13_10 == null) {
-			method10(local15, local19);
-			Cs1ScriptRunner.aClass13_10 = InterfaceList.method1418(local19, local15);
+			sendComponentClickPacket(local15, local19);
+			Cs1ScriptRunner.aClass13_10 = InterfaceList.getComponent(local19, local15);
 			InterfaceList.redraw(Cs1ScriptRunner.aClass13_10);
 		}
 		if (actionCode == LOC_ACTION_3) {
@@ -723,7 +723,7 @@ public class MiniMenu {
 			}
 		}
 		if (actionCode == UNKNOWN_9 || actionCode == UNKNOWN_1003) {
-			ClientProt.method4512(opBases[arg0], local15, local36, local19);
+			ClientProt.sendButtonClick(opBases[arg0], local15, local36, local19);
 		}
 		if (actionCode == OBJ_EQUIP_ACTION) {
 			Protocol.outboundBuffer.p1isaac(55);
@@ -765,7 +765,7 @@ public class MiniMenu {
 			}
 		}
 		if (actionCode == UNKNOWN_32) {
-			local693 = InterfaceList.method1418(local19, local15);
+			local693 = InterfaceList.getComponent(local19, local15);
 			if (local693 != null) {
 				cancelTargeting();
 				@Pc(1493) ServerActiveProperties local1493 = InterfaceList.getServerActiveProperties(local693);
@@ -1192,7 +1192,7 @@ public class MiniMenu {
 			@Pc(33) int local33 = (arg5 - arg3) * (local17 - local19) / arg1 + local19;
 			x = local15 + (local13 - local15) * (arg4 - arg0) / arg2;
 			if (aBoolean302 && (anInt4999 & 0x40) != 0) {
-				@Pc(61) Component local61 = InterfaceList.method1418(anInt2512, anInt506);
+				@Pc(61) Component local61 = InterfaceList.getComponent(anInt2512, anInt506);
 				if (local61 == null) {
 					cancelTargeting();
 				} else {
@@ -1615,7 +1615,7 @@ public class MiniMenu {
 		if (!aBoolean302) {
 			return;
 		}
-		@Pc(19) Component local19 = InterfaceList.method1418(anInt2512, anInt506);
+		@Pc(19) Component local19 = InterfaceList.getComponent(anInt2512, anInt506);
 		if (local19 != null && local19.onUseWith != null) {
 			@Pc(29) HookRequest local29 = new HookRequest();
 			local29.arguments = local19.onUseWith;
@@ -1629,7 +1629,7 @@ public class MiniMenu {
 
 	@OriginalMember(owner = "client!ub", name = "b", descriptor = "(IIIIIII)V")
 	public static void startTargeting(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5) {
-		@Pc(8) Component local8 = InterfaceList.method1418(arg0, arg1);
+		@Pc(8) Component local8 = InterfaceList.getComponent(arg0, arg1);
 		if (local8 != null && local8.onUse != null) {
 			@Pc(19) HookRequest local19 = new HookRequest();
 			local19.source = local8;
@@ -1653,7 +1653,7 @@ public class MiniMenu {
 		}
 		@Pc(24) JagString local24 = getTooltipText();
 		if (arg0 == null) {
-			@Pc(40) int local40 = Fonts.b12Full.method2859(local24, arg2 + 4, arg1 - -15, client.aRandom1, gregorianDateSeed);
+			@Pc(40) int local40 = Fonts.b12Full.renderWavyText(local24, arg2 + 4, arg1 - -15, client.aRandom1, gregorianDateSeed);
 			InterfaceList.redrawScreen(arg2 + 4, Fonts.b12Full.getStringWidth(local24) + local40, arg1, 15);
 			return;
 		}
@@ -1661,7 +1661,7 @@ public class MiniMenu {
 		if (local59 == null) {
 			local59 = Fonts.b12Full;
 		}
-		local59.method2878(local24, arg2, arg1, arg0.width, arg0.height, arg0.color, arg0.shadowColor, arg0.halign, arg0.valign, client.aRandom1, gregorianDateSeed, anIntArray132);
+		local59.renderWavyTextAligned(local24, arg2, arg1, arg0.width, arg0.height, arg0.color, arg0.shadowColor, arg0.halign, arg0.valign, client.aRandom1, gregorianDateSeed, anIntArray132);
 		InterfaceList.redrawScreen(anIntArray132[0], anIntArray132[2], anIntArray132[1], anIntArray132[3]);
 	}
 
@@ -1691,7 +1691,7 @@ public class MiniMenu {
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(IZI)V")
-	public static void method10(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public static void sendComponentClickPacket(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 		Protocol.outboundBuffer.p1isaac(132);
 		Protocol.outboundBuffer.imp4(arg1);
 		Protocol.outboundBuffer.ip2(arg0);

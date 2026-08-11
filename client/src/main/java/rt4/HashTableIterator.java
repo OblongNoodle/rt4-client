@@ -23,7 +23,7 @@ public final class HashTableIterator {
 	}
 
 	@OriginalMember(owner = "client!l", name = "a", descriptor = "(I)Lclient!ab;")
-	public final Node method2700() {
+	public final Node next() {
 		@Pc(30) Node local30;
 		if (this.anInt3447 > 0 && this.aClass133_10.nodes[this.anInt3447 - 1] != this.aClass3_135) {
 			local30 = this.aClass3_135;
@@ -41,8 +41,8 @@ public final class HashTableIterator {
 	}
 
 	@OriginalMember(owner = "client!l", name = "a", descriptor = "(B)Lclient!ab;")
-	public final Node method2701() {
+	public final Node first() {
 		this.anInt3447 = 0;
-		return this.method2700();
+		return this.next();
 	}
 }

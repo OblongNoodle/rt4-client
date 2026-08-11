@@ -286,7 +286,7 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!qf", name = "a", descriptor = "(BII)Lclient!be;")
-	public static Component method1418(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public static Component getComponent(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(7) Component local7 = getComponent(arg0);
 		if (arg1 == -1) {
 			return local7;
@@ -548,7 +548,7 @@ public class InterfaceList {
 		}
 		@Pc(28) int local28 = arg0.id >>> 16;
 		@Pc(33) HashTableIterator local33 = new HashTableIterator(openInterfaces);
-		for (@Pc(38) ComponentPointer local38 = (ComponentPointer) local33.method2701(); local38 != null; local38 = (ComponentPointer) local33.method2700()) {
+		for (@Pc(38) ComponentPointer local38 = (ComponentPointer) local33.first(); local38 != null; local38 = (ComponentPointer) local33.next()) {
 			if (local28 == local38.interfaceId) {
 				return getComponent((int) local38.key);
 			}
@@ -690,7 +690,7 @@ public class InterfaceList {
 									if (component.anIntArray49 == null || client.loop >= component.anIntArray49[i]) {
 										@Pc(279) byte local279 = component.aByteArray7[i];
 										if (local279 == 0 || ((local279 & 0x2) == 0 || Keyboard.pressedKeys[Keyboard.KEY_ALT]) && ((local279 & 0x1) == 0 || Keyboard.pressedKeys[Keyboard.KEY_CTRL]) && ((local279 & 0x4) == 0 || Keyboard.pressedKeys[Keyboard.KEY_SHIFT])) {
-											ClientProt.method4512(JagString.EMPTY, -1, i + 1, component.id);
+											ClientProt.sendButtonClick(JagString.EMPTY, -1, i + 1, component.id);
 											k = component.anIntArray46[i];
 											if (component.anIntArray49 == null) {
 												component.anIntArray49 = new int[component.aByteArray8.length];
@@ -1097,7 +1097,7 @@ public class InterfaceList {
 			reset();
 			topLevelInterface = LoginManager.loginScreenId;
 			layoutTopLevel(false);
-			ScriptRunner.method1807();
+			ScriptRunner.forceRedrawAllRectangles();
 			runOnLoadScripts(topLevelInterface);
 		}
 		MiniMenu.anInt1092 = -1;

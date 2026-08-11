@@ -30,8 +30,8 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!pd", name = "<init>", descriptor = "()V")
 	public WaterMaterialRenderer() {
-		this.method3435();
-		this.method3437();
+		this.createAlphaTexture();
+		this.initDisplayLists();
 	}
 
 	@OriginalMember(owner = "client!jj", name = "a", descriptor = "(B)[F")
@@ -59,7 +59,7 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!pd", name = "d", descriptor = "()V")
-	private void method3435() {
+	private void createAlphaTexture() {
 		@Pc(2) byte[] local2 = new byte[]{0, -1};
 		@Pc(12) GL2 gl = GlRenderer.gl;
 		@Pc(15) int[] local15 = new int[1];
@@ -73,7 +73,7 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!pd", name = "f", descriptor = "()V")
-	private void method3437() {
+	private void initDisplayLists() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		this.anInt4440 = gl.glGenLists(2);
 		gl.glNewList(this.anInt4440, GL2.GL_COMPILE);

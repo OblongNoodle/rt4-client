@@ -163,7 +163,7 @@ public class AudioChannel {
 		if (this.stream != null && this.anInt4638 <= 0) {
 			this.anInt4638 += sampleRate >> 4;
 			setInactive(this.stream);
-			this.method3567(this.stream, this.stream.method4407());
+			this.insertStreamByPriority(this.stream, this.stream.getEffectiveVolume());
 			@Pc(45) int local45 = 0;
 			@Pc(47) int local47 = 255;
 			@Pc(49) int local49 = 7;
@@ -204,7 +204,7 @@ public class AudioChannel {
 									if (local145 != null) {
 										@Pc(150) int local150 = local96.anInt5626;
 										while (local145 != null) {
-											this.method3567(local145, local150 * local145.method4407() >> 8);
+											this.insertStreamByPriority(local145, local150 * local145.getEffectiveVolume() >> 8);
 											local145 = local96.nextSubStream();
 										}
 									}
@@ -333,7 +333,7 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "(Lclient!qb;IB)V")
-	private void method3567(@OriginalArg(0) PcmStream arg0, @OriginalArg(1) int arg1) {
+	private void insertStreamByPriority(@OriginalArg(0) PcmStream arg0, @OriginalArg(1) int arg1) {
 		@Pc(16) int local16 = arg1 >> 5;
 		@Pc(21) PcmStream local21 = this.aClass3_Sub3Array6[local16];
 		if (local21 == null) {

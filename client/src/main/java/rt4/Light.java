@@ -85,7 +85,7 @@ public final class Light {
 		this.y = arg0.g2();
 		this.z = arg0.g2();
 		this.radius = arg0.g1();
-		this.method1763();
+		this.computeAttenuation();
 		this.aShortArray30 = new short[this.radius * 2 + 1];
 		@Pc(87) int local87;
 		for (local87 = 0; local87 < this.aShortArray30.length; local87++) {
@@ -96,7 +96,7 @@ public final class Light {
 		this.anInt2249 = (local87 & 0xE0) << 3;
 		this.anInt2243 = local87 & 0x1F;
 		if (this.anInt2243 != 31) {
-			this.method1766();
+			this.initAnimationPreset();
 		}
 	}
 
@@ -130,7 +130,7 @@ public final class Light {
 	}
 
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "(I)V")
-	private void method1763() {
+	private void computeAttenuation() {
 		@Pc(10) int local10 = (this.radius << 7) + 64;
 		this.aFloat9 = 1.0F / (float) (local10 * local10);
 	}
@@ -164,7 +164,7 @@ public final class Light {
 	}
 
 	@OriginalMember(owner = "client!gi", name = "c", descriptor = "(I)V")
-	private void method1766() {
+	private void initAnimationPreset() {
 		@Pc(4) int local4 = this.anInt2243;
 		if (local4 == 2) {
 			this.alphaMin = 2048;

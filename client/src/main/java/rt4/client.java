@@ -1225,7 +1225,7 @@ public final class client extends GameShell {
 										priorityRequest = (HookRequest) InterfaceList.lowPriorityRequests.removeHead();
 										if (priorityRequest == null) {
 											if (Cs1ScriptRunner.aClass13_14 != null) {
-												Cs1ScriptRunner.method28();
+												Cs1ScriptRunner.updateComponentDrag();
 											}
 											if (Protocol.openUrlRequest != null && Protocol.openUrlRequest.status == 1) {
 												if (Protocol.openUrlRequest.result != null) {

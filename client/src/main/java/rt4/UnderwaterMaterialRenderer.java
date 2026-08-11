@@ -42,19 +42,19 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 			gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
 			this.anInt5805 = local17[0];
 			aBoolean308 = GlRenderer.maxTextureUnits > 2 && GlRenderer.extTexture3dSupported;
-			this.method4606();
+			this.initDisplayLists();
 		}
 	}
 
 	@OriginalMember(owner = "client!wg", name = "e", descriptor = "()I")
-	public static int method4607() {
+	public static int getSecondaryTextureUnit() {
 		return aBoolean308 ? 33986 : 33985;
 	}
 
 	@OriginalMember(owner = "client!wg", name = "f", descriptor = "()V")
 	public static void disableSecondaryTexCoordArray() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		gl.glClientActiveTexture(method4607());
+		gl.glClientActiveTexture(getSecondaryTextureUnit());
 		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		gl.glClientActiveTexture(GL2.GL_TEXTURE0);
 	}
@@ -62,7 +62,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!wg", name = "g", descriptor = "()V")
 	public static void enableSecondaryTexCoordArray() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		gl.glClientActiveTexture(method4607());
+		gl.glClientActiveTexture(getSecondaryTextureUnit());
 		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		gl.glClientActiveTexture(GL2.GL_TEXTURE0);
 	}
@@ -95,7 +95,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!wg", name = "d", descriptor = "()V")
-	private void method4606() {
+	private void initDisplayLists() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		this.anInt5806 = gl.glGenLists(2);
 		gl.glNewList(this.anInt5806, GL2.GL_COMPILE);

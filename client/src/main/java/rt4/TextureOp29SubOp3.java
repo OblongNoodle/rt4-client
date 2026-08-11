@@ -51,18 +51,18 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!oi", name = "a", descriptor = "(IIIIIIIIII)V")
-	public static void method3340(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
+	public static void drawCurve(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
 		if (arg5 >= TextureOp29.anInt4164 && arg5 <= TextureOp29.anInt5063 && arg0 >= TextureOp29.anInt4164 && arg0 <= TextureOp29.anInt5063 && arg6 >= TextureOp29.anInt4164 && TextureOp29.anInt5063 >= arg6 && TextureOp29.anInt4164 <= arg1 && arg1 <= TextureOp29.anInt5063 && TextureOp29.anInt5773 <= arg4 && arg4 <= TextureOp29.anInt2869 && arg7 >= TextureOp29.anInt5773 && TextureOp29.anInt2869 >= arg7 && arg2 >= TextureOp29.anInt5773 && TextureOp29.anInt2869 >= arg2 && arg3 >= TextureOp29.anInt5773 && arg3 <= TextureOp29.anInt2869) {
-			method962(arg2, arg8, arg7, arg6, arg1, arg3, arg4, arg0, arg5);
+			drawCurveFast(arg2, arg8, arg7, arg6, arg1, arg3, arg4, arg0, arg5);
 		} else {
-			method3162(arg5, arg0, arg7, arg8, arg3, arg2, arg1, arg6, arg4);
+			drawCurveClipped(arg5, arg0, arg7, arg8, arg3, arg2, arg1, arg6, arg4);
 		}
 	}
 
 	@OriginalMember(owner = "client!cn", name = "a", descriptor = "(IIIIIIIIII)V")
-	public static void method962(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
+	public static void drawCurveFast(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
 		if (arg8 == arg7 && arg2 == arg6 && arg4 == arg3 && arg0 == arg5) {
-			TextureOp29SubOp4.method4547(arg1, arg5, arg6, arg4, arg8);
+			TextureOp29SubOp4.plotLine(arg1, arg5, arg6, arg4, arg8);
 			return;
 		}
 		@Pc(37) int local37 = arg6;
@@ -90,16 +90,16 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 			@Pc(156) int local156 = local113 * local115;
 			@Pc(167) int local167 = (local152 + local144 + local140 >> 12) + arg8;
 			@Pc(177) int local177 = arg6 + (local156 + local136 + local148 >> 12);
-			TextureOp29SubOp4.method4547(arg1, local177, local37, local167, local39);
+			TextureOp29SubOp4.plotLine(arg1, local177, local37, local167, local39);
 			local39 = local167;
 			local37 = local177;
 		}
 	}
 
 	@OriginalMember(owner = "client!nb", name = "a", descriptor = "(IIIIIIIIII)V")
-	public static void method3162(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
+	public static void drawCurveClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
 		if (arg0 == arg1 && arg8 == arg2 && arg7 == arg6 && arg4 == arg5) {
-			TextureOp29.method3982(arg3, arg4, arg0, arg8, arg6);
+			TextureOp29.drawLine(arg3, arg4, arg0, arg8, arg6);
 			return;
 		}
 		@Pc(32) int local32 = arg0;
@@ -127,7 +127,7 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 			@Pc(156) int local156 = arg0 + (local136 + local140 + local144 >> 12);
 			@Pc(160) int local160 = local107 * local105;
 			@Pc(172) int local172 = arg8 + (local160 + local132 + local128 >> 12);
-			TextureOp29.method3982(arg3, local172, local32, local42, local156);
+			TextureOp29.drawLine(arg3, local172, local32, local42, local156);
 			local32 = local156;
 			local42 = local172;
 		}
@@ -135,7 +135,7 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!re", name = "a", descriptor = "(IZI)V")
 	@Override
-	public final void method4009(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
 		@Pc(6) int local6 = arg1 * this.anInt4846 >> 12;
 		@Pc(17) int local17 = arg1 * this.anInt4854 >> 12;
 		@Pc(24) int local24 = this.anInt4841 * arg0 >> 12;
@@ -144,16 +144,16 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 		@Pc(45) int local45 = arg0 * this.anInt4845 >> 12;
 		@Pc(52) int local52 = this.anInt4853 * arg1 >> 12;
 		@Pc(65) int local65 = arg0 * this.anInt4842 >> 12;
-		method3340(local17, local52, local45, local65, local31, local6, local38, local24, this.anInt5229);
+		drawCurve(local17, local52, local45, local65, local31, local6, local38, local24, this.anInt5229);
 	}
 
 	@OriginalMember(owner = "client!re", name = "c", descriptor = "(III)V")
 	@Override
-	public final void method4013(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
 	}
 
 	@OriginalMember(owner = "client!re", name = "a", descriptor = "(III)V")
 	@Override
-	public final void method4007(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 	}
 }

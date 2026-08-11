@@ -140,7 +140,7 @@ public final class ScriptRunner {
 	public static int anInt3751;
 
 	@OriginalMember(owner = "client!ja", name = "a", descriptor = "(IIIIIZ)V")
-	public static void method2314(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4) {
+	public static void calculateViewportBounds(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4) {
 		if (arg0 < 1) {
 			arg0 = 1;
 		}
@@ -204,21 +204,21 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!ui", name = "a", descriptor = "(IIZIII)V")
-	public static void method4326(@OriginalArg(1) int arg0, @OriginalArg(2) boolean arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public static void renderGameScene(@OriginalArg(1) int arg0, @OriginalArg(2) boolean arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
 		anInt3325++;
-		method3711();
+		clearTileEntityCounts();
 		if (!arg1) {
 			method964(true);
-			method3240(true);
+			addNpcsToScene(true);
 			method964(false);
 		}
-		method3240(false);
+		addNpcsToScene(false);
 		if (!arg1) {
 			updateSceneProjectiles();
 		}
-		method4239();
+		updateSceneSpotAnims();
 		if (GlRenderer.enabled) {
-			method2314(arg3, arg4, arg0, arg2, true);
+			calculateViewportBounds(arg3, arg4, arg0, arg2, true);
 			arg2 = anInt983;
 			arg4 = anInt773;
 			arg3 = anInt4055;
@@ -270,7 +270,7 @@ public final class ScriptRunner {
 				}
 			}
 		}
-		method4302();
+		updateRoofVisibilityGroups();
 		if (GlRenderer.enabled) {
 			GlRaster.setClip(arg2, arg4, arg2 + arg3, arg4 - -arg0);
 			@Pc(248) float local248 = (float) Camera.cameraPitch * 0.17578125F;
@@ -298,7 +298,7 @@ public final class ScriptRunner {
 			RawModel.anInt1053 = (local361 - local344) * (anInt1892 - arg4) / arg0 + local344;
 		}
 		client.audioLoop();
-		@Pc(387) byte local387 = method4047() == 2 ? (byte) anInt3325 : 1;
+		@Pc(387) byte local387 = getRoofRemovalMode() == 2 ? (byte) anInt3325 : 1;
 		if (GlRenderer.enabled) {
 			GlRenderer.restoreLighting();
 			GlRenderer.setDepthTestEnabled(true);
@@ -310,21 +310,21 @@ public final class ScriptRunner {
 			}
 			LightingManager.updateAllLightAnimations(client.loop, !Preferences.flickeringEffectsOn);
 			GlRenderer.clearColorAndDepthBuffers(local171);
-			MaterialManager.method2731(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
+			MaterialManager.setCameraTransform(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
 			GlRenderer.anInt5323 = client.loop;
 			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			aBoolean299 = true;
 			LightingManager.resetActiveLights();
-			MaterialManager.method2731(0, 0, 0, 0, 0);
+			MaterialManager.setCameraTransform(0, 0, 0, 0, 0);
 			client.audioLoop();
-			method3858();
+			clearSceneScenery();
 			drawOverheads(arg4, arg3, arg2, anInt5029, arg0, anInt5029);
 			MiniMap.renderHeadHints(arg3, arg2, arg0, anInt5029, anInt5029, arg4);
 		} else {
 			SoftwareRaster.fillRect(arg2, arg4, arg3, arg0, 0);
 			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			client.audioLoop();
-			method3858();
+			clearSceneScenery();
 			drawOverheads(arg4, arg3, arg2, 256, arg0, 256);
 			MiniMap.renderHeadHints(arg3, arg2, arg0, 256, 256, arg4);
 		}
@@ -656,7 +656,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!rb", name = "a", descriptor = "(I)V")
-	public static void method3711() {
+	public static void clearTileEntityCounts() {
 		for (@Pc(7) int local7 = 0; local7 < 104; local7++) {
 			for (@Pc(14) int local14 = 0; local14 < 104; local14++) {
 				anIntArrayArray6[local7][local14] = 0;
@@ -795,14 +795,14 @@ public final class ScriptRunner {
 				} else {
 					local39.lowDetail = false;
 					local39.tileHeight = SceneGraph.getTileHeight(Player.plane, local39.xFine, local39.yFine);
-					method3387(Player.plane, local39.xFine, local39.yFine, local39.tileHeight, local39, local39.currentAngle, local272, local39.atachmentX0, local39.attachmentY0, local39.attachmentX1, local39.attachmentY1);
+					addAttachedEntityToScene(Player.plane, local39.xFine, local39.yFine, local39.tileHeight, local39, local39.currentAngle, local272, local39.atachmentX0, local39.attachmentY0, local39.attachmentX1, local39.attachmentY1);
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!nk", name = "c", descriptor = "(IZ)V")
-	public static void method3240(@OriginalArg(1) boolean arg0) {
+	public static void addNpcsToScene(@OriginalArg(1) boolean arg0) {
 		@Pc(7) int local7;
 		@Pc(16) Npc local16;
 		@Pc(107) int local107;
@@ -949,7 +949,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!u", name = "a", descriptor = "(Z)V")
-	public static void method4239() {
+	public static void updateSceneSpotAnims() {
 		for (@Pc(9) SpotAnimNode local9 = (SpotAnimNode) SceneGraph.spotanims.head(); local9 != null; local9 = (SpotAnimNode) SceneGraph.spotanims.next()) {
 			@Pc(15) SpotAnim local15 = local9.aClass8_Sub2_1;
 			if (local15.plane != Player.plane || local15.finished) {
@@ -967,22 +967,22 @@ public final class ScriptRunner {
 
 	@OriginalMember(owner = "client!wa", name = "o", descriptor = "(I)V")
 	public static void updateRoofRemovalMode() {
-		@Pc(8) int local8 = method4047();
+		@Pc(8) int local8 = getRoofRemovalMode();
 		if (local8 == 0) {
 			aByteArrayArrayArray15 = null;
-			method3993(0);
+			allocateRoofVisibilityGroupArrays(0);
 		} else if (local8 == 1) {
 			method960((byte) 0);
-			method3993(512);
-			method2608();
+			allocateRoofVisibilityGroupArrays(512);
+			buildAllRoofVisibilityGroups();
 		} else {
 			method960((byte) (anInt3325 - 4 & 0xFF));
-			method3993(API.GetRoofVisibilityGroupLimit());
+			allocateRoofVisibilityGroupArrays(API.GetRoofVisibilityGroupLimit());
 		}
 	}
 
 	@OriginalMember(owner = "client!tc", name = "a", descriptor = "(B)I")
-	public static int method4047() {
+	public static int getRoofRemovalMode() {
 		return getBaseRoofMode();
 	}
 
@@ -1002,7 +1002,7 @@ public final class ScriptRunner {
 
 
 	@OriginalMember(owner = "client!ok", name = "a", descriptor = "(IIB)Lclient!ce;")
-	public static SecondaryLinkedList method3333(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static SecondaryLinkedList findMapsAtCoordinate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(9) SecondaryLinkedList local9 = new SecondaryLinkedList();
 		for (@Pc(14) Map local14 = (Map) MapList.aClass69_120.head(); local14 != null; local14 = (Map) MapList.aClass69_120.next()) {
 			if (local14.valid && local14.method664(arg1, arg0)) {
@@ -1027,7 +1027,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!sm", name = "a", descriptor = "(II)V")
-	public static void method3993(@OriginalArg(0) int arg0) {
+	public static void allocateRoofVisibilityGroupArrays(@OriginalArg(0) int arg0) {
 		anIntArray338 = new int[arg0];
 		anIntArray518 = new int[arg0];
 		anIntArray476 = new int[arg0];
@@ -1036,11 +1036,11 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!ke", name = "f", descriptor = "(B)V")
-	public static void method2608() {
+	public static void buildAllRoofVisibilityGroups() {
 		@Pc(7) int local7 = 0;
 		for (@Pc(23) int local23 = 0; local23 < 104; local23++) {
 			for (@Pc(30) int local30 = 0; local30 < 104; local30++) {
-				if (method4348(true, local23, local30, SceneGraph.tiles, local7)) {
+				if (floodFillRoofVisibilityGroup(true, local23, local30, SceneGraph.tiles, local7)) {
 					local7++;
 				}
 				if (local7 >= 512) {
@@ -1051,16 +1051,16 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!uj", name = "a", descriptor = "(BZII[[[Lclient!bj;I)Z")
-	public static boolean method4348(@OriginalArg(1) boolean arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) Tile[][][] arg3, @OriginalArg(5) int arg4) {
-		return method4348(arg0, arg1, arg2, arg3, arg4, Player.plane);
+	public static boolean floodFillRoofVisibilityGroup(@OriginalArg(1) boolean arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) Tile[][][] arg3, @OriginalArg(5) int arg4) {
+		return floodFillRoofVisibilityGroup(arg0, arg1, arg2, arg3, arg4, Player.plane);
 	}
 
 
 	public static boolean hideRoofAt(int sceneX, int sceneY, int group, int plane) {
-		return method4348(false, sceneX, sceneY, SceneGraph.tiles, group, plane);
+		return floodFillRoofVisibilityGroup(false, sceneX, sceneY, SceneGraph.tiles, group, plane);
 	}
 
-	private static boolean method4348(boolean arg0, int arg1, int arg2, Tile[][][] arg3, int arg4, int plane) {
+	private static boolean floodFillRoofVisibilityGroup(boolean arg0, int arg1, int arg2, Tile[][][] arg3, int arg4, int plane) {
 		if (plane < 0 || plane >= 3) {
 			return false;
 		}
@@ -1300,7 +1300,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!sc", name = "a", descriptor = "()V")
-	public static void method3858() {
+	public static void clearSceneScenery() {
 		for (@Pc(1) int local1 = 0; local1 < SceneGraph.sceneryLen; local1++) {
 			@Pc(8) Scenery local8 = SceneGraph.scenery[local1];
 			SceneGraph.removeScenery(local8);
@@ -1323,7 +1323,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!ol", name = "a", descriptor = "(IIIILclient!th;IJIIII)Z")
-	public static boolean method3387(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) Entity arg4, @OriginalArg(5) int arg5, @OriginalArg(6) long arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10) {
+	public static boolean addAttachedEntityToScene(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) Entity arg4, @OriginalArg(5) int arg5, @OriginalArg(6) long arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10) {
 		return arg4 == null || SceneGraph.addSceneryEntity(arg0, arg7, arg8, arg9 + 1 - arg7, arg10 - arg8 + 1, arg1, arg2, arg3, arg4, arg5, true, arg6);
 	}
 
@@ -1339,9 +1339,9 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!uh", name = "f", descriptor = "(I)V")
-	public static void method4302() {
+	public static void updateRoofVisibilityGroups() {
 		API.DisableRoofVisibilityIfExpired();
-		if (method4047() != 2) {
+		if (getRoofRemovalMode() != 2) {
 			return;
 		}
 		API.EnsureRoofVisibilityBuffers();
@@ -1368,12 +1368,12 @@ public final class ScriptRunner {
 		if (Camera.cameraType != 1) {
 			local33 = SceneGraph.getTileHeight(Player.plane, Camera.renderX, Camera.renderY);
 			if (local33 - Camera.renderZ < 800 && (SceneGraph.renderFlags[Player.plane][Camera.renderX >> 7][Camera.renderY >> 7] & API.TILE_FLAG_UNDER_ROOF) != 0) {
-				method4348(false, Camera.renderX >> 7, Camera.renderY >> 7, SceneGraph.tiles, 1);
+				floodFillRoofVisibilityGroup(false, Camera.renderX >> 7, Camera.renderY >> 7, SceneGraph.tiles, 1);
 			}
 			return;
 		}
 		if ((SceneGraph.renderFlags[Player.plane][PlayerList.self.xFine >> 7][PlayerList.self.yFine >> 7] & API.TILE_FLAG_UNDER_ROOF) != 0) {
-			method4348(false, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7, SceneGraph.tiles, 0);
+			floodFillRoofVisibilityGroup(false, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7, SceneGraph.tiles, 0);
 		}
 		if (roofVisibilityActive) {
 			API.ApplyRoofVisibilityRequests();
@@ -1409,7 +1409,7 @@ public final class ScriptRunner {
 					local40--;
 				}
 				if ((SceneGraph.renderFlags[Player.plane][local33][local40] & API.TILE_FLAG_UNDER_ROOF) != 0) {
-					method4348(false, local33, local40, SceneGraph.tiles, 1);
+					floodFillRoofVisibilityGroup(false, local33, local40, SceneGraph.tiles, 1);
 					break;
 				}
 				local186 += local192;
@@ -1421,7 +1421,7 @@ public final class ScriptRunner {
 					}
 					local186 -= 65536;
 					if ((SceneGraph.renderFlags[Player.plane][local33][local40] & API.TILE_FLAG_UNDER_ROOF) != 0) {
-						method4348(false, local33, local40, SceneGraph.tiles, 1);
+						floodFillRoofVisibilityGroup(false, local33, local40, SceneGraph.tiles, 1);
 						break;
 					}
 				}
@@ -1437,7 +1437,7 @@ public final class ScriptRunner {
 				local33--;
 			}
 			if ((SceneGraph.renderFlags[Player.plane][local33][local40] & API.TILE_FLAG_UNDER_ROOF) != 0) {
-				method4348(false, local33, local40, SceneGraph.tiles, 1);
+				floodFillRoofVisibilityGroup(false, local33, local40, SceneGraph.tiles, 1);
 				break;
 			}
 			local186 += local192;
@@ -1449,7 +1449,7 @@ public final class ScriptRunner {
 				}
 				local186 -= 65536;
 				if ((SceneGraph.renderFlags[Player.plane][local33][local40] & API.TILE_FLAG_UNDER_ROOF) != 0) {
-					method4348(false, local33, local40, SceneGraph.tiles, 1);
+					floodFillRoofVisibilityGroup(false, local33, local40, SceneGraph.tiles, 1);
 					break;
 				}
 			}
@@ -1457,7 +1457,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!lf", name = "a", descriptor = "(I)V")
-	public static void method2742() {
+	public static void refreshGameStateAfterSettingsChange() {
 		if (client.gameState == 10 && GlRenderer.enabled) {
 			client.setGameState(28);
 		}
@@ -1517,7 +1517,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!gn", name = "b", descriptor = "(Z)V")
-	public static void method1807() {
+	public static void forceRedrawAllRectangles() {
 		for (@Pc(11) int local11 = 0; local11 < 100; local11++) {
 			InterfaceList.aBooleanArray100[local11] = true;
 		}
@@ -1937,7 +1937,7 @@ public final class ScriptRunner {
 					if (opcode == 2) {
 						id = intOperands[pc];
 						isp--;
-						VarpDomain.method2766(id, intStack[isp]);
+						VarpDomain.setVarp(id, intStack[isp]);
 						continue;
 					}
 					if (opcode == 3) {
@@ -2227,7 +2227,7 @@ public final class ScriptRunner {
 						isp -= 2;
 						int1 = intStack[isp];
 						int3 = intStack[isp + 1];
-						local1256 = InterfaceList.method1418(int1, int3);
+						local1256 = InterfaceList.getComponent(int1, int3);
 						if (local1256 != null && int3 != -1) {
 							intStack[isp++] = 1;
 							if (local1020) {
@@ -2606,7 +2606,7 @@ public final class ScriptRunner {
 									isp -= 2;
 									int2 = intStack[isp + 1];
 									int3 = intStack[isp];
-									component.aClass13_5 = InterfaceList.method1418(int3, int2);
+									component.aClass13_5 = InterfaceList.getComponent(int3, int2);
 									continue;
 								}
 								if (opcode == Cs2Opcodes.setDragRenderBehaviour) {
@@ -4597,7 +4597,7 @@ public final class ScriptRunner {
 														ssp--;
 														str1 = stringStack[ssp];
 														local7566 = false;
-														@Pc(7577) SecondaryLinkedList local7577 = method3333(int1 >> 14 & 0x3FFF, int1 & 0x3FFF);
+														@Pc(7577) SecondaryLinkedList local7577 = findMapsAtCoordinate(int1 >> 14 & 0x3FFF, int1 & 0x3FFF);
 														for (@Pc(7582) Map local7582 = (Map) local7577.head(); local7582 != null; local7582 = (Map) local7577.next()) {
 															if (local7582.group.equalsIgnoreCase(str1)) {
 																local7566 = true;
@@ -4614,13 +4614,13 @@ public final class ScriptRunner {
 													if (opcode == 5216) {
 														isp--;
 														int1 = intStack[isp];
-														MapList.method4332(int1);
+														MapList.toggleMapVisibility(int1);
 														continue;
 													}
 													if (opcode == 5217) {
 														isp--;
 														int1 = intStack[isp];
-														if (MapList.method1855(int1)) {
+														if (MapList.isMapVisible(int1)) {
 															intStack[isp++] = 1;
 														} else {
 															intStack[isp++] = 0;
@@ -4737,7 +4737,7 @@ public final class ScriptRunner {
 														ObjTypeList.clearSprites();
 														NpcTypeList.clearModels();
 														NpcTypeList.clearHeadModels();
-														method1807();
+														forceRedrawAllRectangles();
 														continue;
 													}
 													if (opcode == 5405) {
@@ -5048,7 +5048,7 @@ public final class ScriptRunner {
 														if (GlRenderer.enabled) {
 															FogManager.setInstantFade();
 															if (!Preferences.highDetailLighting) {
-																method2742();
+																refreshGameStateAfterSettingsChange();
 															}
 														}
 														ObjTypeList.clearSprites();
@@ -5060,7 +5060,7 @@ public final class ScriptRunner {
 														isp--;
 														Preferences.setAllVisibleLevels(intStack[isp] == 1);
 														LocTypeList.clear();
-														method2742();
+														refreshGameStateAfterSettingsChange();
 														updateRoofRemovalMode();
 														Preferences.write(GameShell.signLink);
 														Preferences.sentToServer = false;
@@ -5077,7 +5077,7 @@ public final class ScriptRunner {
 													if (opcode == 6005) {
 														isp--;
 														Preferences.showGroundDecorations = intStack[isp] == 1;
-														method2742();
+														refreshGameStateAfterSettingsChange();
 														Preferences.write(GameShell.signLink);
 														Preferences.sentToServer = false;
 														continue;
@@ -5151,7 +5151,7 @@ public final class ScriptRunner {
 																Rasteriser.setBrightness(0.6F);
 															}
 														}
-														method2742();
+														refreshGameStateAfterSettingsChange();
 														Preferences.write(GameShell.signLink);
 														Preferences.sentToServer = false;
 														continue;
@@ -5160,7 +5160,7 @@ public final class ScriptRunner {
 														isp--;
 														Preferences.highWaterDetail = intStack[isp] == 1;
 														if (GlRenderer.enabled) {
-															method2742();
+															refreshGameStateAfterSettingsChange();
 														}
 														Preferences.write(GameShell.signLink);
 														Preferences.sentToServer = false;
@@ -5434,7 +5434,7 @@ public final class ScriptRunner {
 														continue;
 													}
 													if (opcode == 6203) {
-														method2314(InterfaceList.aClass13_26.width, 0, InterfaceList.aClass13_26.height, 0, false);
+														calculateViewportBounds(InterfaceList.aClass13_26.width, 0, InterfaceList.aClass13_26.height, 0, false);
 														intStack[isp++] = anInt4055;
 														intStack[isp++] = anInt5377;
 														continue;

@@ -83,12 +83,12 @@ public final class SynthFilter {
 			return 0;
 		}
 		local20 = this.getAmplitude(arg0, 0, arg1);
-		floatingCoefficients[arg0][0] = -2.0F * local20 * (float) Math.cos(this.method3254(arg0, 0, arg1));
+		floatingCoefficients[arg0][0] = -2.0F * local20 * (float) Math.cos(this.getInterpolatedPhase(arg0, 0, arg1));
 		floatingCoefficients[arg0][1] = local20 * local20;
 		@Pc(77) int local77;
 		for (local77 = 1; local77 < this.pairs[arg0]; local77++) {
 			local20 = this.getAmplitude(arg0, local77, arg1);
-			@Pc(102) float local102 = -2.0F * local20 * (float) Math.cos(this.method3254(arg0, local77, arg1));
+			@Pc(102) float local102 = -2.0F * local20 * (float) Math.cos(this.getInterpolatedPhase(arg0, local77, arg1));
 			@Pc(106) float local106 = local20 * local20;
 			floatingCoefficients[arg0][local77 * 2 + 1] = floatingCoefficients[arg0][local77 * 2 - 1] * local106;
 			floatingCoefficients[arg0][local77 * 2] = floatingCoefficients[arg0][local77 * 2 - 1] * local102 + floatingCoefficients[arg0][local77 * 2 - 2] * local106;
@@ -117,7 +117,7 @@ public final class SynthFilter {
 	}
 
 	@OriginalMember(owner = "client!nl", name = "b", descriptor = "(IIF)F")
-	private float method3254(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) float arg2) {
+	private float getInterpolatedPhase(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) float arg2) {
 		@Pc(30) float local30 = (float) this.octaves[arg0][0][arg1] + arg2 * (float) (this.octaves[arg0][1][arg1] - this.octaves[arg0][0][arg1]);
 		@Pc(34) float local34 = local30 * 1.2207031E-4F;
 		return getOctavePhase(local34);

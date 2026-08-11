@@ -92,7 +92,7 @@ public final class SynthInstrument {
 	}
 
 	@OriginalMember(owner = "client!pj", name = "a", descriptor = "(III)I")
-	private int method3504(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	private int evaluateWaveform(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		if (arg2 == 1) {
 			return (arg0 & 0x7FFF) < 16384 ? arg1 : -arg1;
 		} else if (arg2 == 2) {
@@ -153,20 +153,20 @@ public final class SynthInstrument {
 			if (this.phaseModulationEnvelope != null) {
 				local198 = this.phaseModulationEnvelope.nextLevel(arg0);
 				local203 = this.phaseModulationAmplitudeEnvelope.nextLevel(arg0);
-				local185 += this.method3504(local28, local203, this.phaseModulationEnvelope.wavetable) >> 1;
+				local185 += this.evaluateWaveform(local28, local203, this.phaseModulationEnvelope.wavetable) >> 1;
 				local28 += (local198 * local24 >> 16) + local26;
 			}
 			if (this.amplitudeModulationEnvelope != null) {
 				local198 = this.amplitudeModulationEnvelope.nextLevel(arg0);
 				local203 = this.amplitudeModulationAmplitudeEnvelope.nextLevel(arg0);
-				local190 = local190 * ((this.method3504(local67, local203, this.amplitudeModulationEnvelope.wavetable) >> 1) + 32768) >> 15;
+				local190 = local190 * ((this.evaluateWaveform(local67, local203, this.amplitudeModulationEnvelope.wavetable) >> 1) + 32768) >> 15;
 				local67 += (local198 * local63 >> 16) + local65;
 			}
 			for (local198 = 0; local198 < 5; local198++) {
 				if (this.harmonicVolume[local198] != 0) {
 					local203 = local102 + oscillatorStartSamples[local198];
 					if (local203 < arg0) {
-						samples[local203] += this.method3504(oscillatorTimes[local198], local190 * scaledOscillatorAmplitudes[local198] >> 15, this.phaseEnvelope.wavetable);
+						samples[local203] += this.evaluateWaveform(oscillatorTimes[local198], local190 * scaledOscillatorAmplitudes[local198] >> 15, this.phaseEnvelope.wavetable);
 						oscillatorTimes[local198] += (local185 * oscillatorIntervalRanges[local198] >> 16) + oscillatorMinIntervals[local198];
 					}
 				}
@@ -276,7 +276,7 @@ public final class SynthInstrument {
 	}
 
 	@OriginalMember(owner = "client!pj", name = "a", descriptor = "(Lclient!wa;)V")
-	public final void method3506(@OriginalArg(0) Buffer arg0) {
+	public final void decode(@OriginalArg(0) Buffer arg0) {
 		this.phaseEnvelope = new SynthEnvelope();
 		this.phaseEnvelope.decode(arg0);
 		this.amplitudeEnvelope = new SynthEnvelope();

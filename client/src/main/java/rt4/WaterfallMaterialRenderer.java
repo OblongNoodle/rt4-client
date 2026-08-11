@@ -17,7 +17,7 @@ public final class WaterfallMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!ob", name = "<init>", descriptor = "()V")
 	public WaterfallMaterialRenderer() {
-		this.method3307();
+		this.initDisplayLists();
 	}
 
 	@OriginalMember(owner = "client!ob", name = "c", descriptor = "()I")
@@ -88,7 +88,7 @@ public final class WaterfallMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "b", descriptor = "(I)V")
-	private void method3307() {
+	private void initDisplayLists() {
 		@Pc(3) GL2 gl = GlRenderer.gl;
 		this.anInt4236 = gl.glGenLists(2);
 		gl.glNewList(this.anInt4236, GL2.GL_COMPILE);

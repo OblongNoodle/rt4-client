@@ -421,25 +421,25 @@ public final class SoftwareModel extends Model {
 					local435 = model.aClass57Array2[this.triangleVertexA[i]];
 				}
 				local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude);
-				this.anIntArray533[i] = ColorUtils.method4582(local468);
+				this.anIntArray533[i] = ColorUtils.clampLightness(local468);
 				if (model.aClass57Array2 == null || model.aClass57Array2[this.triangleVertexB[i]] == null) {
 					local435 = model.vertexNormals[this.triangleVertexB[i]];
 				} else {
 					local435 = model.aClass57Array2[this.triangleVertexB[i]];
 				}
 				local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude);
-				this.anIntArray523[i] = ColorUtils.method4582(local468);
+				this.anIntArray523[i] = ColorUtils.clampLightness(local468);
 				if (model.aClass57Array2 == null || model.aClass57Array2[this.triangleVertexC[i]] == null) {
 					local435 = model.vertexNormals[this.triangleVertexC[i]];
 				} else {
 					local435 = model.aClass57Array2[this.triangleVertexC[i]];
 				}
 				local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude);
-				this.triangleInfo[i] = ColorUtils.method4582(local468);
+				this.triangleInfo[i] = ColorUtils.clampLightness(local468);
 			} else if (local366 == 1) {
 				local614 = model.triangleNormals[i];
 				local468 = arg1 + (arg3 * local614.anInt4769 + arg4 * local614.anInt4770 + arg5 * local614.anInt4767) / (local108 + local108 / 2);
-				this.anIntArray533[i] = ColorUtils.method4582(local468);
+				this.anIntArray533[i] = ColorUtils.clampLightness(local468);
 				this.triangleInfo[i] = -1;
 			} else {
 				this.triangleInfo[i] = -2;

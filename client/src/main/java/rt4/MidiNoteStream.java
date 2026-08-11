@@ -59,7 +59,7 @@ public final class MidiNoteStream extends PcmStream {
 					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.method405(), instrument.stream.getVolume(), instrument.stream.getPan());
 				} else {
 					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.method405(), 0, instrument.stream.getPan());
-					this.parent.method4442(instrument, instrument.instrument.aShortArray36[instrument.anInt3779] < 0);
+					this.parent.applyLoopStartOffset(instrument, instrument.instrument.aShortArray36[instrument.anInt3779] < 0);
 				}
 				if (instrument.instrument.aShortArray36[instrument.anInt3779] < 0) {
 					instrument.stream.setLoops(-1);
@@ -81,7 +81,7 @@ public final class MidiNoteStream extends PcmStream {
 	public final void skip(@OriginalArg(0) int len) {
 		this.mixer.skip(len);
 		for (@Pc(15) MidiNote note = (MidiNote) this.notes.head(); note != null; note = (MidiNote) this.notes.next()) {
-			if (!this.parent.method4445(note)) {
+			if (!this.parent.isNoteFinished(note)) {
 				@Pc(27) int len2 = len;
 				do {
 					if (len2 <= note.anInt3771) {
@@ -91,7 +91,7 @@ public final class MidiNoteStream extends PcmStream {
 					}
 					this.skip(note, note.anInt3771);
 					len2 -= note.anInt3771;
-				} while (!this.parent.method4433(len2, 0, note, null));
+				} while (!this.parent.advanceNoteEnvelope(len2, 0, note, null));
 			}
 		}
 	}
@@ -101,25 +101,25 @@ public final class MidiNoteStream extends PcmStream {
 	public final void read(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		this.mixer.read(arg0, arg1, arg2);
 		for (@Pc(17) MidiNote local17 = (MidiNote) this.notes.head(); local17 != null; local17 = (MidiNote) this.notes.next()) {
-			if (!this.parent.method4445(local17)) {
+			if (!this.parent.isNoteFinished(local17)) {
 				@Pc(29) int local29 = arg2;
 				@Pc(31) int local31 = arg1;
 				do {
 					if (local29 <= local17.anInt3771) {
-						this.method4146(arg0, local17, local31, local29, local31 + local29);
+						this.readNoteWithRetrigger(arg0, local17, local31, local29, local31 + local29);
 						local17.anInt3771 -= local29;
 						break;
 					}
-					this.method4146(arg0, local17, local31, local17.anInt3771, local29 + local31);
+					this.readNoteWithRetrigger(arg0, local17, local31, local17.anInt3771, local29 + local31);
 					local29 -= local17.anInt3771;
 					local31 += local17.anInt3771;
-				} while (!this.parent.method4433(local29, local31, local17, arg0));
+				} while (!this.parent.advanceNoteEnvelope(local29, local31, local17, arg0));
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!te", name = "a", descriptor = "([ILclient!mf;IIIB)V")
-	private void method4146(@OriginalArg(0) int[] arg0, @OriginalArg(1) MidiNote arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private void readNoteWithRetrigger(@OriginalArg(0) int[] arg0, @OriginalArg(1) MidiNote arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if ((this.parent.channelFlags[arg1.channel] & 0x4) != 0 && arg1.anInt3767 < 0) {
 			@Pc(26) int local26 = this.parent.anIntArray503[arg1.channel] / AudioChannel.sampleRate;
 			while (true) {
@@ -141,7 +141,7 @@ public final class MidiNoteStream extends PcmStream {
 					arg1.stream = SoundPcmStream.create(arg1.sound, local58.method405(), local58.getVolume(), local58.getPan());
 				} else {
 					arg1.stream = SoundPcmStream.create(arg1.sound, local58.method405(), 0, local58.getPan());
-					this.parent.method4442(arg1, arg1.instrument.aShortArray36[arg1.anInt3779] < 0);
+					this.parent.applyLoopStartOffset(arg1, arg1.instrument.aShortArray36[arg1.anInt3779] < 0);
 					arg1.stream.method398(local55, local58.getVolume());
 				}
 				if (arg1.instrument.aShortArray36[arg1.anInt3779] < 0) {

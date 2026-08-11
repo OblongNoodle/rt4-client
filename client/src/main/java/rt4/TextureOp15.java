@@ -50,7 +50,7 @@ public final class TextureOp15 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(II)[B")
-	public static byte[] method1837(@OriginalArg(1) int arg0) {
+	public static byte[] getPermutationTable(@OriginalArg(1) int arg0) {
 		@Pc(10) ByteArrayNodeSecondary local10 = (ByteArrayNodeSecondary) aClass54_5.get(arg0);
 		if (local10 == null) {
 			@Pc(24) Random local24 = new Random(arg0);
@@ -73,7 +73,7 @@ public final class TextureOp15 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!hm", name = "f", descriptor = "(B)V")
-	private void method2052() {
+	private void initRandomOffsets() {
 		@Pc(12) Random local12 = new Random(this.anInt2639);
 		this.aShortArray35 = new short[512];
 		if (this.anInt2636 > 0) {
@@ -86,8 +86,8 @@ public final class TextureOp15 extends TextureOp {
 	@OriginalMember(owner = "client!hm", name = "e", descriptor = "(I)V")
 	@Override
 	public final void postDecode() {
-		this.aByteArray38 = method1837(this.anInt2639);
-		this.method2052();
+		this.aByteArray38 = getPermutationTable(this.anInt2639);
+		this.initRandomOffsets();
 	}
 
 	@OriginalMember(owner = "client!hm", name = "a", descriptor = "(IB)[I")
