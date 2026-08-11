@@ -9,29 +9,29 @@ import java.net.Socket;
 
 public class WorldList {
 	@OriginalMember(owner = "client!nd", name = "x", descriptor = "Lclient!na;")
-	public static final JagString aClass100_783 = JagString.parse(")4p=");
+	public static final JagString URL_PARAM_SETTINGS = JagString.parse(")4p=");
 	@OriginalMember(owner = "client!ja", name = "s", descriptor = "Lclient!na;")
 	public static final JagString HTTP_PROTOCOL = JagString.parse("http:)4)4");
 	@OriginalMember(owner = "client!wk", name = "x", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1107 = JagString.parse(")4l=");
+	public static final JagString URL_PARAM_LANGUAGE = JagString.parse(")4l=");
 	@OriginalMember(owner = "client!rc", name = "G", descriptor = "Lclient!na;")
-	public static final JagString aClass100_230 = JagString.parse("");
+	public static final JagString EMPTY_STRING = JagString.parse("");
 	@OriginalMember(owner = "client!ob", name = "o", descriptor = "Lclient!na;")
-	public static final JagString aClass100_801 = JagString.parse(")4a=");
+	public static final JagString URL_PARAM_AFFILIATE = JagString.parse(")4a=");
 	@OriginalMember(owner = "client!l", name = "d", descriptor = "Lclient!na;")
-	public static final JagString aClass100_659 = JagString.parse(")4j");
+	public static final JagString URL_PARAM_JAVA_FLAG = JagString.parse(")4j");
 	@OriginalMember(owner = "client!cg", name = "e", descriptor = "Lclient!na;")
-	public static final JagString aClass100_184 = JagString.parse("1");
+	public static final JagString TRUE_STRING = JagString.parse("1");
 	@OriginalMember(owner = "client!vd", name = "F", descriptor = "Lclient!na;")
-	public static final JagString aClass100_945 = JagString.parse("0");
+	public static final JagString FALSE_STRING = JagString.parse("0");
 	@OriginalMember(owner = "client!em", name = "u", descriptor = "Lclient!na;")
-	public static final JagString aClass100_420 = JagString.parse(")1o");
+	public static final JagString URL_PARAM_JAVASCRIPT = JagString.parse(")1o");
 	@OriginalMember(owner = "client!q", name = "a", descriptor = "Lclient!na;")
-	public static final JagString aClass100_260 = JagString.parse(")1a2)1m");
+	public static final JagString URL_PARAM_ADVERT = JagString.parse(")1a2)1m");
 	@OriginalMember(owner = "client!ch", name = "x", descriptor = "Lclient!na;")
-	public static final JagString aClass100_193 = JagString.parse(":");
+	public static final JagString PORT_SEPARATOR = JagString.parse(":");
 	@OriginalMember(owner = "client!ii", name = "e", descriptor = "Lclient!na;")
-	public static final JagString aClass100_570 = JagString.parse(")2");
+	public static final JagString NO_ACTIVITY = JagString.parse(")2");
 	@OriginalMember(owner = "client!gi", name = "c", descriptor = "I")
 	public static int step = 0;
 	@OriginalMember(owner = "client!be", name = "kc", descriptor = "J")
@@ -301,15 +301,15 @@ public class WorldList {
 			}
 			return true;
 		} else {
-			@Pc(62) JagString local62 = aClass100_230;
+			@Pc(62) JagString local62 = EMPTY_STRING;
 			if (client.modeWhere != 0) {
-				local62 = JagString.concatenate(new JagString[]{aClass100_193, JagString.parseInt(local3.id + 7000)});
+				local62 = JagString.concatenate(new JagString[]{PORT_SEPARATOR, JagString.parseInt(local3.id + 7000)});
 			}
-			@Pc(89) JagString local89 = aClass100_230;
+			@Pc(89) JagString local89 = EMPTY_STRING;
 			if (client.settings != null) {
-				local89 = JagString.concatenate(new JagString[]{aClass100_783, client.settings});
+				local89 = JagString.concatenate(new JagString[]{URL_PARAM_SETTINGS, client.settings});
 			}
-			@Pc(182) JagString local182 = JagString.concatenate(new JagString[]{HTTP_PROTOCOL, local3.hostname, local62, aClass100_1107, JagString.parseInt(client.language), aClass100_801, JagString.parseInt(client.affiliate), local89, aClass100_659, client.objectTag ? aClass100_184 : aClass100_945, aClass100_420, client.javaScript ? aClass100_184 : aClass100_945, aClass100_260, client.advertSuppressed ? aClass100_184 : aClass100_945});
+			@Pc(182) JagString local182 = JagString.concatenate(new JagString[]{HTTP_PROTOCOL, local3.hostname, local62, URL_PARAM_LANGUAGE, JagString.parseInt(client.language), URL_PARAM_AFFILIATE, JagString.parseInt(client.affiliate), local89, URL_PARAM_JAVA_FLAG, client.objectTag ? TRUE_STRING : FALSE_STRING, URL_PARAM_JAVASCRIPT, client.javaScript ? TRUE_STRING : FALSE_STRING, URL_PARAM_ADVERT, client.advertSuppressed ? TRUE_STRING : FALSE_STRING});
 			try {
 				client.instance.getAppletContext().showDocument(local182.toUrl(), "_self");
 				return true;
@@ -349,15 +349,15 @@ public class WorldList {
 		} else if (arg1 == 2) {
 			return arg0.getWorldInfo().name.compare(arg2.getWorldInfo().name);
 		} else if (arg1 == 3) {
-			if (arg0.activity.strEquals(aClass100_570)) {
-				if (arg2.activity.strEquals(aClass100_570)) {
+			if (arg0.activity.strEquals(NO_ACTIVITY)) {
+				if (arg2.activity.strEquals(NO_ACTIVITY)) {
 					return 0;
 				} else if (arg3) {
 					return -1;
 				} else {
 					return 1;
 				}
-			} else if (arg2.activity.strEquals(aClass100_570)) {
+			} else if (arg2.activity.strEquals(NO_ACTIVITY)) {
 				return arg3 ? 1 : -1;
 			} else {
 				return arg0.activity.compare(arg2.activity);
