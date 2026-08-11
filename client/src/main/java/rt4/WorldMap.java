@@ -836,7 +836,7 @@ public class WorldMap {
 										if (sprite != null) {
 											local276 = local162 * sprite.height / 4;
 											local270 = local62 * sprite.width / 4;
-											if (type.aBoolean2) {
+											if (type.stretchToTile) {
 												local312 = mapScene >> 16 & 0xF;
 												local372 = mapScene >> 20 & 0xF;
 												if ((angle & 0x1) == 1) {
@@ -848,10 +848,10 @@ public class WorldMap {
 												local276 = local162 * local372;
 											}
 											if (local270 != 0 && local276 != 0) {
-												if (type.anInt11 == 0) {
+												if (type.tintColor == 0) {
 													sprite.renderScaled(local47, local145 + local162 - local276, local270, local276);
 												} else {
-													sprite.renderScaledTinted(local47, local145 + local162 - local276, local270, local276, type.anInt11);
+													sprite.renderScaledTinted(local47, local145 + local162 - local276, local270, local276, type.tintColor);
 												}
 											}
 										}

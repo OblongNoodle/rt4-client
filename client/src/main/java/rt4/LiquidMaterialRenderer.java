@@ -14,26 +14,26 @@ import java.nio.FloatBuffer;
 public final class LiquidMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!rd", name = "d", descriptor = "[F")
-	public static final float[] aFloatArray24 = new float[4];
+	public static final float[] ambientLightTemp = new float[4];
 	@OriginalMember(owner = "client!rd", name = "a", descriptor = "I")
-	private int anInt4829 = -1;
+	private int lastNoiseUpdateClock = -1;
 
 	@OriginalMember(owner = "client!rd", name = "e", descriptor = "I")
-	private int anInt4831 = -1;
+	private int displayListId = -1;
 
 	@OriginalMember(owner = "client!rd", name = "c", descriptor = "I")
-	private int anInt4830;
+	private int vertexProgramId;
 
 	@OriginalMember(owner = "client!rd", name = "b", descriptor = "Ljava/nio/FloatBuffer;")
-	private FloatBuffer aFloatBuffer1;
+	private FloatBuffer noiseBuffer;
 
 	@OriginalMember(owner = "client!rd", name = "<init>", descriptor = "()V")
 	public LiquidMaterialRenderer() {
-		if (this.anInt4831 < 0 && (GlRenderer.arbVertexProgramSupported && GlRenderer.maxTextureUnits >= 2)) {
+		if (this.displayListId < 0 && (GlRenderer.arbVertexProgramSupported && GlRenderer.maxTextureUnits >= 2)) {
 			@Pc(19) int[] local19 = new int[1];
 			@Pc(21) GL2 gl = GlRenderer.gl;
 			gl.glGenProgramsARB(1, local19, 0);
-			this.anInt4830 = local19[0];
+			this.vertexProgramId = local19[0];
 			@Pc(42) int[][] local42 = generateNoiseTable(0.4F);
 			@Pc(53) int[][] local53 = generateNoiseTable(0.4F);
 			@Pc(58) Buffer local58 = new Buffer(262144);
@@ -57,7 +57,7 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 			@Pc(141) ByteBuffer local141 = ByteBuffer.allocateDirect(local58.offset).order(ByteOrder.nativeOrder());
 			local141.put(local58.data, 0, local58.offset);
 			local141.flip();
-			this.aFloatBuffer1 = local141.asFloatBuffer().asReadOnlyBuffer();
+			this.noiseBuffer = local141.asFloatBuffer().asReadOnlyBuffer();
 			this.initDisplayLists();
 			this.uploadVertexProgram();
 		}
@@ -83,9 +83,9 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!rd", name = "a", descriptor = "()V")
 	@Override
 	public final void unbind() {
-		if (this.anInt4831 >= 0) {
+		if (this.displayListId >= 0) {
 			@Pc(5) GL2 gl = GlRenderer.gl;
-			gl.glCallList(this.anInt4831 + 1);
+			gl.glCallList(this.displayListId + 1);
 		}
 	}
 
@@ -98,11 +98,11 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!rd", name = "b", descriptor = "()V")
 	@Override
 	public final void bind() {
-		if (this.anInt4831 < 0) {
+		if (this.displayListId < 0) {
 			return;
 		}
 		@Pc(5) GL2 gl = GlRenderer.gl;
-		gl.glCallList(this.anInt4831);
+		gl.glCallList(this.displayListId);
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glMatrixMode(GL2.GL_TEXTURE);
 		gl.glTranslatef((float) MaterialManager.anInt406, (float) MaterialManager.anInt4675, (float) MaterialManager.anInt5158);
@@ -114,13 +114,13 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, MaterialManager.anIntArray341[(int) ((float) (GlRenderer.animationClock * 64) * 0.005F) % 64]);
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
-		if (this.anInt4829 == GlRenderer.animationClock) {
+		if (this.lastNoiseUpdateClock == GlRenderer.animationClock) {
 			return;
 		}
 		@Pc(85) int local85 = (GlRenderer.animationClock & 0xFF) * 256;
 		for (@Pc(87) int local87 = 0; local87 < 64; local87++) {
-			this.aFloatBuffer1.position(local85);
-			gl.glProgramLocalParameter4fvARB(GL2.GL_VERTEX_PROGRAM_ARB, local87, this.aFloatBuffer1);
+			this.noiseBuffer.position(local85);
+			gl.glProgramLocalParameter4fvARB(GL2.GL_VERTEX_PROGRAM_ARB, local87, this.noiseBuffer);
 			local85 += 4;
 		}
 		if (MaterialManager.allows3DTextureMapping) {
@@ -128,14 +128,14 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 		} else {
 			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 65, 0.0F, 0.0F, 0.0F, 1.0F);
 		}
-		this.anInt4829 = GlRenderer.animationClock;
+		this.lastNoiseUpdateClock = GlRenderer.animationClock;
 	}
 
 	@OriginalMember(owner = "client!rd", name = "e", descriptor = "()V")
 	private void initDisplayLists() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		this.anInt4831 = gl.glGenLists(2);
-		gl.glNewList(this.anInt4831, GL2.GL_COMPILE);
+		this.displayListId = gl.glGenLists(2);
+		gl.glNewList(this.displayListId, GL2.GL_COMPILE);
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		if (MaterialManager.allows3DTextureMapping) {
 			gl.glBindTexture(GL2.GL_TEXTURE_3D, MaterialManager.texture3D);
@@ -144,10 +144,10 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_ALPHA, GL2.GL_REPLACE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_ALPHA, GL2.GL_PREVIOUS);
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
-		gl.glBindProgramARB(GL2.GL_VERTEX_PROGRAM_ARB, this.anInt4830);
+		gl.glBindProgramARB(GL2.GL_VERTEX_PROGRAM_ARB, this.vertexProgramId);
 		gl.glEnable(GL2.GL_VERTEX_PROGRAM_ARB);
 		gl.glEndList();
-		gl.glNewList(this.anInt4831 + 1, GL2.GL_COMPILE);
+		gl.glNewList(this.displayListId + 1, GL2.GL_COMPILE);
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glMatrixMode(GL2.GL_TEXTURE);
 		gl.glLoadIdentity();
@@ -165,12 +165,12 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!rd", name = "f", descriptor = "()V")
 	private void uploadVertexProgram() {
-		if (this.anInt4831 < 0) {
+		if (this.displayListId < 0) {
 			return;
 		}
 		@Pc(4) GL2 gl = GlRenderer.gl;
 		@Pc(7) int[] local7 = new int[1];
-		gl.glBindProgramARB(GL2.GL_VERTEX_PROGRAM_ARB, this.anInt4830);
+		gl.glBindProgramARB(GL2.GL_VERTEX_PROGRAM_ARB, this.vertexProgramId);
 		gl.glProgramStringARB(GL2.GL_VERTEX_PROGRAM_ARB, GL2.GL_PROGRAM_FORMAT_ASCII_ARB, "!!ARBvp1.0\nATTRIB  iPos         = vertex.position;\nATTRIB  iColour      = vertex.color;\nOUTPUT  oPos         = result.position;\nOUTPUT  oColour      = result.color;\nOUTPUT  oTexCoord0   = result.texcoord[0];\nOUTPUT  oTexCoord1   = result.texcoord[1];\nOUTPUT  oFogCoord    = result.fogcoord;\nPARAM   time         = program.local[65];\nPARAM   turbulence   = program.local[64];\nPARAM   lightAmbient = program.local[66]; \nPARAM   pMatrix[4]   = { state.matrix.projection };\nPARAM   mvMatrix[4]  = { state.matrix.modelview };\nPARAM   ivMatrix[4]  = { state.matrix.texture[1] };\nPARAM   fNoise[64]   = { program.local[0..63] };\nTEMP    noise, clipPos, viewPos, worldPos;\nADDRESS noiseAddr;\nDP4   viewPos.x, mvMatrix[0], iPos;\nDP4   viewPos.y, mvMatrix[1], iPos;\nDP4   viewPos.z, mvMatrix[2], iPos;\nDP4   viewPos.w, mvMatrix[3], iPos;\nDP4   worldPos.x, ivMatrix[0], viewPos;\nDP4   worldPos.y, ivMatrix[1], viewPos;\nDP4   worldPos.z, ivMatrix[2], viewPos;\nDP4   worldPos.w, ivMatrix[3], viewPos;\nADD   noise.x, worldPos.x, worldPos.z;SUB   noise.y, worldPos.z, worldPos.x;MUL   noise, noise, 0.0001220703125;\nFRC   noise, noise;\nMUL   noise, noise, 64;\nARL   noiseAddr.x, noise.x;\nMOV   noise.x, fNoise[noiseAddr.x].x;\nARL   noiseAddr.x, noise.y;\nMOV   noise.y, fNoise[noiseAddr.x].y;\nMUL   noise, noise, turbulence.x;\nMAD   oTexCoord0, worldPos.xzww, 0.0078125, noise;\nMOV   oTexCoord0.w, 1;\nMUL   oTexCoord1.xy, worldPos.xzww, 0.0009765625;\nMOV   oTexCoord1.zw, time.xxxw;\nDP4   clipPos.x, pMatrix[0], viewPos;\nDP4   clipPos.y, pMatrix[1], viewPos;\nDP4   clipPos.z, pMatrix[2], viewPos;\nDP4   clipPos.w, pMatrix[3], viewPos;\nMUL   oColour.xyz, iColour, lightAmbient;\nMOV   oColour.w, 1;\nMOV   oFogCoord.x, clipPos.z;\nMOV   oPos, clipPos; \nEND".length(), "!!ARBvp1.0\nATTRIB  iPos         = vertex.position;\nATTRIB  iColour      = vertex.color;\nOUTPUT  oPos         = result.position;\nOUTPUT  oColour      = result.color;\nOUTPUT  oTexCoord0   = result.texcoord[0];\nOUTPUT  oTexCoord1   = result.texcoord[1];\nOUTPUT  oFogCoord    = result.fogcoord;\nPARAM   time         = program.local[65];\nPARAM   turbulence   = program.local[64];\nPARAM   lightAmbient = program.local[66]; \nPARAM   pMatrix[4]   = { state.matrix.projection };\nPARAM   mvMatrix[4]  = { state.matrix.modelview };\nPARAM   ivMatrix[4]  = { state.matrix.texture[1] };\nPARAM   fNoise[64]   = { program.local[0..63] };\nTEMP    noise, clipPos, viewPos, worldPos;\nADDRESS noiseAddr;\nDP4   viewPos.x, mvMatrix[0], iPos;\nDP4   viewPos.y, mvMatrix[1], iPos;\nDP4   viewPos.z, mvMatrix[2], iPos;\nDP4   viewPos.w, mvMatrix[3], iPos;\nDP4   worldPos.x, ivMatrix[0], viewPos;\nDP4   worldPos.y, ivMatrix[1], viewPos;\nDP4   worldPos.z, ivMatrix[2], viewPos;\nDP4   worldPos.w, ivMatrix[3], viewPos;\nADD   noise.x, worldPos.x, worldPos.z;SUB   noise.y, worldPos.z, worldPos.x;MUL   noise, noise, 0.0001220703125;\nFRC   noise, noise;\nMUL   noise, noise, 64;\nARL   noiseAddr.x, noise.x;\nMOV   noise.x, fNoise[noiseAddr.x].x;\nARL   noiseAddr.x, noise.y;\nMOV   noise.y, fNoise[noiseAddr.x].y;\nMUL   noise, noise, turbulence.x;\nMAD   oTexCoord0, worldPos.xzww, 0.0078125, noise;\nMOV   oTexCoord0.w, 1;\nMUL   oTexCoord1.xy, worldPos.xzww, 0.0009765625;\nMOV   oTexCoord1.zw, time.xxxw;\nDP4   clipPos.x, pMatrix[0], viewPos;\nDP4   clipPos.y, pMatrix[1], viewPos;\nDP4   clipPos.z, pMatrix[2], viewPos;\nDP4   clipPos.w, pMatrix[3], viewPos;\nMUL   oColour.xyz, iColour, lightAmbient;\nMOV   oColour.w, 1;\nMOV   oFogCoord.x, clipPos.z;\nMOV   oPos, clipPos; \nEND");
 		gl.glGetIntegerv(GL2.GL_PROGRAM_ERROR_POSITION_ARB, local7, 0);
 		if (local7[0] != -1) {
@@ -181,7 +181,7 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!rd", name = "a", descriptor = "(I)V")
 	@Override
 	public final void setArgument(@OriginalArg(0) int arg0) {
-		if (this.anInt4831 < 0) {
+		if (this.displayListId < 0) {
 			return;
 		}
 		@Pc(5) GL2 gl = GlRenderer.gl;
@@ -193,8 +193,8 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
 		if ((arg0 & 0x40) == 0) {
-			gl.glGetFloatv(GL2.GL_LIGHT_MODEL_AMBIENT, aFloatArray24, 0);
-			gl.glProgramLocalParameter4fvARB(GL2.GL_VERTEX_PROGRAM_ARB, 66, aFloatArray24, 0);
+			gl.glGetFloatv(GL2.GL_LIGHT_MODEL_AMBIENT, ambientLightTemp, 0);
+			gl.glProgramLocalParameter4fvARB(GL2.GL_VERTEX_PROGRAM_ARB, 66, ambientLightTemp, 0);
 		} else {
 			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 66, 1.0F, 1.0F, 1.0F, 1.0F);
 		}

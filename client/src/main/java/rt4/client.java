@@ -587,7 +587,7 @@ public final class client extends GameShell {
 	public static void reloadResourcesOnDisplayModeChange() {
 		SceneGraph.clear();
 		MiniMap.sprite = null;
-		LightingManager.anInt2875 = -1;
+		LightingManager.minimapRenderedPlane = -1;
 		unload();
 		DeadClass.cache.clear();
 		LocType.tempLocEntity = new LocEntity();
@@ -658,7 +658,7 @@ public final class client extends GameShell {
 		Camera.cameraOffsetX = (int) (Math.random() * 100.0D) - 50;
 		LoginManager.mapFlagY = 0;
 		Camera.yawTarget = (int) (Math.random() * 20.0D) - 10 & 0x7FF;
-		LightingManager.anInt2875 = -1;
+		LightingManager.minimapRenderedPlane = -1;
 		PlayerList.size = 0;
 		MiniMap.state = 0;
 		Camera.cameraOffsetY = (int) (Math.random() * 110.0D) - 55;

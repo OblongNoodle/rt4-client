@@ -9,13 +9,13 @@ import org.openrs2.deob.annotation.Pc;
 public final class MsiType {
 
 	@OriginalMember(owner = "client!aa", name = "f", descriptor = "I")
-	public int anInt11;
+	public int tintColor;
 
 	@OriginalMember(owner = "client!aa", name = "i", descriptor = "I")
 	public int spriteId;
 
 	@OriginalMember(owner = "client!aa", name = "s", descriptor = "Z")
-	public boolean aBoolean2 = false;
+	public boolean stretchToTile = false;
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(BLclient!wa;I)V")
 	public final void decode(@OriginalArg(1) Buffer arg0, @OriginalArg(2) int arg1) {
@@ -53,9 +53,9 @@ public final class MsiType {
 		if (arg0 == 1) {
 			this.spriteId = arg1.g2();
 		} else if (arg0 == 2) {
-			this.anInt11 = arg1.g3();
+			this.tintColor = arg1.g3();
 		} else if (arg0 == 3) {
-			this.aBoolean2 = true;
+			this.stretchToTile = true;
 		} else if (arg0 == 4) {
 			this.spriteId = -1;
 		}

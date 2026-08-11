@@ -416,7 +416,7 @@ public final class ScriptRunner {
 							}
 							setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, local359, arg1 >> 1);
 							if (anInt1951 > -1) {
-								Sprites.headhints[local322.anInt4048].render(arg2 + anInt1951 - 12, anInt548 + -28 + arg0);
+								Sprites.headhints[local322.arrowSpriteId].render(arg2 + anInt1951 - 12, anInt548 + -28 + arg0);
 							}
 						}
 					}
@@ -443,7 +443,7 @@ public final class ScriptRunner {
 							if (local173 != null && local173.type == 10 && PlayerList.ids[local5] == local173.actorTargetId) {
 								setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight() + 15, arg1 >> 1);
 								if (anInt1951 > -1) {
-									Sprites.headhints[local173.anInt4048].render(arg2 + anInt1951 - 12, arg0 + (anInt548 - local74));
+									Sprites.headhints[local173.arrowSpriteId].render(arg2 + anInt1951 - 12, arg0 + (anInt548 - local74));
 								}
 							}
 						}

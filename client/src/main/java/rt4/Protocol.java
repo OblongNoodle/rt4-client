@@ -1877,36 +1877,36 @@ public class Protocol {
 			@Pc(4084) MapMarker mapMarker = new MapMarker();
 			int slot = flags >> 6;
 			mapMarker.type = flags & 0x3F;
-			mapMarker.anInt4048 = inboundBuffer.g1();
-			if (mapMarker.anInt4048 >= 0 && mapMarker.anInt4048 < Sprites.headhints.length) {
+			mapMarker.arrowSpriteId = inboundBuffer.g1();
+			if (mapMarker.arrowSpriteId >= 0 && mapMarker.arrowSpriteId < Sprites.headhints.length) {
 				if (mapMarker.type == 1 || mapMarker.type == 10) {
 					mapMarker.actorTargetId = inboundBuffer.g2();
 					inboundBuffer.offset += 3;
 				} else if (mapMarker.type >= 2 && mapMarker.type <= 6) {
 					if (mapMarker.type == 2) {
-						mapMarker.anInt4045 = 64;
-						mapMarker.anInt4047 = 64;
+						mapMarker.targetXFine = 64;
+						mapMarker.targetYFine = 64;
 					}
 					if (mapMarker.type == 3) {
-						mapMarker.anInt4045 = 0;
-						mapMarker.anInt4047 = 64;
+						mapMarker.targetXFine = 0;
+						mapMarker.targetYFine = 64;
 					}
 					if (mapMarker.type == 4) {
-						mapMarker.anInt4045 = 128;
-						mapMarker.anInt4047 = 64;
+						mapMarker.targetXFine = 128;
+						mapMarker.targetYFine = 64;
 					}
 					if (mapMarker.type == 5) {
-						mapMarker.anInt4045 = 64;
-						mapMarker.anInt4047 = 0;
+						mapMarker.targetXFine = 64;
+						mapMarker.targetYFine = 0;
 					}
 					if (mapMarker.type == 6) {
-						mapMarker.anInt4045 = 64;
-						mapMarker.anInt4047 = 128;
+						mapMarker.targetXFine = 64;
+						mapMarker.targetYFine = 128;
 					}
 					mapMarker.type = 2;
 					mapMarker.targetX = inboundBuffer.g2();
-					mapMarker.anInt4046 = inboundBuffer.g2();
-					mapMarker.anInt4050 = inboundBuffer.g1();
+					mapMarker.targetY = inboundBuffer.g2();
+					mapMarker.targetHeight = inboundBuffer.g1();
 				}
 				mapMarker.playerModelId = inboundBuffer.g2();
 				if (mapMarker.playerModelId == 65535) {

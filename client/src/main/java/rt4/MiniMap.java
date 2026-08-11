@@ -372,20 +372,20 @@ public class MiniMap {
 						if (local804 != null) {
 							local231 = local804.xFine / 32 - PlayerList.self.xFine / 32;
 							local200 = local804.yFine / 32 - PlayerList.self.yFine / 32;
-							renderHintMarker(local770.anInt4048, arg1, arg2, local231, local200, arg3);
+							renderHintMarker(local770.arrowSpriteId, arg1, arg2, local231, local200, arg3);
 						}
 					}
 					if (local770.type == 2) {
 						local154 = (local770.targetX - Camera.originX) * 4 + 2 - PlayerList.self.xFine / 32;
-						local231 = (-Camera.originY + local770.anInt4046) * 4 + 2 - PlayerList.self.yFine / 32;
-						renderHintMarker(local770.anInt4048, arg1, arg2, local154, local231, arg3);
+						local231 = (-Camera.originY + local770.targetY) * 4 + 2 - PlayerList.self.yFine / 32;
+						renderHintMarker(local770.arrowSpriteId, arg1, arg2, local154, local231, arg3);
 					}
 					if (local770.type == 10 && local770.actorTargetId >= 0 && PlayerList.players.length > local770.actorTargetId) {
 						@Pc(905) Player local905 = PlayerList.players[local770.actorTargetId];
 						if (local905 != null) {
 							local200 = local905.yFine / 32 - PlayerList.self.yFine / 32;
 							local231 = local905.xFine / 32 - PlayerList.self.xFine / 32;
-							renderHintMarker(local770.anInt4048, arg1, arg2, local231, local200, arg3);
+							renderHintMarker(local770.arrowSpriteId, arg1, arg2, local231, local200, arg3);
 						}
 					}
 				}
@@ -499,14 +499,14 @@ public class MiniMap {
 		}
 		@Pc(66) int local66 = local42.innerWidth;
 		@Pc(69) int local69 = local42.innerHeight;
-		if (msiType.aBoolean2) {
+		if (msiType.stretchToTile) {
 			local69 = local52 * 4;
 			local66 = local49 * 4;
 		}
-		if (msiType.anInt11 == 0) {
+		if (msiType.tintColor == 0) {
 			local42.renderScaled(arg0 * 4 + 48, (-local52 + -arg2 + 104) * 4 + 48, local66, local69);
 		} else {
-			local42.renderScaledTinted(arg0 * 4 + 48, (-local52 + -arg2 + 104) * 4 + 48, local66, local69, msiType.anInt11);
+			local42.renderScaledTinted(arg0 * 4 + 48, (-local52 + -arg2 + 104) * 4 + 48, local66, local69, msiType.tintColor);
 		}
 		return true;
 	}
@@ -518,9 +518,9 @@ public class MiniMap {
 		while (local5.length > local3) {
 			@Pc(17) MapMarker local17 = local5[local3];
 			if (local17 != null && local17.type == 2) {
-				ScriptRunner.projectToScreen(arg0 >> 1, arg4, (local17.anInt4046 - Camera.originY << 7) + local17.anInt4047, local17.anInt4050 * 2, arg2 >> 1, local17.anInt4045 + (local17.targetX - Camera.originX << 7), arg3);
+				ScriptRunner.projectToScreen(arg0 >> 1, arg4, (local17.targetY - Camera.originY << 7) + local17.targetYFine, local17.targetHeight * 2, arg2 >> 1, local17.targetXFine + (local17.targetX - Camera.originX << 7), arg3);
 				if (ScriptRunner.anInt1951 > -1 && client.loop % 20 < 10) {
-					Sprites.headhints[local17.anInt4048].render(arg1 + ScriptRunner.anInt1951 - 12, arg5 + -28 - -ScriptRunner.anInt548);
+					Sprites.headhints[local17.arrowSpriteId].render(arg1 + ScriptRunner.anInt1951 - 12, arg5 + -28 - -ScriptRunner.anInt548);
 				}
 			}
 			local3++;

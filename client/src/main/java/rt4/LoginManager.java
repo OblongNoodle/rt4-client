@@ -821,7 +821,7 @@ public class LoginManager {
 		if (GlRenderer.enabled && fromLogin && (Math.abs(deltaX) > 104 || Math.abs(deltaY) > 104)) {
 			FogManager.setInstantFade();
 		}
-		LightingManager.anInt2875 = -1;
+		LightingManager.minimapRenderedPlane = -1;
 		SceneGraph.spotanims.clear();
 		SceneGraph.projectiles.clear();
 	}
