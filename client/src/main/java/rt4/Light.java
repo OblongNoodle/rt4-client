@@ -109,12 +109,12 @@ public final class Light {
 	public static int[] craeteNoise(@OriginalArg(5) float arg0) {
 		@Pc(11) int[] local11 = new int[2048];
 		@Pc(15) TextureOp34 local15 = new TextureOp34();
-		local15.anInt646 = 8;
-		local15.anInt642 = 4;
-		local15.anInt650 = 35;
-		local15.anInt641 = 8;
-		local15.anInt648 = (int) (arg0 * 4096.0F);
-		local15.aBoolean44 = true;
+		local15.frequencyX = 8;
+		local15.octaveCount = 4;
+		local15.seed = 35;
+		local15.frequencyY = 8;
+		local15.persistence = (int) (arg0 * 4096.0F);
+		local15.normalizeOutput = true;
 		local15.postDecode();
 		Texture.setSize(1, 2048);
 		local15.getNoiseRow(0, local11);

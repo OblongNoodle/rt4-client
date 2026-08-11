@@ -67,11 +67,11 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	public static int[][] generateNoiseTable(@OriginalArg(7) float arg0) {
 		@Pc(15) int[][] local15 = new int[256][64];
 		@Pc(19) TextureOp34 local19 = new TextureOp34();
-		local19.anInt648 = (int) (arg0 * 4096.0F);
-		local19.anInt642 = 3;
-		local19.anInt641 = 4;
-		local19.aBoolean44 = false;
-		local19.anInt646 = 8;
+		local19.persistence = (int) (arg0 * 4096.0F);
+		local19.octaveCount = 3;
+		local19.frequencyY = 4;
+		local19.normalizeOutput = false;
+		local19.frequencyX = 8;
 		local19.postDecode();
 		Texture.setSize(256, 64);
 		for (@Pc(46) int local46 = 0; local46 < 256; local46++) {
