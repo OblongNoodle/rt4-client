@@ -368,7 +368,7 @@ public final class client extends GameShell {
 			Protocol.aClass95_4 = null;
 		}
 		if (arg0 == 25 || arg0 == 28) {
-			LoginManager.anInt5804 = 0;
+			LoginManager.missingLocModelCount = 0;
 			anInt5150 = 1;
 			LoginManager.loadingScreenState = 0;
 			anInt1196 = 1;
@@ -611,11 +611,11 @@ public final class client extends GameShell {
 		}
 		Fonts.load(js5Archive13, js5Archive8);
 		Sprites.load(js5Archive8);
-		LoginManager.aClass3_Sub2_Sub1_10 = null;
-		LoginManager.aClass3_Sub2_Sub1_1 = null;
-		LoginManager.aClass3_Sub2_Sub1_6 = null;
-		LoginManager.aClass3_Sub2_Sub1_8 = null;
-		LoginManager.aClass3_Sub2_Sub1_9 = null;
+		LoginManager.menuBottomEdgeSprite = null;
+		LoginManager.menuHeaderFillSprite = null;
+		LoginManager.menuSideFillSprite = null;
+		LoginManager.menuBottomFillSprite = null;
+		LoginManager.menuHeaderEdgeSprite = null;
 		if (gameState == 5) {
 			TitleScreen.load(js5Archive8);
 		}
@@ -642,7 +642,7 @@ public final class client extends GameShell {
 		Player.rebootTimer = 0;
 		Protocol.outboundBuffer.offset = 0;
 		Protocol.opcode2 = -1;
-		LoginManager.anInt1862 = 0;
+		LoginManager.ticksSinceLastPacket = 0;
 		Protocol.inboundBuffer.offset = 0;
 		@Pc(3506) int local3506;
 		for (local3506 = 0; local3506 < MiniMap.hintMapMarkers.length; local3506++) {
@@ -876,10 +876,10 @@ public final class client extends GameShell {
 				local80 = (anInt5150 - LoginManager.mapFilesMissingCount) * 50 / anInt5150;
 				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, aClass100_974, JagString.parseInt(local80), Cs1ScriptRunner.aClass100_80}));
 			} else if (LoginManager.loadingScreenState == 2) {
-				if (anInt1196 < LoginManager.anInt5804) {
-					anInt1196 = LoginManager.anInt5804;
+				if (anInt1196 < LoginManager.missingLocModelCount) {
+					anInt1196 = LoginManager.missingLocModelCount;
 				}
-				local80 = (anInt1196 - LoginManager.anInt5804) * 50 / anInt1196 + 50;
+				local80 = (anInt1196 - LoginManager.missingLocModelCount) * 50 / anInt1196 + 50;
 				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, aClass100_974, JagString.parseInt(local80), Cs1ScriptRunner.aClass100_80}));
 			} else {
 				Fonts.drawTextOnScreen(false, LocalizedText.LOADING);

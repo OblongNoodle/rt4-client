@@ -3323,7 +3323,7 @@ public final class ScriptRunner {
 										continue;
 									}
 									if (opcode == Cs2Opcodes.getLoginTypeRelatedMethod3333) {
-										intStack[isp++] = LoginManager.anInt39;
+										intStack[isp++] = LoginManager.loginType;
 										continue;
 									}
 									if (opcode == Cs2Opcodes.getLanguage) {
@@ -4842,22 +4842,22 @@ public final class ScriptRunner {
 													}
 													if (opcode == 5424) {
 														isp -= 11;
-														LoginManager.anInt1275 = intStack[isp];
-														LoginManager.anInt2910 = intStack[isp + 1];
-														LoginManager.anInt5457 = intStack[isp + 2];
-														LoginManager.anInt5208 = intStack[isp + 3];
-														LoginManager.anInt1736 = intStack[isp + 4];
-														LoginManager.anInt4073 = intStack[isp + 5];
-														LoginManager.anInt2261 = intStack[isp + 6];
-														LoginManager.anInt3324 = intStack[isp + 7];
-														LoginManager.anInt5556 = intStack[isp + 8];
-														LoginManager.anInt4581 = intStack[isp + 9];
-														LoginManager.anInt5752 = intStack[isp + 10];
-														client.js5Archive8.isFileReady(LoginManager.anInt1736);
-														client.js5Archive8.isFileReady(LoginManager.anInt4073);
-														client.js5Archive8.isFileReady(LoginManager.anInt2261);
-														client.js5Archive8.isFileReady(LoginManager.anInt3324);
-														client.js5Archive8.isFileReady(LoginManager.anInt5556);
+														LoginManager.menuFillColor = intStack[isp];
+														LoginManager.menuFillTransparency = intStack[isp + 1];
+														LoginManager.menuHighlightColor = intStack[isp + 2];
+														LoginManager.menuHighlightTransparency = intStack[isp + 3];
+														LoginManager.menuHeaderFillSpriteId = intStack[isp + 4];
+														LoginManager.menuHeaderEdgeSpriteId = intStack[isp + 5];
+														LoginManager.menuBottomFillSpriteId = intStack[isp + 6];
+														LoginManager.menuSideFillSpriteId = intStack[isp + 7];
+														LoginManager.menuBottomEdgeSpriteId = intStack[isp + 8];
+														LoginManager.menuTextColor = intStack[isp + 9];
+														LoginManager.menuHighlightTextColor = intStack[isp + 10];
+														client.js5Archive8.isFileReady(LoginManager.menuHeaderFillSpriteId);
+														client.js5Archive8.isFileReady(LoginManager.menuHeaderEdgeSpriteId);
+														client.js5Archive8.isFileReady(LoginManager.menuBottomFillSpriteId);
+														client.js5Archive8.isFileReady(LoginManager.menuSideFillSpriteId);
+														client.js5Archive8.isFileReady(LoginManager.menuBottomEdgeSpriteId);
 														InterfaceList.aBoolean298 = true;
 														continue;
 													}
@@ -4954,7 +4954,7 @@ public final class ScriptRunner {
 														str1 = stringStack[ssp + 1];
 														isp--;
 														int2 = intStack[isp];
-														if (client.gameState == 10 && LoginManager.anInt4937 == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
+														if (client.gameState == 10 && LoginManager.hopStep == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
 															LoginManager.startLogin(string, str1, int2);
 														}
 														continue;
@@ -4971,14 +4971,14 @@ public final class ScriptRunner {
 													}
 													if (opcode == 5603) {
 														isp -= 4;
-														if (client.gameState == 10 && LoginManager.anInt4937 == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
+														if (client.gameState == 10 && LoginManager.hopStep == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
 															CreateManager.checkInfo(intStack[isp + 2], intStack[isp + 3], intStack[isp], intStack[isp + 1]);
 														}
 														continue;
 													}
 													if (opcode == Cs2Opcodes.sendRequestAccount) {
 														ssp--;
-														if (client.gameState == 10 && LoginManager.anInt4937 == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
+														if (client.gameState == 10 && LoginManager.hopStep == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
 															CreateManager.checkName(stringStack[ssp].encode37());
 														}
 														continue;
@@ -4986,7 +4986,7 @@ public final class ScriptRunner {
 													if (opcode == Cs2Opcodes.sendCreateAccount) {
 														isp -= 4;
 														ssp -= 2;
-														if (client.gameState == 10 && LoginManager.anInt4937 == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
+														if (client.gameState == 10 && LoginManager.hopStep == 0 && LoginManager.step == 0 && CreateManager.step == 0 && WorldList.step == 0) {
 															CreateManager.createAccount(intStack[isp], intStack[isp + 3], intStack[isp + 1], stringStack[ssp + 1], stringStack[ssp].encode37(), intStack[isp + 2]);
 														}
 														continue;
@@ -5504,7 +5504,7 @@ public final class ScriptRunner {
 													}
 												} else if (opcode < 6600) {
 													if (opcode == 6500) {
-														if (client.gameState == 10 && LoginManager.anInt4937 == 0 && LoginManager.step == 0 && CreateManager.step == 0) {
+														if (client.gameState == 10 && LoginManager.hopStep == 0 && LoginManager.step == 0 && CreateManager.step == 0) {
 															intStack[isp++] = WorldList.fetch() == -1 ? 0 : 1;
 															continue;
 														}
@@ -5556,7 +5556,7 @@ public final class ScriptRunner {
 													if (opcode == Cs2Opcodes.setWorldHost) {
 														isp--;
 														int1 = intStack[isp];
-														if (client.gameState == 10 && LoginManager.anInt4937 == 0 && LoginManager.step == 0 && CreateManager.step == 0) {
+														if (client.gameState == 10 && LoginManager.hopStep == 0 && LoginManager.step == 0 && CreateManager.step == 0) {
 															intStack[isp++] = WorldList.hopWorld(int1) ? 1 : 0;
 															continue;
 														}

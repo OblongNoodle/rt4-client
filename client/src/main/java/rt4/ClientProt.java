@@ -206,13 +206,13 @@ public class ClientProt {
 			return;
 		}
 		Protocol.anInt3251 = 0;
-		if (!LoginManager.aBoolean247 && Protocol.socket != null) {
+		if (!LoginManager.pingFailed && Protocol.socket != null) {
 			Protocol.outboundBuffer.p1isaac(ClientProt.NO_TIMEOUT);
 			try {
 				Protocol.socket.write(Protocol.outboundBuffer.data, Protocol.outboundBuffer.offset);
 				Protocol.outboundBuffer.offset = 0;
 			} catch (@Pc(53) IOException local53) {
-				LoginManager.aBoolean247 = true;
+				LoginManager.pingFailed = true;
 			}
 		}
 		client.audioLoop();

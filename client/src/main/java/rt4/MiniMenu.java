@@ -1732,43 +1732,43 @@ public class MiniMenu {
 		@Pc(9) int local9 = InterfaceList.anInt5138;
 		@Pc(11) int local11 = InterfaceList.anInt436;
 		@Pc(13) int local13 = InterfaceList.anInt761;
-		if (LoginManager.aClass3_Sub2_Sub1_1 == null || LoginManager.aClass3_Sub2_Sub1_9 == null) {
-			if (client.js5Archive8.isFileReady(LoginManager.anInt1736) && client.js5Archive8.isFileReady(LoginManager.anInt4073)) {
-				LoginManager.aClass3_Sub2_Sub1_1 = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.anInt1736);
-				LoginManager.aClass3_Sub2_Sub1_9 = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.anInt4073);
+		if (LoginManager.menuHeaderFillSprite == null || LoginManager.menuHeaderEdgeSprite == null) {
+			if (client.js5Archive8.isFileReady(LoginManager.menuHeaderFillSpriteId) && client.js5Archive8.isFileReady(LoginManager.menuHeaderEdgeSpriteId)) {
+				LoginManager.menuHeaderFillSprite = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.menuHeaderFillSpriteId);
+				LoginManager.menuHeaderEdgeSprite = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.menuHeaderEdgeSpriteId);
 				if (GlRenderer.enabled) {
-					if (LoginManager.aClass3_Sub2_Sub1_1 instanceof SoftwareAlphaSprite) {
-						LoginManager.aClass3_Sub2_Sub1_1 = new GlAlphaSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_1);
+					if (LoginManager.menuHeaderFillSprite instanceof SoftwareAlphaSprite) {
+						LoginManager.menuHeaderFillSprite = new GlAlphaSprite((SoftwareSprite) LoginManager.menuHeaderFillSprite);
 					} else {
-						LoginManager.aClass3_Sub2_Sub1_1 = new GlSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_1);
+						LoginManager.menuHeaderFillSprite = new GlSprite((SoftwareSprite) LoginManager.menuHeaderFillSprite);
 					}
-					if (LoginManager.aClass3_Sub2_Sub1_9 instanceof SoftwareAlphaSprite) {
-						LoginManager.aClass3_Sub2_Sub1_9 = new GlAlphaSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_9);
+					if (LoginManager.menuHeaderEdgeSprite instanceof SoftwareAlphaSprite) {
+						LoginManager.menuHeaderEdgeSprite = new GlAlphaSprite((SoftwareSprite) LoginManager.menuHeaderEdgeSprite);
 					} else {
-						LoginManager.aClass3_Sub2_Sub1_9 = new GlSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_9);
+						LoginManager.menuHeaderEdgeSprite = new GlSprite((SoftwareSprite) LoginManager.menuHeaderEdgeSprite);
 					}
 				}
 			} else if (GlRenderer.enabled) {
-				GlRaster.fillRectAlpha(local3, local9, local13, 20, LoginManager.anInt1275, 256 - LoginManager.anInt2910);
+				GlRaster.fillRectAlpha(local3, local9, local13, 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
 			} else {
-				SoftwareRaster.fillRectAlpha(local3, local9, local13, 20, LoginManager.anInt1275, 256 - LoginManager.anInt2910);
+				SoftwareRaster.fillRectAlpha(local3, local9, local13, 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
 			}
 		}
 		@Pc(112) int local112;
 		@Pc(114) int local114;
-		if (LoginManager.aClass3_Sub2_Sub1_1 != null && LoginManager.aClass3_Sub2_Sub1_9 != null) {
-			local112 = local13 / LoginManager.aClass3_Sub2_Sub1_1.width;
+		if (LoginManager.menuHeaderFillSprite != null && LoginManager.menuHeaderEdgeSprite != null) {
+			local112 = local13 / LoginManager.menuHeaderFillSprite.width;
 			for (local114 = 0; local114 < local112; local114++) {
-				LoginManager.aClass3_Sub2_Sub1_1.render(local114 * LoginManager.aClass3_Sub2_Sub1_1.width + local3, local9);
+				LoginManager.menuHeaderFillSprite.render(local114 * LoginManager.menuHeaderFillSprite.width + local3, local9);
 			}
-			LoginManager.aClass3_Sub2_Sub1_9.render(local3, local9);
-			LoginManager.aClass3_Sub2_Sub1_9.renderHorizontalFlip(local3 + local13 - LoginManager.aClass3_Sub2_Sub1_9.width, local9);
+			LoginManager.menuHeaderEdgeSprite.render(local3, local9);
+			LoginManager.menuHeaderEdgeSprite.renderHorizontalFlip(local3 + local13 - LoginManager.menuHeaderEdgeSprite.width, local9);
 		}
-		Fonts.b12Full.renderLeft(LocalizedText.CHOOSE_OPTION, local3 + 3, local9 + 14, LoginManager.anInt4581, -1);
+		Fonts.b12Full.renderLeft(LocalizedText.CHOOSE_OPTION, local3 + 3, local9 + 14, LoginManager.menuTextColor, -1);
 		if (GlRenderer.enabled) {
-			GlRaster.fillRectAlpha(local3, local9 + 20, local13, local11 - 20, LoginManager.anInt1275, 256 - LoginManager.anInt2910);
+			GlRaster.fillRectAlpha(local3, local9 + 20, local13, local11 - 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
 		} else {
-			SoftwareRaster.fillRectAlpha(local3, local9 + 20, local13, local11 - 20, LoginManager.anInt1275, 256 - LoginManager.anInt2910);
+			SoftwareRaster.fillRectAlpha(local3, local9 + 20, local13, local11 - 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
 		}
 		local114 = Mouse.lastMouseY;
 		local112 = Mouse.lastMouseX;
@@ -1778,53 +1778,53 @@ public class MiniMenu {
 			local219 = (size - local203 - 1) * 15 + local9 + 35;
 			if (local3 < local112 && local112 < local3 + local13 && local114 > local219 - 13 && local114 < local219 + 3) {
 				if (GlRenderer.enabled) {
-					GlRaster.fillRectAlpha(local3, local219 - 13, local13, 16, LoginManager.anInt5457, 256 - LoginManager.anInt5208);
+					GlRaster.fillRectAlpha(local3, local219 - 13, local13, 16, LoginManager.menuHighlightColor, 256 - LoginManager.menuHighlightTransparency);
 				} else {
-					SoftwareRaster.fillRectAlpha(local3, local219 - 13, local13, 16, LoginManager.anInt5457, 256 - LoginManager.anInt5208);
+					SoftwareRaster.fillRectAlpha(local3, local219 - 13, local13, 16, LoginManager.menuHighlightColor, 256 - LoginManager.menuHighlightTransparency);
 				}
 			}
 		}
-		if ((LoginManager.aClass3_Sub2_Sub1_8 == null || LoginManager.aClass3_Sub2_Sub1_6 == null || LoginManager.aClass3_Sub2_Sub1_10 == null) && client.js5Archive8.isFileReady(LoginManager.anInt2261) && client.js5Archive8.isFileReady(LoginManager.anInt3324) && client.js5Archive8.isFileReady(LoginManager.anInt5556)) {
-			LoginManager.aClass3_Sub2_Sub1_8 = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.anInt2261);
-			LoginManager.aClass3_Sub2_Sub1_6 = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.anInt3324);
-			LoginManager.aClass3_Sub2_Sub1_10 = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.anInt5556);
+		if ((LoginManager.menuBottomFillSprite == null || LoginManager.menuSideFillSprite == null || LoginManager.menuBottomEdgeSprite == null) && client.js5Archive8.isFileReady(LoginManager.menuBottomFillSpriteId) && client.js5Archive8.isFileReady(LoginManager.menuSideFillSpriteId) && client.js5Archive8.isFileReady(LoginManager.menuBottomEdgeSpriteId)) {
+			LoginManager.menuBottomFillSprite = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.menuBottomFillSpriteId);
+			LoginManager.menuSideFillSprite = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.menuSideFillSpriteId);
+			LoginManager.menuBottomEdgeSprite = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.menuBottomEdgeSpriteId);
 			if (GlRenderer.enabled) {
-				if (LoginManager.aClass3_Sub2_Sub1_8 instanceof SoftwareAlphaSprite) {
-					LoginManager.aClass3_Sub2_Sub1_8 = new GlAlphaSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_8);
+				if (LoginManager.menuBottomFillSprite instanceof SoftwareAlphaSprite) {
+					LoginManager.menuBottomFillSprite = new GlAlphaSprite((SoftwareSprite) LoginManager.menuBottomFillSprite);
 				} else {
-					LoginManager.aClass3_Sub2_Sub1_8 = new GlSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_8);
+					LoginManager.menuBottomFillSprite = new GlSprite((SoftwareSprite) LoginManager.menuBottomFillSprite);
 				}
-				if (LoginManager.aClass3_Sub2_Sub1_6 instanceof SoftwareAlphaSprite) {
-					LoginManager.aClass3_Sub2_Sub1_6 = new GlAlphaSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_6);
+				if (LoginManager.menuSideFillSprite instanceof SoftwareAlphaSprite) {
+					LoginManager.menuSideFillSprite = new GlAlphaSprite((SoftwareSprite) LoginManager.menuSideFillSprite);
 				} else {
-					LoginManager.aClass3_Sub2_Sub1_6 = new GlSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_6);
+					LoginManager.menuSideFillSprite = new GlSprite((SoftwareSprite) LoginManager.menuSideFillSprite);
 				}
-				if (LoginManager.aClass3_Sub2_Sub1_10 instanceof SoftwareAlphaSprite) {
-					LoginManager.aClass3_Sub2_Sub1_10 = new GlAlphaSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_10);
+				if (LoginManager.menuBottomEdgeSprite instanceof SoftwareAlphaSprite) {
+					LoginManager.menuBottomEdgeSprite = new GlAlphaSprite((SoftwareSprite) LoginManager.menuBottomEdgeSprite);
 				} else {
-					LoginManager.aClass3_Sub2_Sub1_10 = new GlSprite((SoftwareSprite) LoginManager.aClass3_Sub2_Sub1_10);
+					LoginManager.menuBottomEdgeSprite = new GlSprite((SoftwareSprite) LoginManager.menuBottomEdgeSprite);
 				}
 			}
 		}
 		@Pc(418) int local418;
-		if (LoginManager.aClass3_Sub2_Sub1_8 != null && LoginManager.aClass3_Sub2_Sub1_6 != null && LoginManager.aClass3_Sub2_Sub1_10 != null) {
-			local203 = local13 / LoginManager.aClass3_Sub2_Sub1_8.width;
+		if (LoginManager.menuBottomFillSprite != null && LoginManager.menuSideFillSprite != null && LoginManager.menuBottomEdgeSprite != null) {
+			local203 = local13 / LoginManager.menuBottomFillSprite.width;
 			for (local219 = 0; local219 < local203; local219++) {
-				LoginManager.aClass3_Sub2_Sub1_8.render(local3 + LoginManager.aClass3_Sub2_Sub1_8.width * local219, local11 + local9 + -LoginManager.aClass3_Sub2_Sub1_8.height);
+				LoginManager.menuBottomFillSprite.render(local3 + LoginManager.menuBottomFillSprite.width * local219, local11 + local9 + -LoginManager.menuBottomFillSprite.height);
 			}
-			local219 = (local11 - 20) / LoginManager.aClass3_Sub2_Sub1_6.height;
+			local219 = (local11 - 20) / LoginManager.menuSideFillSprite.height;
 			for (local418 = 0; local418 < local219; local418++) {
-				LoginManager.aClass3_Sub2_Sub1_6.render(local3, local9 + local418 * LoginManager.aClass3_Sub2_Sub1_6.height + 20);
-				LoginManager.aClass3_Sub2_Sub1_6.renderHorizontalFlip(local3 + local13 - LoginManager.aClass3_Sub2_Sub1_6.width, local9 + 20 + local418 * LoginManager.aClass3_Sub2_Sub1_6.height);
+				LoginManager.menuSideFillSprite.render(local3, local9 + local418 * LoginManager.menuSideFillSprite.height + 20);
+				LoginManager.menuSideFillSprite.renderHorizontalFlip(local3 + local13 - LoginManager.menuSideFillSprite.width, local9 + 20 + local418 * LoginManager.menuSideFillSprite.height);
 			}
-			LoginManager.aClass3_Sub2_Sub1_10.render(local3, local11 + local9 - LoginManager.aClass3_Sub2_Sub1_10.height);
-			LoginManager.aClass3_Sub2_Sub1_10.renderHorizontalFlip(local3 + local13 - LoginManager.aClass3_Sub2_Sub1_10.width, local9 - -local11 + -LoginManager.aClass3_Sub2_Sub1_10.height);
+			LoginManager.menuBottomEdgeSprite.render(local3, local11 + local9 - LoginManager.menuBottomEdgeSprite.height);
+			LoginManager.menuBottomEdgeSprite.renderHorizontalFlip(local3 + local13 - LoginManager.menuBottomEdgeSprite.width, local9 - -local11 + -LoginManager.menuBottomEdgeSprite.height);
 		}
 		for (local203 = 0; local203 < size; local203++) {
 			local219 = (size - local203 - 1) * 15 + local9 + 35;
-			local418 = LoginManager.anInt4581;
+			local418 = LoginManager.menuTextColor;
 			if (local3 < local112 && local13 + local3 > local112 && local219 - 13 < local114 && local114 < local219 + 3) {
-				local418 = LoginManager.anInt5752;
+				local418 = LoginManager.menuHighlightTextColor;
 			}
 			Fonts.b12Full.renderLeft(getOp(local203), local3 + 3, local219, local418, 0);
 		}

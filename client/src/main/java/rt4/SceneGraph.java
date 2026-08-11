@@ -2622,7 +2622,7 @@ public class SceneGraph {
 				entity = new Loc(locIndex, LocType.WALL_DIAGONALCORNER, orientation, currentPlane, x, y, loc.anim, loc.allowrandomizedanimation, null);
 			}
 
-			setWall(plane, x, y, averageY, entity, null, LoginManager.anIntArray204[orientation], 0, bitset);
+			setWall(plane, x, y, averageY, entity, null, LoginManager.WALL_ROTATION_FLAGS[orientation], 0, bitset);
 			if (loc.active && lowmem) {
 				if (orientation == 0) {
 					shadowmap[plane][x][y + 1] = 50;
@@ -2689,7 +2689,7 @@ public class SceneGraph {
 			} else {
 				entity = new Loc(locIndex, LocType.WALL_SQUARECORNER, orientation, currentPlane, x, y, loc.anim, loc.allowrandomizedanimation, null);
 			}
-			setWall(plane, x, y, averageY, entity, null, LoginManager.anIntArray204[orientation], 0, bitset);
+			setWall(plane, x, y, averageY, entity, null, LoginManager.WALL_ROTATION_FLAGS[orientation], 0, bitset);
 			if (loc.active && lowmem) {
 				if (orientation == 0) {
 					shadowmap[plane][x][y + 1] = 50;

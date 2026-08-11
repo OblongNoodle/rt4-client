@@ -456,10 +456,10 @@ public class Protocol {
 						LoginManager.underWaterLocationsMapFileIds[local20] = -1;
 					} else {
 						LoginManager.regionBitPacked[local20] = local169;
-						LoginManager.mapFileIds[local20] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.aClass100_558, JagString.parseInt(local138), LoginManager.UNDERSCORE, JagString.parseInt(local151)}));
-						LoginManager.locationsMapFileIds[local20] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.aClass100_1090, JagString.parseInt(local138), LoginManager.UNDERSCORE, JagString.parseInt(local151)}));
-						LoginManager.underWaterMapFileIds[local20] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.aClass100_772, JagString.parseInt(local138), LoginManager.UNDERSCORE, JagString.parseInt(local151)}));
-						LoginManager.underWaterLocationsMapFileIds[local20] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.aClass100_1103, JagString.parseInt(local138), LoginManager.UNDERSCORE, JagString.parseInt(local151)}));
+						LoginManager.mapFileIds[local20] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.MAP_PREFIX, JagString.parseInt(local138), LoginManager.UNDERSCORE, JagString.parseInt(local151)}));
+						LoginManager.locationsMapFileIds[local20] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.LOC_PREFIX, JagString.parseInt(local138), LoginManager.UNDERSCORE, JagString.parseInt(local151)}));
+						LoginManager.underWaterMapFileIds[local20] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.UNDERWATER_MAP_PREFIX, JagString.parseInt(local138), LoginManager.UNDERSCORE, JagString.parseInt(local151)}));
+						LoginManager.underWaterLocationsMapFileIds[local20] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.UNDERWATER_LOC_PREFIX, JagString.parseInt(local138), LoginManager.UNDERSCORE, JagString.parseInt(local151)}));
 					}
 					local20++;
 				}
@@ -525,10 +525,10 @@ public class Protocol {
 							LoginManager.regionBitPacked[local60] = local571;
 							@Pc(609) int local609 = local571 & 0xFF;
 							local573 = local571 >> 8 & 0xFF;
-							LoginManager.mapFileIds[local60] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.aClass100_558, JagString.parseInt(local573), LoginManager.UNDERSCORE, JagString.parseInt(local609)}));
-							LoginManager.locationsMapFileIds[local60] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.aClass100_1090, JagString.parseInt(local573), LoginManager.UNDERSCORE, JagString.parseInt(local609)}));
-							LoginManager.underWaterMapFileIds[local60] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.aClass100_772, JagString.parseInt(local573), LoginManager.UNDERSCORE, JagString.parseInt(local609)}));
-							LoginManager.underWaterLocationsMapFileIds[local60] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.aClass100_1103, JagString.parseInt(local573), LoginManager.UNDERSCORE, JagString.parseInt(local609)}));
+							LoginManager.mapFileIds[local60] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.MAP_PREFIX, JagString.parseInt(local573), LoginManager.UNDERSCORE, JagString.parseInt(local609)}));
+							LoginManager.locationsMapFileIds[local60] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.LOC_PREFIX, JagString.parseInt(local573), LoginManager.UNDERSCORE, JagString.parseInt(local609)}));
+							LoginManager.underWaterMapFileIds[local60] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.UNDERWATER_MAP_PREFIX, JagString.parseInt(local573), LoginManager.UNDERSCORE, JagString.parseInt(local609)}));
+							LoginManager.underWaterLocationsMapFileIds[local60] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.UNDERWATER_LOC_PREFIX, JagString.parseInt(local573), LoginManager.UNDERSCORE, JagString.parseInt(local609)}));
 							local60++;
 						}
 					}
@@ -939,7 +939,7 @@ public class Protocol {
 		opcode4 = opcode3;
 		opcode3 = opcode2;
 		opcode2 = opcode;
-		LoginManager.anInt1862 = 0;
+		LoginManager.ticksSinceLastPacket = 0;
 
 		if (opcode == ServerProt.VARP_SMALL) {
 			int id = inboundBuffer.g2add();
@@ -2392,8 +2392,8 @@ public class Protocol {
 			Player.rebootTimer--;
 			InterfaceList.miscTransmitAt = InterfaceList.transmitTimer;
 		}
-		if (LoginManager.aBoolean247) {
-			LoginManager.aBoolean247 = false;
+		if (LoginManager.pingFailed) {
+			LoginManager.pingFailed = false;
 			handleConnectionLost();
 			return;
 		}
@@ -2558,8 +2558,8 @@ public class Protocol {
 		ChangeLocRequest.loop();
 		AttachLocRequest.loop();
 		SoundPlayer.loop();
-		LoginManager.anInt1862++;
-		if (LoginManager.anInt1862 > 750) {
+		LoginManager.ticksSinceLastPacket++;
+		if (LoginManager.ticksSinceLastPacket > 750) {
 			handleConnectionLost();
 			return;
 		}

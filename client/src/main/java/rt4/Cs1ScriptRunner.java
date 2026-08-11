@@ -533,7 +533,7 @@ public class Cs1ScriptRunner {
 							}
 							if (component.clientCode == 1406) {
 								anInt3484 = local114;
-								LoginManager.aClass13_13 = component;
+								LoginManager.tooltipComponent = component;
 								anInt3260 = local123;
 								continue;
 							}

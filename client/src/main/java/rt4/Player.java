@@ -209,7 +209,7 @@ public final class Player extends PathingEntity {
 
 	@OriginalMember(owner = "client!bf", name = "c", descriptor = "(I)V")
 	public static void invalidateGlModels() {
-		if (!GlRenderer.enabled || LoginManager.aBoolean252) {
+		if (!GlRenderer.enabled || LoginManager.glModelsInvalidated) {
 			return;
 		}
 		@Pc(14) Tile[][][] local14 = SceneGraph.tiles;
@@ -278,7 +278,7 @@ public final class Player extends PathingEntity {
 				}
 			}
 		}
-		LoginManager.aBoolean252 = true;
+		LoginManager.glModelsInvalidated = true;
 	}
 
 	@OriginalMember(owner = "client!ja", name = "a", descriptor = "(IIIIB)V")
