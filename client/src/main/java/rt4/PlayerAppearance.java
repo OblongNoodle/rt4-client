@@ -395,7 +395,7 @@ public final class PlayerAppearance {
 				}
 				local154 = local740.createModel(64, 850, -30, -50, -30);
 				if (GlRenderer.enabled) {
-					((GlModel) local154).method4111(false, false, true, false, false, true);
+					((GlModel) local154).uploadBuffers(false, false, true, false, false, true);
 				}
 				bodyModels.put(local154, local41);
 				this.prevChecksum = local41;

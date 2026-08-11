@@ -350,7 +350,7 @@ public final class NpcType {
 			}
 			local40 = local593.createModel(this.ambient + 64, this.contrast + 850, -30, -50, -30);
 			if (GlRenderer.enabled) {
-				((GlModel) local40).method4111(false, false, false, false, false, true);
+				((GlModel) local40).uploadBuffers(false, false, false, false, false, true);
 			}
 			NpcTypeList.models.put(local40, this.id);
 		}

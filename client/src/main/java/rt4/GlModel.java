@@ -389,7 +389,7 @@ public final class GlModel extends Model {
 						local714 = (float) model.texturesScaleY[local459] / 1024.0F;
 						local685 = (float) model.texturesScaleZ[local459] / 1024.0F;
 					}
-					local433[local459] = method4097(model.textureFacesP[local459], model.textureFacesM[local459], model.textureFacesN[local459], model.textureRotationY[local459] & 0xFF, local683, local714, local685);
+					local433[local459] = buildTextureTransformMatrix(model.textureFacesP[local459], model.textureFacesM[local459], model.textureFacesN[local459], model.textureRotationY[local459] & 0xFF, local683, local714, local685);
 				}
 			}
 		}
@@ -505,13 +505,13 @@ public final class GlModel extends Model {
 						local952 = (float) model.aByteArray34[local833] / 256.0F;
 						if (local902 == 1) {
 							local960 = (float) (model.texturesScaleZ[local833] & 0xFFFF) / 1024.0F;
-							method4095(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local1288, local960, local1293, local952);
+							calculateCylindricalUV(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local1288, local960, local1293, local952);
 							local854 = aFloat26;
 							local856 = aFloat28;
-							method4095(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local1288, local960, local1293, local952);
+							calculateCylindricalUV(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local1288, local960, local1293, local952);
 							local858 = aFloat26;
 							local683 = aFloat28;
-							method4095(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local1288, local960, local1293, local952);
+							calculateCylindricalUV(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local1288, local960, local1293, local952);
 							local714 = aFloat26;
 							local685 = aFloat28;
 							local968 = local960 / 2.0F;
@@ -564,24 +564,24 @@ public final class GlModel extends Model {
 							local1072 = ((float) local1583 * local1288[0] + (float) local1591 * local1288[1] + (float) local1599 * local1288[2]) / local1048;
 							local1080 = ((float) local1583 * local1288[3] + (float) local1591 * local1288[4] + (float) local1599 * local1288[5]) / local1056;
 							local1088 = ((float) local1583 * local1288[6] + (float) local1591 * local1288[7] + (float) local1599 * local1288[8]) / local1064;
-							local553 = method4092(local1072, local1080, local1088);
-							method4104(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
+							local553 = getDominantAxis(local1072, local1080, local1088);
+							calculatePlanarUV(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
 							local854 = aFloat27;
 							local856 = aFloat24;
-							method4104(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
+							calculatePlanarUV(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
 							local858 = aFloat27;
 							local683 = aFloat24;
-							method4104(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
+							calculatePlanarUV(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
 							local714 = aFloat27;
 							local685 = aFloat24;
 						} else if (local902 == 3) {
-							method4101(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local1288, local1293, local952);
+							calculateSphericalUV(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local1288, local1293, local952);
 							local854 = aFloat29;
 							local856 = aFloat25;
-							method4101(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local1288, local1293, local952);
+							calculateSphericalUV(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local1288, local1293, local952);
 							local858 = aFloat29;
 							local683 = aFloat25;
-							method4101(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local1288, local1293, local952);
+							calculateSphericalUV(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local1288, local1293, local952);
 							local714 = aFloat29;
 							local685 = aFloat25;
 							if ((local1293 & 0x1) == 0) {
@@ -629,19 +629,19 @@ public final class GlModel extends Model {
 				@Pc(1994) long local1994 = (long) (local833 << 2) + ((long) (local553 << 24) + (long) (local817 << 8) + (long) local844 << 32);
 				local919 = model.triangleVertexA[local810];
 				@Pc(2004) VertexNormal local2004 = model.vertexNormals[local919];
-				this.aShortArray77[local439] = this.method4098(model, local919, local1994, local2004.x, local2004.y, local2004.z, local2004.magnitude, local854, local856);
+				this.aShortArray77[local439] = this.findOrCreateVertex(model, local919, local1994, local2004.x, local2004.y, local2004.z, local2004.magnitude, local854, local856);
 				local1280 = model.triangleVertexB[local810];
 				@Pc(2033) VertexNormal local2033 = model.vertexNormals[local1280];
-				this.aShortArray82[local439] = this.method4098(model, local1280, local1994 + (long) local866, local2033.x, local2033.y, local2033.z, local2033.magnitude, local858, local683);
+				this.aShortArray82[local439] = this.findOrCreateVertex(model, local1280, local1994 + (long) local866, local2033.x, local2033.y, local2033.z, local2033.magnitude, local858, local683);
 				@Pc(2060) int local2060 = model.triangleVertexC[local810];
 				@Pc(2065) VertexNormal local2065 = model.vertexNormals[local2060];
-				this.aShortArray83[local439] = this.method4098(model, local2060, local1994 + (long) local868, local2065.x, local2065.y, local2065.z, local2065.magnitude, local714, local685);
+				this.aShortArray83[local439] = this.findOrCreateVertex(model, local2060, local1994 + (long) local868, local2065.x, local2065.y, local2065.z, local2065.magnitude, local714, local685);
 			} else if (local902 == 1) {
 				@Pc(2096) TriangleNormal local2096 = model.triangleNormals[local810];
 				@Pc(2137) long local2137 = (long) ((local833 << 2) + (local2096.anInt4769 > 0 ? 1024 : 2048) + (local2096.anInt4770 + 256 << 12) + (local2096.anInt4767 + 256 << 22)) + ((long) (local553 << 24) + (long) (local817 << 8) + (long) local844 << 32);
-				this.aShortArray77[local439] = this.method4098(model, model.triangleVertexA[local810], local2137, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local854, local856);
-				this.aShortArray82[local439] = this.method4098(model, model.triangleVertexB[local810], local2137 + (long) local866, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local858, local683);
-				this.aShortArray83[local439] = this.method4098(model, model.triangleVertexC[local810], local2137 + (long) local868, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local714, local685);
+				this.aShortArray77[local439] = this.findOrCreateVertex(model, model.triangleVertexA[local810], local2137, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local854, local856);
+				this.aShortArray82[local439] = this.findOrCreateVertex(model, model.triangleVertexB[local810], local2137 + (long) local866, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local858, local683);
+				this.aShortArray83[local439] = this.findOrCreateVertex(model, model.triangleVertexC[local810], local2137 + (long) local868, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local714, local685);
 			}
 			if (model.triangleTextures == null) {
 				this.triangleTextures[local439] = -1;
@@ -689,7 +689,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(FFF)I")
-	public static int method4092(@OriginalArg(0) float arg0, @OriginalArg(1) float arg1, @OriginalArg(2) float arg2) {
+	public static int getDominantAxis(@OriginalArg(0) float arg0, @OriginalArg(1) float arg1, @OriginalArg(2) float arg2) {
 		@Pc(8) float local8 = arg0 < 0.0F ? -arg0 : arg0;
 		@Pc(17) float local17 = arg1 < 0.0F ? -arg1 : arg1;
 		@Pc(26) float local26 = arg2 < 0.0F ? -arg2 : arg2;
@@ -705,7 +705,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIII[FFIF)V")
-	public static void method4095(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) float[] arg6, @OriginalArg(7) float arg7, @OriginalArg(8) int arg8, @OriginalArg(9) float arg9) {
+	public static void calculateCylindricalUV(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) float[] arg6, @OriginalArg(7) float arg7, @OriginalArg(8) int arg8, @OriginalArg(9) float arg9) {
 		@Pc(3) int local3 = arg0 - arg3;
 		@Pc(7) int local7 = arg1 - arg4;
 		@Pc(11) int local11 = arg2 - arg5;
@@ -735,7 +735,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ISIB)I")
-	public static int method4096(@OriginalArg(0) int arg0, @OriginalArg(1) short arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
+	public static int packColorToRGBA(@OriginalArg(0) int arg0, @OriginalArg(1) short arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
 		@Pc(5) int local5 = Rasteriser.palette[ColorUtils.multiplyLightness2(arg0, arg2)];
 		if (arg1 != -1) {
 			@Pc(15) int local15 = Rasteriser.textureProvider.getTextureBrightness(arg1 & 0xFFFF);
@@ -778,7 +778,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIFFF)[F")
-	public static float[] method4097(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) float arg4, @OriginalArg(5) float arg5, @OriginalArg(6) float arg6) {
+	public static float[] buildTextureTransformMatrix(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) float arg4, @OriginalArg(5) float arg5, @OriginalArg(6) float arg6) {
 		@Pc(2) float[] local2 = new float[9];
 		@Pc(5) float[] local5 = new float[9];
 		@Pc(13) float local13 = (float) Math.cos((float) arg3 * 0.024543693F);
@@ -838,7 +838,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIII[FIF)V")
-	public static void method4101(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) float[] arg6, @OriginalArg(7) int arg7, @OriginalArg(8) float arg8) {
+	public static void calculateSphericalUV(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) float[] arg6, @OriginalArg(7) int arg7, @OriginalArg(8) float arg8) {
 		@Pc(3) int local3 = arg0 - arg3;
 		@Pc(7) int local7 = arg1 - arg4;
 		@Pc(11) int local11 = arg2 - arg5;
@@ -866,7 +866,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIIII[FIFFF)V")
-	public static void method4104(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float[] arg7, @OriginalArg(8) int arg8, @OriginalArg(9) float arg9, @OriginalArg(10) float arg10, @OriginalArg(11) float arg11) {
+	public static void calculatePlanarUV(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float[] arg7, @OriginalArg(8) int arg8, @OriginalArg(9) float arg9, @OriginalArg(10) float arg10, @OriginalArg(11) float arg11) {
 		@Pc(3) int local3 = arg0 - arg3;
 		@Pc(7) int local7 = arg1 - arg4;
 		@Pc(11) int local11 = arg2 - arg5;
@@ -912,7 +912,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "v", descriptor = "()V")
-	public static void method4120() {
+	public static void initCopyTargets() {
 		aClass8_Sub1_Sub1_1 = new GlModel();
 		aClass8_Sub1_Sub1_2 = new GlModel();
 		aClass8_Sub1_Sub1_3 = new GlModel();
@@ -924,7 +924,7 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
 	public final Model copyForAnimation(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
-		return this.method4114(arg0, arg1, arg2, aClass8_Sub1_Sub1_4, aClass8_Sub1_Sub1_3);
+		return this.copyToTarget(arg0, arg1, arg2, aClass8_Sub1_Sub1_4, aClass8_Sub1_Sub1_3);
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIIIIIJILclient!ga;)V")
@@ -1077,7 +1077,7 @@ public final class GlModel extends Model {
 										@Pc(698) short local698 = this.aShortArray77[local362];
 										@Pc(703) short local703 = this.aShortArray82[local362];
 										@Pc(708) short local708 = this.aShortArray83[local362];
-										if (this.method4118(anInt3582, RawModel.anInt1053, anIntArray467[local698], anIntArray467[local703], anIntArray467[local708], anIntArray468[local698], anIntArray468[local703], anIntArray468[local708])) {
+										if (this.pointWithinTriangle(anInt3582, RawModel.anInt1053, anIntArray467[local698], anIntArray467[local703], anIntArray467[local708], anIntArray468[local698], anIntArray468[local703], anIntArray468[local708])) {
 											if (miniMenuPick) {
 												Model.aLongArray11[MiniMenu.anInt7++] = arg8;
 											}
@@ -1131,14 +1131,14 @@ public final class GlModel extends Model {
 		gl.glPushMatrix();
 		gl.glTranslatef((float) arg5, (float) arg6, (float) arg7);
 		gl.glRotatef((float) arg0 * 0.17578125F, 0.0F, 1.0F, 0.0F);
-		this.method4121();
+		this.ensureBuffersAndDraw();
 		gl.glRotatef((float) -arg0 * 0.17578125F, 0.0F, 1.0F, 0.0F);
 		gl.glTranslatef((float) -arg5, (float) -arg6, (float) -arg7);
 		gl.glPopMatrix();
 	}
 
 	@OriginalMember(owner = "client!td", name = "m", descriptor = "()V")
-	public final void method4093() {
+	public final void rotateClockwiseAll() {
 		if (this.aShortArray76 == null) {
 			this.rotateClockwise();
 			return;
@@ -1162,7 +1162,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "n", descriptor = "()I")
-	public final int method4094() {
+	public final int getAmbientIntensity() {
 		return this.aShort29;
 	}
 
@@ -1228,7 +1228,7 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "b", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
 	public final Model copyForLoc(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
-		return this.method4114(arg0, arg1, arg2, aClass8_Sub1_Sub1_6, aClass8_Sub1_Sub1_5);
+		return this.copyToTarget(arg0, arg1, arg2, aClass8_Sub1_Sub1_6, aClass8_Sub1_Sub1_5);
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(Lclient!th;IIIZ)V")
@@ -1397,12 +1397,12 @@ public final class GlModel extends Model {
 		if (arg1 != 0) {
 			gl.glRotatef((float) -arg1 * 0.17578125F, 0.0F, 0.0F, 1.0F);
 		}
-		this.method4121();
+		this.ensureBuffersAndDraw();
 		gl.glPopMatrix();
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(Lclient!gb;IJIIIIFF)S")
-	private short method4098(@OriginalArg(0) RawModel arg0, @OriginalArg(1) int arg1, @OriginalArg(2) long arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float arg7, @OriginalArg(8) float arg8) {
+	private short findOrCreateVertex(@OriginalArg(0) RawModel arg0, @OriginalArg(1) int arg1, @OriginalArg(2) long arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float arg7, @OriginalArg(8) float arg8) {
 		@Pc(4) int local4 = this.anIntArray462[arg1];
 		@Pc(11) int local11 = this.anIntArray462[arg1 + 1];
 		@Pc(13) int local13 = 0;
@@ -1937,7 +1937,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "e", descriptor = "(I)V")
-	public final void method4100(@OriginalArg(0) int arg0) {
+	public final void setDiffuseIntensity(@OriginalArg(0) int arg0) {
 		this.aShort28 = (short) arg0;
 		if (this.normalsBuffer != null) {
 			this.normalsBuffer.valid = false;
@@ -1945,7 +1945,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "p", descriptor = "()V")
-	public final void method4102() {
+	public final void rotate180All() {
 		if (this.aShortArray76 == null) {
 			this.rotate180();
 			return;
@@ -1981,7 +1981,7 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "c", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
 	public final Model copyForEntity(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
-		return this.method4114(arg0, arg1, arg2, aClass8_Sub1_Sub1_2, aClass8_Sub1_Sub1_1);
+		return this.copyToTarget(arg0, arg1, arg2, aClass8_Sub1_Sub1_2, aClass8_Sub1_Sub1_1);
 	}
 
 	@OriginalMember(owner = "client!td", name = "e", descriptor = "()V")
@@ -1996,7 +1996,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "q", descriptor = "()V")
-	private void method4103() {
+	private void buildIndexBuffer() {
 		if (tempBuffer.data.length < this.anInt5296 * 12) {
 			tempBuffer = new Buffer((this.anInt5296 + 100) * 12);
 		} else {
@@ -2034,7 +2034,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "f", descriptor = "(I)V")
-	public final void method4105(@OriginalArg(0) int arg0) {
+	public final void setAmbientIntensity(@OriginalArg(0) int arg0) {
 		this.aShort29 = (short) arg0;
 		this.colorBuffer.valid = false;
 	}
@@ -2057,7 +2057,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(SS)V")
-	public final void method4107(@OriginalArg(0) short arg0, @OriginalArg(1) short arg1) {
+	public final void retexture(@OriginalArg(0) short arg0, @OriginalArg(1) short arg1) {
 		@Pc(1) int local1;
 		for (local1 = 0; local1 < this.triangleCount; local1++) {
 			if (this.triangleTextures[local1] == arg0) {
@@ -2134,7 +2134,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "b", descriptor = "(SS)V")
-	public final void method4109(@OriginalArg(0) short arg0, @OriginalArg(1) short arg1) {
+	public final void recolor(@OriginalArg(0) short arg0, @OriginalArg(1) short arg1) {
 		for (@Pc(1) int local1 = 0; local1 < this.triangleCount; local1++) {
 			if (this.triangleColors[local1] == arg0) {
 				this.triangleColors[local1] = arg1;
@@ -2144,7 +2144,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IILclient!td;[[I[[IIII)V")
-	public final void method4110(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) GlModel arg2, @OriginalArg(3) int[][] arg3, @OriginalArg(4) int[][] arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	public final void alignToTerrain(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) GlModel arg2, @OriginalArg(3) int[][] arg3, @OriginalArg(4) int[][] arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		if (!arg2.bounds.valid) {
 			arg2.calculateBounds();
 		}
@@ -2257,15 +2257,15 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZZZZZ)V")
-	public final void method4111(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(4) boolean arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5) {
+	public final void uploadBuffers(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(4) boolean arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5) {
 		if (this.aByte18 != 0) {
 			throw new IllegalArgumentException();
 		} else if (this.anInt5296 != 0) {
 			if (arg5) {
 				@Pc(26) boolean local26 = !this.colorBuffer.valid && (arg1 || arg2 && !Preferences.highDetailLighting);
-				this.method4113(false, !this.vertexBuffer.valid && arg0, local26, this.normalsBuffer != null && !this.normalsBuffer.valid && arg2, !this.texCoordBuffer.valid);
+				this.packInterleavedVertexData(false, !this.vertexBuffer.valid && arg0, local26, this.normalsBuffer != null && !this.normalsBuffer.valid && arg2, !this.texCoordBuffer.valid);
 				if (!this.indexBuffer.valid && arg3 && arg1) {
-					this.method4103();
+					this.buildIndexBuffer();
 				}
 			}
 			if (arg0) {
@@ -2325,7 +2325,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZZZ)V")
-	private void method4113(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) boolean arg4) {
+	private void packInterleavedVertexData(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) boolean arg4) {
 		@Pc(1) int stride = 0;
 		if (arg1) {
 			this.vertexBuffer.pointer = 0;
@@ -2401,7 +2401,7 @@ public final class GlModel extends Model {
 		if (arg2) {
 			if (Preferences.highDetailLighting) {
 				for (local60 = 0; local60 < this.triangleCount; local60++) {
-					local71 = method4096(this.triangleColors[local60], this.triangleTextures[local60], this.aShort29, this.triangleAlpha[local60]);
+					local71 = packColorToRGBA(this.triangleColors[local60], this.triangleTextures[local60], this.aShort29, this.triangleAlpha[local60]);
 					tempBuffer.offset = this.colorBuffer.pointer + this.aShortArray77[local60] * stride;
 					tempBuffer.p4(local71);
 					tempBuffer.offset = this.colorBuffer.pointer + this.aShortArray82[local60] * stride;
@@ -2471,9 +2471,9 @@ public final class GlModel extends Model {
 						}
 						this.aShortArray86[local458] = (short) (-local469 - 1);
 					}
-					@Pc(562) int local562 = method4096(this.triangleColors[local99], this.triangleTextures[local99], local281, this.triangleAlpha[local99]);
-					@Pc(577) int local577 = method4096(this.triangleColors[local99], this.triangleTextures[local99], local375, this.triangleAlpha[local99]);
-					@Pc(592) int local592 = method4096(this.triangleColors[local99], this.triangleTextures[local99], local469, this.triangleAlpha[local99]);
+					@Pc(562) int local562 = packColorToRGBA(this.triangleColors[local99], this.triangleTextures[local99], local281, this.triangleAlpha[local99]);
+					@Pc(577) int local577 = packColorToRGBA(this.triangleColors[local99], this.triangleTextures[local99], local375, this.triangleAlpha[local99]);
+					@Pc(592) int local592 = packColorToRGBA(this.triangleColors[local99], this.triangleTextures[local99], local469, this.triangleAlpha[local99]);
 					tempBuffer.offset = this.colorBuffer.pointer + local270 * stride;
 					tempBuffer.p4(local562);
 					tempBuffer.offset = this.colorBuffer.pointer + local364 * stride;
@@ -2668,7 +2668,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZLclient!td;Lclient!td;)Lclient!ak;")
-	private Model method4114(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) GlModel arg3, @OriginalArg(4) GlModel arg4) {
+	private Model copyToTarget(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) GlModel arg3, @OriginalArg(4) GlModel arg4) {
 		arg3.vertexCount = this.vertexCount;
 		arg3.anInt5296 = this.anInt5296;
 		arg3.triangleCount = this.triangleCount;
@@ -2794,12 +2794,12 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "t", descriptor = "()I")
-	public final int method4115() {
+	public final int getDiffuseIntensity() {
 		return this.aShort28;
 	}
 
 	@OriginalMember(owner = "client!td", name = "u", descriptor = "()V")
-	public final void method4116() {
+	public final void rotateCounterClockwiseAll() {
 		if (this.aShortArray76 == null) {
 			this.rotateCounterClockwise();
 			return;
@@ -2823,7 +2823,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZZZZZZZZZ)Lclient!td;")
-	public final GlModel method4117(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(4) boolean arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5, @OriginalArg(7) boolean arg6, @OriginalArg(9) boolean arg7, @OriginalArg(10) boolean arg8) {
+	public final GlModel deepCopy(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(4) boolean arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5, @OriginalArg(7) boolean arg6, @OriginalArg(9) boolean arg7, @OriginalArg(10) boolean arg8) {
 		@Pc(3) GlModel model = new GlModel();
 		model.vertexCount = this.vertexCount;
 		model.anInt5296 = this.anInt5296;
@@ -2922,7 +2922,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIIIII)Z")
-	private boolean method4118(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	private boolean pointWithinTriangle(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		if (arg1 < arg2 && arg1 < arg3 && arg1 < arg4) {
 			return false;
 		} else if (arg1 > arg2 && arg1 > arg3 && arg1 > arg4) {
@@ -3290,17 +3290,17 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "w", descriptor = "()V")
-	private void method4121() {
+	private void ensureBuffersAndDraw() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		if (this.triangleCount == 0) {
 			return;
 		}
 		if (this.aByte18 != 0) {
-			this.method4113(true, !this.vertexBuffer.valid && (this.aByte18 & 0x1) != 0, !this.colorBuffer.valid && (this.aByte18 & 0x2) != 0, this.normalsBuffer != null && !this.normalsBuffer.valid && (this.aByte18 & 0x4) != 0, false);
+			this.packInterleavedVertexData(true, !this.vertexBuffer.valid && (this.aByte18 & 0x1) != 0, !this.colorBuffer.valid && (this.aByte18 & 0x2) != 0, this.normalsBuffer != null && !this.normalsBuffer.valid && (this.aByte18 & 0x4) != 0, false);
 		}
-		this.method4113(false, !this.vertexBuffer.valid, !this.colorBuffer.valid, this.normalsBuffer != null && !this.normalsBuffer.valid, !this.texCoordBuffer.valid);
+		this.packInterleavedVertexData(false, !this.vertexBuffer.valid, !this.colorBuffer.valid, this.normalsBuffer != null && !this.normalsBuffer.valid, !this.texCoordBuffer.valid);
 		if (!this.indexBuffer.valid) {
-			this.method4103();
+			this.buildIndexBuffer();
 		}
 		if (this.aByte19 != 0) {
 			if ((this.aByte19 & 0x1) != 0) {
@@ -3418,7 +3418,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "x", descriptor = "()V")
-	public final void method4122() {
+	public final void mirrorZ() {
 		@Pc(1) int local1;
 		for (local1 = 0; local1 < this.vertexCount; local1++) {
 			this.vertexZ[local1] = -this.vertexZ[local1];
@@ -3456,7 +3456,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "g", descriptor = "(I)V")
-	public final void method4123() {
+	public final void rotate45Degrees() {
 		if (this.aShortArray76 == null) {
 			this.rotateY(256);
 			return;
@@ -3483,7 +3483,7 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(Lclient!ek;)Lclient!ek;")
-	public final SoftwareIndexedSprite method4124(@OriginalArg(0) SoftwareIndexedSprite arg0) {
+	public final SoftwareIndexedSprite projectShadow(@OriginalArg(0) SoftwareIndexedSprite arg0) {
 		if (this.anInt5296 == 0) {
 			return null;
 		}

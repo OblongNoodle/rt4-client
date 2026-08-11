@@ -105,7 +105,7 @@ public final class Npc extends PathingEntity {
 
 		if (!GlRenderer.enabled) {
 			if (model != null) {
-				body = ((SoftwareModel) body).method4588(model);
+				body = ((SoftwareModel) body).mergeWith(model);
 			}
 
 			if (this.type.size == 1) {

@@ -571,7 +571,7 @@ public final class ObjType {
 			}
 			model.pickable = true;
 			if (GlRenderer.enabled) {
-				((GlModel) model).method4111(false, false, false, false, false, true);
+				((GlModel) model).uploadBuffers(false, false, false, false, false, true);
 			}
 			ObjTypeList.models.put(model, this.id);
 		}

@@ -565,7 +565,7 @@ public final class SoftwareModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!w", name = "m", descriptor = "()V")
-	public static void method4580() {
+	public static void enableDepthSortMode() {
 		aBoolean307 = true;
 		anIntArray550 = new int[4096];
 		depthTriangles = new int[4096];
@@ -576,7 +576,7 @@ public final class SoftwareModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!w", name = "o", descriptor = "()V")
-	public static void method4583() {
+	public static void enableBucketSortMode() {
 		aBoolean307 = false;
 		anIntArray550 = null;
 		depthTriangles = null;
@@ -639,7 +639,7 @@ public final class SoftwareModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!w", name = "n", descriptor = "()V")
-	private void method4581() {
+	private void recalculateTriangleColors() {
 		for (@Pc(1) int local1 = 0; local1 < this.triangleCount; local1++) {
 			@Pc(15) short local15 = this.aShortArray92 == null ? -1 : this.aShortArray92[local1];
 			if (local15 == -1) {
@@ -948,7 +948,7 @@ public final class SoftwareModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!w", name = "a", descriptor = "(II[[I[[IIIIZ)Lclient!w;")
-	public SoftwareModel method4586(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[][] arg2, @OriginalArg(3) int[][] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7) {
+	public SoftwareModel alignToTerrain(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[][] arg2, @OriginalArg(3) int[][] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7) {
 		if (!this.boundsValid) {
 			this.calculateBounds();
 		}
@@ -1363,7 +1363,7 @@ public final class SoftwareModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!w", name = "a", descriptor = "(Lclient!ak;)Lclient!ak;")
-	public Model method4588(@OriginalArg(0) Model arg0) {
+	public Model mergeWith(@OriginalArg(0) Model arg0) {
 		return new SoftwareModel(new SoftwareModel[]{this, (SoftwareModel) arg0}, 2);
 	}
 
@@ -1380,7 +1380,7 @@ public final class SoftwareModel extends Model {
 	@Override
 	protected void resetAfterAnimation() {
 		if (this.aBoolean304) {
-			this.method4581();
+			this.recalculateTriangleColors();
 			this.aBoolean304 = false;
 		}
 		this.boundsValid = false;
@@ -1914,7 +1914,7 @@ public final class SoftwareModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!w", name = "b", descriptor = "(IIIIIIII)V")
-	public void method4591(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public void renderOnInterface(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
 		try {
 			if (!this.boundsValid) {
 				this.calculateBounds();

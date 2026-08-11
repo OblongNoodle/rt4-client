@@ -798,7 +798,7 @@ public class Cs1ScriptRunner {
 													color = (component.height + local468 - 1) / local468;
 
 													if (GlRenderer.enabled) {
-														GlRaster.method1183(local123, local114, component.width + local123, component.height + local114);
+														GlRaster.setClipRegion(local123, local114, component.width + local123, component.height + local114);
 
 														@Pc(2274) boolean local2274 = IntUtils.isPowerOfTwo(sprite.width);
 														@Pc(2279) boolean local2279 = IntUtils.isPowerOfTwo(sprite.height);
@@ -958,7 +958,7 @@ public class Cs1ScriptRunner {
 													GlRenderer.setFogEnabled(false);
 													FogManager.init(Preferences.brightness);
 													if (ScriptRunner.aBoolean299) {
-														GlRaster.method1177();
+														GlRaster.resetClipRegion();
 														GlRenderer.clearDepthBuffer();
 														GlRaster.setClip(arg0, arg6, arg4, arg7);
 														ScriptRunner.aBoolean299 = false;
@@ -983,7 +983,7 @@ public class Cs1ScriptRunner {
 													if (!component.if3) {
 														local2589.setCamera(component.modelYAngle, 0, component.modelXAngle, 0, local563, local571, -1L);
 													} else if (component.modelOrtho) {
-														((SoftwareModel) local2589).method4591(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + memory + local563, local571 + component.modelZOffset, component.modelZoom);
+														((SoftwareModel) local2589).renderOnInterface(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + memory + local563, local571 + component.modelZOffset, component.modelZoom);
 													} else {
 														local2589.setCamera(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + local563 + memory, local571 + component.modelZOffset, -1L);
 													}
@@ -1097,12 +1097,12 @@ public class Cs1ScriptRunner {
 												}
 												if (component.lineWidth == 1) {
 													if (GlRenderer.enabled) {
-														GlRaster.method1185(local123, local276, local468, memory, component.color);
+														GlRaster.drawLine(local123, local276, local468, memory, component.color);
 													} else {
 														SoftwareRaster.drawLine(local123, local276, local468, memory, component.color);
 													}
 												} else if (GlRenderer.enabled) {
-													GlRaster.method1181(local123, local276, local468, memory, component.color, component.lineWidth);
+													GlRaster.drawThickLine(local123, local276, local468, memory, component.color, component.lineWidth);
 												} else {
 													SoftwareRaster.drawThickLine(local123, local276, local468, memory, component.color, component.lineWidth);
 												}

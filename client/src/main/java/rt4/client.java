@@ -594,7 +594,7 @@ public final class client extends GameShell {
 		((Js5GlTextureProvider) Rasteriser.textureProvider).clear();
 		LightingManager.lightCount = 0;
 		LightingManager.lights = new Light[255];
-		GlModel.method4120();
+		GlModel.initCopyTargets();
 		ShadowManager.destroy();
 		Sprites.clear();
 		WorldMap.clear(false);

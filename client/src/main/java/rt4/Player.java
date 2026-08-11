@@ -223,26 +223,26 @@ public final class Player extends PathingEntity {
 						if (local54.groundDecor != null && local54.groundDecor.entity instanceof GlModel) {
 							local71 = (GlModel) local54.groundDecor.entity;
 							if ((local54.groundDecor.key & Long.MIN_VALUE) == 0L) {
-								local71.method4111(false, true, true, false, true, true);
+								local71.uploadBuffers(false, true, true, false, true, true);
 							} else {
-								local71.method4111(true, true, true, true, true, true);
+								local71.uploadBuffers(true, true, true, true, true, true);
 							}
 						}
 						if (local54.wallDecor != null) {
 							if (local54.wallDecor.primary instanceof GlModel) {
 								local71 = (GlModel) local54.wallDecor.primary;
 								if ((local54.wallDecor.key & Long.MIN_VALUE) == 0L) {
-									local71.method4111(false, true, true, false, true, true);
+									local71.uploadBuffers(false, true, true, false, true, true);
 								} else {
-									local71.method4111(true, true, true, true, true, true);
+									local71.uploadBuffers(true, true, true, true, true, true);
 								}
 							}
 							if (local54.wallDecor.secondary instanceof GlModel) {
 								local71 = (GlModel) local54.wallDecor.secondary;
 								if ((Long.MIN_VALUE & local54.wallDecor.key) == 0L) {
-									local71.method4111(false, true, true, false, true, true);
+									local71.uploadBuffers(false, true, true, false, true, true);
 								} else {
-									local71.method4111(true, true, true, true, true, true);
+									local71.uploadBuffers(true, true, true, true, true, true);
 								}
 							}
 						}
@@ -250,17 +250,17 @@ public final class Player extends PathingEntity {
 							if (local54.wall.primary instanceof GlModel) {
 								local71 = (GlModel) local54.wall.primary;
 								if ((local54.wall.key & Long.MIN_VALUE) == 0L) {
-									local71.method4111(false, true, true, false, true, true);
+									local71.uploadBuffers(false, true, true, false, true, true);
 								} else {
-									local71.method4111(true, true, true, true, true, true);
+									local71.uploadBuffers(true, true, true, true, true, true);
 								}
 							}
 							if (local54.wall.secondary instanceof GlModel) {
 								local71 = (GlModel) local54.wall.secondary;
 								if ((Long.MIN_VALUE & local54.wall.key) == 0L) {
-									local71.method4111(false, true, true, false, true, true);
+									local71.uploadBuffers(false, true, true, false, true, true);
 								} else {
-									local71.method4111(true, true, true, true, true, true);
+									local71.uploadBuffers(true, true, true, true, true, true);
 								}
 							}
 						}
@@ -268,9 +268,9 @@ public final class Player extends PathingEntity {
 							if (local54.scenery[local270].entity instanceof GlModel) {
 								@Pc(293) GlModel local293 = (GlModel) local54.scenery[local270].entity;
 								if ((Long.MIN_VALUE & local54.scenery[local270].key) == 0L) {
-									local293.method4111(false, true, true, false, true, true);
+									local293.uploadBuffers(false, true, true, false, true, true);
 								} else {
-									local293.method4111(true, true, true, true, true, true);
+									local293.uploadBuffers(true, true, true, true, true, true);
 								}
 							}
 						}
@@ -528,10 +528,10 @@ public final class Player extends PathingEntity {
 			}
 		} else {
 			if (local184 != null) {
-				local76 = ((SoftwareModel) local76).method4588(local184);
+				local76 = ((SoftwareModel) local76).mergeWith(local184);
 			}
 			if (local515 != null) {
-				local76 = ((SoftwareModel) local76).method4588(local515);
+				local76 = ((SoftwareModel) local76).mergeWith(local515);
 			}
 			local76.pickable = true;
 			local76.render(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, this.particleSystem);

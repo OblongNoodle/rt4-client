@@ -230,7 +230,7 @@ public final class DisplayMode {
 		if (newMode > 0 && currentMode == 0) {
 			GameShell.thread.setPriority(5);
 			SoftwareRaster.frameBuffer = null;
-			SoftwareModel.method4580();
+			SoftwareModel.enableDepthSortMode();
 			((Js5GlTextureProvider) Rasteriser.textureProvider).setCapacity(200);
 			if (Preferences.highDetailLighting) {
 				Rasteriser.setBrightness(0.7F);
@@ -242,7 +242,7 @@ public final class DisplayMode {
 				SoftwareRaster.frameBuffer = FrameBuffer.create(GameShell.frameHeight, GameShell.frameWidth, GameShell.canvas);
 			else
 				SoftwareRaster.frameBuffer = FrameBuffer.create(503, 765, GameShell.canvas);
-			SoftwareModel.method4583();
+			SoftwareModel.enableBucketSortMode();
 			ParticleSystem.quit();
 			((Js5GlTextureProvider) Rasteriser.textureProvider).setCapacity(20);
 			if (Preferences.highDetailLighting) {
@@ -283,7 +283,7 @@ public final class DisplayMode {
 	@OriginalMember(owner = "client!ab", name = "c", descriptor = "(B)[Lclient!od;")
 	public static DisplayMode[] getDisplayModes() {
 		if (aClass114Array1 == null) {
-			@Pc(16) DisplayMode[] local16 = method3558(GameShell.signLink);
+			@Pc(16) DisplayMode[] local16 = getAvailableDisplayModes(GameShell.signLink);
 			@Pc(20) DisplayMode[] local20 = new DisplayMode[local16.length];
 			@Pc(22) int local22 = 0;
 			label52:
@@ -316,7 +316,7 @@ public final class DisplayMode {
 	}
 
 	@OriginalMember(owner = "client!pm", name = "a", descriptor = "(ILsignlink!ll;)[Lclient!od;")
-	public static DisplayMode[] method3558(@OriginalArg(1) SignLink arg0) {
+	public static DisplayMode[] getAvailableDisplayModes(@OriginalArg(1) SignLink arg0) {
 		if (!arg0.isFullScreenSupported()) {
 			return new DisplayMode[0];
 		}
@@ -345,7 +345,7 @@ public final class DisplayMode {
 		if (!signLink.isFullScreenSupported()) {
 			return null;
 		}
-		@Pc(20) DisplayMode[] displayModes = method3558(signLink);
+		@Pc(20) DisplayMode[] displayModes = getAvailableDisplayModes(signLink);
 		if (displayModes == null) {
 			return null;
 		}

@@ -721,30 +721,30 @@ public final class LocType {
 		}
 		@Pc(264) boolean local264 = this.resizey == 128 && this.yoff == 0;
 		@Pc(294) boolean local294 = arg0 == 0 && this.resizex == 128 && this.resizez == 128 && this.xoff == 0 && this.zoff == 0 && !local236;
-		@Pc(351) GlModel local351 = local79.method4117(local294, local264, this.recol_s == null, local79.method4094() == local10, arg0 == 0 && !local236, true, local17 == local79.method4115(), !local236, this.retex_s == null);
+		@Pc(351) GlModel local351 = local79.deepCopy(local294, local264, this.recol_s == null, local79.getAmbientIntensity() == local10, arg0 == 0 && !local236, true, local17 == local79.getDiffuseIntensity(), !local236, this.retex_s == null);
 		if (local236) {
-			local351.method4122();
+			local351.mirrorZ();
 		}
 		if (arg2 == 4 && arg0 > 3) {
-			local351.method4123();
+			local351.rotate45Degrees();
 			local351.translate(45, 0, -45);
 		}
 		@Pc(374) int local374 = arg0 & 0x3;
 		if (local374 == 1) {
-			local351.method4116();
+			local351.rotateCounterClockwiseAll();
 		} else if (local374 == 2) {
-			local351.method4102();
+			local351.rotate180All();
 		} else if (local374 == 3) {
-			local351.method4093();
+			local351.rotateClockwiseAll();
 		}
 		if (this.recol_s != null) {
 			for (local177 = 0; local177 < this.recol_s.length; local177++) {
-				local351.method4109(this.recol_s[local177], this.recol_d[local177]);
+				local351.recolor(this.recol_s[local177], this.recol_d[local177]);
 			}
 		}
 		if (this.retex_s != null) {
 			for (local177 = 0; local177 < this.retex_s.length; local177++) {
-				local351.method4107(this.retex_s[local177], this.retex_d[local177]);
+				local351.retexture(this.retex_s[local177], this.retex_d[local177]);
 			}
 		}
 		if (this.resizex != 128 || this.resizey != 128 || this.resizez != 128) {
@@ -753,11 +753,11 @@ public final class LocType {
 		if (this.xoff != 0 || this.yoff != 0 || this.zoff != 0) {
 			local351.translate(this.xoff, this.yoff, this.zoff);
 		}
-		if (local10 != local351.method4094()) {
-			local351.method4105(local10);
+		if (local10 != local351.getAmbientIntensity()) {
+			local351.setAmbientIntensity(local10);
 		}
-		if (local351.method4115() != local17) {
-			local351.method4100(local17);
+		if (local351.getDiffuseIntensity() != local17) {
+			local351.setDiffuseIntensity(local17);
 		}
 		return local351;
 	}
@@ -785,7 +785,7 @@ public final class LocType {
 					local235.rotateY(256);
 				}
 				if (arg8) {
-					local265 = local235.method4124(arg7);
+					local265 = local235.projectShadow(arg7);
 				} else {
 					local265 = null;
 				}
@@ -798,11 +798,11 @@ public final class LocType {
 				local265 = local225.sprite;
 			}
 			@Pc(298) boolean local298 = this.computeVertexColors & arg6;
-			@Pc(330) GlModel local330 = local235.method4117(this.hillskewType != 3, this.hillskewType == 0, true, true, true, !local298, true, true, true);
+			@Pc(330) GlModel local330 = local235.deepCopy(this.hillskewType != 3, this.hillskewType == 0, true, true, true, !local298, true, true, true);
 			if (this.hillskewType != 0) {
-				local330.method4110(this.hillskewType, this.hillskewAmount, local235, arg2, arg5, arg1, arg4, arg9);
+				local330.alignToTerrain(this.hillskewType, this.hillskewAmount, local235, arg2, arg5, arg1, arg4, arg9);
 			}
-			local330.method4111(this.interactable == 0 && !this.dynamic, true, true, this.interactable == 0, true, false);
+			local330.uploadBuffers(this.interactable == 0 && !this.dynamic, true, true, this.interactable == 0, true, false);
 			tempLocEntity.model = local330;
 			local330.aBoolean259 = local298;
 			tempLocEntity.sprite = local265;
@@ -846,7 +846,7 @@ public final class LocType {
 		}
 		if (this.hillskewType != 0) {
 			if (local60 instanceof SoftwareModel) {
-				local60 = ((SoftwareModel) local60).method4586(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9, true);
+				local60 = ((SoftwareModel) local60).alignToTerrain(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9, true);
 			} else if (local60 instanceof RawModel) {
 				local60 = ((RawModel) local60).placeOnTerrain(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9);
 			}
@@ -889,7 +889,7 @@ public final class LocType {
 				if (!local234) {
 					local195 = (SoftwareModel) local195.copyForLoc(true, true, true);
 				}
-				local195 = local195.method4586(this.hillskewType, this.hillskewAmount, arg6, arg9, arg1, arg3, arg0, false);
+				local195 = local195.alignToTerrain(this.hillskewType, this.hillskewAmount, arg6, arg9, arg1, arg3, arg0, false);
 			}
 			tempLocEntity.model = local195;
 			return tempLocEntity;
@@ -906,7 +906,7 @@ public final class LocType {
 				return null;
 			}
 			local46.createBones();
-			local46.method4111(false, false, false, false, false, true);
+			local46.uploadBuffers(false, false, false, false, false, true);
 			LocTypeList.animatedEntityCache.put(local46, local30);
 		}
 		@Pc(80) boolean local80 = false;
@@ -923,7 +923,7 @@ public final class LocType {
 			local82.rotateY(256);
 		}
 		if (arg7) {
-			tempLocEntity.sprite = local82.method4124(arg2);
+			tempLocEntity.sprite = local82.projectShadow(arg2);
 		} else {
 			tempLocEntity.sprite = null;
 		}
@@ -931,7 +931,7 @@ public final class LocType {
 			if (!local80) {
 				local82 = (GlModel) local82.copyForLoc(true, true, true);
 			}
-			local82.method4110(this.hillskewType, this.hillskewAmount, local46, arg6, arg9, arg1, arg3, arg0);
+			local82.alignToTerrain(this.hillskewType, this.hillskewAmount, local46, arg6, arg9, arg1, arg3, arg0);
 		}
 		tempLocEntity.model = local82;
 		return tempLocEntity;

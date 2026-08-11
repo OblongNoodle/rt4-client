@@ -100,11 +100,11 @@ public final class SeqType {
 		}
 		if (GlRenderer.enabled && this.aBoolean278) {
 			if (local39 == 1) {
-				((GlModel) local124).method4093();
+				((GlModel) local124).rotateClockwiseAll();
 			} else if (local39 == 2) {
-				((GlModel) local124).method4102();
+				((GlModel) local124).rotate180All();
 			} else if (local39 == 3) {
-				((GlModel) local124).method4116();
+				((GlModel) local124).rotateCounterClockwiseAll();
 			}
 		} else if (local39 == 1) {
 			local124.rotateClockwise();
@@ -116,11 +116,11 @@ public final class SeqType {
 		local124.applyAnimation(local23, local27, local41, arg1, arg4 - 1, local10, this.aBoolean278);
 		if (GlRenderer.enabled && this.aBoolean278) {
 			if (local39 == 1) {
-				((GlModel) local124).method4116();
+				((GlModel) local124).rotateCounterClockwiseAll();
 			} else if (local39 == 2) {
-				((GlModel) local124).method4102();
+				((GlModel) local124).rotate180All();
 			} else if (local39 == 3) {
-				((GlModel) local124).method4093();
+				((GlModel) local124).rotateClockwiseAll();
 			}
 		} else if (local39 == 1) {
 			local124.rotateCounterClockwise();
@@ -213,11 +213,11 @@ public final class SeqType {
 		}
 		if (this.aBoolean278 && GlRenderer.enabled) {
 			if (local40 == 1) {
-				((GlModel) local106).method4093();
+				((GlModel) local106).rotateClockwiseAll();
 			} else if (local40 == 2) {
-				((GlModel) local106).method4102();
+				((GlModel) local106).rotate180All();
 			} else if (local40 == 3) {
-				((GlModel) local106).method4116();
+				((GlModel) local106).rotateCounterClockwiseAll();
 			}
 		} else if (local40 == 1) {
 			local106.rotateClockwise();
@@ -229,11 +229,11 @@ public final class SeqType {
 		local106.applyAnimation(local19, local27, local42, arg0, arg2 - 1, local6, this.aBoolean278);
 		if (this.aBoolean278 && GlRenderer.enabled) {
 			if (local40 == 1) {
-				((GlModel) local106).method4116();
+				((GlModel) local106).rotateCounterClockwiseAll();
 			} else if (local40 == 2) {
-				((GlModel) local106).method4102();
+				((GlModel) local106).rotate180All();
 			} else if (local40 == 3) {
-				((GlModel) local106).method4093();
+				((GlModel) local106).rotateClockwiseAll();
 			}
 		} else if (local40 == 1) {
 			local106.rotateCounterClockwise();

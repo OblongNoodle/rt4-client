@@ -1154,7 +1154,7 @@ public class InterfaceList {
 			Cs1ScriptRunner.renderTopLevelInterface();
 		}
 		if (GlRenderer.enabled) {
-			GlRaster.method1177();
+			GlRaster.resetClipRegion();
 		} else {
 			SoftwareRaster.resetClip();
 		}

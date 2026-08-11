@@ -50,7 +50,7 @@ public final class GlRaster {
 	}
 
 	@OriginalMember(owner = "client!dj", name = "c", descriptor = "()V")
-	public static void method1177() {
+	public static void resetClipRegion() {
 		clipLeft = 0;
 		clipTop = 0;
 		clipRight = GlRenderer.canvasWidth;
@@ -109,7 +109,7 @@ public final class GlRaster {
 	}
 
 	@OriginalMember(owner = "client!dj", name = "b", descriptor = "(IIIIII)V")
-	public static void method1181(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	public static void drawThickLine(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		@Pc(3) int local3 = arg2 - arg0;
 		@Pc(7) int local7 = arg3 - arg1;
 		@Pc(14) int local14 = local3 >= 0 ? local3 : -local3;
@@ -176,7 +176,7 @@ public final class GlRaster {
 	}
 
 	@OriginalMember(owner = "client!dj", name = "c", descriptor = "(IIII)V")
-	public static void method1183(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static void setClipRegion(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		if (clipLeft < arg0) {
 			clipLeft = arg0;
 		}
@@ -205,7 +205,7 @@ public final class GlRaster {
 	}
 
 	@OriginalMember(owner = "client!dj", name = "b", descriptor = "(IIIII)V")
-	public static void method1185(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public static void drawLine(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		GlRenderer.begin2DNoTexture();
 		@Pc(5) float local5 = (float) arg0 + 0.3F;
 		@Pc(10) float local10 = (float) arg2 + 0.3F;
