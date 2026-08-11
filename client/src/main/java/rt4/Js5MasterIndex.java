@@ -24,9 +24,9 @@ public final class Js5MasterIndex {
 	private Js5NetRequest request;
 
 	@OriginalMember(owner = "client!al", name = "<init>", descriptor = "(Lclient!jb;Lclient!k;)V")
-	public Js5MasterIndex(@OriginalArg(0) Js5NetQueue arg0, @OriginalArg(1) Js5CacheQueue arg1) {
-		this.cacheQueue = arg1;
-		this.netQueue = arg0;
+	public Js5MasterIndex(@OriginalArg(0) Js5NetQueue netQueue, @OriginalArg(1) Js5CacheQueue cacheQueue) {
+		this.cacheQueue = cacheQueue;
+		this.netQueue = netQueue;
 		if (!this.netQueue.isUrgentRequestQueueFull()) {
 			this.request = this.netQueue.read(255, (byte) 0, 255, true);
 		}
@@ -57,40 +57,40 @@ public final class Js5MasterIndex {
 		if (this.resourceProviders == null) {
 			return;
 		}
-		@Pc(13) int local13;
-		for (local13 = 0; local13 < this.resourceProviders.length; local13++) {
-			if (this.resourceProviders[local13] != null) {
-				this.resourceProviders[local13].processPrefetchQueue();
+		@Pc(13) int i;
+		for (i = 0; i < this.resourceProviders.length; i++) {
+			if (this.resourceProviders[i] != null) {
+				this.resourceProviders[i].processPrefetchQueue();
 			}
 		}
-		for (local13 = 0; local13 < this.resourceProviders.length; local13++) {
-			if (this.resourceProviders[local13] != null) {
-				this.resourceProviders[local13].loop();
+		for (i = 0; i < this.resourceProviders.length; i++) {
+			if (this.resourceProviders[i] != null) {
+				this.resourceProviders[i].loop();
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(IILclient!ge;Lclient!ge;)Lclient!bg;")
-	public final Js5CachedResourceProvider getResourceProvider(@OriginalArg(1) int arg0, @OriginalArg(2) Cache arg1, @OriginalArg(3) Cache arg2) {
-		return this.createResourceProvider(arg2, arg0, arg1);
+	public final Js5CachedResourceProvider getResourceProvider(@OriginalArg(1) int archive, @OriginalArg(2) Cache cache, @OriginalArg(3) Cache masterCache) {
+		return this.createResourceProvider(masterCache, archive, cache);
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(Lclient!ge;IIZLclient!ge;)Lclient!bg;")
-	private Js5CachedResourceProvider createResourceProvider(@OriginalArg(0) Cache arg0, @OriginalArg(2) int arg1, @OriginalArg(4) Cache arg2) {
+	private Js5CachedResourceProvider createResourceProvider(@OriginalArg(0) Cache masterCache, @OriginalArg(2) int archive, @OriginalArg(4) Cache cache) {
 		if (this.buffer == null) {
 			throw new RuntimeException();
 		}
-		this.buffer.offset = arg1 * 8 + 5;
+		this.buffer.offset = archive * 8 + 5;
 		if (this.buffer.data.length <= this.buffer.offset) {
 			throw new RuntimeException();
-		} else if (this.resourceProviders[arg1] == null) {
-			@Pc(56) int local56 = this.buffer.g4();
-			@Pc(61) int local61 = this.buffer.g4();
-			@Pc(75) Js5CachedResourceProvider local75 = new Js5CachedResourceProvider(arg1, arg0, arg2, this.netQueue, this.cacheQueue, local56, local61, true);
-			this.resourceProviders[arg1] = local75;
-			return local75;
+		} else if (this.resourceProviders[archive] == null) {
+			@Pc(56) int expectedChecksum = this.buffer.g4();
+			@Pc(61) int expectedVersion = this.buffer.g4();
+			@Pc(75) Js5CachedResourceProvider provider = new Js5CachedResourceProvider(archive, masterCache, cache, this.netQueue, this.cacheQueue, expectedChecksum, expectedVersion, true);
+			this.resourceProviders[archive] = provider;
+			return provider;
 		} else {
-			return this.resourceProviders[arg1];
+			return this.resourceProviders[archive];
 		}
 	}
 }

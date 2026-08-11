@@ -15,10 +15,10 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	private int capacity = 50;
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "Lclient!ve;")
-	private final Js5 aClass153_72;
+	private final Js5 sprites;
 
 	@OriginalMember(owner = "client!nk", name = "i", descriptor = "Lclient!ve;")
-	private final Js5 aClass153_73;
+	private final Js5 textureDefs;
 
 	@OriginalMember(owner = "client!nk", name = "P", descriptor = "Lclient!gn;")
 	private LruHashTable glTextures;
@@ -27,41 +27,41 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	private LruHashTable solidColorSprites;
 
 	@OriginalMember(owner = "client!nk", name = "Q", descriptor = "[B")
-	private final byte[] aByteArray61;
+	private final byte[] animationTypes;
 
 	@OriginalMember(owner = "client!nk", name = "l", descriptor = "[B")
-	private final byte[] aByteArray60;
+	private final byte[] brightnessValues;
 
 	@OriginalMember(owner = "client!nk", name = "h", descriptor = "[B")
-	private final byte[] aByteArray59;
+	private final byte[] scrollSpeeds;
 
 	@OriginalMember(owner = "client!nk", name = "F", descriptor = "[S")
-	private final short[] aShortArray59;
+	private final short[] averageColors;
 
 	@OriginalMember(owner = "client!nk", name = "R", descriptor = "[B")
-	private final byte[] aByteArray62;
+	private final byte[] materialTypes;
 
 	@OriginalMember(owner = "client!nk", name = "k", descriptor = "[Z")
-	private final boolean[] aBooleanArray91;
+	private final boolean[] opaque;
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "[Z")
-	private final boolean[] aBooleanArray89;
+	private final boolean[] forceLowDetail;
 
 	@OriginalMember(owner = "client!nk", name = "c", descriptor = "[Z")
-	private final boolean[] aBooleanArray90;
+	private final boolean[] repeating;
 
 	@OriginalMember(owner = "client!nk", name = "s", descriptor = "[Z")
-	private final boolean[] aBooleanArray92;
+	private final boolean[] defined;
 
 	@OriginalMember(owner = "client!nk", name = "D", descriptor = "[Z")
-	private final boolean[] aBooleanArray93;
+	private final boolean[] flipped;
 
 	@OriginalMember(owner = "client!nk", name = "<init>", descriptor = "(Lclient!ve;Lclient!ve;Lclient!ve;IZ)V")
-	public Js5GlTextureProvider(@OriginalArg(0) Js5 arg0, @OriginalArg(1) Js5 arg1, @OriginalArg(2) Js5 arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
-		this.aClass153_72 = arg2;
-		this.lowDetail = arg4;
-		this.capacity = arg3;
-		this.aClass153_73 = arg0;
+	public Js5GlTextureProvider(@OriginalArg(0) Js5 textureDefs, @OriginalArg(1) Js5 textureConfig, @OriginalArg(2) Js5 sprites, @OriginalArg(3) int capacity, @OriginalArg(4) boolean lowDetail) {
+		this.sprites = sprites;
+		this.lowDetail = lowDetail;
+		this.capacity = capacity;
+		this.textureDefs = textureDefs;
 		this.glTextures = new LruHashTable(this.capacity);
 		if (GlRenderer.enabled) {
 			this.solidColorSprites = new LruHashTable(this.capacity);
@@ -69,177 +69,177 @@ public final class Js5GlTextureProvider implements TextureProvider {
 			this.solidColorSprites = null;
 		}
 
-		@Pc(51) Buffer local51 = new Buffer(arg1.fetchFile(0, 0));
-		@Pc(55) int local55 = local51.g2();
-		this.aByteArray61 = new byte[local55];
-		this.aByteArray60 = new byte[local55];
-		this.aByteArray59 = new byte[local55];
-		this.aShortArray59 = new short[local55];
-		this.aByteArray62 = new byte[local55];
-		this.aBooleanArray91 = new boolean[local55];
-		this.aBooleanArray89 = new boolean[local55];
-		this.aBooleanArray90 = new boolean[local55];
-		this.aBooleanArray92 = new boolean[local55];
-		this.aBooleanArray93 = new boolean[local55];
-		@Pc(97) int local97;
-		for (local97 = 0; local97 < local55; local97++) {
-			this.aBooleanArray92[local97] = local51.g1() == 1;
+		@Pc(51) Buffer buffer = new Buffer(textureConfig.fetchFile(0, 0));
+		@Pc(55) int textureCount = buffer.g2();
+		this.animationTypes = new byte[textureCount];
+		this.brightnessValues = new byte[textureCount];
+		this.scrollSpeeds = new byte[textureCount];
+		this.averageColors = new short[textureCount];
+		this.materialTypes = new byte[textureCount];
+		this.opaque = new boolean[textureCount];
+		this.forceLowDetail = new boolean[textureCount];
+		this.repeating = new boolean[textureCount];
+		this.defined = new boolean[textureCount];
+		this.flipped = new boolean[textureCount];
+		@Pc(97) int i;
+		for (i = 0; i < textureCount; i++) {
+			this.defined[i] = buffer.g1() == 1;
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aBooleanArray90[local97] = local51.g1() == 1;
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.repeating[i] = buffer.g1() == 1;
 			}
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aBooleanArray91[local97] = local51.g1() == 1;
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.opaque[i] = buffer.g1() == 1;
 			}
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aBooleanArray89[local97] = local51.g1() == 1;
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.forceLowDetail[i] = buffer.g1() == 1;
 			}
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aBooleanArray93[local97] = local51.g1() == 1;
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.flipped[i] = buffer.g1() == 1;
 			}
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aByteArray59[local97] = local51.g1b();
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.scrollSpeeds[i] = buffer.g1b();
 			}
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aByteArray60[local97] = local51.g1b();
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.brightnessValues[i] = buffer.g1b();
 			}
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aByteArray62[local97] = local51.g1b();
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.materialTypes[i] = buffer.g1b();
 			}
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aByteArray61[local97] = local51.g1b();
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.animationTypes[i] = buffer.g1b();
 			}
 		}
-		for (local97 = 0; local97 < local55; local97++) {
-			if (this.aBooleanArray92[local97]) {
-				this.aShortArray59[local97] = (short) local51.g2();
+		for (i = 0; i < textureCount; i++) {
+			if (this.defined[i]) {
+				this.averageColors[i] = (short) buffer.g2();
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(ZI)V")
-	public final void resetAnimatedTextures(@OriginalArg(1) int arg0) {
-		for (@Pc(19) GlTexture local19 = (GlTexture) this.glTextures.head(); local19 != null; local19 = (GlTexture) this.glTextures.next()) {
-			if (local19.aBoolean287) {
-				local19.scrollAnimation(arg0);
-				local19.aBoolean287 = false;
+	public final void resetAnimatedTextures(@OriginalArg(1) int deltaTime) {
+		for (@Pc(19) GlTexture texture = (GlTexture) this.glTextures.head(); texture != null; texture = (GlTexture) this.glTextures.next()) {
+			if (texture.aBoolean287) {
+				texture.scrollAnimation(deltaTime);
+				texture.aBoolean287 = false;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!nk", name = "e", descriptor = "(II)[I")
 	@Override
-	public final int[] getPixels(@OriginalArg(1) int arg0) {
-		@Pc(16) GlTexture local16 = this.getOrLoadGlTexture(arg0);
-		return local16 == null ? null : local16.getPixels(this.lowDetail || this.aBooleanArray89[arg0], this, this.aClass153_72);
+	public final int[] getPixels(@OriginalArg(1) int textureId) {
+		@Pc(16) GlTexture texture = this.getOrLoadGlTexture(textureId);
+		return texture == null ? null : texture.getPixels(this.lowDetail || this.forceLowDetail[textureId], this, this.sprites);
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(IZ)V")
 	@Override
-	public final void bindTexture(@OriginalArg(0) int arg0) {
-		MaterialManager.setMaterial(this.aByteArray61[arg0] & 0xFF, this.aByteArray62[arg0] & 0xFF);
-		@Pc(23) boolean local23 = false;
-		@Pc(28) GlTexture local28 = this.getOrLoadGlTexture(arg0);
-		if (local28 != null) {
-			local23 = local28.bind(this.aClass153_72, this, this.lowDetail || this.aBooleanArray89[arg0]);
+	public final void bindTexture(@OriginalArg(0) int textureId) {
+		MaterialManager.setMaterial(this.animationTypes[textureId] & 0xFF, this.materialTypes[textureId] & 0xFF);
+		@Pc(23) boolean bound = false;
+		@Pc(28) GlTexture texture = this.getOrLoadGlTexture(textureId);
+		if (texture != null) {
+			bound = texture.bind(this.sprites, this, this.lowDetail || this.forceLowDetail[textureId]);
 		}
-		if (!local23) {
-			@Pc(56) GlSolidColorTexture local56 = this.getOrCreateSolidColorTexture(arg0);
-			local56.bind();
+		if (!bound) {
+			@Pc(56) GlSolidColorTexture fallback = this.getOrCreateSolidColorTexture(textureId);
+			fallback.bind();
 		}
 	}
 
 	@OriginalMember(owner = "client!nk", name = "i", descriptor = "(II)Lclient!uh;")
-	private GlTexture getOrLoadGlTexture(@OriginalArg(0) int arg0) {
-		@Pc(14) GlTexture local14 = (GlTexture) this.glTextures.get(arg0);
-		if (local14 != null) {
-			return local14;
+	private GlTexture getOrLoadGlTexture(@OriginalArg(0) int textureId) {
+		@Pc(14) GlTexture texture = (GlTexture) this.glTextures.get(textureId);
+		if (texture != null) {
+			return texture;
 		}
-		@Pc(30) byte[] local30 = this.aClass153_73.fetchFile(arg0, 0);
-		if (local30 == null) {
+		@Pc(30) byte[] data = this.textureDefs.fetchFile(textureId, 0);
+		if (data == null) {
 			return null;
 		} else {
-			@Pc(41) Buffer local41 = new Buffer(local30);
-			local14 = new GlTexture(local41);
-			this.glTextures.put(local14, arg0);
-			return local14;
+			@Pc(41) Buffer buffer = new Buffer(data);
+			texture = new GlTexture(buffer);
+			this.glTextures.put(texture, textureId);
+			return texture;
 		}
 	}
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(IZ)I")
 	@Override
-	public final int getAnimationType(@OriginalArg(0) int arg0) {
-		return this.aByteArray61[arg0] & 0xFF;
+	public final int getAnimationType(@OriginalArg(0) int textureId) {
+		return this.animationTypes[textureId] & 0xFF;
 	}
 
 	@OriginalMember(owner = "client!nk", name = "g", descriptor = "(II)I")
 	@Override
-	public final int getMaterialType(@OriginalArg(0) int arg0) {
-		return this.aByteArray62[arg0] & 0xFF;
+	public final int getMaterialType(@OriginalArg(0) int textureId) {
+		return this.materialTypes[textureId] & 0xFF;
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(II)I")
 	@Override
-	public final int getTextureSpeed(@OriginalArg(1) int arg0) {
-		return this.aByteArray59[arg0] & 0xFF;
+	public final int getTextureSpeed(@OriginalArg(1) int textureId) {
+		return this.scrollSpeeds[textureId] & 0xFF;
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(BI)Z")
 	@Override
-	public final boolean isOpaque(@OriginalArg(1) int arg0) {
-		return this.aBooleanArray91[arg0];
+	public final boolean isOpaque(@OriginalArg(1) int textureId) {
+		return this.opaque[textureId];
 	}
 
 	@OriginalMember(owner = "client!nk", name = "j", descriptor = "(II)Lclient!sd;")
-	private GlSolidColorTexture getOrCreateSolidColorTexture(@OriginalArg(1) int arg0) {
-		@Pc(19) GlSolidColorTexture local19 = (GlSolidColorTexture) this.solidColorSprites.get(arg0);
-		if (local19 == null) {
-			local19 = new GlSolidColorTexture(this.aShortArray59[arg0] & 0xFFFF);
-			this.solidColorSprites.put(local19, arg0);
-			return local19;
+	private GlSolidColorTexture getOrCreateSolidColorTexture(@OriginalArg(1) int textureId) {
+		@Pc(19) GlSolidColorTexture texture = (GlSolidColorTexture) this.solidColorSprites.get(textureId);
+		if (texture == null) {
+			texture = new GlSolidColorTexture(this.averageColors[textureId] & 0xFFFF);
+			this.solidColorSprites.put(texture, textureId);
+			return texture;
 		} else {
-			return local19;
+			return texture;
 		}
 	}
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(II)Z")
 	@Override
-	public final boolean isTextureLoaded(@OriginalArg(1) int arg0) {
-		@Pc(15) GlTexture local15 = this.getOrLoadGlTexture(arg0);
-		return local15 != null && local15.isReady(this, this.aClass153_72);
+	public final boolean isTextureLoaded(@OriginalArg(1) int textureId) {
+		@Pc(15) GlTexture texture = this.getOrLoadGlTexture(textureId);
+		return texture != null && texture.isReady(this, this.sprites);
 	}
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(ZI)V")
-	public final void setLowDetail(@OriginalArg(0) boolean arg0) {
-		this.lowDetail = arg0;
+	public final void setLowDetail(@OriginalArg(0) boolean lowDetail) {
+		this.lowDetail = lowDetail;
 		this.clear();
 	}
 
 	@OriginalMember(owner = "client!nk", name = "c", descriptor = "(II)Z")
 	@Override
-	public final boolean isTextureFlipped(@OriginalArg(0) int arg0) {
-		return this.aBooleanArray93[arg0];
+	public final boolean isTextureFlipped(@OriginalArg(0) int textureId) {
+		return this.flipped[textureId];
 	}
 
 	@OriginalMember(owner = "client!nk", name = "h", descriptor = "(II)I")
 	@Override
-	public final int getTextureBrightness(@OriginalArg(1) int arg0) {
-		return this.aByteArray60[arg0] & 0xFF;
+	public final int getTextureBrightness(@OriginalArg(1) int textureId) {
+		return this.brightnessValues[textureId] & 0xFF;
 	}
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(I)V")
@@ -252,14 +252,14 @@ public final class Js5GlTextureProvider implements TextureProvider {
 
 	@OriginalMember(owner = "client!nk", name = "d", descriptor = "(II)I")
 	@Override
-	public final int getAverageColor(@OriginalArg(0) int arg0) {
-		return this.aShortArray59[arg0] & 0xFFFF;
+	public final int getAverageColor(@OriginalArg(0) int textureId) {
+		return this.averageColors[textureId] & 0xFFFF;
 	}
 
 	@OriginalMember(owner = "client!nk", name = "b", descriptor = "(BI)Z")
 	@Override
-	public final boolean isLowDetail(@OriginalArg(1) int arg0) {
-		return this.lowDetail || this.aBooleanArray89[arg0];
+	public final boolean isLowDetail(@OriginalArg(1) int textureId) {
+		return this.lowDetail || this.forceLowDetail[textureId];
 	}
 
 	@OriginalMember(owner = "client!nk", name = "k", descriptor = "(II)V")
@@ -275,19 +275,19 @@ public final class Js5GlTextureProvider implements TextureProvider {
 
 	@OriginalMember(owner = "client!nk", name = "f", descriptor = "(II)Z")
 	@Override
-	public final boolean isTextureRepeating(@OriginalArg(0) int arg0) {
-		return this.aBooleanArray90[arg0];
+	public final boolean isTextureRepeating(@OriginalArg(0) int textureId) {
+		return this.repeating[textureId];
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(IZF)[I")
 	@Override
-	public final int[] getAnimatedPixels(@OriginalArg(0) int arg0, @OriginalArg(2) float arg1) {
-		@Pc(8) GlTexture local8 = this.getOrLoadGlTexture(arg0);
-		if (local8 == null) {
+	public final int[] getAnimatedPixels(@OriginalArg(0) int textureId, @OriginalArg(2) float animationProgress) {
+		@Pc(8) GlTexture texture = this.getOrLoadGlTexture(textureId);
+		if (texture == null) {
 			return null;
 		} else {
-			local8.aBoolean287 = true;
-			return local8.getAnimatedPixels(this, arg1, this.aClass153_72, this.lowDetail || this.aBooleanArray89[arg0]);
+			texture.aBoolean287 = true;
+			return texture.getAnimatedPixels(this, animationProgress, this.sprites, this.lowDetail || this.forceLowDetail[textureId]);
 		}
 	}
 }

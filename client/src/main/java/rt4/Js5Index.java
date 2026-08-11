@@ -51,105 +51,105 @@ public final class Js5Index {
 	public final int checksum;
 
 	@OriginalMember(owner = "client!ii", name = "<init>", descriptor = "([BI)V")
-	public Js5Index(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1) {
-		this.checksum = Buffer.crc32(arg0, arg0.length);
-		if (arg1 != this.checksum) {
+	public Js5Index(@OriginalArg(0) byte[] data, @OriginalArg(1) int expectedChecksum) {
+		this.checksum = Buffer.crc32(data, data.length);
+		if (expectedChecksum != this.checksum) {
 			throw new RuntimeException();
 		}
-		this.decode(arg0);
+		this.decode(data);
 	}
 
 	@OriginalMember(owner = "client!ii", name = "a", descriptor = "(I[B)V")
-	private void decode(@OriginalArg(1) byte[] arg0) {
-		@Pc(12) Buffer local12 = new Buffer(Js5Compression.uncompress(arg0));
-		@Pc(16) int local16 = local12.g1();
-		if (local16 != 5 && local16 != 6) {
+	private void decode(@OriginalArg(1) byte[] data) {
+		@Pc(12) Buffer buffer = new Buffer(Js5Compression.uncompress(data));
+		@Pc(16) int formatVersion = buffer.g1();
+		if (formatVersion != 5 && formatVersion != 6) {
 			throw new RuntimeException();
 		}
-		if (local16 >= 6) {
-			this.version = local12.g4();
+		if (formatVersion >= 6) {
+			this.version = buffer.g4();
 		} else {
 			this.version = 0;
 		}
-		@Pc(48) int local48 = local12.g1();
-		@Pc(50) int local50 = 0;
-		this.size = local12.g2();
-		@Pc(59) int local59 = -1;
+		@Pc(48) int flags = buffer.g1();
+		@Pc(50) int delta = 0;
+		this.size = buffer.g2();
+		@Pc(59) int maxGroupId = -1;
 		this.groupIds = new int[this.size];
-		@Pc(66) int local66;
-		for (local66 = 0; local66 < this.size; local66++) {
-			this.groupIds[local66] = local50 += local12.g2();
-			if (this.groupIds[local66] > local59) {
-				local59 = this.groupIds[local66];
+		@Pc(66) int i;
+		for (i = 0; i < this.size; i++) {
+			this.groupIds[i] = delta += buffer.g2();
+			if (this.groupIds[i] > maxGroupId) {
+				maxGroupId = this.groupIds[i];
 			}
 		}
-		this.capacity = local59 + 1;
+		this.capacity = maxGroupId + 1;
 		this.groupVersions = new int[this.capacity];
 		this.fileIds = new int[this.capacity][];
 		this.groupChecksums = new int[this.capacity];
 		this.groupCapacities = new int[this.capacity];
 		this.groupSizes = new int[this.capacity];
-		if (local48 != 0) {
+		if (flags != 0) {
 			this.groupNameHashes = new int[this.capacity];
-			for (local66 = 0; local66 < this.capacity; local66++) {
-				this.groupNameHashes[local66] = -1;
+			for (i = 0; i < this.capacity; i++) {
+				this.groupNameHashes[i] = -1;
 			}
-			for (local66 = 0; local66 < this.size; local66++) {
-				this.groupNameHashes[this.groupIds[local66]] = local12.g4();
+			for (i = 0; i < this.size; i++) {
+				this.groupNameHashes[this.groupIds[i]] = buffer.g4();
 			}
 			this.groupNameHashTable = new IntHashTable(this.groupNameHashes);
 		}
-		for (local66 = 0; local66 < this.size; local66++) {
-			this.groupChecksums[this.groupIds[local66]] = local12.g4();
+		for (i = 0; i < this.size; i++) {
+			this.groupChecksums[this.groupIds[i]] = buffer.g4();
 		}
-		for (local66 = 0; local66 < this.size; local66++) {
-			this.groupVersions[this.groupIds[local66]] = local12.g4();
+		for (i = 0; i < this.size; i++) {
+			this.groupVersions[this.groupIds[i]] = buffer.g4();
 		}
-		for (local66 = 0; local66 < this.size; local66++) {
-			this.groupSizes[this.groupIds[local66]] = local12.g2();
+		for (i = 0; i < this.size; i++) {
+			this.groupSizes[this.groupIds[i]] = buffer.g2();
 		}
-		@Pc(273) int local273;
-		@Pc(278) int local278;
-		@Pc(280) int local280;
-		@Pc(288) int local288;
-		for (local66 = 0; local66 < this.size; local66++) {
-			local50 = 0;
-			local273 = this.groupIds[local66];
-			local278 = this.groupSizes[local273];
-			local280 = -1;
-			this.fileIds[local273] = new int[local278];
-			for (local288 = 0; local288 < local278; local288++) {
-				@Pc(306) int local306 = this.fileIds[local273][local288] = local50 += local12.g2();
-				if (local306 > local280) {
-					local280 = local306;
+		@Pc(273) int groupId;
+		@Pc(278) int groupSize;
+		@Pc(280) int maxFileId;
+		@Pc(288) int fileId;
+		for (i = 0; i < this.size; i++) {
+			delta = 0;
+			groupId = this.groupIds[i];
+			groupSize = this.groupSizes[groupId];
+			maxFileId = -1;
+			this.fileIds[groupId] = new int[groupSize];
+			for (fileId = 0; fileId < groupSize; fileId++) {
+				@Pc(306) int id = this.fileIds[groupId][fileId] = delta += buffer.g2();
+				if (id > maxFileId) {
+					maxFileId = id;
 				}
 			}
-			this.groupCapacities[local273] = local280 + 1;
-			if (local280 + 1 == local278) {
-				this.fileIds[local273] = null;
+			this.groupCapacities[groupId] = maxFileId + 1;
+			if (maxFileId + 1 == groupSize) {
+				this.fileIds[groupId] = null;
 			}
 		}
-		if (local48 == 0) {
+		if (flags == 0) {
 			return;
 		}
-		this.fileNameHashTables = new IntHashTable[local59 + 1];
-		this.fileNameHashes = new int[local59 + 1][];
-		for (local66 = 0; local66 < this.size; local66++) {
-			local273 = this.groupIds[local66];
-			local278 = this.groupSizes[local273];
-			this.fileNameHashes[local273] = new int[this.groupCapacities[local273]];
-			for (local280 = 0; local280 < this.groupCapacities[local273]; local280++) {
-				this.fileNameHashes[local273][local280] = -1;
+		this.fileNameHashTables = new IntHashTable[maxGroupId + 1];
+		this.fileNameHashes = new int[maxGroupId + 1][];
+		for (i = 0; i < this.size; i++) {
+			groupId = this.groupIds[i];
+			groupSize = this.groupSizes[groupId];
+			this.fileNameHashes[groupId] = new int[this.groupCapacities[groupId]];
+			for (maxFileId = 0; maxFileId < this.groupCapacities[groupId]; maxFileId++) {
+				this.fileNameHashes[groupId][maxFileId] = -1;
 			}
-			for (local280 = 0; local280 < local278; local280++) {
-				if (this.fileIds[local273] == null) {
-					local288 = local280;
+			for (maxFileId = 0; maxFileId < groupSize; maxFileId++) {
+				if (this.fileIds[groupId] == null) {
+					fileId = maxFileId;
 				} else {
-					local288 = this.fileIds[local273][local280];
+					fileId = this.fileIds[groupId][maxFileId];
 				}
-				this.fileNameHashes[local273][local288] = local12.g4();
+				this.fileNameHashes[groupId][fileId] = buffer.g4();
 			}
-			this.fileNameHashTables[local273] = new IntHashTable(this.fileNameHashes[local273]);
+			this.fileNameHashTables[groupId] = new IntHashTable(this.fileNameHashes[groupId]);
 		}
 	}
 }

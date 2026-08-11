@@ -56,19 +56,19 @@ public final class Js5NetQueue {
 
 	@OriginalMember(owner = "client!jb", name = "b", descriptor = "(B)Z")
 	public final boolean loop() {
-		@Pc(19) int local19;
+		@Pc(19) int elapsed;
 		if (this.socket != null) {
-			@Pc(12) long local12 = MonotonicClock.currentTimeMillis();
-			local19 = (int) (local12 - this.previousLoop);
-			this.previousLoop = local12;
-			if (local19 > 200) {
-				local19 = 200;
+			@Pc(12) long currentTime = MonotonicClock.currentTimeMillis();
+			elapsed = (int) (currentTime - this.previousLoop);
+			this.previousLoop = currentTime;
+			if (elapsed > 200) {
+				elapsed = 200;
 			}
-			this.latency += local19;
+			this.latency += elapsed;
 			if (this.latency > 30000) {
 				try {
 					this.socket.close();
-				} catch (@Pc(43) Exception local43) {
+				} catch (@Pc(43) Exception ignored) {
 				}
 				this.socket = null;
 			}
@@ -78,57 +78,57 @@ public final class Js5NetQueue {
 		}
 		try {
 			this.socket.checkError();
-			@Pc(75) Js5NetRequest local75;
-			for (local75 = (Js5NetRequest) this.pendingUrgentRequests.head(); local75 != null; local75 = (Js5NetRequest) this.pendingUrgentRequests.next()) {
+			@Pc(75) Js5NetRequest request;
+			for (request = (Js5NetRequest) this.pendingUrgentRequests.head(); request != null; request = (Js5NetRequest) this.pendingUrgentRequests.next()) {
 				this.outBuffer.offset = 0;
 				this.outBuffer.p1(1);
-				this.outBuffer.p3((int) local75.secondaryKey);
+				this.outBuffer.p3((int) request.secondaryKey);
 				this.socket.write(this.outBuffer.data, 4);
-				this.inFlightUrgentRequests.addTail(local75);
+				this.inFlightUrgentRequests.addTail(request);
 			}
-			for (local75 = (Js5NetRequest) this.pendingPrefetchRequests.head(); local75 != null; local75 = (Js5NetRequest) this.pendingPrefetchRequests.next()) {
+			for (request = (Js5NetRequest) this.pendingPrefetchRequests.head(); request != null; request = (Js5NetRequest) this.pendingPrefetchRequests.next()) {
 				this.outBuffer.offset = 0;
 				this.outBuffer.p1(0);
-				this.outBuffer.p3((int) local75.secondaryKey);
+				this.outBuffer.p3((int) request.secondaryKey);
 				this.socket.write(this.outBuffer.data, 4);
-				this.inFlightPrefetchRequests.addTail(local75);
+				this.inFlightPrefetchRequests.addTail(request);
 			}
-			for (@Pc(172) int local172 = 0; local172 < 100; local172++) {
-				local19 = this.socket.available();
-				if (local19 < 0) {
+			for (@Pc(172) int iteration = 0; iteration < 100; iteration++) {
+				elapsed = this.socket.available();
+				if (elapsed < 0) {
 					throw new IOException();
 				}
-				if (local19 == 0) {
+				if (elapsed == 0) {
 					break;
 				}
 				this.latency = 0;
-				@Pc(196) byte local196 = 0;
+				@Pc(196) byte headerBytesNeeded = 0;
 				if (this.current == null) {
-					local196 = 8;
+					headerBytesNeeded = 8;
 				} else if (this.current.blockPosition == 0) {
-					local196 = 1;
+					headerBytesNeeded = 1;
 				}
-				@Pc(228) int local228;
-				@Pc(235) int local235;
-				@Pc(283) int local283;
-				if (local196 <= 0) {
-					local228 = this.current.buffer.data.length - this.current.trailerLen;
-					local235 = 512 - this.current.blockPosition;
-					if (local235 > local228 - this.current.buffer.offset) {
-						local235 = local228 - this.current.buffer.offset;
+				@Pc(228) int dataLen;
+				@Pc(235) int readLen;
+				@Pc(283) int j;
+				if (headerBytesNeeded <= 0) {
+					dataLen = this.current.buffer.data.length - this.current.trailerLen;
+					readLen = 512 - this.current.blockPosition;
+					if (readLen > dataLen - this.current.buffer.offset) {
+						readLen = dataLen - this.current.buffer.offset;
 					}
-					if (local235 > local19) {
-						local235 = local19;
+					if (readLen > elapsed) {
+						readLen = elapsed;
 					}
-					this.socket.read(this.current.buffer.offset, local235, this.current.buffer.data);
+					this.socket.read(this.current.buffer.offset, readLen, this.current.buffer.data);
 					if (this.encryptionKey != 0) {
-						for (local283 = 0; local283 < local235; local283++) {
-							this.current.buffer.data[this.current.buffer.offset + local283] = (byte) (this.current.buffer.data[this.current.buffer.offset + local283] ^ this.encryptionKey);
+						for (j = 0; j < readLen; j++) {
+							this.current.buffer.data[this.current.buffer.offset + j] = (byte) (this.current.buffer.data[this.current.buffer.offset + j] ^ this.encryptionKey);
 						}
 					}
-					this.current.blockPosition += local235;
-					this.current.buffer.offset += local235;
-					if (this.current.buffer.offset == local228) {
+					this.current.blockPosition += readLen;
+					this.current.buffer.offset += readLen;
+					if (this.current.buffer.offset == dataLen) {
 						this.current.unlinkSecondary();
 						this.current.incomplete = false;
 						this.current = null;
@@ -136,43 +136,43 @@ public final class Js5NetQueue {
 						this.current.blockPosition = 0;
 					}
 				} else {
-					local228 = local196 - this.inBuffer.offset;
-					if (local19 < local228) {
-						local228 = local19;
+					dataLen = headerBytesNeeded - this.inBuffer.offset;
+					if (elapsed < dataLen) {
+						dataLen = elapsed;
 					}
-					this.socket.read(this.inBuffer.offset, local228, this.inBuffer.data);
+					this.socket.read(this.inBuffer.offset, dataLen, this.inBuffer.data);
 					if (this.encryptionKey != 0) {
-						for (local235 = 0; local235 < local228; local235++) {
-							this.inBuffer.data[local235 + this.inBuffer.offset] ^= this.encryptionKey;
+						for (readLen = 0; readLen < dataLen; readLen++) {
+							this.inBuffer.data[readLen + this.inBuffer.offset] ^= this.encryptionKey;
 						}
 					}
-					this.inBuffer.offset += local228;
-					if (this.inBuffer.offset >= local196) {
+					this.inBuffer.offset += dataLen;
+					if (this.inBuffer.offset >= headerBytesNeeded) {
 						if (this.current == null) {
 							this.inBuffer.offset = 0;
-							local235 = this.inBuffer.g1();
-							local283 = this.inBuffer.g2();
-							@Pc(471) int local471 = this.inBuffer.g1();
-							@Pc(476) int local476 = this.inBuffer.g4();
-							@Pc(480) int local480 = local471 & 0x7F;
-							@Pc(491) boolean local491 = (local471 & 0x80) != 0;
-							@Pc(501) long local501 = (local235 << 16) + local283;
-							@Pc(509) Js5NetRequest local509;
-							if (local491) {
-								for (local509 = (Js5NetRequest) this.inFlightPrefetchRequests.head(); local509 != null && local509.secondaryKey != local501; local509 = (Js5NetRequest) this.inFlightPrefetchRequests.next()) {
+							readLen = this.inBuffer.g1();
+							j = this.inBuffer.g2();
+							@Pc(471) int headerByte = this.inBuffer.g1();
+							@Pc(476) int compressedLen = this.inBuffer.g4();
+							@Pc(480) int compressionType = headerByte & 0x7F;
+							@Pc(491) boolean isPrefetch = (headerByte & 0x80) != 0;
+							@Pc(501) long requestKey = (readLen << 16) + j;
+							@Pc(509) Js5NetRequest matched;
+							if (isPrefetch) {
+								for (matched = (Js5NetRequest) this.inFlightPrefetchRequests.head(); matched != null && matched.secondaryKey != requestKey; matched = (Js5NetRequest) this.inFlightPrefetchRequests.next()) {
 								}
 							} else {
-								for (local509 = (Js5NetRequest) this.inFlightUrgentRequests.head(); local509 != null && local501 != local509.secondaryKey; local509 = (Js5NetRequest) this.inFlightUrgentRequests.next()) {
+								for (matched = (Js5NetRequest) this.inFlightUrgentRequests.head(); matched != null && requestKey != matched.secondaryKey; matched = (Js5NetRequest) this.inFlightUrgentRequests.next()) {
 								}
 							}
-							if (local509 == null) {
+							if (matched == null) {
 								throw new IOException();
 							}
-							@Pc(568) int local568 = local480 == 0 ? 5 : 9;
-							this.current = local509;
-							this.current.buffer = new Buffer(local476 + local568 + this.current.trailerLen);
-							this.current.buffer.p1(local480);
-							this.current.buffer.p4(local476);
+							@Pc(568) int headerLen = compressionType == 0 ? 5 : 9;
+							this.current = matched;
+							this.current.buffer = new Buffer(compressedLen + headerLen + this.current.trailerLen);
+							this.current.buffer.p1(compressionType);
+							this.current.buffer.p4(compressedLen);
 							this.current.blockPosition = 8;
 							this.inBuffer.offset = 0;
 						} else if (this.current.blockPosition != 0) {
@@ -187,7 +187,7 @@ public final class Js5NetQueue {
 				}
 			}
 			return true;
-		} catch (@Pc(644) IOException local644) {
+		} catch (@Pc(644) IOException ex) {
 			try {
 				this.socket.close();
 			} catch (@Pc(650) Exception ignored) {
@@ -209,10 +209,10 @@ public final class Js5NetQueue {
 			this.outBuffer.p1(7);
 			this.outBuffer.p3(0);
 			this.socket.write(this.outBuffer.data, 4);
-		} catch (@Pc(39) IOException local39) {
+		} catch (@Pc(39) IOException ex) {
 			try {
 				this.socket.close();
-			} catch (@Pc(45) Exception local45) {
+			} catch (@Pc(45) Exception ignored) {
 			}
 			this.errors++;
 			this.response = -2;
@@ -226,19 +226,19 @@ public final class Js5NetQueue {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(ZZ)V")
-	public final void writeLoggedIn(@OriginalArg(0) boolean arg0) {
+	public final void writeLoggedIn(@OriginalArg(0) boolean loggedIn) {
 		if (this.socket == null) {
 			return;
 		}
 		try {
 			this.outBuffer.offset = 0;
-			this.outBuffer.p1(arg0 ? 2 : 3);
+			this.outBuffer.p1(loggedIn ? 2 : 3);
 			this.outBuffer.p3(0);
 			this.socket.write(this.outBuffer.data, 4);
-		} catch (@Pc(42) IOException local42) {
+		} catch (@Pc(42) IOException ex) {
 			try {
 				this.socket.close();
-			} catch (@Pc(48) Exception local48) {
+			} catch (@Pc(48) Exception ignored) {
 			}
 			this.errors++;
 			this.response = -2;
@@ -254,25 +254,25 @@ public final class Js5NetQueue {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(ZLclient!ma;I)V")
-	public final void start(@OriginalArg(0) boolean arg0, @OriginalArg(1) BufferedSocket arg1) {
+	public final void start(@OriginalArg(0) boolean loggedIn, @OriginalArg(1) BufferedSocket socket) {
 		if (this.socket != null) {
 			try {
 				this.socket.close();
-			} catch (@Pc(14) Exception local14) {
+			} catch (@Pc(14) Exception ignored) {
 			}
 			this.socket = null;
 		}
-		this.socket = arg1;
+		this.socket = socket;
 		this.sendPing();
-		this.writeLoggedIn(arg0);
+		this.writeLoggedIn(loggedIn);
 		this.inBuffer.offset = 0;
 		this.current = null;
 		while (true) {
-			@Pc(44) Js5NetRequest local44 = (Js5NetRequest) this.inFlightUrgentRequests.removeHead();
-			if (local44 == null) {
+			@Pc(44) Js5NetRequest pending = (Js5NetRequest) this.inFlightUrgentRequests.removeHead();
+			if (pending == null) {
 				while (true) {
-					local44 = (Js5NetRequest) this.inFlightPrefetchRequests.removeHead();
-					if (local44 == null) {
+					pending = (Js5NetRequest) this.inFlightPrefetchRequests.removeHead();
+					if (pending == null) {
 						if (this.encryptionKey != 0) {
 							try {
 								this.outBuffer.offset = 0;
@@ -280,10 +280,10 @@ public final class Js5NetQueue {
 								this.outBuffer.p1(this.encryptionKey);
 								this.outBuffer.p2(0);
 								this.socket.write(this.outBuffer.data, 4);
-							} catch (@Pc(107) IOException local107) {
+							} catch (@Pc(107) IOException ex) {
 								try {
 									this.socket.close();
-								} catch (@Pc(113) Exception local113) {
+								} catch (@Pc(113) Exception ignored) {
 								}
 								this.response = -2;
 								this.errors++;
@@ -294,10 +294,10 @@ public final class Js5NetQueue {
 						this.previousLoop = MonotonicClock.currentTimeMillis();
 						return;
 					}
-					this.pendingPrefetchRequests.addTail(local44);
+					this.pendingPrefetchRequests.addTail(pending);
 				}
 			}
-			this.pendingUrgentRequests.addTail(local44);
+			this.pendingUrgentRequests.addTail(pending);
 		}
 	}
 
@@ -310,7 +310,7 @@ public final class Js5NetQueue {
 	public final void rekey() {
 		try {
 			this.socket.close();
-		} catch (@Pc(17) Exception local17) {
+		} catch (@Pc(17) Exception ignored) {
 		}
 		this.response = -1;
 		this.encryptionKey = (byte) (Math.random() * 255.0D + 1.0D);
@@ -331,23 +331,23 @@ public final class Js5NetQueue {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIBIZ)Lclient!pm;")
-	public final Js5NetRequest read(@OriginalArg(1) int arg0, @OriginalArg(2) byte arg1, @OriginalArg(3) int arg2, @OriginalArg(4) boolean arg3) {
-		@Pc(7) Js5NetRequest local7 = new Js5NetRequest();
-		@Pc(14) long local14 = arg2 + ((long) arg0 << 16);
-		local7.urgent = arg3;
-		local7.secondaryKey = local14;
-		local7.trailerLen = arg1;
-		if (arg3) {
+	public final Js5NetRequest read(@OriginalArg(1) int archive, @OriginalArg(2) byte trailerLen, @OriginalArg(3) int group, @OriginalArg(4) boolean urgent) {
+		@Pc(7) Js5NetRequest request = new Js5NetRequest();
+		@Pc(14) long requestKey = group + ((long) archive << 16);
+		request.urgent = urgent;
+		request.secondaryKey = requestKey;
+		request.trailerLen = trailerLen;
+		if (urgent) {
 			if (this.getUrgentRequestCount() >= 20) {
 				throw new RuntimeException();
 			}
-			this.pendingUrgentRequests.addTail(local7);
+			this.pendingUrgentRequests.addTail(request);
 		} else if (this.getPrefetchRequestCount() < 20) {
-			this.pendingPrefetchRequests.addTail(local7);
+			this.pendingPrefetchRequests.addTail(request);
 		} else {
 			throw new RuntimeException();
 		}
-		return local7;
+		return request;
 	}
 
 	@OriginalMember(owner = "client!jb", name = "e", descriptor = "(B)V")
@@ -360,7 +360,7 @@ public final class Js5NetQueue {
 			this.outBuffer.p1(6);
 			this.outBuffer.p3(3);
 			this.socket.write(this.outBuffer.data, 4);
-		} catch (@Pc(37) IOException local37) {
+		} catch (@Pc(37) IOException ex) {
 			try {
 				this.socket.close();
 			} catch (@Pc(43) Exception ignored) {
