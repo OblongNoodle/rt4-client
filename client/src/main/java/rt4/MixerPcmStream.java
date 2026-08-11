@@ -9,16 +9,16 @@ import org.openrs2.deob.annotation.Pc;
 public final class MixerPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!ei", name = "t", descriptor = "Lclient!ih;")
-	private final LinkedList aClass69_43 = new LinkedList();
+	private final LinkedList subStreams = new LinkedList();
 
 	@OriginalMember(owner = "client!ei", name = "u", descriptor = "Lclient!ih;")
-	private final LinkedList aClass69_44 = new LinkedList();
+	private final LinkedList listeners = new LinkedList();
 
 	@OriginalMember(owner = "client!ei", name = "v", descriptor = "I")
-	private int anInt1780 = 0;
+	private int samplePosition = 0;
 
 	@OriginalMember(owner = "client!ei", name = "w", descriptor = "I")
-	private int anInt1781 = -1;
+	private int nextListenerTime = -1;
 
 	@OriginalMember(owner = "client!ok", name = "a", descriptor = "(Lclient!ab;Lclient!ab;I)V")
 	public static void insertBefore(@OriginalArg(0) Node arg0, @OriginalArg(1) Node arg1) {
@@ -35,46 +35,46 @@ public final class MixerPcmStream extends PcmStream {
 	private void removeListener(@OriginalArg(0) MixerListener arg0) {
 		arg0.unlink();
 		arg0.onRemoved();
-		@Pc(9) Node local9 = this.aClass69_44.sentinel.nextNode;
-		if (local9 == this.aClass69_44.sentinel) {
-			this.anInt1781 = -1;
+		@Pc(9) Node local9 = this.listeners.sentinel.nextNode;
+		if (local9 == this.listeners.sentinel) {
+			this.nextListenerTime = -1;
 		} else {
-			this.anInt1781 = ((MixerListener) local9).anInt905;
+			this.nextListenerTime = ((MixerListener) local9).delay;
 		}
 	}
 
 	@OriginalMember(owner = "client!ei", name = "a", descriptor = "(Lclient!qb;)V")
 	public final synchronized void addSubStream(@OriginalArg(0) PcmStream arg0) {
-		this.aClass69_43.addHead(arg0);
+		this.subStreams.addHead(arg0);
 	}
 
 	@OriginalMember(owner = "client!ei", name = "b", descriptor = "([III)V")
 	@Override
 	public final synchronized void read(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		do {
-			if (this.anInt1781 < 0) {
+			if (this.nextListenerTime < 0) {
 				this.readSubStreams(arg0, arg1, arg2);
 				return;
 			}
-			if (this.anInt1780 + arg2 < this.anInt1781) {
-				this.anInt1780 += arg2;
+			if (this.samplePosition + arg2 < this.nextListenerTime) {
+				this.samplePosition += arg2;
 				this.readSubStreams(arg0, arg1, arg2);
 				return;
 			}
-			@Pc(33) int local33 = this.anInt1781 - this.anInt1780;
+			@Pc(33) int local33 = this.nextListenerTime - this.samplePosition;
 			this.readSubStreams(arg0, arg1, local33);
 			arg1 += local33;
 			arg2 -= local33;
-			this.anInt1780 += local33;
+			this.samplePosition += local33;
 			this.advanceListeners();
-			@Pc(60) MixerListener local60 = (MixerListener) this.aClass69_44.head();
+			@Pc(60) MixerListener local60 = (MixerListener) this.listeners.head();
 			synchronized (local60) {
 				@Pc(68) int local68 = local60.process(this);
 				if (local68 < 0) {
-					local60.anInt905 = 0;
+					local60.delay = 0;
 					this.removeListener(local60);
 				} else {
-					local60.anInt905 = local68;
+					local60.delay = local68;
 					this.insertListenerSorted(local60.nextNode, local60);
 				}
 			}
@@ -83,32 +83,32 @@ public final class MixerPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!ei", name = "e", descriptor = "()V")
 	private void advanceListeners() {
-		if (this.anInt1780 <= 0) {
+		if (this.samplePosition <= 0) {
 			return;
 		}
-		for (@Pc(8) MixerListener local8 = (MixerListener) this.aClass69_44.head(); local8 != null; local8 = (MixerListener) this.aClass69_44.next()) {
-			local8.anInt905 -= this.anInt1780;
+		for (@Pc(8) MixerListener local8 = (MixerListener) this.listeners.head(); local8 != null; local8 = (MixerListener) this.listeners.next()) {
+			local8.delay -= this.samplePosition;
 		}
-		this.anInt1781 -= this.anInt1780;
-		this.anInt1780 = 0;
+		this.nextListenerTime -= this.samplePosition;
+		this.samplePosition = 0;
 	}
 
 	@OriginalMember(owner = "client!ei", name = "b", descriptor = "()Lclient!qb;")
 	@Override
 	public final PcmStream firstSubStream() {
-		return (PcmStream) this.aClass69_43.head();
+		return (PcmStream) this.subStreams.head();
 	}
 
 	@OriginalMember(owner = "client!ei", name = "d", descriptor = "(I)V")
 	private void skipSubStreams(@OriginalArg(0) int arg0) {
-		for (@Pc(5) PcmStream local5 = (PcmStream) this.aClass69_43.head(); local5 != null; local5 = (PcmStream) this.aClass69_43.next()) {
+		for (@Pc(5) PcmStream local5 = (PcmStream) this.subStreams.head(); local5 != null; local5 = (PcmStream) this.subStreams.next()) {
 			local5.skip(arg0);
 		}
 	}
 
 	@OriginalMember(owner = "client!ei", name = "c", descriptor = "([III)V")
 	private void readSubStreams(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		for (@Pc(5) PcmStream local5 = (PcmStream) this.aClass69_43.head(); local5 != null; local5 = (PcmStream) this.aClass69_43.next()) {
+		for (@Pc(5) PcmStream local5 = (PcmStream) this.subStreams.head(); local5 != null; local5 = (PcmStream) this.subStreams.next()) {
 			local5.readIfActive(arg0, arg1, arg2);
 		}
 	}
@@ -128,28 +128,28 @@ public final class MixerPcmStream extends PcmStream {
 	@Override
 	public final synchronized void skip(@OriginalArg(0) int arg0) {
 		do {
-			if (this.anInt1781 < 0) {
+			if (this.nextListenerTime < 0) {
 				this.skipSubStreams(arg0);
 				return;
 			}
-			if (this.anInt1780 + arg0 < this.anInt1781) {
-				this.anInt1780 += arg0;
+			if (this.samplePosition + arg0 < this.nextListenerTime) {
+				this.samplePosition += arg0;
 				this.skipSubStreams(arg0);
 				return;
 			}
-			@Pc(29) int local29 = this.anInt1781 - this.anInt1780;
+			@Pc(29) int local29 = this.nextListenerTime - this.samplePosition;
 			this.skipSubStreams(local29);
 			arg0 -= local29;
-			this.anInt1780 += local29;
+			this.samplePosition += local29;
 			this.advanceListeners();
-			@Pc(50) MixerListener local50 = (MixerListener) this.aClass69_44.head();
+			@Pc(50) MixerListener local50 = (MixerListener) this.listeners.head();
 			synchronized (local50) {
 				@Pc(58) int local58 = local50.process(this);
 				if (local58 < 0) {
-					local50.anInt905 = 0;
+					local50.delay = 0;
 					this.removeListener(local50);
 				} else {
-					local50.anInt905 = local58;
+					local50.delay = local58;
 					this.insertListenerSorted(local50.nextNode, local50);
 				}
 			}
@@ -159,15 +159,15 @@ public final class MixerPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!ei", name = "d", descriptor = "()Lclient!qb;")
 	@Override
 	public final PcmStream nextSubStream() {
-		return (PcmStream) this.aClass69_43.next();
+		return (PcmStream) this.subStreams.next();
 	}
 
 	@OriginalMember(owner = "client!ei", name = "a", descriptor = "(Lclient!ab;Lclient!cc;)V")
 	private void insertListenerSorted(@OriginalArg(0) Node arg0, @OriginalArg(1) MixerListener arg1) {
-		while (arg0 != this.aClass69_44.sentinel && ((MixerListener) arg0).anInt905 <= arg1.anInt905) {
+		while (arg0 != this.listeners.sentinel && ((MixerListener) arg0).delay <= arg1.delay) {
 			arg0 = arg0.nextNode;
 		}
 		insertBefore(arg1, arg0);
-		this.anInt1781 = ((MixerListener) this.aClass69_44.sentinel.nextNode).anInt905;
+		this.nextListenerTime = ((MixerListener) this.listeners.sentinel.nextNode).delay;
 	}
 }
