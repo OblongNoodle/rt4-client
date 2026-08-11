@@ -259,8 +259,8 @@ public final class GlTexture extends SecondaryNode {
 			if (this.scrollSpeedV == 0 && this.scrollSpeedU == 0) {
 				GlRenderer.resetTextureMatrix();
 			} else {
-				@Pc(303) float local303 = (float) (this.scrollSpeedV * GlRenderer.anInt5323) / (float) size;
-				@Pc(312) float local312 = (float) (this.scrollSpeedU * GlRenderer.anInt5323) / (float) size;
+				@Pc(303) float local303 = (float) (this.scrollSpeedV * GlRenderer.animationClock) / (float) size;
+				@Pc(312) float local312 = (float) (this.scrollSpeedU * GlRenderer.animationClock) / (float) size;
 				GlRenderer.translateTextureMatrix(local312, local303, 0.0F);
 			}
 		}

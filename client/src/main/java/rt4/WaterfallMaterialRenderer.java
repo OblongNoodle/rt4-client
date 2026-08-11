@@ -54,20 +54,20 @@ public final class WaterfallMaterialRenderer implements MaterialRenderer {
 		gl.glRotatef((float) MaterialManager.anInt1815 * 360.0F / 2048.0F, 0.0F, 1.0F, 0.0F);
 		gl.glTranslatef((float) -MaterialManager.anInt406, (float) -MaterialManager.anInt4675, (float) -MaterialManager.anInt5158);
 		gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.aFloatArray21, 0);
-		this.aFloatArray21[3] = local27 * (float) GlRenderer.anInt5323;
+		this.aFloatArray21[3] = local27 * (float) GlRenderer.animationClock;
 		this.aFloatArray21[0] = 0.0F;
 		this.aFloatArray21[2] = 0.0F;
 		this.aFloatArray21[1] = local36;
 		gl.glTexGenfv(GL2.GL_T, GL2.GL_EYE_PLANE, this.aFloatArray21, 0);
 		gl.glPopMatrix();
 		if (MaterialManager.allows3DTextureMapping) {
-			this.aFloatArray21[3] = (float) GlRenderer.anInt5323 * local18;
+			this.aFloatArray21[3] = (float) GlRenderer.animationClock * local18;
 			this.aFloatArray21[1] = 0.0F;
 			this.aFloatArray21[0] = 0.0F;
 			this.aFloatArray21[2] = 0.0F;
 			gl.glTexGenfv(GL2.GL_R, GL2.GL_OBJECT_PLANE, this.aFloatArray21, 0);
 		} else {
-			@Pc(189) int local189 = (int) ((float) GlRenderer.anInt5323 * local18 * 64.0F);
+			@Pc(189) int local189 = (int) ((float) GlRenderer.animationClock * local18 * 64.0F);
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, MaterialManager.waterfallTextures[local189 % 64]);
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE0);

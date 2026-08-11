@@ -391,7 +391,7 @@ public class LightingManager {
 		MaterialManager.setMaterial(0, 0);
 		GlRenderer.setTextureCombineRgbMode(0);
 		GlRenderer.resetTextureMatrix();
-		GlRenderer.setTextureId(GlRenderer.anInt5328);
+		GlRenderer.setTextureId(GlRenderer.defaultTextureId);
 		gl.glDepthMask(false);
 		GlRenderer.setLightingEnabled(false);
 		gl.glBlendFunc(GL2.GL_DST_COLOR, GL2.GL_ONE);

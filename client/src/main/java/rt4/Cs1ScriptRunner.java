@@ -765,7 +765,7 @@ public class Cs1ScriptRunner {
 													local1934 = MiniMenu.NULL;
 												}
 												if ((local1989.stackable == 1 || component.objCount != 1) && component.objCount != -1) {
-													local1934 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local1934, JagString.aClass100_375, formatItemCount(component.objCount)});
+													local1934 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local1934, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCount)});
 												}
 											}
 											if (aClass13_10 == component) {
@@ -1007,9 +1007,9 @@ public class Cs1ScriptRunner {
 															local2611 = ObjTypeList.get(component.objTypes[local276] - 1);
 															@Pc(3159) JagString local3159;
 															if (local2611.stackable != 1 && component.objCounts[local276] == 1) {
-																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.aClass100_978});
+																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.CLOSE_COLOR});
 															} else {
-																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.aClass100_375, formatItemCount(component.objCounts[local276])});
+																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCounts[local276])});
 															}
 															local556 = local123 + memory * (component.invMarginX + 115);
 															objId = (component.invMarginY + 12) * local468 + local114;
@@ -1034,7 +1034,7 @@ public class Cs1ScriptRunner {
 												local3297 = interpolate(component, local3297);
 												@Pc(3325) JagString local3325;
 												while (local3297.length() > 0) {
-													cardMemory = local3297.indexOf(JagString.aClass100_556);
+													cardMemory = local3297.indexOf(JagString.LINE_BREAK);
 													if (cardMemory == -1) {
 														local3325 = local3297;
 														local3297 = JagString.EMPTY;
@@ -1072,7 +1072,7 @@ public class Cs1ScriptRunner {
 												objId = local556 + local3299.lineHeight + 2;
 												local3297 = interpolate(component, local3297);
 												while (local3297.length() > 0) {
-													local563 = local3297.indexOf(JagString.aClass100_556);
+													local563 = local3297.indexOf(JagString.LINE_BREAK);
 													if (local563 == -1) {
 														local3325 = local3297;
 														local3297 = JagString.EMPTY;
@@ -1246,14 +1246,14 @@ public class Cs1ScriptRunner {
 	public static JagString formatItemCount(@OriginalArg(1) int arg0) {
 		@Pc(9) JagString local9 = JagString.parseInt(arg0);
 		for (@Pc(21) int local21 = local9.length() - 3; local21 > 0; local21 -= 3) {
-			local9 = JagString.concatenate(new JagString[]{local9.substring(local21, 0), JagString.aClass100_760, local9.substring(local21)});
+			local9 = JagString.concatenate(new JagString[]{local9.substring(local21, 0), JagString.COMMA, local9.substring(local21)});
 		}
 		if (local9.length() > 9) {
-			return JagString.concatenate(new JagString[]{JagString.aClass100_1043, local9.substring(local9.length() - 8, 0), LocalizedText.MILLION_SHORT, MiniMenu.OPEN_PARENTHESIS, local9, JagString.aClass100_583});
+			return JagString.concatenate(new JagString[]{JagString.GREEN_COLOR_PREFIX, local9.substring(local9.length() - 8, 0), LocalizedText.MILLION_SHORT, MiniMenu.OPEN_PARENTHESIS, local9, JagString.CLOSE_PAREN_CLOSE_COLOR});
 		} else if (local9.length() > 6) {
-			return JagString.concatenate(new JagString[]{JagString.aClass100_589, local9.substring(local9.length() - 4, 0), LocalizedText.THOUSAND_SHORT, MiniMenu.OPEN_PARENTHESIS, local9, JagString.aClass100_583});
+			return JagString.concatenate(new JagString[]{JagString.WHITE_COLOR_PREFIX, local9.substring(local9.length() - 4, 0), LocalizedText.THOUSAND_SHORT, MiniMenu.OPEN_PARENTHESIS, local9, JagString.CLOSE_PAREN_CLOSE_COLOR});
 		} else {
-			return JagString.concatenate(new JagString[]{JagString.aClass100_1101, local9, JagString.aClass100_978});
+			return JagString.concatenate(new JagString[]{JagString.YELLOW_COLOR_PREFIX, local9, JagString.CLOSE_COLOR});
 		}
 	}
 

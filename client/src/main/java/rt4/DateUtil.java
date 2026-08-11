@@ -94,6 +94,6 @@ public final class DateUtil {
 		@Pc(36) int local36 = calendar.get(Calendar.HOUR_OF_DAY);
 		@Pc(40) int local40 = calendar.get(Calendar.MINUTE);
 		@Pc(44) int local44 = calendar.get(Calendar.SECOND);
-		return JagString.concatenate(new JagString[]{DAYS[local13 - 1], JagString.aClass100_461, JagString.parseInt(local17 / 10), JagString.parseInt(local17 % 10), JagString.aClass100_1089, MONTHS[local21], JagString.aClass100_1089, JagString.parseInt(local32), JagString.SPACE, JagString.parseInt(local36 / 10), JagString.parseInt(local36 % 10), JagString.COLON, JagString.parseInt(local40 / 10), JagString.parseInt(local40 % 10), JagString.COLON, JagString.parseInt(local44 / 10), JagString.parseInt(local44 % 10), JagString.TIMEZONE});
+		return JagString.concatenate(new JagString[]{DAYS[local13 - 1], JagString.COMMA_SPACE, JagString.parseInt(local17 / 10), JagString.parseInt(local17 % 10), JagString.HYPHEN, MONTHS[local21], JagString.HYPHEN, JagString.parseInt(local32), JagString.SPACE, JagString.parseInt(local36 / 10), JagString.parseInt(local36 % 10), JagString.COLON, JagString.parseInt(local40 / 10), JagString.parseInt(local40 % 10), JagString.COLON, JagString.parseInt(local44 / 10), JagString.parseInt(local44 % 10), JagString.TIMEZONE});
 	}
 }

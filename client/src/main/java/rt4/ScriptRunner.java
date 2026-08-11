@@ -311,7 +311,7 @@ public final class ScriptRunner {
 			LightingManager.updateAllLightAnimations(client.loop, !Preferences.flickeringEffectsOn);
 			GlRenderer.clearColorAndDepthBuffers(local171);
 			MaterialManager.setCameraTransform(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
-			GlRenderer.anInt5323 = client.loop;
+			GlRenderer.animationClock = client.loop;
 			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			aBoolean299 = true;
 			LightingManager.resetActiveLights();

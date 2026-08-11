@@ -85,7 +85,7 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND1_RGB, GL2.GL_SRC_ALPHA);
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_ALPHA, GL2.GL_REPLACE);
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_ALPHA, GL2.GL_PRIMARY_COLOR);
-				gl.glBindTexture(GL2.GL_TEXTURE_2D, GlRenderer.anInt5328);
+				gl.glBindTexture(GL2.GL_TEXTURE_2D, GlRenderer.defaultTextureId);
 				gl.glEnable(GL2.GL_TEXTURE_2D);
 			}
 			gl.glActiveTexture(GL2.GL_TEXTURE0);

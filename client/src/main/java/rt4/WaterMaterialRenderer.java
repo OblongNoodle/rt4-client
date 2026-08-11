@@ -150,14 +150,14 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
 		if ((arg0 & 0x1) == 1) {
 			if (!MaterialManager.allows3DTextureMapping) {
-				GlRenderer.setTextureId(MaterialManager.anIntArray341[GlRenderer.anInt5323 * 64 / 100 % 64]);
-			} else if (this.anInt4442 != GlRenderer.anInt5323) {
+				GlRenderer.setTextureId(MaterialManager.anIntArray341[GlRenderer.animationClock * 64 / 100 % 64]);
+			} else if (this.anInt4442 != GlRenderer.animationClock) {
 				this.aFloatArray23[0] = 0.0F;
 				this.aFloatArray23[1] = 0.0F;
 				this.aFloatArray23[2] = 0.0F;
-				this.aFloatArray23[3] = (float) GlRenderer.anInt5323 * 0.005F;
+				this.aFloatArray23[3] = (float) GlRenderer.animationClock * 0.005F;
 				gl.glTexGenfv(GL2.GL_R, GL2.GL_OBJECT_PLANE, this.aFloatArray23, 0);
-				this.anInt4442 = GlRenderer.anInt5323;
+				this.anInt4442 = GlRenderer.animationClock;
 			}
 		} else if (MaterialManager.allows3DTextureMapping) {
 			this.aFloatArray23[0] = 0.0F;

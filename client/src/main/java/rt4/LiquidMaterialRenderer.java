@@ -111,24 +111,24 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 		gl.glRotatef(-180.0F, 1.0F, 0.0F, 0.0F);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		if (!MaterialManager.allows3DTextureMapping) {
-			gl.glBindTexture(GL2.GL_TEXTURE_2D, MaterialManager.anIntArray341[(int) ((float) (GlRenderer.anInt5323 * 64) * 0.005F) % 64]);
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, MaterialManager.anIntArray341[(int) ((float) (GlRenderer.animationClock * 64) * 0.005F) % 64]);
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
-		if (this.anInt4829 == GlRenderer.anInt5323) {
+		if (this.anInt4829 == GlRenderer.animationClock) {
 			return;
 		}
-		@Pc(85) int local85 = (GlRenderer.anInt5323 & 0xFF) * 256;
+		@Pc(85) int local85 = (GlRenderer.animationClock & 0xFF) * 256;
 		for (@Pc(87) int local87 = 0; local87 < 64; local87++) {
 			this.aFloatBuffer1.position(local85);
 			gl.glProgramLocalParameter4fvARB(GL2.GL_VERTEX_PROGRAM_ARB, local87, this.aFloatBuffer1);
 			local85 += 4;
 		}
 		if (MaterialManager.allows3DTextureMapping) {
-			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 65, (float) GlRenderer.anInt5323 * 0.005F, 0.0F, 0.0F, 1.0F);
+			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 65, (float) GlRenderer.animationClock * 0.005F, 0.0F, 0.0F, 1.0F);
 		} else {
 			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 65, 0.0F, 0.0F, 0.0F, 1.0F);
 		}
-		this.anInt4829 = GlRenderer.anInt5323;
+		this.anInt4829 = GlRenderer.animationClock;
 	}
 
 	@OriginalMember(owner = "client!rd", name = "e", descriptor = "()V")

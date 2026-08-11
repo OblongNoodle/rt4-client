@@ -203,7 +203,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 				this.aFloatArray29[0] = 0.0F;
 				this.aFloatArray29[1] = 0.0F;
 				this.aFloatArray29[2] = 0.0F;
-				this.aFloatArray29[3] = (float) GlRenderer.anInt5323 * 0.005F;
+				this.aFloatArray29[3] = (float) GlRenderer.animationClock * 0.005F;
 				gl.glTexGenfv(GL2.GL_R, GL2.GL_EYE_PLANE, this.aFloatArray29, 0);
 				gl.glActiveTexture(GL2.GL_TEXTURE2);
 			}
