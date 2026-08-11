@@ -135,9 +135,9 @@ public final class Js5GlTextureProvider implements TextureProvider {
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(ZI)V")
 	public final void resetAnimatedTextures(@OriginalArg(1) int deltaTime) {
 		for (@Pc(19) GlTexture texture = (GlTexture) this.glTextures.head(); texture != null; texture = (GlTexture) this.glTextures.next()) {
-			if (texture.aBoolean287) {
+			if (texture.animationDirty) {
 				texture.scrollAnimation(deltaTime);
-				texture.aBoolean287 = false;
+				texture.animationDirty = false;
 			}
 		}
 	}
@@ -286,7 +286,7 @@ public final class Js5GlTextureProvider implements TextureProvider {
 		if (texture == null) {
 			return null;
 		} else {
-			texture.aBoolean287 = true;
+			texture.animationDirty = true;
 			return texture.getAnimatedPixels(this, animationProgress, this.sprites, this.lowDetail || this.forceLowDetail[textureId]);
 		}
 	}

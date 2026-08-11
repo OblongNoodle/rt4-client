@@ -12,25 +12,25 @@ import java.nio.ByteBuffer;
 public final class GlIndexedSprite extends IndexedSprite {
 
 	@OriginalMember(owner = "client!oh", name = "r", descriptor = "I")
-	private int anInt4285;
+	private int contextId;
 
 	@OriginalMember(owner = "client!oh", name = "s", descriptor = "I")
-	private int anInt4286;
+	private int powerOfTwoHeight;
 
 	@OriginalMember(owner = "client!oh", name = "t", descriptor = "I")
-	private int anInt4287;
+	private int powerOfTwoWidth;
 
 	@OriginalMember(owner = "client!oh", name = "n", descriptor = "I")
-	private int anInt4281 = -1;
+	private int textureId = -1;
 
 	@OriginalMember(owner = "client!oh", name = "p", descriptor = "I")
-	private int anInt4283 = 0;
+	private int filterMode = 0;
 
 	@OriginalMember(owner = "client!oh", name = "o", descriptor = "I")
-	private int anInt4282 = -1;
+	private int displayListId = -1;
 
 	@OriginalMember(owner = "client!oh", name = "q", descriptor = "I")
-	private int anInt4284 = 0;
+	private int textureDataSize = 0;
 
 	public byte[] pixels;
 
@@ -52,9 +52,9 @@ public final class GlIndexedSprite extends IndexedSprite {
 
 	@OriginalMember(owner = "client!oh", name = "a", descriptor = "([B[I)V")
 	private void uploadPixels(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1) {
-		this.anInt4287 = IntUtils.clp2(this.width);
-		this.anInt4286 = IntUtils.clp2(this.height);
-		@Pc(20) byte[] local20 = new byte[this.anInt4287 * this.anInt4286 * 4];
+		this.powerOfTwoWidth = IntUtils.clp2(this.width);
+		this.powerOfTwoHeight = IntUtils.clp2(this.height);
+		@Pc(20) byte[] local20 = new byte[this.powerOfTwoWidth * this.powerOfTwoHeight * 4];
 		@Pc(22) int local22 = 0;
 		@Pc(24) int local24 = 0;
 		for (@Pc(26) int local26 = 0; local26 < this.height; local26++) {
@@ -70,20 +70,20 @@ public final class GlIndexedSprite extends IndexedSprite {
 					local20[local22++] = -1;
 				}
 			}
-			local22 += (this.anInt4287 - this.width) * 4;
+			local22 += (this.powerOfTwoWidth - this.width) * 4;
 		}
 		@Pc(93) ByteBuffer local93 = ByteBuffer.wrap(local20);
 		@Pc(95) GL2 gl = GlRenderer.gl;
-		if (this.anInt4281 == -1) {
+		if (this.textureId == -1) {
 			@Pc(102) int[] local102 = new int[1];
 			gl.glGenTextures(1, local102, 0);
-			this.anInt4281 = local102[0];
-			this.anInt4285 = GlCleaner.contextId;
+			this.textureId = local102[0];
+			this.contextId = GlCleaner.contextId;
 		}
-		GlRenderer.setTextureId(this.anInt4281);
-		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, this.anInt4287, this.anInt4286, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, local93);
-		GlCleaner.onCard2d += local93.limit() - this.anInt4284;
-		this.anInt4284 = local93.limit();
+		GlRenderer.setTextureId(this.textureId);
+		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, this.powerOfTwoWidth, this.powerOfTwoHeight, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, local93);
+		GlCleaner.onCard2d += local93.limit() - this.textureDataSize;
+		this.textureDataSize = local93.limit();
 	}
 
 	@OriginalMember(owner = "client!oh", name = "a", descriptor = "(III)V")
@@ -93,18 +93,18 @@ public final class GlIndexedSprite extends IndexedSprite {
 		@Pc(5) int local5 = arg0 + this.xOffset;
 		@Pc(10) int local10 = arg1 + this.yOffset;
 		@Pc(12) GL2 gl = GlRenderer.gl;
-		GlRenderer.setTextureId(this.anInt4281);
+		GlRenderer.setTextureId(this.textureId);
 		this.setNearestFilter();
 		gl.glColor4f(1.0F, 1.0F, 1.0F, (float) arg2 / 256.0F);
 		gl.glTranslatef((float) local5, (float) (GlRenderer.canvasHeight - local10), 0.0F);
-		gl.glCallList(this.anInt4282);
+		gl.glCallList(this.displayListId);
 		gl.glLoadIdentity();
 	}
 
 	@OriginalMember(owner = "client!oh", name = "b", descriptor = "(I)V")
 	private void setNearestFilter() {
-		if (this.anInt4283 != 1) {
-			this.anInt4283 = 1;
+		if (this.filterMode != 1) {
+			this.filterMode = 1;
 			@Pc(9) GL2 gl = GlRenderer.gl;
 			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);
 			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
@@ -118,38 +118,38 @@ public final class GlIndexedSprite extends IndexedSprite {
 		@Pc(5) int local5 = arg0 + this.xOffset;
 		@Pc(10) int local10 = arg1 + this.yOffset;
 		@Pc(12) GL2 gl = GlRenderer.gl;
-		GlRenderer.setTextureId(this.anInt4281);
+		GlRenderer.setTextureId(this.textureId);
 		this.setNearestFilter();
 		gl.glTranslatef((float) local5, (float) (GlRenderer.canvasHeight - local10), 0.0F);
-		gl.glCallList(this.anInt4282);
+		gl.glCallList(this.displayListId);
 		gl.glLoadIdentity();
 	}
 
 	@OriginalMember(owner = "client!oh", name = "finalize", descriptor = "()V")
 	@Override
 	public final void finalize() throws Throwable {
-		if (this.anInt4281 != -1) {
-			GlCleaner.deleteTexture2d(this.anInt4281, this.anInt4284, this.anInt4285);
-			this.anInt4281 = -1;
-			this.anInt4284 = 0;
+		if (this.textureId != -1) {
+			GlCleaner.deleteTexture2d(this.textureId, this.textureDataSize, this.contextId);
+			this.textureId = -1;
+			this.textureDataSize = 0;
 		}
-		if (this.anInt4282 != -1) {
-			GlCleaner.deleteList(this.anInt4282, this.anInt4285);
-			this.anInt4282 = -1;
+		if (this.displayListId != -1) {
+			GlCleaner.deleteList(this.displayListId, this.contextId);
+			this.displayListId = -1;
 		}
 		super.finalize();
 	}
 
 	@OriginalMember(owner = "client!oh", name = "a", descriptor = "()V")
 	private void compileDisplayList() {
-		@Pc(7) float local7 = (float) this.width / (float) this.anInt4287;
-		@Pc(15) float local15 = (float) this.height / (float) this.anInt4286;
+		@Pc(7) float local7 = (float) this.width / (float) this.powerOfTwoWidth;
+		@Pc(15) float local15 = (float) this.height / (float) this.powerOfTwoHeight;
 		@Pc(17) GL2 gl = GlRenderer.gl;
-		if (this.anInt4282 == -1) {
-			this.anInt4282 = gl.glGenLists(1);
-			this.anInt4285 = GlCleaner.contextId;
+		if (this.displayListId == -1) {
+			this.displayListId = gl.glGenLists(1);
+			this.contextId = GlCleaner.contextId;
 		}
-		gl.glNewList(this.anInt4282, GL2.GL_COMPILE);
+		gl.glNewList(this.displayListId, GL2.GL_COMPILE);
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 		gl.glTexCoord2f(local7, 0.0F);
 		gl.glVertex2f((float) this.width, 0.0F);

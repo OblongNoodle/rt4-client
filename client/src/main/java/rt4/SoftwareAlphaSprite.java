@@ -145,8 +145,8 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	@OriginalMember(owner = "client!am", name = "e", descriptor = "(II)V")
 	@Override
 	public final void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		arg0 += this.anInt1863;
-		arg1 += this.anInt1861;
+		arg0 += this.xOffset;
+		arg1 += this.yOffset;
 		@Pc(15) int local15 = arg0 + arg1 * SoftwareRaster.width;
 		@Pc(17) int local17 = 0;
 		@Pc(20) int local20 = this.height;
@@ -187,8 +187,8 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	@OriginalMember(owner = "client!am", name = "c", descriptor = "(II)V")
 	@Override
 	public final void drawPixels(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		arg0 += this.anInt1863;
-		arg1 += this.anInt1861;
+		arg0 += this.xOffset;
+		arg1 += this.yOffset;
 		@Pc(15) int local15 = arg0 + arg1 * SoftwareRaster.width;
 		@Pc(17) int local17 = 0;
 		@Pc(20) int local20 = this.height;
@@ -232,8 +232,8 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 		if (arg5 == 0) {
 			return;
 		}
-		@Pc(9) int local9 = arg0 - (this.anInt1863 << 4);
-		@Pc(16) int local16 = arg1 - (this.anInt1861 << 4);
+		@Pc(9) int local9 = arg0 - (this.xOffset << 4);
+		@Pc(16) int local16 = arg1 - (this.yOffset << 4);
 		@Pc(23) double local23 = (double) (arg4 & 0xFFFF) * 9.587379924285257E-5D;
 		@Pc(33) int local33 = (int) Math.floor(Math.sin(local23) * (double) arg5 + 0.5D);
 		@Pc(43) int local43 = (int) Math.floor(Math.cos(local23) * (double) arg5 + 0.5D);
@@ -748,20 +748,20 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 		@Pc(10) int local10 = this.height;
 		@Pc(12) int local12 = 0;
 		@Pc(14) int local14 = 0;
-		@Pc(17) int local17 = this.anInt1860;
-		@Pc(20) int local20 = this.anInt1866;
+		@Pc(17) int local17 = this.innerWidth;
+		@Pc(20) int local20 = this.innerHeight;
 		@Pc(26) int local26 = (local17 << 16) / arg2;
 		@Pc(32) int local32 = (local20 << 16) / arg3;
 		@Pc(46) int local46;
-		if (this.anInt1863 > 0) {
-			local46 = ((this.anInt1863 << 16) + local26 - 1) / local26;
+		if (this.xOffset > 0) {
+			local46 = ((this.xOffset << 16) + local26 - 1) / local26;
 			arg0 += local46;
-			local12 = local46 * local26 - (this.anInt1863 << 16);
+			local12 = local46 * local26 - (this.xOffset << 16);
 		}
-		if (this.anInt1861 > 0) {
-			local46 = ((this.anInt1861 << 16) + local32 - 1) / local32;
+		if (this.yOffset > 0) {
+			local46 = ((this.yOffset << 16) + local32 - 1) / local32;
 			arg1 += local46;
-			local14 = local46 * local32 - (this.anInt1861 << 16);
+			local14 = local46 * local32 - (this.yOffset << 16);
 		}
 		if (local7 < local17) {
 			arg2 = ((local7 << 16) + local26 - local12 - 1) / local26;
@@ -806,20 +806,20 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 		@Pc(10) int local10 = this.height;
 		@Pc(12) int local12 = 0;
 		@Pc(14) int local14 = 0;
-		@Pc(17) int local17 = this.anInt1860;
-		@Pc(20) int local20 = this.anInt1866;
+		@Pc(17) int local17 = this.innerWidth;
+		@Pc(20) int local20 = this.innerHeight;
 		@Pc(26) int local26 = (local17 << 16) / width;
 		@Pc(32) int local32 = (local20 << 16) / height;
 		@Pc(46) int local46;
-		if (this.anInt1863 > 0) {
-			local46 = ((this.anInt1863 << 16) + local26 - 1) / local26;
+		if (this.xOffset > 0) {
+			local46 = ((this.xOffset << 16) + local26 - 1) / local26;
 			x += local46;
-			local12 = local46 * local26 - (this.anInt1863 << 16);
+			local12 = local46 * local26 - (this.xOffset << 16);
 		}
-		if (this.anInt1861 > 0) {
-			local46 = ((this.anInt1861 << 16) + local32 - 1) / local32;
+		if (this.yOffset > 0) {
+			local46 = ((this.yOffset << 16) + local32 - 1) / local32;
 			y += local46;
-			local14 = local46 * local32 - (this.anInt1861 << 16);
+			local14 = local46 * local32 - (this.yOffset << 16);
 		}
 		if (local7 < local17) {
 			width = ((local7 << 16) + local26 - local12 - 1) / local26;
@@ -857,8 +857,8 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	@OriginalMember(owner = "client!am", name = "d", descriptor = "(II)V")
 	@Override
 	public final void renderHorizontalFlip(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		arg0 += this.anInt1860 - this.width - this.anInt1863;
-		arg1 += this.anInt1861;
+		arg0 += this.innerWidth - this.width - this.xOffset;
+		arg1 += this.yOffset;
 		@Pc(21) int local21 = arg0 + arg1 * SoftwareRaster.width;
 		@Pc(26) int local26 = this.width - 1;
 		@Pc(29) int local29 = this.height;
@@ -899,8 +899,8 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	@OriginalMember(owner = "client!am", name = "a", descriptor = "(III)V")
 	@Override
 	public final void renderAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int alpha) {
-		x += this.anInt1863;
-		y += this.anInt1861;
+		x += this.xOffset;
+		y += this.yOffset;
 		@Pc(15) int local15 = x + y * SoftwareRaster.width;
 		@Pc(17) int local17 = 0;
 		@Pc(20) int local20 = this.height;

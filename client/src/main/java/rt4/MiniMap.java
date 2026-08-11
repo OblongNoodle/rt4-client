@@ -429,9 +429,9 @@ public class MiniMap {
 		@Pc(81) int local81 = local58 * arg2 + arg3 * local70 >> 16;
 		@Pc(92) int local92 = local70 * arg2 - arg3 * local58 >> 16;
 		if (GlRenderer.enabled) {
-			((GlSprite) arg1).renderClipped(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, arg0.height / 2 + arg4 - (local92 + arg1.anInt1866 / 2), (GlSprite) arg0.getSprite(false));
+			((GlSprite) arg1).renderClipped(arg0.width / 2 + arg5 + local81 - arg1.innerWidth / 2, arg0.height / 2 + arg4 - (local92 + arg1.innerHeight / 2), (GlSprite) arg0.getSprite(false));
 		} else {
-			((SoftwareSprite) arg1).drawClipped(arg0.width / 2 + arg5 + local81 - arg1.anInt1860 / 2, -(arg1.anInt1866 / 2) + arg0.height / 2 + arg4 + -local92, arg0.anIntArray37, arg0.anIntArray45);
+			((SoftwareSprite) arg1).drawClipped(arg0.width / 2 + arg5 + local81 - arg1.innerWidth / 2, -(arg1.innerHeight / 2) + arg0.height / 2 + arg4 + -local92, arg0.anIntArray37, arg0.anIntArray45);
 		}
 	}
 

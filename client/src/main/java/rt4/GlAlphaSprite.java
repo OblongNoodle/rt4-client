@@ -53,7 +53,7 @@ public final class GlAlphaSprite extends GlSprite {
 		}
 		GlRenderer.setTextureId(this.textureId);
 		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, this.powerOfTwoWidth, this.powerOfTwoHeight, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, local94);
-		GlCleaner.onCard2d += local94.limit() - this.anInt1869;
-		this.anInt1869 = local94.limit();
+		GlCleaner.onCard2d += local94.limit() - this.textureDataSize;
+		this.textureDataSize = local94.limit();
 	}
 }

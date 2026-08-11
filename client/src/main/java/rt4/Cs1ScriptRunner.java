@@ -790,8 +790,8 @@ public class Cs1ScriptRunner {
 											}
 
 											if (sprite != null) {
-												local276 = sprite.anInt1860;
-												local468 = sprite.anInt1866;
+												local276 = sprite.innerWidth;
+												local468 = sprite.innerHeight;
 
 												if (component.spriteTiling) {
 													memory = (local276 + component.width - 1) / local276;

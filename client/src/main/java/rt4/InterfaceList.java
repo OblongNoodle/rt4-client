@@ -1314,7 +1314,7 @@ public class InterfaceList {
 			if (local28 == null) {
 				arg0 = -1;
 			} else {
-				GameShell.signLink.setCursor(local28.toFullImage(), local28.anInt1860, GameShell.canvas, new Point(local24.hotSpotX, local24.hotSpotY), local28.anInt1866);
+				GameShell.signLink.setCursor(local28.toFullImage(), local28.innerWidth, GameShell.canvas, new Point(local24.hotSpotX, local24.hotSpotY), local28.innerHeight);
 				anInt2941 = arg0;
 			}
 		}

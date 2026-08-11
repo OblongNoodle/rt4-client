@@ -12,16 +12,16 @@ public abstract class Sprite extends SecondaryNode {
 	public int height;
 
 	@OriginalMember(owner = "client!qf", name = "J", descriptor = "I")
-	public int anInt1860;
+	public int innerWidth;
 
 	@OriginalMember(owner = "client!qf", name = "K", descriptor = "I")
-	protected int anInt1861;
+	protected int yOffset;
 
 	@OriginalMember(owner = "client!qf", name = "P", descriptor = "I")
-	protected int anInt1863;
+	protected int xOffset;
 
 	@OriginalMember(owner = "client!qf", name = "V", descriptor = "I")
-	public int anInt1866;
+	public int innerHeight;
 
 	@OriginalMember(owner = "client!qf", name = "W", descriptor = "I")
 	public int width;
@@ -44,8 +44,8 @@ public abstract class Sprite extends SecondaryNode {
 
 	@OriginalMember(owner = "client!qf", name = "a", descriptor = "(IIIII)V")
 	public final void renderAngled(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(8) int local8 = this.anInt1860 << 3;
-		@Pc(17) int local17 = this.anInt1866 << 3;
+		@Pc(8) int local8 = this.innerWidth << 3;
+		@Pc(17) int local17 = this.innerHeight << 3;
 		@Pc(25) int local25 = (arg3 << 4) + (local8 & 0xF);
 		@Pc(33) int local33 = (arg0 << 4) + (local17 & 0xF);
 		this.drawRotatedScaled(local8, local17, local25, local33, arg1, arg2);
