@@ -21,7 +21,7 @@ public class Find {
 		@Pc(36) int local36 = (arg0 ? QuickChatPhraseTypeList.anInt1047 : QuickChatPhraseTypeList.anInt3490) + local28;
 		for (@Pc(38) int local38 = local28; local38 < local36; local38++) {
 			@Pc(45) QuickChatPhraseType local45 = QuickChatPhraseTypeList.get(local38);
-			if (local45.aBoolean60 && local45.getText().toLowerCase().indexOf(local9) != -1) {
+			if (local45.searchable && local45.getText().toLowerCase().indexOf(local9) != -1) {
 				if (local11 >= 50) {
 					index = -1;
 					results = null;
