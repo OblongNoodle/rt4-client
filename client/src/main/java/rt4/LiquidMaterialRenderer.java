@@ -34,8 +34,8 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 			@Pc(21) GL2 gl = GlRenderer.gl;
 			gl.glGenProgramsARB(1, local19, 0);
 			this.anInt4830 = local19[0];
-			@Pc(42) int[][] local42 = method874(0.4F);
-			@Pc(53) int[][] local53 = method874(0.4F);
+			@Pc(42) int[][] local42 = generateNoiseTable(0.4F);
+			@Pc(53) int[][] local53 = generateNoiseTable(0.4F);
 			@Pc(58) Buffer local58 = new Buffer(262144);
 			for (@Pc(60) int local60 = 0; local60 < 256; local60++) {
 				@Pc(67) int[] local67 = local42[local60];
@@ -64,7 +64,7 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!cj", name = "a", descriptor = "(ZIIIIIIFB)[[I")
-	public static int[][] method874(@OriginalArg(7) float arg0) {
+	public static int[][] generateNoiseTable(@OriginalArg(7) float arg0) {
 		@Pc(15) int[][] local15 = new int[256][64];
 		@Pc(19) TextureOp34 local19 = new TextureOp34();
 		local19.anInt648 = (int) (arg0 * 4096.0F);
@@ -75,7 +75,7 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 		local19.postDecode();
 		Texture.setSize(256, 64);
 		for (@Pc(46) int local46 = 0; local46 < 256; local46++) {
-			local19.method584(local46, local15[local46]);
+			local19.getNoiseRow(local46, local15[local46]);
 		}
 		return local15;
 	}

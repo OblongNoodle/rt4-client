@@ -53,7 +53,7 @@ public final class Js5MasterIndex {
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(B)V")
-	public final void method179() {
+	public final void processResourceProviders() {
 		if (this.resourceProviders == null) {
 			return;
 		}
@@ -72,11 +72,11 @@ public final class Js5MasterIndex {
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(IILclient!ge;Lclient!ge;)Lclient!bg;")
 	public final Js5CachedResourceProvider getResourceProvider(@OriginalArg(1) int arg0, @OriginalArg(2) Cache arg1, @OriginalArg(3) Cache arg2) {
-		return this.method188(arg2, arg0, arg1);
+		return this.createResourceProvider(arg2, arg0, arg1);
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(Lclient!ge;IIZLclient!ge;)Lclient!bg;")
-	private Js5CachedResourceProvider method188(@OriginalArg(0) Cache arg0, @OriginalArg(2) int arg1, @OriginalArg(4) Cache arg2) {
+	private Js5CachedResourceProvider createResourceProvider(@OriginalArg(0) Cache arg0, @OriginalArg(2) int arg1, @OriginalArg(4) Cache arg2) {
 		if (this.buffer == null) {
 			throw new RuntimeException();
 		}

@@ -24,7 +24,7 @@ public final class MsiType {
 			if (local5 == 0) {
 				return;
 			}
-			this.method11(local5, arg0, arg1);
+			this.decodeOpcode(local5, arg0, arg1);
 		}
 	}
 
@@ -49,7 +49,7 @@ public final class MsiType {
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(ILclient!wa;II)V")
-	private void method11(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
+	private void decodeOpcode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
 		if (arg0 == 1) {
 			this.spriteId = arg1.g2();
 		} else if (arg0 == 2) {

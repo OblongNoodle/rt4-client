@@ -41,7 +41,7 @@ public final class TextureOp34 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!bi", name = "a", descriptor = "(ZI[I)V")
-	public final void method584(@OriginalArg(1) int arg0, @OriginalArg(2) int[] arg1) {
+	public final void getNoiseRow(@OriginalArg(1) int arg0, @OriginalArg(2) int[] arg1) {
 		@Pc(12) int local12 = this.anInt641 * Texture.heightFractions[arg0];
 		@Pc(115) int local115;
 		@Pc(129) int local129;
@@ -74,14 +74,14 @@ public final class TextureOp34 extends TextureOp {
 			if (this.aBoolean44) {
 				for (local105 = 0; local105 < Texture.width; local105++) {
 					local115 = this.anInt646 * Texture.widthFractions[local105];
-					local129 = this.method590(local40 * local115 >> 12, local103, local77, local54, local60, local85);
+					local129 = this.sampleNoise(local40 * local115 >> 12, local103, local77, local54, local60, local85);
 					local129 = local27 * local129 >> 12;
 					arg1[local105] = (local129 >> 1) + 2048;
 				}
 			} else {
 				for (local105 = 0; local105 < Texture.width; local105++) {
 					local115 = this.anInt646 * Texture.widthFractions[local105];
-					local129 = this.method590(local40 * local115 >> 12, local103, local77, local54, local60, local85);
+					local129 = this.sampleNoise(local40 * local115 >> 12, local103, local77, local54, local60, local85);
 					arg1[local105] = local27 * local129 >> 12;
 				}
 			}
@@ -104,7 +104,7 @@ public final class TextureOp34 extends TextureOp {
 			local103 = this.aByteArray10[local68 & 0xFF] & 0xFF;
 			for (local105 = 0; local105 < Texture.width; local105++) {
 				local115 = Texture.widthFractions[local105] * this.anInt646;
-				local129 = this.method590(local115 * local40 >> 12, local103, local77, local54, local81, local85);
+				local129 = this.sampleNoise(local115 * local40 >> 12, local103, local77, local54, local81, local85);
 				arg1[local105] = local129 * local27 >> 12;
 			}
 		}
@@ -127,14 +127,14 @@ public final class TextureOp34 extends TextureOp {
 				if (this.aBoolean44 && local142 == this.anInt642 - 1) {
 					for (local105 = 0; local105 < Texture.width; local105++) {
 						local115 = Texture.widthFractions[local105] * this.anInt646;
-						local129 = this.method590(local40 * local115 >> 12, local103, local77, local54, local60, local85);
+						local129 = this.sampleNoise(local40 * local115 >> 12, local103, local77, local54, local60, local85);
 						local129 = (local27 * local129 >> 12) + arg1[local105];
 						arg1[local105] = (local129 >> 1) + 2048;
 					}
 				} else {
 					for (local105 = 0; local105 < Texture.width; local105++) {
 						local115 = Texture.widthFractions[local105] * this.anInt646;
-						local129 = this.method590(local115 * local40 >> 12, local103, local77, local54, local60, local85);
+						local129 = this.sampleNoise(local115 * local40 >> 12, local103, local77, local54, local60, local85);
 						arg1[local105] += local129 * local27 >> 12;
 					}
 				}
@@ -146,7 +146,7 @@ public final class TextureOp34 extends TextureOp {
 	@Override
 	public final void postDecode() {
 		this.aByteArray10 = TextureOp15.getPermutationTable(this.anInt650);
-		this.method589();
+		this.initOctaves();
 		for (@Pc(15) int local15 = this.anInt642 - 1; local15 >= 1; local15--) {
 			@Pc(23) short local23 = this.aShortArray4[local15];
 			if (local23 > 8 || local23 < -8) {
@@ -183,7 +183,7 @@ public final class TextureOp34 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!bi", name = "b", descriptor = "(Z)V")
-	private void method589() {
+	private void initOctaves() {
 		@Pc(21) int local21;
 		if (this.anInt648 > 0) {
 			this.aShortArray4 = new short[this.anInt642];
@@ -201,7 +201,7 @@ public final class TextureOp34 extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!bi", name = "a", descriptor = "(IIIIIII)I")
-	private int method590(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
+	private int sampleNoise(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
 		@Pc(15) int local15 = arg4 - 4096;
 		@Pc(19) int local19 = arg0 >> 12;
 		@Pc(23) int local23 = local19 + 1;
@@ -249,7 +249,7 @@ public final class TextureOp34 extends TextureOp {
 	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
 		@Pc(17) int[] local17 = this.monochromeImageCache.get(arg0);
 		if (this.monochromeImageCache.invalid) {
-			this.method584(arg0, local17);
+			this.getNoiseRow(arg0, local17);
 		}
 		return local17;
 	}

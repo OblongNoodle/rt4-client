@@ -50,7 +50,7 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 	}
 
 	@OriginalMember(owner = "client!bk", name = "a", descriptor = "(BI)V")
-	public static void method619(@OriginalArg(1) int color) {
+	public static void setUnderwaterColor(@OriginalArg(1) int color) {
 		aFloatArray2[0] = (float) (color >> 16 & 0xFF) / 255.0F;
 		aFloatArray2[1] = (float) (color >> 8 & 0xFF) / 255.0F;
 		aFloatArray2[2] = (float) (color & 0xFF) / 255.0F;

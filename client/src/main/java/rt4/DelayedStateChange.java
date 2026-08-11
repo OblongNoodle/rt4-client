@@ -224,7 +224,7 @@ public final class DelayedStateChange extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "(BI)V")
-	public static void method24(@OriginalArg(1) int arg0) {
+	public static void setVarpClient(@OriginalArg(1) int arg0) {
 		@Pc(16) DelayedStateChange local16 = create(1, arg0);
 		local16.pushClient();
 	}

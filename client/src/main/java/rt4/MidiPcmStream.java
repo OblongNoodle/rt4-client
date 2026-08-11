@@ -217,8 +217,8 @@ public final class MidiPcmStream extends PcmStream {
 		for (@Pc(20) MidiNote local20 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.head(); local20 != null; local20 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.next()) {
 			if (arg0 < 0 || local20.channel == arg0) {
 				if (local20.stream != null) {
-					local20.stream.method384(AudioChannel.sampleRate / 100);
-					if (local20.stream.method412()) {
+					local20.stream.fadeOutAndRelease(AudioChannel.sampleRate / 100);
+					if (local20.stream.isTransitioning()) {
 						this.aClass3_Sub3_Sub3_1.mixer.addSubStream(local20.stream);
 					}
 					local20.release();
@@ -516,7 +516,7 @@ public final class MidiPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(IILclient!mf;B[I)Z")
 	public final boolean advanceNoteEnvelope(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) MidiNote arg2, @OriginalArg(4) int[] arg3) {
 		arg2.anInt3771 = AudioChannel.sampleRate / 100;
-		if (arg2.anInt3767 >= 0 && (arg2.stream == null || arg2.stream.method411())) {
+		if (arg2.anInt3767 >= 0 && (arg2.stream == null || arg2.stream.isOutOfBounds())) {
 			arg2.release();
 			arg2.unlink();
 			if (arg2.anInt3776 > 0 && arg2 == this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.anInt3776]) {
@@ -532,7 +532,7 @@ public final class MidiPcmStream extends PcmStream {
 			}
 			arg2.anInt3764 = local54;
 		}
-		arg2.stream.method410(this.calculatePitch(arg2));
+		arg2.stream.setRate(this.calculatePitch(arg2));
 		@Pc(103) MidiTrackState local103 = arg2.trackState;
 		arg2.anInt3768 += local103.anInt5814;
 		arg2.anInt3774++;
@@ -575,16 +575,16 @@ public final class MidiPcmStream extends PcmStream {
 			}
 		}
 		if (!local136) {
-			arg2.stream.method417(arg2.anInt3771, this.calculateVolume(arg2), this.calculatePan(arg2));
+			arg2.stream.fadeToVolumeAndPan(arg2.anInt3771, this.calculateVolume(arg2), this.calculatePan(arg2));
 			return false;
 		}
-		arg2.stream.method384(arg2.anInt3771);
+		arg2.stream.fadeOutAndRelease(arg2.anInt3771);
 		if (arg3 == null) {
 			arg2.stream.skip(arg0);
 		} else {
 			arg2.stream.read(arg3, arg1, arg0);
 		}
-		if (arg2.stream.method412()) {
+		if (arg2.stream.isTransitioning()) {
 			this.aClass3_Sub3_Sub3_1.mixer.addSubStream(arg2.stream);
 		}
 		arg2.release();
@@ -768,13 +768,13 @@ public final class MidiPcmStream extends PcmStream {
 			local8 <<= 0x8;
 			local27 = (int) ((long) local37 * (long) this.anIntArray509[arg0.channel] >> 6);
 			if (local27 >= local8) {
-				arg0.stream.method409();
+				arg0.stream.reverseDirection();
 				local27 = local8 + local8 - local27 - 1;
 			}
 		} else {
 			local27 = (int) ((long) local8 * (long) this.anIntArray509[arg0.channel] >> 6);
 		}
-		arg0.stream.method401(local27);
+		arg0.stream.setSamplePosition(local27);
 	}
 
 	@OriginalMember(owner = "client!va", name = "f", descriptor = "(II)V")

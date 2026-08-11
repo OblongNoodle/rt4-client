@@ -66,7 +66,7 @@ public final class QuickChatPhraseType extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!cb", name = "e", descriptor = "(I)V")
-	public final void method763() {
+	public final void postDecode() {
 		if (this.automaticResponses != null) {
 			for (@Pc(7) int local7 = 0; local7 < this.automaticResponses.length; local7++) {
 				this.automaticResponses[local7] |= 0x8000;

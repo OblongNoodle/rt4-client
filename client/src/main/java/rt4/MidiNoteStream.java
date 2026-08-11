@@ -56,9 +56,9 @@ public final class MidiNoteStream extends PcmStream {
 			instrument.anInt3775 = local27 * len + instrument.anInt3775 & 0xFFFFF;
 			if (len >= local37) {
 				if (this.parent.anIntArray509[instrument.channel] == 0) {
-					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.method405(), instrument.stream.getVolume(), instrument.stream.getPan());
+					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.getAbsoluteRate(), instrument.stream.getVolume(), instrument.stream.getPan());
 				} else {
-					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.method405(), 0, instrument.stream.getPan());
+					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.getAbsoluteRate(), 0, instrument.stream.getPan());
 					this.parent.applyLoopStartOffset(instrument, instrument.instrument.aShortArray36[instrument.anInt3779] < 0);
 				}
 				if (instrument.instrument.aShortArray36[instrument.anInt3779] < 0) {
@@ -138,19 +138,19 @@ public final class MidiNoteStream extends PcmStream {
 				}
 				arg1.anInt3775 += local26 * local36 - 1048576;
 				if (this.parent.anIntArray509[arg1.channel] == 0) {
-					arg1.stream = SoundPcmStream.create(arg1.sound, local58.method405(), local58.getVolume(), local58.getPan());
+					arg1.stream = SoundPcmStream.create(arg1.sound, local58.getAbsoluteRate(), local58.getVolume(), local58.getPan());
 				} else {
-					arg1.stream = SoundPcmStream.create(arg1.sound, local58.method405(), 0, local58.getPan());
+					arg1.stream = SoundPcmStream.create(arg1.sound, local58.getAbsoluteRate(), 0, local58.getPan());
 					this.parent.applyLoopStartOffset(arg1, arg1.instrument.aShortArray36[arg1.anInt3779] < 0);
-					arg1.stream.method398(local55, local58.getVolume());
+					arg1.stream.fadeToVolume(local55, local58.getVolume());
 				}
 				if (arg1.instrument.aShortArray36[arg1.anInt3779] < 0) {
 					arg1.stream.setLoops(-1);
 				}
 				arg2 += local36;
-				local58.method384(local55);
+				local58.fadeOutAndRelease(local55);
 				local58.read(arg0, arg2, arg4 - arg2);
-				if (local58.method412()) {
+				if (local58.isTransitioning()) {
 					this.mixer.addSubStream(local58);
 				}
 			}

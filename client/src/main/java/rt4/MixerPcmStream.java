@@ -34,7 +34,7 @@ public final class MixerPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!ei", name = "a", descriptor = "(Lclient!cc;)V")
 	private void removeListener(@OriginalArg(0) MixerListener arg0) {
 		arg0.unlink();
-		arg0.method780();
+		arg0.onRemoved();
 		@Pc(9) Node local9 = this.aClass69_44.aClass3_109.nextNode;
 		if (local9 == this.aClass69_44.aClass3_109) {
 			this.anInt1781 = -1;
@@ -69,7 +69,7 @@ public final class MixerPcmStream extends PcmStream {
 			this.advanceListeners();
 			@Pc(60) MixerListener local60 = (MixerListener) this.aClass69_44.head();
 			synchronized (local60) {
-				@Pc(68) int local68 = local60.method779(this);
+				@Pc(68) int local68 = local60.process(this);
 				if (local68 < 0) {
 					local60.anInt905 = 0;
 					this.removeListener(local60);
@@ -144,7 +144,7 @@ public final class MixerPcmStream extends PcmStream {
 			this.advanceListeners();
 			@Pc(50) MixerListener local50 = (MixerListener) this.aClass69_44.head();
 			synchronized (local50) {
-				@Pc(58) int local58 = local50.method779(this);
+				@Pc(58) int local58 = local50.process(this);
 				if (local58 < 0) {
 					local50.anInt905 = 0;
 					this.removeListener(local50);

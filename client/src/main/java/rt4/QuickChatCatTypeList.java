@@ -35,7 +35,7 @@ public class QuickChatCatTypeList {
 			quickChatCat.decode(new Buffer(data));
 		}
 		if (id >= 32768) {
-			quickChatCat.method465();
+			quickChatCat.postDecode();
 		}
 		types.put(quickChatCat, id);
 		return quickChatCat;

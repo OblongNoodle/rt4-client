@@ -26,7 +26,7 @@ public class BasTypeList {
 		if (local21 != null) {
 			local10.decode(new Buffer(local21));
 		}
-		local10.method878();
+		local10.postDecode();
 		types.put(local10, arg0);
 		return local10;
 	}

@@ -93,7 +93,7 @@ public final class BasType {
 	public int rollTargetAngle = 0;
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "(I)V")
-	public final void method878() {
+	public final void postDecode() {
 	}
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "(ILclient!wa;)V")

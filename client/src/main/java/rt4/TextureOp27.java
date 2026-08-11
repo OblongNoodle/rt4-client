@@ -31,11 +31,11 @@ public final class TextureOp27 extends TextureOp {
 	@OriginalMember(owner = "client!d", name = "e", descriptor = "(I)V")
 	@Override
 	public final void postDecode() {
-		this.method991();
+		this.initStripes();
 	}
 
 	@OriginalMember(owner = "client!d", name = "h", descriptor = "(I)V")
-	private void method991() {
+	private void initStripes() {
 		@Pc(7) int local7 = 0;
 		this.anIntArray87 = new int[this.anInt1233 + 1];
 		@Pc(23) int local23 = 4096 / this.anInt1233;

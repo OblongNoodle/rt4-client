@@ -117,7 +117,7 @@ public final class Light {
 		local15.aBoolean44 = true;
 		local15.postDecode();
 		Texture.setSize(1, 2048);
-		local15.method584(0, local11);
+		local15.getNoiseRow(0, local11);
 		return local11;
 	}
 

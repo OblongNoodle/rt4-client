@@ -755,7 +755,7 @@ public final class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!rc", name = "d", descriptor = "(I)V")
-	public static void method930() {
+	public static void reinitAudio() {
 		if (musicChannel != null) {
 			musicChannel.quit();
 		}
@@ -770,7 +770,7 @@ public final class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!ag", name = "j", descriptor = "(I)V")
-	public static void method84() {
+	public static void clearScene() {
 		SceneGraph.clear();
 		for (@Pc(9) int local9 = 0; local9 < 4; local9++) {
 			PathFinder.collisionMaps[local9].clear();
@@ -1703,7 +1703,7 @@ public final class client extends GameShell {
 		}
 		this.js5NetworkLoop();
 		if (js5MasterIndex != null) {
-			js5MasterIndex.method179();
+			js5MasterIndex.processResourceProviders();
 		}
 		MidiPlayer.loop();
 		audioLoop();

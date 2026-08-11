@@ -123,7 +123,7 @@ public class WorldMap {
 				return;
 			}
 
-			client.method84();
+			client.clearScene();
 			loadPercentage = 10;
 		}
 

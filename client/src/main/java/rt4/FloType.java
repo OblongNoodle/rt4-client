@@ -41,7 +41,7 @@ public final class FloType {
 	public int waterColor = 1190717;
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(II)I")
-	public static int method492(@OriginalArg(1) int color) {
+	public static int decodeColor(@OriginalArg(1) int color) {
 		return color == 16711935 ? -1 : ColorUtils.rgbToHsl(color);
 	}
 
@@ -59,7 +59,7 @@ public final class FloType {
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(IILclient!wa;I)V")
 	private void decode(@OriginalArg(1) int opcode, @OriginalArg(2) Buffer buffer, @OriginalArg(3) int id) {
 		if (opcode == 1) {
-			this.baseColor = method492(buffer.g3());
+			this.baseColor = decodeColor(buffer.g3());
 		} else if (opcode == 2) {
 			this.texture = buffer.g1();
 		} else if (opcode == 3) {
@@ -70,7 +70,7 @@ public final class FloType {
 		} else if (opcode == 5) {
 			this.occludeUnderlay = false;
 		} else if (opcode == 7) {
-			this.secondaryColor = method492(buffer.g3());
+			this.secondaryColor = decodeColor(buffer.g3());
 		} else if (opcode == 8) {
 			anInt865 = id;
 		} else if (opcode == 9) {

@@ -2308,7 +2308,7 @@ public class Protocol {
 					component.objCounts[i] = 0;
 				}
 			}
-			Inv.method475(containerId);
+			Inv.clearContainer(containerId);
 			int total = inboundBuffer.g2();
 			for (int slot = 0; slot < total; slot++) {
 				int amount = inboundBuffer.g1sub();
@@ -2853,7 +2853,7 @@ public class Protocol {
 												}
 											}
 											MiniMenu.anInt1742 = -1;
-											method843();
+											processDefaultAction();
 											if (InterfaceList.aClass13_22 != component) {
 												if (component != null) {
 													InterfaceList.redraw(component);
@@ -3519,7 +3519,7 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!ah", name = "b", descriptor = "(I)V")
-	public static void method843() {
+	public static void processDefaultAction() {
 		if (InterfaceList.clickedInventoryComponent != null || Cs1ScriptRunner.aClass13_14 != null) {
 			return;
 		}

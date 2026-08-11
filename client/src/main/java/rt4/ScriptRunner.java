@@ -208,9 +208,9 @@ public final class ScriptRunner {
 		anInt3325++;
 		clearTileEntityCounts();
 		if (!arg1) {
-			method964(true);
+			addPlayersToScene(true);
 			addNpcsToScene(true);
-			method964(false);
+			addPlayersToScene(false);
 		}
 		addNpcsToScene(false);
 		if (!arg1) {
@@ -665,7 +665,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!cn", name = "b", descriptor = "(ZI)V")
-	public static void method964(@OriginalArg(0) boolean arg0) {
+	public static void addPlayersToScene(@OriginalArg(0) boolean arg0) {
 		@Pc(3) int local3 = PlayerList.size;
 		if (LoginManager.mapFlagX == PlayerList.self.xFine >> 7 && PlayerList.self.yFine >> 7 == LoginManager.mapFlagY) {
 			LoginManager.mapFlagX = 0;
@@ -972,11 +972,11 @@ public final class ScriptRunner {
 			aByteArrayArrayArray15 = null;
 			allocateRoofVisibilityGroupArrays(0);
 		} else if (local8 == 1) {
-			method960((byte) 0);
+			fillRoofVisibility((byte) 0);
 			allocateRoofVisibilityGroupArrays(512);
 			buildAllRoofVisibilityGroups();
 		} else {
-			method960((byte) (anInt3325 - 4 & 0xFF));
+			fillRoofVisibility((byte) (anInt3325 - 4 & 0xFF));
 			allocateRoofVisibilityGroupArrays(API.GetRoofVisibilityGroupLimit());
 		}
 	}
@@ -1005,7 +1005,7 @@ public final class ScriptRunner {
 	public static SecondaryLinkedList findMapsAtCoordinate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(9) SecondaryLinkedList local9 = new SecondaryLinkedList();
 		for (@Pc(14) Map local14 = (Map) MapList.aClass69_120.head(); local14 != null; local14 = (Map) MapList.aClass69_120.next()) {
-			if (local14.valid && local14.method664(arg1, arg0)) {
+			if (local14.valid && local14.containsDisplayCoordinate(arg1, arg0)) {
 				local9.addTail(local14);
 			}
 		}
@@ -1013,7 +1013,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!cn", name = "a", descriptor = "(BB)V")
-	public static void method960(@OriginalArg(0) byte arg0) {
+	public static void fillRoofVisibility(@OriginalArg(0) byte arg0) {
 		if (aByteArrayArrayArray15 == null) {
 			aByteArrayArrayArray15 = new byte[4][104][104];
 		}
@@ -1310,7 +1310,7 @@ public final class ScriptRunner {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(Z)Lclient!na;")
-	public static JagString method479() {
+	public static JagString buildSettingsUrl() {
 		@Pc(8) JagString local8 = aClass100_518;
 		@Pc(10) JagString local10 = JagString.EMPTY;
 		if (client.modeWhere != 0) {
@@ -2088,7 +2088,7 @@ public final class ScriptRunner {
 						id = intOperands[pc];
 						isp--;
 						VarcDomain.varcs[id] = intStack[isp];
-						DelayedStateChange.method24(id);
+						DelayedStateChange.setVarpClient(id);
 						continue;
 					}
 					if (opcode == 44) {
@@ -4775,7 +4775,7 @@ public final class ScriptRunner {
 															DisplayMode.setWindowMode(false, Preferences.favoriteWorlds, -1, -1);
 														}
 														if (GameShell.frame == null) {
-															openUrl(method479(), false);
+															openUrl(buildSettingsUrl(), false);
 														} else {
 															System.exit(0);
 														}
@@ -4805,7 +4805,7 @@ public final class ScriptRunner {
 														local1552 = intStack[isp] == 1;
 														ssp--;
 														string = stringStack[ssp];
-														@Pc(8356) JagString local8356 = JagString.concatenate(new JagString[]{method479(), string});
+														@Pc(8356) JagString local8356 = JagString.concatenate(new JagString[]{buildSettingsUrl(), string});
 														if (GameShell.frame != null || local1552 && SignLink.anInt5928 != 3 && SignLink.osName.startsWith("win") && !client.haveIe6) {
 															Protocol.newTab = local1552;
 															url = local8356;
@@ -5191,7 +5191,7 @@ public final class ScriptRunner {
 													if (opcode == 6017) {
 														isp--;
 														Preferences.stereo = intStack[isp] == 1;
-														client.method930();
+														client.reinitAudio();
 														Preferences.write(GameShell.signLink);
 														Preferences.sentToServer = false;
 														continue;

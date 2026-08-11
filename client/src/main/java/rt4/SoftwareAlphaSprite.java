@@ -14,7 +14,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	}
 
 	@OriginalMember(owner = "client!am", name = "b", descriptor = "([I[IIIIIIIIIIII)V")
-	public static void method317(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11) {
+	public static void blitAlphaScaledWithOpacity(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11) {
 		@Pc(1) int local1 = arg2;
 		for (@Pc(4) int local4 = -arg7; local4 < 0; local4++) {
 			@Pc(12) int local12 = (arg3 >> 16) * arg10;
@@ -33,7 +33,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	}
 
 	@OriginalMember(owner = "client!am", name = "c", descriptor = "([I[IIIIIIII)V")
-	public static void method318(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
+	public static void blitAlphaFlipped(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
 		@Pc(2) int local2 = -arg4;
 		for (@Pc(5) int local5 = -arg5; local5 < 0; local5++) {
 			for (@Pc(9) int local9 = local2; local9 < 0; local9++) {
@@ -53,7 +53,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	}
 
 	@OriginalMember(owner = "client!am", name = "d", descriptor = "([I[IIIIIIII)V")
-	public static void method319(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
+	public static void blitAlpha(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
 		@Pc(2) int local2 = -arg4;
 		for (@Pc(5) int local5 = -arg5; local5 < 0; local5++) {
 			for (@Pc(9) int local9 = local2; local9 < 0; local9++) {
@@ -73,7 +73,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	}
 
 	@OriginalMember(owner = "client!am", name = "b", descriptor = "([I[IIIIIIIII)V")
-	public static void method320(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
+	public static void blitAlphaWithOpacity(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
 		for (@Pc(2) int local2 = -arg5; local2 < 0; local2++) {
 			for (@Pc(7) int local7 = -arg4; local7 < 0; local7++) {
 				@Pc(19) int local19 = (arg1[arg2] >>> 24) * arg8 >> 8;
@@ -88,7 +88,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	}
 
 	@OriginalMember(owner = "client!am", name = "b", descriptor = "([I[IIIIIIIIIII)V")
-	public static void method321(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10) {
+	public static void blitAlphaScaled(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10) {
 		@Pc(1) int local1 = arg2;
 		for (@Pc(4) int local4 = -arg7; local4 < 0; local4++) {
 			@Pc(12) int local12 = (arg3 >> 16) * arg10;
@@ -180,7 +180,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			method319(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
+			blitAlpha(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
 		}
 	}
 
@@ -222,7 +222,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			method319(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
+			blitAlpha(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
 		}
 	}
 
@@ -793,7 +793,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 			local12 += local26 * local150;
 			local130 += local150;
 		}
-		method317(SoftwareRaster.pixels, this.pixels, local12, local14, local46, local130, arg2, arg3, local26, local32, local7, arg4);
+		blitAlphaScaledWithOpacity(SoftwareRaster.pixels, this.pixels, local12, local14, local46, local130, arg2, arg3, local26, local32, local7, arg4);
 	}
 
 	@OriginalMember(owner = "client!am", name = "a", descriptor = "(IIII)V")
@@ -851,7 +851,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 			local12 += local26 * local150;
 			local130 += local150;
 		}
-		method321(SoftwareRaster.pixels, this.pixels, local12, local14, local46, local130, width, height, local26, local32, local7);
+		blitAlphaScaled(SoftwareRaster.pixels, this.pixels, local12, local14, local46, local130, width, height, local26, local32, local7);
 	}
 
 	@OriginalMember(owner = "client!am", name = "d", descriptor = "(II)V")
@@ -892,7 +892,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 			local36 += local47;
 		}
 		if (local32 > 0 && local29 > 0) {
-			method318(SoftwareRaster.pixels, this.pixels, local26, local21, local32, local29, local36, local40);
+			blitAlphaFlipped(SoftwareRaster.pixels, this.pixels, local26, local21, local32, local29, local36, local40);
 		}
 	}
 
@@ -934,7 +934,7 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			method320(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29, alpha);
+			blitAlphaWithOpacity(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29, alpha);
 		}
 	}
 }

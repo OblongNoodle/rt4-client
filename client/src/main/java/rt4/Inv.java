@@ -272,7 +272,7 @@ public final class Inv extends Node {
 	}
 
 	@OriginalMember(owner = "client!bd", name = "a", descriptor = "(BI)V")
-	public static void method475(@OriginalArg(1) int arg0) {
+	public static void clearContainer(@OriginalArg(1) int arg0) {
 		@Pc(8) Inv local8 = (Inv) objectContainerCache.get(arg0);
 		if (local8 != null) {
 			for (@Pc(24) int local24 = 0; local24 < local8.objectIds.length; local24++) {

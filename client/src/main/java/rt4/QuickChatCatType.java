@@ -29,7 +29,7 @@ public final class QuickChatCatType extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!bc", name = "d", descriptor = "(I)V")
-	public final void method465() {
+	public final void postDecode() {
 		@Pc(8) int local8;
 		if (this.phrases != null) {
 			for (local8 = 0; local8 < this.phrases.length; local8++) {

@@ -1683,7 +1683,7 @@ public class SceneGraph {
 													var10 = var9 & 0xFFFFFF;
 													if (var10 != anInt3604) {
 														anInt3604 = var10;
-														WaterMaterialRenderer.method619(var10);
+														WaterMaterialRenderer.setUnderwaterColor(var10);
 														FogManager.setFogColor(WaterMaterialRenderer.getWaterFogColor());
 													}
 													local65 = var9 >>> 24 << 3;
@@ -3057,7 +3057,7 @@ public class SceneGraph {
 					@Pc(294) float local294 = 251.5F - (local285.blend ? 1.0F : 0.5F);
 					if (local285.underwaterColor != anInt3604) {
 						anInt3604 = local285.underwaterColor;
-						WaterMaterialRenderer.method619(local285.underwaterColor);
+						WaterMaterialRenderer.setUnderwaterColor(local285.underwaterColor);
 						FogManager.setFogColor(WaterMaterialRenderer.getWaterFogColor());
 					}
 					local285.renderTiles(tiles, local294, false);
@@ -3074,7 +3074,7 @@ public class SceneGraph {
 						@Pc(336) GlTile local336 = underwaterHdTiles[local32][local37];
 						@Pc(350) float local350 = 201.5F - (float) local32 * 50.0F - (local336.blend ? 1.0F : 0.5F);
 						if (local336.texture != -1 && Rasteriser.textureProvider.getMaterialType(local336.texture) == MaterialManager.WATER && Preferences.highWaterDetail) {
-							WaterMaterialRenderer.method619(local336.underwaterColor);
+							WaterMaterialRenderer.setUnderwaterColor(local336.underwaterColor);
 						}
 						local336.renderTiles(tiles, local350, false);
 					}

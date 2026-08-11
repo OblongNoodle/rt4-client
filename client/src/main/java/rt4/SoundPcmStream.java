@@ -63,7 +63,7 @@ public final class SoundPcmStream extends PcmStream {
 		this.volume = volume;
 		this.pan = 8192;
 		this.anInt346 = 0;
-		this.method416();
+		this.recalculateChannelVolumes();
 	}
 
 	@OriginalMember(owner = "client!b", name = "<init>", descriptor = "(Lclient!kj;III)V")
@@ -76,7 +76,7 @@ public final class SoundPcmStream extends PcmStream {
 		this.volume = volume;
 		this.pan = pan;
 		this.anInt346 = 0;
-		this.method416();
+		this.recalculateChannelVolumes();
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(Lclient!kj;II)Lclient!b;")
@@ -85,7 +85,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(I[B[IIIIIIIILclient!b;)I")
-	public static int method387(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(10) SoundPcmStream arg8) {
+	public static int mixForwardStereo(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(10) SoundPcmStream arg8) {
 		arg2 >>= 0x8;
 		@Pc(7) int local7 = arg7 >> 8;
 		@Pc(11) int local11 = arg4 << 2;
@@ -138,7 +138,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(II[B[IIIIIIIIIILclient!b;II)I")
-	public static int method388(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9, @OriginalArg(13) SoundPcmStream arg10, @OriginalArg(14) int arg11, @OriginalArg(15) int arg12) {
+	public static int mixForwardStereoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9, @OriginalArg(13) SoundPcmStream arg10, @OriginalArg(14) int arg11, @OriginalArg(15) int arg12) {
 		arg10.anInt348 -= arg10.anInt344 * arg3;
 		@Pc(23) int local23;
 		if (arg11 == 0 || (local23 = arg3 + (arg9 + arg11 - arg2 - 257) / arg11) > arg8) {
@@ -190,7 +190,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
-	public static int method389(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
+	public static int mixForwardMonoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
 		arg8.anInt355 -= arg8.anInt347 * arg3;
 		arg8.anInt352 -= arg8.anInt354 * arg3;
 		@Pc(32) int local32;
@@ -225,7 +225,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(II[B[IIIIIIILclient!b;II)I")
-	public static int method390(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(8) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) SoundPcmStream arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9) {
+	public static int mixBackwardMonoResampled(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(8) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) SoundPcmStream arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9) {
 		@Pc(14) int local14;
 		if (arg8 == 0 || (local14 = arg3 + (arg6 + arg8 + 256 - arg2) / arg8) > arg5) {
 			local14 = arg5;
@@ -251,7 +251,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "([B[IIIIIIILclient!b;)I")
-	public static int method391(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) SoundPcmStream arg7) {
+	public static int mixForwardMono(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) SoundPcmStream arg7) {
 		arg2 >>= 0x8;
 		@Pc(7) int local7 = arg6 >> 8;
 		@Pc(11) int local11 = arg4 << 2;
@@ -289,7 +289,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(I[B[IIIIIIIIIILclient!b;)I")
-	public static int method393(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(10) int arg8, @OriginalArg(11) int arg9, @OriginalArg(12) SoundPcmStream arg10) {
+	public static int mixForwardStereoFading(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(10) int arg8, @OriginalArg(11) int arg9, @OriginalArg(12) SoundPcmStream arg10) {
 		arg2 >>= 0x8;
 		@Pc(7) int local7 = arg9 >> 8;
 		arg4 <<= 0x2;
@@ -357,7 +357,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "([B[IIIIIIIILclient!b;)I")
-	public static int method394(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) SoundPcmStream arg8) {
+	public static int mixBackwardMonoFading(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) SoundPcmStream arg8) {
 		arg2 >>= 0x8;
 		@Pc(7) int local7 = arg7 >> 8;
 		arg4 <<= 0x2;
@@ -404,7 +404,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([B[IIIIIIIILclient!b;)I")
-	public static int method395(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) SoundPcmStream arg8) {
+	public static int mixForwardMonoFading(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) SoundPcmStream arg8) {
 		arg2 >>= 0x8;
 		@Pc(7) int local7 = arg7 >> 8;
 		arg4 <<= 0x2;
@@ -456,7 +456,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
-	public static int method400(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
+	public static int mixForwardStereoResampled(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
 		@Pc(14) int local14;
 		if (arg9 == 0 || (local14 = arg3 + (arg7 + arg9 - arg2 - 257) / arg9) > arg6) {
 			local14 = arg6;
@@ -499,7 +499,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II[B[IIIIIIILclient!b;II)I")
-	public static int method422(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(8) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) SoundPcmStream arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9) {
+	public static int mixForwardMonoResampled(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(8) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) SoundPcmStream arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9) {
 		@Pc(14) int local14;
 		if (arg8 == 0 || (local14 = arg3 + (arg6 + arg8 - arg2 - 257) / arg8) > arg5) {
 			local14 = arg5;
@@ -527,17 +527,17 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "e", descriptor = "(II)I")
-	public static int method421(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static int calculateRightVolume(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		return arg1 < 0 ? -arg0 : (int) ((double) arg0 * Math.sqrt((double) arg1 * 1.220703125E-4D) + 0.5D);
 	}
 
 	@OriginalMember(owner = "client!b", name = "d", descriptor = "(II)I")
-	public static int method419(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static int calculateLeftVolume(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		return arg1 < 0 ? arg0 : (int) ((double) arg0 * Math.sqrt((double) (16384 - arg1) * 1.220703125E-4D) + 0.5D);
 	}
 
 	@OriginalMember(owner = "client!b", name = "d", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
-	public static int method420(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
+	public static int mixBackwardStereoResampled(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
 		@Pc(14) int local14;
 		if (arg9 == 0 || (local14 = arg3 + (arg7 + arg9 + 256 - arg2) / arg9) > arg6) {
 			local14 = arg6;
@@ -578,7 +578,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([B[IIIIIIILclient!b;)I")
-	public static int method413(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) SoundPcmStream arg7) {
+	public static int mixBackwardMono(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) SoundPcmStream arg7) {
 		arg2 >>= 0x8;
 		@Pc(7) int local7 = arg6 >> 8;
 		@Pc(11) int local11 = arg4 << 2;
@@ -616,7 +616,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
-	public static int method415(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
+	public static int mixBackwardMonoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
 		arg8.anInt355 -= arg8.anInt347 * arg3;
 		arg8.anInt352 -= arg8.anInt354 * arg3;
 		@Pc(32) int local32;
@@ -649,7 +649,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(I[B[IIIIIIIILclient!b;)I")
-	public static int method414(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(10) SoundPcmStream arg8) {
+	public static int mixBackwardStereo(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(10) SoundPcmStream arg8) {
 		arg2 >>= 0x8;
 		@Pc(7) int local7 = arg7 >> 8;
 		@Pc(11) int local11 = arg4 << 2;
@@ -702,7 +702,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II[B[IIIIIIIIIILclient!b;II)I")
-	public static int method407(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9, @OriginalArg(13) SoundPcmStream arg10, @OriginalArg(14) int arg11, @OriginalArg(15) int arg12) {
+	public static int mixBackwardStereoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9, @OriginalArg(13) SoundPcmStream arg10, @OriginalArg(14) int arg11, @OriginalArg(15) int arg12) {
 		arg10.anInt348 -= arg10.anInt344 * arg3;
 		@Pc(23) int local23;
 		if (arg11 == 0 || (local23 = arg3 + (arg9 + arg11 + 256 - arg2) / arg11) > arg8) {
@@ -752,7 +752,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(I[B[IIIIIIIIIILclient!b;)I")
-	public static int method402(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(10) int arg8, @OriginalArg(11) int arg9, @OriginalArg(12) SoundPcmStream arg10) {
+	public static int mixBackwardStereoFading(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(10) int arg8, @OriginalArg(11) int arg9, @OriginalArg(12) SoundPcmStream arg10) {
 		arg2 >>= 0x8;
 		@Pc(7) int local7 = arg9 >> 8;
 		arg4 <<= 0x2;
@@ -838,7 +838,7 @@ public final class SoundPcmStream extends PcmStream {
 		@Pc(44) int local44 = arg2 + arg1;
 		if (this.anInt346 < 0) {
 			if (this.anInt342 <= 0) {
-				this.method406();
+				this.cancelTransition();
 				this.unlink();
 				return;
 			}
@@ -846,7 +846,7 @@ public final class SoundPcmStream extends PcmStream {
 		}
 		if (this.anInt346 >= local29) {
 			if (this.anInt342 >= 0) {
-				this.method406();
+				this.cancelTransition();
 				this.unlink();
 				return;
 			}
@@ -858,7 +858,7 @@ public final class SoundPcmStream extends PcmStream {
 					label131:
 					{
 						if (this.anInt342 < 0) {
-							local40 = this.method403(arg0, arg1, local18, local44, local13.samples[this.start]);
+							local40 = this.readBackward(arg0, arg1, local18, local44, local13.samples[this.start]);
 							if (this.anInt346 >= local18) {
 								return;
 							}
@@ -869,7 +869,7 @@ public final class SoundPcmStream extends PcmStream {
 							}
 						}
 						do {
-							local40 = this.method385(arg0, local40, local23, local44, local13.samples[this.end - 1]);
+							local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.end - 1]);
 							if (this.anInt346 < local23) {
 								return;
 							}
@@ -878,7 +878,7 @@ public final class SoundPcmStream extends PcmStream {
 							if (--this.anInt350 == 0) {
 								break;
 							}
-							local40 = this.method403(arg0, local40, local18, local44, local13.samples[this.start]);
+							local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.start]);
 							if (this.anInt346 >= local18) {
 								return;
 							}
@@ -890,7 +890,7 @@ public final class SoundPcmStream extends PcmStream {
 					@Pc(417) int local417;
 					if (this.anInt342 < 0) {
 						while (true) {
-							local40 = this.method403(arg0, local40, local18, local44, local13.samples[this.end - 1]);
+							local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.end - 1]);
 							if (this.anInt346 >= local18) {
 								return;
 							}
@@ -905,7 +905,7 @@ public final class SoundPcmStream extends PcmStream {
 						}
 					} else {
 						while (true) {
-							local40 = this.method385(arg0, local40, local23, local44, local13.samples[this.start]);
+							local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.start]);
 							if (this.anInt346 < local23) {
 								return;
 							}
@@ -922,23 +922,23 @@ public final class SoundPcmStream extends PcmStream {
 				}
 			}
 			if (this.anInt342 < 0) {
-				this.method403(arg0, local40, 0, local44, 0);
+				this.readBackward(arg0, local40, 0, local44, 0);
 				if (this.anInt346 < 0) {
 					this.anInt346 = -1;
-					this.method406();
+					this.cancelTransition();
 					this.unlink();
 				}
 			} else {
-				this.method385(arg0, local40, local29, local44, 0);
+				this.readForward(arg0, local40, local29, local44, 0);
 				if (this.anInt346 >= local29) {
 					this.anInt346 = local29;
-					this.method406();
+					this.cancelTransition();
 					this.unlink();
 				}
 			}
 		} else if (this.aBoolean14) {
 			if (this.anInt342 < 0) {
-				local40 = this.method403(arg0, arg1, local18, local44, local13.samples[this.start]);
+				local40 = this.readBackward(arg0, arg1, local18, local44, local13.samples[this.start]);
 				if (this.anInt346 >= local18) {
 					return;
 				}
@@ -946,13 +946,13 @@ public final class SoundPcmStream extends PcmStream {
 				this.anInt342 = -this.anInt342;
 			}
 			while (true) {
-				local40 = this.method385(arg0, local40, local23, local44, local13.samples[this.end - 1]);
+				local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.end - 1]);
 				if (this.anInt346 < local23) {
 					return;
 				}
 				this.anInt346 = local23 + local23 - this.anInt346 - 1;
 				this.anInt342 = -this.anInt342;
-				local40 = this.method403(arg0, local40, local18, local44, local13.samples[this.start]);
+				local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.start]);
 				if (this.anInt346 >= local18) {
 					return;
 				}
@@ -961,7 +961,7 @@ public final class SoundPcmStream extends PcmStream {
 			}
 		} else if (this.anInt342 < 0) {
 			while (true) {
-				local40 = this.method403(arg0, local40, local18, local44, local13.samples[this.end - 1]);
+				local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.end - 1]);
 				if (this.anInt346 >= local18) {
 					return;
 				}
@@ -969,7 +969,7 @@ public final class SoundPcmStream extends PcmStream {
 			}
 		} else {
 			while (true) {
-				local40 = this.method385(arg0, local40, local23, local44, local13.samples[this.start]);
+				local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.start]);
 				if (this.anInt346 < local23) {
 					return;
 				}
@@ -979,7 +979,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "e", descriptor = "()Z")
-	private boolean method383() {
+	private boolean applyVolumeTransition() {
 		@Pc(2) int local2 = this.volume;
 		@Pc(10) int local10;
 		@Pc(8) int local8;
@@ -988,8 +988,8 @@ public final class SoundPcmStream extends PcmStream {
 			local10 = 0;
 			local2 = 0;
 		} else {
-			local10 = method419(local2, this.pan);
-			local8 = method421(local2, this.pan);
+			local10 = calculateLeftVolume(local2, this.pan);
+			local8 = calculateRightVolume(local2, this.pan);
 		}
 		if (this.anInt348 != local2 || this.anInt355 != local10 || this.anInt352 != local8) {
 			if (this.anInt348 < local2) {
@@ -1034,15 +1034,15 @@ public final class SoundPcmStream extends PcmStream {
 			this.unlink();
 			return true;
 		} else {
-			this.method416();
+			this.recalculateChannelVolumes();
 			return false;
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "d", descriptor = "(I)V")
-	public final synchronized void method384(@OriginalArg(0) int arg0) {
+	public final synchronized void fadeOutAndRelease(@OriginalArg(0) int arg0) {
 		if (arg0 == 0) {
-			this.method397();
+			this.resetVolume();
 			this.unlink();
 		} else if (this.anInt355 == 0 && this.anInt352 == 0) {
 			this.anInt351 = 0;
@@ -1078,7 +1078,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "([IIIII)I")
-	private int method385(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private int readForward(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		while (true) {
 			if (this.anInt351 > 0) {
 				@Pc(7) int local7 = arg1 + this.anInt351;
@@ -1088,40 +1088,40 @@ public final class SoundPcmStream extends PcmStream {
 				this.anInt351 += arg1;
 				if (this.anInt342 == 256 && (this.anInt346 & 0xFF) == 0) {
 					if (AudioChannel.stereo) {
-						arg1 = method393(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this);
+						arg1 = mixForwardStereoFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this);
 					} else {
-						arg1 = method395(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this);
+						arg1 = mixForwardMonoFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this);
 					}
 				} else if (AudioChannel.stereo) {
-					arg1 = method388(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this, this.anInt342, arg4);
+					arg1 = mixForwardStereoResampledFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this, this.anInt342, arg4);
 				} else {
-					arg1 = method389(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this, this.anInt342, arg4);
+					arg1 = mixForwardMonoResampledFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this, this.anInt342, arg4);
 				}
 				this.anInt351 -= arg1;
 				if (this.anInt351 != 0) {
 					return arg1;
 				}
-				if (!this.method383()) {
+				if (!this.applyVolumeTransition()) {
 					continue;
 				}
 				return arg3;
 			}
 			if (this.anInt342 == 256 && (this.anInt346 & 0xFF) == 0) {
 				if (AudioChannel.stereo) {
-					return method387(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this);
+					return mixForwardStereo(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this);
 				}
-				return method391(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this);
+				return mixForwardMono(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this);
 			}
 			if (AudioChannel.stereo) {
-				return method400(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this, this.anInt342, arg4);
+				return mixForwardStereoResampled(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this, this.anInt342, arg4);
 			}
-			return method422(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this, this.anInt342, arg4);
+			return mixForwardMonoResampled(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this, this.anInt342, arg4);
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "e", descriptor = "(I)V")
 	public final synchronized void setVolume(@OriginalArg(0) int arg0) {
-		this.method408(arg0 << 6, this.getPan());
+		this.setVolumeAndPan(arg0 << 6, this.getPan());
 	}
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "()I")
@@ -1160,7 +1160,7 @@ public final class SoundPcmStream extends PcmStream {
 					arg0 = this.anInt351;
 				}
 				this.anInt351 = 0;
-				this.method416();
+				this.recalculateChannelVolumes();
 			} else {
 				this.anInt348 += this.anInt344 * arg0;
 				this.anInt355 += this.anInt347 * arg0;
@@ -1178,7 +1178,7 @@ public final class SoundPcmStream extends PcmStream {
 		}
 		if (this.anInt346 < 0) {
 			if (this.anInt342 <= 0) {
-				this.method406();
+				this.cancelTransition();
 				this.unlink();
 				return;
 			}
@@ -1186,7 +1186,7 @@ public final class SoundPcmStream extends PcmStream {
 		}
 		if (this.anInt346 >= local87) {
 			if (this.anInt342 >= 0) {
-				this.method406();
+				this.cancelTransition();
 				this.unlink();
 				return;
 			}
@@ -1259,12 +1259,12 @@ public final class SoundPcmStream extends PcmStream {
 			if (this.anInt342 < 0) {
 				if (this.anInt346 < 0) {
 					this.anInt346 = -1;
-					this.method406();
+					this.cancelTransition();
 					this.unlink();
 				}
 			} else if (this.anInt346 >= local87) {
 				this.anInt346 = local87;
-				this.method406();
+				this.cancelTransition();
 				this.unlink();
 			}
 		} else if (this.aBoolean14) {
@@ -1302,13 +1302,13 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "g", descriptor = "(I)V")
-	private synchronized void method397() {
-		this.method408(0, this.getPan());
+	private synchronized void resetVolume() {
+		this.setVolumeAndPan(0, this.getPan());
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II)V")
-	public final synchronized void method398(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		this.method417(arg0, arg1, this.getPan());
+	public final synchronized void fadeToVolume(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+		this.fadeToVolumeAndPan(arg0, arg1, this.getPan());
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "()Lclient!qb;")
@@ -1318,7 +1318,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "h", descriptor = "(I)V")
-	public final synchronized void method401(@OriginalArg(0) int arg0) {
+	public final synchronized void setSamplePosition(@OriginalArg(0) int arg0) {
 		@Pc(7) int local7 = ((PcmSound) this.sound).samples.length << 8;
 		if (arg0 < -1) {
 			arg0 = -1;
@@ -1330,7 +1330,7 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([IIIII)I")
-	private int method403(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private int readBackward(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		while (true) {
 			if (this.anInt351 > 0) {
 				@Pc(7) int local7 = arg1 + this.anInt351;
@@ -1340,44 +1340,44 @@ public final class SoundPcmStream extends PcmStream {
 				this.anInt351 += arg1;
 				if (this.anInt342 == -256 && (this.anInt346 & 0xFF) == 0) {
 					if (AudioChannel.stereo) {
-						arg1 = method402(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this);
+						arg1 = mixBackwardStereoFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this);
 					} else {
-						arg1 = method394(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this);
+						arg1 = mixBackwardMonoFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this);
 					}
 				} else if (AudioChannel.stereo) {
-					arg1 = method407(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this, this.anInt342, arg4);
+					arg1 = mixBackwardStereoResampledFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this, this.anInt342, arg4);
 				} else {
-					arg1 = method415(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this, this.anInt342, arg4);
+					arg1 = mixBackwardMonoResampledFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this, this.anInt342, arg4);
 				}
 				this.anInt351 -= arg1;
 				if (this.anInt351 != 0) {
 					return arg1;
 				}
-				if (!this.method383()) {
+				if (!this.applyVolumeTransition()) {
 					continue;
 				}
 				return arg3;
 			}
 			if (this.anInt342 == -256 && (this.anInt346 & 0xFF) == 0) {
 				if (AudioChannel.stereo) {
-					return method414(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this);
+					return mixBackwardStereo(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this);
 				}
-				return method413(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this);
+				return mixBackwardMono(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this);
 			}
 			if (AudioChannel.stereo) {
-				return method420(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this, this.anInt342, arg4);
+				return mixBackwardStereoResampled(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this, this.anInt342, arg4);
 			}
-			return method390(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this, this.anInt342, arg4);
+			return mixBackwardMonoResampled(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this, this.anInt342, arg4);
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "g", descriptor = "()I")
-	public final synchronized int method405() {
+	public final synchronized int getAbsoluteRate() {
 		return this.anInt342 < 0 ? -this.anInt342 : this.anInt342;
 	}
 
 	@OriginalMember(owner = "client!b", name = "h", descriptor = "()V")
-	private void method406() {
+	private void cancelTransition() {
 		if (this.anInt351 == 0) {
 			return;
 		}
@@ -1385,25 +1385,25 @@ public final class SoundPcmStream extends PcmStream {
 			this.volume = 0;
 		}
 		this.anInt351 = 0;
-		this.method416();
+		this.recalculateChannelVolumes();
 	}
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "(II)V")
-	private synchronized void method408(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	private synchronized void setVolumeAndPan(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		this.volume = arg0;
 		this.pan = arg1;
 		this.anInt351 = 0;
-		this.method416();
+		this.recalculateChannelVolumes();
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(Z)V")
-	public final synchronized void method409() {
+	public final synchronized void reverseDirection() {
 		this.anInt342 = (this.anInt342 ^ this.anInt342 >> 31) + (this.anInt342 >>> 31);
 		this.anInt342 = -this.anInt342;
 	}
 
 	@OriginalMember(owner = "client!b", name = "i", descriptor = "(I)V")
-	public final synchronized void method410(@OriginalArg(0) int arg0) {
+	public final synchronized void setRate(@OriginalArg(0) int arg0) {
 		if (this.anInt342 < 0) {
 			this.anInt342 = -arg0;
 		} else {
@@ -1412,30 +1412,30 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "i", descriptor = "()Z")
-	public final boolean method411() {
+	public final boolean isOutOfBounds() {
 		return this.anInt346 < 0 || this.anInt346 >= ((PcmSound) this.sound).samples.length << 8;
 	}
 
 	@OriginalMember(owner = "client!b", name = "j", descriptor = "()Z")
-	public final boolean method412() {
+	public final boolean isTransitioning() {
 		return this.anInt351 != 0;
 	}
 
 	@OriginalMember(owner = "client!b", name = "k", descriptor = "()V")
-	private void method416() {
+	private void recalculateChannelVolumes() {
 		this.anInt348 = this.volume;
-		this.anInt355 = method419(this.volume, this.pan);
-		this.anInt352 = method421(this.volume, this.pan);
+		this.anInt355 = calculateLeftVolume(this.volume, this.pan);
+		this.anInt352 = calculateRightVolume(this.volume, this.pan);
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(III)V")
-	public final synchronized void method417(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final synchronized void fadeToVolumeAndPan(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		if (arg0 == 0) {
-			this.method408(arg1, arg2);
+			this.setVolumeAndPan(arg1, arg2);
 			return;
 		}
-		@Pc(10) int local10 = method419(arg1, arg2);
-		@Pc(14) int local14 = method421(arg1, arg2);
+		@Pc(10) int local10 = calculateLeftVolume(arg1, arg2);
+		@Pc(14) int local14 = calculateRightVolume(arg1, arg2);
 		if (this.anInt355 == local10 && this.anInt352 == local14) {
 			this.anInt351 = 0;
 			return;

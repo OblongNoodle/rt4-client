@@ -48,7 +48,7 @@ public class QuickChatPhraseTypeList {
 			quickChatPhrase.decode(new Buffer(data));
 		}
 		if (id >= 32768) {
-			quickChatPhrase.method763();
+			quickChatPhrase.postDecode();
 		}
 		types.put(quickChatPhrase, id);
 		return quickChatPhrase;
