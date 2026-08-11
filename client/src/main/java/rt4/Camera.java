@@ -80,13 +80,13 @@ public class Camera {
 	@OriginalMember(owner = "client!ke", name = "U", descriptor = "I")
 	public static int cameraOffsetX = 0;
 	@OriginalMember(owner = "client!uc", name = "a", descriptor = "I")
-	public static int anInt4229 = 2;
+	public static int offsetXDelta = 2;
 	@OriginalMember(owner = "client!ta", name = "B", descriptor = "I")
 	public static int maxPitchDistance = 0;
 	@OriginalMember(owner = "client!qk", name = "h", descriptor = "I")
 	public static int cameraOffsetY = 0;
 	@OriginalMember(owner = "client!sj", name = "H", descriptor = "I")
-	public static int anInt5161 = 0;
+	public static int yawDrift = 0;
 	@OriginalMember(owner = "client!af", name = "d", descriptor = "I")
 	public static int renderZ;
 	@OriginalMember(owner = "client!lg", name = "d", descriptor = "F")

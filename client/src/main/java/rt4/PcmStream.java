@@ -8,13 +8,13 @@ import org.openrs2.deob.annotation.OriginalMember;
 public abstract class PcmStream extends Node {
 
 	@OriginalMember(owner = "client!qb", name = "p", descriptor = "I")
-	public int anInt5626;
+	public int effectivePriority;
 
 	@OriginalMember(owner = "client!qb", name = "q", descriptor = "Lclient!ik;")
 	public Sound sound;
 
 	@OriginalMember(owner = "client!qb", name = "s", descriptor = "Lclient!qb;")
-	public PcmStream aClass3_Sub3_8;
+	public PcmStream nextPriorityStream;
 
 	@OriginalMember(owner = "client!qb", name = "r", descriptor = "Z")
 	public volatile boolean active = true;

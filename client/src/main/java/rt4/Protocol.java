@@ -2912,13 +2912,13 @@ public class Protocol {
 												anInt3486 = 0;
 												modelId = (int) (Math.random() * 8.0D);
 												if ((modelId & 0x4) == 4) {
-													Camera.anInt5161 += anInt4941;
+													Camera.yawDrift += anInt4941;
 												}
 												if ((modelId & 0x2) == 2) {
 													Camera.cameraOffsetY += anInt659;
 												}
 												if ((modelId & 0x1) == 1) {
-													Camera.cameraOffsetX += Camera.anInt4229;
+													Camera.cameraOffsetX += Camera.offsetXDelta;
 												}
 											}
 											if (MiniMap.jitterTimer > 500) {
@@ -2932,7 +2932,7 @@ public class Protocol {
 												}
 											}
 											if (Camera.cameraOffsetX < -50) {
-												Camera.anInt4229 = 2;
+												Camera.offsetXDelta = 2;
 											}
 											if (MiniMap.compassAngleOffset < -60) {
 												MiniMap.angleJitterStep = 2;
@@ -2946,13 +2946,13 @@ public class Protocol {
 											if (Camera.cameraOffsetY > 55) {
 												anInt659 = -2;
 											}
-											if (Camera.anInt5161 < -40) {
+											if (Camera.yawDrift < -40) {
 												anInt4941 = 1;
 											}
 											if (Camera.cameraOffsetX > 50) {
-												Camera.anInt4229 = -2;
+												Camera.offsetXDelta = -2;
 											}
-											if (Camera.anInt5161 > 40) {
+											if (Camera.yawDrift > 40) {
 												anInt4941 = -1;
 											}
 											if (MiniMap.zoomOffset > 10) {

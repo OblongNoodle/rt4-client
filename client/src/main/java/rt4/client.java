@@ -668,7 +668,7 @@ public final class client extends GameShell {
 		LoginManager.mapFlagX = 0;
 		MiniMap.compassAngleOffset = (int) (Math.random() * 120.0D) - 60;
 		Chat.size = 0;
-		Camera.anInt5161 = (int) (Math.random() * 80.0D) - 40;
+		Camera.yawDrift = (int) (Math.random() * 80.0D) - 40;
 		NpcList.size = 0;
 		for (local3506 = 0; local3506 < 2048; local3506++) {
 			PlayerList.players[local3506] = null;

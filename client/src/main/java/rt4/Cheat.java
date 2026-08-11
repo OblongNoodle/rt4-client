@@ -11,23 +11,23 @@ public class Cheat {
 	@OriginalMember(owner = "client!v", name = "d", descriptor = "Lclient!na;")
 	public static final JagString CLIENTDROP = JagString.parse("::clientdrop");
 	@OriginalMember(owner = "client!dg", name = "b", descriptor = "Lclient!na;")
-	public static final JagString aClass100_333 = JagString.parse("Shift)2click ENABLED(Q");
+	public static final JagString MSG_SHIFTCLICK_ENABLED = JagString.parse("Shift)2click ENABLED(Q");
 	@OriginalMember(owner = "client!nh", name = "hb", descriptor = "Lclient!na;")
 	public static final JagString COMMAND_FPS = JagString.parse("::fps ");
 	@OriginalMember(owner = "client!nb", name = "e", descriptor = "Lclient!na;")
 	public static final JagString BREAKCON = JagString.parse("::breakcon");
 	@OriginalMember(owner = "client!wf", name = "s", descriptor = "Lclient!na;")
-	public static final JagString aClass100_943 = JagString.parse("Forced tweening disabled)3");
+	public static final JagString MSG_TWEENING_DISABLED = JagString.parse("Forced tweening disabled)3");
 	@OriginalMember(owner = "client!wd", name = "f", descriptor = "Lclient!na;")
 	public static final JagString ERROR_TEST = JagString.parse("::errortest");
 	@OriginalMember(owner = "client!wb", name = "j", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1093 = JagString.parse("Memory after cleanup=");
+	public static final JagString MSG_MEMORY_AFTER_CLEANUP = JagString.parse("Memory after cleanup=");
 	@OriginalMember(owner = "client!th", name = "h", descriptor = "Lclient!na;")
 	public static final JagString PARTICLES = JagString.parse("::setparticles");
 	@OriginalMember(owner = "client!rc", name = "K", descriptor = "Lclient!na;")
 	public static final JagString RECT_DEBUG = JagString.parse("::rect_debug");
 	@OriginalMember(owner = "client!hh", name = "b", descriptor = "Lclient!na;")
-	public static final JagString aClass100_521 = JagString.parse("::tele ");
+	public static final JagString TELE = JagString.parse("::tele ");
 	@OriginalMember(owner = "client!hh", name = "k", descriptor = "Lclient!na;")
 	public static final JagString WM0 = JagString.parse("::wm0");
 	@OriginalMember(owner = "client!tg", name = "i", descriptor = "Lclient!na;")
@@ -61,19 +61,19 @@ public class Cheat {
 	@OriginalMember(owner = "client!qf", name = "N", descriptor = "Lclient!na;")
 	public static final JagString CARDMEM = JagString.parse("::cardmem");
 	@OriginalMember(owner = "client!e", name = "Ac", descriptor = "Lclient!na;")
-	public static final JagString aClass100_362 = JagString.parse("Forced tweening ENABLED(Q");
+	public static final JagString MSG_TWEENING_ENABLED = JagString.parse("Forced tweening ENABLED(Q");
 	@OriginalMember(owner = "client!md", name = "T", descriptor = "Lclient!na;")
-	public static final JagString aClass100_736 = JagString.parse("Shift)2click disabled)3");
+	public static final JagString MSG_SHIFTCLICK_DISABLED = JagString.parse("Shift)2click disabled)3");
 	@OriginalMember(owner = "client!wh", name = "o", descriptor = "Lclient!na;")
 	public static final JagString RECT_DEBUG_EQUALS = JagString.parse("rect_debug=");
 	@OriginalMember(owner = "client!dh", name = "e", descriptor = "Lclient!na;")
-	public static final JagString aClass100_335 = JagString.parse("Number of player models in cache:");
+	public static final JagString MSG_MODEL_CACHE_SIZE = JagString.parse("Number of player models in cache:");
 	@OriginalMember(owner = "client!qh", name = "c", descriptor = "Lclient!na;")
-	public static final JagString aClass100_893 = JagString.parse("Memory before cleanup=");
+	public static final JagString MSG_MEMORY_BEFORE_CLEANUP = JagString.parse("Memory before cleanup=");
 	@OriginalMember(owner = "client!qg", name = "Z", descriptor = "Lclient!na;")
-	public static final JagString aClass100_892 = JagString.parse("mem=");
+	public static final JagString MSG_MEMORY = JagString.parse("mem=");
 	@OriginalMember(owner = "client!gg", name = "Y", descriptor = "Lclient!na;")
-	public static final JagString aClass100_476 = JagString.parse("::gc");
+	public static final JagString GC = JagString.parse("::gc");
 	@OriginalMember(owner = "client!wk", name = "u", descriptor = "Lclient!na;")
 	public static final JagString CLIENTJS5DROP = JagString.parse("::clientjs5drop");
 	@OriginalMember(owner = "client!id", name = "c", descriptor = "Lclient!na;")
@@ -102,7 +102,7 @@ public class Cheat {
 
 	@OriginalMember(owner = "client!en", name = "a", descriptor = "(IIIB)V")
 	public static void teleport(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(66) JagString local66 = JagString.concatenate(new JagString[]{aClass100_521, JagString.parseInt(arg2), JagString.COMMA, JagString.parseInt(arg0 >> 6), JagString.COMMA, JagString.parseInt(arg1 >> 6), JagString.COMMA, JagString.parseInt(arg0 & 0x3F), JagString.COMMA, JagString.parseInt(arg1 & 0x3F)});
+		@Pc(66) JagString local66 = JagString.concatenate(new JagString[]{TELE, JagString.parseInt(arg2), JagString.COMMA, JagString.parseInt(arg0 >> 6), JagString.COMMA, JagString.parseInt(arg1 >> 6), JagString.COMMA, JagString.parseInt(arg0 & 0x3F), JagString.COMMA, JagString.parseInt(arg1 & 0x3F)});
 		local66.print();
 		execute(local66);
 	}
@@ -114,14 +114,14 @@ public class Cheat {
 			@Pc(18) int local18;
 			@Pc(38) int local38;
 			@Pc(29) Runtime local29;
-			if (arg0.equalsIgnoreCase(aClass100_476)) {
+			if (arg0.equalsIgnoreCase(GC)) {
 				client.unloadSoft();
 				for (local18 = 0; local18 < 10; local18++) {
 					System.gc();
 				}
 				local29 = Runtime.getRuntime();
 				local38 = (int) ((local29.totalMemory() - local29.freeMemory()) / 1024L);
-				Chat.add(null, 0, JagString.concatenate(new JagString[]{aClass100_892, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
+				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
 			}
 			@Pc(117) int local117;
 			if (arg0.equalsIgnoreCase(MM)) {
@@ -131,17 +131,17 @@ public class Cheat {
 				}
 				local29 = Runtime.getRuntime();
 				local38 = (int) ((local29.totalMemory() - local29.freeMemory()) / 1024L);
-				Chat.add(null, 0, JagString.concatenate(new JagString[]{aClass100_893, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
+				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY_BEFORE_CLEANUP, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
 				Player.invalidateGlModels();
 				client.unloadSoft();
 				for (local117 = 0; local117 < 10; local117++) {
 					System.gc();
 				}
 				local38 = (int) ((local29.totalMemory() - local29.freeMemory()) / 1024L);
-				Chat.add(null, 0, JagString.concatenate(new JagString[]{aClass100_1093, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
+				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY_AFTER_CLEANUP, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
 			}
 			if (arg0.equalsIgnoreCase(PCACHESIZE)) {
-				Chat.add(null, 0, JagString.concatenate(new JagString[]{aClass100_335, JagString.parseInt(PlayerAppearance.getModelCacheSize())}));
+				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MODEL_CACHE_SIZE, JagString.parseInt(PlayerAppearance.getModelCacheSize())}));
 			}
 			if (GlRenderer.enabled && arg0.equalsIgnoreCase(CARDMEM)) {
 				System.out.println("oncard_geometry:" + GlCleaner.onCardGeometry);
@@ -216,18 +216,18 @@ public class Cheat {
 			if (arg0.equalsIgnoreCase(TWEENING)) {
 				if (SeqType.applyTweening) {
 					SeqType.applyTweening = false;
-					Chat.add(null, 0, aClass100_943);
+					Chat.add(null, 0, MSG_TWEENING_DISABLED);
 				} else {
 					SeqType.applyTweening = true;
-					Chat.add(null, 0, aClass100_362);
+					Chat.add(null, 0, MSG_TWEENING_ENABLED);
 				}
 			}
 			if (arg0.equalsIgnoreCase(SHIFTCLICK)) {
 				if (shiftClick) {
-					aClass100_736.print();
+					MSG_SHIFTCLICK_DISABLED.print();
 					shiftClick = false;
 				} else {
-					aClass100_333.print();
+					MSG_SHIFTCLICK_ENABLED.print();
 					shiftClick = true;
 				}
 			}

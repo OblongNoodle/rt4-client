@@ -227,7 +227,7 @@ public final class ScriptRunner {
 		@Pc(59) int local59;
 		@Pc(57) int local57;
 		if (Camera.cameraType == 1) {
-			local57 = Camera.anInt5161 + (int) Camera.yawTarget & 0x7FF;
+			local57 = Camera.yawDrift + (int) Camera.yawTarget & 0x7FF;
 			local59 = (int) Camera.pitchTarget;
 			if (local59 < Camera.maxPitchDistance / 256) {
 				local59 = Camera.maxPitchDistance / 256;
