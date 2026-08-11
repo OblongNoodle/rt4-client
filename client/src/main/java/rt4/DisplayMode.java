@@ -274,7 +274,7 @@ public final class DisplayMode {
 			ClientProt.sendWindowDetails();
 		}
 		for (@Pc(466) int local466 = 0; local466 < 100; local466++) {
-			InterfaceList.aBooleanArray100[local466] = true;
+			InterfaceList.rectangleDirty[local466] = true;
 		}
 		GameShell.fullRedraw = true;
 		PluginRepository.reloadPlugins();

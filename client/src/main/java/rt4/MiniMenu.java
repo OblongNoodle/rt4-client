@@ -123,11 +123,11 @@ public class MiniMenu {
 	@OriginalMember(owner = "client!pk", name = "bb", descriptor = "Lclient!na;")
 	public static JagString walkText;
 	@OriginalMember(owner = "client!jl", name = "v", descriptor = "I")
-	public static int anInt3096 = 0;
+	public static int minimapWalkState = 0;
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "I")
 	public static int anInt7 = 0;
 	@OriginalMember(owner = "client!cl", name = "Y", descriptor = "I")
-	public static int anInt1092 = -1;
+	public static int defaultCursorId = -1;
 	@OriginalMember(owner = "client!p", name = "e", descriptor = "I")
 	public static int anInt4370;
 	@OriginalMember(owner = "client!jg", name = "b", descriptor = "I")
@@ -139,7 +139,7 @@ public class MiniMenu {
 	@OriginalMember(owner = "client!em", name = "D", descriptor = "I")
 	public static int gregorianDateSeed;
 	@OriginalMember(owner = "client!ml", name = "Q", descriptor = "I")
-	public static int anInt3953 = 0;
+	public static int clickProcessingState = 0;
 
 	/***********************
 	 *   Action Constants  *
@@ -235,7 +235,7 @@ public class MiniMenu {
 		if (component.buttonType == 5) {
 			add(-1, 0L, JagString.EMPTY, 0, (short) 51, component.option, component.id);
 		}
-		if (component.buttonType == 6 && Cs1ScriptRunner.aClass13_10 == null) {
+		if (component.buttonType == 6 && Cs1ScriptRunner.pleaseWaitComponent == null) {
 			add(-1, 0L, JagString.EMPTY, -1, (short) 41, component.option, component.id);
 		}
 		@Pc(173) int local173;
@@ -369,12 +369,12 @@ public class MiniMenu {
 
 	@OriginalMember(owner = "client!hj", name = "a", descriptor = "(IJBLclient!na;ISLclient!na;I)V")
 	public static void add(@OriginalArg(0) int cursor, @OriginalArg(1) long arg1, @OriginalArg(3) JagString opName, @OriginalArg(4) int arg3, @OriginalArg(5) short arg4, @OriginalArg(6) JagString arg5, @OriginalArg(7) int arg6) {
-		if (Cs1ScriptRunner.aBoolean108 || size >= 500) {
+		if (Cs1ScriptRunner.isMenuOpen || size >= 500) {
 			return;
 		}
 		ops[size] = arg5;
 		opBases[size] = opName;
-		cursors[size] = cursor == -1 ? anInt1092 : cursor;
+		cursors[size] = cursor == -1 ? defaultCursorId : cursor;
 		actions[size] = arg4;
 		keys[size] = arg1;
 		intArgs1[size] = arg3;
@@ -680,10 +680,10 @@ public class MiniMenu {
 				Protocol.outboundBuffer.ip2(local36);
 			}
 		}
-		if (actionCode == UNKNOWN_41 && Cs1ScriptRunner.aClass13_10 == null) {
+		if (actionCode == UNKNOWN_41 && Cs1ScriptRunner.pleaseWaitComponent == null) {
 			sendComponentClickPacket(local15, local19);
-			Cs1ScriptRunner.aClass13_10 = InterfaceList.getComponent(local19, local15);
-			InterfaceList.redraw(Cs1ScriptRunner.aClass13_10);
+			Cs1ScriptRunner.pleaseWaitComponent = InterfaceList.getComponent(local19, local15);
+			InterfaceList.redraw(Cs1ScriptRunner.pleaseWaitComponent);
 		}
 		if (actionCode == LOC_ACTION_3) {
 			PathFinder.findPathToLoc(local31, local19, local15);
@@ -922,7 +922,7 @@ public class MiniMenu {
 		}
 		if (actionCode == UNKNOWN_11) {
 			if (local36 == 0) {
-				anInt3096 = 1;
+				minimapWalkState = 1;
 				setWalkDestination(Player.plane, local15, local19);
 			} else if (local36 == 1) {
 				Protocol.outboundBuffer.p1isaac(131);
@@ -1090,7 +1090,7 @@ public class MiniMenu {
 		}
 		if (actionCode == UNKNOWN_36) {
 			if (local36 == 0) {
-				Protocol.anInt4422 = 1;
+				Protocol.viewportWalkState = 1;
 				setWalkDestination(Player.plane, local15, local19);
 			} else if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT]) {
 				Cheat.teleport(local15 + Camera.originX, Camera.originY - -local19, Player.plane);
@@ -1623,7 +1623,7 @@ public class MiniMenu {
 			ScriptRunner.run(local29);
 		}
 		aBoolean302 = false;
-		anInt1092 = -1;
+		defaultCursorId = -1;
 		InterfaceList.redraw(local19);
 	}
 
@@ -1642,7 +1642,7 @@ public class MiniMenu {
 		anInt4999 = arg2;
 		aBoolean302 = true;
 		anInt5393 = arg4;
-		anInt1092 = arg5;
+		defaultCursorId = arg5;
 		InterfaceList.redraw(local8);
 	}
 
@@ -1667,17 +1667,17 @@ public class MiniMenu {
 
 	@OriginalMember(owner = "client!ej", name = "h", descriptor = "(I)V")
 	public static void processClick() {
-		if (anInt3953 == 2) {
-			if (ScriptRunner.anInt3751 == Mouse.lastHandledClickX && ScriptRunner.anInt1892 == Mouse.lastHandledClickY) {
-				anInt3953 = 0;
+		if (clickProcessingState == 2) {
+			if (ScriptRunner.interfaceMouseX == Mouse.lastHandledClickX && ScriptRunner.interfaceMouseY == Mouse.lastHandledClickY) {
+				clickProcessingState = 0;
 				if (Cheat.shiftClick && Keyboard.pressedKeys[Keyboard.KEY_SHIFT] && size > 2) {
 					doAction(size - 2);
 				} else {
 					doAction(size - 1);
 				}
 			}
-		} else if (ScriptRunner.anInt3751 == Mouse.clickX && ScriptRunner.anInt1892 == Mouse.clickY) {
-			anInt3953 = 0;
+		} else if (ScriptRunner.interfaceMouseX == Mouse.clickX && ScriptRunner.interfaceMouseY == Mouse.clickY) {
+			clickProcessingState = 0;
 			if (Cheat.shiftClick && Keyboard.pressedKeys[Keyboard.KEY_SHIFT] && size > 2) {
 				doAction(size - 2);
 			} else {
@@ -1685,7 +1685,7 @@ public class MiniMenu {
 			}
 		} else {
 			Mouse.lastHandledClickY = Mouse.clickY;
-			anInt3953 = 2;
+			clickProcessingState = 2;
 			Mouse.lastHandledClickX = Mouse.clickX;
 		}
 	}

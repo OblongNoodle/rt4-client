@@ -649,7 +649,7 @@ public final class client extends GameShell {
 			MiniMap.hintMapMarkers[local3506] = null;
 		}
 		MiniMenu.size = 0;
-		Cs1ScriptRunner.aBoolean108 = false;
+		Cs1ScriptRunner.isMenuOpen = false;
 		Mouse.setIdleLoops(0);
 		for (local3506 = 0; local3506 < 100; local3506++) {
 			Chat.messages[local3506] = null;
@@ -716,8 +716,8 @@ public final class client extends GameShell {
 		InterfaceList.topLevelInterface = -1;
 		InterfaceList.openInterfaces = new HashTable(8);
 		InterfaceList.reset();
-		Cs1ScriptRunner.aClass13_10 = null;
-		Cs1ScriptRunner.aBoolean108 = false;
+		Cs1ScriptRunner.pleaseWaitComponent = null;
+		Cs1ScriptRunner.isMenuOpen = false;
 		MiniMenu.size = 0;
 		PlayerAppearance.DEFAULT.set(new int[]{0, 0, 0, 0, 0}, -1, false, null, -1);
 		for (local3506 = 0; local3506 < 8; local3506++) {
@@ -728,7 +728,7 @@ public final class client extends GameShell {
 		Inv.clear();
 		ScriptRunner.aBoolean43 = true;
 		for (local3506 = 0; local3506 < 100; local3506++) {
-			InterfaceList.aBooleanArray100[local3506] = true;
+			InterfaceList.rectangleDirty[local3506] = true;
 		}
 		ClanChat.size = 0;
 		ClanChat.members = null;
@@ -750,7 +750,7 @@ public final class client extends GameShell {
 		ScriptRunner.neverRemoveRoofs = false;
 		aShortArray88 = aShortArray19 = aShortArray74 = aShortArray87 = new short[256];
 		LoginManager.clearLoginScreenSprites();
-		InterfaceList.aBoolean298 = false;
+		InterfaceList.useStyledMenu = false;
 		ClientProt.sendWindowDetails();
 	}
 
@@ -859,7 +859,7 @@ public final class client extends GameShell {
 		}
 		if (GlRenderer.enabled) {
 			for (local80 = 0; local80 < 100; local80++) {
-				InterfaceList.aBooleanArray100[local80] = true;
+				InterfaceList.rectangleDirty[local80] = true;
 			}
 		}
 		if (gameState == 0) {
@@ -874,13 +874,13 @@ public final class client extends GameShell {
 					anInt5150 = LoginManager.mapFilesMissingCount;
 				}
 				local80 = (anInt5150 - LoginManager.mapFilesMissingCount) * 50 / anInt5150;
-				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, aClass100_974, JagString.parseInt(local80), Cs1ScriptRunner.aClass100_80}));
+				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, aClass100_974, JagString.parseInt(local80), Cs1ScriptRunner.CACHE_STAT_SUFFIX}));
 			} else if (LoginManager.loadingScreenState == 2) {
 				if (anInt1196 < LoginManager.missingLocModelCount) {
 					anInt1196 = LoginManager.missingLocModelCount;
 				}
 				local80 = (anInt1196 - LoginManager.missingLocModelCount) * 50 / anInt1196 + 50;
-				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, aClass100_974, JagString.parseInt(local80), Cs1ScriptRunner.aClass100_80}));
+				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, aClass100_974, JagString.parseInt(local80), Cs1ScriptRunner.CACHE_STAT_SUFFIX}));
 			} else {
 				Fonts.drawTextOnScreen(false, LocalizedText.LOADING);
 			}
@@ -1224,7 +1224,7 @@ public final class client extends GameShell {
 									do {
 										priorityRequest = (HookRequest) InterfaceList.lowPriorityRequests.removeHead();
 										if (priorityRequest == null) {
-											if (Cs1ScriptRunner.aClass13_14 != null) {
+											if (Cs1ScriptRunner.draggedComponent != null) {
 												Cs1ScriptRunner.updateComponentDrag();
 											}
 											if (Protocol.openUrlRequest != null && Protocol.openUrlRequest.status == 1) {

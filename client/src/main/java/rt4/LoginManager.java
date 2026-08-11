@@ -830,7 +830,7 @@ public class LoginManager {
 	public static void reconnect() {
 		Protocol.outboundBuffer.offset = 0;
 		Protocol.opcode3 = -1;
-		Cs1ScriptRunner.aBoolean108 = false;
+		Cs1ScriptRunner.isMenuOpen = false;
 		Protocol.length = 0;
 		mapFlagX = 0;
 		MiniMenu.size = 0;
@@ -856,7 +856,7 @@ public class LoginManager {
 		Camera.cameraType = 1;
 		client.setGameState(30);
 		for (i = 0; i < 100; i++) {
-			InterfaceList.aBooleanArray100[i] = true;
+			InterfaceList.rectangleDirty[i] = true;
 		}
 		ClientProt.sendWindowDetails();
 	}
@@ -1400,42 +1400,42 @@ public class LoginManager {
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(I)V")
 	public static void processInterface() {
-		if (!Cs1ScriptRunner.aBoolean108) {
-			if (MiniMenu.anInt3953 != 0) {
-				ScriptRunner.anInt3751 = Mouse.lastHandledClickX;
-				ScriptRunner.anInt1892 = Mouse.lastHandledClickY;
+		if (!Cs1ScriptRunner.isMenuOpen) {
+			if (MiniMenu.clickProcessingState != 0) {
+				ScriptRunner.interfaceMouseX = Mouse.lastHandledClickX;
+				ScriptRunner.interfaceMouseY = Mouse.lastHandledClickY;
 			} else if (Mouse.clickButton == 0) {
-				ScriptRunner.anInt3751 = Mouse.lastMouseX;
-				ScriptRunner.anInt1892 = Mouse.lastMouseY;
+				ScriptRunner.interfaceMouseX = Mouse.lastMouseX;
+				ScriptRunner.interfaceMouseY = Mouse.lastMouseY;
 			} else {
-				ScriptRunner.anInt3751 = Mouse.clickX;
-				ScriptRunner.anInt1892 = Mouse.clickY;
+				ScriptRunner.interfaceMouseX = Mouse.clickX;
+				ScriptRunner.interfaceMouseY = Mouse.clickY;
 			}
 			MiniMenu.size = 1;
 			MiniMenu.ops[0] = LocalizedText.CANCEL;
 			MiniMenu.opBases[0] = JagString.EMPTY;
 			MiniMenu.actions[0] = 1005;
-			MiniMenu.cursors[0] = MiniMenu.anInt1092;
+			MiniMenu.cursors[0] = MiniMenu.defaultCursorId;
 		}
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.updateAnimations(InterfaceList.topLevelInterface);
 		}
 		@Pc(60) int local60;
 		for (local60 = 0; local60 < InterfaceList.rectangles; local60++) {
-			if (InterfaceList.aBooleanArray100[local60]) {
+			if (InterfaceList.rectangleDirty[local60]) {
 				InterfaceList.rectangleRedraw[local60] = true;
 			}
-			InterfaceList.aBooleanArray116[local60] = InterfaceList.aBooleanArray100[local60];
-			InterfaceList.aBooleanArray100[local60] = false;
+			InterfaceList.rectangleDirtySnapshot[local60] = InterfaceList.rectangleDirty[local60];
+			InterfaceList.rectangleDirty[local60] = false;
 		}
 		tooltipComponent = null;
-		Cs1ScriptRunner.anInt2503 = -1;
-		InterfaceList.anInt5574 = -1;
+		Cs1ScriptRunner.gameSceneTooltipX = -1;
+		InterfaceList.viewportX = -1;
 		InterfaceList.mouseOverInventoryInterface = null;
 		if (GlRenderer.enabled) {
-			ScriptRunner.aBoolean299 = true;
+			ScriptRunner.glSceneNeedsRender = true;
 		}
-		InterfaceList.anInt4311 = client.loop;
+		InterfaceList.currentRenderLoop = client.loop;
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.rectangles = 0;
 			Cs1ScriptRunner.renderTopLevelInterface();
@@ -1445,35 +1445,35 @@ public class LoginManager {
 		} else {
 			SoftwareRaster.resetClip();
 		}
-		if (!Cs1ScriptRunner.aBoolean108) {
+		if (!Cs1ScriptRunner.isMenuOpen) {
 			PluginRepository.OnMiniMenuCreate();
 		}
 		MiniMenu.sort();
-		if (Cs1ScriptRunner.aBoolean108) {
-			if (InterfaceList.aBoolean298) {
+		if (Cs1ScriptRunner.isMenuOpen) {
+			if (InterfaceList.useStyledMenu) {
 				MiniMenu.drawB();
 			} else {
 				MiniMenu.drawA();
 			}
 		} else if (tooltipComponent != null) {
-			MiniMenu.renderTooltip(tooltipComponent, Cs1ScriptRunner.anInt3484, Cs1ScriptRunner.anInt3260);
-		} else if (Cs1ScriptRunner.anInt2503 != -1) {
-			MiniMenu.renderTooltip(null, InterfaceList.anInt5574, Cs1ScriptRunner.anInt2503);
+			MiniMenu.renderTooltip(tooltipComponent, Cs1ScriptRunner.tooltipRenderY, Cs1ScriptRunner.tooltipRenderX);
+		} else if (Cs1ScriptRunner.gameSceneTooltipX != -1) {
+			MiniMenu.renderTooltip(null, InterfaceList.viewportX, Cs1ScriptRunner.gameSceneTooltipX);
 		}
-		local60 = Cs1ScriptRunner.aBoolean108 ? -1 : getActiveCursorId();
+		local60 = Cs1ScriptRunner.isMenuOpen ? -1 : getActiveCursorId();
 		if (local60 == -1) {
-			local60 = ScriptRunner.anInt5794;
+			local60 = ScriptRunner.scriptCursorId;
 		}
 		InterfaceList.setCursor(local60);
-		if (MiniMenu.anInt3096 == 1) {
-			MiniMenu.anInt3096 = 2;
+		if (MiniMenu.minimapWalkState == 1) {
+			MiniMenu.minimapWalkState = 2;
 		}
-		if (Protocol.anInt4422 == 1) {
-			Protocol.anInt4422 = 2;
+		if (Protocol.viewportWalkState == 1) {
+			Protocol.viewportWalkState = 2;
 		}
 		if (Cheat.rectDebug == 3) {
 			for (@Pc(189) int local189 = 0; local189 < InterfaceList.rectangles; local189++) {
-				if (InterfaceList.aBooleanArray116[local189]) {
+				if (InterfaceList.rectangleDirtySnapshot[local189]) {
 					if (GlRenderer.enabled) {
 						GlRaster.fillRectAlpha(InterfaceList.rectangleX[local189], InterfaceList.rectangleY[local189], InterfaceList.rectangleWidth[local189], InterfaceList.rectangleHeight[local189], 16711935, 128);
 					} else {

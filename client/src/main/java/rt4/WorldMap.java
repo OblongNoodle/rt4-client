@@ -1026,7 +1026,7 @@ public class WorldMap {
 	@OriginalMember(owner = "client!va", name = "c", descriptor = "(BI)V")
 	public static void highlightMapElement(@OriginalArg(1) int arg0) {
 		anInt172 = arg0;
-		Cs1ScriptRunner.anInt2428 = 20;
+		Cs1ScriptRunner.mapHighlightPulseCounter = 20;
 		anInt1864 = 3;
 	}
 
@@ -1637,10 +1637,10 @@ public class WorldMap {
 			return;
 		}
 		anInt1176 = (int) ((float) (arg2 * 2) / zoom);
-		Cs1ScriptRunner.anInt2882 = anInt435 - (int) ((float) arg3 / zoom);
+		Cs1ScriptRunner.worldMapViewportX = anInt435 - (int) ((float) arg3 / zoom);
 		@Pc(211) int local211 = anInt435 - (int) ((float) arg3 / zoom);
 		local50 = anInt919 - (int) ((float) arg2 / zoom);
-		Cs1ScriptRunner.anInt2884 = anInt919 - (int) ((float) arg2 / zoom);
+		Cs1ScriptRunner.worldMapViewportY = anInt919 - (int) ((float) arg2 / zoom);
 		@Pc(236) int local236 = anInt919 + (int) ((float) arg2 / zoom);
 		local61 = (int) ((float) arg3 / zoom) + anInt435;
 		anInt2387 = (int) ((float) (arg3 * 2) / zoom);
@@ -1661,9 +1661,9 @@ public class WorldMap {
 			renderMapLabels(arg0, arg1, local211, arg0 + arg3, local236, local50, local61, arg2 + arg1);
 		}
 		if (anInt1864 > 0) {
-			Cs1ScriptRunner.anInt2428--;
-			if (Cs1ScriptRunner.anInt2428 == 0) {
-				Cs1ScriptRunner.anInt2428 = 20;
+			Cs1ScriptRunner.mapHighlightPulseCounter--;
+			if (Cs1ScriptRunner.mapHighlightPulseCounter == 0) {
+				Cs1ScriptRunner.mapHighlightPulseCounter = 20;
 				anInt1864--;
 			}
 		}
@@ -1698,10 +1698,10 @@ public class WorldMap {
 		@Pc(9) int local9 = arg2 - arg4;
 		@Pc(11) int local11 = -1;
 		if (anInt1864 > 0) {
-			if (Cs1ScriptRunner.anInt2428 <= 10) {
-				local11 = Cs1ScriptRunner.anInt2428 * 5;
+			if (Cs1ScriptRunner.mapHighlightPulseCounter <= 10) {
+				local11 = Cs1ScriptRunner.mapHighlightPulseCounter * 5;
 			} else {
-				local11 = 50 - (Cs1ScriptRunner.anInt2428 - 10) * 5;
+				local11 = 50 - (Cs1ScriptRunner.mapHighlightPulseCounter - 10) * 5;
 			}
 		}
 		@Pc(39) int local39 = arg1 - arg6;

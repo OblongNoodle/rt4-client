@@ -9,71 +9,71 @@ import java.nio.charset.StandardCharsets;
 
 public class Cs1ScriptRunner {
 	@OriginalMember(owner = "client!bm", name = "p", descriptor = "Lclient!na;")
-	public static final JagString aClass100_133 = JagString.parse("(U1");
+	public static final JagString CS1_PLACEHOLDER_1 = JagString.parse("(U1");
 	@OriginalMember(owner = "client!wh", name = "u", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1097 = JagString.parse("(U2");
+	public static final JagString CS1_PLACEHOLDER_2 = JagString.parse("(U2");
 	@OriginalMember(owner = "client!mj", name = "g", descriptor = "Lclient!na;")
-	public static final JagString aClass100_761 = JagString.parse("(U3");
+	public static final JagString CS1_PLACEHOLDER_3 = JagString.parse("(U3");
 	@OriginalMember(owner = "client!hh", name = "a", descriptor = "Lclient!na;")
-	public static final JagString aClass100_520 = JagString.parse("(U4");
+	public static final JagString CS1_PLACEHOLDER_4 = JagString.parse("(U4");
 	@OriginalMember(owner = "client!tb", name = "P", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1002 = JagString.parse("(U5");
+	public static final JagString CS1_PLACEHOLDER_5 = JagString.parse("(U5");
 	@OriginalMember(owner = "client!jh", name = "g", descriptor = "Lclient!na;")
-	public static final JagString aClass100_591 = JagString.parse("(Udns");
+	public static final JagString CS1_PLACEHOLDER_DNS = JagString.parse("(Udns");
 	@OriginalMember(owner = "client!lh", name = "z", descriptor = "Lclient!na;")
-	public static final JagString aClass100_672 = JagString.parse("(U (X");
+	public static final JagString CACHE_STAT_SEPARATOR = JagString.parse("(U (X");
 	@OriginalMember(owner = "client!bd", name = "b", descriptor = "Lclient!na;")
-	public static final JagString aClass100_80 = JagString.parse("(U(Y");
+	public static final JagString CACHE_STAT_SUFFIX = JagString.parse("(U(Y");
 	@OriginalMember(owner = "client!oj", name = "p", descriptor = "I")
-	public static final int anInt4306 = 0x23201b;
+	public static final int SCROLLBAR_TRACK_COLOR = 0x23201b;
 	@OriginalMember(owner = "client!ec", name = "l", descriptor = "I")
-	public static final int anInt1704 = 0x4d4233;
+	public static final int SCROLLBAR_THUMB_COLOR = 0x4d4233;
 	@OriginalMember(owner = "client!rl", name = "Z", descriptor = "I")
-	public static final int anInt4938 = 0x766654;
+	public static final int SCROLLBAR_THUMB_HIGHLIGHT_COLOR = 0x766654;
 	@OriginalMember(owner = "client!bj", name = "V", descriptor = "I")
-	public static final int anInt671 = 0x332d25;
+	public static final int SCROLLBAR_THUMB_SHADOW_COLOR = 0x332d25;
 	@OriginalMember(owner = "client!pg", name = "V", descriptor = "I")
-	public static final int anInt4504 = 50;
+	public static final int TOOLTIP_DISPLAY_DELAY = 50;
 	@OriginalMember(owner = "client!th", name = "m", descriptor = "[Lclient!be;")
-	public static Component[] aClass13Array13;
+	public static Component[] deferredDragComponents;
 	@OriginalMember(owner = "client!k", name = "j", descriptor = "I")
-	public static int anInt3126;
+	public static int deferredDragRenderY;
 	@OriginalMember(owner = "client!gf", name = "K", descriptor = "I")
-	public static int anInt4696;
+	public static int deferredDragRenderX;
 	@OriginalMember(owner = "client!ac", name = "p", descriptor = "Lclient!be;")
-	public static Component aClass13_1 = null;
+	public static Component dragParentComponent = null;
 	@OriginalMember(owner = "client!ib", name = "e", descriptor = "Lclient!be;")
-	public static Component aClass13_14 = null;
+	public static Component draggedComponent = null;
 	@OriginalMember(owner = "client!km", name = "pc", descriptor = "Z")
-	public static boolean aBoolean172 = false;
+	public static boolean isDragging = false;
 	@OriginalMember(owner = "client!gg", name = "db", descriptor = "I")
-	public static int anInt2225 = -1;
+	public static int dragBoundsMinX = -1;
 	@OriginalMember(owner = "client!nb", name = "d", descriptor = "I")
-	public static int anInt4035 = 0;
+	public static int dragStartMouseY = 0;
 	@OriginalMember(owner = "client!kd", name = "Bb", descriptor = "I")
-	public static int anInt3260 = -1;
+	public static int tooltipRenderX = -1;
 	@OriginalMember(owner = "client!d", name = "R", descriptor = "Lclient!be;")
-	public static Component aClass13_10 = null;
+	public static Component pleaseWaitComponent = null;
 	@OriginalMember(owner = "client!hi", name = "a", descriptor = "I")
-	public static int anInt2503 = -1;
+	public static int gameSceneTooltipX = -1;
 	@OriginalMember(owner = "client!ld", name = "c", descriptor = "I")
-	public static int anInt3484 = -1;
+	public static int tooltipRenderY = -1;
 	@OriginalMember(owner = "client!lf", name = "k", descriptor = "I")
-	public static int anInt3502 = -1;
+	public static int cachedActiveSpriteId = -1;
 	@OriginalMember(owner = "client!mh", name = "X", descriptor = "I")
-	public static int anInt3851 = -1;
+	public static int cachedDefaultSpriteId = -1;
 	@OriginalMember(owner = "client!ig", name = "b", descriptor = "I")
-	public static int anInt2882;
+	public static int worldMapViewportX;
 	@OriginalMember(owner = "client!ig", name = "f", descriptor = "I")
-	public static int anInt2884;
+	public static int worldMapViewportY;
 	@OriginalMember(owner = "client!hc", name = "P", descriptor = "I")
-	public static int anInt2428;
+	public static int mapHighlightPulseCounter;
 	@OriginalMember(owner = "client!u", name = "a", descriptor = "I")
-	public static int anInt5388 = 0;
+	public static int dragStartMouseX = 0;
 	@OriginalMember(owner = "client!re", name = "y", descriptor = "I")
-	public static int anInt4851;
+	public static int dragElapsedTicks;
 	@OriginalMember(owner = "client!em", name = "z", descriptor = "Z")
-	public static boolean aBoolean108 = false;
+	public static boolean isMenuOpen = false;
 
 	@OriginalMember(owner = "client!we", name = "a", descriptor = "(BILclient!be;)I")
 	public static int run(@OriginalArg(1) int arg0, @OriginalArg(2) Component arg1) {
@@ -214,22 +214,22 @@ public class Cs1ScriptRunner {
 		}
 
 		while (true) {
-			@Pc(14) int local14 = text.indexOf(aClass100_133);
+			@Pc(14) int local14 = text.indexOf(CS1_PLACEHOLDER_1);
 			if (local14 == -1) {
 				while (true) {
-					local14 = text.indexOf(aClass100_1097);
+					local14 = text.indexOf(CS1_PLACEHOLDER_2);
 					if (local14 == -1) {
 						while (true) {
-							local14 = text.indexOf(aClass100_761);
+							local14 = text.indexOf(CS1_PLACEHOLDER_3);
 							if (local14 == -1) {
 								while (true) {
-									local14 = text.indexOf(aClass100_520);
+									local14 = text.indexOf(CS1_PLACEHOLDER_4);
 									if (local14 == -1) {
 										while (true) {
-											local14 = text.indexOf(aClass100_1002);
+											local14 = text.indexOf(CS1_PLACEHOLDER_5);
 											if (local14 == -1) {
 												while (true) {
-													local14 = text.indexOf(aClass100_591);
+													local14 = text.indexOf(CS1_PLACEHOLDER_DNS);
 													if (local14 == -1) {
 														return text;
 													}
@@ -298,7 +298,7 @@ public class Cs1ScriptRunner {
 
 		for (@Pc(18) int i = 0; i < components.length; i++) {
 			@Pc(30) Component component = components[i];
-			if (component != null && (component.overlayer == layer || layer == 0xabcdabcd && component == aClass13_14)) {
+			if (component != null && (component.overlayer == layer || layer == 0xabcdabcd && component == draggedComponent)) {
 				@Pc(57) int rectangle;
 				if (parentRectangle == -1) {
 					InterfaceList.rectangleX[InterfaceList.rectangles] = arg2 + component.x;
@@ -323,30 +323,30 @@ public class Cs1ScriptRunner {
 					}
 					@Pc(166) int local166;
 					@Pc(164) int local164;
-					if (component == aClass13_14) {
+					if (component == draggedComponent) {
 						if (layer != 0xabcdabcd && !component.dragRenderBehavior) {
-							anInt4696 = arg2;
-							anInt3126 = arg1;
-							aClass13Array13 = components;
+							deferredDragRenderX = arg2;
+							deferredDragRenderY = arg1;
+							deferredDragComponents = components;
 							continue;
 						}
-						if (aBoolean172 && InterfaceList.aBoolean174) {
+						if (isDragging && InterfaceList.aBoolean174) {
 							local164 = Mouse.lastMouseY;
 							local166 = Mouse.lastMouseX;
-							local164 -= anInt4035;
+							local164 -= dragStartMouseY;
 							if (local164 < InterfaceList.anInt5103) {
 								local164 = InterfaceList.anInt5103;
 							}
-							if (local164 + component.height > aClass13_1.height + InterfaceList.anInt5103) {
-								local164 = aClass13_1.height + InterfaceList.anInt5103 - component.height;
+							if (local164 + component.height > dragParentComponent.height + InterfaceList.anInt5103) {
+								local164 = dragParentComponent.height + InterfaceList.anInt5103 - component.height;
 							}
 							local114 = local164;
-							local166 -= anInt5388;
-							if (anInt2225 > local166) {
-								local166 = anInt2225;
+							local166 -= dragStartMouseX;
+							if (dragBoundsMinX > local166) {
+								local166 = dragBoundsMinX;
 							}
-							if (aClass13_1.width + anInt2225 < component.width + local166) {
-								local166 = aClass13_1.width + anInt2225 - component.width;
+							if (dragParentComponent.width + dragBoundsMinX < component.width + local166) {
+								local166 = dragParentComponent.width + dragBoundsMinX - component.width;
 							}
 							local123 = local166;
 						}
@@ -387,8 +387,8 @@ public class Cs1ScriptRunner {
 						if (component.clientCode != 0) {
 							if (component.clientCode == 1337 || component.clientCode == 1403 && GlRenderer.enabled) {
 								InterfaceList.aClass13_26 = component;
-								InterfaceList.anInt5574 = local114;
-								anInt2503 = local123;
+								InterfaceList.viewportX = local114;
+								gameSceneTooltipX = local123;
 								ScriptRunner.renderGameScene(component.height, component.clientCode == 1403, local123, component.width, local114);
 								if (GlRenderer.enabled) {
 									GlRaster.setClip(arg0, arg6, arg4, arg7);
@@ -407,11 +407,11 @@ public class Cs1ScriptRunner {
 								} else {
 									SoftwareRaster.setClip(arg0, arg6, arg4, arg7);
 								}
-								if (MiniMap.state != 0 && MiniMap.state != 3 || aBoolean108 || local166 > ScriptRunner.anInt3751 || ScriptRunner.anInt1892 < local164 || ScriptRunner.anInt3751 >= local302 || local291 <= ScriptRunner.anInt1892) {
+								if (MiniMap.state != 0 && MiniMap.state != 3 || isMenuOpen || local166 > ScriptRunner.interfaceMouseX || ScriptRunner.interfaceMouseY < local164 || ScriptRunner.interfaceMouseX >= local302 || local291 <= ScriptRunner.interfaceMouseY) {
 									continue;
 								}
-								local270 = ScriptRunner.anInt3751 - local123;
-								local276 = ScriptRunner.anInt1892 - local114;
+								local270 = ScriptRunner.interfaceMouseX - local123;
+								local276 = ScriptRunner.interfaceMouseY - local114;
 								local468 = component.clickMaskStart[local276];
 								if (local270 < local468 || local270 > local468 + component.clickMaskWidth[local276]) {
 									continue;
@@ -455,7 +455,7 @@ public class Cs1ScriptRunner {
 							}
 							if (component.clientCode == 1400) {
 								WorldMap.render(local123, local114, component.height, component.width);
-								InterfaceList.aBooleanArray100[rectangle] = true;
+								InterfaceList.rectangleDirty[rectangle] = true;
 								InterfaceList.rectangleRedraw[rectangle] = true;
 								if (GlRenderer.enabled) {
 									GlRaster.setClip(arg0, arg6, arg4, arg7);
@@ -466,7 +466,7 @@ public class Cs1ScriptRunner {
 							}
 							if (component.clientCode == 1401) {
 								renderWorldMapOverview(local123, component.height, component.width, local114);
-								InterfaceList.aBooleanArray100[rectangle] = true;
+								InterfaceList.rectangleDirty[rectangle] = true;
 								InterfaceList.rectangleRedraw[rectangle] = true;
 								if (GlRenderer.enabled) {
 									GlRaster.setClip(arg0, arg6, arg4, arg7);
@@ -478,14 +478,14 @@ public class Cs1ScriptRunner {
 							if (component.clientCode == 1402) {
 								if (!GlRenderer.enabled) {
 									Flames.render(local123, local114);
-									InterfaceList.aBooleanArray100[rectangle] = true;
+									InterfaceList.rectangleDirty[rectangle] = true;
 									InterfaceList.rectangleRedraw[rectangle] = true;
 								}
 								continue;
 							}
 							if (component.clientCode == 1405) {
 								PluginRepository.Draw();
-								InterfaceList.aBooleanArray100[rectangle] = true;
+								InterfaceList.rectangleDirty[rectangle] = true;
 								InterfaceList.rectangleRedraw[rectangle] = true;
 
 								//Above are inauthentic changes to call plugin draws and redraw this interface. Below I have left intact all the authentic code.
@@ -524,30 +524,30 @@ public class Cs1ScriptRunner {
 								}
 								local571 = local556 * 10000 / cardMemory;
 								local563 = objId * 100 / cardMemory;
-								@Pc(968) JagString local968 = JagString.concatenate(new JagString[]{Cheat.DEBUG_CAHE, StringUtils.formatNumber(0, true, 2, local571), aClass100_672, JagString.parseInt(local563), aClass100_80});
+								@Pc(968) JagString local968 = JagString.concatenate(new JagString[]{Cheat.DEBUG_CAHE, StringUtils.formatNumber(0, true, 2, local571), CACHE_STAT_SEPARATOR, JagString.parseInt(local563), CACHE_STAT_SUFFIX});
 								Fonts.p11Full.renderRight(local968, local270, local276, 16776960, 0);
 								local276 += 12;
-								InterfaceList.aBooleanArray100[rectangle] = true;
+								InterfaceList.rectangleDirty[rectangle] = true;
 								InterfaceList.rectangleRedraw[rectangle] = true;
 								continue;
 							}
 							if (component.clientCode == 1406) {
-								anInt3484 = local114;
+								tooltipRenderY = local114;
 								LoginManager.tooltipComponent = component;
-								anInt3260 = local123;
+								tooltipRenderX = local123;
 								continue;
 							}
 						}
-						if (!aBoolean108) {
-							if (component.type == 0 && component.noClickThrough && ScriptRunner.anInt3751 >= local166 && ScriptRunner.anInt1892 >= local164 && ScriptRunner.anInt3751 < local302 && local291 > ScriptRunner.anInt1892 && !Cheat.qaOpTest) {
+						if (!isMenuOpen) {
+							if (component.type == 0 && component.noClickThrough && ScriptRunner.interfaceMouseX >= local166 && ScriptRunner.interfaceMouseY >= local164 && ScriptRunner.interfaceMouseX < local302 && local291 > ScriptRunner.interfaceMouseY && !Cheat.qaOpTest) {
 								MiniMenu.size = 1;
-								MiniMenu.cursors[0] = MiniMenu.anInt1092;
+								MiniMenu.cursors[0] = MiniMenu.defaultCursorId;
 								MiniMenu.ops[0] = LocalizedText.CANCEL;
 								MiniMenu.opBases[0] = JagString.EMPTY;
 								MiniMenu.actions[0] = 1005;
 							}
-							if (local166 <= ScriptRunner.anInt3751 && local164 <= ScriptRunner.anInt1892 && local302 > ScriptRunner.anInt3751 && local291 > ScriptRunner.anInt1892) {
-								MiniMenu.addComponentEntries(ScriptRunner.anInt1892 - local114, -local123 + ScriptRunner.anInt3751, component);
+							if (local166 <= ScriptRunner.interfaceMouseX && local164 <= ScriptRunner.interfaceMouseY && local302 > ScriptRunner.interfaceMouseX && local291 > ScriptRunner.interfaceMouseY) {
+								MiniMenu.addComponentEntries(ScriptRunner.interfaceMouseY - local114, -local123 + ScriptRunner.interfaceMouseX, component);
 							}
 						}
 						if (component.type == 0) {
@@ -568,10 +568,10 @@ public class Cs1ScriptRunner {
 							}
 							@Pc(1186) ComponentPointer local1186 = (ComponentPointer) InterfaceList.openInterfaces.get(component.id);
 							if (local1186 != null) {
-								if (local1186.anInt5879 == 0 && !aBoolean108 && ScriptRunner.anInt3751 >= local166 && local164 <= ScriptRunner.anInt1892 && local302 > ScriptRunner.anInt3751 && ScriptRunner.anInt1892 < local291 && !Cheat.qaOpTest) {
+								if (local1186.anInt5879 == 0 && !isMenuOpen && ScriptRunner.interfaceMouseX >= local166 && local164 <= ScriptRunner.interfaceMouseY && local302 > ScriptRunner.interfaceMouseX && ScriptRunner.interfaceMouseY < local291 && !Cheat.qaOpTest) {
 									MiniMenu.ops[0] = LocalizedText.CANCEL;
 									MiniMenu.size = 1;
-									MiniMenu.cursors[0] = MiniMenu.anInt1092;
+									MiniMenu.cursors[0] = MiniMenu.defaultCursorId;
 									MiniMenu.actions[0] = 1005;
 									MiniMenu.opBases[0] = JagString.EMPTY;
 								}
@@ -584,7 +584,7 @@ public class Cs1ScriptRunner {
 								Rasteriser.prepare();
 							}
 						}
-						if (InterfaceList.aBooleanArray116[rectangle] || Cheat.rectDebug > 1) {
+						if (InterfaceList.rectangleDirtySnapshot[rectangle] || Cheat.rectDebug > 1) {
 							if (component.type == 0 && !component.if3 && component.scrollMaxV > component.height) {
 								renderScrollbar(component.scrollY, component.scrollMaxV, component.width + local123, local114, component.height);
 							}
@@ -612,7 +612,7 @@ public class Cs1ScriptRunner {
 													}
 
 													if (Rasteriser.textureHasTransparency) {
-														InterfaceList.aBooleanArray100[rectangle] = true;
+														InterfaceList.rectangleDirty[rectangle] = true;
 													}
 
 													if (sprite == null) {
@@ -768,7 +768,7 @@ public class Cs1ScriptRunner {
 													local1934 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local1934, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCount)});
 												}
 											}
-											if (aClass13_10 == component) {
+											if (pleaseWaitComponent == component) {
 												local276 = component.color;
 												local1934 = LocalizedText.PLEASEWAIT;
 											}
@@ -957,11 +957,11 @@ public class Cs1ScriptRunner {
 													GlRenderer.setDepthTestEnabled(true);
 													GlRenderer.setFogEnabled(false);
 													FogManager.init(Preferences.brightness);
-													if (ScriptRunner.aBoolean299) {
+													if (ScriptRunner.glSceneNeedsRender) {
 														GlRaster.resetClipRegion();
 														GlRenderer.clearDepthBuffer();
 														GlRaster.setClip(arg0, arg6, arg4, arg7);
-														ScriptRunner.aBoolean299 = false;
+														ScriptRunner.glSceneNeedsRender = false;
 													}
 													if (component.modelTransparent) {
 														GlRenderer.disableDepthMask();
@@ -1026,7 +1026,7 @@ public class Cs1ScriptRunner {
 												}
 												PluginRepository.ComponentDraw(i, component, local123 + component.invMarginX + 115, local114 + component.invMarginY + 12);
 											}
-											if (component.type == 8 && Protocol.aClass13_11 == component && Protocol.anInt5235 == anInt4504) {
+											if (component.type == 8 && Protocol.aClass13_11 == component && Protocol.anInt5235 == TOOLTIP_DISPLAY_DELAY) {
 												local276 = 0;
 												local270 = 0;
 												@Pc(3297) JagString local3297 = component.text;
@@ -1125,20 +1125,20 @@ public class Cs1ScriptRunner {
 			renderComponent(arg1, arg7, arg3, InterfaceList.components[arg0], arg2, -1, arg6, arg5, arg4);
 		} else if (arg4 == -1) {
 			for (@Pc(27) int local27 = 0; local27 < 100; local27++) {
-				InterfaceList.aBooleanArray100[local27] = true;
+				InterfaceList.rectangleDirty[local27] = true;
 			}
 		} else {
-			InterfaceList.aBooleanArray100[arg4] = true;
+			InterfaceList.rectangleDirty[arg4] = true;
 		}
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(Z)V")
 	public static void renderTopLevelInterface() {
-		aClass13Array13 = null;
+		deferredDragComponents = null;
 		renderInterface(InterfaceList.topLevelInterface, 0, GameShell.canvasWidth, 0, -1, GameShell.canvasHeight, 0, 0);
-		if (aClass13Array13 != null) {
-			renderComponent(0, anInt3126, anInt4696, aClass13Array13, GameShell.canvasWidth, -1412584499, 0, GameShell.canvasHeight, aClass13_1.rectangle);
-			aClass13Array13 = null;
+		if (deferredDragComponents != null) {
+			renderComponent(0, deferredDragRenderY, deferredDragRenderX, deferredDragComponents, GameShell.canvasWidth, -1412584499, 0, GameShell.canvasHeight, dragParentComponent.rectangle);
+			deferredDragComponents = null;
 		}
 	}
 
@@ -1174,52 +1174,52 @@ public class Cs1ScriptRunner {
 		}
 		@Pc(54) int local54 = arg0 * (arg4 - local35 - 32) / (arg1 - arg4);
 		if (!GlRenderer.enabled) {
-			SoftwareRaster.fillRect(arg2, arg3 + 16, 16, arg4 - 32, anInt4306);
-			SoftwareRaster.fillRect(arg2, local54 + arg3 + 16, 16, local35, anInt1704);
-			SoftwareRaster.drawVerticalLine(arg2, local54 + arg3 + 16, local35, anInt4938);
-			SoftwareRaster.drawVerticalLine(arg2 + 1, local54 + 16 + arg3, local35, anInt4938);
-			SoftwareRaster.drawHorizontalLine(arg2, arg3 + local54 + 16, 16, anInt4938);
-			SoftwareRaster.drawHorizontalLine(arg2, arg3 + local54 + 17, 16, anInt4938);
-			SoftwareRaster.drawVerticalLine(arg2 + 15, local54 + 16 + arg3, local35, anInt671);
-			SoftwareRaster.drawVerticalLine(arg2 + 14, arg3 - -17 - -local54, local35 - 1, anInt671);
-			SoftwareRaster.drawHorizontalLine(arg2, local35 + arg3 + local54 + 15, 16, anInt671);
-			SoftwareRaster.drawHorizontalLine(arg2 + 1, local35 + arg3 - (-local54 + -14), 15, anInt671);
+			SoftwareRaster.fillRect(arg2, arg3 + 16, 16, arg4 - 32, SCROLLBAR_TRACK_COLOR);
+			SoftwareRaster.fillRect(arg2, local54 + arg3 + 16, 16, local35, SCROLLBAR_THUMB_COLOR);
+			SoftwareRaster.drawVerticalLine(arg2, local54 + arg3 + 16, local35, SCROLLBAR_THUMB_HIGHLIGHT_COLOR);
+			SoftwareRaster.drawVerticalLine(arg2 + 1, local54 + 16 + arg3, local35, SCROLLBAR_THUMB_HIGHLIGHT_COLOR);
+			SoftwareRaster.drawHorizontalLine(arg2, arg3 + local54 + 16, 16, SCROLLBAR_THUMB_HIGHLIGHT_COLOR);
+			SoftwareRaster.drawHorizontalLine(arg2, arg3 + local54 + 17, 16, SCROLLBAR_THUMB_HIGHLIGHT_COLOR);
+			SoftwareRaster.drawVerticalLine(arg2 + 15, local54 + 16 + arg3, local35, SCROLLBAR_THUMB_SHADOW_COLOR);
+			SoftwareRaster.drawVerticalLine(arg2 + 14, arg3 - -17 - -local54, local35 - 1, SCROLLBAR_THUMB_SHADOW_COLOR);
+			SoftwareRaster.drawHorizontalLine(arg2, local35 + arg3 + local54 + 15, 16, SCROLLBAR_THUMB_SHADOW_COLOR);
+			SoftwareRaster.drawHorizontalLine(arg2 + 1, local35 + arg3 - (-local54 + -14), 15, SCROLLBAR_THUMB_SHADOW_COLOR);
 			return;
 		}
-		GlRaster.fillRect(arg2, arg3 + 16, 16, arg4 - 32, anInt4306);
-		GlRaster.fillRect(arg2, arg3 + local54 + 16, 16, local35, anInt1704);
-		GlRaster.drawVerticalLine(arg2, local54 + arg3 + 16, local35, anInt4938);
-		GlRaster.drawVerticalLine(arg2 + 1, local54 + 16 + arg3, local35, anInt4938);
-		GlRaster.drawHorizontalLine(arg2, local54 + arg3 + 16, 16, anInt4938);
-		GlRaster.drawHorizontalLine(arg2, local54 + arg3 + 17, 16, anInt4938);
-		GlRaster.drawVerticalLine(arg2 + 15, arg3 + (16 - -local54), local35, anInt671);
-		GlRaster.drawVerticalLine(arg2 + 14, arg3 - -local54 + 17, local35 - 1, anInt671);
-		GlRaster.drawHorizontalLine(arg2, local35 + arg3 + local54 + 15, 16, anInt671);
-		GlRaster.drawHorizontalLine(arg2 + 1, arg3 + 14 - -local54 + local35, 15, anInt671);
+		GlRaster.fillRect(arg2, arg3 + 16, 16, arg4 - 32, SCROLLBAR_TRACK_COLOR);
+		GlRaster.fillRect(arg2, arg3 + local54 + 16, 16, local35, SCROLLBAR_THUMB_COLOR);
+		GlRaster.drawVerticalLine(arg2, local54 + arg3 + 16, local35, SCROLLBAR_THUMB_HIGHLIGHT_COLOR);
+		GlRaster.drawVerticalLine(arg2 + 1, local54 + 16 + arg3, local35, SCROLLBAR_THUMB_HIGHLIGHT_COLOR);
+		GlRaster.drawHorizontalLine(arg2, local54 + arg3 + 16, 16, SCROLLBAR_THUMB_HIGHLIGHT_COLOR);
+		GlRaster.drawHorizontalLine(arg2, local54 + arg3 + 17, 16, SCROLLBAR_THUMB_HIGHLIGHT_COLOR);
+		GlRaster.drawVerticalLine(arg2 + 15, arg3 + (16 - -local54), local35, SCROLLBAR_THUMB_SHADOW_COLOR);
+		GlRaster.drawVerticalLine(arg2 + 14, arg3 - -local54 + 17, local35 - 1, SCROLLBAR_THUMB_SHADOW_COLOR);
+		GlRaster.drawHorizontalLine(arg2, local35 + arg3 + local54 + 15, 16, SCROLLBAR_THUMB_SHADOW_COLOR);
+		GlRaster.drawHorizontalLine(arg2 + 1, arg3 + 14 - -local54 + local35, 15, SCROLLBAR_THUMB_SHADOW_COLOR);
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(BLclient!be;)V")
 	public static void applyClientCode(@OriginalArg(1) Component arg0) {
 		@Pc(16) int local16 = arg0.clientCode;
 		if (local16 == 324) {
-			if (anInt3851 == -1) {
-				anInt3851 = arg0.spriteId;
-				anInt3502 = arg0.activeSpriteId;
+			if (cachedDefaultSpriteId == -1) {
+				cachedDefaultSpriteId = arg0.spriteId;
+				cachedActiveSpriteId = arg0.activeSpriteId;
 			}
 			if (PlayerAppearance.DEFAULT.gender) {
-				arg0.spriteId = anInt3851;
+				arg0.spriteId = cachedDefaultSpriteId;
 			} else {
-				arg0.spriteId = anInt3502;
+				arg0.spriteId = cachedActiveSpriteId;
 			}
 		} else if (local16 == 325) {
-			if (anInt3851 == -1) {
-				anInt3502 = arg0.activeSpriteId;
-				anInt3851 = arg0.spriteId;
+			if (cachedDefaultSpriteId == -1) {
+				cachedActiveSpriteId = arg0.activeSpriteId;
+				cachedDefaultSpriteId = arg0.spriteId;
 			}
 			if (PlayerAppearance.DEFAULT.gender) {
-				arg0.spriteId = anInt3502;
+				arg0.spriteId = cachedActiveSpriteId;
 			} else {
-				arg0.spriteId = anInt3851;
+				arg0.spriteId = cachedDefaultSpriteId;
 			}
 		} else if (local16 == 327) {
 			arg0.modelXAngle = 150;
@@ -1285,9 +1285,9 @@ public class Cs1ScriptRunner {
 			}
 		}
 		WorldMap.aClass3_Sub2_Sub1_2.drawPixels(arg0, arg3);
-		@Pc(147) int local147 = arg1 * anInt2884 / WorldMap.length + arg3;
+		@Pc(147) int local147 = arg1 * worldMapViewportY / WorldMap.length + arg3;
 		@Pc(153) int local153 = WorldMap.anInt1176 * arg1 / WorldMap.length;
-		@Pc(161) int local161 = arg0 + arg2 * anInt2882 / WorldMap.width;
+		@Pc(161) int local161 = arg0 + arg2 * worldMapViewportX / WorldMap.width;
 		@Pc(167) int local167 = arg2 * WorldMap.anInt2387 / WorldMap.width;
 		@Pc(169) int local169 = 16711680;
 		if (client.game == 1) {
@@ -1304,10 +1304,10 @@ public class Cs1ScriptRunner {
 			return;
 		}
 		@Pc(225) int local225;
-		if (anInt2428 > 10) {
-			local225 = (20 - anInt2428) * 25;
+		if (mapHighlightPulseCounter > 10) {
+			local225 = (20 - mapHighlightPulseCounter) * 25;
 		} else {
-			local225 = anInt2428 * 25;
+			local225 = mapHighlightPulseCounter * 25;
 		}
 		for (@Pc(238) MapElement local238 = (MapElement) WorldMap.mapElements.head(); local238 != null; local238 = (MapElement) WorldMap.mapElements.next()) {
 			if (local238.id == WorldMap.anInt172) {
@@ -1324,15 +1324,15 @@ public class Cs1ScriptRunner {
 
 	@OriginalMember(owner = "client!da", name = "a", descriptor = "(IIILclient!be;)V")
 	public static void startComponentDrag(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) Component arg2) {
-		if (aClass13_14 != null || aBoolean108 || (arg2 == null || getDragParent(arg2) == null)) {
+		if (draggedComponent != null || isMenuOpen || (arg2 == null || getDragParent(arg2) == null)) {
 			return;
 		}
-		aClass13_14 = arg2;
-		aClass13_1 = getDragParent(arg2);
-		anInt5388 = arg1;
-		aBoolean172 = false;
-		anInt4851 = 0;
-		anInt4035 = arg0;
+		draggedComponent = arg2;
+		dragParentComponent = getDragParent(arg2);
+		dragStartMouseX = arg1;
+		isDragging = false;
+		dragElapsedTicks = 0;
+		dragStartMouseY = arg0;
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(ILclient!be;)Lclient!be;")
@@ -1346,69 +1346,69 @@ public class Cs1ScriptRunner {
 
 	@OriginalMember(owner = "client!ac", name = "b", descriptor = "(I)V")
 	public static void updateComponentDrag() {
-		InterfaceList.redraw(aClass13_14);
-		anInt4851++;
+		InterfaceList.redraw(draggedComponent);
+		dragElapsedTicks++;
 		if (InterfaceList.aBoolean83 && InterfaceList.aBoolean174) {
 			@Pc(30) int local30 = Mouse.lastMouseX;
-			local30 -= anInt5388;
-			if (anInt2225 > local30) {
-				local30 = anInt2225;
+			local30 -= dragStartMouseX;
+			if (dragBoundsMinX > local30) {
+				local30 = dragBoundsMinX;
 			}
 			@Pc(41) int local41 = Mouse.lastMouseY;
-			if (anInt2225 + aClass13_1.width < local30 - -aClass13_14.width) {
-				local30 = anInt2225 + aClass13_1.width - aClass13_14.width;
+			if (dragBoundsMinX + dragParentComponent.width < local30 - -draggedComponent.width) {
+				local30 = dragBoundsMinX + dragParentComponent.width - draggedComponent.width;
 			}
-			local41 -= anInt4035;
+			local41 -= dragStartMouseY;
 			if (local41 < InterfaceList.anInt5103) {
 				local41 = InterfaceList.anInt5103;
 			}
-			if (InterfaceList.anInt5103 + aClass13_1.height < local41 - -aClass13_14.height) {
-				local41 = InterfaceList.anInt5103 + aClass13_1.height - aClass13_14.height;
+			if (InterfaceList.anInt5103 + dragParentComponent.height < local41 - -draggedComponent.height) {
+				local41 = InterfaceList.anInt5103 + dragParentComponent.height - draggedComponent.height;
 			}
 			@Pc(109) int local109 = local41 - InterfaceList.anInt660;
 			@Pc(114) int local114 = local30 - InterfaceList.anInt3075;
-			@Pc(122) int local122 = local30 + aClass13_1.scrollX - anInt2225;
-			@Pc(130) int local130 = aClass13_1.scrollY + local41 - InterfaceList.anInt5103;
-			@Pc(133) int local133 = aClass13_14.dragDeadzone;
-			if (anInt4851 > aClass13_14.dragDeadtime && (local133 < local114 || -local133 > local114 || local109 > local133 || local109 < -local133)) {
-				aBoolean172 = true;
+			@Pc(122) int local122 = local30 + dragParentComponent.scrollX - dragBoundsMinX;
+			@Pc(130) int local130 = dragParentComponent.scrollY + local41 - InterfaceList.anInt5103;
+			@Pc(133) int local133 = draggedComponent.dragDeadzone;
+			if (dragElapsedTicks > draggedComponent.dragDeadtime && (local133 < local114 || -local133 > local114 || local109 > local133 || local109 < -local133)) {
+				isDragging = true;
 			}
 			@Pc(176) HookRequest local176;
-			if (aClass13_14.onDragStart != null && aBoolean172) {
+			if (draggedComponent.onDragStart != null && isDragging) {
 				local176 = new HookRequest();
-				local176.source = aClass13_14;
-				local176.arguments = aClass13_14.onDragStart;
+				local176.source = draggedComponent;
+				local176.arguments = draggedComponent.onDragStart;
 				local176.mouseX = local122;
 				local176.mouseY = local130;
 				ScriptRunner.run(local176);
 			}
 			if (Mouse.pressedButton == 0) {
-				if (aBoolean172) {
-					if (aClass13_14.onDragRelease != null) {
+				if (isDragging) {
+					if (draggedComponent.onDragRelease != null) {
 						local176 = new HookRequest();
 						local176.mouseY = local130;
 						local176.target = InterfaceList.aClass13_12;
 						local176.mouseX = local122;
-						local176.arguments = aClass13_14.onDragRelease;
-						local176.source = aClass13_14;
+						local176.arguments = draggedComponent.onDragRelease;
+						local176.source = draggedComponent;
 						ScriptRunner.run(local176);
 					}
-					if (InterfaceList.aClass13_12 != null && InterfaceList.getDragRenderParent(aClass13_14) != null) {
+					if (InterfaceList.aClass13_12 != null && InterfaceList.getDragRenderParent(draggedComponent) != null) {
 						Protocol.outboundBuffer.p1isaac(79);
-						Protocol.outboundBuffer.mp4(aClass13_14.id);
+						Protocol.outboundBuffer.mp4(draggedComponent.id);
 						Protocol.outboundBuffer.ip2(InterfaceList.aClass13_12.createdComponentId);
 						Protocol.outboundBuffer.p4(InterfaceList.aClass13_12.id);
-						Protocol.outboundBuffer.ip2(aClass13_14.createdComponentId);
+						Protocol.outboundBuffer.ip2(draggedComponent.createdComponentId);
 					}
 				} else if ((VarpDomain.mouseButtons == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
 					ScriptRunner.layoutMiniMenu();
 				} else if (MiniMenu.size > 0) {
 					MiniMenu.processClick();
 				}
-				aClass13_14 = null;
+				draggedComponent = null;
 			}
-		} else if (anInt4851 > 1) {
-			aClass13_14 = null;
+		} else if (dragElapsedTicks > 1) {
+			draggedComponent = null;
 		}
 	}
 }

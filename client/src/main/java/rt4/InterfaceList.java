@@ -26,7 +26,7 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!fe", name = "lb", descriptor = "[I")
 	public static final int[] rectangleHeight = new int[100];
 	@OriginalMember(owner = "client!pa", name = "R", descriptor = "[Z")
-	public static final boolean[] aBooleanArray100 = new boolean[100];
+	public static final boolean[] rectangleDirty = new boolean[100];
 	@OriginalMember(owner = "client!ql", name = "h", descriptor = "Lclient!na;")
 	public static final JagString aClass100_903 = JagString.parse("Hidden)2");
 	@OriginalMember(owner = "client!ja", name = "f", descriptor = "Lclient!ih;")
@@ -34,7 +34,7 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!ac", name = "i", descriptor = "Lclient!ih;")
 	public static final LinkedList highPriorityRequests = new LinkedList();
 	@OriginalMember(owner = "client!sc", name = "z", descriptor = "[Z")
-	public static final boolean[] aBooleanArray116 = new boolean[100];
+	public static final boolean[] rectangleDirtySnapshot = new boolean[100];
 	@OriginalMember(owner = "client!bn", name = "V", descriptor = "I")
 	public static int rectangles = 0;
 	@OriginalMember(owner = "client!md", name = "W", descriptor = "I")
@@ -92,9 +92,9 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!jj", name = "j", descriptor = "Z")
 	public static boolean draggingClickedInventoryObject = false;
 	@OriginalMember(owner = "client!rg", name = "s", descriptor = "I")
-	public static int anInt5574 = -1;
+	public static int viewportX = -1;
 	@OriginalMember(owner = "client!oj", name = "v", descriptor = "I")
-	public static int anInt4311 = -2;
+	public static int currentRenderLoop = -2;
 	@OriginalMember(owner = "client!pm", name = "hb", descriptor = "I")
 	public static int anInt4620;
 	@OriginalMember(owner = "client!fk", name = "e", descriptor = "I")
@@ -116,7 +116,7 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!a", name = "h", descriptor = "I")
 	public static int anInt5;
 	@OriginalMember(owner = "client!ve", name = "w", descriptor = "Z")
-	public static boolean aBoolean298 = false;
+	public static boolean useStyledMenu = false;
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(ZLclient!ve;Lclient!ve;Lclient!ve;Lclient!ve;)V")
 	public static void init(@OriginalArg(1) Js5 arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) Js5 arg2, @OriginalArg(4) Js5 arg3) {
@@ -269,8 +269,8 @@ public class InterfaceList {
 
 	@OriginalMember(owner = "client!dg", name = "a", descriptor = "(ILclient!be;)V")
 	public static void redraw(@OriginalArg(1) Component arg0) {
-		if (anInt4311 == arg0.rectangleLoop) {
-			aBooleanArray100[arg0.rectangle] = true;
+		if (currentRenderLoop == arg0.rectangleLoop) {
+			rectangleDirty[arg0.rectangle] = true;
 		}
 	}
 
@@ -403,7 +403,7 @@ public class InterfaceList {
 			}
 		}
 		if (MiniMenu.size == 1) {
-			Cs1ScriptRunner.aBoolean108 = false;
+			Cs1ScriptRunner.isMenuOpen = false;
 			redrawScreen(anInt4271, anInt761, anInt5138, anInt436);
 		} else {
 			redrawScreen(anInt4271, anInt761, anInt5138, anInt436);
@@ -414,7 +414,7 @@ public class InterfaceList {
 					local43 = local88;
 				}
 			}
-			anInt436 = MiniMenu.size * 15 + (aBoolean298 ? 26 : 22);
+			anInt436 = MiniMenu.size * 15 + (useStyledMenu ? 26 : 22);
 			anInt761 = local43 + 8;
 		}
 		if (topLevelInterface != -1) {
@@ -560,7 +560,7 @@ public class InterfaceList {
 	public static void redrawScreen(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		for (@Pc(12) int local12 = 0; local12 < rectangles; local12++) {
 			if (rectangleWidth[local12] + rectangleX[local12] > arg0 && arg1 + arg0 > rectangleX[local12] && arg2 < rectangleHeight[local12] + rectangleY[local12] && rectangleY[local12] < arg2 + arg3) {
-				aBooleanArray100[local12] = true;
+				rectangleDirty[local12] = true;
 			}
 		}
 	}
@@ -629,7 +629,7 @@ public class InterfaceList {
 	public static void processComponents(@OriginalArg(0) Component[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		for (@Pc(1) int local1 = 0; local1 < arg0.length; local1++) {
 			@Pc(9) Component component = arg0[local1];
-			if (component != null && component.overlayer == arg1 && (!component.if3 || component.type == 0 || component.hasEventHandlers || getServerActiveProperties(component).events != 0 || component == Cs1ScriptRunner.aClass13_1 || component.clientCode == 1338) && (!component.if3 || !isHidden(component))) {
+			if (component != null && component.overlayer == arg1 && (!component.if3 || component.type == 0 || component.hasEventHandlers || getServerActiveProperties(component).events != 0 || component == Cs1ScriptRunner.dragParentComponent || component.clientCode == 1338) && (!component.if3 || !isHidden(component))) {
 				@Pc(50) int local50 = component.x + arg6;
 				@Pc(55) int local55 = component.y + arg7;
 				@Pc(61) int local61;
@@ -653,7 +653,7 @@ public class InterfaceList {
 					local65 = local73 < arg4 ? local73 : arg4;
 					local67 = local78 < arg5 ? local78 : arg5;
 				}
-				if (component == Cs1ScriptRunner.aClass13_14) {
+				if (component == Cs1ScriptRunner.draggedComponent) {
 					aBoolean83 = true;
 					anInt3075 = local50;
 					anInt660 = local55;
@@ -670,9 +670,9 @@ public class InterfaceList {
 									local164.source.mouseOver = false;
 								}
 							}
-							if (Cs1ScriptRunner.anInt4851 == 0) {
-								Cs1ScriptRunner.aClass13_14 = null;
-								Cs1ScriptRunner.aClass13_1 = null;
+							if (Cs1ScriptRunner.dragElapsedTicks == 0) {
+								Cs1ScriptRunner.draggedComponent = null;
+								Cs1ScriptRunner.dragParentComponent = null;
 							}
 							anInt3337 = 0;
 						}
@@ -710,12 +710,12 @@ public class InterfaceList {
 						if (local221) {
 							Cs1ScriptRunner.startComponentDrag(Mouse.clickY - local55, Mouse.clickX - local50, component);
 						}
-						if (Cs1ScriptRunner.aClass13_14 != null && Cs1ScriptRunner.aClass13_14 != component && local207 && getServerActiveProperties(component).isDragTarget()) {
+						if (Cs1ScriptRunner.draggedComponent != null && Cs1ScriptRunner.draggedComponent != component && local207 && getServerActiveProperties(component).isDragTarget()) {
 							aClass13_12 = component;
 						}
-						if (component == Cs1ScriptRunner.aClass13_1) {
+						if (component == Cs1ScriptRunner.dragParentComponent) {
 							aBoolean174 = true;
-							Cs1ScriptRunner.anInt2225 = local50;
+							Cs1ScriptRunner.dragBoundsMinX = local50;
 							anInt5103 = local55;
 						}
 						if (component.hasEventHandlers || component.clientCode != 0) {
@@ -728,7 +728,7 @@ public class InterfaceList {
 								request.arguments = component.onScroll;
 								lowPriorityRequests.addTail(request);
 							}
-							if (Cs1ScriptRunner.aClass13_14 != null || clickedInventoryComponent != null || Cs1ScriptRunner.aBoolean108 || component.clientCode != 1400 && anInt3337 > 0) {
+							if (Cs1ScriptRunner.draggedComponent != null || clickedInventoryComponent != null || Cs1ScriptRunner.isMenuOpen || component.clientCode != 1400 && anInt3337 > 0) {
 								local221 = false;
 								local212 = false;
 								local207 = false;
@@ -762,19 +762,19 @@ public class InterfaceList {
 											continue;
 										}
 										anInt3337 = 1;
-										Cs1ScriptRunner.anInt5388 = Mouse.lastMouseX;
-										Cs1ScriptRunner.anInt4035 = Mouse.lastMouseY;
+										Cs1ScriptRunner.dragStartMouseX = Mouse.lastMouseX;
+										Cs1ScriptRunner.dragStartMouseY = Mouse.lastMouseY;
 										continue;
 									}
 									if (local212 && anInt3337 > 0) {
-										if (anInt3337 == 1 && (Cs1ScriptRunner.anInt5388 != Mouse.lastMouseX || Cs1ScriptRunner.anInt4035 != Mouse.lastMouseY)) {
+										if (anInt3337 == 1 && (Cs1ScriptRunner.dragStartMouseX != Mouse.lastMouseX || Cs1ScriptRunner.dragStartMouseY != Mouse.lastMouseY)) {
 											anInt4620 = WorldMap.anInt435;
 											anInt1885 = WorldMap.anInt919;
 											anInt3337 = 2;
 										}
 										if (anInt3337 == 2) {
-											WorldMap.setViewX(anInt4620 + (int) ((double) (Cs1ScriptRunner.anInt5388 - Mouse.lastMouseX) * 2.0D / (double) WorldMap.targetZoom));
-											WorldMap.setViewY(anInt1885 + (int) ((double) (Cs1ScriptRunner.anInt4035 - Mouse.lastMouseY) * 2.0D / (double) WorldMap.targetZoom));
+											WorldMap.setViewX(anInt4620 + (int) ((double) (Cs1ScriptRunner.dragStartMouseX - Mouse.lastMouseX) * 2.0D / (double) WorldMap.targetZoom));
+											WorldMap.setViewY(anInt1885 + (int) ((double) (Cs1ScriptRunner.dragStartMouseY - Mouse.lastMouseY) * 2.0D / (double) WorldMap.targetZoom));
 										}
 										continue;
 									}
@@ -1040,7 +1040,7 @@ public class InterfaceList {
 							}
 						}
 					}
-					if (!component.if3 && Cs1ScriptRunner.aClass13_14 == null && clickedInventoryComponent == null && !Cs1ScriptRunner.aBoolean108) {
+					if (!component.if3 && Cs1ScriptRunner.draggedComponent == null && clickedInventoryComponent == null && !Cs1ScriptRunner.isMenuOpen) {
 						if ((component.hoverOverlayer >= 0 || component.overColor != 0) && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
 							if (component.hoverOverlayer >= 0) {
 								aClass13_22 = arg0[component.hoverOverlayer];
@@ -1100,8 +1100,8 @@ public class InterfaceList {
 			ScriptRunner.forceRedrawAllRectangles();
 			runOnLoadScripts(topLevelInterface);
 		}
-		MiniMenu.anInt1092 = -1;
-		setCursor(ScriptRunner.anInt5794);
+		MiniMenu.defaultCursorId = -1;
+		setCursor(ScriptRunner.scriptCursorId);
 		PlayerList.self = new Player();
 		PlayerList.self.yFine = 3000;
 		PlayerList.self.xFine = 3000;
@@ -1136,19 +1136,19 @@ public class InterfaceList {
 			updateAnimations(topLevelInterface);
 		}
 		for (@Pc(15) int local15 = 0; local15 < rectangles; local15++) {
-			if (aBooleanArray100[local15]) {
+			if (rectangleDirty[local15]) {
 				rectangleRedraw[local15] = true;
 			}
-			aBooleanArray116[local15] = aBooleanArray100[local15];
-			aBooleanArray100[local15] = false;
+			rectangleDirtySnapshot[local15] = rectangleDirty[local15];
+			rectangleDirty[local15] = false;
 		}
-		Cs1ScriptRunner.anInt2503 = -1;
+		Cs1ScriptRunner.gameSceneTooltipX = -1;
 		mouseOverInventoryInterface = null;
-		anInt4311 = client.loop;
+		currentRenderLoop = client.loop;
 		if (GlRenderer.enabled) {
-			ScriptRunner.aBoolean299 = true;
+			ScriptRunner.glSceneNeedsRender = true;
 		}
-		anInt5574 = -1;
+		viewportX = -1;
 		if (topLevelInterface != -1) {
 			rectangles = 0;
 			Cs1ScriptRunner.renderTopLevelInterface();

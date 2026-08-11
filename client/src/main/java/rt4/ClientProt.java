@@ -147,9 +147,9 @@ public class ClientProt {
 				InterfaceList.closeInterface(true, local18);
 			}
 		}
-		if (Cs1ScriptRunner.aClass13_10 != null) {
-			InterfaceList.redraw(Cs1ScriptRunner.aClass13_10);
-			Cs1ScriptRunner.aClass13_10 = null;
+		if (Cs1ScriptRunner.pleaseWaitComponent != null) {
+			InterfaceList.redraw(Cs1ScriptRunner.pleaseWaitComponent);
+			Cs1ScriptRunner.pleaseWaitComponent = null;
 		}
 	}
 

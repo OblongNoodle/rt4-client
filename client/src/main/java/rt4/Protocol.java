@@ -110,7 +110,7 @@ public class Protocol {
 	@OriginalMember(owner = "client!bf", name = "G", descriptor = "I")
 	public static int anInt551 = 0;
 	@OriginalMember(owner = "client!pb", name = "ab", descriptor = "I")
-	public static int anInt4422 = 0;
+	public static int viewportWalkState = 0;
 	@OriginalMember(owner = "client!fe", name = "R", descriptor = "Z")
 	public static boolean prevFocus = true;
 	@OriginalMember(owner = "client!rm", name = "c", descriptor = "I")
@@ -1277,7 +1277,7 @@ public class Protocol {
 			InterfaceList.layoutTopLevel(false);
 			InterfaceList.runOnLoadScripts(InterfaceList.topLevelInterface);
 			for (int i = 0; i < 100; i++) {
-				InterfaceList.aBooleanArray100[i] = true;
+				InterfaceList.rectangleDirty[i] = true;
 			}
 			opcode = -1;
 			return true;
@@ -1476,9 +1476,9 @@ public class Protocol {
 			if (pointer != null) {
 				InterfaceList.closeInterface(true, pointer);
 			}
-			if (Cs1ScriptRunner.aClass13_10 != null) {
-				InterfaceList.redraw(Cs1ScriptRunner.aClass13_10);
-				Cs1ScriptRunner.aClass13_10 = null;
+			if (Cs1ScriptRunner.pleaseWaitComponent != null) {
+				InterfaceList.redraw(Cs1ScriptRunner.pleaseWaitComponent);
+				Cs1ScriptRunner.pleaseWaitComponent = null;
 			}
 			opcode = -1;
 			return true;
@@ -2800,7 +2800,7 @@ public class Protocol {
 											if (WorldMap.component == null) {
 												InterfaceList.anInt3337 = 0;
 											}
-											if (Cs1ScriptRunner.aClass13_14 != null) {
+											if (Cs1ScriptRunner.draggedComponent != null) {
 												Cs1ScriptRunner.updateComponentDrag();
 											}
 											if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT] && MouseWheel.wheelRotation != 0) {
@@ -2817,9 +2817,9 @@ public class Protocol {
 												if (MiniMenu.anInt1742 != -1) {
 													Cheat.teleport(Camera.originX + MiniMenu.anInt1742, Camera.originY - -MiniMenu.anInt2954, Player.plane);
 												}
-												anInt4422 = 0;
-												MiniMenu.anInt3096 = 0;
-											} else if (MiniMenu.anInt3096 == 2) {
+												viewportWalkState = 0;
+												MiniMenu.minimapWalkState = 0;
+											} else if (MiniMenu.minimapWalkState == 2) {
 												if (MiniMenu.anInt1742 != -1) {
 													outboundBuffer.p1isaac(131);
 													outboundBuffer.mp4(MiniMenu.anInt2512);
@@ -2831,8 +2831,8 @@ public class Protocol {
 													Cross.y = Mouse.clickY;
 													Cross.x = Mouse.clickX;
 												}
-												MiniMenu.anInt3096 = 0;
-											} else if (anInt4422 == 2) {
+												MiniMenu.minimapWalkState = 0;
+											} else if (viewportWalkState == 2) {
 												if (MiniMenu.anInt1742 != -1) {
 													outboundBuffer.p1isaac(179);
 													outboundBuffer.p2(Camera.originY + MiniMenu.anInt2954);
@@ -2842,8 +2842,8 @@ public class Protocol {
 													Cross.x = Mouse.clickX;
 													Cross.y = Mouse.clickY;
 												}
-												anInt4422 = 0;
-											} else if (MiniMenu.anInt1742 != -1 && MiniMenu.anInt3096 == 0 && anInt4422 == 0) {
+												viewportWalkState = 0;
+											} else if (MiniMenu.anInt1742 != -1 && MiniMenu.minimapWalkState == 0 && viewportWalkState == 0) {
 												@Pc(1871) boolean local1871 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, true, 0, MiniMenu.anInt1742, 0, 0, 0, MiniMenu.anInt2954, PlayerList.self.movementQueueX[0]);
 												if (local1871) {
 													Cross.y = Mouse.clickY;
@@ -2862,7 +2862,7 @@ public class Protocol {
 													InterfaceList.redraw(InterfaceList.aClass13_22);
 												}
 											}
-											if (local1508 != aClass13_11 && Cs1ScriptRunner.anInt4504 == anInt5235) {
+											if (local1508 != aClass13_11 && Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY == anInt5235) {
 												if (local1508 != null) {
 													InterfaceList.redraw(local1508);
 												}
@@ -2874,9 +2874,9 @@ public class Protocol {
 												if (anInt5235 > 0) {
 													anInt5235--;
 												}
-											} else if (anInt5235 < Cs1ScriptRunner.anInt4504) {
+											} else if (anInt5235 < Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY) {
 												anInt5235++;
-												if (Cs1ScriptRunner.anInt4504 == anInt5235) {
+												if (Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY == anInt5235) {
 													InterfaceList.redraw(aClass13_11);
 												}
 											}
@@ -3482,9 +3482,9 @@ public class Protocol {
 		if (local28 != null) {
 			InterfaceList.redraw(local28);
 		}
-		if (Cs1ScriptRunner.aClass13_10 != null) {
-			InterfaceList.redraw(Cs1ScriptRunner.aClass13_10);
-			Cs1ScriptRunner.aClass13_10 = null;
+		if (Cs1ScriptRunner.pleaseWaitComponent != null) {
+			InterfaceList.redraw(Cs1ScriptRunner.pleaseWaitComponent);
+			Cs1ScriptRunner.pleaseWaitComponent = null;
 		}
 		@Pc(45) int local45 = MiniMenu.size;
 		@Pc(53) int local53;
@@ -3494,7 +3494,7 @@ public class Protocol {
 			}
 		}
 		if (MiniMenu.size == 1) {
-			Cs1ScriptRunner.aBoolean108 = false;
+			Cs1ScriptRunner.isMenuOpen = false;
 			InterfaceList.redrawScreen(InterfaceList.anInt4271, InterfaceList.anInt761, InterfaceList.anInt5138, InterfaceList.anInt436);
 		} else {
 			InterfaceList.redrawScreen(InterfaceList.anInt4271, InterfaceList.anInt761, InterfaceList.anInt5138, InterfaceList.anInt436);
@@ -3506,7 +3506,7 @@ public class Protocol {
 				}
 			}
 			InterfaceList.anInt761 = local53 + 8;
-			InterfaceList.anInt436 = MiniMenu.size * 15 + (InterfaceList.aBoolean298 ? 26 : 22);
+			InterfaceList.anInt436 = MiniMenu.size * 15 + (InterfaceList.useStyledMenu ? 26 : 22);
 		}
 		if (local28 != null) {
 			InterfaceList.layoutComponent(local28, false);
@@ -3520,13 +3520,13 @@ public class Protocol {
 
 	@OriginalMember(owner = "client!ah", name = "b", descriptor = "(I)V")
 	public static void processDefaultAction() {
-		if (InterfaceList.clickedInventoryComponent != null || Cs1ScriptRunner.aClass13_14 != null) {
+		if (InterfaceList.clickedInventoryComponent != null || Cs1ScriptRunner.draggedComponent != null) {
 			return;
 		}
 		@Pc(20) int local20 = Mouse.clickButton;
 		@Pc(93) int local93;
 		@Pc(99) int local99;
-		if (!Cs1ScriptRunner.aBoolean108) {
+		if (!Cs1ScriptRunner.isMenuOpen) {
 			if (local20 == 1 && MiniMenu.size > 0) {
 				@Pc(37) short local37 = MiniMenu.actions[MiniMenu.size - 1];
 				if (local37 == 25 || local37 == 23 || local37 == 48 || local37 == 7 || local37 == 13 || local37 == 47 || local37 == 5 || local37 == 43 || local37 == 35 || local37 == 58 || local37 == 22 || local37 == 1006) {
@@ -3552,10 +3552,10 @@ public class Protocol {
 			if (local20 == 1 && (VarpDomain.mouseButtons == 1 && MiniMenu.size > 2 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1))) {
 				local20 = 2;
 			}
-			if (local20 == 2 && MiniMenu.size > 0 || MiniMenu.anInt3953 == 1) {
+			if (local20 == 2 && MiniMenu.size > 0 || MiniMenu.clickProcessingState == 1) {
 				ScriptRunner.layoutMiniMenu();
 			}
-			if (local20 == 1 && MiniMenu.size > 0 || MiniMenu.anInt3953 == 2) {
+			if (local20 == 1 && MiniMenu.size > 0 || MiniMenu.clickProcessingState == 2) {
 				MiniMenu.processClick();
 			}
 			return;
@@ -3565,7 +3565,7 @@ public class Protocol {
 			local93 = Mouse.lastMouseY;
 			local204 = Mouse.lastMouseX;
 			if (local204 < InterfaceList.anInt4271 - 10 || local204 > InterfaceList.anInt761 + InterfaceList.anInt4271 + 10 || InterfaceList.anInt5138 - 10 > local93 || local93 > InterfaceList.anInt436 + InterfaceList.anInt5138 + 10) {
-				Cs1ScriptRunner.aBoolean108 = false;
+				Cs1ScriptRunner.isMenuOpen = false;
 				InterfaceList.redrawScreen(InterfaceList.anInt4271, InterfaceList.anInt761, InterfaceList.anInt5138, InterfaceList.anInt436);
 			}
 		}
@@ -3580,7 +3580,7 @@ public class Protocol {
 		@Pc(269) int local269 = -1;
 		for (@Pc(271) int local271 = 0; local271 < MiniMenu.size; local271++) {
 			@Pc(289) int local289;
-			if (InterfaceList.aBoolean298) {
+			if (InterfaceList.useStyledMenu) {
 				local289 = (MiniMenu.size - local271 - 1) * 15 + local93 + 35;
 			} else {
 				local289 = (MiniMenu.size - local271 - 1) * 15 + local93 + 31;
@@ -3592,7 +3592,7 @@ public class Protocol {
 		if (local269 != -1) {
 			MiniMenu.doAction(local269);
 		}
-		Cs1ScriptRunner.aBoolean108 = false;
+		Cs1ScriptRunner.isMenuOpen = false;
 		InterfaceList.redrawScreen(InterfaceList.anInt4271, InterfaceList.anInt761, InterfaceList.anInt5138, InterfaceList.anInt436);
 	}
 }

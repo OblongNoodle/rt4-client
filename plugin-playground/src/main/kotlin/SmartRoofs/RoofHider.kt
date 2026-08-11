@@ -458,7 +458,7 @@ object RoofHider {
 
     private fun hideHoverTargets() {
         val now = System.currentTimeMillis()
-        val keepAlive = Cs1ScriptRunner.aBoolean108
+        val keepAlive = Cs1ScriptRunner.isMenuOpen
         for (i in 0 until HOVER_TARGET_LIMIT) {
             if (hoverTargetX[i] == -1) {
                 continue
