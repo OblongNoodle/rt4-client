@@ -501,8 +501,8 @@ public final class GlModel extends Model {
 						local1280 = local428[local833];
 						@Pc(1284) int local1284 = local430[local833];
 						@Pc(1288) float[] local1288 = local433[local833];
-						@Pc(1293) byte local1293 = model.aByteArray32[local833];
-						local952 = (float) model.aByteArray34[local833] / 256.0F;
+						@Pc(1293) byte local1293 = model.textureDirection[local833];
+						local952 = (float) model.textureSpeed[local833] / 256.0F;
 						if (local902 == 1) {
 							local960 = (float) (model.texturesScaleZ[local833] & 0xFFFF) / 1024.0F;
 							calculateCylindricalUV(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local1288, local960, local1293, local952);
@@ -547,8 +547,8 @@ public final class GlModel extends Model {
 								}
 							}
 						} else if (local902 == 2) {
-							local960 = (float) model.aByteArray28[local833] / 256.0F;
-							local968 = (float) model.aByteArray33[local833] / 256.0F;
+							local960 = (float) model.textureTransU[local833] / 256.0F;
+							local968 = (float) model.textureTransV[local833] / 256.0F;
 							@Pc(1525) int local1525 = model.vertexX[local914] - model.vertexX[local909];
 							@Pc(1535) int local1535 = model.vertexY[local914] - model.vertexY[local909];
 							@Pc(1545) int local1545 = model.vertexZ[local914] - model.vertexZ[local909];
@@ -994,7 +994,7 @@ public final class GlModel extends Model {
 				local206 = local153 / local70;
 				local210 = local132 / local53;
 			}
-			if (anInt3582 >= local187 && anInt3582 <= local191 && RawModel.anInt1053 >= local206 && RawModel.anInt1053 <= local210) {
+			if (anInt3582 >= local187 && anInt3582 <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
 				local187 = 999999;
 				local191 = -999999;
 				local206 = 999999;
@@ -1047,7 +1047,7 @@ public final class GlModel extends Model {
 						}
 					}
 				}
-				if (anInt3582 >= local187 && anInt3582 <= local191 && RawModel.anInt1053 >= local206 && RawModel.anInt1053 <= local210) {
+				if (anInt3582 >= local187 && anInt3582 <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
 					if (this.pickable) {
 						if (miniMenuPick) {
 							Model.aLongArray11[MiniMenu.anInt7++] = arg8;
@@ -1077,7 +1077,7 @@ public final class GlModel extends Model {
 										@Pc(698) short local698 = this.aShortArray77[local362];
 										@Pc(703) short local703 = this.aShortArray82[local362];
 										@Pc(708) short local708 = this.aShortArray83[local362];
-										if (this.pointWithinTriangle(anInt3582, RawModel.anInt1053, anIntArray467[local698], anIntArray467[local703], anIntArray467[local708], anIntArray468[local698], anIntArray468[local703], anIntArray468[local708])) {
+										if (this.pointWithinTriangle(anInt3582, RawModel.pickScreenY, anIntArray467[local698], anIntArray467[local703], anIntArray467[local708], anIntArray468[local698], anIntArray468[local703], anIntArray468[local708])) {
 											if (miniMenuPick) {
 												Model.aLongArray11[MiniMenu.anInt7++] = arg8;
 											}

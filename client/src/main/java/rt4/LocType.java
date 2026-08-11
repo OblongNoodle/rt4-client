@@ -832,9 +832,9 @@ public final class LocType {
 				local69.rotate256();
 			}
 			if (local50) {
-				local69.aShort19 = (short) (this.ambient + 64);
+				local69.ambient = (short) (this.ambient + 64);
 				local60 = local69;
-				local69.aShort18 = (short) (this.contrast * 5 + 768);
+				local69.contrast = (short) (this.contrast * 5 + 768);
 				local69.calculateNormals();
 			} else {
 				local60 = new SoftwareModel(local69, this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50);

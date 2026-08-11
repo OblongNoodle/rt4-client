@@ -107,7 +107,7 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!bi", name = "jb", descriptor = "Z")
 	public static boolean aBoolean43 = true;
 	@OriginalMember(owner = "client!wb", name = "c", descriptor = "I")
-	public static int anInt5794 = -1;
+	public static int scriptCursorId = -1;
 	@OriginalMember(owner = "client!k", name = "m", descriptor = "Z")
 	public static boolean neverRemoveRoofs = false;
 	@OriginalMember(owner = "client!vk", name = "f", descriptor = "[[[B")
@@ -115,7 +115,7 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!vg", name = "b", descriptor = "S")
 	public static short aShort30 = 256;
 	@OriginalMember(owner = "client!vg", name = "c", descriptor = "Z")
-	public static boolean aBoolean299 = false;
+	public static boolean glSceneNeedsRender = false;
 	@OriginalMember(owner = "client!lj", name = "z", descriptor = "[I")
 	public static int[] anIntArray338 = new int[8];
 	@OriginalMember(owner = "client!vl", name = "i", descriptor = "[I")
@@ -135,9 +135,9 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!fc", name = "a", descriptor = "I")
 	public static int anInt1951 = -1;
 	@OriginalMember(owner = "client!em", name = "w", descriptor = "I")
-	public static int anInt1892;
+	public static int interfaceMouseY;
 	@OriginalMember(owner = "client!me", name = "nb", descriptor = "I")
-	public static int anInt3751;
+	public static int interfaceMouseX;
 
 	@OriginalMember(owner = "client!ja", name = "a", descriptor = "(IIIIIZ)V")
 	public static void calculateViewportBounds(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4) {
@@ -284,7 +284,7 @@ public final class ScriptRunner {
 			SoftwareRaster.setClip(arg2, arg4, arg3 + arg2, arg0 + arg4);
 			Rasteriser.prepare();
 		}
-		if (Cs1ScriptRunner.aBoolean108 || anInt3751 < arg2 || anInt3751 >= arg3 + arg2 || arg4 > anInt1892 || arg0 + arg4 <= anInt1892) {
+		if (Cs1ScriptRunner.isMenuOpen || interfaceMouseX < arg2 || interfaceMouseX >= arg3 + arg2 || arg4 > interfaceMouseY || arg0 + arg4 <= interfaceMouseY) {
 			RawModel.allowInput = false;
 			MiniMenu.anInt7 = 0;
 		} else {
@@ -293,9 +293,9 @@ public final class ScriptRunner {
 			local171 = Rasteriser.screenUpperX;
 			@Pc(344) int local344 = Rasteriser.screenLowerY;
 			local127 = Rasteriser.screenLowerX;
-			GlModel.anInt3582 = local127 + (local171 - local127) * (-arg2 + anInt3751) / arg3;
+			GlModel.anInt3582 = local127 + (local171 - local127) * (-arg2 + interfaceMouseX) / arg3;
 			@Pc(361) int local361 = Rasteriser.screenUpperY;
-			RawModel.anInt1053 = (local361 - local344) * (anInt1892 - arg4) / arg0 + local344;
+			RawModel.pickScreenY = (local361 - local344) * (interfaceMouseY - arg4) / arg0 + local344;
 		}
 		client.audioLoop();
 		@Pc(387) byte local387 = getRoofRemovalMode() == 2 ? (byte) anInt3325 : 1;
@@ -313,7 +313,7 @@ public final class ScriptRunner {
 			MaterialManager.setCameraTransform(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
 			GlRenderer.animationClock = client.loop;
 			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
-			aBoolean299 = true;
+			glSceneNeedsRender = true;
 			LightingManager.resetActiveLights();
 			MaterialManager.setCameraTransform(0, 0, 0, 0, 0);
 			client.audioLoop();
@@ -346,8 +346,8 @@ public final class ScriptRunner {
 			}
 			Fonts.drawTextOnScreen(false, LocalizedText.LOADING);
 		}
-		if (!arg1 && !aBoolean43 && !Cs1ScriptRunner.aBoolean108 && arg2 <= anInt3751 && arg3 + arg2 > anInt3751 && arg4 <= anInt1892 && arg0 + arg4 > anInt1892) {
-			MiniMenu.addEntries(arg4, arg3, arg0, arg2, anInt1892, anInt3751);
+		if (!arg1 && !aBoolean43 && !Cs1ScriptRunner.isMenuOpen && arg2 <= interfaceMouseX && arg3 + arg2 > interfaceMouseX && arg4 <= interfaceMouseY && arg0 + arg4 > interfaceMouseY) {
+			MiniMenu.addEntries(arg4, arg3, arg0, arg2, interfaceMouseY, interfaceMouseX);
 		}
 	}
 
@@ -1478,9 +1478,9 @@ public final class ScriptRunner {
 			}
 		}
 		local18 = MiniMenu.size * 15 + 21;
-		@Pc(43) int local43 = anInt1892;
+		@Pc(43) int local43 = interfaceMouseY;
 		local16 += 8;
-		local27 = anInt3751 - local16 / 2;
+		local27 = interfaceMouseX - local16 / 2;
 		if (local43 + local18 > GameShell.canvasHeight) {
 			local43 = GameShell.canvasHeight - local18;
 		}
@@ -1493,33 +1493,33 @@ public final class ScriptRunner {
 		if (local43 < 0) {
 			local43 = 0;
 		}
-		if (MiniMenu.anInt3953 == 1) {
-			if (anInt3751 == Mouse.lastHandledClickX && Mouse.lastHandledClickY == anInt1892) {
-				InterfaceList.anInt436 = MiniMenu.size * 15 + (InterfaceList.aBoolean298 ? 26 : 22);
-				MiniMenu.anInt3953 = 0;
+		if (MiniMenu.clickProcessingState == 1) {
+			if (interfaceMouseX == Mouse.lastHandledClickX && Mouse.lastHandledClickY == interfaceMouseY) {
+				InterfaceList.anInt436 = MiniMenu.size * 15 + (InterfaceList.useStyledMenu ? 26 : 22);
+				MiniMenu.clickProcessingState = 0;
 				InterfaceList.anInt5138 = local43;
 				InterfaceList.anInt4271 = local27;
-				Cs1ScriptRunner.aBoolean108 = true;
+				Cs1ScriptRunner.isMenuOpen = true;
 				InterfaceList.anInt761 = local16;
 			}
-		} else if (anInt3751 == Mouse.clickX && anInt1892 == Mouse.clickY) {
+		} else if (interfaceMouseX == Mouse.clickX && interfaceMouseY == Mouse.clickY) {
 			InterfaceList.anInt4271 = local27;
-			MiniMenu.anInt3953 = 0;
+			MiniMenu.clickProcessingState = 0;
 			InterfaceList.anInt761 = local16;
 			InterfaceList.anInt5138 = local43;
-			InterfaceList.anInt436 = (InterfaceList.aBoolean298 ? 26 : 22) + MiniMenu.size * 15;
-			Cs1ScriptRunner.aBoolean108 = true;
+			InterfaceList.anInt436 = (InterfaceList.useStyledMenu ? 26 : 22) + MiniMenu.size * 15;
+			Cs1ScriptRunner.isMenuOpen = true;
 		} else {
 			Mouse.lastHandledClickY = Mouse.clickY;
 			Mouse.lastHandledClickX = Mouse.clickX;
-			MiniMenu.anInt3953 = 1;
+			MiniMenu.clickProcessingState = 1;
 		}
 	}
 
 	@OriginalMember(owner = "client!gn", name = "b", descriptor = "(Z)V")
 	public static void forceRedrawAllRectangles() {
 		for (@Pc(11) int local11 = 0; local11 < 100; local11++) {
-			InterfaceList.aBooleanArray100[local11] = true;
+			InterfaceList.rectangleDirty[local11] = true;
 		}
 	}
 
@@ -4858,17 +4858,17 @@ public final class ScriptRunner {
 														client.js5Archive8.isFileReady(LoginManager.menuBottomFillSpriteId);
 														client.js5Archive8.isFileReady(LoginManager.menuSideFillSpriteId);
 														client.js5Archive8.isFileReady(LoginManager.menuBottomEdgeSpriteId);
-														InterfaceList.aBoolean298 = true;
+														InterfaceList.useStyledMenu = true;
 														continue;
 													}
 													if (opcode == 5425) {
 														LoginManager.clearLoginScreenSprites();
-														InterfaceList.aBoolean298 = false;
+														InterfaceList.useStyledMenu = false;
 														continue;
 													}
 													if (opcode == 5426) {
 														isp--;
-														anInt5794 = intStack[isp];
+														scriptCursorId = intStack[isp];
 														continue;
 													}
 													if (opcode == 5427) {

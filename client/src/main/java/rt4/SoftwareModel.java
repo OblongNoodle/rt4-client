@@ -382,24 +382,24 @@ public final class SoftwareModel extends Model {
 			if (local388 == -1) {
 				if (local366 == 0) {
 					@Pc(416) int local416 = model.triangleColors[i] & 0xFFFF;
-					if (model.aClass57Array2 == null || model.aClass57Array2[this.triangleVertexA[i]] == null) {
+					if (model.mergedNormals == null || model.mergedNormals[this.triangleVertexA[i]] == null) {
 						local435 = model.vertexNormals[this.triangleVertexA[i]];
 					} else {
-						local435 = model.aClass57Array2[this.triangleVertexA[i]];
+						local435 = model.mergedNormals[this.triangleVertexA[i]];
 					}
 					local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude) << 17;
 					this.anIntArray533[i] = local468 | ColorUtils.multiplyLightness2(local416, local468 >> 17);
-					if (model.aClass57Array2 == null || model.aClass57Array2[this.triangleVertexB[i]] == null) {
+					if (model.mergedNormals == null || model.mergedNormals[this.triangleVertexB[i]] == null) {
 						local435 = model.vertexNormals[this.triangleVertexB[i]];
 					} else {
-						local435 = model.aClass57Array2[this.triangleVertexB[i]];
+						local435 = model.mergedNormals[this.triangleVertexB[i]];
 					}
 					local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude) << 17;
 					this.anIntArray523[i] = local468 | ColorUtils.multiplyLightness2(local416, local468 >> 17);
-					if (model.aClass57Array2 == null || model.aClass57Array2[this.triangleVertexC[i]] == null) {
+					if (model.mergedNormals == null || model.mergedNormals[this.triangleVertexC[i]] == null) {
 						local435 = model.vertexNormals[this.triangleVertexC[i]];
 					} else {
-						local435 = model.aClass57Array2[this.triangleVertexC[i]];
+						local435 = model.mergedNormals[this.triangleVertexC[i]];
 					}
 					local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude) << 17;
 					this.triangleInfo[i] = local468 | ColorUtils.multiplyLightness2(local416, local468 >> 17);
@@ -415,24 +415,24 @@ public final class SoftwareModel extends Model {
 					this.triangleInfo[i] = -2;
 				}
 			} else if (local366 == 0) {
-				if (model.aClass57Array2 == null || model.aClass57Array2[this.triangleVertexA[i]] == null) {
+				if (model.mergedNormals == null || model.mergedNormals[this.triangleVertexA[i]] == null) {
 					local435 = model.vertexNormals[this.triangleVertexA[i]];
 				} else {
-					local435 = model.aClass57Array2[this.triangleVertexA[i]];
+					local435 = model.mergedNormals[this.triangleVertexA[i]];
 				}
 				local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude);
 				this.anIntArray533[i] = ColorUtils.clampLightness(local468);
-				if (model.aClass57Array2 == null || model.aClass57Array2[this.triangleVertexB[i]] == null) {
+				if (model.mergedNormals == null || model.mergedNormals[this.triangleVertexB[i]] == null) {
 					local435 = model.vertexNormals[this.triangleVertexB[i]];
 				} else {
-					local435 = model.aClass57Array2[this.triangleVertexB[i]];
+					local435 = model.mergedNormals[this.triangleVertexB[i]];
 				}
 				local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude);
 				this.anIntArray523[i] = ColorUtils.clampLightness(local468);
-				if (model.aClass57Array2 == null || model.aClass57Array2[this.triangleVertexC[i]] == null) {
+				if (model.mergedNormals == null || model.mergedNormals[this.triangleVertexC[i]] == null) {
 					local435 = model.vertexNormals[this.triangleVertexC[i]];
 				} else {
-					local435 = model.aClass57Array2[this.triangleVertexC[i]];
+					local435 = model.mergedNormals[this.triangleVertexC[i]];
 				}
 				local468 = arg1 + (arg3 * local435.x + arg4 * local435.y + arg5 * local435.z) / (local108 * local435.magnitude);
 				this.triangleInfo[i] = ColorUtils.clampLightness(local468);
@@ -851,7 +851,7 @@ public final class SoftwareModel extends Model {
 				x = maxScreenY / d;
 				z = minScreenY / c;
 			}
-			if (GlModel.anInt3582 >= v && GlModel.anInt3582 <= y && RawModel.anInt1053 >= x && RawModel.anInt1053 <= z) {
+			if (GlModel.anInt3582 >= v && GlModel.anInt3582 <= y && RawModel.pickScreenY >= x && RawModel.pickScreenY <= z) {
 				v = 999999;
 				y = -999999;
 				x = 999999;
@@ -894,7 +894,7 @@ public final class SoftwareModel extends Model {
 						}
 					}
 				}
-				if (GlModel.anInt3582 >= v && GlModel.anInt3582 <= y && RawModel.anInt1053 >= x && RawModel.anInt1053 <= z) {
+				if (GlModel.anInt3582 >= v && GlModel.anInt3582 <= y && RawModel.pickScreenY >= x && RawModel.pickScreenY <= z) {
 					if (this.pickable) {
 						if (miniMenuPick) {
 							Model.aLongArray11[MiniMenu.anInt7++] = key;
@@ -1666,7 +1666,7 @@ public final class SoftwareModel extends Model {
 						}
 					}
 				} else {
-					if (arg1 && this.pointWithinTriangle(GlModel.anInt3582 + Rasteriser.centerX, RawModel.anInt1053 + Rasteriser.centerY, vertexScreenY[local51], vertexScreenY[local56], vertexScreenY[pri], local65, local69, local73)) {
+					if (arg1 && this.pointWithinTriangle(GlModel.anInt3582 + Rasteriser.centerX, RawModel.pickScreenY + Rasteriser.centerY, vertexScreenY[local51], vertexScreenY[local56], vertexScreenY[pri], local65, local69, local73)) {
 						if (arg2 >= 0L) {
 							Model.aLongArray11[MiniMenu.anInt7++] = arg2;
 						}

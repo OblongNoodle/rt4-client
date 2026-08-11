@@ -15,16 +15,16 @@ public final class RawModel extends Entity {
 	public static final int[] COS = MathUtils.cos;
 
 	@OriginalMember(owner = "client!gb", name = "L", descriptor = "[I")
-	public static final int[] anIntArray194 = new int[10000];
+	public static final int[] mergedVertexTagsA = new int[10000];
 
 	@OriginalMember(owner = "client!gb", name = "Z", descriptor = "[I")
-	public static final int[] anIntArray199 = new int[10000];
+	public static final int[] mergedVertexTagsB = new int[10000];
 
 	@OriginalMember(owner = "client!gb", name = "S", descriptor = "I")
-	public static int anInt2138 = 0;
+	public static int mergeGeneration = 0;
 
 	@OriginalMember(owner = "client!ck", name = "K", descriptor = "I")
-	public static int anInt1053 = 0;
+	public static int pickScreenY = 0;
 
 	@OriginalMember(owner = "client!d", name = "db", descriptor = "Z")
 	public static boolean allowInput = false;
@@ -51,7 +51,7 @@ public final class RawModel extends Entity {
 	public short[] texturesScaleZ;
 
 	@OriginalMember(owner = "client!gb", name = "B", descriptor = "[B")
-	public byte[] aByteArray28;
+	public byte[] textureTransU;
 
 	@OriginalMember(owner = "client!gb", name = "D", descriptor = "S")
 	private short minY;
@@ -87,10 +87,10 @@ public final class RawModel extends Entity {
 	public byte[] triangleTextureIndex;
 
 	@OriginalMember(owner = "client!gb", name = "R", descriptor = "[B")
-	public byte[] aByteArray32;
+	public byte[] textureDirection;
 
 	@OriginalMember(owner = "client!gb", name = "T", descriptor = "[B")
-	public byte[] aByteArray33;
+	public byte[] textureTransV;
 
 	@OriginalMember(owner = "client!gb", name = "U", descriptor = "[S")
 	public short[] triangleColors;
@@ -105,16 +105,16 @@ public final class RawModel extends Entity {
 	private short maxZ;
 
 	@OriginalMember(owner = "client!gb", name = "ab", descriptor = "S")
-	public short aShort18;
+	public short contrast;
 
 	@OriginalMember(owner = "client!gb", name = "bb", descriptor = "[B")
-	public byte[] aByteArray34;
+	public byte[] textureSpeed;
 
 	@OriginalMember(owner = "client!gb", name = "cb", descriptor = "[I")
 	public int[] triangleVertexB;
 
 	@OriginalMember(owner = "client!gb", name = "db", descriptor = "S")
-	public short aShort19;
+	public short ambient;
 
 	@OriginalMember(owner = "client!gb", name = "eb", descriptor = "S")
 	private short minZ;
@@ -126,7 +126,7 @@ public final class RawModel extends Entity {
 	public short[] texturesScaleY;
 
 	@OriginalMember(owner = "client!gb", name = "hb", descriptor = "[Lclient!hd;")
-	public VertexNormal[] aClass57Array2;
+	public VertexNormal[] mergedNormals;
 
 	@OriginalMember(owner = "client!gb", name = "ib", descriptor = "[S")
 	public short[] textureFacesP;
@@ -284,10 +284,10 @@ public final class RawModel extends Entity {
 			this.texturesScaleY = new short[this.texturedCount];
 			this.texturesScaleZ = new short[this.texturedCount];
 			this.textureRotationY = new byte[this.texturedCount];
-			this.aByteArray32 = new byte[this.texturedCount];
-			this.aByteArray34 = new byte[this.texturedCount];
-			this.aByteArray28 = new byte[this.texturedCount];
-			this.aByteArray33 = new byte[this.texturedCount];
+			this.textureDirection = new byte[this.texturedCount];
+			this.textureSpeed = new byte[this.texturedCount];
+			this.textureTransU = new byte[this.texturedCount];
+			this.textureTransV = new byte[this.texturedCount];
 		}
 
 		this.vertexCount = 0;
@@ -359,11 +359,11 @@ public final class RawModel extends Entity {
 						this.texturesScaleY[this.texturedCount] = other.texturesScaleY[t];
 						this.texturesScaleZ[this.texturedCount] = other.texturesScaleZ[t];
 						this.textureRotationY[this.texturedCount] = other.textureRotationY[t];
-						this.aByteArray32[this.texturedCount] = other.aByteArray32[t];
-						this.aByteArray34[this.texturedCount] = other.aByteArray34[t];
+						this.textureDirection[this.texturedCount] = other.textureDirection[t];
+						this.textureSpeed[this.texturedCount] = other.textureSpeed[t];
 					} else if (type == 2) {
-						this.aByteArray28[this.texturedCount] = other.aByteArray28[t];
-						this.aByteArray33[this.texturedCount] = other.aByteArray33[t];
+						this.textureTransU[this.texturedCount] = other.textureTransU[t];
+						this.textureTransV[this.texturedCount] = other.textureTransV[t];
 					}
 					this.texturedCount++;
 				}
@@ -423,19 +423,19 @@ public final class RawModel extends Entity {
 		this.texturesScaleY = other.texturesScaleY;
 		this.texturesScaleZ = other.texturesScaleZ;
 		this.textureRotationY = other.textureRotationY;
-		this.aByteArray32 = other.aByteArray32;
-		this.aByteArray34 = other.aByteArray34;
-		this.aByteArray28 = other.aByteArray28;
-		this.aByteArray33 = other.aByteArray33;
+		this.textureDirection = other.textureDirection;
+		this.textureSpeed = other.textureSpeed;
+		this.textureTransU = other.textureTransU;
+		this.textureTransV = other.textureTransV;
 		this.vertexBones = other.vertexBones;
 		this.triangleBones = other.triangleBones;
 		this.boneVertices = other.boneVertices;
 		this.boneTriangles = other.boneTriangles;
 		this.vertexNormals = other.vertexNormals;
 		this.triangleNormals = other.triangleNormals;
-		this.aClass57Array2 = other.aClass57Array2;
-		this.aShort19 = other.aShort19;
-		this.aShort18 = other.aShort18;
+		this.mergedNormals = other.mergedNormals;
+		this.ambient = other.ambient;
+		this.contrast = other.contrast;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "([[III)I")
@@ -555,7 +555,7 @@ public final class RawModel extends Entity {
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(III)Lclient!th;")
 	@Override
 	public final Entity createModel() {
-		return this.createModel(this.aShort19, this.aShort18, -50, -10, -50);
+		return this.createModel(this.ambient, this.contrast, -50, -10, -50);
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(Lclient!gb;IS)I")
@@ -767,19 +767,19 @@ public final class RawModel extends Entity {
 		m.texturesScaleY = this.texturesScaleY;
 		m.texturesScaleZ = this.texturesScaleZ;
 		m.textureRotationY = this.textureRotationY;
-		m.aByteArray32 = this.aByteArray32;
-		m.aByteArray34 = this.aByteArray34;
-		m.aByteArray28 = this.aByteArray28;
-		m.aByteArray33 = this.aByteArray33;
+		m.textureDirection = this.textureDirection;
+		m.textureSpeed = this.textureSpeed;
+		m.textureTransU = this.textureTransU;
+		m.textureTransV = this.textureTransV;
 		m.vertexBones = this.vertexBones;
 		m.triangleBones = this.triangleBones;
 		m.boneVertices = this.boneVertices;
 		m.boneTriangles = this.boneTriangles;
-		m.aShort19 = this.aShort19;
-		m.aShort18 = this.aShort18;
+		m.ambient = this.ambient;
+		m.contrast = this.contrast;
 		m.vertexNormals = this.vertexNormals;
 		m.triangleNormals = this.triangleNormals;
-		m.aClass57Array2 = this.aClass57Array2;
+		m.mergedNormals = this.mergedNormals;
 		if (orientation == 3) {
 			m.vertexX = ArrayUtils.copyOfNullable(this.vertexX);
 			m.vertexY = ArrayUtils.copyOfNullable(this.vertexY);
@@ -1095,13 +1095,13 @@ public final class RawModel extends Entity {
 				this.texturesScaleY = new short[complexTextureFaceCount];
 				this.texturesScaleZ = new short[complexTextureFaceCount];
 				this.textureRotationY = new byte[complexTextureFaceCount];
-				this.aByteArray32 = new byte[complexTextureFaceCount];
-				this.aByteArray34 = new byte[complexTextureFaceCount];
+				this.textureDirection = new byte[complexTextureFaceCount];
+				this.textureSpeed = new byte[complexTextureFaceCount];
 			}
 
 			if (cubeTextureFaceCount > 0) {
-				this.aByteArray28 = new byte[cubeTextureFaceCount];
-				this.aByteArray33 = new byte[cubeTextureFaceCount];
+				this.textureTransU = new byte[cubeTextureFaceCount];
+				this.textureTransV = new byte[cubeTextureFaceCount];
 			}
 		}
 
@@ -1251,8 +1251,8 @@ public final class RawModel extends Entity {
 				this.texturesScaleY[t] = (short) buffer3.g2();
 				this.texturesScaleZ[t] = (short) buffer3.g2();
 				this.textureRotationY[t] = buffer4.g1b();
-				this.aByteArray32[t] = buffer5.g1b();
-				this.aByteArray34[t] = buffer6.g1b();
+				this.textureDirection[t] = buffer5.g1b();
+				this.textureSpeed[t] = buffer6.g1b();
 			} else if (type == 2) {
 				this.textureFacesP[t] = (short) buffer2.g2();
 				this.textureFacesM[t] = (short) buffer2.g2();
@@ -1261,10 +1261,10 @@ public final class RawModel extends Entity {
 				this.texturesScaleY[t] = (short) buffer3.g2();
 				this.texturesScaleZ[t] = (short) buffer3.g2();
 				this.textureRotationY[t] = buffer4.g1b();
-				this.aByteArray32[t] = buffer5.g1b();
-				this.aByteArray34[t] = buffer6.g1b();
-				this.aByteArray28[t] = buffer6.g1b();
-				this.aByteArray33[t] = buffer6.g1b();
+				this.textureDirection[t] = buffer5.g1b();
+				this.textureSpeed[t] = buffer6.g1b();
+				this.textureTransU[t] = buffer6.g1b();
+				this.textureTransV[t] = buffer6.g1b();
 			} else if (type == 3) {
 				this.textureFacesP[t] = (short) buffer2.g2();
 				this.textureFacesM[t] = (short) buffer2.g2();
@@ -1273,8 +1273,8 @@ public final class RawModel extends Entity {
 				this.texturesScaleY[t] = (short) buffer3.g2();
 				this.texturesScaleZ[t] = (short) buffer3.g2();
 				this.textureRotationY[t] = buffer4.g1b();
-				this.aByteArray32[t] = buffer5.g1b();
-				this.aByteArray34[t] = buffer6.g1b();
+				this.textureDirection[t] = buffer5.g1b();
+				this.textureSpeed[t] = buffer6.g1b();
 			}
 		}
 
@@ -1324,18 +1324,18 @@ public final class RawModel extends Entity {
 		m.texturesScaleY = this.texturesScaleY;
 		m.texturesScaleZ = this.texturesScaleZ;
 		m.textureRotationY = this.textureRotationY;
-		m.aByteArray32 = this.aByteArray32;
-		m.aByteArray34 = this.aByteArray34;
-		m.aByteArray28 = this.aByteArray28;
-		m.aByteArray33 = this.aByteArray33;
+		m.textureDirection = this.textureDirection;
+		m.textureSpeed = this.textureSpeed;
+		m.textureTransU = this.textureTransU;
+		m.textureTransV = this.textureTransV;
 		m.vertexBones = this.vertexBones;
 		m.triangleBones = this.triangleBones;
 		m.boneVertices = this.boneVertices;
 		m.boneTriangles = this.boneTriangles;
 		m.vertexNormals = this.vertexNormals;
 		m.triangleNormals = this.triangleNormals;
-		m.aShort19 = this.aShort19;
-		m.aShort18 = this.aShort18;
+		m.ambient = this.ambient;
+		m.contrast = this.contrast;
 		return m;
 	}
 
@@ -1367,7 +1367,7 @@ public final class RawModel extends Entity {
 	@OriginalMember(owner = "client!gb", name = "j", descriptor = "()V")
 	private void invalidate() {
 		this.vertexNormals = null;
-		this.aClass57Array2 = null;
+		this.mergedNormals = null;
 		this.triangleNormals = null;
 		this.boundsValid = false;
 	}
@@ -1407,7 +1407,7 @@ public final class RawModel extends Entity {
 		@Pc(2) RawModel m = (RawModel) arg0;
 		m.calculateBounds();
 		m.calculateNormals();
-		anInt2138++;
+		mergeGeneration++;
 		@Pc(12) int local12 = 0;
 		@Pc(15) int[] local15 = m.vertexX;
 		@Pc(18) int local18 = m.vertexCount;
@@ -1424,19 +1424,19 @@ public final class RawModel extends Entity {
 							for (@Pc(83) int local83 = 0; local83 < local18; local83++) {
 								@Pc(91) VertexNormal local91 = m.vertexNormals[local83];
 								if (local56 == local15[local83] && local72 == m.vertexZ[local83] && local40 == m.vertexY[local83] && local91.magnitude != 0) {
-									if (this.aClass57Array2 == null) {
-										this.aClass57Array2 = new VertexNormal[this.vertexCount];
+									if (this.mergedNormals == null) {
+										this.mergedNormals = new VertexNormal[this.vertexCount];
 									}
-									if (m.aClass57Array2 == null) {
-										m.aClass57Array2 = new VertexNormal[local18];
+									if (m.mergedNormals == null) {
+										m.mergedNormals = new VertexNormal[local18];
 									}
-									@Pc(131) VertexNormal local131 = this.aClass57Array2[local20];
+									@Pc(131) VertexNormal local131 = this.mergedNormals[local20];
 									if (local131 == null) {
-										local131 = this.aClass57Array2[local20] = new VertexNormal(local29);
+										local131 = this.mergedNormals[local20] = new VertexNormal(local29);
 									}
-									@Pc(148) VertexNormal local148 = m.aClass57Array2[local83];
+									@Pc(148) VertexNormal local148 = m.mergedNormals[local83];
 									if (local148 == null) {
-										local148 = m.aClass57Array2[local83] = new VertexNormal(local91);
+										local148 = m.mergedNormals[local83] = new VertexNormal(local91);
 									}
 									local131.x += local91.x;
 									local131.y += local91.y;
@@ -1447,8 +1447,8 @@ public final class RawModel extends Entity {
 									local148.z += local29.z;
 									local148.magnitude += local29.magnitude;
 									local12++;
-									anIntArray194[local20] = anInt2138;
-									anIntArray199[local83] = anInt2138;
+									mergedVertexTagsA[local20] = mergeGeneration;
+									mergedVertexTagsB[local83] = mergeGeneration;
 								}
 							}
 						}
@@ -1460,7 +1460,7 @@ public final class RawModel extends Entity {
 			return;
 		}
 		for (local20 = 0; local20 < this.triangleCount; local20++) {
-			if (anIntArray194[this.triangleVertexA[local20]] == anInt2138 && anIntArray194[this.triangleVertexB[local20]] == anInt2138 && anIntArray194[this.triangleVertexC[local20]] == anInt2138) {
+			if (mergedVertexTagsA[this.triangleVertexA[local20]] == mergeGeneration && mergedVertexTagsA[this.triangleVertexB[local20]] == mergeGeneration && mergedVertexTagsA[this.triangleVertexC[local20]] == mergeGeneration) {
 				if (this.triangleInfo == null) {
 					this.triangleInfo = new byte[this.triangleCount];
 				}
@@ -1468,7 +1468,7 @@ public final class RawModel extends Entity {
 			}
 		}
 		for (local20 = 0; local20 < m.triangleCount; local20++) {
-			if (anIntArray199[m.triangleVertexA[local20]] == anInt2138 && anIntArray199[m.triangleVertexB[local20]] == anInt2138 && anIntArray199[m.triangleVertexC[local20]] == anInt2138) {
+			if (mergedVertexTagsB[m.triangleVertexA[local20]] == mergeGeneration && mergedVertexTagsB[m.triangleVertexB[local20]] == mergeGeneration && mergedVertexTagsB[m.triangleVertexC[local20]] == mergeGeneration) {
 				if (m.triangleInfo == null) {
 					m.triangleInfo = new byte[m.triangleCount];
 				}
