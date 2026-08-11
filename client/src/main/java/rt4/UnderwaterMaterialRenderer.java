@@ -186,9 +186,9 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 			gl.glPushMatrix();
 			gl.glLoadIdentity();
 			gl.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-			gl.glRotatef((float) MaterialManager.anInt5559 * 360.0F / 2048.0F, 1.0F, 0.0F, 0.0F);
-			gl.glRotatef((float) MaterialManager.anInt1815 * 360.0F / 2048.0F, 0.0F, 1.0F, 0.0F);
-			gl.glTranslatef((float) -MaterialManager.anInt406, (float) -MaterialManager.anInt4675, (float) -MaterialManager.anInt5158);
+			gl.glRotatef((float) MaterialManager.cameraPitch * 360.0F / 2048.0F, 1.0F, 0.0F, 0.0F);
+			gl.glRotatef((float) MaterialManager.cameraYaw * 360.0F / 2048.0F, 0.0F, 1.0F, 0.0F);
+			gl.glTranslatef((float) -MaterialManager.cameraRenderX, (float) -MaterialManager.cameraRenderZ, (float) -MaterialManager.cameraRenderY);
 			if (use3DTexture) {
 				this.texGenParams[0] = 0.001F;
 				this.texGenParams[1] = 9.0E-4F;

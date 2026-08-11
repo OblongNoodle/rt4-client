@@ -150,7 +150,7 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
 		if ((arg0 & 0x1) == 1) {
 			if (!MaterialManager.allows3DTextureMapping) {
-				GlRenderer.setTextureId(MaterialManager.anIntArray341[GlRenderer.animationClock * 64 / 100 % 64]);
+				GlRenderer.setTextureId(MaterialManager.noise2DTextures[GlRenderer.animationClock * 64 / 100 % 64]);
 			} else if (this.lastAnimationClock != GlRenderer.animationClock) {
 				this.texGenParams[0] = 0.0F;
 				this.texGenParams[1] = 0.0F;
@@ -166,7 +166,7 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 			this.texGenParams[3] = 0.0F;
 			gl.glTexGenfv(GL2.GL_R, GL2.GL_OBJECT_PLANE, this.texGenParams, 0);
 		} else {
-			GlRenderer.setTextureId(MaterialManager.anIntArray341[0]);
+			GlRenderer.setTextureId(MaterialManager.noise2DTextures[0]);
 		}
 	}
 
@@ -179,7 +179,7 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 		GlRenderer.resetTextureMatrix();
 		gl.glCallList(this.displayListId);
 		@Pc(12) float local12 = 2662.4001F;
-		local12 += (float) (MaterialManager.anInt5559 - 128) * 0.5F;
+		local12 += (float) (MaterialManager.cameraPitch - 128) * 0.5F;
 		float max = (float) GlobalConfig.VIEW_DISTANCE - GlobalConfig.VIEW_FADE_DISTANCE;
 		if (local12 >= max) {
 			local12 = max - 1.0f;

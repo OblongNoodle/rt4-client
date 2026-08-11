@@ -9,28 +9,28 @@ import org.openrs2.deob.annotation.Pc;
 public final class SoundPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!b", name = "v", descriptor = "I")
-	public int anInt344;
+	public int volumeDelta;
 
 	@OriginalMember(owner = "client!b", name = "y", descriptor = "I")
-	public int anInt347;
+	public int leftVolumeDelta;
 
 	@OriginalMember(owner = "client!b", name = "z", descriptor = "I")
-	public int anInt348;
+	public int currentVolume;
 
 	@OriginalMember(owner = "client!b", name = "C", descriptor = "I")
-	private int anInt350;
+	private int loopCount;
 
 	@OriginalMember(owner = "client!b", name = "D", descriptor = "I")
-	private int anInt351;
+	private int fadeRemaining;
 
 	@OriginalMember(owner = "client!b", name = "E", descriptor = "I")
-	public int anInt352;
+	public int rightVolume;
 
 	@OriginalMember(owner = "client!b", name = "G", descriptor = "I")
-	public int anInt354;
+	public int rightVolumeDelta;
 
 	@OriginalMember(owner = "client!b", name = "H", descriptor = "I")
-	public int anInt355;
+	public int leftVolume;
 
 	@OriginalMember(owner = "client!b", name = "w", descriptor = "I")
 	private final int start;
@@ -39,10 +39,10 @@ public final class SoundPcmStream extends PcmStream {
 	private final int end;
 
 	@OriginalMember(owner = "client!b", name = "A", descriptor = "Z")
-	private final boolean aBoolean14;
+	private final boolean pingPongLoop;
 
 	@OriginalMember(owner = "client!b", name = "t", descriptor = "I")
-	private int anInt342;
+	private int sampleRate;
 
 	@OriginalMember(owner = "client!b", name = "u", descriptor = "I")
 	private int volume;
@@ -51,18 +51,18 @@ public final class SoundPcmStream extends PcmStream {
 	private int pan;
 
 	@OriginalMember(owner = "client!b", name = "x", descriptor = "I")
-	public int anInt346;
+	public int samplePosition;
 
 	@OriginalMember(owner = "client!b", name = "<init>", descriptor = "(Lclient!kj;II)V")
 	public SoundPcmStream(@OriginalArg(0) PcmSound sound, @OriginalArg(1) int arg1, @OriginalArg(2) int volume) {
 		this.sound = sound;
 		this.start = sound.start;
 		this.end = sound.end;
-		this.aBoolean14 = sound.aBoolean165;
-		this.anInt342 = arg1;
+		this.pingPongLoop = sound.aBoolean165;
+		this.sampleRate = arg1;
 		this.volume = volume;
 		this.pan = 8192;
-		this.anInt346 = 0;
+		this.samplePosition = 0;
 		this.recalculateChannelVolumes();
 	}
 
@@ -71,11 +71,11 @@ public final class SoundPcmStream extends PcmStream {
 		this.sound = sound;
 		this.start = sound.start;
 		this.end = sound.end;
-		this.aBoolean14 = sound.aBoolean165;
-		this.anInt342 = arg1;
+		this.pingPongLoop = sound.aBoolean165;
+		this.sampleRate = arg1;
 		this.volume = volume;
 		this.pan = pan;
-		this.anInt346 = 0;
+		this.samplePosition = 0;
 		this.recalculateChannelVolumes();
 	}
 
@@ -133,13 +133,13 @@ public final class SoundPcmStream extends PcmStream {
 			arg3 = local46 + 1;
 			arg1[local46] += local43 * local15;
 		}
-		arg8.anInt346 = arg2 << 8;
+		arg8.samplePosition = arg2 << 8;
 		return arg3 >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(II[B[IIIIIIIIIILclient!b;II)I")
 	public static int mixForwardStereoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9, @OriginalArg(13) SoundPcmStream arg10, @OriginalArg(14) int arg11, @OriginalArg(15) int arg12) {
-		arg10.anInt348 -= arg10.anInt344 * arg3;
+		arg10.currentVolume -= arg10.volumeDelta * arg3;
 		@Pc(23) int local23;
 		if (arg11 == 0 || (local23 = arg3 + (arg9 + arg11 - arg2 - 257) / arg11) > arg8) {
 			local23 = arg8;
@@ -182,17 +182,17 @@ public final class SoundPcmStream extends PcmStream {
 			arg2 += arg11;
 		}
 		local65 = arg3 >> 1;
-		arg10.anInt348 += arg10.anInt344 * local65;
-		arg10.anInt355 = arg4;
-		arg10.anInt352 = arg5;
-		arg10.anInt346 = arg2;
+		arg10.currentVolume += arg10.volumeDelta * local65;
+		arg10.leftVolume = arg4;
+		arg10.rightVolume = arg5;
+		arg10.samplePosition = arg2;
 		return local65;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
 	public static int mixForwardMonoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
-		arg8.anInt355 -= arg8.anInt347 * arg3;
-		arg8.anInt352 -= arg8.anInt354 * arg3;
+		arg8.leftVolume -= arg8.leftVolumeDelta * arg3;
+		arg8.rightVolume -= arg8.rightVolumeDelta * arg3;
 		@Pc(32) int local32;
 		if (arg9 == 0 || (local32 = arg3 + (arg7 + arg9 - arg2 - 257) / arg9) > arg6) {
 			local32 = arg6;
@@ -217,10 +217,10 @@ public final class SoundPcmStream extends PcmStream {
 			arg4 += arg5;
 			arg2 += arg9;
 		}
-		arg8.anInt355 += arg8.anInt347 * arg3;
-		arg8.anInt352 += arg8.anInt354 * arg3;
-		arg8.anInt348 = arg4;
-		arg8.anInt346 = arg2;
+		arg8.leftVolume += arg8.leftVolumeDelta * arg3;
+		arg8.rightVolume += arg8.rightVolumeDelta * arg3;
+		arg8.currentVolume = arg4;
+		arg8.samplePosition = arg2;
 		return arg3;
 	}
 
@@ -246,7 +246,7 @@ public final class SoundPcmStream extends PcmStream {
 			arg1[local33] += ((arg9 << 8) + (arg0[arg2 >> 8] - arg9) * (arg2 & 0xFF)) * arg4 >> 6;
 			arg2 += arg8;
 		}
-		arg7.anInt346 = arg2;
+		arg7.samplePosition = arg2;
 		return arg3;
 	}
 
@@ -284,7 +284,7 @@ public final class SoundPcmStream extends PcmStream {
 			local28 = arg3++;
 			arg1[local28] += arg0[arg2++] * local11;
 		}
-		arg7.anInt346 = arg2 << 8;
+		arg7.samplePosition = arg2 << 8;
 		return arg3;
 	}
 
@@ -300,7 +300,7 @@ public final class SoundPcmStream extends PcmStream {
 		if ((local30 = arg3 + local7 - arg2) > arg8) {
 			local30 = arg8;
 		}
-		arg10.anInt348 += arg10.anInt344 * (local30 - arg3);
+		arg10.currentVolume += arg10.volumeDelta * (local30 - arg3);
 		arg3 <<= 0x1;
 		local30 <<= 0x1;
 		local30 -= 6;
@@ -350,9 +350,9 @@ public final class SoundPcmStream extends PcmStream {
 			arg1[local65] += local62 * arg5;
 			arg5 += local23;
 		}
-		arg10.anInt355 = arg4 >> 2;
-		arg10.anInt352 = arg5 >> 2;
-		arg10.anInt346 = arg2 << 8;
+		arg10.leftVolume = arg4 >> 2;
+		arg10.rightVolume = arg5 >> 2;
+		arg10.samplePosition = arg2 << 8;
 		return arg3 >> 1;
 	}
 
@@ -366,8 +366,8 @@ public final class SoundPcmStream extends PcmStream {
 		if ((local24 = arg3 + arg2 + 1 - local7) > arg6) {
 			local24 = arg6;
 		}
-		arg8.anInt355 += arg8.anInt347 * (local24 - arg3);
-		arg8.anInt352 += arg8.anInt354 * (local24 - arg3);
+		arg8.leftVolume += arg8.leftVolumeDelta * (local24 - arg3);
+		arg8.rightVolume += arg8.rightVolumeDelta * (local24 - arg3);
 		local24 -= 3;
 		@Pc(56) int local56;
 		while (arg3 < local24) {
@@ -398,8 +398,8 @@ public final class SoundPcmStream extends PcmStream {
 			arg1[local56] += arg0[arg2--] * arg4;
 			arg4 += local15;
 		}
-		arg8.anInt348 = arg4 >> 2;
-		arg8.anInt346 = arg2 << 8;
+		arg8.currentVolume = arg4 >> 2;
+		arg8.samplePosition = arg2 << 8;
 		return arg3;
 	}
 
@@ -413,8 +413,8 @@ public final class SoundPcmStream extends PcmStream {
 		if ((local22 = arg3 + local7 - arg2) > arg6) {
 			local22 = arg6;
 		}
-		arg8.anInt355 += arg8.anInt347 * (local22 - arg3);
-		arg8.anInt352 += arg8.anInt354 * (local22 - arg3);
+		arg8.leftVolume += arg8.leftVolumeDelta * (local22 - arg3);
+		arg8.rightVolume += arg8.rightVolumeDelta * (local22 - arg3);
 		local22 -= 3;
 		@Pc(54) int local54;
 		while (arg3 < local22) {
@@ -445,8 +445,8 @@ public final class SoundPcmStream extends PcmStream {
 			arg1[local54] += arg0[arg2++] * arg4;
 			arg4 += local15;
 		}
-		arg8.anInt348 = arg4 >> 2;
-		arg8.anInt346 = arg2 << 8;
+		arg8.currentVolume = arg4 >> 2;
+		arg8.samplePosition = arg2 << 8;
 		return arg3;
 	}
 
@@ -494,7 +494,7 @@ public final class SoundPcmStream extends PcmStream {
 			arg1[local55] += local53 * arg5 >> 6;
 			arg2 += arg9;
 		}
-		arg8.anInt346 = arg2;
+		arg8.samplePosition = arg2;
 		return arg3 >> 1;
 	}
 
@@ -522,7 +522,7 @@ public final class SoundPcmStream extends PcmStream {
 			arg1[local31] += ((local29 << 8) + (arg9 - local29) * (arg2 & 0xFF)) * arg4 >> 6;
 			arg2 += arg8;
 		}
-		arg7.anInt346 = arg2;
+		arg7.samplePosition = arg2;
 		return arg3;
 	}
 
@@ -573,7 +573,7 @@ public final class SoundPcmStream extends PcmStream {
 			arg1[local55] += local53 * arg5 >> 6;
 			arg2 += arg9;
 		}
-		arg8.anInt346 = arg2;
+		arg8.samplePosition = arg2;
 		return arg3 >> 1;
 	}
 
@@ -611,14 +611,14 @@ public final class SoundPcmStream extends PcmStream {
 			local30 = arg3++;
 			arg1[local30] += arg0[arg2--] * local11;
 		}
-		arg7.anInt346 = arg2 << 8;
+		arg7.samplePosition = arg2 << 8;
 		return arg3;
 	}
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
 	public static int mixBackwardMonoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
-		arg8.anInt355 -= arg8.anInt347 * arg3;
-		arg8.anInt352 -= arg8.anInt354 * arg3;
+		arg8.leftVolume -= arg8.leftVolumeDelta * arg3;
+		arg8.rightVolume -= arg8.rightVolumeDelta * arg3;
 		@Pc(32) int local32;
 		if (arg9 == 0 || (local32 = arg3 + (arg7 + arg9 + 256 - arg2) / arg9) > arg6) {
 			local32 = arg6;
@@ -641,10 +641,10 @@ public final class SoundPcmStream extends PcmStream {
 			arg4 += arg5;
 			arg2 += arg9;
 		}
-		arg8.anInt355 += arg8.anInt347 * arg3;
-		arg8.anInt352 += arg8.anInt354 * arg3;
-		arg8.anInt348 = arg4;
-		arg8.anInt346 = arg2;
+		arg8.leftVolume += arg8.leftVolumeDelta * arg3;
+		arg8.rightVolume += arg8.rightVolumeDelta * arg3;
+		arg8.currentVolume = arg4;
+		arg8.samplePosition = arg2;
 		return arg3;
 	}
 
@@ -697,13 +697,13 @@ public final class SoundPcmStream extends PcmStream {
 			arg3 = local48 + 1;
 			arg1[local48] += local45 * local15;
 		}
-		arg8.anInt346 = arg2 << 8;
+		arg8.samplePosition = arg2 << 8;
 		return arg3 >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II[B[IIIIIIIIIILclient!b;II)I")
 	public static int mixBackwardStereoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9, @OriginalArg(13) SoundPcmStream arg10, @OriginalArg(14) int arg11, @OriginalArg(15) int arg12) {
-		arg10.anInt348 -= arg10.anInt344 * arg3;
+		arg10.currentVolume -= arg10.volumeDelta * arg3;
 		@Pc(23) int local23;
 		if (arg11 == 0 || (local23 = arg3 + (arg9 + arg11 + 256 - arg2) / arg11) > arg8) {
 			local23 = arg8;
@@ -744,10 +744,10 @@ public final class SoundPcmStream extends PcmStream {
 			arg2 += arg11;
 		}
 		local65 = arg3 >> 1;
-		arg10.anInt348 += arg10.anInt344 * local65;
-		arg10.anInt355 = arg4;
-		arg10.anInt352 = arg5;
-		arg10.anInt346 = arg2;
+		arg10.currentVolume += arg10.volumeDelta * local65;
+		arg10.leftVolume = arg4;
+		arg10.rightVolume = arg5;
+		arg10.samplePosition = arg2;
 		return local65;
 	}
 
@@ -763,7 +763,7 @@ public final class SoundPcmStream extends PcmStream {
 		if ((local32 = arg3 + arg2 + 1 - local7) > arg8) {
 			local32 = arg8;
 		}
-		arg10.anInt348 += arg10.anInt344 * (local32 - arg3);
+		arg10.currentVolume += arg10.volumeDelta * (local32 - arg3);
 		arg3 <<= 0x1;
 		local32 <<= 0x1;
 		local32 -= 6;
@@ -813,16 +813,16 @@ public final class SoundPcmStream extends PcmStream {
 			arg1[local67] += local64 * arg5;
 			arg5 += local23;
 		}
-		arg10.anInt355 = arg4 >> 2;
-		arg10.anInt352 = arg5 >> 2;
-		arg10.anInt346 = arg2 << 8;
+		arg10.leftVolume = arg4 >> 2;
+		arg10.rightVolume = arg5 >> 2;
+		arg10.samplePosition = arg2 << 8;
 		return arg3 >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([III)V")
 	@Override
 	public final synchronized void read(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		if (this.volume == 0 && this.anInt351 == 0) {
+		if (this.volume == 0 && this.fadeRemaining == 0) {
 			this.skip(arg2);
 			return;
 		}
@@ -832,148 +832,148 @@ public final class SoundPcmStream extends PcmStream {
 		@Pc(29) int local29 = local13.samples.length << 8;
 		@Pc(33) int local33 = local23 - local18;
 		if (local33 <= 0) {
-			this.anInt350 = 0;
+			this.loopCount = 0;
 		}
 		@Pc(40) int local40 = arg1;
 		@Pc(44) int local44 = arg2 + arg1;
-		if (this.anInt346 < 0) {
-			if (this.anInt342 <= 0) {
+		if (this.samplePosition < 0) {
+			if (this.sampleRate <= 0) {
 				this.cancelTransition();
 				this.unlink();
 				return;
 			}
-			this.anInt346 = 0;
+			this.samplePosition = 0;
 		}
-		if (this.anInt346 >= local29) {
-			if (this.anInt342 >= 0) {
+		if (this.samplePosition >= local29) {
+			if (this.sampleRate >= 0) {
 				this.cancelTransition();
 				this.unlink();
 				return;
 			}
-			this.anInt346 = local29 - 1;
+			this.samplePosition = local29 - 1;
 		}
-		if (this.anInt350 >= 0) {
-			if (this.anInt350 > 0) {
-				if (this.aBoolean14) {
+		if (this.loopCount >= 0) {
+			if (this.loopCount > 0) {
+				if (this.pingPongLoop) {
 					label131:
 					{
-						if (this.anInt342 < 0) {
+						if (this.sampleRate < 0) {
 							local40 = this.readBackward(arg0, arg1, local18, local44, local13.samples[this.start]);
-							if (this.anInt346 >= local18) {
+							if (this.samplePosition >= local18) {
 								return;
 							}
-							this.anInt346 = local18 + local18 - this.anInt346 - 1;
-							this.anInt342 = -this.anInt342;
-							if (--this.anInt350 == 0) {
+							this.samplePosition = local18 + local18 - this.samplePosition - 1;
+							this.sampleRate = -this.sampleRate;
+							if (--this.loopCount == 0) {
 								break label131;
 							}
 						}
 						do {
 							local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.end - 1]);
-							if (this.anInt346 < local23) {
+							if (this.samplePosition < local23) {
 								return;
 							}
-							this.anInt346 = local23 + local23 - this.anInt346 - 1;
-							this.anInt342 = -this.anInt342;
-							if (--this.anInt350 == 0) {
+							this.samplePosition = local23 + local23 - this.samplePosition - 1;
+							this.sampleRate = -this.sampleRate;
+							if (--this.loopCount == 0) {
 								break;
 							}
 							local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.start]);
-							if (this.anInt346 >= local18) {
+							if (this.samplePosition >= local18) {
 								return;
 							}
-							this.anInt346 = local18 + local18 - this.anInt346 - 1;
-							this.anInt342 = -this.anInt342;
-						} while (--this.anInt350 != 0);
+							this.samplePosition = local18 + local18 - this.samplePosition - 1;
+							this.sampleRate = -this.sampleRate;
+						} while (--this.loopCount != 0);
 					}
 				} else {
 					@Pc(417) int local417;
-					if (this.anInt342 < 0) {
+					if (this.sampleRate < 0) {
 						while (true) {
 							local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.end - 1]);
-							if (this.anInt346 >= local18) {
+							if (this.samplePosition >= local18) {
 								return;
 							}
-							local417 = (local23 - this.anInt346 - 1) / local33;
-							if (local417 >= this.anInt350) {
-								this.anInt346 += local33 * this.anInt350;
-								this.anInt350 = 0;
+							local417 = (local23 - this.samplePosition - 1) / local33;
+							if (local417 >= this.loopCount) {
+								this.samplePosition += local33 * this.loopCount;
+								this.loopCount = 0;
 								break;
 							}
-							this.anInt346 += local33 * local417;
-							this.anInt350 -= local417;
+							this.samplePosition += local33 * local417;
+							this.loopCount -= local417;
 						}
 					} else {
 						while (true) {
 							local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.start]);
-							if (this.anInt346 < local23) {
+							if (this.samplePosition < local23) {
 								return;
 							}
-							local417 = (this.anInt346 - local18) / local33;
-							if (local417 >= this.anInt350) {
-								this.anInt346 -= local33 * this.anInt350;
-								this.anInt350 = 0;
+							local417 = (this.samplePosition - local18) / local33;
+							if (local417 >= this.loopCount) {
+								this.samplePosition -= local33 * this.loopCount;
+								this.loopCount = 0;
 								break;
 							}
-							this.anInt346 -= local33 * local417;
-							this.anInt350 -= local417;
+							this.samplePosition -= local33 * local417;
+							this.loopCount -= local417;
 						}
 					}
 				}
 			}
-			if (this.anInt342 < 0) {
+			if (this.sampleRate < 0) {
 				this.readBackward(arg0, local40, 0, local44, 0);
-				if (this.anInt346 < 0) {
-					this.anInt346 = -1;
+				if (this.samplePosition < 0) {
+					this.samplePosition = -1;
 					this.cancelTransition();
 					this.unlink();
 				}
 			} else {
 				this.readForward(arg0, local40, local29, local44, 0);
-				if (this.anInt346 >= local29) {
-					this.anInt346 = local29;
+				if (this.samplePosition >= local29) {
+					this.samplePosition = local29;
 					this.cancelTransition();
 					this.unlink();
 				}
 			}
-		} else if (this.aBoolean14) {
-			if (this.anInt342 < 0) {
+		} else if (this.pingPongLoop) {
+			if (this.sampleRate < 0) {
 				local40 = this.readBackward(arg0, arg1, local18, local44, local13.samples[this.start]);
-				if (this.anInt346 >= local18) {
+				if (this.samplePosition >= local18) {
 					return;
 				}
-				this.anInt346 = local18 + local18 - this.anInt346 - 1;
-				this.anInt342 = -this.anInt342;
+				this.samplePosition = local18 + local18 - this.samplePosition - 1;
+				this.sampleRate = -this.sampleRate;
 			}
 			while (true) {
 				local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.end - 1]);
-				if (this.anInt346 < local23) {
+				if (this.samplePosition < local23) {
 					return;
 				}
-				this.anInt346 = local23 + local23 - this.anInt346 - 1;
-				this.anInt342 = -this.anInt342;
+				this.samplePosition = local23 + local23 - this.samplePosition - 1;
+				this.sampleRate = -this.sampleRate;
 				local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.start]);
-				if (this.anInt346 >= local18) {
+				if (this.samplePosition >= local18) {
 					return;
 				}
-				this.anInt346 = local18 + local18 - this.anInt346 - 1;
-				this.anInt342 = -this.anInt342;
+				this.samplePosition = local18 + local18 - this.samplePosition - 1;
+				this.sampleRate = -this.sampleRate;
 			}
-		} else if (this.anInt342 < 0) {
+		} else if (this.sampleRate < 0) {
 			while (true) {
 				local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.end - 1]);
-				if (this.anInt346 >= local18) {
+				if (this.samplePosition >= local18) {
 					return;
 				}
-				this.anInt346 = local23 - (local23 - 1 - this.anInt346) % local33 - 1;
+				this.samplePosition = local23 - (local23 - 1 - this.samplePosition) % local33 - 1;
 			}
 		} else {
 			while (true) {
 				local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.start]);
-				if (this.anInt346 < local23) {
+				if (this.samplePosition < local23) {
 					return;
 				}
-				this.anInt346 = local18 + (this.anInt346 - local18) % local33;
+				this.samplePosition = local18 + (this.samplePosition - local18) % local33;
 			}
 		}
 	}
@@ -991,46 +991,46 @@ public final class SoundPcmStream extends PcmStream {
 			local10 = calculateLeftVolume(local2, this.pan);
 			local8 = calculateRightVolume(local2, this.pan);
 		}
-		if (this.anInt348 != local2 || this.anInt355 != local10 || this.anInt352 != local8) {
-			if (this.anInt348 < local2) {
-				this.anInt344 = 1;
-				this.anInt351 = local2 - this.anInt348;
-			} else if (this.anInt348 > local2) {
-				this.anInt344 = -1;
-				this.anInt351 = this.anInt348 - local2;
+		if (this.currentVolume != local2 || this.leftVolume != local10 || this.rightVolume != local8) {
+			if (this.currentVolume < local2) {
+				this.volumeDelta = 1;
+				this.fadeRemaining = local2 - this.currentVolume;
+			} else if (this.currentVolume > local2) {
+				this.volumeDelta = -1;
+				this.fadeRemaining = this.currentVolume - local2;
 			} else {
-				this.anInt344 = 0;
+				this.volumeDelta = 0;
 			}
-			if (this.anInt355 < local10) {
-				this.anInt347 = 1;
-				if (this.anInt351 == 0 || this.anInt351 > local10 - this.anInt355) {
-					this.anInt351 = local10 - this.anInt355;
+			if (this.leftVolume < local10) {
+				this.leftVolumeDelta = 1;
+				if (this.fadeRemaining == 0 || this.fadeRemaining > local10 - this.leftVolume) {
+					this.fadeRemaining = local10 - this.leftVolume;
 				}
-			} else if (this.anInt355 > local10) {
-				this.anInt347 = -1;
-				if (this.anInt351 == 0 || this.anInt351 > this.anInt355 - local10) {
-					this.anInt351 = this.anInt355 - local10;
+			} else if (this.leftVolume > local10) {
+				this.leftVolumeDelta = -1;
+				if (this.fadeRemaining == 0 || this.fadeRemaining > this.leftVolume - local10) {
+					this.fadeRemaining = this.leftVolume - local10;
 				}
 			} else {
-				this.anInt347 = 0;
+				this.leftVolumeDelta = 0;
 			}
-			if (this.anInt352 < local8) {
-				this.anInt354 = 1;
-				if (this.anInt351 == 0 || this.anInt351 > local8 - this.anInt352) {
-					this.anInt351 = local8 - this.anInt352;
+			if (this.rightVolume < local8) {
+				this.rightVolumeDelta = 1;
+				if (this.fadeRemaining == 0 || this.fadeRemaining > local8 - this.rightVolume) {
+					this.fadeRemaining = local8 - this.rightVolume;
 				}
-			} else if (this.anInt352 > local8) {
-				this.anInt354 = -1;
-				if (this.anInt351 == 0 || this.anInt351 > this.anInt352 - local8) {
-					this.anInt351 = this.anInt352 - local8;
+			} else if (this.rightVolume > local8) {
+				this.rightVolumeDelta = -1;
+				if (this.fadeRemaining == 0 || this.fadeRemaining > this.rightVolume - local8) {
+					this.fadeRemaining = this.rightVolume - local8;
 				}
 			} else {
-				this.anInt354 = 0;
+				this.rightVolumeDelta = 0;
 			}
 			return false;
 		} else if (this.volume == Integer.MIN_VALUE) {
 			this.volume = 0;
-			this.anInt348 = this.anInt355 = this.anInt352 = 0;
+			this.currentVolume = this.leftVolume = this.rightVolume = 0;
 			this.unlink();
 			return true;
 		} else {
@@ -1044,61 +1044,61 @@ public final class SoundPcmStream extends PcmStream {
 		if (arg0 == 0) {
 			this.resetVolume();
 			this.unlink();
-		} else if (this.anInt355 == 0 && this.anInt352 == 0) {
-			this.anInt351 = 0;
+		} else if (this.leftVolume == 0 && this.rightVolume == 0) {
+			this.fadeRemaining = 0;
 			this.volume = 0;
-			this.anInt348 = 0;
+			this.currentVolume = 0;
 			this.unlink();
 		} else {
-			@Pc(31) int local31 = -this.anInt348;
-			if (this.anInt348 > local31) {
-				local31 = this.anInt348;
+			@Pc(31) int local31 = -this.currentVolume;
+			if (this.currentVolume > local31) {
+				local31 = this.currentVolume;
 			}
-			if (-this.anInt355 > local31) {
-				local31 = -this.anInt355;
+			if (-this.leftVolume > local31) {
+				local31 = -this.leftVolume;
 			}
-			if (this.anInt355 > local31) {
-				local31 = this.anInt355;
+			if (this.leftVolume > local31) {
+				local31 = this.leftVolume;
 			}
-			if (-this.anInt352 > local31) {
-				local31 = -this.anInt352;
+			if (-this.rightVolume > local31) {
+				local31 = -this.rightVolume;
 			}
-			if (this.anInt352 > local31) {
-				local31 = this.anInt352;
+			if (this.rightVolume > local31) {
+				local31 = this.rightVolume;
 			}
 			if (arg0 > local31) {
 				arg0 = local31;
 			}
-			this.anInt351 = arg0;
+			this.fadeRemaining = arg0;
 			this.volume = Integer.MIN_VALUE;
-			this.anInt344 = -this.anInt348 / arg0;
-			this.anInt347 = -this.anInt355 / arg0;
-			this.anInt354 = -this.anInt352 / arg0;
+			this.volumeDelta = -this.currentVolume / arg0;
+			this.leftVolumeDelta = -this.leftVolume / arg0;
+			this.rightVolumeDelta = -this.rightVolume / arg0;
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "([IIIII)I")
 	private int readForward(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		while (true) {
-			if (this.anInt351 > 0) {
-				@Pc(7) int local7 = arg1 + this.anInt351;
+			if (this.fadeRemaining > 0) {
+				@Pc(7) int local7 = arg1 + this.fadeRemaining;
 				if (local7 > arg3) {
 					local7 = arg3;
 				}
-				this.anInt351 += arg1;
-				if (this.anInt342 == 256 && (this.anInt346 & 0xFF) == 0) {
+				this.fadeRemaining += arg1;
+				if (this.sampleRate == 256 && (this.samplePosition & 0xFF) == 0) {
 					if (AudioChannel.stereo) {
-						arg1 = mixForwardStereoFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this);
+						arg1 = mixForwardStereoFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, local7, arg2, this);
 					} else {
-						arg1 = mixForwardMonoFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this);
+						arg1 = mixForwardMonoFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, this.volumeDelta, local7, arg2, this);
 					}
 				} else if (AudioChannel.stereo) {
-					arg1 = mixForwardStereoResampledFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this, this.anInt342, arg4);
+					arg1 = mixForwardStereoResampledFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, local7, arg2, this, this.sampleRate, arg4);
 				} else {
-					arg1 = mixForwardMonoResampledFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this, this.anInt342, arg4);
+					arg1 = mixForwardMonoResampledFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, this.volumeDelta, local7, arg2, this, this.sampleRate, arg4);
 				}
-				this.anInt351 -= arg1;
-				if (this.anInt351 != 0) {
+				this.fadeRemaining -= arg1;
+				if (this.fadeRemaining != 0) {
 					return arg1;
 				}
 				if (!this.applyVolumeTransition()) {
@@ -1106,16 +1106,16 @@ public final class SoundPcmStream extends PcmStream {
 				}
 				return arg3;
 			}
-			if (this.anInt342 == 256 && (this.anInt346 & 0xFF) == 0) {
+			if (this.sampleRate == 256 && (this.samplePosition & 0xFF) == 0) {
 				if (AudioChannel.stereo) {
-					return mixForwardStereo(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this);
+					return mixForwardStereo(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, arg3, arg2, this);
 				}
-				return mixForwardMono(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this);
+				return mixForwardMono(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, arg3, arg2, this);
 			}
 			if (AudioChannel.stereo) {
-				return mixForwardStereoResampled(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this, this.anInt342, arg4);
+				return mixForwardStereoResampled(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, arg3, arg2, this, this.sampleRate, arg4);
 			}
-			return mixForwardMonoResampled(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this, this.anInt342, arg4);
+			return mixForwardMonoResampled(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, arg3, arg2, this, this.sampleRate, arg4);
 		}
 	}
 
@@ -1127,11 +1127,11 @@ public final class SoundPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "()I")
 	@Override
 	public final int getEffectiveVolume() {
-		@Pc(6) int local6 = this.anInt348 * 3 >> 6;
+		@Pc(6) int local6 = this.currentVolume * 3 >> 6;
 		local6 = (local6 ^ local6 >> 31) + (local6 >>> 31);
-		if (this.anInt350 == 0) {
-			local6 -= local6 * this.anInt346 / (((PcmSound) this.sound).samples.length << 8);
-		} else if (this.anInt350 >= 0) {
+		if (this.loopCount == 0) {
+			local6 -= local6 * this.samplePosition / (((PcmSound) this.sound).samples.length << 8);
+		} else if (this.loopCount >= 0) {
 			local6 -= local6 * this.start / ((PcmSound) this.sound).samples.length;
 		}
 		return local6 > 255 ? 255 : local6;
@@ -1140,7 +1140,7 @@ public final class SoundPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "()I")
 	@Override
 	public final int getActiveChannelCount() {
-		return this.volume == 0 && this.anInt351 == 0 ? 0 : 1;
+		return this.volume == 0 && this.fadeRemaining == 0 ? 0 : 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "f", descriptor = "()I")
@@ -1151,21 +1151,21 @@ public final class SoundPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "(I)V")
 	@Override
 	public final synchronized void skip(@OriginalArg(0) int arg0) {
-		if (this.anInt351 > 0) {
-			if (arg0 >= this.anInt351) {
+		if (this.fadeRemaining > 0) {
+			if (arg0 >= this.fadeRemaining) {
 				if (this.volume == Integer.MIN_VALUE) {
 					this.volume = 0;
-					this.anInt348 = this.anInt355 = this.anInt352 = 0;
+					this.currentVolume = this.leftVolume = this.rightVolume = 0;
 					this.unlink();
-					arg0 = this.anInt351;
+					arg0 = this.fadeRemaining;
 				}
-				this.anInt351 = 0;
+				this.fadeRemaining = 0;
 				this.recalculateChannelVolumes();
 			} else {
-				this.anInt348 += this.anInt344 * arg0;
-				this.anInt355 += this.anInt347 * arg0;
-				this.anInt352 += this.anInt354 * arg0;
-				this.anInt351 -= arg0;
+				this.currentVolume += this.volumeDelta * arg0;
+				this.leftVolume += this.leftVolumeDelta * arg0;
+				this.rightVolume += this.rightVolumeDelta * arg0;
+				this.fadeRemaining -= arg0;
 			}
 		}
 		@Pc(71) PcmSound local71 = (PcmSound) this.sound;
@@ -1174,81 +1174,81 @@ public final class SoundPcmStream extends PcmStream {
 		@Pc(87) int local87 = local71.samples.length << 8;
 		@Pc(91) int local91 = local81 - local76;
 		if (local91 <= 0) {
-			this.anInt350 = 0;
+			this.loopCount = 0;
 		}
-		if (this.anInt346 < 0) {
-			if (this.anInt342 <= 0) {
+		if (this.samplePosition < 0) {
+			if (this.sampleRate <= 0) {
 				this.cancelTransition();
 				this.unlink();
 				return;
 			}
-			this.anInt346 = 0;
+			this.samplePosition = 0;
 		}
-		if (this.anInt346 >= local87) {
-			if (this.anInt342 >= 0) {
+		if (this.samplePosition >= local87) {
+			if (this.sampleRate >= 0) {
 				this.cancelTransition();
 				this.unlink();
 				return;
 			}
-			this.anInt346 = local87 - 1;
+			this.samplePosition = local87 - 1;
 		}
-		this.anInt346 += this.anInt342 * arg0;
-		if (this.anInt350 >= 0) {
-			if (this.anInt350 > 0) {
-				if (this.aBoolean14) {
+		this.samplePosition += this.sampleRate * arg0;
+		if (this.loopCount >= 0) {
+			if (this.loopCount > 0) {
+				if (this.pingPongLoop) {
 					label121:
 					{
-						if (this.anInt342 < 0) {
-							if (this.anInt346 >= local76) {
+						if (this.sampleRate < 0) {
+							if (this.samplePosition >= local76) {
 								return;
 							}
-							this.anInt346 = local76 + local76 - this.anInt346 - 1;
-							this.anInt342 = -this.anInt342;
-							if (--this.anInt350 == 0) {
+							this.samplePosition = local76 + local76 - this.samplePosition - 1;
+							this.sampleRate = -this.sampleRate;
+							if (--this.loopCount == 0) {
 								break label121;
 							}
 						}
 						do {
-							if (this.anInt346 < local81) {
+							if (this.samplePosition < local81) {
 								return;
 							}
-							this.anInt346 = local81 + local81 - this.anInt346 - 1;
-							this.anInt342 = -this.anInt342;
-							if (--this.anInt350 == 0) {
+							this.samplePosition = local81 + local81 - this.samplePosition - 1;
+							this.sampleRate = -this.sampleRate;
+							if (--this.loopCount == 0) {
 								break;
 							}
-							if (this.anInt346 >= local76) {
+							if (this.samplePosition >= local76) {
 								return;
 							}
-							this.anInt346 = local76 + local76 - this.anInt346 - 1;
-							this.anInt342 = -this.anInt342;
-						} while (--this.anInt350 != 0);
+							this.samplePosition = local76 + local76 - this.samplePosition - 1;
+							this.sampleRate = -this.sampleRate;
+						} while (--this.loopCount != 0);
 					}
 				} else {
 					label153:
 					{
 						@Pc(362) int local362;
-						if (this.anInt342 < 0) {
-							if (this.anInt346 >= local76) {
+						if (this.sampleRate < 0) {
+							if (this.samplePosition >= local76) {
 								return;
 							}
-							local362 = (local81 - this.anInt346 - 1) / local91;
-							if (local362 >= this.anInt350) {
-								this.anInt346 += local91 * this.anInt350;
-								this.anInt350 = 0;
+							local362 = (local81 - this.samplePosition - 1) / local91;
+							if (local362 >= this.loopCount) {
+								this.samplePosition += local91 * this.loopCount;
+								this.loopCount = 0;
 								break label153;
 							}
-							this.anInt346 += local91 * local362;
-							this.anInt350 -= local362;
-						} else if (this.anInt346 >= local81) {
-							local362 = (this.anInt346 - local76) / local91;
-							if (local362 >= this.anInt350) {
-								this.anInt346 -= local91 * this.anInt350;
-								this.anInt350 = 0;
+							this.samplePosition += local91 * local362;
+							this.loopCount -= local362;
+						} else if (this.samplePosition >= local81) {
+							local362 = (this.samplePosition - local76) / local91;
+							if (local362 >= this.loopCount) {
+								this.samplePosition -= local91 * this.loopCount;
+								this.loopCount = 0;
 								break label153;
 							}
-							this.anInt346 -= local91 * local362;
-							this.anInt350 -= local362;
+							this.samplePosition -= local91 * local362;
+							this.loopCount -= local362;
 						} else {
 							return;
 						}
@@ -1256,41 +1256,41 @@ public final class SoundPcmStream extends PcmStream {
 					}
 				}
 			}
-			if (this.anInt342 < 0) {
-				if (this.anInt346 < 0) {
-					this.anInt346 = -1;
+			if (this.sampleRate < 0) {
+				if (this.samplePosition < 0) {
+					this.samplePosition = -1;
 					this.cancelTransition();
 					this.unlink();
 				}
-			} else if (this.anInt346 >= local87) {
-				this.anInt346 = local87;
+			} else if (this.samplePosition >= local87) {
+				this.samplePosition = local87;
 				this.cancelTransition();
 				this.unlink();
 			}
-		} else if (this.aBoolean14) {
-			if (this.anInt342 < 0) {
-				if (this.anInt346 >= local76) {
+		} else if (this.pingPongLoop) {
+			if (this.sampleRate < 0) {
+				if (this.samplePosition >= local76) {
 					return;
 				}
-				this.anInt346 = local76 + local76 - this.anInt346 - 1;
-				this.anInt342 = -this.anInt342;
+				this.samplePosition = local76 + local76 - this.samplePosition - 1;
+				this.sampleRate = -this.sampleRate;
 			}
-			while (this.anInt346 >= local81) {
-				this.anInt346 = local81 + local81 - this.anInt346 - 1;
-				this.anInt342 = -this.anInt342;
-				if (this.anInt346 >= local76) {
+			while (this.samplePosition >= local81) {
+				this.samplePosition = local81 + local81 - this.samplePosition - 1;
+				this.sampleRate = -this.sampleRate;
+				if (this.samplePosition >= local76) {
 					return;
 				}
-				this.anInt346 = local76 + local76 - this.anInt346 - 1;
-				this.anInt342 = -this.anInt342;
+				this.samplePosition = local76 + local76 - this.samplePosition - 1;
+				this.sampleRate = -this.sampleRate;
 			}
-		} else if (this.anInt342 < 0) {
-			if (this.anInt346 >= local76) {
+		} else if (this.sampleRate < 0) {
+			if (this.samplePosition >= local76) {
 				return;
 			}
-			this.anInt346 = local81 - (local81 - 1 - this.anInt346) % local91 - 1;
-		} else if (this.anInt346 >= local81) {
-			this.anInt346 = local76 + (this.anInt346 - local76) % local91;
+			this.samplePosition = local81 - (local81 - 1 - this.samplePosition) % local91 - 1;
+		} else if (this.samplePosition >= local81) {
+			this.samplePosition = local76 + (this.samplePosition - local76) % local91;
 		} else {
 			return;
 		}
@@ -1298,7 +1298,7 @@ public final class SoundPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!b", name = "f", descriptor = "(I)V")
 	public final synchronized void setLoops(@OriginalArg(0) int arg0) {
-		this.anInt350 = arg0;
+		this.loopCount = arg0;
 	}
 
 	@OriginalMember(owner = "client!b", name = "g", descriptor = "(I)V")
@@ -1326,31 +1326,31 @@ public final class SoundPcmStream extends PcmStream {
 		if (arg0 > local7) {
 			arg0 = local7;
 		}
-		this.anInt346 = arg0;
+		this.samplePosition = arg0;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([IIIII)I")
 	private int readBackward(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		while (true) {
-			if (this.anInt351 > 0) {
-				@Pc(7) int local7 = arg1 + this.anInt351;
+			if (this.fadeRemaining > 0) {
+				@Pc(7) int local7 = arg1 + this.fadeRemaining;
 				if (local7 > arg3) {
 					local7 = arg3;
 				}
-				this.anInt351 += arg1;
-				if (this.anInt342 == -256 && (this.anInt346 & 0xFF) == 0) {
+				this.fadeRemaining += arg1;
+				if (this.sampleRate == -256 && (this.samplePosition & 0xFF) == 0) {
 					if (AudioChannel.stereo) {
-						arg1 = mixBackwardStereoFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this);
+						arg1 = mixBackwardStereoFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, local7, arg2, this);
 					} else {
-						arg1 = mixBackwardMonoFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this);
+						arg1 = mixBackwardMonoFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, this.volumeDelta, local7, arg2, this);
 					}
 				} else if (AudioChannel.stereo) {
-					arg1 = mixBackwardStereoResampledFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, this.anInt347, this.anInt354, local7, arg2, this, this.anInt342, arg4);
+					arg1 = mixBackwardStereoResampledFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, local7, arg2, this, this.sampleRate, arg4);
 				} else {
-					arg1 = mixBackwardMonoResampledFading(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, this.anInt344, local7, arg2, this, this.anInt342, arg4);
+					arg1 = mixBackwardMonoResampledFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, this.volumeDelta, local7, arg2, this, this.sampleRate, arg4);
 				}
-				this.anInt351 -= arg1;
-				if (this.anInt351 != 0) {
+				this.fadeRemaining -= arg1;
+				if (this.fadeRemaining != 0) {
 					return arg1;
 				}
 				if (!this.applyVolumeTransition()) {
@@ -1358,33 +1358,33 @@ public final class SoundPcmStream extends PcmStream {
 				}
 				return arg3;
 			}
-			if (this.anInt342 == -256 && (this.anInt346 & 0xFF) == 0) {
+			if (this.sampleRate == -256 && (this.samplePosition & 0xFF) == 0) {
 				if (AudioChannel.stereo) {
-					return mixBackwardStereo(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this);
+					return mixBackwardStereo(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, arg3, arg2, this);
 				}
-				return mixBackwardMono(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this);
+				return mixBackwardMono(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, arg3, arg2, this);
 			}
 			if (AudioChannel.stereo) {
-				return mixBackwardStereoResampled(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt355, this.anInt352, arg3, arg2, this, this.anInt342, arg4);
+				return mixBackwardStereoResampled(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, arg3, arg2, this, this.sampleRate, arg4);
 			}
-			return mixBackwardMonoResampled(((PcmSound) this.sound).samples, arg0, this.anInt346, arg1, this.anInt348, arg3, arg2, this, this.anInt342, arg4);
+			return mixBackwardMonoResampled(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, arg3, arg2, this, this.sampleRate, arg4);
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "g", descriptor = "()I")
 	public final synchronized int getAbsoluteRate() {
-		return this.anInt342 < 0 ? -this.anInt342 : this.anInt342;
+		return this.sampleRate < 0 ? -this.sampleRate : this.sampleRate;
 	}
 
 	@OriginalMember(owner = "client!b", name = "h", descriptor = "()V")
 	private void cancelTransition() {
-		if (this.anInt351 == 0) {
+		if (this.fadeRemaining == 0) {
 			return;
 		}
 		if (this.volume == Integer.MIN_VALUE) {
 			this.volume = 0;
 		}
-		this.anInt351 = 0;
+		this.fadeRemaining = 0;
 		this.recalculateChannelVolumes();
 	}
 
@@ -1392,40 +1392,40 @@ public final class SoundPcmStream extends PcmStream {
 	private synchronized void setVolumeAndPan(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		this.volume = arg0;
 		this.pan = arg1;
-		this.anInt351 = 0;
+		this.fadeRemaining = 0;
 		this.recalculateChannelVolumes();
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(Z)V")
 	public final synchronized void reverseDirection() {
-		this.anInt342 = (this.anInt342 ^ this.anInt342 >> 31) + (this.anInt342 >>> 31);
-		this.anInt342 = -this.anInt342;
+		this.sampleRate = (this.sampleRate ^ this.sampleRate >> 31) + (this.sampleRate >>> 31);
+		this.sampleRate = -this.sampleRate;
 	}
 
 	@OriginalMember(owner = "client!b", name = "i", descriptor = "(I)V")
 	public final synchronized void setRate(@OriginalArg(0) int arg0) {
-		if (this.anInt342 < 0) {
-			this.anInt342 = -arg0;
+		if (this.sampleRate < 0) {
+			this.sampleRate = -arg0;
 		} else {
-			this.anInt342 = arg0;
+			this.sampleRate = arg0;
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "i", descriptor = "()Z")
 	public final boolean isOutOfBounds() {
-		return this.anInt346 < 0 || this.anInt346 >= ((PcmSound) this.sound).samples.length << 8;
+		return this.samplePosition < 0 || this.samplePosition >= ((PcmSound) this.sound).samples.length << 8;
 	}
 
 	@OriginalMember(owner = "client!b", name = "j", descriptor = "()Z")
 	public final boolean isTransitioning() {
-		return this.anInt351 != 0;
+		return this.fadeRemaining != 0;
 	}
 
 	@OriginalMember(owner = "client!b", name = "k", descriptor = "()V")
 	private void recalculateChannelVolumes() {
-		this.anInt348 = this.volume;
-		this.anInt355 = calculateLeftVolume(this.volume, this.pan);
-		this.anInt352 = calculateRightVolume(this.volume, this.pan);
+		this.currentVolume = this.volume;
+		this.leftVolume = calculateLeftVolume(this.volume, this.pan);
+		this.rightVolume = calculateRightVolume(this.volume, this.pan);
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(III)V")
@@ -1436,35 +1436,35 @@ public final class SoundPcmStream extends PcmStream {
 		}
 		@Pc(10) int local10 = calculateLeftVolume(arg1, arg2);
 		@Pc(14) int local14 = calculateRightVolume(arg1, arg2);
-		if (this.anInt355 == local10 && this.anInt352 == local14) {
-			this.anInt351 = 0;
+		if (this.leftVolume == local10 && this.rightVolume == local14) {
+			this.fadeRemaining = 0;
 			return;
 		}
-		@Pc(31) int local31 = arg1 - this.anInt348;
-		if (this.anInt348 - arg1 > local31) {
-			local31 = this.anInt348 - arg1;
+		@Pc(31) int local31 = arg1 - this.currentVolume;
+		if (this.currentVolume - arg1 > local31) {
+			local31 = this.currentVolume - arg1;
 		}
-		if (local10 - this.anInt355 > local31) {
-			local31 = local10 - this.anInt355;
+		if (local10 - this.leftVolume > local31) {
+			local31 = local10 - this.leftVolume;
 		}
-		if (this.anInt355 - local10 > local31) {
-			local31 = this.anInt355 - local10;
+		if (this.leftVolume - local10 > local31) {
+			local31 = this.leftVolume - local10;
 		}
-		if (local14 - this.anInt352 > local31) {
-			local31 = local14 - this.anInt352;
+		if (local14 - this.rightVolume > local31) {
+			local31 = local14 - this.rightVolume;
 		}
-		if (this.anInt352 - local14 > local31) {
-			local31 = this.anInt352 - local14;
+		if (this.rightVolume - local14 > local31) {
+			local31 = this.rightVolume - local14;
 		}
 		if (arg0 > local31) {
 			arg0 = local31;
 		}
-		this.anInt351 = arg0;
+		this.fadeRemaining = arg0;
 		this.volume = arg1;
 		this.pan = arg2;
-		this.anInt344 = (arg1 - this.anInt348) / arg0;
-		this.anInt347 = (local10 - this.anInt355) / arg0;
-		this.anInt354 = (local14 - this.anInt352) / arg0;
+		this.volumeDelta = (arg1 - this.currentVolume) / arg0;
+		this.leftVolumeDelta = (local10 - this.leftVolume) / arg0;
+		this.rightVolumeDelta = (local14 - this.rightVolume) / arg0;
 	}
 
 	@OriginalMember(owner = "client!b", name = "l", descriptor = "()I")

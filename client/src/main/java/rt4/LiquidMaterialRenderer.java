@@ -105,13 +105,13 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 		gl.glCallList(this.displayListId);
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glMatrixMode(GL2.GL_TEXTURE);
-		gl.glTranslatef((float) MaterialManager.anInt406, (float) MaterialManager.anInt4675, (float) MaterialManager.anInt5158);
-		gl.glRotatef(-((float) MaterialManager.anInt1815 * 360.0F) / 2048.0F, 0.0F, 1.0F, 0.0F);
-		gl.glRotatef(-((float) MaterialManager.anInt5559 * 360.0F) / 2048.0F, 1.0F, 0.0F, 0.0F);
+		gl.glTranslatef((float) MaterialManager.cameraRenderX, (float) MaterialManager.cameraRenderZ, (float) MaterialManager.cameraRenderY);
+		gl.glRotatef(-((float) MaterialManager.cameraYaw * 360.0F) / 2048.0F, 0.0F, 1.0F, 0.0F);
+		gl.glRotatef(-((float) MaterialManager.cameraPitch * 360.0F) / 2048.0F, 1.0F, 0.0F, 0.0F);
 		gl.glRotatef(-180.0F, 1.0F, 0.0F, 0.0F);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		if (!MaterialManager.allows3DTextureMapping) {
-			gl.glBindTexture(GL2.GL_TEXTURE_2D, MaterialManager.anIntArray341[(int) ((float) (GlRenderer.animationClock * 64) * 0.005F) % 64]);
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, MaterialManager.noise2DTextures[(int) ((float) (GlRenderer.animationClock * 64) * 0.005F) % 64]);
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
 		if (this.lastNoiseUpdateClock == GlRenderer.animationClock) {
