@@ -1400,7 +1400,7 @@ public class Cs1ScriptRunner {
 						Protocol.outboundBuffer.p4(InterfaceList.aClass13_12.id);
 						Protocol.outboundBuffer.ip2(aClass13_14.createdComponentId);
 					}
-				} else if ((VarpDomain.anInt2952 == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
+				} else if ((VarpDomain.mouseButtons == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
 					ScriptRunner.layoutMiniMenu();
 				} else if (MiniMenu.size > 0) {
 					MiniMenu.processClick();

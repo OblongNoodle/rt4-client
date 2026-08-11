@@ -2136,7 +2136,7 @@ public final class ScriptRunner {
 					if (opcode == 47) {
 						value = VarcDomain.varcstrs[intOperands[pc]];
 						if (value == null) {
-							value = VarpDomain.aClass100_1061;
+							value = VarpDomain.NULL_STRING;
 						}
 						stringStack[ssp++] = value;
 						continue;
@@ -4563,7 +4563,7 @@ public final class ScriptRunner {
 														if (int1 == -1) {
 															str1 = EMPTY_STRING;
 														} else {
-															str1 = WorldMap.labels.aClass100Array153[int1];
+															str1 = WorldMap.labels.names[int1];
 															int2 = WorldMap.labels.getLabelSize(int1);
 														}
 														str1 = str1.replaceAll(aClass100_639, aClass100_10);
@@ -4577,7 +4577,7 @@ public final class ScriptRunner {
 														if (int1 == -1) {
 															str1 = EMPTY_STRING;
 														} else {
-															str1 = WorldMap.labels.aClass100Array153[int1];
+															str1 = WorldMap.labels.names[int1];
 															int2 = WorldMap.labels.getLabelSize(int1);
 														}
 														str1 = str1.replaceAll(aClass100_639, aClass100_10);

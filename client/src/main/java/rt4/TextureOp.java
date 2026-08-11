@@ -16,20 +16,20 @@ public abstract class TextureOp extends Node {
 	protected MonochromeImageCache colorImageCache;
 
 	@OriginalMember(owner = "client!j", name = "G", descriptor = "I")
-	public int anInt5840;
+	public int cacheHeight;
 
 	@OriginalMember(owner = "client!j", name = "H", descriptor = "Lclient!pf;")
 	protected ColorImageCache monochromeImageCache;
 
 	@OriginalMember(owner = "client!j", name = "u", descriptor = "[Lclient!j;")
-	public final TextureOp[] aClass3_Sub1Array42;
+	public final TextureOp[] inputs;
 
 	@OriginalMember(owner = "client!j", name = "p", descriptor = "Z")
 	public boolean monochrome;
 
 	@OriginalMember(owner = "client!j", name = "<init>", descriptor = "(IZ)V")
 	protected TextureOp(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1) {
-		this.aClass3_Sub1Array42 = new TextureOp[arg0];
+		this.inputs = new TextureOp[arg0];
 		this.monochrome = arg1;
 	}
 
@@ -49,7 +49,7 @@ public abstract class TextureOp extends Node {
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "(III)[I")
 	protected final int[] getChildMonochromeOutput(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		return this.aClass3_Sub1Array42[arg0].monochrome ? this.aClass3_Sub1Array42[arg0].getMonochromeOutput(arg1) : this.aClass3_Sub1Array42[arg0].getColorOutput(arg1)[0];
+		return this.inputs[arg0].monochrome ? this.inputs[arg0].getMonochromeOutput(arg1) : this.inputs[arg0].getColorOutput(arg1)[0];
 	}
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "(IB)[I")
@@ -77,7 +77,7 @@ public abstract class TextureOp extends Node {
 
 	@OriginalMember(owner = "client!j", name = "b", descriptor = "(III)V")
 	public final void allocateImageCache(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(15) int local15 = this.anInt5840 == 255 ? arg0 : this.anInt5840;
+		@Pc(15) int local15 = this.cacheHeight == 255 ? arg0 : this.cacheHeight;
 		if (this.monochrome) {
 			this.monochromeImageCache = new ColorImageCache(local15, arg0, arg1);
 		} else {
@@ -98,11 +98,11 @@ public abstract class TextureOp extends Node {
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "(IIB)[[I")
 	protected final int[][] getChildColorOutput(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		if (this.aClass3_Sub1Array42[arg1].monochrome) {
-			@Pc(32) int[] local32 = this.aClass3_Sub1Array42[arg1].getMonochromeOutput(arg0);
+		if (this.inputs[arg1].monochrome) {
+			@Pc(32) int[] local32 = this.inputs[arg1].getMonochromeOutput(arg0);
 			return new int[][]{local32, local32, local32};
 		} else {
-			return this.aClass3_Sub1Array42[arg1].getColorOutput(arg0);
+			return this.inputs[arg1].getColorOutput(arg0);
 		}
 	}
 

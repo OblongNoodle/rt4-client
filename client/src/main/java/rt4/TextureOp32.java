@@ -48,7 +48,7 @@ public final class TextureOp32 extends TextureOp {
 	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
 		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(30) int local30 = Texture.anInt4042 * this.anInt4580 >> 12;
+			@Pc(30) int local30 = Texture.widthScale * this.anInt4580 >> 12;
 			@Pc(40) int[] local40 = this.getChildMonochromeOutput(0, Texture.heightMask & arg0 - 1);
 			@Pc(46) int[] local46 = this.getChildMonochromeOutput(0, arg0);
 			@Pc(56) int[] local56 = this.getChildMonochromeOutput(0, arg0 + 1 & Texture.heightMask);

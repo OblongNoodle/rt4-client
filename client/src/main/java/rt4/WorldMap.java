@@ -1034,14 +1034,14 @@ public class WorldMap {
 	public static void panToLabelByPrefix(@OriginalArg(0) JagString arg0) {
 		@Pc(9) int local9 = findLabelByPrefix(arg0);
 		if (local9 != -1) {
-			panToCoords(labels.aShortArray73[local9], labels.aShortArray72[local9]);
+			panToCoords(labels.coordX[local9], labels.coordY[local9]);
 		}
 	}
 
 	@OriginalMember(owner = "client!rc", name = "a", descriptor = "(Lclient!na;Z)Lclient!na;")
 	public static JagString getLabelTextByPrefix(@OriginalArg(0) JagString arg0) {
 		@Pc(12) int local12 = findLabelByPrefix(arg0);
-		return local12 == -1 ? aClass100_517 : labels.aClass100Array153[local12].replaceAll(aClass100_538, aClass100_872);
+		return local12 == -1 ? aClass100_517 : labels.names[local12].replaceAll(aClass100_538, aClass100_872);
 	}
 
 	@OriginalMember(owner = "client!rg", name = "d", descriptor = "(B)Lclient!bn;")
@@ -1060,7 +1060,7 @@ public class WorldMap {
 		if (labels == null) {
 			return -1;
 		}
-		while (anInt5212 < labels.anInt5074) {
+		while (anInt5212 < labels.count) {
 			if (labels.isVisible(anInt5212)) {
 				return anInt5212++;
 			}
@@ -1095,7 +1095,7 @@ public class WorldMap {
 	public static void panToLabelByExactName(@OriginalArg(0) JagString arg0) {
 		@Pc(7) int local7 = findLabelByExactName(arg0);
 		if (local7 != -1) {
-			panToCoords(labels.aShortArray73[local7], labels.aShortArray72[local7]);
+			panToCoords(labels.coordX[local7], labels.coordY[local7]);
 		}
 	}
 
@@ -1104,8 +1104,8 @@ public class WorldMap {
 		if (labels == null || arg0.length() == 0) {
 			return -1;
 		}
-		for (@Pc(20) int local20 = 0; local20 < labels.anInt5074; local20++) {
-			if (labels.aClass100Array153[local20].replaceAll(aClass100_538, aClass100_872).strEquals(arg0)) {
+		for (@Pc(20) int local20 = 0; local20 < labels.count; local20++) {
+			if (labels.names[local20].replaceAll(aClass100_538, aClass100_872).strEquals(arg0)) {
 				return local20;
 			}
 		}
@@ -1804,8 +1804,8 @@ public class WorldMap {
 		if (labels == null || arg0.length() == 0) {
 			return -1;
 		}
-		for (@Pc(20) int local20 = 0; local20 < labels.anInt5074; local20++) {
-			if (labels.aClass100Array153[local20].replaceAll(aClass100_538, aClass100_872).startsWithIgnoreCase(arg0)) {
+		for (@Pc(20) int local20 = 0; local20 < labels.count; local20++) {
+			if (labels.names[local20].replaceAll(aClass100_538, aClass100_872).startsWithIgnoreCase(arg0)) {
 				return local20;
 			}
 		}
@@ -1814,10 +1814,10 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!cn", name = "a", descriptor = "(BIIIIIIII)V")
 	public static void renderMapLabels(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
-		for (@Pc(11) int local11 = 0; local11 < labels.anInt5074; local11++) {
+		for (@Pc(11) int local11 = 0; local11 < labels.count; local11++) {
 			if (labels.isTextLabel(local11)) {
-				@Pc(32) int local32 = labels.aShortArray73[local11] - originX;
-				@Pc(43) int local43 = originY + length - labels.aShortArray72[local11] - 1;
+				@Pc(32) int local32 = labels.coordX[local11] - originX;
+				@Pc(43) int local43 = originY + length - labels.coordY[local11] - 1;
 				@Pc(59) int local59 = arg0 + (arg3 - arg0) * (local32 - arg2) / (arg6 - arg2);
 				@Pc(64) int local64 = labels.getLabelSize(local11);
 				@Pc(80) int local80 = (arg7 - arg1) * (local43 - arg5) / (arg4 - arg5) + arg1;
@@ -1866,11 +1866,11 @@ public class WorldMap {
 						local84 = font30;
 					}
 				}
-				if (labels.anIntArray444[local11] != -1) {
-					local82 = labels.anIntArray444[local11];
+				if (labels.colors[local11] != -1) {
+					local82 = labels.colors[local11];
 				}
 				if (local84 != null) {
-					@Pc(211) int local211 = Fonts.p11Full.splitParagraph(labels.aClass100Array153[local11], null, aClass100Array53);
+					@Pc(211) int local211 = Fonts.p11Full.splitParagraph(labels.names[local11], null, aClass100Array53);
 					local80 -= local84.getLineHeight() * (local211 - 1) / 2;
 					local80 += local84.getAscent() / 2;
 					for (@Pc(231) int local231 = 0; local231 < local211; local231++) {

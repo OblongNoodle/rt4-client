@@ -29,28 +29,28 @@ public final class Texture {
 	@OriginalMember(owner = "client!ck", name = "X", descriptor = "I")
 	public static int widthMask;
 	@OriginalMember(owner = "client!nb", name = "o", descriptor = "I")
-	public static int anInt4042;
+	public static int widthScale;
 	@OriginalMember(owner = "client!fb", name = "h", descriptor = "[I")
 	public static int[] heightFractions;
 	@OriginalMember(owner = "client!lc", name = "k", descriptor = "[I")
-	private final int[] anIntArray328;
+	private final int[] requiredTextureIds;
 
 	@OriginalMember(owner = "client!lc", name = "b", descriptor = "[I")
-	private final int[] anIntArray327;
+	private final int[] requiredSpriteIds;
 
 	@OriginalMember(owner = "client!lc", name = "d", descriptor = "Lclient!j;")
-	private final TextureOp aClass3_Sub1_1;
+	private final TextureOp colorOp;
 
 	@OriginalMember(owner = "client!lc", name = "i", descriptor = "Lclient!j;")
-	private final TextureOp aClass3_Sub1_2;
+	private final TextureOp alphaOp;
 
 	@OriginalMember(owner = "client!lc", name = "g", descriptor = "[Lclient!j;")
-	private final TextureOp[] aClass3_Sub1Array22;
+	private final TextureOp[] operations;
 
 	@OriginalMember(owner = "client!lc", name = "<init>", descriptor = "(Lclient!wa;)V")
 	public Texture(@OriginalArg(0) Buffer arg0) {
 		@Pc(7) int local7 = arg0.g1();
-		this.aClass3_Sub1Array22 = new TextureOp[local7];
+		this.operations = new TextureOp[local7];
 		@Pc(14) int[][] local14 = new int[local7][];
 		@Pc(16) int local16 = 0;
 		@Pc(18) int local18 = 0;
@@ -66,36 +66,36 @@ public final class Texture {
 			if (local27.getRequiredTextureId() >= 0) {
 				local16++;
 			}
-			local45 = local27.aClass3_Sub1Array42.length;
+			local45 = local27.inputs.length;
 			local14[local20] = new int[local45];
 			for (local52 = 0; local52 < local45; local52++) {
 				local14[local20][local52] = arg0.g1();
 			}
-			this.aClass3_Sub1Array22[local20] = local27;
+			this.operations[local20] = local27;
 		}
-		this.anIntArray327 = new int[local18];
-		this.anIntArray328 = new int[local16];
+		this.requiredSpriteIds = new int[local18];
+		this.requiredTextureIds = new int[local16];
 		local18 = 0;
 		local16 = 0;
 		for (local20 = 0; local20 < local7; local20++) {
-			local27 = this.aClass3_Sub1Array22[local20];
-			local45 = local27.aClass3_Sub1Array42.length;
+			local27 = this.operations[local20];
+			local45 = local27.inputs.length;
 			for (local52 = 0; local52 < local45; local52++) {
-				local27.aClass3_Sub1Array42[local52] = this.aClass3_Sub1Array22[local14[local20][local52]];
+				local27.inputs[local52] = this.operations[local14[local20][local52]];
 			}
 			local52 = local27.getRequiredSpriteId();
 			@Pc(136) int local136 = local27.getRequiredTextureId();
 			if (local52 > 0) {
-				this.anIntArray327[local18++] = local52;
+				this.requiredSpriteIds[local18++] = local52;
 			}
 			if (local136 > 0) {
-				this.anIntArray328[local16++] = local136;
+				this.requiredTextureIds[local16++] = local136;
 			}
 			local14[local20] = null;
 		}
-		this.aClass3_Sub1_1 = this.aClass3_Sub1Array22[arg0.g1()];
+		this.colorOp = this.operations[arg0.g1()];
 		local14 = null;
-		this.aClass3_Sub1_2 = this.aClass3_Sub1Array22[arg0.g1()];
+		this.alphaOp = this.operations[arg0.g1()];
 	}
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(DI)V")
@@ -115,7 +115,7 @@ public final class Texture {
 		arg0.g1();
 		@Pc(13) int local13 = arg0.g1();
 		@Pc(17) TextureOp local17 = create(local13);
-		local17.anInt5840 = arg0.g1();
+		local17.cacheHeight = arg0.g1();
 		@Pc(26) int local26 = arg0.g1();
 		for (@Pc(34) int local34 = 0; local34 < local26; local34++) {
 			@Pc(41) int local41 = arg0.g1();
@@ -219,7 +219,7 @@ public final class Texture {
 			for (@Pc(10) int x = 0; x < arg1; x++) {
 				widthFractions[x] = (x << 12) / arg1;
 			}
-			anInt4042 = arg1 == 64 ? 2048 : 4096;
+			widthScale = arg1 == 64 ? 2048 : 4096;
 			widthMask = arg1 - 1;
 			width = arg1;
 		}
@@ -245,8 +245,8 @@ public final class Texture {
 		spritesArchive = arg4;
 		setSize(arg0, arg2);
 		@Pc(20) int local20;
-		for (local20 = 0; local20 < this.aClass3_Sub1Array22.length; local20++) {
-			this.aClass3_Sub1Array22[local20].allocateImageCache(arg0, arg2);
+		for (local20 = 0; local20 < this.operations.length; local20++) {
+			this.operations[local20].allocateImageCache(arg0, arg2);
 		}
 		@Pc(56) int[] local56 = new int[arg0 * arg2];
 		@Pc(64) int local64;
@@ -269,13 +269,13 @@ public final class Texture {
 			@Pc(101) int[] local101;
 			@Pc(103) int[] local103;
 			@Pc(105) int[] local105;
-			if (this.aClass3_Sub1_1.monochrome) {
-				@Pc(99) int[] local99 = this.aClass3_Sub1_1.getMonochromeOutput(local78);
+			if (this.colorOp.monochrome) {
+				@Pc(99) int[] local99 = this.colorOp.getMonochromeOutput(local78);
 				local101 = local99;
 				local103 = local99;
 				local105 = local99;
 			} else {
-				@Pc(113) int[][] local113 = this.aClass3_Sub1_1.getColorOutput(local78);
+				@Pc(113) int[][] local113 = this.colorOp.getColorOutput(local78);
 				local101 = local113[0];
 				local105 = local113[2];
 				local103 = local113[1];
@@ -311,8 +311,8 @@ public final class Texture {
 				}
 			}
 		}
-		for (local78 = 0; local78 < this.aClass3_Sub1Array22.length; local78++) {
-			this.aClass3_Sub1Array22[local78].clearImageCache();
+		for (local78 = 0; local78 < this.operations.length; local78++) {
+			this.operations[local78].clearImageCache();
 		}
 		return local56;
 	}
@@ -325,8 +325,8 @@ public final class Texture {
 		provider = arg3;
 		setSize(arg0, arg1);
 		@Pc(31) int local31;
-		for (local31 = 0; local31 < this.aClass3_Sub1Array22.length; local31++) {
-			this.aClass3_Sub1Array22[local31].allocateImageCache(arg0, arg1);
+		for (local31 = 0; local31 < this.operations.length; local31++) {
+			this.operations[local31].allocateImageCache(arg0, arg1);
 		}
 		local31 = 0;
 		@Pc(53) int local53;
@@ -338,21 +338,21 @@ public final class Texture {
 			@Pc(81) int[] local81;
 			@Pc(83) int[] local83;
 			@Pc(77) int[] local77;
-			if (this.aClass3_Sub1_1.monochrome) {
-				local77 = this.aClass3_Sub1_1.getMonochromeOutput(local53);
+			if (this.colorOp.monochrome) {
+				local77 = this.colorOp.getMonochromeOutput(local53);
 				local79 = local77;
 				local81 = local77;
 				local83 = local77;
 			} else {
-				@Pc(91) int[][] local91 = this.aClass3_Sub1_1.getColorOutput(local53);
+				@Pc(91) int[][] local91 = this.colorOp.getColorOutput(local53);
 				local79 = local91[0];
 				local81 = local91[1];
 				local83 = local91[2];
 			}
-			if (this.aClass3_Sub1_2.monochrome) {
-				local77 = this.aClass3_Sub1_2.getMonochromeOutput(local53);
+			if (this.alphaOp.monochrome) {
+				local77 = this.alphaOp.getMonochromeOutput(local53);
 			} else {
-				local77 = this.aClass3_Sub1_2.getColorOutput(local53)[0];
+				local77 = this.alphaOp.getColorOutput(local53)[0];
 			}
 			for (@Pc(127) int local127 = arg1 - 1; local127 >= 0; local127--) {
 				@Pc(138) int local138 = local79[local127] >> 4;
@@ -400,8 +400,8 @@ public final class Texture {
 				}
 			}
 		}
-		for (local53 = 0; local53 < this.aClass3_Sub1Array22.length; local53++) {
-			this.aClass3_Sub1Array22[local53].clearImageCache();
+		for (local53 = 0; local53 < this.operations.length; local53++) {
+			this.operations[local53].clearImageCache();
 		}
 		return local8;
 	}
@@ -410,20 +410,20 @@ public final class Texture {
 	public final boolean isReady(@OriginalArg(1) TextureProvider arg0, @OriginalArg(2) Js5 arg1) {
 		@Pc(10) int local10;
 		if (spriteGroupId > 0) {
-			for (local10 = 0; local10 < this.anIntArray327.length; local10++) {
-				if (!arg1.isFileReady(this.anIntArray327[local10], spriteGroupId)) {
+			for (local10 = 0; local10 < this.requiredSpriteIds.length; local10++) {
+				if (!arg1.isFileReady(this.requiredSpriteIds[local10], spriteGroupId)) {
 					return false;
 				}
 			}
 		} else {
-			for (local10 = 0; local10 < this.anIntArray327.length; local10++) {
-				if (!arg1.isFileReady(this.anIntArray327[local10])) {
+			for (local10 = 0; local10 < this.requiredSpriteIds.length; local10++) {
+				if (!arg1.isFileReady(this.requiredSpriteIds[local10])) {
 					return false;
 				}
 			}
 		}
-		for (local10 = 0; local10 < this.anIntArray328.length; local10++) {
-			if (!arg0.isTextureLoaded(this.anIntArray328[local10])) {
+		for (local10 = 0; local10 < this.requiredTextureIds.length; local10++) {
+			if (!arg0.isTextureLoaded(this.requiredTextureIds[local10])) {
 				return false;
 			}
 		}

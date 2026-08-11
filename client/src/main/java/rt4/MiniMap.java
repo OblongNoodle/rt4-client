@@ -252,14 +252,14 @@ public class MiniMap {
 			@Pc(239) int local239;
 			@Pc(271) int local271;
 			if (LoginManager.mapElementList != null) {
-				for (@Pc(117) int local117 = 0; local117 < LoginManager.mapElementList.anInt5074; local117++) {
+				for (@Pc(117) int local117 = 0; local117 < LoginManager.mapElementList.count; local117++) {
 					if (LoginManager.mapElementList.isMinimapLabelVisible(local117)) {
-						local146 = (LoginManager.mapElementList.aShortArray73[local117] - Camera.originX) * 4 + 2 - PlayerList.self.xFine / 32;
+						local146 = (LoginManager.mapElementList.coordX[local117] - Camera.originX) * 4 + 2 - PlayerList.self.xFine / 32;
 						local150 = MathUtils.sin[local48];
 						local154 = MathUtils.cos[local48];
 						@Pc(156) Font local156 = Fonts.p11Full;
 						@Pc(164) int local164 = local150 * 256 / (zoomOffset + 256);
-						local181 = (LoginManager.mapElementList.aShortArray72[local117] - Camera.originY) * 4 + 2 - PlayerList.self.yFine / 32;
+						local181 = (LoginManager.mapElementList.coordY[local117] - Camera.originY) * 4 + 2 - PlayerList.self.yFine / 32;
 						@Pc(189) int local189 = local154 * 256 / (zoomOffset + 256);
 						local200 = local181 * local189 - local146 * local164 >> 16;
 						if (LoginManager.mapElementList.getLabelSize(local117) == 1) {
@@ -269,19 +269,19 @@ public class MiniMap {
 							local156 = Fonts.b12Full;
 						}
 						local231 = local164 * local181 + local189 * local146 >> 16;
-						local239 = local156.getMaxLineWidth(LoginManager.mapElementList.aClass100Array153[local117], 100);
+						local239 = local156.getMaxLineWidth(LoginManager.mapElementList.names[local117], 100);
 						@Pc(245) int local245 = local231 - local239 / 2;
 						if (local245 >= -arg3.width && local245 <= arg3.width && local200 >= -arg3.height && local200 <= arg3.height) {
 							local271 = 16777215;
-							if (LoginManager.mapElementList.anIntArray444[local117] != -1) {
-								local271 = LoginManager.mapElementList.anIntArray444[local117];
+							if (LoginManager.mapElementList.colors[local117] != -1) {
+								local271 = LoginManager.mapElementList.colors[local117];
 							}
 							if (GlRenderer.enabled) {
 								GlFont.setLineMask((GlSprite) arg3.getSprite(false));
 							} else {
 								SoftwareRaster.setLineMasks(arg3.clickMaskStart, arg3.clickMaskWidth);
 							}
-							local156.renderParagraphAlpha(LoginManager.mapElementList.aClass100Array153[local117], arg2 + local245 + arg3.width / 2, arg1 + arg3.height / 2 + -local200, local239, 50, local271, 0, 1, 0, 0);
+							local156.renderParagraphAlpha(LoginManager.mapElementList.names[local117], arg2 + local245 + arg3.width / 2, arg1 + arg3.height / 2 + -local200, local239, 50, local271, 0, 1, 0, 0);
 							if (GlRenderer.enabled) {
 								GlFont.clearLineMask();
 							} else {

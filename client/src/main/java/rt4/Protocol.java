@@ -2754,7 +2754,7 @@ public class Protocol {
 						outboundBuffer.p2add(MiniMenu.clickedInventoryIndex);
 						outboundBuffer.p1sub(inserting);
 					}
-				} else if ((VarpDomain.anInt2952 == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
+				} else if ((VarpDomain.mouseButtons == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {
 					ScriptRunner.layoutMiniMenu();
 				} else if (MiniMenu.size > 0) {
 					MiniMenu.processClick();
@@ -3549,7 +3549,7 @@ public class Protocol {
 					}
 				}
 			}
-			if (local20 == 1 && (VarpDomain.anInt2952 == 1 && MiniMenu.size > 2 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1))) {
+			if (local20 == 1 && (VarpDomain.mouseButtons == 1 && MiniMenu.size > 2 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1))) {
 				local20 = 2;
 			}
 			if (local20 == 2 && MiniMenu.size > 0 || MiniMenu.anInt3953 == 1) {
