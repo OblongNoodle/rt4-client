@@ -35,8 +35,8 @@ public final class MixerPcmStream extends PcmStream {
 	private void removeListener(@OriginalArg(0) MixerListener arg0) {
 		arg0.unlink();
 		arg0.onRemoved();
-		@Pc(9) Node local9 = this.aClass69_44.aClass3_109.nextNode;
-		if (local9 == this.aClass69_44.aClass3_109) {
+		@Pc(9) Node local9 = this.aClass69_44.sentinel.nextNode;
+		if (local9 == this.aClass69_44.sentinel) {
 			this.anInt1781 = -1;
 		} else {
 			this.anInt1781 = ((MixerListener) local9).anInt905;
@@ -164,10 +164,10 @@ public final class MixerPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!ei", name = "a", descriptor = "(Lclient!ab;Lclient!cc;)V")
 	private void insertListenerSorted(@OriginalArg(0) Node arg0, @OriginalArg(1) MixerListener arg1) {
-		while (arg0 != this.aClass69_44.aClass3_109 && ((MixerListener) arg0).anInt905 <= arg1.anInt905) {
+		while (arg0 != this.aClass69_44.sentinel && ((MixerListener) arg0).anInt905 <= arg1.anInt905) {
 			arg0 = arg0.nextNode;
 		}
 		insertBefore(arg1, arg0);
-		this.anInt1781 = ((MixerListener) this.aClass69_44.aClass3_109.nextNode).anInt905;
+		this.anInt1781 = ((MixerListener) this.aClass69_44.sentinel.nextNode).anInt905;
 	}
 }

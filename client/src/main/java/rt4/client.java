@@ -663,10 +663,10 @@ public final class client extends GameShell {
 		MiniMap.state = 0;
 		Camera.cameraOffsetY = (int) (Math.random() * 110.0D) - 55;
 		MiniMenu.aBoolean302 = false;
-		MiniMap.anInt4130 = (int) (Math.random() * 30.0D) - 20;
+		MiniMap.zoomOffset = (int) (Math.random() * 30.0D) - 20;
 		SoundPlayer.size = 0;
 		LoginManager.mapFlagX = 0;
-		MiniMap.anInt1814 = (int) (Math.random() * 120.0D) - 60;
+		MiniMap.compassAngleOffset = (int) (Math.random() * 120.0D) - 60;
 		Chat.size = 0;
 		Camera.anInt5161 = (int) (Math.random() * 80.0D) - 40;
 		NpcList.size = 0;

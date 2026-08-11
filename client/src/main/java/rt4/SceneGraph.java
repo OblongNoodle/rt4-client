@@ -3316,7 +3316,7 @@ public class SceneGraph {
 				@Pc(328) boolean local328;
 				@Pc(355) int local355;
 				for (local72 = local46; local72 <= local65; local72++) {
-					local84 = local18.aShortArray30[local24];
+					local84 = local18.spanProfile[local24];
 					local90 = local37 + (local84 >> 8);
 					local99 = local90 + (local84 & 0xFF) - 1;
 					if (local99 > 103) {
@@ -3376,13 +3376,13 @@ public class SceneGraph {
 									local328 = local99 >= local114 + 1;
 									local315 = local114 - 1 >= local90;
 									if (!local315 && local72 + 1 <= local65) {
-										local343 = local18.aShortArray30[local24 + 1];
+										local343 = local18.spanProfile[local24 + 1];
 										local349 = local37 + (local343 >> 8);
 										local355 = local349 + (local343 & 0xFF);
 										local315 = local349 < local114 && local114 < local355;
 									}
 									if (!local328 && local72 - 1 >= local46) {
-										local343 = local18.aShortArray30[local24 - 1];
+										local343 = local18.spanProfile[local24 - 1];
 										local349 = local37 + (local343 >> 8);
 										local355 = local349 + (local343 & 0xFF);
 										local328 = local114 > local349 && local114 < local355;
@@ -3398,13 +3398,13 @@ public class SceneGraph {
 									local315 = local90 <= local114 - 1;
 									local328 = local114 + 1 <= local99;
 									if (!local315 && local72 - 1 >= local46) {
-										local343 = local18.aShortArray30[local24 - 1];
+										local343 = local18.spanProfile[local24 - 1];
 										local349 = (local343 >> 8) + local37;
 										local355 = local349 + (local343 & 0xFF);
 										local315 = local349 < local114 && local114 < local355;
 									}
 									if (!local328 && local72 + 1 <= local65) {
-										local343 = local18.aShortArray30[local24 + 1];
+										local343 = local18.spanProfile[local24 + 1];
 										local349 = (local343 >> 8) + local37;
 										local355 = local349 + (local343 & 0xFF);
 										local328 = local349 < local114 && local355 > local114;
@@ -3445,7 +3445,7 @@ public class SceneGraph {
 					local24 = local18.radius - (local18.y >> 7);
 				}
 				for (local72 = local46; local72 <= local65; local72++) {
-					local84 = local18.aShortArray30[local24];
+					local84 = local18.spanProfile[local24];
 					local90 = (local84 >> 8) + local37;
 					local99 = (local84 & 0xFF) + local90 - 1;
 					if (local99 > 103) {
@@ -3496,13 +3496,13 @@ public class SceneGraph {
 									local328 = local114 - 1 >= local90;
 									local947 = local99 >= local114 + 1;
 									if (!local328 && local65 >= local72 + 1) {
-										local961 = local18.aShortArray30[local24 + 1];
+										local961 = local18.spanProfile[local24 + 1];
 										local355 = (local961 >> 8) + local37;
 										local973 = (local961 & 0xFF) + local355;
 										local328 = local114 > local355 && local973 > local114;
 									}
 									if (!local947 && local72 - 1 >= local46) {
-										local961 = local18.aShortArray30[local24 - 1];
+										local961 = local18.spanProfile[local24 - 1];
 										local355 = local37 + (local961 >> 8);
 										local973 = (local961 & 0xFF) + local355;
 										local947 = local355 < local114 && local973 > local114;
@@ -3520,13 +3520,13 @@ public class SceneGraph {
 									local328 = local114 - 1 >= local90;
 									local947 = local99 >= local114 + 1;
 									if (!local328 && local46 <= local72 - 1) {
-										local961 = local18.aShortArray30[local24 - 1];
+										local961 = local18.spanProfile[local24 - 1];
 										local355 = local37 + (local961 >> 8);
 										local973 = (local961 & 0xFF) + local355;
 										local328 = local114 > local355 && local973 > local114;
 									}
 									if (!local947 && local65 >= local72 + 1) {
-										local961 = local18.aShortArray30[local24 + 1];
+										local961 = local18.spanProfile[local24 + 1];
 										local355 = local37 + (local961 >> 8);
 										local973 = (local961 & 0xFF) + local355;
 										local947 = local114 > local355 && local973 > local114;
@@ -5271,7 +5271,7 @@ public class SceneGraph {
 				int regionId = (regionX << 8) + regionY;
 				for (local243 = 0; local243 < local515; local243++) {
 					@Pc(529) Light local529 = new Light(local95);
-					if (local529.anInt2243 == 31) {
+					if (local529.animationPreset == 31) {
 						@Pc(541) LightType local541 = LightTypeList.get(local95.g2());
 						local529.setFlickerParams(local541.anInt2865, local541.anInt2873, local541.anInt2867, local541.anInt2872);
 					}
@@ -5281,7 +5281,7 @@ public class SceneGraph {
 					local194 = local529.y >> 7;
 					local190 = local529.x >> 7;
 					if (local190 >= 0 && local194 >= 0 && local190 < 104 && local194 < 104) {
-						local529.aBoolean125 = (renderFlags[1][local190][local194] & 0x2) != 0;
+						local529.onBridge = (renderFlags[1][local190][local194] & 0x2) != 0;
 						local529.y = tileHeights[local529.level][local190][local194] - local529.y;
 						LightingManager.addLight(local529);
 					}
@@ -5433,7 +5433,7 @@ public class SceneGraph {
 				} while (local497 <= 0);
 				for (local232 = 0; local232 < local497; local232++) {
 					@Pc(517) Light local517 = new Light(local96);
-					if (local517.anInt2243 == 31) {
+					if (local517.animationPreset == 31) {
 						@Pc(529) LightType local529 = LightTypeList.get(local96.g2());
 						local517.setFlickerParams(local529.anInt2865, local529.anInt2873, local529.anInt2867, local529.anInt2872);
 					}
@@ -5447,7 +5447,7 @@ public class SceneGraph {
 						local417 = local517.x >> 7;
 						local255 = local517.y >> 7;
 						if (local417 >= 0 && local255 >= 0 && local417 < 104 && local255 < 104) {
-							local517.aBoolean125 = (renderFlags[1][local417][local255] & 0x2) != 0;
+							local517.onBridge = (renderFlags[1][local417][local255] & 0x2) != 0;
 							local517.y = tileHeights[local517.level][local417][local255] - local517.y;
 							LightingManager.addLight(local517);
 						}

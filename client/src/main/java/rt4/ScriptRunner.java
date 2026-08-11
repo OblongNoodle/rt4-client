@@ -1494,7 +1494,7 @@ public final class ScriptRunner {
 			local43 = 0;
 		}
 		if (MiniMenu.anInt3953 == 1) {
-			if (anInt3751 == Mouse.anInt5850 && Mouse.anInt5895 == anInt1892) {
+			if (anInt3751 == Mouse.lastHandledClickX && Mouse.lastHandledClickY == anInt1892) {
 				InterfaceList.anInt436 = MiniMenu.size * 15 + (InterfaceList.aBoolean298 ? 26 : 22);
 				MiniMenu.anInt3953 = 0;
 				InterfaceList.anInt5138 = local43;
@@ -1510,8 +1510,8 @@ public final class ScriptRunner {
 			InterfaceList.anInt436 = (InterfaceList.aBoolean298 ? 26 : 22) + MiniMenu.size * 15;
 			Cs1ScriptRunner.aBoolean108 = true;
 		} else {
-			Mouse.anInt5895 = Mouse.clickY;
-			Mouse.anInt5850 = Mouse.clickX;
+			Mouse.lastHandledClickY = Mouse.clickY;
+			Mouse.lastHandledClickX = Mouse.clickX;
 			MiniMenu.anInt3953 = 1;
 		}
 	}
@@ -4873,8 +4873,8 @@ public final class ScriptRunner {
 													}
 													if (opcode == 5427) {
 														isp -= 2;
-														MiniMap.anInt4075 = intStack[isp];
-														MiniMap.anInt5073 = intStack[isp + 1];
+														MiniMap.useCursor = intStack[isp];
+														MiniMap.examineCursor = intStack[isp + 1];
 														continue;
 													}
 												} else if (opcode < 5600) {
@@ -5677,7 +5677,7 @@ public final class ScriptRunner {
 										local652 = aCalendar2.get(Calendar.DATE);
 										c = aCalendar2.get(Calendar.MONTH);
 										local1087 = aCalendar2.get(Calendar.YEAR);
-										stringStack[ssp++] = JagString.concatenate(new JagString[]{JagString.parseInt(local652), aClass100_767, DateUtil.aClass100Array40[c], aClass100_767, JagString.parseInt(local1087)});
+										stringStack[ssp++] = JagString.concatenate(new JagString[]{JagString.parseInt(local652), aClass100_767, DateUtil.SCRIPT_MONTHS[c], aClass100_767, JagString.parseInt(local1087)});
 										continue;
 									}
 									if (opcode == Cs2Opcodes.strForGender) {

@@ -2906,7 +2906,7 @@ public class Protocol {
 												newTab = false;
 											}
 											anInt3251++;
-											MiniMap.anInt2252++;
+											MiniMap.jitterTimer++;
 											anInt3486++;
 											if (anInt3486 > 500) {
 												anInt3486 = 0;
@@ -2921,24 +2921,24 @@ public class Protocol {
 													Camera.cameraOffsetX += Camera.anInt4229;
 												}
 											}
-											if (MiniMap.anInt2252 > 500) {
-												MiniMap.anInt2252 = 0;
+											if (MiniMap.jitterTimer > 500) {
+												MiniMap.jitterTimer = 0;
 												modelId = (int) (Math.random() * 8.0D);
 												if ((modelId & 0x1) == 1) {
-													MiniMap.anInt1814 += MiniMap.anInt5755;
+													MiniMap.compassAngleOffset += MiniMap.angleJitterStep;
 												}
 												if ((modelId & 0x2) == 2) {
-													MiniMap.anInt4130 += MiniMap.anInt4262;
+													MiniMap.zoomOffset += MiniMap.zoomJitterStep;
 												}
 											}
 											if (Camera.cameraOffsetX < -50) {
 												Camera.anInt4229 = 2;
 											}
-											if (MiniMap.anInt1814 < -60) {
-												MiniMap.anInt5755 = 2;
+											if (MiniMap.compassAngleOffset < -60) {
+												MiniMap.angleJitterStep = 2;
 											}
-											if (MiniMap.anInt4130 < -20) {
-												MiniMap.anInt4262 = 1;
+											if (MiniMap.zoomOffset < -20) {
+												MiniMap.zoomJitterStep = 1;
 											}
 											if (Camera.cameraOffsetY < -55) {
 												anInt659 = 2;
@@ -2955,11 +2955,11 @@ public class Protocol {
 											if (Camera.anInt5161 > 40) {
 												anInt4941 = -1;
 											}
-											if (MiniMap.anInt4130 > 10) {
-												MiniMap.anInt4262 = -1;
+											if (MiniMap.zoomOffset > 10) {
+												MiniMap.zoomJitterStep = -1;
 											}
-											if (MiniMap.anInt1814 > 60) {
-												MiniMap.anInt5755 = -2;
+											if (MiniMap.compassAngleOffset > 60) {
+												MiniMap.angleJitterStep = -2;
 											}
 											if (anInt3251 > 50) {
 												outboundBuffer.p1isaac(93);

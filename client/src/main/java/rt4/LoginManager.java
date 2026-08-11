@@ -1402,8 +1402,8 @@ public class LoginManager {
 	public static void processInterface() {
 		if (!Cs1ScriptRunner.aBoolean108) {
 			if (MiniMenu.anInt3953 != 0) {
-				ScriptRunner.anInt3751 = Mouse.anInt5850;
-				ScriptRunner.anInt1892 = Mouse.anInt5895;
+				ScriptRunner.anInt3751 = Mouse.lastHandledClickX;
+				ScriptRunner.anInt1892 = Mouse.lastHandledClickY;
 			} else if (Mouse.clickButton == 0) {
 				ScriptRunner.anInt3751 = Mouse.lastMouseX;
 				ScriptRunner.anInt1892 = Mouse.lastMouseY;

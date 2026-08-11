@@ -11,13 +11,13 @@ public final class Light {
 	@OriginalMember(owner = "client!f", name = "P", descriptor = "[I")
 	public static int[] NOISE;
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "Z")
-	public final boolean aBoolean124;
+	public final boolean extendsDown;
 
 	@OriginalMember(owner = "client!gi", name = "d", descriptor = "I")
 	private int alphaMax;
 
 	@OriginalMember(owner = "client!gi", name = "e", descriptor = "I")
-	private int anInt2233;
+	private int flickerType;
 
 	@OriginalMember(owner = "client!gi", name = "i", descriptor = "I")
 	public int z;
@@ -35,10 +35,10 @@ public final class Light {
 	public int level;
 
 	@OriginalMember(owner = "client!gi", name = "t", descriptor = "I")
-	public final int anInt2243;
+	public final int animationPreset;
 
 	@OriginalMember(owner = "client!gi", name = "u", descriptor = "[S")
-	public final short[] aShortArray30;
+	public final short[] spanProfile;
 
 	@OriginalMember(owner = "client!gi", name = "w", descriptor = "F")
 	public float alpha;
@@ -47,13 +47,13 @@ public final class Light {
 	public int y;
 
 	@OriginalMember(owner = "client!gi", name = "y", descriptor = "I")
-	private int anInt2246;
+	private int flickerSpeed;
 
 	@OriginalMember(owner = "client!gi", name = "z", descriptor = "F")
-	public float aFloat9;
+	public float quadraticAttenuation;
 
 	@OriginalMember(owner = "client!gi", name = "A", descriptor = "Z")
-	public final boolean aBoolean126;
+	public final boolean extendsUp;
 
 	@OriginalMember(owner = "client!gi", name = "B", descriptor = "Lclient!fj;")
 	public LightMesh mesh;
@@ -62,10 +62,10 @@ public final class Light {
 	public final int color;
 
 	@OriginalMember(owner = "client!gi", name = "E", descriptor = "I")
-	private final int anInt2249;
+	private final int animationPhase;
 
 	@OriginalMember(owner = "client!gi", name = "g", descriptor = "Z")
-	public boolean aBoolean125 = false;
+	public boolean onBridge = false;
 
 	public boolean matchesStaticLightOverride = false;
 
@@ -78,24 +78,24 @@ public final class Light {
 			init();
 		}
 		this.level = arg0.g1();
-		this.aBoolean124 = (this.level & 0x10) != 0;
-		this.aBoolean126 = (this.level & 0x8) != 0;
+		this.extendsDown = (this.level & 0x10) != 0;
+		this.extendsUp = (this.level & 0x8) != 0;
 		this.level &= 0x7;
 		this.x = arg0.g2();
 		this.y = arg0.g2();
 		this.z = arg0.g2();
 		this.radius = arg0.g1();
 		this.computeAttenuation();
-		this.aShortArray30 = new short[this.radius * 2 + 1];
+		this.spanProfile = new short[this.radius * 2 + 1];
 		@Pc(87) int local87;
-		for (local87 = 0; local87 < this.aShortArray30.length; local87++) {
-			this.aShortArray30[local87] = (short) arg0.g2();
+		for (local87 = 0; local87 < this.spanProfile.length; local87++) {
+			this.spanProfile[local87] = (short) arg0.g2();
 		}
 		this.color = Rasteriser.palette[arg0.g2()];
 		local87 = arg0.g1();
-		this.anInt2249 = (local87 & 0xE0) << 3;
-		this.anInt2243 = local87 & 0x1F;
-		if (this.anInt2243 != 31) {
+		this.animationPhase = (local87 & 0xE0) << 3;
+		this.animationPreset = local87 & 0x1F;
+		if (this.animationPreset != 31) {
 			this.initAnimationPreset();
 		}
 	}
@@ -123,22 +123,22 @@ public final class Light {
 
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "(BIIII)V")
 	public final void setFlickerParams(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		this.anInt2233 = arg0;
+		this.flickerType = arg0;
 		this.alphaMin = arg2;
 		this.alphaMax = arg3;
-		this.anInt2246 = arg1;
+		this.flickerSpeed = arg1;
 	}
 
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "(I)V")
 	private void computeAttenuation() {
 		@Pc(10) int local10 = (this.radius << 7) + 64;
-		this.aFloat9 = 1.0F / (float) (local10 * local10);
+		this.quadraticAttenuation = 1.0F / (float) (local10 * local10);
 	}
 
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "(ZII)V")
 	public final void updateAnimation(@OriginalArg(0) boolean disableFlicker, @OriginalArg(1) int arg1) {
-		@Pc(26) int t = this.anInt2249 + arg1 * this.anInt2246 / 50 & 0x7FF;
-		@Pc(29) int local29 = this.anInt2233;
+		@Pc(26) int t = this.animationPhase + arg1 * this.flickerSpeed / 50 & 0x7FF;
+		@Pc(29) int local29 = this.flickerType;
 		@Pc(62) int alpha;
 		if (local29 == 1) {
 			alpha = (MathUtils.sin[t] >> 6) + 1024;
@@ -165,87 +165,87 @@ public final class Light {
 
 	@OriginalMember(owner = "client!gi", name = "c", descriptor = "(I)V")
 	private void initAnimationPreset() {
-		@Pc(4) int local4 = this.anInt2243;
+		@Pc(4) int local4 = this.animationPreset;
 		if (local4 == 2) {
 			this.alphaMin = 2048;
 			this.alphaMax = 0;
-			this.anInt2233 = 1;
-			this.anInt2246 = 2048;
+			this.flickerType = 1;
+			this.flickerSpeed = 2048;
 		} else if (local4 == 3) {
 			this.alphaMax = 0;
-			this.anInt2246 = 4096;
-			this.anInt2233 = 1;
+			this.flickerSpeed = 4096;
+			this.flickerType = 1;
 			this.alphaMin = 2048;
 		} else if (local4 == 4) {
 			this.alphaMax = 0;
 			this.alphaMin = 2048;
-			this.anInt2233 = 4;
-			this.anInt2246 = 2048;
+			this.flickerType = 4;
+			this.flickerSpeed = 2048;
 		} else if (local4 == 5) {
-			this.anInt2233 = 4;
+			this.flickerType = 4;
 			this.alphaMin = 2048;
-			this.anInt2246 = 8192;
+			this.flickerSpeed = 8192;
 			this.alphaMax = 0;
 		} else if (local4 == 12) {
 			this.alphaMin = 2048;
-			this.anInt2233 = 2;
-			this.anInt2246 = 2048;
+			this.flickerType = 2;
+			this.flickerSpeed = 2048;
 			this.alphaMax = 0;
 		} else if (local4 == 13) {
-			this.anInt2246 = 8192;
+			this.flickerSpeed = 8192;
 			this.alphaMin = 2048;
-			this.anInt2233 = 2;
+			this.flickerType = 2;
 			this.alphaMax = 0;
 		} else if (local4 == 10) {
 			this.alphaMin = 512;
-			this.anInt2233 = 3;
+			this.flickerType = 3;
 			this.alphaMax = 1536;
-			this.anInt2246 = 2048;
+			this.flickerSpeed = 2048;
 		} else if (local4 == 11) {
-			this.anInt2233 = 3;
-			this.anInt2246 = 4096;
+			this.flickerType = 3;
+			this.flickerSpeed = 4096;
 			this.alphaMin = 512;
 			this.alphaMax = 1536;
 		} else if (local4 == 6) {
 			this.alphaMin = 768;
 			this.alphaMax = 1280;
-			this.anInt2233 = 3;
-			this.anInt2246 = 2048;
+			this.flickerType = 3;
+			this.flickerSpeed = 2048;
 		} else if (local4 == 7) {
 			this.alphaMin = 768;
 			this.alphaMax = 1280;
-			this.anInt2246 = 4096;
-			this.anInt2233 = 3;
+			this.flickerSpeed = 4096;
+			this.flickerType = 3;
 		} else if (local4 == 8) {
-			this.anInt2246 = 2048;
-			this.anInt2233 = 3;
+			this.flickerSpeed = 2048;
+			this.flickerType = 3;
 			this.alphaMin = 1024;
 			this.alphaMax = 1024;
 		} else if (local4 == 9) {
-			this.anInt2246 = 4096;
+			this.flickerSpeed = 4096;
 			this.alphaMax = 1024;
 			this.alphaMin = 1024;
-			this.anInt2233 = 3;
+			this.flickerType = 3;
 		} else if (local4 == 14) {
-			this.anInt2246 = 2048;
+			this.flickerSpeed = 2048;
 			this.alphaMax = 1280;
-			this.anInt2233 = 1;
+			this.flickerType = 1;
 			this.alphaMin = 768;
 		} else if (local4 == 15) {
 			this.alphaMin = 512;
-			this.anInt2246 = 4096;
+			this.flickerSpeed = 4096;
 			this.alphaMax = 1536;
-			this.anInt2233 = 1;
+			this.flickerType = 1;
 		} else if (local4 == 16) {
-			this.anInt2246 = 8192;
+			this.flickerSpeed = 8192;
 			this.alphaMax = 1792;
-			this.anInt2233 = 1;
+			this.flickerType = 1;
 			this.alphaMin = 256;
 		} else {
-			this.anInt2246 = 2048;
+			this.flickerSpeed = 2048;
 			this.alphaMax = 0;
 			this.alphaMin = 2048;
-			this.anInt2233 = 0;
+			this.flickerType = 0;
 		}
 	}
 }

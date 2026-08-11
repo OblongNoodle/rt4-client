@@ -9,23 +9,23 @@ import org.openrs2.deob.annotation.Pc;
 public final class LinkedList {
 
 	@OriginalMember(owner = "client!ih", name = "p", descriptor = "Lclient!ab;")
-	private Node aClass3_110;
+	private Node iteratorCursor;
 
 	@OriginalMember(owner = "client!ih", name = "m", descriptor = "Lclient!ab;")
-	public final Node aClass3_109 = new Node();
+	public final Node sentinel = new Node();
 
 	@OriginalMember(owner = "client!ih", name = "<init>", descriptor = "()V")
 	public LinkedList() {
-		this.aClass3_109.previousNode = this.aClass3_109;
-		this.aClass3_109.nextNode = this.aClass3_109;
+		this.sentinel.previousNode = this.sentinel;
+		this.sentinel.nextNode = this.sentinel;
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(I)V")
 	public final void clear() {
 		while (true) {
-			@Pc(5) Node local5 = this.aClass3_109.nextNode;
-			if (local5 == this.aClass3_109) {
-				this.aClass3_110 = null;
+			@Pc(5) Node local5 = this.sentinel.nextNode;
+			if (local5 == this.sentinel) {
+				this.iteratorCursor = null;
 				return;
 			}
 			local5.unlink();
@@ -34,12 +34,12 @@ public final class LinkedList {
 
 	@OriginalMember(owner = "client!ih", name = "b", descriptor = "(I)Lclient!ab;")
 	public final Node tail() {
-		@Pc(7) Node local7 = this.aClass3_109.previousNode;
-		if (this.aClass3_109 == local7) {
-			this.aClass3_110 = null;
+		@Pc(7) Node local7 = this.sentinel.previousNode;
+		if (this.sentinel == local7) {
+			this.iteratorCursor = null;
 			return null;
 		} else {
-			this.aClass3_110 = local7.previousNode;
+			this.iteratorCursor = local7.previousNode;
 			return local7;
 		}
 	}
@@ -49,8 +49,8 @@ public final class LinkedList {
 		if (arg0.previousNode != null) {
 			arg0.unlink();
 		}
-		arg0.nextNode = this.aClass3_109;
-		arg0.previousNode = this.aClass3_109.previousNode;
+		arg0.nextNode = this.sentinel;
+		arg0.previousNode = this.sentinel.previousNode;
 		arg0.previousNode.nextNode = arg0;
 		arg0.nextNode.previousNode = arg0;
 	}
@@ -60,28 +60,28 @@ public final class LinkedList {
 		if (arg0.previousNode != null) {
 			arg0.unlink();
 		}
-		arg0.nextNode = this.aClass3_109.nextNode;
-		arg0.previousNode = this.aClass3_109;
+		arg0.nextNode = this.sentinel.nextNode;
+		arg0.previousNode = this.sentinel;
 		arg0.previousNode.nextNode = arg0;
 		arg0.nextNode.previousNode = arg0;
 	}
 
 	@OriginalMember(owner = "client!ih", name = "d", descriptor = "(I)Lclient!ab;")
 	public final Node prev() {
-		@Pc(13) Node local13 = this.aClass3_110;
-		if (this.aClass3_109 == local13) {
-			this.aClass3_110 = null;
+		@Pc(13) Node local13 = this.iteratorCursor;
+		if (this.sentinel == local13) {
+			this.iteratorCursor = null;
 			return null;
 		} else {
-			this.aClass3_110 = local13.previousNode;
+			this.iteratorCursor = local13.previousNode;
 			return local13;
 		}
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(B)Lclient!ab;")
 	public final Node removeHead() {
-		@Pc(3) Node local3 = this.aClass3_109.nextNode;
-		if (this.aClass3_109 == local3) {
+		@Pc(3) Node local3 = this.sentinel.nextNode;
+		if (this.sentinel == local3) {
 			return null;
 		} else {
 			local3.unlink();
@@ -91,24 +91,24 @@ public final class LinkedList {
 
 	@OriginalMember(owner = "client!ih", name = "e", descriptor = "(I)Lclient!ab;")
 	public final Node next() {
-		@Pc(12) Node local12 = this.aClass3_110;
-		if (local12 == this.aClass3_109) {
-			this.aClass3_110 = null;
+		@Pc(12) Node local12 = this.iteratorCursor;
+		if (local12 == this.sentinel) {
+			this.iteratorCursor = null;
 			return null;
 		} else {
-			this.aClass3_110 = local12.nextNode;
+			this.iteratorCursor = local12.nextNode;
 			return local12;
 		}
 	}
 
 	@OriginalMember(owner = "client!ih", name = "f", descriptor = "(I)Lclient!ab;")
 	public final Node head() {
-		@Pc(3) Node local3 = this.aClass3_109.nextNode;
-		if (this.aClass3_109 == local3) {
-			this.aClass3_110 = null;
+		@Pc(3) Node local3 = this.sentinel.nextNode;
+		if (this.sentinel == local3) {
+			this.iteratorCursor = null;
 			return null;
 		} else {
-			this.aClass3_110 = local3.nextNode;
+			this.iteratorCursor = local3.nextNode;
 			return local3;
 		}
 	}

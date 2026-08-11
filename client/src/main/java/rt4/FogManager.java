@@ -16,43 +16,43 @@ public final class FogManager {
 	@OriginalMember(owner = "client!mk", name = "d", descriptor = "I")
 	public static int lightZ;
 	@OriginalMember(owner = "client!ig", name = "d", descriptor = "I")
-	public static int anInt2883;
+	public static int targetScreenColor;
 	@OriginalMember(owner = "client!jm", name = "s", descriptor = "F")
-	public static float aFloat13;
+	public static float targetAmbient;
 	@OriginalMember(owner = "client!ui", name = "mb", descriptor = "F")
-	public static float aFloat37;
+	public static float prevLight0Diffuse;
 	@OriginalMember(owner = "client!ej", name = "bb", descriptor = "F")
-	public static float aFloat6;
+	public static float prevAmbient;
 	@OriginalMember(owner = "client!vh", name = "e", descriptor = "I")
-	public static int anInt4623;
+	public static int prevFogColor;
 	@OriginalMember(owner = "client!ni", name = "h", descriptor = "I")
-	public static int anInt4153;
+	public static int prevFogDepth;
 	@OriginalMember(owner = "client!be", name = "Vb", descriptor = "F")
-	public static float aFloat4;
+	public static float targetLight1Diffuse;
 	@OriginalMember(owner = "client!ab", name = "b", descriptor = "I")
-	public static int anInt5868 = 0;
+	public static int fadeProgress = 0;
 	@OriginalMember(owner = "client!sf", name = "c", descriptor = "I")
-	public static int anInt5080;
+	public static int targetFogDepth;
 	@OriginalMember(owner = "client!kd", name = "ub", descriptor = "I")
-	public static int anInt3255;
+	public static int prevScreenColor;
 	@OriginalMember(owner = "client!aj", name = "X", descriptor = "F")
-	public static float aFloat1;
+	public static float targetLight0Diffuse;
 	@OriginalMember(owner = "client!p", name = "g", descriptor = "F")
-	public static float aFloat23;
+	public static float prevLight1Diffuse;
 	@OriginalMember(owner = "client!nc", name = "a", descriptor = "I")
-	public static int anInt4044;
+	public static int targetFogColor;
 	@OriginalMember(owner = "client!bm", name = "a", descriptor = "F")
-	public static float aFloat5;
+	public static float currentLight1Diffuse;
 	@OriginalMember(owner = "client!ve", name = "t", descriptor = "I")
-	public static int anInt5731;
+	public static int currentScreenColor;
 	@OriginalMember(owner = "client!md", name = "S", descriptor = "I")
-	public static int anInt3709;
+	public static int currentFogColor;
 	@OriginalMember(owner = "client!ui", name = "T", descriptor = "F")
-	public static float aFloat36;
+	public static float currentLight0Diffuse;
 	@OriginalMember(owner = "client!en", name = "z", descriptor = "F")
-	public static float aFloat7;
+	public static float currentAmbient;
 	@OriginalMember(owner = "client!ge", name = "q", descriptor = "I")
-	public static int anInt2161;
+	public static int currentFogDepth;
 	@OriginalMember(owner = "client!sa", name = "W", descriptor = "Z")
 	public static boolean instantScreenFade = true;
 	@OriginalMember(owner = "client!li", name = "t", descriptor = "I")
@@ -233,42 +233,42 @@ public final class FogManager {
 			local34 = 0;
 		}
 		@Pc(44) float local44 = local15.light1Diffuse;
-		if (local31 != anInt2883 || aFloat13 != local25 || aFloat1 != local28 || local44 != aFloat4 || anInt4044 != local37 || anInt5080 != local34) {
-			aFloat13 = local25;
-			aFloat37 = aFloat36;
-			aFloat6 = aFloat7;
-			anInt2883 = local31;
-			anInt4623 = anInt3709;
-			anInt4153 = anInt2161;
-			aFloat4 = local44;
-			anInt5868 = 0;
-			anInt3255 = anInt5731;
-			anInt5080 = local34;
-			aFloat1 = local28;
-			anInt4044 = local37;
-			aFloat23 = aFloat5;
+		if (local31 != targetScreenColor || targetAmbient != local25 || targetLight0Diffuse != local28 || local44 != targetLight1Diffuse || targetFogColor != local37 || targetFogDepth != local34) {
+			targetAmbient = local25;
+			prevLight0Diffuse = currentLight0Diffuse;
+			prevAmbient = currentAmbient;
+			targetScreenColor = local31;
+			prevFogColor = currentFogColor;
+			prevFogDepth = currentFogDepth;
+			targetLight1Diffuse = local44;
+			fadeProgress = 0;
+			prevScreenColor = currentScreenColor;
+			targetFogDepth = local34;
+			targetLight0Diffuse = local28;
+			targetFogColor = local37;
+			prevLight1Diffuse = currentLight1Diffuse;
 		}
-		if (anInt5868 < 65536) {
-			anInt5868 += arg0 * 250;
-			if (anInt5868 >= 65536) {
-				anInt5868 = 65536;
+		if (fadeProgress < 65536) {
+			fadeProgress += arg0 * 250;
+			if (fadeProgress >= 65536) {
+				fadeProgress = 65536;
 			}
-			@Pc(114) float local114 = (float) anInt5868 / 65536.0F;
-			@Pc(118) int local118 = anInt5868 >> 8;
-			@Pc(125) int local125 = 65536 - anInt5868 >> 8;
-			anInt3709 = (local118 * (anInt4044 & 0xFF00FF) + (anInt4623 & 0xFF00FF) * local125 & 0xFF00FF00) + (local125 * (anInt4623 & 0xFF00) + (anInt4044 & 0xFF00) * local118 & 0xFF0000) >> 8;
-			@Pc(162) float local162 = (float) (65536 - anInt5868) / 65536.0F;
-			aFloat7 = local162 * aFloat6 + local114 * aFloat13;
-			aFloat36 = aFloat37 * local162 + local114 * aFloat1;
-			aFloat5 = local114 * aFloat4 + local162 * aFloat23;
-			anInt5731 = ((anInt2883 & 0xFF00) * local118 + local125 * (anInt3255 & 0xFF00) & 0xFF0000) + ((anInt3255 & 0xFF00FF) * local125 + ((anInt2883 & 0xFF00FF) * local118) & 0xFF00FF00) >> 8;
-			anInt2161 = local118 * anInt5080 + local125 * anInt4153 >> 8;
+			@Pc(114) float local114 = (float) fadeProgress / 65536.0F;
+			@Pc(118) int local118 = fadeProgress >> 8;
+			@Pc(125) int local125 = 65536 - fadeProgress >> 8;
+			currentFogColor = (local118 * (targetFogColor & 0xFF00FF) + (prevFogColor & 0xFF00FF) * local125 & 0xFF00FF00) + (local125 * (prevFogColor & 0xFF00) + (targetFogColor & 0xFF00) * local118 & 0xFF0000) >> 8;
+			@Pc(162) float local162 = (float) (65536 - fadeProgress) / 65536.0F;
+			currentAmbient = local162 * prevAmbient + local114 * targetAmbient;
+			currentLight0Diffuse = prevLight0Diffuse * local162 + local114 * targetLight0Diffuse;
+			currentLight1Diffuse = local114 * targetLight1Diffuse + local162 * prevLight1Diffuse;
+			currentScreenColor = ((targetScreenColor & 0xFF00) * local118 + local125 * (prevScreenColor & 0xFF00) & 0xFF0000) + ((prevScreenColor & 0xFF00FF) * local125 + ((targetScreenColor & 0xFF00FF) * local118) & 0xFF00FF00) >> 8;
+			currentFogDepth = local118 * targetFogDepth + local125 * prevFogDepth >> 8;
 		}
-		setLightParams(anInt5731, aFloat7, aFloat36, aFloat5);
-		setFogParams(anInt3709, anInt2161);
+		setLightParams(currentScreenColor, currentAmbient, currentLight0Diffuse, currentLight1Diffuse);
+		setFogParams(currentFogColor, currentFogDepth);
 		setLightPosition((float) currentLightX, (float) currentLightY, (float) currentLightZ);
 		applyLightPosition();
-		return anInt3709;
+		return currentFogColor;
 	}
 
 	@OriginalMember(owner = "client!gm", name = "f", descriptor = "(B)V")

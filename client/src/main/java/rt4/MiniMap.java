@@ -6,9 +6,9 @@ import org.openrs2.deob.annotation.Pc;
 
 public class MiniMap {
 	@OriginalMember(owner = "client!ke", name = "T", descriptor = "[[I")
-	public static final int[][] anIntArrayArray24 = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1}, {1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0}, {0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1}, {0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0}, {1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1}, {1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1}};
+	public static final int[][] tileShapeMasks = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1}, {1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0}, {0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1}, {0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0}, {1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1}, {1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1}};
 	@OriginalMember(owner = "client!wc", name = "h", descriptor = "[[I")
-	public static final int[][] anIntArrayArray46 = new int[][]{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, {12, 8, 4, 0, 13, 9, 5, 1, 14, 10, 6, 2, 15, 11, 7, 3}, {15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}, {3, 7, 11, 15, 2, 6, 10, 14, 1, 5, 9, 13, 0, 4, 8, 12}};
+	public static final int[][] tileShapeRotations = new int[][]{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, {12, 8, 4, 0, 13, 9, 5, 1, 14, 10, 6, 2, 15, 11, 7, 3}, {15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}, {3, 7, 11, 15, 2, 6, 10, 14, 1, 5, 9, 13, 0, 4, 8, 12}};
 	@OriginalMember(owner = "client!qc", name = "ab", descriptor = "[I")
 	public static final int[] locId = new int[1000];
 	@OriginalMember(owner = "client!lf", name = "d", descriptor = "[I")
@@ -18,7 +18,7 @@ public class MiniMap {
 	@OriginalMember(owner = "client!ld", name = "b", descriptor = "[Lclient!nc;")
 	public static final MapMarker[] hintMapMarkers = new MapMarker[4];
 	@OriginalMember(owner = "client!ld", name = "d", descriptor = "Lclient!na;")
-	public static final JagString aClass100_668 = JagString.parse("Hidden)2use");
+	public static final JagString HIDDEN_OPTION_TEXT = JagString.parse("Hidden)2use");
 	@OriginalMember(owner = "client!ef", name = "j", descriptor = "Lclient!mm;")
 	public static SoftwareSprite softwareSprite;
 	@OriginalMember(owner = "client!ha", name = "i", descriptor = "Lclient!qf;")
@@ -28,21 +28,21 @@ public class MiniMap {
 	@OriginalMember(owner = "client!wb", name = "d", descriptor = "I")
 	public static int state = 0;
 	@OriginalMember(owner = "client!we", name = "w", descriptor = "I")
-	public static int anInt4130 = 0;
+	public static int zoomOffset = 0;
 	@OriginalMember(owner = "client!ej", name = "W", descriptor = "I")
-	public static int anInt1814 = 0;
+	public static int compassAngleOffset = 0;
 	@OriginalMember(owner = "client!vg", name = "d", descriptor = "I")
-	public static int anInt5755 = 2;
+	public static int angleJitterStep = 2;
 	@OriginalMember(owner = "client!oe", name = "n", descriptor = "I")
-	public static int anInt4262 = 1;
+	public static int zoomJitterStep = 1;
 	@OriginalMember(owner = "client!gi", name = "H", descriptor = "I")
-	public static int anInt2252 = 0;
+	public static int jitterTimer = 0;
 	@OriginalMember(owner = "client!nf", name = "i", descriptor = "I")
-	public static int anInt4075 = -1;
+	public static int useCursor = -1;
 	@OriginalMember(owner = "client!se", name = "h", descriptor = "I")
-	public static int anInt5073 = -1;
+	public static int examineCursor = -1;
 	@OriginalMember(owner = "client!sd", name = "R", descriptor = "I")
-	public static int anInt5062;
+	public static int selectedComponentId;
 
 	@OriginalMember(owner = "client!ma", name = "a", descriptor = "([IIIIII)V")
 	public static void renderTile(@OriginalArg(0) int[] pixels, @OriginalArg(1) int index, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
@@ -73,8 +73,8 @@ public class MiniMap {
 		@Pc(67) int local67 = local58.rotation;
 		@Pc(70) int local70 = local58.textureId;
 		@Pc(73) int local73 = local58.flatColor;
-		@Pc(77) int[] local77 = anIntArrayArray24[local23];
-		@Pc(81) int[] local81 = anIntArrayArray46[local67];
+		@Pc(77) int[] local77 = tileShapeMasks[local23];
+		@Pc(81) int[] local81 = tileShapeRotations[local67];
 		@Pc(83) int local83 = 0;
 		@Pc(87) int local87;
 		if (local70 != 0) {
@@ -235,13 +235,13 @@ public class MiniMap {
 			SoftwareRaster.setClip(arg2, arg1, arg2 + arg3.width, arg1 + arg3.height);
 		}
 		if (state != 2 && state != 5 && sprite != null) {
-			@Pc(48) int local48 = anInt1814 + (int) Camera.yawTarget & 0x7FF;
+			@Pc(48) int local48 = compassAngleOffset + (int) Camera.yawTarget & 0x7FF;
 			@Pc(57) int local57 = PlayerList.self.xFine / 32 + 48;
 			@Pc(67) int local67 = 464 - PlayerList.self.yFine / 32;
 			if (GlRenderer.enabled) {
-				((GlSprite) sprite).renderRotatedTransparent(arg2, arg1, arg3.width, arg3.height, local57, local67, local48, anInt4130 + 256, (GlSprite) arg3.getSprite(false));
+				((GlSprite) sprite).renderRotatedTransparent(arg2, arg1, arg3.width, arg3.height, local57, local67, local48, zoomOffset + 256, (GlSprite) arg3.getSprite(false));
 			} else {
-				((SoftwareSprite) sprite).renderRotated(arg2, arg1, arg3.width, arg3.height, local57, local67, local48, anInt4130 + 256, arg3.anIntArray37, arg3.anIntArray45);
+				((SoftwareSprite) sprite).renderRotated(arg2, arg1, arg3.width, arg3.height, local57, local67, local48, zoomOffset + 256, arg3.anIntArray37, arg3.anIntArray45);
 			}
 			@Pc(146) int local146;
 			@Pc(181) int local181;
@@ -258,9 +258,9 @@ public class MiniMap {
 						local150 = MathUtils.sin[local48];
 						local154 = MathUtils.cos[local48];
 						@Pc(156) Font local156 = Fonts.p11Full;
-						@Pc(164) int local164 = local150 * 256 / (anInt4130 + 256);
+						@Pc(164) int local164 = local150 * 256 / (zoomOffset + 256);
 						local181 = (LoginManager.mapElementList.aShortArray72[local117] - Camera.originY) * 4 + 2 - PlayerList.self.yFine / 32;
-						@Pc(189) int local189 = local154 * 256 / (anInt4130 + 256);
+						@Pc(189) int local189 = local154 * 256 / (zoomOffset + 256);
 						local200 = local181 * local189 - local146 * local164 >> 16;
 						if (LoginManager.mapElementList.getLabelSize(local117) == 1) {
 							local156 = Fonts.p12Full;
@@ -417,15 +417,15 @@ public class MiniMap {
 			return;
 		}
 		@Pc(21) int local21 = arg3 * arg3 + arg2 * arg2;
-		@Pc(27) int local27 = anInt1814 + (int) Camera.yawTarget & 0x7FF;
+		@Pc(27) int local27 = compassAngleOffset + (int) Camera.yawTarget & 0x7FF;
 		@Pc(39) int local39 = Math.max(arg0.width / 2, arg0.height / 2) + 10;
 		if (local39 * local39 < local21) {
 			return;
 		}
 		@Pc(50) int local50 = MathUtils.sin[local27];
-		@Pc(58) int local58 = local50 * 256 / (anInt4130 + 256);
+		@Pc(58) int local58 = local50 * 256 / (zoomOffset + 256);
 		@Pc(62) int local62 = MathUtils.cos[local27];
-		@Pc(70) int local70 = local62 * 256 / (anInt4130 + 256);
+		@Pc(70) int local70 = local62 * 256 / (zoomOffset + 256);
 		@Pc(81) int local81 = local58 * arg2 + arg3 * local70 >> 16;
 		@Pc(92) int local92 = local70 * arg2 - arg3 * local58 >> 16;
 		if (GlRenderer.enabled) {
@@ -447,11 +447,11 @@ public class MiniMap {
 			return;
 		}
 		local30 -= 10;
-		@Pc(58) int local58 = anInt1814 + (int) Camera.yawTarget & 0x7FF;
+		@Pc(58) int local58 = compassAngleOffset + (int) Camera.yawTarget & 0x7FF;
 		@Pc(62) int local62 = MathUtils.cos[local58];
 		@Pc(66) int local66 = MathUtils.sin[local58];
-		@Pc(74) int local74 = local66 * 256 / (anInt4130 + 256);
-		@Pc(82) int local82 = local62 * 256 / (anInt4130 + 256);
+		@Pc(74) int local74 = local66 * 256 / (zoomOffset + 256);
+		@Pc(82) int local82 = local62 * 256 / (zoomOffset + 256);
 		@Pc(93) int local93 = arg4 * local74 + local82 * arg3 >> 16;
 		@Pc(104) int local104 = arg4 * local82 - local74 * arg3 >> 16;
 		@Pc(110) double local110 = Math.atan2(local93, local104);
@@ -469,7 +469,7 @@ public class MiniMap {
 		if (InterfaceList.getServerActiveProperties(arg0).getTargetMask() == 0) {
 			return null;
 		} else if (arg0.optionCircumfix == null || arg0.optionCircumfix.trim().length() == 0) {
-			return Cheat.qaOpTest ? aClass100_668 : null;
+			return Cheat.qaOpTest ? HIDDEN_OPTION_TEXT : null;
 		} else {
 			return arg0.optionCircumfix;
 		}

@@ -260,11 +260,11 @@ public class LightingManager {
 		for (@Pc(1) int local1 = 0; local1 < lightCount; local1++) {
 			@Pc(8) Light local8 = lights[local1];
 			@Pc(11) int local11 = local8.level;
-			if (local8.aBoolean124) {
+			if (local8.extendsDown) {
 				local11 = 0;
 			}
 			@Pc(19) int local19 = local8.level;
-			if (local8.aBoolean126) {
+			if (local8.extendsUp) {
 				local19 = 3;
 			}
 			for (@Pc(26) int local26 = local11; local26 <= local19; local26++) {
@@ -279,7 +279,7 @@ public class LightingManager {
 					local55 = length - 1;
 				}
 				for (@Pc(66) int local66 = local39; local66 <= local55; local66++) {
-					@Pc(75) short local75 = local8.aShortArray30[local31++];
+					@Pc(75) short local75 = local8.spanProfile[local31++];
 					@Pc(87) int local87 = (local8.x >> 7) + (local75 >> 8) - local8.radius;
 					@Pc(95) int local95 = local87 + (local75 & 0xFF) - 1;
 					if (local87 < 0) {
@@ -402,7 +402,7 @@ public class LightingManager {
 		for (@Pc(56) int local56 = 0; local56 < lightCount; local56++) {
 			@Pc(63) Light local63 = lights[local56];
 			@Pc(66) int local66 = local63.level;
-			if (local63.aBoolean125) {
+			if (local63.onBridge) {
 				local66--;
 			}
 			if (local63.mesh != null) {
@@ -417,7 +417,7 @@ public class LightingManager {
 					local84 = anInt4698;
 				}
 				for (@Pc(112) int local112 = local84; local112 <= local92; local112++) {
-					@Pc(121) short local121 = local63.aShortArray30[local76++];
+					@Pc(121) short local121 = local63.spanProfile[local76++];
 					@Pc(133) int local133 = (local63.x >> 7) + (local121 >> 8) - local63.radius;
 					@Pc(141) int local141 = local133 + (local121 & 0xFF) - 1;
 					if (local133 < anInt987) {
@@ -458,7 +458,7 @@ public class LightingManager {
 			gl.glEnable(local5);
 			enabledLights[arg0] = true;
 		}
-		gl.glLightf(local5, GL2.GL_QUADRATIC_ATTENUATION, arg1.aFloat9);
+		gl.glLightf(local5, GL2.GL_QUADRATIC_ATTENUATION, arg1.quadraticAttenuation);
 		gl.glLightfv(local5, GL2.GL_DIFFUSE, arg1.diffuse, 0);
 		aFloatArray17[0] = arg1.x - arg2;
 		aFloatArray17[1] = arg1.z - arg3;
