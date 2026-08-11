@@ -18,7 +18,7 @@ public final class Component {
 	public static final SoftLruHashTable fonts = new SoftLruHashTable(20);
 
 	@OriginalMember(owner = "client!rc", name = "C", descriptor = "Z")
-	public static boolean aBoolean72 = false;
+	public static boolean loadFailed = false;
 
 	@OriginalMember(owner = "client!be", name = "b", descriptor = "[Ljava/lang/Object;")
 	public Object[] onFriendTransmit;
@@ -27,7 +27,7 @@ public final class Component {
 	public Object[] onStatTransmit;
 
 	@OriginalMember(owner = "client!be", name = "e", descriptor = "[Ljava/lang/Object;")
-	public Object[] anObjectArray3;
+	public Object[] onLoad;
 
 	@OriginalMember(owner = "client!be", name = "g", descriptor = "[Ljava/lang/Object;")
 	public Object[] onVarcTransmit;
@@ -84,7 +84,7 @@ public final class Component {
 	public Object[] onDialogAbort;
 
 	@OriginalMember(owner = "client!be", name = "gb", descriptor = "[I")
-	public int[] anIntArray37;
+	public int[] clickMaskStart;
 
 	@OriginalMember(owner = "client!be", name = "kb", descriptor = "[I")
 	public int[] varcTriggers;
@@ -114,7 +114,7 @@ public final class Component {
 	public Object[] onMouseOver;
 
 	@OriginalMember(owner = "client!be", name = "Yb", descriptor = "[I")
-	public int[] anIntArray39;
+	public int[] dragTargets;
 
 	@OriginalMember(owner = "client!be", name = "dc", descriptor = "[I")
 	public int[] objTypes;
@@ -156,7 +156,7 @@ public final class Component {
 	public int[] varpTriggers;
 
 	@OriginalMember(owner = "client!be", name = "Tc", descriptor = "[I")
-	public int[] anIntArray45;
+	public int[] clickMaskWidth;
 
 	@OriginalMember(owner = "client!be", name = "Xc", descriptor = "[Ljava/lang/Object;")
 	public Object[] onDragStart;
@@ -258,7 +258,7 @@ public final class Component {
 	public int createdComponentId = -1;
 
 	@OriginalMember(owner = "client!be", name = "J", descriptor = "Z")
-	public boolean aBoolean24 = false;
+	public boolean dragging = false;
 
 	@OriginalMember(owner = "client!ob", name = "e", descriptor = "Lclient!na;")
 	public static final JagString EMPTY_STRING = JagString.parse("");
@@ -266,16 +266,16 @@ public final class Component {
 	public JagString optionSuffix = EMPTY_STRING;
 
 	@OriginalMember(owner = "client!be", name = "i", descriptor = "Z")
-	public boolean aBoolean19 = false;
+	public boolean mouseOver = false;
 
 	@OriginalMember(owner = "client!be", name = "yb", descriptor = "I")
 	public int valign = 0;
 
 	@OriginalMember(owner = "client!be", name = "lb", descriptor = "I")
-	public int anInt470 = -1;
+	public int hoverOverlayer = -1;
 
 	@OriginalMember(owner = "client!be", name = "m", descriptor = "Z")
-	public boolean aBoolean20 = false;
+	public boolean lineFlipped = false;
 
 	@OriginalMember(owner = "client!be", name = "pc", descriptor = "I")
 	public int anInt499 = -1;
@@ -338,7 +338,7 @@ public final class Component {
 	public int objId = -1;
 
 	@OriginalMember(owner = "client!be", name = "vb", descriptor = "I")
-	public int anInt475 = 0;
+	public int activeOverColor = 0;
 
 	@OriginalMember(owner = "client!be", name = "nc", descriptor = "I")
 	public int modelZOffset = 0;
@@ -446,7 +446,7 @@ public final class Component {
 	public int shadowColor = 0;
 
 	@OriginalMember(owner = "client!be", name = "fd", descriptor = "Lclient!be;")
-	public Component aClass13_5 = null;
+	public Component dragParent = null;
 
 	@OriginalMember(owner = "client!be", name = "od", descriptor = "I")
 	public int updatedStatsReaderIndex = 0;
@@ -455,7 +455,7 @@ public final class Component {
 	public int modelType = 1;
 
 	@OriginalMember(owner = "client!be", name = "md", descriptor = "Z")
-	public boolean aBoolean34 = false;
+	public boolean modelTransparent = false;
 
 	@OriginalMember(owner = "client!be", name = "hd", descriptor = "B")
 	public byte dynamicWidthValue = 0;
@@ -470,7 +470,7 @@ public final class Component {
 	public int modelYAngle = 0;
 
 	@OriginalMember(owner = "client!be", name = "T", descriptor = "Z")
-	public boolean aBoolean25 = false;
+	public boolean hasEventHandlers = false;
 
 	@OriginalMember(owner = "client!be", name = "vd", descriptor = "I")
 	public int baseX = 0;
@@ -519,25 +519,25 @@ public final class Component {
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(IIB)V")
 	public final void setDragTarget(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		if (this.anIntArray39 == null || this.anIntArray39.length <= arg0) {
+		if (this.dragTargets == null || this.dragTargets.length <= arg0) {
 			@Pc(18) int[] local18 = new int[arg0 + 1];
-			if (this.anIntArray39 != null) {
+			if (this.dragTargets != null) {
 				@Pc(24) int local24;
-				for (local24 = 0; local24 < this.anIntArray39.length; local24++) {
-					local18[local24] = this.anIntArray39[local24];
+				for (local24 = 0; local24 < this.dragTargets.length; local24++) {
+					local18[local24] = this.dragTargets[local24];
 				}
-				for (local24 = this.anIntArray39.length; local24 < arg0; local24++) {
+				for (local24 = this.dragTargets.length; local24 < arg0; local24++) {
 					local18[local24] = -1;
 				}
 			}
-			this.anIntArray39 = local18;
+			this.dragTargets = local18;
 		}
-		this.anIntArray39[arg0] = arg1;
+		this.dragTargets[arg0] = arg1;
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(I)Z")
 	public final boolean buildClickMask() {
-		if (this.anIntArray37 != null) {
+		if (this.clickMaskStart != null) {
 			return true;
 		}
 		@Pc(18) SoftwareIndexedSprite local18 = SpriteLoader.loadSoftwareIndexedSprite(this.spriteId, InterfaceList.aClass153_12);
@@ -545,8 +545,8 @@ public final class Component {
 			return false;
 		}
 		local18.trim();
-		this.anIntArray37 = new int[local18.height];
-		this.anIntArray45 = new int[local18.height];
+		this.clickMaskStart = new int[local18.height];
+		this.clickMaskWidth = new int[local18.height];
 		for (@Pc(37) int local37 = 0; local37 < local18.height; local37++) {
 			@Pc(47) int local47 = 0;
 			@Pc(50) int local50 = local18.width;
@@ -563,8 +563,8 @@ public final class Component {
 					break;
 				}
 			}
-			this.anIntArray37[local37] = local47;
-			this.anIntArray45[local37] = local50 - local47;
+			this.clickMaskStart[local37] = local47;
+			this.clickMaskWidth[local37] = local50 - local47;
 		}
 		return true;
 	}
@@ -604,9 +604,9 @@ public final class Component {
 		} else {
 			this.overlayer += this.id & 0xFFFF0000;
 		}
-		this.anInt470 = buffer.g2();
-		if (this.anInt470 == 65535) {
-			this.anInt470 = -1;
+		this.hoverOverlayer = buffer.g2();
+		if (this.hoverOverlayer == 65535) {
+			this.hoverOverlayer = -1;
 		}
 		@Pc(109) int local109 = buffer.g1();
 		@Pc(125) int local125;
@@ -713,7 +713,7 @@ public final class Component {
 		if (this.type == 3 || this.type == 4) {
 			this.activeColor = buffer.g4();
 			this.overColor = buffer.g4();
-			this.anInt475 = buffer.g4();
+			this.activeOverColor = buffer.g4();
 		}
 		if (this.type == 5) {
 			this.spriteId = buffer.g4();
@@ -806,7 +806,7 @@ public final class Component {
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(ZI)Lclient!qf;")
 	public final Sprite getInvSprite(@OriginalArg(1) int arg0) {
-		aBoolean72 = false;
+		loadFailed = false;
 		if (arg0 < 0 || arg0 >= this.invSprite.length) {
 			return null;
 		}
@@ -820,7 +820,7 @@ public final class Component {
 		}
 		local43 = SpriteLoader.loadSprites(local29, InterfaceList.aClass153_12);
 		if (local43 == null) {
-			aBoolean72 = true;
+			loadFailed = true;
 		} else {
 			sprites.put(local43, local29);
 		}
@@ -842,7 +842,7 @@ public final class Component {
 				local26[local28] = arg0.gjstr();
 			}
 		}
-		this.aBoolean25 = true;
+		this.hasEventHandlers = true;
 		return local26;
 	}
 
@@ -872,7 +872,7 @@ public final class Component {
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(ILclient!tk;IIIZLclient!hh;)Lclient!ak;")
 	public final Model getModel(@OriginalArg(0) int arg0, @OriginalArg(1) SeqType arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) PlayerAppearance arg5) {
-		aBoolean72 = false;
+		loadFailed = false;
 		@Pc(10) int local10;
 		@Pc(13) int local13;
 		if (arg4) {
@@ -893,7 +893,7 @@ public final class Component {
 				if (local61 == null) {
 					@Pc(69) RawModel local69 = RawModel.create(InterfaceList.aClass153_85, local13);
 					if (local69 == null) {
-						aBoolean72 = true;
+						loadFailed = true;
 						return null;
 					}
 					local61 = local69.createModel(64, 768, -50, -10, -50);
@@ -906,7 +906,7 @@ public final class Component {
 			} else if (local10 == 2) {
 				local61 = NpcTypeList.get(local13).getHeadModel(arg1, arg3, arg0, arg2);
 				if (local61 == null) {
-					aBoolean72 = true;
+					loadFailed = true;
 					return null;
 				} else {
 					return local61;
@@ -917,7 +917,7 @@ public final class Component {
 				}
 				local61 = arg5.getHeadModel(arg3, arg1, arg2, arg0);
 				if (local61 == null) {
-					aBoolean72 = true;
+					loadFailed = true;
 					return null;
 				} else {
 					return local61;
@@ -926,7 +926,7 @@ public final class Component {
 				@Pc(164) ObjType local164 = ObjTypeList.get(local13);
 				@Pc(173) Model local173 = local164.getModel(arg0, arg3, arg1, 10, arg2);
 				if (local173 == null) {
-					aBoolean72 = true;
+					loadFailed = true;
 					return null;
 				} else {
 					return local173;
@@ -934,7 +934,7 @@ public final class Component {
 			} else if (local10 == 6) {
 				local61 = NpcTypeList.get(local13).getBodyModel(null, 0, 0, arg0, arg3, arg2, null, 0, arg1);
 				if (local61 == null) {
-					aBoolean72 = true;
+					loadFailed = true;
 					return null;
 				} else {
 					return local61;
@@ -949,7 +949,7 @@ public final class Component {
 				@Pc(235) int local235 = this.anInt498;
 				@Pc(246) Model local246 = arg5.getPartialHeadModel(arg0, local235, local227, arg3, arg1, arg2, local232);
 				if (local246 == null) {
-					aBoolean72 = true;
+					loadFailed = true;
 					return null;
 				} else {
 					return local246;
@@ -960,7 +960,7 @@ public final class Component {
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(BZ)Lclient!qf;")
 	public final Sprite getSprite(@OriginalArg(1) boolean arg0) {
-		aBoolean72 = false;
+		loadFailed = false;
 		@Pc(12) int local12;
 		if (arg0) {
 			local12 = this.activeSpriteId;
@@ -982,7 +982,7 @@ public final class Component {
 			local85 = SpriteLoader.loadSoftwareSprite(0, InterfaceList.aClass153_12, local12);
 		}
 		if (local85 == null) {
-			aBoolean72 = true;
+			loadFailed = true;
 			return null;
 		}
 		if (this.vFlip) {
@@ -1076,7 +1076,7 @@ public final class Component {
 			this.modelOrtho = buffer.g1() == 1;
 			this.aShort11 = (short) buffer.g2();
 			this.aShort10 = (short) buffer.g2();
-			this.aBoolean34 = buffer.g1() == 1;
+			this.modelTransparent = buffer.g1() == 1;
 			if (this.dynamicWidthValue != 0) {
 				this.anInt451 = buffer.g2();
 			}
@@ -1104,7 +1104,7 @@ public final class Component {
 		if (this.type == 9) {
 			this.lineWidth = buffer.g1();
 			this.color = buffer.g4();
-			this.aBoolean20 = buffer.g1() == 1;
+			this.lineFlipped = buffer.g1() == 1;
 		}
 		local175 = buffer.g3();
 		@Pc(471) int local471 = buffer.g1();
@@ -1140,15 +1140,15 @@ public final class Component {
 		@Pc(584) int local584 = local497 >> 4;
 		if (local584 > 0) {
 			local567 = buffer.g1();
-			this.anIntArray39 = new int[local567 + 1];
-			for (@Pc(599) int local599 = 0; local599 < this.anIntArray39.length; local599++) {
-				this.anIntArray39[local599] = -1;
+			this.dragTargets = new int[local567 + 1];
+			for (@Pc(599) int local599 = 0; local599 < this.dragTargets.length; local599++) {
+				this.dragTargets[local599] = -1;
 			}
-			this.anIntArray39[local567] = buffer.g2();
+			this.dragTargets[local567] = buffer.g2();
 		}
 		if (local584 > 1) {
 			local567 = buffer.g1();
-			this.anIntArray39[local567] = buffer.g2();
+			this.dragTargets[local567] = buffer.g2();
 		}
 		this.dragDeadzone = buffer.g1();
 		this.dragDeadtime = buffer.g1();
@@ -1170,7 +1170,7 @@ public final class Component {
 			}
 		}
 		this.properties = new ServerActiveProperties(local175, local567);
-		this.anObjectArray3 = this.decodeEventHandler(buffer);
+		this.onLoad = this.decodeEventHandler(buffer);
 		this.onMouseOver = this.decodeEventHandler(buffer);
 		this.onMouseLeave = this.decodeEventHandler(buffer);
 		this.onUseWith = this.decodeEventHandler(buffer);
@@ -1199,7 +1199,7 @@ public final class Component {
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "([Lclient!ok;I)Lclient!rk;")
 	public final Font getFont(@OriginalArg(0) IndexedSprite[] arg0) {
-		aBoolean72 = false;
+		loadFailed = false;
 		if (this.font == -1) {
 			return null;
 		}
@@ -1209,7 +1209,7 @@ public final class Component {
 		}
 		local21 = Font.load(this.font, InterfaceList.aClass153_12, InterfaceList.aClass153_64);
 		if (local21 == null) {
-			aBoolean72 = true;
+			loadFailed = true;
 		} else {
 			local21.setNameIcons(arg0, null);
 			fonts.put(local21, this.font);

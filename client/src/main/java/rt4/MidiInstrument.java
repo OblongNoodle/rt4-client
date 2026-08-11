@@ -9,25 +9,25 @@ import org.openrs2.deob.annotation.Pc;
 public final class MidiInstrument extends Node {
 
 	@OriginalMember(owner = "client!jk", name = "r", descriptor = "[B")
-	public final byte[] aByteArray43 = new byte[128];
+	public final byte[] notePan = new byte[128];
 
 	@OriginalMember(owner = "client!jk", name = "s", descriptor = "[I")
-	private int[] anIntArray289 = new int[128];
+	private int[] soundLookup = new int[128];
 
 	@OriginalMember(owner = "client!jk", name = "u", descriptor = "I")
-	public final int anInt3078;
+	public final int volumeMultiplier;
 
 	@OriginalMember(owner = "client!jk", name = "w", descriptor = "[B")
-	public final byte[] aByteArray44;
+	public final byte[] noteExclusiveGroup;
 
 	@OriginalMember(owner = "client!jk", name = "C", descriptor = "[B")
-	public final byte[] aByteArray45 = new byte[128];
+	public final byte[] noteVolume = new byte[128];
 
 	@OriginalMember(owner = "client!jk", name = "D", descriptor = "[Lclient!kj;")
-	public final PcmSound[] aClass3_Sub16_Sub1Array1 = new PcmSound[128];
+	public final PcmSound[] sounds = new PcmSound[128];
 
 	@OriginalMember(owner = "client!jk", name = "H", descriptor = "[S")
-	public final short[] aShortArray36 = new short[128];
+	public final short[] notePitchOffset = new short[128];
 
 	@OriginalMember(owner = "client!jk", name = "I", descriptor = "[Lclient!wh;")
 	public final MidiTrackState[] trackStates = new MidiTrackState[128];
@@ -35,7 +35,7 @@ public final class MidiInstrument extends Node {
 	@OriginalMember(owner = "client!jk", name = "<init>", descriptor = "([B)V")
 	public MidiInstrument(@OriginalArg(0) byte[] arg0) {
 		@Pc(29) int local29 = 0;
-		this.aByteArray44 = new byte[128];
+		this.noteExclusiveGroup = new byte[128];
 		@Pc(38) Buffer local38 = new Buffer(arg0);
 		while (local38.data[local29 + local38.offset] != 0) {
 			local29++;
@@ -98,12 +98,12 @@ public final class MidiInstrument extends Node {
 			@Pc(256) MidiTrackState local256 = local242[local206] = new MidiTrackState();
 			@Pc(260) int local260 = local38.g1();
 			if (local260 > 0) {
-				local256.aByteArray80 = new byte[local260 * 2];
+				local256.attackEnvelope = new byte[local260 * 2];
 			}
 			local260 = local38.g1();
 			if (local260 > 0) {
-				local256.aByteArray81 = new byte[local260 * 2 + 2];
-				local256.aByteArray81[1] = 64;
+				local256.releaseEnvelope = new byte[local260 * 2 + 2];
+				local256.releaseEnvelope[1] = 64;
 			}
 		}
 		local206 = local38.g1();
@@ -124,12 +124,12 @@ public final class MidiInstrument extends Node {
 		@Pc(375) int local375;
 		for (local375 = 0; local375 < 128; local375++) {
 			local348 += local38.g1();
-			this.aShortArray36[local375] = (short) local348;
+			this.notePitchOffset[local375] = (short) local348;
 		}
 		local348 = 0;
 		for (local375 = 0; local375 < 128; local375++) {
 			local348 += local38.g1();
-			this.aShortArray36[local375] = (short) (this.aShortArray36[local375] + (local348 << 8));
+			this.notePitchOffset[local375] = (short) (this.notePitchOffset[local375] + (local348 << 8));
 		}
 		local375 = 0;
 		@Pc(428) int local428 = 0;
@@ -144,8 +144,8 @@ public final class MidiInstrument extends Node {
 				}
 				local430 = local38.gVarInt();
 			}
-			this.aShortArray36[local432] = (short) (this.aShortArray36[local432] + ((local430 - 1 & 0x2) << 14));
-			this.anIntArray289[local432] = local430;
+			this.notePitchOffset[local432] = (short) (this.notePitchOffset[local432] + ((local430 - 1 & 0x2) << 14));
+			this.soundLookup[local432] = local430;
 			local375--;
 		}
 		local375 = 0;
@@ -153,7 +153,7 @@ public final class MidiInstrument extends Node {
 		local428 = 0;
 		@Pc(496) int local496;
 		for (local496 = 0; local496 < 128; local496++) {
-			if (this.anIntArray289[local496] != 0) {
+			if (this.soundLookup[local496] != 0) {
 				if (local375 == 0) {
 					local432 = local38.data[local57++] - 1;
 					if (local55.length > local428) {
@@ -163,14 +163,14 @@ public final class MidiInstrument extends Node {
 					}
 				}
 				local375--;
-				this.aByteArray44[local496] = (byte) local432;
+				this.noteExclusiveGroup[local496] = (byte) local432;
 			}
 		}
 		local375 = 0;
 		local428 = 0;
 		local496 = 0;
 		for (@Pc(550) int local550 = 0; local550 < 128; local550++) {
-			if (this.anIntArray289[local550] != 0) {
+			if (this.soundLookup[local550] != 0) {
 				if (local375 == 0) {
 					local496 = local38.data[local108++] + 16 << 2;
 					if (local428 < local106.length) {
@@ -180,7 +180,7 @@ public final class MidiInstrument extends Node {
 					}
 				}
 				local375--;
-				this.aByteArray43[local550] = (byte) local496;
+				this.notePan[local550] = (byte) local496;
 			}
 		}
 		local428 = 0;
@@ -188,7 +188,7 @@ public final class MidiInstrument extends Node {
 		@Pc(609) MidiTrackState local609 = null;
 		@Pc(611) int local611;
 		for (local611 = 0; local611 < 128; local611++) {
-			if (this.anIntArray289[local611] != 0) {
+			if (this.soundLookup[local611] != 0) {
 				if (local375 == 0) {
 					local609 = local242[local187[local428]];
 					if (local428 >= local159.length) {
@@ -212,26 +212,26 @@ public final class MidiInstrument extends Node {
 				} else {
 					local375 = -1;
 				}
-				if (this.anIntArray289[local664] > 0) {
+				if (this.soundLookup[local664] > 0) {
 					local611 = local38.g1() + 1;
 				}
 			}
 			local375--;
-			this.aByteArray45[local664] = (byte) local611;
+			this.noteVolume[local664] = (byte) local611;
 		}
-		this.anInt3078 = local38.g1() + 1;
+		this.volumeMultiplier = local38.g1() + 1;
 		@Pc(729) MidiTrackState local729;
 		@Pc(734) int local734;
 		for (local664 = 0; local664 < local194; local664++) {
 			local729 = local242[local664];
-			if (local729.aByteArray80 != null) {
-				for (local734 = 1; local734 < local729.aByteArray80.length; local734 += 2) {
-					local729.aByteArray80[local734] = local38.g1b();
+			if (local729.attackEnvelope != null) {
+				for (local734 = 1; local734 < local729.attackEnvelope.length; local734 += 2) {
+					local729.attackEnvelope[local734] = local38.g1b();
 				}
 			}
-			if (local729.aByteArray81 != null) {
-				for (local734 = 3; local734 < local729.aByteArray81.length - 2; local734 += 2) {
-					local729.aByteArray81[local734] = local38.g1b();
+			if (local729.releaseEnvelope != null) {
+				for (local734 = 3; local734 < local729.releaseEnvelope.length - 2; local734 += 2) {
+					local729.releaseEnvelope[local734] = local38.g1b();
 				}
 			}
 		}
@@ -247,21 +247,21 @@ public final class MidiInstrument extends Node {
 		}
 		for (local664 = 0; local664 < local194; local664++) {
 			local729 = local242[local664];
-			if (local729.aByteArray81 != null) {
+			if (local729.releaseEnvelope != null) {
 				local348 = 0;
-				for (local734 = 2; local734 < local729.aByteArray81.length; local734 += 2) {
+				for (local734 = 2; local734 < local729.releaseEnvelope.length; local734 += 2) {
 					local348 -= -local38.g1() - 1;
-					local729.aByteArray81[local734] = (byte) local348;
+					local729.releaseEnvelope[local734] = (byte) local348;
 				}
 			}
 		}
 		for (local664 = 0; local664 < local194; local664++) {
 			local729 = local242[local664];
-			if (local729.aByteArray80 != null) {
+			if (local729.attackEnvelope != null) {
 				local348 = 0;
-				for (local734 = 2; local734 < local729.aByteArray80.length; local734 += 2) {
+				for (local734 = 2; local734 < local729.attackEnvelope.length; local734 += 2) {
 					local348 = local348 + local38.g1() + 1;
-					local729.aByteArray80[local734] = (byte) local348;
+					local729.attackEnvelope[local734] = (byte) local348;
 				}
 			}
 		}
@@ -281,7 +281,7 @@ public final class MidiInstrument extends Node {
 			local954 = local311[0];
 			@Pc(958) byte local958 = local311[1];
 			for (local734 = 0; local734 < local954; local734++) {
-				this.aByteArray45[local734] = (byte) (local958 * this.aByteArray45[local734] + 32 >> 6);
+				this.noteVolume[local734] = (byte) (local958 * this.noteVolume[local734] + 32 >> 6);
 			}
 			local734 = 2;
 			while (local734 < local311.length) {
@@ -292,13 +292,13 @@ public final class MidiInstrument extends Node {
 				for (local1016 = local954; local1016 < local995; local1016++) {
 					local1031 = floorDiv(local1014, local995 - local954);
 					local1014 += local1001 - local958;
-					this.aByteArray45[local1016] = (byte) (local1031 * this.aByteArray45[local1016] + 32 >> 6);
+					this.noteVolume[local1016] = (byte) (local1031 * this.noteVolume[local1016] + 32 >> 6);
 				}
 				local958 = local1001;
 				local954 = local995;
 			}
 			for (local1066 = local954; local1066 < 128; local1066++) {
-				this.aByteArray45[local1066] = (byte) (this.aByteArray45[local1066] * local958 + 32 >> 6);
+				this.noteVolume[local1066] = (byte) (this.noteVolume[local1066] * local958 + 32 >> 6);
 			}
 		}
 		if (local327 != null) {
@@ -311,14 +311,14 @@ public final class MidiInstrument extends Node {
 			local954 = local327[0];
 			@Pc(1133) int local1133 = local327[1] << 1;
 			for (local734 = 0; local734 < local954; local734++) {
-				local1066 = local1133 + (this.aByteArray43[local734] & 0xFF);
+				local1066 = local1133 + (this.notePan[local734] & 0xFF);
 				if (local1066 < 0) {
 					local1066 = 0;
 				}
 				if (local1066 > 128) {
 					local1066 = 128;
 				}
-				this.aByteArray43[local734] = (byte) local1066;
+				this.notePan[local734] = (byte) local1066;
 			}
 			local734 = 2;
 			@Pc(1207) int local1207;
@@ -330,57 +330,57 @@ public final class MidiInstrument extends Node {
 				for (local1016 = local954; local1016 < local995; local1016++) {
 					local1031 = floorDiv(local1014, local995 - local954);
 					local1014 += local1207 - local1133;
-					@Pc(1237) int local1237 = local1031 + (this.aByteArray43[local1016] & 0xFF);
+					@Pc(1237) int local1237 = local1031 + (this.notePan[local1016] & 0xFF);
 					if (local1237 < 0) {
 						local1237 = 0;
 					}
 					if (local1237 > 128) {
 						local1237 = 128;
 					}
-					this.aByteArray43[local1016] = (byte) local1237;
+					this.notePan[local1016] = (byte) local1237;
 				}
 				local954 = local995;
 				local1133 = local1207;
 			}
 			for (local1066 = local954; local1066 < 128; local1066++) {
-				local1207 = (this.aByteArray43[local1066] & 0xFF) + local1133;
+				local1207 = (this.notePan[local1066] & 0xFF) + local1133;
 				if (local1207 < 0) {
 					local1207 = 0;
 				}
 				if (local1207 > 128) {
 					local1207 = 128;
 				}
-				this.aByteArray43[local1066] = (byte) local1207;
+				this.notePan[local1066] = (byte) local1207;
 			}
 		}
 		for (local664 = 0; local664 < local194; local664++) {
-			local242[local664].anInt5815 = local38.g1();
-		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local729 = local242[local664];
-			if (local729.aByteArray80 != null) {
-				local729.anInt5810 = local38.g1();
-			}
-			if (local729.aByteArray81 != null) {
-				local729.anInt5813 = local38.g1();
-			}
-			if (local729.anInt5815 > 0) {
-				local729.anInt5807 = local38.g1();
-			}
-		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local242[local664].anInt5814 = local38.g1();
+			local242[local664].decayRate = local38.g1();
 		}
 		for (local664 = 0; local664 < local194; local664++) {
 			local729 = local242[local664];
-			if (local729.anInt5814 > 0) {
-				local729.anInt5809 = local38.g1();
+			if (local729.attackEnvelope != null) {
+				local729.attackRate = local38.g1();
+			}
+			if (local729.releaseEnvelope != null) {
+				local729.releaseRate = local38.g1();
+			}
+			if (local729.decayRate > 0) {
+				local729.sustainRate = local38.g1();
+			}
+		}
+		for (local664 = 0; local664 < local194; local664++) {
+			local242[local664].vibratoSpeed = local38.g1();
+		}
+		for (local664 = 0; local664 < local194; local664++) {
+			local729 = local242[local664];
+			if (local729.vibratoSpeed > 0) {
+				local729.vibratoDepth = local38.g1();
 			}
 		}
 		for (local664 = 0; local664 < local194; local664++) {
 			local729 = local242[local664];
-			if (local729.anInt5809 > 0) {
-				local729.anInt5811 = local38.g1();
+			if (local729.vibratoDepth > 0) {
+				local729.vibratoDelay = local38.g1();
 			}
 		}
 	}
@@ -399,7 +399,7 @@ public final class MidiInstrument extends Node {
 
 	@OriginalMember(owner = "client!jk", name = "d", descriptor = "(B)V")
 	public final void freeSoundTable() {
-		this.anIntArray289 = null;
+		this.soundLookup = null;
 	}
 
 	@OriginalMember(owner = "client!jk", name = "a", descriptor = "(I[ILclient!le;[B)Z")
@@ -409,7 +409,7 @@ public final class MidiInstrument extends Node {
 		@Pc(16) boolean local16 = true;
 		for (@Pc(18) int local18 = 0; local18 < 128; local18++) {
 			if (arg2 == null || arg2[local18] != 0) {
-				@Pc(35) int local35 = this.anIntArray289[local18];
+				@Pc(35) int local35 = this.soundLookup[local18];
 				if (local35 != 0) {
 					if (local8 != local35) {
 						local8 = local35--;
@@ -423,8 +423,8 @@ public final class MidiInstrument extends Node {
 						}
 					}
 					if (local10 != null) {
-						this.aClass3_Sub16_Sub1Array1[local18] = local10;
-						this.anIntArray289[local18] = 0;
+						this.sounds[local18] = local10;
+						this.soundLookup[local18] = 0;
 					}
 				}
 			}

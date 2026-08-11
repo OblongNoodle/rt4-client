@@ -2606,7 +2606,7 @@ public final class ScriptRunner {
 									isp -= 2;
 									int2 = intStack[isp + 1];
 									int3 = intStack[isp];
-									component.aClass13_5 = InterfaceList.getComponent(int3, int2);
+									component.dragParent = InterfaceList.getComponent(int3, int2);
 									continue;
 								}
 								if (opcode == Cs2Opcodes.setDragRenderBehaviour) {
@@ -2697,7 +2697,7 @@ public final class ScriptRunner {
 									} else {
 										local13000[0] = c;
 									}
-									component.aBoolean25 = true;
+									component.hasEventHandlers = true;
 									if (opcode == Cs2Opcodes.hookMousePress) {
 										component.onClickRepeat = local13000;
 									} else if (opcode == Cs2Opcodes.hookDraggedOver) {

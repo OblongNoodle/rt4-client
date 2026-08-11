@@ -226,7 +226,7 @@ public class MaterialManager {
 
 	@OriginalMember(owner = "client!lh", name = "b", descriptor = "(II)V")
 	public static void setUnderwaterFogRange(@OriginalArg(0) int arg0) {
-		UnderwaterMaterialRenderer.anInt3241 = arg0;
+		UnderwaterMaterialRenderer.underwaterDepthRange = arg0;
 		resetArgument(3);
 		resetArgument(4);
 	}

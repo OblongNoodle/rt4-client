@@ -7,29 +7,29 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class MidiTrackState {
 
 	@OriginalMember(owner = "client!wh", name = "a", descriptor = "I")
-	public int anInt5807;
+	public int sustainRate;
 
 	@OriginalMember(owner = "client!wh", name = "b", descriptor = "[B")
-	public byte[] aByteArray80;
+	public byte[] attackEnvelope;
 
 	@OriginalMember(owner = "client!wh", name = "e", descriptor = "I")
-	public int anInt5809;
+	public int vibratoDepth;
 
 	@OriginalMember(owner = "client!wh", name = "f", descriptor = "I")
-	public int anInt5810;
+	public int attackRate;
 
 	@OriginalMember(owner = "client!wh", name = "h", descriptor = "I")
-	public int anInt5811;
+	public int vibratoDelay;
 
 	@OriginalMember(owner = "client!wh", name = "k", descriptor = "I")
-	public int anInt5813;
+	public int releaseRate;
 
 	@OriginalMember(owner = "client!wh", name = "p", descriptor = "[B")
-	public byte[] aByteArray81;
+	public byte[] releaseEnvelope;
 
 	@OriginalMember(owner = "client!wh", name = "q", descriptor = "I")
-	public int anInt5814;
+	public int vibratoSpeed;
 
 	@OriginalMember(owner = "client!wh", name = "r", descriptor = "I")
-	public int anInt5815;
+	public int decayRate;
 }

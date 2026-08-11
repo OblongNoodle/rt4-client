@@ -223,8 +223,8 @@ public final class MidiPcmStream extends PcmStream {
 					}
 					local20.release();
 				}
-				if (local20.anInt3767 < 0) {
-					this.aClass3_Sub25ArrayArray1[local20.channel][local20.anInt3779] = null;
+				if (local20.releaseTimer < 0) {
+					this.aClass3_Sub25ArrayArray1[local20.channel][local20.noteKey] = null;
 				}
 				local20.unlink();
 			}
@@ -266,14 +266,14 @@ public final class MidiPcmStream extends PcmStream {
 		this.noteOff(arg2, 64, arg1);
 		if ((this.channelFlags[arg1] & 0x2) != 0) {
 			for (@Pc(28) MidiNote local28 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.tail(); local28 != null; local28 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.prev()) {
-				if (arg1 == local28.channel && local28.anInt3767 < 0) {
-					this.aClass3_Sub25ArrayArray1[arg1][local28.anInt3779] = null;
+				if (arg1 == local28.channel && local28.releaseTimer < 0) {
+					this.aClass3_Sub25ArrayArray1[arg1][local28.noteKey] = null;
 					this.aClass3_Sub25ArrayArray1[arg1][arg2] = local28;
-					@Pc(72) int local72 = local28.anInt3769 + (local28.anInt3764 * local28.anInt3781 >> 12);
-					local28.anInt3764 = 4096;
-					local28.anInt3769 += arg2 - local28.anInt3779 << 8;
-					local28.anInt3781 = local72 - local28.anInt3769;
-					local28.anInt3779 = arg2;
+					@Pc(72) int local72 = local28.basePitch + (local28.pitchModifier * local28.pitchDelta >> 12);
+					local28.pitchModifier = 4096;
+					local28.basePitch += arg2 - local28.noteKey << 8;
+					local28.pitchDelta = local72 - local28.basePitch;
+					local28.noteKey = arg2;
 					return;
 				}
 			}
@@ -282,7 +282,7 @@ public final class MidiPcmStream extends PcmStream {
 		if (local118 == null) {
 			return;
 		}
-		@Pc(126) PcmSound local126 = local118.aClass3_Sub16_Sub1Array1[arg2];
+		@Pc(126) PcmSound local126 = local118.sounds[arg2];
 		if (local126 == null) {
 			return;
 		}
@@ -291,32 +291,32 @@ public final class MidiPcmStream extends PcmStream {
 		local133.instrument = local118;
 		local133.channel = arg1;
 		local133.trackState = local118.trackStates[arg2];
-		local133.anInt3776 = local118.aByteArray44[arg2];
-		local133.anInt3779 = arg2;
-		local133.anInt3772 = local118.aByteArray45[arg2] * arg0 * arg0 * local118.anInt3078 + 1024 >> 11;
-		local133.anInt3765 = local118.aByteArray43[arg2] & 0xFF;
-		local133.anInt3769 = (arg2 << 8) - (local118.aShortArray36[arg2] & 0x7FFF);
-		local133.anInt3767 = -1;
-		local133.anInt3770 = 0;
-		local133.anInt3777 = 0;
-		local133.anInt3782 = 0;
-		local133.anInt3763 = 0;
+		local133.exclusiveGroup = local118.noteExclusiveGroup[arg2];
+		local133.noteKey = arg2;
+		local133.volumeGain = local118.noteVolume[arg2] * arg0 * arg0 * local118.volumeMultiplier + 1024 >> 11;
+		local133.pan = local118.notePan[arg2] & 0xFF;
+		local133.basePitch = (arg2 << 8) - (local118.notePitchOffset[arg2] & 0x7FFF);
+		local133.releaseTimer = -1;
+		local133.attackEnvelopePos = 0;
+		local133.releaseEnvelopeIndex = 0;
+		local133.sustainTimer = 0;
+		local133.attackEnvelopeIndex = 0;
 		if (this.anIntArray509[arg1] == 0) {
 			local133.stream = SoundPcmStream.create(local126, this.calculatePitch(local133), this.calculateVolume(local133), this.calculatePan(local133));
 		} else {
 			local133.stream = SoundPcmStream.create(local126, this.calculatePitch(local133), 0, this.calculatePan(local133));
-			this.applyLoopStartOffset(local133, local118.aShortArray36[arg2] < 0);
+			this.applyLoopStartOffset(local133, local118.notePitchOffset[arg2] < 0);
 		}
-		if (local118.aShortArray36[arg2] < 0) {
+		if (local118.notePitchOffset[arg2] < 0) {
 			local133.stream.setLoops(-1);
 		}
-		if (local133.anInt3776 >= 0) {
-			@Pc(289) MidiNote local289 = this.aClass3_Sub25ArrayArray2[arg1][local133.anInt3776];
-			if (local289 != null && local289.anInt3767 < 0) {
-				this.aClass3_Sub25ArrayArray1[arg1][local289.anInt3779] = null;
-				local289.anInt3767 = 0;
+		if (local133.exclusiveGroup >= 0) {
+			@Pc(289) MidiNote local289 = this.aClass3_Sub25ArrayArray2[arg1][local133.exclusiveGroup];
+			if (local289 != null && local289.releaseTimer < 0) {
+				this.aClass3_Sub25ArrayArray1[arg1][local289.noteKey] = null;
+				local289.releaseTimer = 0;
 			}
-			this.aClass3_Sub25ArrayArray2[arg1][local133.anInt3776] = local133;
+			this.aClass3_Sub25ArrayArray2[arg1][local133.exclusiveGroup] = local133;
 		}
 		this.aClass3_Sub3_Sub3_1.notes.addTail(local133);
 		this.aClass3_Sub25ArrayArray1[arg1][arg2] = local133;
@@ -479,9 +479,9 @@ public final class MidiPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!va", name = "d", descriptor = "(II)V")
 	private void allNotesOff(@OriginalArg(1) int arg0) {
 		for (@Pc(12) MidiNote local12 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.head(); local12 != null; local12 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.next()) {
-			if ((arg0 < 0 || arg0 == local12.channel) && local12.anInt3767 < 0) {
-				this.aClass3_Sub25ArrayArray1[local12.channel][local12.anInt3779] = null;
-				local12.anInt3767 = 0;
+			if ((arg0 < 0 || arg0 == local12.channel) && local12.releaseTimer < 0) {
+				this.aClass3_Sub25ArrayArray1[local12.channel][local12.noteKey] = null;
+				local12.releaseTimer = 0;
 			}
 		}
 	}
@@ -515,70 +515,70 @@ public final class MidiPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(IILclient!mf;B[I)Z")
 	public final boolean advanceNoteEnvelope(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) MidiNote arg2, @OriginalArg(4) int[] arg3) {
-		arg2.anInt3771 = AudioChannel.sampleRate / 100;
-		if (arg2.anInt3767 >= 0 && (arg2.stream == null || arg2.stream.isOutOfBounds())) {
+		arg2.retriggerDelay = AudioChannel.sampleRate / 100;
+		if (arg2.releaseTimer >= 0 && (arg2.stream == null || arg2.stream.isOutOfBounds())) {
 			arg2.release();
 			arg2.unlink();
-			if (arg2.anInt3776 > 0 && arg2 == this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.anInt3776]) {
-				this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.anInt3776] = null;
+			if (arg2.exclusiveGroup > 0 && arg2 == this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.exclusiveGroup]) {
+				this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.exclusiveGroup] = null;
 			}
 			return true;
 		}
-		@Pc(54) int local54 = arg2.anInt3764;
+		@Pc(54) int local54 = arg2.pitchModifier;
 		if (local54 > 0) {
 			local54 -= (int) (Math.pow(2.0D, (double) this.anIntArray504[arg2.channel] * 4.921259842519685E-4D) * 16.0D + 0.5D);
 			if (local54 < 0) {
 				local54 = 0;
 			}
-			arg2.anInt3764 = local54;
+			arg2.pitchModifier = local54;
 		}
 		arg2.stream.setRate(this.calculatePitch(arg2));
 		@Pc(103) MidiTrackState local103 = arg2.trackState;
-		arg2.anInt3768 += local103.anInt5814;
-		arg2.anInt3774++;
-		@Pc(134) double local134 = (double) ((arg2.anInt3779 - 60 << 8) + (arg2.anInt3764 * arg2.anInt3781 >> 12)) * 5.086263020833333E-6D;
+		arg2.vibratoPhase += local103.vibratoSpeed;
+		arg2.tickCount++;
+		@Pc(134) double local134 = (double) ((arg2.noteKey - 60 << 8) + (arg2.pitchModifier * arg2.pitchDelta >> 12)) * 5.086263020833333E-6D;
 		@Pc(136) boolean local136 = false;
-		if (local103.anInt5815 > 0) {
-			if (local103.anInt5807 > 0) {
-				arg2.anInt3782 += (int) (Math.pow(2.0D, local134 * (double) local103.anInt5807) * 128.0D + 0.5D);
+		if (local103.decayRate > 0) {
+			if (local103.sustainRate > 0) {
+				arg2.sustainTimer += (int) (Math.pow(2.0D, local134 * (double) local103.sustainRate) * 128.0D + 0.5D);
 			} else {
-				arg2.anInt3782 += 128;
+				arg2.sustainTimer += 128;
 			}
-			if (arg2.anInt3782 * local103.anInt5815 >= 819200) {
+			if (arg2.sustainTimer * local103.decayRate >= 819200) {
 				local136 = true;
 			}
 		}
-		if (local103.aByteArray80 != null) {
-			if (local103.anInt5810 <= 0) {
-				arg2.anInt3770 += 128;
+		if (local103.attackEnvelope != null) {
+			if (local103.attackRate <= 0) {
+				arg2.attackEnvelopePos += 128;
 			} else {
-				arg2.anInt3770 += (int) (Math.pow(2.0D, (double) local103.anInt5810 * local134) * 128.0D + 0.5D);
+				arg2.attackEnvelopePos += (int) (Math.pow(2.0D, (double) local103.attackRate * local134) * 128.0D + 0.5D);
 			}
-			while (arg2.anInt3763 < local103.aByteArray80.length - 2 && arg2.anInt3770 > (local103.aByteArray80[arg2.anInt3763 + 2] & 0xFF) << 8) {
-				arg2.anInt3763 += 2;
+			while (arg2.attackEnvelopeIndex < local103.attackEnvelope.length - 2 && arg2.attackEnvelopePos > (local103.attackEnvelope[arg2.attackEnvelopeIndex + 2] & 0xFF) << 8) {
+				arg2.attackEnvelopeIndex += 2;
 			}
-			if (local103.aByteArray80.length - 2 == arg2.anInt3763 && local103.aByteArray80[arg2.anInt3763 + 1] == 0) {
+			if (local103.attackEnvelope.length - 2 == arg2.attackEnvelopeIndex && local103.attackEnvelope[arg2.attackEnvelopeIndex + 1] == 0) {
 				local136 = true;
 			}
 		}
-		if (arg2.anInt3767 >= 0 && local103.aByteArray81 != null && (this.channelFlags[arg2.channel] & 0x1) == 0 && (arg2.anInt3776 < 0 || this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.anInt3776] != arg2)) {
-			if (local103.anInt5813 > 0) {
-				arg2.anInt3767 += (int) (Math.pow(2.0D, (double) local103.anInt5813 * local134) * 128.0D + 0.5D);
+		if (arg2.releaseTimer >= 0 && local103.releaseEnvelope != null && (this.channelFlags[arg2.channel] & 0x1) == 0 && (arg2.exclusiveGroup < 0 || this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.exclusiveGroup] != arg2)) {
+			if (local103.releaseRate > 0) {
+				arg2.releaseTimer += (int) (Math.pow(2.0D, (double) local103.releaseRate * local134) * 128.0D + 0.5D);
 			} else {
-				arg2.anInt3767 += 128;
+				arg2.releaseTimer += 128;
 			}
-			while (local103.aByteArray81.length - 2 > arg2.anInt3777 && (local103.aByteArray81[arg2.anInt3777 + 2] & 0xFF) << 8 < arg2.anInt3767) {
-				arg2.anInt3777 += 2;
+			while (local103.releaseEnvelope.length - 2 > arg2.releaseEnvelopeIndex && (local103.releaseEnvelope[arg2.releaseEnvelopeIndex + 2] & 0xFF) << 8 < arg2.releaseTimer) {
+				arg2.releaseEnvelopeIndex += 2;
 			}
-			if (arg2.anInt3777 == local103.aByteArray81.length - 2) {
+			if (arg2.releaseEnvelopeIndex == local103.releaseEnvelope.length - 2) {
 				local136 = true;
 			}
 		}
 		if (!local136) {
-			arg2.stream.fadeToVolumeAndPan(arg2.anInt3771, this.calculateVolume(arg2), this.calculatePan(arg2));
+			arg2.stream.fadeToVolumeAndPan(arg2.retriggerDelay, this.calculateVolume(arg2), this.calculatePan(arg2));
 			return false;
 		}
-		arg2.stream.fadeOutAndRelease(arg2.anInt3771);
+		arg2.stream.fadeOutAndRelease(arg2.retriggerDelay);
 		if (arg3 == null) {
 			arg2.stream.skip(arg0);
 		} else {
@@ -588,10 +588,10 @@ public final class MidiPcmStream extends PcmStream {
 			this.aClass3_Sub3_Sub3_1.mixer.addSubStream(arg2.stream);
 		}
 		arg2.release();
-		if (arg2.anInt3767 >= 0) {
+		if (arg2.releaseTimer >= 0) {
 			arg2.unlink();
-			if (arg2.anInt3776 > 0 && this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.anInt3776] == arg2) {
-				this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.anInt3776] = null;
+			if (arg2.exclusiveGroup > 0 && this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.exclusiveGroup] == arg2) {
+				this.aClass3_Sub25ArrayArray2[arg2.channel][arg2.exclusiveGroup] = null;
 			}
 		}
 		return true;
@@ -611,12 +611,12 @@ public final class MidiPcmStream extends PcmStream {
 		}
 		this.aClass3_Sub25ArrayArray1[arg2][arg0] = null;
 		if ((this.channelFlags[arg2] & 0x2) == 0) {
-			local12.anInt3767 = 0;
+			local12.releaseTimer = 0;
 			return;
 		}
 		for (@Pc(44) MidiNote local44 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.head(); local44 != null; local44 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.next()) {
-			if (local44.channel == local12.channel && local44.anInt3767 < 0 && local44 != local12) {
-				local12.anInt3767 = 0;
+			if (local44.channel == local12.channel && local44.releaseTimer < 0 && local44 != local12) {
+				local12.releaseTimer = 0;
 				break;
 			}
 		}
@@ -681,7 +681,7 @@ public final class MidiPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(ILclient!mf;)I")
 	private int calculatePan(@OriginalArg(1) MidiNote arg0) {
 		@Pc(5) int local5 = this.anIntArray496[arg0.channel];
-		return local5 < 8192 ? arg0.anInt3765 * local5 + 32 >> 6 : 16384 - ((128 - arg0.anInt3765) * (-local5 + 16384) + 32 >> 6);
+		return local5 < 8192 ? arg0.pan * local5 + 32 >> 6 : 16384 - ((128 - arg0.pan) * (-local5 + 16384) + 32 >> 6);
 	}
 
 	@OriginalMember(owner = "client!va", name = "c", descriptor = "(I)V")
@@ -712,7 +712,7 @@ public final class MidiPcmStream extends PcmStream {
 		}
 		for (@Pc(24) MidiNote local24 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.head(); local24 != null; local24 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.next()) {
 			if (local24.channel == arg0) {
-				local24.anInt3775 = 0;
+				local24.portamentoPos = 0;
 			}
 		}
 	}
@@ -720,17 +720,17 @@ public final class MidiPcmStream extends PcmStream {
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(BLclient!mf;)I")
 	private int calculatePitch(@OriginalArg(1) MidiNote arg0) {
 		@Pc(6) MidiTrackState local6 = arg0.trackState;
-		@Pc(17) int local17 = (arg0.anInt3781 * arg0.anInt3764 >> 12) + arg0.anInt3769;
+		@Pc(17) int local17 = (arg0.pitchDelta * arg0.pitchModifier >> 12) + arg0.basePitch;
 		local17 += this.anIntArray501[arg0.channel] * (this.anIntArray497[arg0.channel] - 8192) >> 12;
 		@Pc(62) int local62;
-		if (local6.anInt5814 > 0 && (local6.anInt5809 > 0 || this.anIntArray500[arg0.channel] > 0)) {
-			local62 = local6.anInt5809 << 2;
-			@Pc(67) int local67 = local6.anInt5811 << 1;
-			if (local67 > arg0.anInt3774) {
-				local62 = arg0.anInt3774 * local62 / local67;
+		if (local6.vibratoSpeed > 0 && (local6.vibratoDepth > 0 || this.anIntArray500[arg0.channel] > 0)) {
+			local62 = local6.vibratoDepth << 2;
+			@Pc(67) int local67 = local6.vibratoDelay << 1;
+			if (local67 > arg0.tickCount) {
+				local62 = arg0.tickCount * local62 / local67;
 			}
 			local62 += this.anIntArray500[arg0.channel] >> 7;
-			@Pc(102) double local102 = Math.sin((double) (arg0.anInt3768 & 0x1FF) * 0.01227184630308513D);
+			@Pc(102) double local102 = Math.sin((double) (arg0.vibratoPhase & 0x1FF) * 0.01227184630308513D);
 			local17 += (int) ((double) local62 * local102);
 		}
 		local62 = (int) ((double) (arg0.sound.rate * 256) * Math.pow(2.0D, (double) local17 * 3.255208333333333E-4D) / (double) AudioChannel.sampleRate + 0.5D);
@@ -783,8 +783,8 @@ public final class MidiPcmStream extends PcmStream {
 			return;
 		}
 		for (@Pc(20) MidiNote local20 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.head(); local20 != null; local20 = (MidiNote) this.aClass3_Sub3_Sub3_1.notes.next()) {
-			if (arg0 == local20.channel && this.aClass3_Sub25ArrayArray1[arg0][local20.anInt3779] == null && local20.anInt3767 < 0) {
-				local20.anInt3767 = 0;
+			if (arg0 == local20.channel && this.aClass3_Sub25ArrayArray1[arg0][local20.noteKey] == null && local20.releaseTimer < 0) {
+				local20.releaseTimer = 0;
 			}
 		}
 	}
@@ -794,10 +794,10 @@ public final class MidiPcmStream extends PcmStream {
 		if (arg0.stream != null) {
 			return false;
 		}
-		if (arg0.anInt3767 >= 0) {
+		if (arg0.releaseTimer >= 0) {
 			arg0.unlink();
-			if (arg0.anInt3776 > 0 && this.aClass3_Sub25ArrayArray2[arg0.channel][arg0.anInt3776] == arg0) {
-				this.aClass3_Sub25ArrayArray2[arg0.channel][arg0.anInt3776] = null;
+			if (arg0.exclusiveGroup > 0 && this.aClass3_Sub25ArrayArray2[arg0.channel][arg0.exclusiveGroup] == arg0) {
+				this.aClass3_Sub25ArrayArray2[arg0.channel][arg0.exclusiveGroup] = null;
 			}
 		}
 		return true;
@@ -828,33 +828,33 @@ public final class MidiPcmStream extends PcmStream {
 		@Pc(21) MidiTrackState local21 = arg0.trackState;
 		@Pc(37) int local37 = this.anIntArray495[arg0.channel] * this.anIntArray505[arg0.channel] + 4096 >> 13;
 		@Pc(45) int local45 = local37 * local37 + 16384 >> 15;
-		@Pc(54) int local54 = arg0.anInt3772 * local45 + 16384 >> 15;
+		@Pc(54) int local54 = arg0.volumeGain * local45 + 16384 >> 15;
 		@Pc(63) int local63 = local54 * this.anInt5668 + 128 >> 8;
 		local37 = this.anIntArray507[arg0.channel] * local63 + 128 >> 8;
-		if (local21.anInt5815 > 0) {
-			local37 = (int) (Math.pow(0.5D, (double) arg0.anInt3782 * 1.953125E-5D * (double) local21.anInt5815) * (double) local37 + 0.5D);
+		if (local21.decayRate > 0) {
+			local37 = (int) (Math.pow(0.5D, (double) arg0.sustainTimer * 1.953125E-5D * (double) local21.decayRate) * (double) local37 + 0.5D);
 		}
 		@Pc(105) int local105;
 		@Pc(113) int local113;
 		@Pc(143) int local143;
 		@Pc(133) int local133;
-		if (local21.aByteArray80 != null) {
-			local105 = arg0.anInt3770;
-			local113 = local21.aByteArray80[arg0.anInt3763 + 1];
-			if (local21.aByteArray80.length - 2 > arg0.anInt3763) {
-				local133 = (local21.aByteArray80[arg0.anInt3763 + 2] & 0xFF) << 8;
-				local143 = (local21.aByteArray80[arg0.anInt3763] & 0xFF) << 8;
-				local113 += (local21.aByteArray80[arg0.anInt3763 + 3] - local113) * (local105 - local143) / (local133 - local143);
+		if (local21.attackEnvelope != null) {
+			local105 = arg0.attackEnvelopePos;
+			local113 = local21.attackEnvelope[arg0.attackEnvelopeIndex + 1];
+			if (local21.attackEnvelope.length - 2 > arg0.attackEnvelopeIndex) {
+				local133 = (local21.attackEnvelope[arg0.attackEnvelopeIndex + 2] & 0xFF) << 8;
+				local143 = (local21.attackEnvelope[arg0.attackEnvelopeIndex] & 0xFF) << 8;
+				local113 += (local21.attackEnvelope[arg0.attackEnvelopeIndex + 3] - local113) * (local105 - local143) / (local133 - local143);
 			}
 			local37 = local113 * local37 + 32 >> 6;
 		}
-		if (arg0.anInt3767 > 0 && local21.aByteArray81 != null) {
-			local105 = arg0.anInt3767;
-			local113 = local21.aByteArray81[arg0.anInt3777 + 1];
-			if (local21.aByteArray81.length - 2 > arg0.anInt3777) {
-				local143 = (local21.aByteArray81[arg0.anInt3777] & 0xFF) << 8;
-				local133 = (local21.aByteArray81[arg0.anInt3777 + 2] & 0xFF) << 8;
-				local113 += (local105 - local143) * (-local113 + local21.aByteArray81[arg0.anInt3777 + 3]) / (local133 - local143);
+		if (arg0.releaseTimer > 0 && local21.releaseEnvelope != null) {
+			local105 = arg0.releaseTimer;
+			local113 = local21.releaseEnvelope[arg0.releaseEnvelopeIndex + 1];
+			if (local21.releaseEnvelope.length - 2 > arg0.releaseEnvelopeIndex) {
+				local143 = (local21.releaseEnvelope[arg0.releaseEnvelopeIndex] & 0xFF) << 8;
+				local133 = (local21.releaseEnvelope[arg0.releaseEnvelopeIndex + 2] & 0xFF) << 8;
+				local113 += (local105 - local143) * (-local113 + local21.releaseEnvelope[arg0.releaseEnvelopeIndex + 3]) / (local133 - local143);
 			}
 			local37 = local37 * local113 + 32 >> 6;
 		}

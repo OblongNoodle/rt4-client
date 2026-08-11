@@ -12,17 +12,17 @@ import java.nio.ByteBuffer;
 public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!wg", name = "b", descriptor = "Z")
-	public static boolean aBoolean308 = false;
+	public static boolean use3DTexture = false;
 	@OriginalMember(owner = "client!nh", name = "Z", descriptor = "I")
-	public static int anInt3241 = 128;
+	public static int underwaterDepthRange = 128;
 	@OriginalMember(owner = "client!wg", name = "c", descriptor = "I")
-	private int anInt5805 = -1;
+	private int alphaGradientTextureId = -1;
 
 	@OriginalMember(owner = "client!wg", name = "a", descriptor = "[F")
-	private final float[] aFloatArray29 = new float[4];
+	private final float[] texGenParams = new float[4];
 
 	@OriginalMember(owner = "client!wg", name = "d", descriptor = "I")
-	private int anInt5806 = -1;
+	private int displayListId = -1;
 
 	@OriginalMember(owner = "client!wg", name = "<init>", descriptor = "()V")
 	public UnderwaterMaterialRenderer() {
@@ -40,15 +40,15 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 			gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
-			this.anInt5805 = local17[0];
-			aBoolean308 = GlRenderer.maxTextureUnits > 2 && GlRenderer.extTexture3dSupported;
+			this.alphaGradientTextureId = local17[0];
+			use3DTexture = GlRenderer.maxTextureUnits > 2 && GlRenderer.extTexture3dSupported;
 			this.initDisplayLists();
 		}
 	}
 
 	@OriginalMember(owner = "client!wg", name = "e", descriptor = "()I")
 	public static int getSecondaryTextureUnit() {
-		return aBoolean308 ? 33986 : 33985;
+		return use3DTexture ? 33986 : 33985;
 	}
 
 	@OriginalMember(owner = "client!wg", name = "f", descriptor = "()V")
@@ -97,10 +97,10 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!wg", name = "d", descriptor = "()V")
 	private void initDisplayLists() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		this.anInt5806 = gl.glGenLists(2);
-		gl.glNewList(this.anInt5806, GL2.GL_COMPILE);
+		this.displayListId = gl.glGenLists(2);
+		gl.glNewList(this.displayListId, GL2.GL_COMPILE);
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
-		if (aBoolean308) {
+		if (use3DTexture) {
 			gl.glBindTexture(GL2.GL_TEXTURE_3D, MaterialManager.texture3D);
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_ADD);
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_COLOR);
@@ -119,7 +119,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 			gl.glActiveTexture(GL2.GL_TEXTURE2);
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_COMBINE);
 		}
-		gl.glBindTexture(GL2.GL_TEXTURE_1D, this.anInt5805);
+		gl.glBindTexture(GL2.GL_TEXTURE_1D, this.alphaGradientTextureId);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_INTERPOLATE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_CONSTANT);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC2_RGB, GL2.GL_TEXTURE);
@@ -130,9 +130,9 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 		gl.glEnable(GL2.GL_TEXTURE_GEN_S);
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
 		gl.glEndList();
-		gl.glNewList(this.anInt5806 + 1, GL2.GL_COMPILE);
+		gl.glNewList(this.displayListId + 1, GL2.GL_COMPILE);
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
-		if (aBoolean308) {
+		if (use3DTexture) {
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_MODULATE);
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_COLOR);
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_ALPHA, GL2.GL_MODULATE);
@@ -161,7 +161,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	@Override
 	public final void bind() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		gl.glCallList(this.anInt5806);
+		gl.glCallList(this.displayListId);
 	}
 
 	@OriginalMember(owner = "client!wg", name = "c", descriptor = "()I")
@@ -174,7 +174,7 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	@Override
 	public final void unbind() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		gl.glCallList(this.anInt5806 + 1);
+		gl.glCallList(this.displayListId + 1);
 	}
 
 	@OriginalMember(owner = "client!wg", name = "a", descriptor = "(I)V")
@@ -182,38 +182,38 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	public final void setArgument(@OriginalArg(0) int arg0) {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
-		if (aBoolean308 || arg0 >= 0) {
+		if (use3DTexture || arg0 >= 0) {
 			gl.glPushMatrix();
 			gl.glLoadIdentity();
 			gl.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 			gl.glRotatef((float) MaterialManager.anInt5559 * 360.0F / 2048.0F, 1.0F, 0.0F, 0.0F);
 			gl.glRotatef((float) MaterialManager.anInt1815 * 360.0F / 2048.0F, 0.0F, 1.0F, 0.0F);
 			gl.glTranslatef((float) -MaterialManager.anInt406, (float) -MaterialManager.anInt4675, (float) -MaterialManager.anInt5158);
-			if (aBoolean308) {
-				this.aFloatArray29[0] = 0.001F;
-				this.aFloatArray29[1] = 9.0E-4F;
-				this.aFloatArray29[2] = 0.0F;
-				this.aFloatArray29[3] = 0.0F;
-				gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.aFloatArray29, 0);
-				this.aFloatArray29[0] = 0.0F;
-				this.aFloatArray29[1] = 9.0E-4F;
-				this.aFloatArray29[2] = 0.001F;
-				this.aFloatArray29[3] = 0.0F;
-				gl.glTexGenfv(GL2.GL_T, GL2.GL_EYE_PLANE, this.aFloatArray29, 0);
-				this.aFloatArray29[0] = 0.0F;
-				this.aFloatArray29[1] = 0.0F;
-				this.aFloatArray29[2] = 0.0F;
-				this.aFloatArray29[3] = (float) GlRenderer.animationClock * 0.005F;
-				gl.glTexGenfv(GL2.GL_R, GL2.GL_EYE_PLANE, this.aFloatArray29, 0);
+			if (use3DTexture) {
+				this.texGenParams[0] = 0.001F;
+				this.texGenParams[1] = 9.0E-4F;
+				this.texGenParams[2] = 0.0F;
+				this.texGenParams[3] = 0.0F;
+				gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.texGenParams, 0);
+				this.texGenParams[0] = 0.0F;
+				this.texGenParams[1] = 9.0E-4F;
+				this.texGenParams[2] = 0.001F;
+				this.texGenParams[3] = 0.0F;
+				gl.glTexGenfv(GL2.GL_T, GL2.GL_EYE_PLANE, this.texGenParams, 0);
+				this.texGenParams[0] = 0.0F;
+				this.texGenParams[1] = 0.0F;
+				this.texGenParams[2] = 0.0F;
+				this.texGenParams[3] = (float) GlRenderer.animationClock * 0.005F;
+				gl.glTexGenfv(GL2.GL_R, GL2.GL_EYE_PLANE, this.texGenParams, 0);
 				gl.glActiveTexture(GL2.GL_TEXTURE2);
 			}
 			gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, WaterMaterialRenderer.getWaterFogColor(), 0);
 			if (arg0 >= 0) {
-				this.aFloatArray29[0] = 0.0F;
-				this.aFloatArray29[1] = 1.0F / (float) anInt3241;
-				this.aFloatArray29[2] = 0.0F;
-				this.aFloatArray29[3] = (float) arg0 * 1.0F / (float) anInt3241;
-				gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.aFloatArray29, 0);
+				this.texGenParams[0] = 0.0F;
+				this.texGenParams[1] = 1.0F / (float) underwaterDepthRange;
+				this.texGenParams[2] = 0.0F;
+				this.texGenParams[3] = (float) arg0 * 1.0F / (float) underwaterDepthRange;
+				gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.texGenParams, 0);
 				gl.glEnable(GL2.GL_TEXTURE_GEN_S);
 			} else {
 				gl.glDisable(GL2.GL_TEXTURE_GEN_S);

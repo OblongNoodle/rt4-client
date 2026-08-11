@@ -412,8 +412,8 @@ public class Cs1ScriptRunner {
 								}
 								local270 = ScriptRunner.anInt3751 - local123;
 								local276 = ScriptRunner.anInt1892 - local114;
-								local468 = component.anIntArray37[local276];
-								if (local270 < local468 || local270 > local468 + component.anIntArray45[local276]) {
+								local468 = component.clickMaskStart[local276];
+								if (local270 < local468 || local270 > local468 + component.clickMaskWidth[local276]) {
 									continue;
 								}
 								local276 -= component.height / 2;
@@ -693,7 +693,7 @@ public class Cs1ScriptRunner {
 												@Pc(1381) Sprite local1381 = component.getInvSprite(local270);
 												if (local1381 != null) {
 													local1381.render(x, y);
-												} else if (Component.aBoolean72) {
+												} else if (Component.loadFailed) {
 													InterfaceList.redraw(component);
 												}
 											}
@@ -705,8 +705,8 @@ public class Cs1ScriptRunner {
 								} else if (component.type == 3) {
 									if (isTrue(component)) {
 										local270 = component.activeColor;
-										if (InterfaceList.aClass13_22 == component && component.anInt475 != 0) {
-											local270 = component.anInt475;
+										if (InterfaceList.aClass13_22 == component && component.activeOverColor != 0) {
+											local270 = component.activeOverColor;
 										}
 									} else {
 										local270 = component.color;
@@ -746,8 +746,8 @@ public class Cs1ScriptRunner {
 											@Pc(1934) JagString local1934 = component.text;
 											if (isTrue(component)) {
 												local276 = component.activeColor;
-												if (InterfaceList.aClass13_22 == component && component.anInt475 != 0) {
-													local276 = component.anInt475;
+												if (InterfaceList.aClass13_22 == component && component.activeOverColor != 0) {
+													local276 = component.activeOverColor;
 												}
 												if (component.activeText.length() > 0) {
 													local1934 = component.activeText;
@@ -777,7 +777,7 @@ public class Cs1ScriptRunner {
 											}
 											local1921.drawInterfaceText(local1934, local123, local114, component.width, component.height, local276, component.shadowed ? 0 : -1, component.halign, component.valign, component.vpadding);
 											PluginRepository.ComponentDraw(i, component, local123, local114);
-										} else if (Component.aBoolean72) {
+										} else if (Component.loadFailed) {
 											InterfaceList.redraw(component);
 										}
 									} else if (component.type == 5) {
@@ -873,14 +873,14 @@ public class Cs1ScriptRunner {
 													}
 													PluginRepository.ComponentDraw(i, component, local123, local114);
 												}
-											} else if (Component.aBoolean72) {
+											} else if (Component.loadFailed) {
 												InterfaceList.redraw(component);
 											}
 										} else {
 											sprite = component.getSprite(isTrue(component));
 											if (sprite != null) {
 												sprite.render(local123, local114);
-											} else if (Component.aBoolean72) {
+											} else if (Component.loadFailed) {
 												InterfaceList.redraw(component);
 											}
 										}
@@ -923,13 +923,13 @@ public class Cs1ScriptRunner {
 												}
 											} else if (local276 == -1) {
 												local2589 = component.getModel(-1, null, -1, 0, local2587, PlayerList.self.appearance);
-												if (local2589 == null && Component.aBoolean72) {
+												if (local2589 == null && Component.loadFailed) {
 													InterfaceList.redraw(component);
 												}
 											} else {
 												@Pc(2689) SeqType local2689 = SeqTypeList.get(local276);
 												local2589 = component.getModel(component.anInt496, local2689, component.anInt510, component.anInt500, local2587, PlayerList.self.appearance);
-												if (local2589 == null && Component.aBoolean72) {
+												if (local2589 == null && Component.loadFailed) {
 													InterfaceList.redraw(component);
 												}
 											}
@@ -963,7 +963,7 @@ public class Cs1ScriptRunner {
 														GlRaster.setClip(arg0, arg6, arg4, arg7);
 														ScriptRunner.aBoolean299 = false;
 													}
-													if (component.aBoolean34) {
+													if (component.modelTransparent) {
 														GlRenderer.disableDepthMask();
 													}
 													local563 = MathUtils.sin[component.modelXAngle] * component.modelZoom >> 16;
@@ -973,7 +973,7 @@ public class Cs1ScriptRunner {
 													} else {
 														local2589.setCamera(component.modelYAngle, 0, component.modelXAngle, 0, local563, local571, -1L);
 													}
-													if (component.aBoolean34) {
+													if (component.modelTransparent) {
 														GlRenderer.enableDepthMask();
 													}
 												} else {
@@ -995,7 +995,7 @@ public class Cs1ScriptRunner {
 											if (component.type == 7) {
 												local1921 = component.getFont(Sprites.nameIcons);
 												if (local1921 == null) {
-													if (Component.aBoolean72) {
+													if (Component.loadFailed) {
 														InterfaceList.redraw(component);
 													}
 													continue;
@@ -1086,7 +1086,7 @@ public class Cs1ScriptRunner {
 												PluginRepository.ComponentDraw(i, component, cardMemory + 3, objId);
 											}
 											if (component.type == 9) {
-												if (component.aBoolean20) {
+												if (component.lineFlipped) {
 													local468 = local123 + component.width;
 													local276 = local114 + component.height;
 													memory = local114;
@@ -1154,12 +1154,12 @@ public class Cs1ScriptRunner {
 					local44.render(arg0, arg1);
 				}
 			} else {
-				SoftwareRaster.clearMaskedRegion(arg0, arg1, arg2.anIntArray37, arg2.anIntArray45);
+				SoftwareRaster.clearMaskedRegion(arg0, arg1, arg2.clickMaskStart, arg2.clickMaskWidth);
 			}
 		} else if (GlRenderer.enabled) {
 			((GlSprite) Sprites.compass).renderRotatedTransparent(arg0, arg1, arg2.width, arg2.height, Sprites.compass.width / 2, Sprites.compass.height / 2, (int) Camera.yawTarget, 256, (GlSprite) arg2.getSprite(false));
 		} else {
-			((SoftwareSprite) Sprites.compass).renderRotated(arg0, arg1, arg2.width, arg2.height, Sprites.compass.width / 2, Sprites.compass.height / 2, (int) Camera.yawTarget, arg2.anIntArray37, arg2.anIntArray45);
+			((SoftwareSprite) Sprites.compass).renderRotated(arg0, arg1, arg2.width, arg2.height, Sprites.compass.width / 2, Sprites.compass.height / 2, (int) Camera.yawTarget, arg2.clickMaskStart, arg2.clickMaskWidth);
 		}
 		InterfaceList.rectangleRedraw[arg3] = true;
 	}
@@ -1339,7 +1339,7 @@ public class Cs1ScriptRunner {
 	public static Component getDragParent(@OriginalArg(1) Component arg0) {
 		@Pc(12) Component local12 = InterfaceList.getDragRenderParent(arg0);
 		if (local12 == null) {
-			local12 = arg0.aClass13_5;
+			local12 = arg0.dragParent;
 		}
 		return local12;
 	}

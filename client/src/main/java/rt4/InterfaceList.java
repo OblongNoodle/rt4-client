@@ -373,9 +373,9 @@ public class InterfaceList {
 		@Pc(31) Component[] local31 = components[arg0];
 		for (@Pc(33) int local33 = 0; local33 < local31.length; local33++) {
 			@Pc(41) Component local41 = local31[local33];
-			if (local41.anObjectArray3 != null) {
+			if (local41.onLoad != null) {
 				@Pc(50) HookRequest local50 = new HookRequest();
-				local50.arguments = local41.anObjectArray3;
+				local50.arguments = local41.onLoad;
 				local50.source = local41;
 				ScriptRunner.run(2000000, local50);
 			}
@@ -629,7 +629,7 @@ public class InterfaceList {
 	public static void processComponents(@OriginalArg(0) Component[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		for (@Pc(1) int local1 = 0; local1 < arg0.length; local1++) {
 			@Pc(9) Component component = arg0[local1];
-			if (component != null && component.overlayer == arg1 && (!component.if3 || component.type == 0 || component.aBoolean25 || getServerActiveProperties(component).events != 0 || component == Cs1ScriptRunner.aClass13_1 || component.clientCode == 1338) && (!component.if3 || !isHidden(component))) {
+			if (component != null && component.overlayer == arg1 && (!component.if3 || component.type == 0 || component.hasEventHandlers || getServerActiveProperties(component).events != 0 || component == Cs1ScriptRunner.aClass13_1 || component.clientCode == 1338) && (!component.if3 || !isHidden(component))) {
 				@Pc(50) int local50 = component.x + arg6;
 				@Pc(55) int local55 = component.y + arg7;
 				@Pc(61) int local61;
@@ -667,7 +667,7 @@ public class InterfaceList {
 							for (@Pc(164) HookRequest local164 = (HookRequest) lowPriorityRequests.head(); local164 != null; local164 = (HookRequest) lowPriorityRequests.next()) {
 								if (local164.aBoolean158) {
 									local164.unlink();
-									local164.source.aBoolean19 = false;
+									local164.source.mouseOver = false;
 								}
 							}
 							if (Cs1ScriptRunner.anInt4851 == 0) {
@@ -718,7 +718,7 @@ public class InterfaceList {
 							Cs1ScriptRunner.anInt2225 = local50;
 							anInt5103 = local55;
 						}
-						if (component.aBoolean25 || component.clientCode != 0) {
+						if (component.hasEventHandlers || component.clientCode != 0) {
 							@Pc(399) HookRequest request;
 							if (local207 && MouseWheel.wheelRotation != 0 && component.onScroll != null) {
 								request = new HookRequest();
@@ -794,8 +794,8 @@ public class InterfaceList {
 									continue;
 								}
 							}
-							if (!component.aBoolean24 && local221) {
-								component.aBoolean24 = true;
+							if (!component.dragging && local221) {
+								component.dragging = true;
 								if (component.onClickRepeat != null) {
 									request = new HookRequest();
 									request.aBoolean158 = true;
@@ -806,7 +806,7 @@ public class InterfaceList {
 									lowPriorityRequests.addTail(request);
 								}
 							}
-							if (component.aBoolean24 && local212 && component.onDrag != null) {
+							if (component.dragging && local212 && component.onDrag != null) {
 								request = new HookRequest();
 								request.aBoolean158 = true;
 								request.source = component;
@@ -815,8 +815,8 @@ public class InterfaceList {
 								request.arguments = component.onDrag;
 								lowPriorityRequests.addTail(request);
 							}
-							if (component.aBoolean24 && !local212) {
-								component.aBoolean24 = false;
+							if (component.dragging && !local212) {
+								component.dragging = false;
 								if (component.onRelease != null) {
 									request = new HookRequest();
 									request.aBoolean158 = true;
@@ -836,8 +836,8 @@ public class InterfaceList {
 								request.arguments = component.onHold;
 								lowPriorityRequests.addTail(request);
 							}
-							if (!component.aBoolean19 && local207) {
-								component.aBoolean19 = true;
+							if (!component.mouseOver && local207) {
+								component.mouseOver = true;
 								if (component.onMouseOver != null) {
 									request = new HookRequest();
 									request.aBoolean158 = true;
@@ -848,7 +848,7 @@ public class InterfaceList {
 									lowPriorityRequests.addTail(request);
 								}
 							}
-							if (component.aBoolean19 && local207 && component.onMouseRepeat != null) {
+							if (component.mouseOver && local207 && component.onMouseRepeat != null) {
 								request = new HookRequest();
 								request.aBoolean158 = true;
 								request.source = component;
@@ -857,8 +857,8 @@ public class InterfaceList {
 								request.arguments = component.onMouseRepeat;
 								lowPriorityRequests.addTail(request);
 							}
-							if (component.aBoolean19 && !local207) {
-								component.aBoolean19 = false;
+							if (component.mouseOver && !local207) {
+								component.mouseOver = false;
 								if (component.onMouseLeave != null) {
 									request = new HookRequest();
 									request.aBoolean158 = true;
@@ -1041,9 +1041,9 @@ public class InterfaceList {
 						}
 					}
 					if (!component.if3 && Cs1ScriptRunner.aClass13_14 == null && clickedInventoryComponent == null && !Cs1ScriptRunner.aBoolean108) {
-						if ((component.anInt470 >= 0 || component.overColor != 0) && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
-							if (component.anInt470 >= 0) {
-								aClass13_22 = arg0[component.anInt470];
+						if ((component.hoverOverlayer >= 0 || component.overColor != 0) && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
+							if (component.hoverOverlayer >= 0) {
+								aClass13_22 = arg0[component.hoverOverlayer];
 							} else {
 								aClass13_22 = component;
 							}

@@ -1571,10 +1571,10 @@ public class MiniMenu {
 	public static int getOpCursor(@OriginalArg(1) int arg0, @OriginalArg(2) Component arg1) {
 		if (!InterfaceList.getServerActiveProperties(arg1).isButtonEnabled(arg0) && arg1.onOptionClick == null) {
 			return -1;
-		} else if (arg1.anIntArray39 == null || arg0 >= arg1.anIntArray39.length) {
+		} else if (arg1.dragTargets == null || arg0 >= arg1.dragTargets.length) {
 			return -1;
 		} else {
-			return arg1.anIntArray39[arg0];
+			return arg1.dragTargets[arg0];
 		}
 	}
 
