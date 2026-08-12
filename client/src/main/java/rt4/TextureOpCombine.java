@@ -18,230 +18,230 @@ public final class TextureOpCombine extends TextureOp {
 
 	@OriginalMember(owner = "client!pi", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(11) int[] local11 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(11) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(22) int[] local22 = this.getChildMonochromeOutput(0, arg0);
-			@Pc(28) int[] local28 = this.getChildMonochromeOutput(1, arg0);
-			@Pc(31) int local31 = this.function;
-			if (local31 == 1) {
-				for (local31 = 0; local31 < Texture.width; local31++) {
-					local11[local31] = local28[local31] + local22[local31];
+			@Pc(22) int[] inputA = this.getChildMonochromeOutput(0, row);
+			@Pc(28) int[] inputB = this.getChildMonochromeOutput(1, row);
+			@Pc(31) int func = this.function;
+			if (func == 1) {
+				for (func = 0; func < Texture.width; func++) {
+					output[func] = inputB[func] + inputA[func];
 				}
-			} else if (local31 == 2) {
-				for (local31 = 0; local31 < Texture.width; local31++) {
-					local11[local31] = local22[local31] - local28[local31];
+			} else if (func == 2) {
+				for (func = 0; func < Texture.width; func++) {
+					output[func] = inputA[func] - inputB[func];
 				}
-			} else if (local31 == 3) {
-				for (local31 = 0; local31 < Texture.width; local31++) {
-					local11[local31] = local28[local31] * local22[local31] >> 12;
+			} else if (func == 3) {
+				for (func = 0; func < Texture.width; func++) {
+					output[func] = inputB[func] * inputA[func] >> 12;
 				}
 			} else {
-				@Pc(180) int local180;
-				if (local31 == 4) {
-					for (local31 = 0; local31 < Texture.width; local31++) {
-						local180 = local28[local31];
-						local11[local31] = local180 == 0 ? 4096 : (local22[local31] << 12) / local180;
+				@Pc(180) int b;
+				if (func == 4) {
+					for (func = 0; func < Texture.width; func++) {
+						b = inputB[func];
+						output[func] = b == 0 ? 4096 : (inputA[func] << 12) / b;
 					}
-				} else if (local31 == 5) {
-					for (local31 = 0; local31 < Texture.width; local31++) {
-						local11[local31] = 4096 - ((4096 - local22[local31]) * (-local28[local31] + 4096) >> 12);
+				} else if (func == 5) {
+					for (func = 0; func < Texture.width; func++) {
+						output[func] = 4096 - ((4096 - inputA[func]) * (-inputB[func] + 4096) >> 12);
 					}
-				} else if (local31 == 6) {
-					for (local31 = 0; local31 < Texture.width; local31++) {
-						local180 = local28[local31];
-						local11[local31] = local180 >= 2048 ? 4096 - ((4096 - local22[local31]) * (-local180 + 4096) >> 11) : local180 * local22[local31] >> 11;
+				} else if (func == 6) {
+					for (func = 0; func < Texture.width; func++) {
+						b = inputB[func];
+						output[func] = b >= 2048 ? 4096 - ((4096 - inputA[func]) * (-b + 4096) >> 11) : b * inputA[func] >> 11;
 					}
 				} else {
-					@Pc(295) int local295;
-					if (local31 == 7) {
-						for (local31 = 0; local31 < Texture.width; local31++) {
-							local295 = local22[local31];
-							local11[local31] = local295 == 4096 ? 4096 : (local28[local31] << 12) / (4096 - local295);
+					@Pc(295) int a;
+					if (func == 7) {
+						for (func = 0; func < Texture.width; func++) {
+							a = inputA[func];
+							output[func] = a == 4096 ? 4096 : (inputB[func] << 12) / (4096 - a);
 						}
-					} else if (local31 == 8) {
-						for (local31 = 0; local31 < Texture.width; local31++) {
-							local295 = local22[local31];
-							local11[local31] = local295 == 0 ? 0 : 4096 - (4096 - local28[local31] << 12) / local295;
+					} else if (func == 8) {
+						for (func = 0; func < Texture.width; func++) {
+							a = inputA[func];
+							output[func] = a == 0 ? 0 : 4096 - (4096 - inputB[func] << 12) / a;
 						}
-					} else if (local31 == 9) {
-						for (local31 = 0; local31 < Texture.width; local31++) {
-							local180 = local28[local31];
-							local295 = local22[local31];
-							local11[local31] = local295 < local180 ? local295 : local180;
+					} else if (func == 9) {
+						for (func = 0; func < Texture.width; func++) {
+							b = inputB[func];
+							a = inputA[func];
+							output[func] = a < b ? a : b;
 						}
-					} else if (local31 == 10) {
-						for (local31 = 0; local31 < Texture.width; local31++) {
-							local180 = local28[local31];
-							local295 = local22[local31];
-							local11[local31] = local295 > local180 ? local295 : local180;
+					} else if (func == 10) {
+						for (func = 0; func < Texture.width; func++) {
+							b = inputB[func];
+							a = inputA[func];
+							output[func] = a > b ? a : b;
 						}
-					} else if (local31 == 11) {
-						for (local31 = 0; local31 < Texture.width; local31++) {
-							local295 = local22[local31];
-							local180 = local28[local31];
-							local11[local31] = local180 < local295 ? local295 - local180 : local180 - local295;
+					} else if (func == 11) {
+						for (func = 0; func < Texture.width; func++) {
+							a = inputA[func];
+							b = inputB[func];
+							output[func] = b < a ? a - b : b - a;
 						}
-					} else if (local31 == 12) {
-						for (local31 = 0; local31 < Texture.width; local31++) {
-							local295 = local22[local31];
-							local180 = local28[local31];
-							local11[local31] = local180 + local295 - (local295 * local180 >> 11);
+					} else if (func == 12) {
+						for (func = 0; func < Texture.width; func++) {
+							a = inputA[func];
+							b = inputB[func];
+							output[func] = b + a - (a * b >> 11);
 						}
 					}
 				}
 			}
 		}
-		return local11;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!pi", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(20) int[][] local20 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(20) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(30) int[][] local30 = this.getChildColorOutput(arg0, 0);
-			@Pc(36) int[][] local36 = this.getChildColorOutput(arg0, 1);
-			@Pc(40) int[] local40 = local20[0];
-			@Pc(44) int[] local44 = local20[1];
-			@Pc(48) int[] local48 = local20[2];
-			@Pc(52) int[] local52 = local30[0];
-			@Pc(56) int[] local56 = local30[1];
-			@Pc(60) int[] local60 = local30[2];
-			@Pc(64) int[] local64 = local36[0];
-			@Pc(68) int[] local68 = local36[1];
-			@Pc(72) int[] local72 = local36[2];
-			@Pc(75) int local75 = this.function;
-			if (local75 == 1) {
-				for (local75 = 0; local75 < Texture.width; local75++) {
-					local40[local75] = local64[local75] + local52[local75];
-					local44[local75] = local68[local75] + local56[local75];
-					local48[local75] = local60[local75] + local72[local75];
+			@Pc(30) int[][] inputA = this.getChildColorOutput(row, 0);
+			@Pc(36) int[][] inputB = this.getChildColorOutput(row, 1);
+			@Pc(40) int[] destR = output[0];
+			@Pc(44) int[] destG = output[1];
+			@Pc(48) int[] destB = output[2];
+			@Pc(52) int[] srcAR = inputA[0];
+			@Pc(56) int[] srcAG = inputA[1];
+			@Pc(60) int[] srcAB = inputA[2];
+			@Pc(64) int[] srcBR = inputB[0];
+			@Pc(68) int[] srcBG = inputB[1];
+			@Pc(72) int[] srcBB = inputB[2];
+			@Pc(75) int func = this.function;
+			if (func == 1) {
+				for (func = 0; func < Texture.width; func++) {
+					destR[func] = srcBR[func] + srcAR[func];
+					destG[func] = srcBG[func] + srcAG[func];
+					destB[func] = srcAB[func] + srcBB[func];
 				}
-			} else if (local75 == 2) {
-				for (local75 = 0; local75 < Texture.width; local75++) {
-					local40[local75] = local52[local75] - local64[local75];
-					local44[local75] = local56[local75] - local68[local75];
-					local48[local75] = local60[local75] - local72[local75];
+			} else if (func == 2) {
+				for (func = 0; func < Texture.width; func++) {
+					destR[func] = srcAR[func] - srcBR[func];
+					destG[func] = srcAG[func] - srcBG[func];
+					destB[func] = srcAB[func] - srcBB[func];
 				}
-			} else if (local75 == 3) {
-				for (local75 = 0; local75 < Texture.width; local75++) {
-					local40[local75] = local64[local75] * local52[local75] >> 12;
-					local44[local75] = local56[local75] * local68[local75] >> 12;
-					local48[local75] = local72[local75] * local60[local75] >> 12;
+			} else if (func == 3) {
+				for (func = 0; func < Texture.width; func++) {
+					destR[func] = srcBR[func] * srcAR[func] >> 12;
+					destG[func] = srcAG[func] * srcBG[func] >> 12;
+					destB[func] = srcBB[func] * srcAB[func] >> 12;
 				}
 			} else {
-				@Pc(286) int local286;
-				@Pc(282) int local282;
-				@Pc(278) int local278;
-				if (local75 == 4) {
-					for (local75 = 0; local75 < Texture.width; local75++) {
-						local278 = local72[local75];
-						local282 = local68[local75];
-						local286 = local64[local75];
-						local40[local75] = local286 == 0 ? 4096 : (local52[local75] << 12) / local286;
-						local44[local75] = local282 == 0 ? 4096 : (local56[local75] << 12) / local282;
-						local48[local75] = local278 == 0 ? 4096 : (local60[local75] << 12) / local278;
+				@Pc(286) int bR;
+				@Pc(282) int bG;
+				@Pc(278) int bB;
+				if (func == 4) {
+					for (func = 0; func < Texture.width; func++) {
+						bB = srcBB[func];
+						bG = srcBG[func];
+						bR = srcBR[func];
+						destR[func] = bR == 0 ? 4096 : (srcAR[func] << 12) / bR;
+						destG[func] = bG == 0 ? 4096 : (srcAG[func] << 12) / bG;
+						destB[func] = bB == 0 ? 4096 : (srcAB[func] << 12) / bB;
 					}
-				} else if (local75 == 5) {
-					for (local75 = 0; local75 < Texture.width; local75++) {
-						local40[local75] = 4096 - ((4096 - local64[local75]) * (4096 - local52[local75]) >> 12);
-						local44[local75] = 4096 - ((4096 - local68[local75]) * (-local56[local75] + 4096) >> 12);
-						local48[local75] = 4096 - ((4096 - local72[local75]) * (-local60[local75] + 4096) >> 12);
+				} else if (func == 5) {
+					for (func = 0; func < Texture.width; func++) {
+						destR[func] = 4096 - ((4096 - srcBR[func]) * (4096 - srcAR[func]) >> 12);
+						destG[func] = 4096 - ((4096 - srcBG[func]) * (-srcAG[func] + 4096) >> 12);
+						destB[func] = 4096 - ((4096 - srcBB[func]) * (-srcAB[func] + 4096) >> 12);
 					}
-				} else if (local75 == 6) {
-					for (local75 = 0; local75 < Texture.width; local75++) {
-						local278 = local72[local75];
-						local286 = local64[local75];
-						local282 = local68[local75];
-						local40[local75] = local286 >= 2048 ? 4096 - ((4096 - local286) * (-local52[local75] + 4096) >> 11) : local286 * local52[local75] >> 11;
-						local44[local75] = local282 < 2048 ? local282 * local56[local75] >> 11 : 4096 - ((4096 - local282) * (-local56[local75] + 4096) >> 11);
-						local48[local75] = local278 >= 2048 ? 4096 - ((4096 - local278) * (-local60[local75] + 4096) >> 11) : local60[local75] * local278 >> 11;
+				} else if (func == 6) {
+					for (func = 0; func < Texture.width; func++) {
+						bB = srcBB[func];
+						bR = srcBR[func];
+						bG = srcBG[func];
+						destR[func] = bR >= 2048 ? 4096 - ((4096 - bR) * (-srcAR[func] + 4096) >> 11) : bR * srcAR[func] >> 11;
+						destG[func] = bG < 2048 ? bG * srcAG[func] >> 11 : 4096 - ((4096 - bG) * (-srcAG[func] + 4096) >> 11);
+						destB[func] = bB >= 2048 ? 4096 - ((4096 - bB) * (-srcAB[func] + 4096) >> 11) : srcAB[func] * bB >> 11;
 					}
 				} else {
-					@Pc(539) int local539;
-					@Pc(543) int local543;
-					@Pc(535) int local535;
-					if (local75 == 7) {
-						for (local75 = 0; local75 < Texture.width; local75++) {
-							local535 = local60[local75];
-							local539 = local52[local75];
-							local543 = local56[local75];
-							local40[local75] = local539 == 4096 ? 4096 : (local64[local75] << 12) / (4096 - local539);
-							local44[local75] = local543 == 4096 ? 4096 : (local68[local75] << 12) / (4096 - local543);
-							local48[local75] = local535 == 4096 ? 4096 : (local72[local75] << 12) / (4096 - local535);
+					@Pc(539) int aR;
+					@Pc(543) int aG;
+					@Pc(535) int aB;
+					if (func == 7) {
+						for (func = 0; func < Texture.width; func++) {
+							aB = srcAB[func];
+							aR = srcAR[func];
+							aG = srcAG[func];
+							destR[func] = aR == 4096 ? 4096 : (srcBR[func] << 12) / (4096 - aR);
+							destG[func] = aG == 4096 ? 4096 : (srcBG[func] << 12) / (4096 - aG);
+							destB[func] = aB == 4096 ? 4096 : (srcBB[func] << 12) / (4096 - aB);
 						}
-					} else if (local75 == 8) {
-						for (local75 = 0; local75 < Texture.width; local75++) {
-							local539 = local52[local75];
-							local543 = local56[local75];
-							local535 = local60[local75];
-							local40[local75] = local539 == 0 ? 0 : 4096 - (4096 - local64[local75] << 12) / local539;
-							local44[local75] = local543 == 0 ? 0 : 4096 - (4096 - local68[local75] << 12) / local543;
-							local48[local75] = local535 == 0 ? 0 : 4096 - (4096 - local72[local75] << 12) / local535;
+					} else if (func == 8) {
+						for (func = 0; func < Texture.width; func++) {
+							aR = srcAR[func];
+							aG = srcAG[func];
+							aB = srcAB[func];
+							destR[func] = aR == 0 ? 0 : 4096 - (4096 - srcBR[func] << 12) / aR;
+							destG[func] = aG == 0 ? 0 : 4096 - (4096 - srcBG[func] << 12) / aG;
+							destB[func] = aB == 0 ? 0 : 4096 - (4096 - srcBB[func] << 12) / aB;
 						}
-					} else if (local75 == 9) {
-						for (local75 = 0; local75 < Texture.width; local75++) {
-							local535 = local60[local75];
-							local278 = local72[local75];
-							local282 = local68[local75];
-							local543 = local56[local75];
-							local286 = local64[local75];
-							local539 = local52[local75];
-							local40[local75] = local539 >= local286 ? local286 : local539;
-							local44[local75] = local543 >= local282 ? local282 : local543;
-							local48[local75] = local535 < local278 ? local535 : local278;
+					} else if (func == 9) {
+						for (func = 0; func < Texture.width; func++) {
+							aB = srcAB[func];
+							bB = srcBB[func];
+							bG = srcBG[func];
+							aG = srcAG[func];
+							bR = srcBR[func];
+							aR = srcAR[func];
+							destR[func] = aR >= bR ? bR : aR;
+							destG[func] = aG >= bG ? bG : aG;
+							destB[func] = aB < bB ? aB : bB;
 						}
-					} else if (local75 == 10) {
-						for (local75 = 0; local75 < Texture.width; local75++) {
-							local278 = local72[local75];
-							local535 = local60[local75];
-							local282 = local68[local75];
-							local539 = local52[local75];
-							local543 = local56[local75];
-							local286 = local64[local75];
-							local40[local75] = local286 < local539 ? local539 : local286;
-							local44[local75] = local543 > local282 ? local543 : local282;
-							local48[local75] = local278 < local535 ? local535 : local278;
+					} else if (func == 10) {
+						for (func = 0; func < Texture.width; func++) {
+							bB = srcBB[func];
+							aB = srcAB[func];
+							bG = srcBG[func];
+							aR = srcAR[func];
+							aG = srcAG[func];
+							bR = srcBR[func];
+							destR[func] = bR < aR ? aR : bR;
+							destG[func] = aG > bG ? aG : bG;
+							destB[func] = bB < aB ? aB : bB;
 						}
-					} else if (local75 == 11) {
-						for (local75 = 0; local75 < Texture.width; local75++) {
-							local282 = local68[local75];
-							local286 = local64[local75];
-							local543 = local56[local75];
-							local539 = local52[local75];
-							local535 = local60[local75];
-							local278 = local72[local75];
-							local40[local75] = local539 > local286 ? local539 - local286 : -local539 + local286;
-							local44[local75] = local543 > local282 ? local543 - local282 : -local543 + local282;
-							local48[local75] = local278 < local535 ? local535 - local278 : -local535 + local278;
+					} else if (func == 11) {
+						for (func = 0; func < Texture.width; func++) {
+							bG = srcBG[func];
+							bR = srcBR[func];
+							aG = srcAG[func];
+							aR = srcAR[func];
+							aB = srcAB[func];
+							bB = srcBB[func];
+							destR[func] = aR > bR ? aR - bR : -aR + bR;
+							destG[func] = aG > bG ? aG - bG : -aG + bG;
+							destB[func] = bB < aB ? aB - bB : -aB + bB;
 						}
-					} else if (local75 == 12) {
-						for (local75 = 0; local75 < Texture.width; local75++) {
-							local539 = local52[local75];
-							local278 = local72[local75];
-							local286 = local64[local75];
-							local282 = local68[local75];
-							local535 = local60[local75];
-							local543 = local56[local75];
-							local40[local75] = local286 + local539 - (local286 * local539 >> 11);
-							local44[local75] = local282 + local543 - (local543 * local282 >> 11);
-							local48[local75] = local278 + local535 - (local535 * local278 >> 11);
+					} else if (func == 12) {
+						for (func = 0; func < Texture.width; func++) {
+							aR = srcAR[func];
+							bB = srcBB[func];
+							bR = srcBR[func];
+							bG = srcBG[func];
+							aB = srcAB[func];
+							aG = srcAG[func];
+							destR[func] = bR + aR - (bR * aR >> 11);
+							destG[func] = bG + aG - (aG * bG >> 11);
+							destB[func] = bB + aB - (aB * bB >> 11);
 						}
 					}
 				}
 			}
 		}
-		return local20;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!pi", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.function = arg1.g1();
-		} else if (arg0 == 1) {
-			this.monochrome = arg1.g1() == 1;
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.function = buf.g1();
+		} else if (opcode == 1) {
+			this.monochrome = buf.g1() == 1;
 		}
 	}
 }

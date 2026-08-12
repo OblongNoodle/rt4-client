@@ -41,101 +41,101 @@ public final class TextureOpPerlinNoise extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!bi", name = "a", descriptor = "(ZI[I)V")
-	public final void getNoiseRow(@OriginalArg(1) int arg0, @OriginalArg(2) int[] arg1) {
-		@Pc(12) int local12 = this.frequencyY * Texture.heightFractions[arg0];
-		@Pc(115) int local115;
-		@Pc(129) int local129;
-		@Pc(40) int local40;
-		@Pc(27) short local27;
-		@Pc(105) int local105;
-		@Pc(60) int local60;
-		@Pc(54) int local54;
-		@Pc(47) int local47;
-		@Pc(85) int local85;
-		@Pc(64) int local64;
-		@Pc(68) int local68;
-		@Pc(77) int local77;
-		@Pc(103) int local103;
+	public final void getNoiseRow(@OriginalArg(1) int row, @OriginalArg(2) int[] output) {
+		@Pc(12) int scaledY = this.frequencyY * Texture.heightFractions[row];
+		@Pc(115) int rawX;
+		@Pc(129) int noise;
+		@Pc(40) int scale;
+		@Pc(27) short amplitude;
+		@Pc(105) int col;
+		@Pc(60) int yPos;
+		@Pc(54) int scaledFreqX;
+		@Pc(47) int scaledFreqY;
+		@Pc(85) int smoothY;
+		@Pc(64) int cellY;
+		@Pc(68) int cellYNext;
+		@Pc(77) int permY;
+		@Pc(103) int permYNext;
 		if (this.octaveCount == 1) {
-			local27 = this.octaveAmplitudes[0];
-			local40 = this.octaveFrequencies[0] << 12;
-			local60 = local12 * local40 >> 12;
-			local54 = this.frequencyX * local40 >> 12;
-			local47 = local40 * this.frequencyY >> 12;
-			local64 = local60 >> 12;
-			local77 = this.permutationTable[local64 & 0xFF] & 0xFF;
-			local60 &= 0xFFF;
-			local85 = MonochromeImageCache.smoothstepLookup[local60];
-			local68 = local64 + 1;
-			if (local47 <= local68) {
-				local68 = 0;
+			amplitude = this.octaveAmplitudes[0];
+			scale = this.octaveFrequencies[0] << 12;
+			yPos = scaledY * scale >> 12;
+			scaledFreqX = this.frequencyX * scale >> 12;
+			scaledFreqY = scale * this.frequencyY >> 12;
+			cellY = yPos >> 12;
+			permY = this.permutationTable[cellY & 0xFF] & 0xFF;
+			yPos &= 0xFFF;
+			smoothY = MonochromeImageCache.smoothstepLookup[yPos];
+			cellYNext = cellY + 1;
+			if (scaledFreqY <= cellYNext) {
+				cellYNext = 0;
 			}
-			local103 = this.permutationTable[local68 & 0xFF] & 0xFF;
+			permYNext = this.permutationTable[cellYNext & 0xFF] & 0xFF;
 			if (this.normalizeOutput) {
-				for (local105 = 0; local105 < Texture.width; local105++) {
-					local115 = this.frequencyX * Texture.widthFractions[local105];
-					local129 = this.sampleNoise(local40 * local115 >> 12, local103, local77, local54, local60, local85);
-					local129 = local27 * local129 >> 12;
-					arg1[local105] = (local129 >> 1) + 2048;
+				for (col = 0; col < Texture.width; col++) {
+					rawX = this.frequencyX * Texture.widthFractions[col];
+					noise = this.sampleNoise(scale * rawX >> 12, permYNext, permY, scaledFreqX, yPos, smoothY);
+					noise = amplitude * noise >> 12;
+					output[col] = (noise >> 1) + 2048;
 				}
 			} else {
-				for (local105 = 0; local105 < Texture.width; local105++) {
-					local115 = this.frequencyX * Texture.widthFractions[local105];
-					local129 = this.sampleNoise(local40 * local115 >> 12, local103, local77, local54, local60, local85);
-					arg1[local105] = local27 * local129 >> 12;
+				for (col = 0; col < Texture.width; col++) {
+					rawX = this.frequencyX * Texture.widthFractions[col];
+					noise = this.sampleNoise(scale * rawX >> 12, permYNext, permY, scaledFreqX, yPos, smoothY);
+					output[col] = amplitude * noise >> 12;
 				}
 			}
 			return;
 		}
-		local27 = this.octaveAmplitudes[0];
-		if (local27 > 8 || local27 < -8) {
-			local40 = this.octaveFrequencies[0] << 12;
-			local47 = local40 * this.frequencyY >> 12;
-			local54 = this.frequencyX * local40 >> 12;
-			local60 = local12 * local40 >> 12;
-			local64 = local60 >> 12;
-			local68 = local64 + 1;
-			local77 = this.permutationTable[local64 & 0xFF] & 0xFF;
-			@Pc(81) int local81 = local60 & 0xFFF;
-			local85 = MonochromeImageCache.smoothstepLookup[local81];
-			if (local68 >= local47) {
-				local68 = 0;
+		amplitude = this.octaveAmplitudes[0];
+		if (amplitude > 8 || amplitude < -8) {
+			scale = this.octaveFrequencies[0] << 12;
+			scaledFreqY = scale * this.frequencyY >> 12;
+			scaledFreqX = this.frequencyX * scale >> 12;
+			yPos = scaledY * scale >> 12;
+			cellY = yPos >> 12;
+			cellYNext = cellY + 1;
+			permY = this.permutationTable[cellY & 0xFF] & 0xFF;
+			@Pc(81) int yFrac = yPos & 0xFFF;
+			smoothY = MonochromeImageCache.smoothstepLookup[yFrac];
+			if (cellYNext >= scaledFreqY) {
+				cellYNext = 0;
 			}
-			local103 = this.permutationTable[local68 & 0xFF] & 0xFF;
-			for (local105 = 0; local105 < Texture.width; local105++) {
-				local115 = Texture.widthFractions[local105] * this.frequencyX;
-				local129 = this.sampleNoise(local115 * local40 >> 12, local103, local77, local54, local81, local85);
-				arg1[local105] = local129 * local27 >> 12;
+			permYNext = this.permutationTable[cellYNext & 0xFF] & 0xFF;
+			for (col = 0; col < Texture.width; col++) {
+				rawX = Texture.widthFractions[col] * this.frequencyX;
+				noise = this.sampleNoise(rawX * scale >> 12, permYNext, permY, scaledFreqX, yFrac, smoothY);
+				output[col] = noise * amplitude >> 12;
 			}
 		}
-		for (@Pc(142) int local142 = 1; local142 < this.octaveCount; local142++) {
-			local27 = this.octaveAmplitudes[local142];
-			if (local27 > 8 || local27 < -8) {
-				local40 = this.octaveFrequencies[local142] << 12;
-				local60 = local40 * local12 >> 12;
-				local64 = local60 >> 12;
-				local77 = this.permutationTable[local64 & 0xFF] & 0xFF;
-				local54 = this.frequencyX * local40 >> 12;
-				local68 = local64 + 1;
-				local60 &= 0xFFF;
-				local85 = MonochromeImageCache.smoothstepLookup[local60];
-				local47 = this.frequencyY * local40 >> 12;
-				if (local68 >= local47) {
-					local68 = 0;
+		for (@Pc(142) int octave = 1; octave < this.octaveCount; octave++) {
+			amplitude = this.octaveAmplitudes[octave];
+			if (amplitude > 8 || amplitude < -8) {
+				scale = this.octaveFrequencies[octave] << 12;
+				yPos = scale * scaledY >> 12;
+				cellY = yPos >> 12;
+				permY = this.permutationTable[cellY & 0xFF] & 0xFF;
+				scaledFreqX = this.frequencyX * scale >> 12;
+				cellYNext = cellY + 1;
+				yPos &= 0xFFF;
+				smoothY = MonochromeImageCache.smoothstepLookup[yPos];
+				scaledFreqY = this.frequencyY * scale >> 12;
+				if (cellYNext >= scaledFreqY) {
+					cellYNext = 0;
 				}
-				local103 = this.permutationTable[local68 & 0xFF] & 0xFF;
-				if (this.normalizeOutput && local142 == this.octaveCount - 1) {
-					for (local105 = 0; local105 < Texture.width; local105++) {
-						local115 = Texture.widthFractions[local105] * this.frequencyX;
-						local129 = this.sampleNoise(local40 * local115 >> 12, local103, local77, local54, local60, local85);
-						local129 = (local27 * local129 >> 12) + arg1[local105];
-						arg1[local105] = (local129 >> 1) + 2048;
+				permYNext = this.permutationTable[cellYNext & 0xFF] & 0xFF;
+				if (this.normalizeOutput && octave == this.octaveCount - 1) {
+					for (col = 0; col < Texture.width; col++) {
+						rawX = Texture.widthFractions[col] * this.frequencyX;
+						noise = this.sampleNoise(scale * rawX >> 12, permYNext, permY, scaledFreqX, yPos, smoothY);
+						noise = (amplitude * noise >> 12) + output[col];
+						output[col] = (noise >> 1) + 2048;
 					}
 				} else {
-					for (local105 = 0; local105 < Texture.width; local105++) {
-						local115 = Texture.widthFractions[local105] * this.frequencyX;
-						local129 = this.sampleNoise(local115 * local40 >> 12, local103, local77, local54, local60, local85);
-						arg1[local105] += local129 * local27 >> 12;
+					for (col = 0; col < Texture.width; col++) {
+						rawX = Texture.widthFractions[col] * this.frequencyX;
+						noise = this.sampleNoise(rawX * scale >> 12, permYNext, permY, scaledFreqX, yPos, smoothY);
+						output[col] += noise * amplitude >> 12;
 					}
 				}
 			}
@@ -147,9 +147,9 @@ public final class TextureOpPerlinNoise extends TextureOp {
 	public final void postDecode() {
 		this.permutationTable = TextureOpVoronoi.getPermutationTable(this.seed);
 		this.initOctaves();
-		for (@Pc(15) int local15 = this.octaveCount - 1; local15 >= 1; local15--) {
-			@Pc(23) short local23 = this.octaveAmplitudes[local15];
-			if (local23 > 8 || local23 < -8) {
+		for (@Pc(15) int i = this.octaveCount - 1; i >= 1; i--) {
+			@Pc(23) short amp = this.octaveAmplitudes[i];
+			if (amp > 8 || amp < -8) {
 				break;
 			}
 			this.octaveCount--;
@@ -158,99 +158,99 @@ public final class TextureOpPerlinNoise extends TextureOp {
 
 	@OriginalMember(owner = "client!bi", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.normalizeOutput = arg1.g1() == 1;
-		} else if (arg0 == 1) {
-			this.octaveCount = arg1.g1();
-		} else if (arg0 == 2) {
-			this.persistence = arg1.g2b();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.normalizeOutput = buf.g1() == 1;
+		} else if (opcode == 1) {
+			this.octaveCount = buf.g1();
+		} else if (opcode == 2) {
+			this.persistence = buf.g2b();
 			if (this.persistence < 0) {
 				this.octaveAmplitudes = new short[this.octaveCount];
-				for (@Pc(93) int local93 = 0; local93 < this.octaveCount; local93++) {
-					this.octaveAmplitudes[local93] = (short) arg1.g2b();
+				for (@Pc(93) int i = 0; i < this.octaveCount; i++) {
+					this.octaveAmplitudes[i] = (short) buf.g2b();
 				}
 			}
-		} else if (arg0 == 3) {
-			this.frequencyX = this.frequencyY = arg1.g1();
-		} else if (arg0 == 4) {
-			this.seed = arg1.g1();
-		} else if (arg0 == 5) {
-			this.frequencyX = arg1.g1();
-		} else if (arg0 == 6) {
-			this.frequencyY = arg1.g1();
+		} else if (opcode == 3) {
+			this.frequencyX = this.frequencyY = buf.g1();
+		} else if (opcode == 4) {
+			this.seed = buf.g1();
+		} else if (opcode == 5) {
+			this.frequencyX = buf.g1();
+		} else if (opcode == 6) {
+			this.frequencyY = buf.g1();
 		}
 	}
 
 	@OriginalMember(owner = "client!bi", name = "b", descriptor = "(Z)V")
 	private void initOctaves() {
-		@Pc(21) int local21;
+		@Pc(21) int i;
 		if (this.persistence > 0) {
 			this.octaveAmplitudes = new short[this.octaveCount];
 			this.octaveFrequencies = new short[this.octaveCount];
-			for (local21 = 0; local21 < this.octaveCount; local21++) {
-				this.octaveAmplitudes[local21] = (short) (Math.pow((float) this.persistence / 4096.0F, local21) * 4096.0D);
-				this.octaveFrequencies[local21] = (short) Math.pow(2.0D, local21);
+			for (i = 0; i < this.octaveCount; i++) {
+				this.octaveAmplitudes[i] = (short) (Math.pow((float) this.persistence / 4096.0F, i) * 4096.0D);
+				this.octaveFrequencies[i] = (short) Math.pow(2.0D, i);
 			}
 		} else if (this.octaveAmplitudes != null && this.octaveAmplitudes.length == this.octaveCount) {
 			this.octaveFrequencies = new short[this.octaveCount];
-			for (local21 = 0; local21 < this.octaveCount; local21++) {
-				this.octaveFrequencies[local21] = (short) Math.pow(2.0D, local21);
+			for (i = 0; i < this.octaveCount; i++) {
+				this.octaveFrequencies[i] = (short) Math.pow(2.0D, i);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!bi", name = "a", descriptor = "(IIIIIII)I")
-	private int sampleNoise(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		@Pc(15) int local15 = arg4 - 4096;
-		@Pc(19) int local19 = arg0 >> 12;
-		@Pc(23) int local23 = local19 + 1;
-		@Pc(27) int local27 = local19 & 0xFF;
-		if (local23 >= arg3) {
-			local23 = 0;
+	private int sampleNoise(@OriginalArg(0) int xPos, @OriginalArg(1) int permYNext, @OriginalArg(2) int permY, @OriginalArg(3) int scaledFreqX, @OriginalArg(5) int yFrac, @OriginalArg(6) int smoothY) {
+		@Pc(15) int yFracNeg = yFrac - 4096;
+		@Pc(19) int cellX = xPos >> 12;
+		@Pc(23) int cellXNext = cellX + 1;
+		@Pc(27) int cellXMasked = cellX & 0xFF;
+		if (cellXNext >= scaledFreqX) {
+			cellXNext = 0;
 		}
-		@Pc(40) int local40 = arg0 & 0xFFF;
-		@Pc(50) int local50 = this.permutationTable[local27 + arg2] & 0x3;
-		@Pc(54) int local54 = MonochromeImageCache.smoothstepLookup[local40];
-		@Pc(70) int local70;
-		if (local50 > 1) {
-			local70 = local50 == 2 ? local40 - arg4 : -local40 + -arg4;
+		@Pc(40) int xFrac = xPos & 0xFFF;
+		@Pc(50) int grad = this.permutationTable[cellXMasked + permY] & 0x3;
+		@Pc(54) int smoothX = MonochromeImageCache.smoothstepLookup[xFrac];
+		@Pc(70) int dot0;
+		if (grad > 1) {
+			dot0 = grad == 2 ? xFrac - yFrac : -xFrac + -yFrac;
 		} else {
-			local70 = local50 == 0 ? arg4 + local40 : -local40 + arg4;
+			dot0 = grad == 0 ? yFrac + xFrac : -xFrac + yFrac;
 		}
-		local23 &= 0xFF;
-		@Pc(92) int local92 = local40 - 4096;
-		local50 = this.permutationTable[arg2 + local23] & 0x3;
-		@Pc(118) int local118;
-		if (local50 <= 1) {
-			local118 = local50 == 0 ? arg4 + local92 : -local92 + arg4;
+		cellXNext &= 0xFF;
+		@Pc(92) int xFracNeg = xFrac - 4096;
+		grad = this.permutationTable[permY + cellXNext] & 0x3;
+		@Pc(118) int dot1;
+		if (grad <= 1) {
+			dot1 = grad == 0 ? yFrac + xFracNeg : -xFracNeg + yFrac;
 		} else {
-			local118 = local50 == 2 ? local92 - arg4 : -local92 + -arg4;
+			dot1 = grad == 2 ? xFracNeg - yFrac : -xFracNeg + -yFrac;
 		}
-		local50 = this.permutationTable[local27 + arg1] & 0x3;
-		@Pc(155) int local155 = local70 + ((local118 - local70) * local54 >> 12);
-		if (local50 > 1) {
-			local70 = local50 == 2 ? local40 - local15 : -local40 - local15;
+		grad = this.permutationTable[cellXMasked + permYNext] & 0x3;
+		@Pc(155) int interpTop = dot0 + ((dot1 - dot0) * smoothX >> 12);
+		if (grad > 1) {
+			dot0 = grad == 2 ? xFrac - yFracNeg : -xFrac - yFracNeg;
 		} else {
-			local70 = local50 == 0 ? local40 + local15 : local15 + -local40;
+			dot0 = grad == 0 ? xFrac + yFracNeg : yFracNeg + -xFrac;
 		}
-		local50 = this.permutationTable[arg1 + local23] & 0x3;
-		if (local50 > 1) {
-			local118 = local50 == 2 ? local92 - local15 : -local15 + -local92;
+		grad = this.permutationTable[permYNext + cellXNext] & 0x3;
+		if (grad > 1) {
+			dot1 = grad == 2 ? xFracNeg - yFracNeg : -yFracNeg + -xFracNeg;
 		} else {
-			local118 = local50 == 0 ? local92 + local15 : local15 + -local92;
+			dot1 = grad == 0 ? xFracNeg + yFracNeg : yFracNeg + -xFracNeg;
 		}
-		@Pc(237) int local237 = local70 + ((local118 - local70) * local54 >> 12);
-		return local155 + (arg5 * (local237 - local155) >> 12);
+		@Pc(237) int interpBottom = dot0 + ((dot1 - dot0) * smoothX >> 12);
+		return interpTop + (smoothY * (interpBottom - interpTop) >> 12);
 	}
 
 	@OriginalMember(owner = "client!bi", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(17) int[] local17 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(17) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			this.getNoiseRow(arg0, local17);
+			this.getNoiseRow(row, output);
 		}
-		return local17;
+		return output;
 	}
 }

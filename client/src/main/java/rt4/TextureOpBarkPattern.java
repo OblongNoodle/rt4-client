@@ -52,280 +52,280 @@ public final class TextureOpBarkPattern extends TextureOp {
 
 	@OriginalMember(owner = "client!ol", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (!this.monochromeImageCache.invalid) {
-			return local19;
+			return output;
 		}
-		@Pc(29) int[][] local29 = this.monochromeImageCache.getAll();
-		@Pc(31) int local31 = 0;
-		@Pc(33) int local33 = 0;
-		@Pc(35) int local35 = 0;
-		@Pc(37) int local37 = 0;
-		@Pc(39) int local39 = 0;
-		@Pc(41) boolean local41 = true;
-		@Pc(43) boolean local43 = true;
-		@Pc(45) int local45 = 0;
-		@Pc(47) int local47 = 0;
-		@Pc(54) int local54 = Texture.width * this.minWidth >> 12;
-		@Pc(61) int local61 = Texture.width * this.maxWidth >> 12;
-		@Pc(68) int local68 = this.maxHeight * Texture.height >> 12;
-		@Pc(75) int local75 = Texture.height * this.minHeight >> 12;
-		if (local68 <= 1) {
-			return local29[arg0];
+		@Pc(29) int[][] allRows = this.monochromeImageCache.getAll();
+		@Pc(31) int curX = 0;
+		@Pc(33) int prevRowOffset = 0;
+		@Pc(35) int rowDelta = 0;
+		@Pc(37) int rowOffset = 0;
+		@Pc(39) int prevBandIdx = 0;
+		@Pc(41) boolean lastRow = true;
+		@Pc(43) boolean firstRow = true;
+		@Pc(45) int prevBandCount = 0;
+		@Pc(47) int curBandIdx = 0;
+		@Pc(54) int minW = Texture.width * this.minWidth >> 12;
+		@Pc(61) int maxW = Texture.width * this.maxWidth >> 12;
+		@Pc(68) int maxH = this.maxHeight * Texture.height >> 12;
+		@Pc(75) int minH = Texture.height * this.minHeight >> 12;
+		if (maxH <= 1) {
+			return allRows[row];
 		}
-		@Pc(88) int local88 = Texture.width / local54 + 1;
+		@Pc(88) int maxBands = Texture.width / minW + 1;
 		this.cornerSize = Texture.width / 8 * this.roundness >> 12;
-		@Pc(102) int[][] local102 = new int[local88][3];
-		@Pc(106) int[][] local106 = new int[local88][3];
-		@Pc(113) Random local113 = new Random(this.seed);
+		@Pc(102) int[][] prevBands = new int[maxBands][3];
+		@Pc(106) int[][] curBands = new int[maxBands][3];
+		@Pc(113) Random rng = new Random(this.seed);
 		while (true) {
 			while (true) {
-				@Pc(123) int local123 = local54 + RandomUtils.nextInt(local61 - local54, local113);
-				@Pc(133) int local133 = RandomUtils.nextInt(local68 - local75, local113) + local75;
-				@Pc(137) int local137 = local31 + local123;
-				if (Texture.width < local137) {
-					local137 = Texture.width;
-					local123 = Texture.width - local31;
+				@Pc(123) int width = minW + RandomUtils.nextInt(maxW - minW, rng);
+				@Pc(133) int height = RandomUtils.nextInt(maxH - minH, rng) + minH;
+				@Pc(137) int endX = curX + width;
+				if (Texture.width < endX) {
+					endX = Texture.width;
+					width = Texture.width - curX;
 				}
-				@Pc(158) int local158;
-				@Pc(160) int local160;
-				if (local43) {
-					local158 = 0;
+				@Pc(158) int startY;
+				@Pc(160) int spanCount;
+				if (firstRow) {
+					startY = 0;
 				} else {
-					@Pc(150) int local150 = local39;
-					@Pc(154) int[] local154 = local102[local39];
-					local158 = local154[2];
-					local160 = 0;
-					@Pc(164) int local164 = local35 + local137;
-					if (local164 < 0) {
-						local164 += Texture.width;
+					@Pc(150) int scanIdx = prevBandIdx;
+					@Pc(154) int[] band = prevBands[prevBandIdx];
+					startY = band[2];
+					spanCount = 0;
+					@Pc(164) int wrappedEnd = rowDelta + endX;
+					if (wrappedEnd < 0) {
+						wrappedEnd += Texture.width;
 					}
-					if (Texture.width < local164) {
-						local164 -= Texture.width;
+					if (Texture.width < wrappedEnd) {
+						wrappedEnd -= Texture.width;
 					}
 					while (true) {
-						@Pc(186) int[] local186 = local102[local150];
-						if (local164 >= local186[0] && local186[1] >= local164) {
-							if (local39 != local150) {
-								@Pc(224) int local224 = local35 + local31;
-								if (local224 < 0) {
-									local224 += Texture.width;
+						@Pc(186) int[] scanBand = prevBands[scanIdx];
+						if (wrappedEnd >= scanBand[0] && scanBand[1] >= wrappedEnd) {
+							if (prevBandIdx != scanIdx) {
+								@Pc(224) int wrappedStart = rowDelta + curX;
+								if (wrappedStart < 0) {
+									wrappedStart += Texture.width;
 								}
-								if (local224 > Texture.width) {
-									local224 -= Texture.width;
+								if (wrappedStart > Texture.width) {
+									wrappedStart -= Texture.width;
 								}
-								@Pc(243) int local243;
-								@Pc(258) int[] local258;
-								for (local243 = 1; local243 <= local160; local243++) {
-									local258 = local102[(local39 + local243) % local45];
-									local158 = Math.max(local158, local258[2]);
+								@Pc(243) int j;
+								@Pc(258) int[] gapBand;
+								for (j = 1; j <= spanCount; j++) {
+									gapBand = prevBands[(prevBandIdx + j) % prevBandCount];
+									startY = Math.max(startY, gapBand[2]);
 								}
-								for (local243 = 0; local243 <= local160; local243++) {
-									local258 = local102[(local39 + local243) % local45];
-									@Pc(285) int local285 = local258[2];
-									if (local285 != local158) {
-										@Pc(297) int local297 = local258[0];
-										@Pc(301) int local301 = local258[1];
-										@Pc(312) int local312;
-										@Pc(316) int local316;
-										if (local164 > local224) {
-											local312 = Math.max(local224, local297);
-											local316 = Math.min(local164, local301);
-										} else if (local297 == 0) {
-											local316 = Math.min(local164, local301);
-											local312 = 0;
+								for (j = 0; j <= spanCount; j++) {
+									gapBand = prevBands[(prevBandIdx + j) % prevBandCount];
+									@Pc(285) int gapY = gapBand[2];
+									if (gapY != startY) {
+										@Pc(297) int gapStart = gapBand[0];
+										@Pc(301) int gapEnd = gapBand[1];
+										@Pc(312) int fillStart;
+										@Pc(316) int fillEnd;
+										if (wrappedEnd > wrappedStart) {
+											fillStart = Math.max(wrappedStart, gapStart);
+											fillEnd = Math.min(wrappedEnd, gapEnd);
+										} else if (gapStart == 0) {
+											fillEnd = Math.min(wrappedEnd, gapEnd);
+											fillStart = 0;
 										} else {
-											local312 = Math.max(local224, local297);
-											local316 = Texture.width;
+											fillStart = Math.max(wrappedStart, gapStart);
+											fillEnd = Texture.width;
 										}
-										this.renderBranch(local285, local113, local33 + local312, -local312 + local316, local158 - local285, local29);
+										this.renderBranch(gapY, rng, prevRowOffset + fillStart, -fillStart + fillEnd, startY - gapY, allRows);
 									}
 								}
 							}
-							local39 = local150;
+							prevBandIdx = scanIdx;
 							break;
 						}
-						local160++;
-						local150++;
-						if (local150 >= local45) {
-							local150 = 0;
+						spanCount++;
+						scanIdx++;
+						if (scanIdx >= prevBandCount) {
+							scanIdx = 0;
 						}
 					}
 				}
-				if (Texture.height >= local158 + local133) {
-					local41 = false;
+				if (Texture.height >= startY + height) {
+					lastRow = false;
 				} else {
-					local133 = Texture.height - local158;
+					height = Texture.height - startY;
 				}
-				@Pc(407) int[] local407;
-				if (local137 == Texture.width) {
-					this.renderBranch(local158, local113, local37 + local31, local123, local133, local29);
-					if (local41) {
-						return local19;
+				@Pc(407) int[] entry;
+				if (endX == Texture.width) {
+					this.renderBranch(startY, rng, rowOffset + curX, width, height, allRows);
+					if (lastRow) {
+						return output;
 					}
-					local41 = true;
-					local33 = local37;
-					local43 = false;
-					local407 = local106[local47++];
-					local407[0] = local31;
-					local39 = 0;
-					local45 = local47;
-					local47 = 0;
-					local407[2] = local133 + local158;
-					local407[1] = local137;
-					local37 = RandomUtils.nextInt(Texture.width, local113);
-					local35 = local37 - local33;
-					@Pc(439) int[][] local439 = local102;
-					local31 = 0;
-					local102 = local106;
-					local160 = local35;
-					if (local35 < 0) {
-						local160 = local35 + Texture.width;
+					lastRow = true;
+					prevRowOffset = rowOffset;
+					firstRow = false;
+					entry = curBands[curBandIdx++];
+					entry[0] = curX;
+					prevBandIdx = 0;
+					prevBandCount = curBandIdx;
+					curBandIdx = 0;
+					entry[2] = height + startY;
+					entry[1] = endX;
+					rowOffset = RandomUtils.nextInt(Texture.width, rng);
+					rowDelta = rowOffset - prevRowOffset;
+					@Pc(439) int[][] tmp = prevBands;
+					curX = 0;
+					prevBands = curBands;
+					spanCount = rowDelta;
+					if (rowDelta < 0) {
+						spanCount = rowDelta + Texture.width;
 					}
-					local106 = local439;
-					if (Texture.width < local160) {
-						local160 -= Texture.width;
+					curBands = tmp;
+					if (Texture.width < spanCount) {
+						spanCount -= Texture.width;
 					}
 					while (true) {
-						@Pc(469) int[] local469 = local102[local39];
-						if (local469[0] <= local160 && local469[1] >= local160) {
+						@Pc(469) int[] prevEntry = prevBands[prevBandIdx];
+						if (prevEntry[0] <= spanCount && prevEntry[1] >= spanCount) {
 							break;
 						}
-						local39++;
-						if (local45 <= local39) {
-							local39 = 0;
+						prevBandIdx++;
+						if (prevBandCount <= prevBandIdx) {
+							prevBandIdx = 0;
 						}
 					}
 				} else {
-					local407 = local106[local47++];
-					local407[1] = local137;
-					local407[2] = local133 + local158;
-					local407[0] = local31;
-					this.renderBranch(local158, local113, local31 + local37, local123, local133, local29);
-					local31 = local137;
+					entry = curBands[curBandIdx++];
+					entry[1] = endX;
+					entry[2] = height + startY;
+					entry[0] = curX;
+					this.renderBranch(startY, rng, curX + rowOffset, width, height, allRows);
+					curX = endX;
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ol", name = "a", descriptor = "(ILjava/util/Random;IIBI[[I)V")
-	private void renderBranch(@OriginalArg(0) int arg0, @OriginalArg(1) Random arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int[][] arg5) {
-		@Pc(26) int local26 = this.brightnessVariation > 0 ? 4096 - RandomUtils.nextInt(this.brightnessVariation, arg1) : 4096;
-		@Pc(34) int local34 = this.roundnessVariation * this.cornerSize >> 12;
-		@Pc(47) int local47 = this.cornerSize - (local34 > 0 ? RandomUtils.nextInt(local34, arg1) : 0);
-		if (Texture.width <= arg2) {
-			arg2 -= Texture.width;
+	private void renderBranch(@OriginalArg(0) int startY, @OriginalArg(1) Random rng, @OriginalArg(2) int x, @OriginalArg(3) int width, @OriginalArg(5) int height, @OriginalArg(6) int[][] allRows) {
+		@Pc(26) int brightness = this.brightnessVariation > 0 ? 4096 - RandomUtils.nextInt(this.brightnessVariation, rng) : 4096;
+		@Pc(34) int cornerVariation = this.roundnessVariation * this.cornerSize >> 12;
+		@Pc(47) int corner = this.cornerSize - (cornerVariation > 0 ? RandomUtils.nextInt(cornerVariation, rng) : 0);
+		if (Texture.width <= x) {
+			x -= Texture.width;
 		}
-		@Pc(68) int local68;
-		@Pc(72) int local72;
-		if (local47 > 0) {
-			if (arg4 <= 0 || arg3 <= 0) {
+		@Pc(68) int i;
+		@Pc(72) int j;
+		if (corner > 0) {
+			if (height <= 0 || width <= 0) {
 				return;
 			}
-			local68 = arg3 / 2;
-			local72 = arg4 / 2;
-			@Pc(79) int local79 = local68 < local47 ? local68 : local47;
-			@Pc(90) int local90 = local72 >= local47 ? local47 : local72;
-			@Pc(97) int local97 = arg3 - local79 * 2;
-			@Pc(101) int local101 = local79 + arg2;
-			for (@Pc(103) int local103 = 0; local103 < arg4; local103++) {
-				@Pc(112) int[] local112 = arg5[arg0 + local103];
-				@Pc(125) int local125;
-				@Pc(133) int local133;
-				@Pc(142) int local142;
-				if (local103 < local90) {
-					local125 = local103 * local26 / local90;
+			i = width / 2;
+			j = height / 2;
+			@Pc(79) int cornerW = i < corner ? i : corner;
+			@Pc(90) int cornerH = j >= corner ? corner : j;
+			@Pc(97) int innerWidth = width - cornerW * 2;
+			@Pc(101) int innerX = cornerW + x;
+			for (@Pc(103) int row = 0; row < height; row++) {
+				@Pc(112) int[] rowData = allRows[startY + row];
+				@Pc(125) int fade;
+				@Pc(133) int col;
+				@Pc(142) int colFade;
+				if (row < cornerH) {
+					fade = row * brightness / cornerH;
 					if (this.cornerMode == 0) {
-						for (local133 = 0; local133 < local79; local133++) {
-							local142 = local133 * local26 / local79;
-							local112[Texture.widthMask & local133 + arg2] = local112[arg3 + arg2 - local133 - 1 & Texture.widthMask] = local142 * local125 >> 12;
+						for (col = 0; col < cornerW; col++) {
+							colFade = col * brightness / cornerW;
+							rowData[Texture.widthMask & col + x] = rowData[width + x - col - 1 & Texture.widthMask] = colFade * fade >> 12;
 						}
 					} else {
-						for (local133 = 0; local133 < local79; local133++) {
-							local142 = local133 * local26 / local79;
-							local112[Texture.widthMask & arg2 + local133] = local112[Texture.widthMask & arg3 + arg2 - local133 - 1] = local125 <= local142 ? local125 : local142;
+						for (col = 0; col < cornerW; col++) {
+							colFade = col * brightness / cornerW;
+							rowData[Texture.widthMask & x + col] = rowData[Texture.widthMask & width + x - col - 1] = fade <= colFade ? fade : colFade;
 						}
 					}
-					if (Texture.width >= local97 + local101) {
-						ArrayUtils.fill(local112, local101, local97, local125);
+					if (Texture.width >= innerWidth + innerX) {
+						ArrayUtils.fill(rowData, innerX, innerWidth, fade);
 					} else {
-						local133 = Texture.width - local101;
-						ArrayUtils.fill(local112, local101, local133, local125);
-						ArrayUtils.fill(local112, 0, local97 - local133, local125);
+						col = Texture.width - innerX;
+						ArrayUtils.fill(rowData, innerX, col, fade);
+						ArrayUtils.fill(rowData, 0, innerWidth - col, fade);
 					}
 				} else {
-					local125 = arg4 - local103 - 1;
-					if (local125 >= local90) {
-						for (local133 = 0; local133 < local79; local133++) {
-							local112[Texture.widthMask & arg2 + local133] = local112[arg2 + arg3 - local133 - 1 & Texture.widthMask] = local26 * local133 / local79;
+					fade = height - row - 1;
+					if (fade >= cornerH) {
+						for (col = 0; col < cornerW; col++) {
+							rowData[Texture.widthMask & x + col] = rowData[x + width - col - 1 & Texture.widthMask] = brightness * col / cornerW;
 						}
-						if (local101 + local97 > Texture.width) {
-							local133 = Texture.width - local101;
-							ArrayUtils.fill(local112, local101, local133, local26);
-							ArrayUtils.fill(local112, 0, local97 - local133, local26);
+						if (innerX + innerWidth > Texture.width) {
+							col = Texture.width - innerX;
+							ArrayUtils.fill(rowData, innerX, col, brightness);
+							ArrayUtils.fill(rowData, 0, innerWidth - col, brightness);
 						} else {
-							ArrayUtils.fill(local112, local101, local97, local26);
+							ArrayUtils.fill(rowData, innerX, innerWidth, brightness);
 						}
 					} else {
-						local133 = local125 * local26 / local90;
-						@Pc(288) int local288;
+						col = fade * brightness / cornerH;
+						@Pc(288) int edgeFade;
 						if (this.cornerMode == 0) {
-							for (local142 = 0; local142 < local79; local142++) {
-								local288 = local26 * local142 / local79;
-								local112[Texture.widthMask & arg2 + local142] = local112[Texture.widthMask & arg2 + arg3 - local142 - 1] = local288 * local133 >> 12;
+							for (colFade = 0; colFade < cornerW; colFade++) {
+								edgeFade = brightness * colFade / cornerW;
+								rowData[Texture.widthMask & x + colFade] = rowData[Texture.widthMask & x + width - colFade - 1] = edgeFade * col >> 12;
 							}
 						} else {
-							for (local142 = 0; local142 < local79; local142++) {
-								local288 = local142 * local26 / local79;
-								local112[arg2 + local142 & Texture.widthMask] = local112[arg3 + arg2 - local142 - 1 & Texture.widthMask] = local133 <= local288 ? local133 : local288;
+							for (colFade = 0; colFade < cornerW; colFade++) {
+								edgeFade = colFade * brightness / cornerW;
+								rowData[x + colFade & Texture.widthMask] = rowData[width + x - colFade - 1 & Texture.widthMask] = col <= edgeFade ? col : edgeFade;
 							}
 						}
-						if (local97 + local101 > Texture.width) {
-							local142 = Texture.width - local101;
-							ArrayUtils.fill(local112, local101, local142, local133);
-							ArrayUtils.fill(local112, 0, local97 - local142, local133);
+						if (innerWidth + innerX > Texture.width) {
+							colFade = Texture.width - innerX;
+							ArrayUtils.fill(rowData, innerX, colFade, col);
+							ArrayUtils.fill(rowData, 0, innerWidth - colFade, col);
 						} else {
-							ArrayUtils.fill(local112, local101, local97, local133);
+							ArrayUtils.fill(rowData, innerX, innerWidth, col);
 						}
 					}
 				}
 			}
-		} else if (Texture.width >= arg2 + arg3) {
-			for (local68 = 0; local68 < arg4; local68++) {
-				ArrayUtils.fill(arg5[arg0 + local68], arg2, arg3, local26);
+		} else if (Texture.width >= x + width) {
+			for (i = 0; i < height; i++) {
+				ArrayUtils.fill(allRows[startY + i], x, width, brightness);
 			}
 		} else {
-			local68 = Texture.width - arg2;
-			for (local72 = 0; local72 < arg4; local72++) {
-				@Pc(522) int[] local522 = arg5[local72 + arg0];
-				ArrayUtils.fill(local522, arg2, local68, local26);
-				ArrayUtils.fill(local522, 0, arg3 - local68, local26);
+			i = Texture.width - x;
+			for (j = 0; j < height; j++) {
+				@Pc(522) int[] rowData = allRows[j + startY];
+				ArrayUtils.fill(rowData, x, i, brightness);
+				ArrayUtils.fill(rowData, 0, width - i, brightness);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ol", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.seed = arg1.g1();
-		} else if (arg0 == 1) {
-			this.minWidth = arg1.g2();
-		} else if (arg0 == 2) {
-			this.maxWidth = arg1.g2();
-		} else if (arg0 == 3) {
-			this.minHeight = arg1.g2();
-		} else if (arg0 == 4) {
-			this.maxHeight = arg1.g2();
-		} else if (arg0 == 5) {
-			this.roundness = arg1.g2();
-		} else if (arg0 == 6) {
-			this.cornerMode = arg1.g1();
-		} else if (arg0 == 7) {
-			this.roundnessVariation = arg1.g2();
-		} else if (arg0 == 8) {
-			this.brightnessVariation = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.seed = buf.g1();
+		} else if (opcode == 1) {
+			this.minWidth = buf.g2();
+		} else if (opcode == 2) {
+			this.maxWidth = buf.g2();
+		} else if (opcode == 3) {
+			this.minHeight = buf.g2();
+		} else if (opcode == 4) {
+			this.maxHeight = buf.g2();
+		} else if (opcode == 5) {
+			this.roundness = buf.g2();
+		} else if (opcode == 6) {
+			this.cornerMode = buf.g1();
+		} else if (opcode == 7) {
+			this.roundnessVariation = buf.g2();
+		} else if (opcode == 8) {
+			this.brightnessVariation = buf.g2();
 		}
 	}
 }
