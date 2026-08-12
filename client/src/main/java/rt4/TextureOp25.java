@@ -9,19 +9,19 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOp25 extends TextureOp {
 
 	@OriginalMember(owner = "client!sk", name = "Y", descriptor = "I")
-	private int anInt5197 = 4096;
+	private int greenMultiplier = 4096;
 
 	@OriginalMember(owner = "client!sk", name = "X", descriptor = "I")
-	private int anInt5196 = 4096;
+	private int blueMultiplier = 4096;
 
 	@OriginalMember(owner = "client!sk", name = "fb", descriptor = "I")
-	private int anInt5201 = 4096;
+	private int redMultiplier = 4096;
 
 	@OriginalMember(owner = "client!sk", name = "W", descriptor = "I")
-	private int anInt5195 = 409;
+	private int tolerance = 409;
 
 	@OriginalMember(owner = "client!sk", name = "V", descriptor = "[I")
-	private final int[] anIntArray450 = new int[3];
+	private final int[] targetColor = new int[3];
 
 	@OriginalMember(owner = "client!sk", name = "<init>", descriptor = "()V")
 	public TextureOp25() {
@@ -32,18 +32,18 @@ public final class TextureOp25 extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt5195 = arg1.g2();
+			this.tolerance = arg1.g2();
 		} else if (arg0 == 1) {
-			this.anInt5196 = arg1.g2();
+			this.blueMultiplier = arg1.g2();
 		} else if (arg0 == 2) {
-			this.anInt5197 = arg1.g2();
+			this.greenMultiplier = arg1.g2();
 		} else if (arg0 == 3) {
-			this.anInt5201 = arg1.g2();
+			this.redMultiplier = arg1.g2();
 		} else if (arg0 == 4) {
 			@Pc(65) int local65 = arg1.g3();
-			this.anIntArray450[2] = local65 >> 12 & 0x0;
-			this.anIntArray450[1] = local65 >> 4 & 0xFF0;
-			this.anIntArray450[0] = (local65 & 0xFF0000) << 4;
+			this.targetColor[2] = local65 >> 12 & 0x0;
+			this.targetColor[1] = local65 >> 4 & 0xFF0;
+			this.targetColor[0] = (local65 & 0xFF0000) << 4;
 		}
 	}
 
@@ -61,34 +61,34 @@ public final class TextureOp25 extends TextureOp {
 			@Pc(49) int[] local49 = local15[2];
 			for (@Pc(51) int local51 = 0; local51 < Texture.width; local51++) {
 				@Pc(58) int local58 = local29[local51];
-				@Pc(66) int local66 = local58 - this.anIntArray450[0];
+				@Pc(66) int local66 = local58 - this.targetColor[0];
 				if (local66 < 0) {
 					local66 = -local66;
 				}
-				if (this.anInt5195 < local66) {
+				if (this.tolerance < local66) {
 					local41[local51] = local58;
 					local45[local51] = local33[local51];
 					local49[local51] = local37[local51];
 				} else {
 					@Pc(100) int local100 = local33[local51];
-					local66 = local100 - this.anIntArray450[1];
+					local66 = local100 - this.targetColor[1];
 					if (local66 < 0) {
 						local66 = -local66;
 					}
-					if (local66 > this.anInt5195) {
+					if (local66 > this.tolerance) {
 						local41[local51] = local58;
 						local45[local51] = local100;
 						local49[local51] = local37[local51];
 					} else {
 						@Pc(141) int local141 = local37[local51];
-						local66 = local141 - this.anIntArray450[2];
+						local66 = local141 - this.targetColor[2];
 						if (local66 < 0) {
 							local66 = -local66;
 						}
-						if (local66 <= this.anInt5195) {
-							local41[local51] = this.anInt5201 * local58 >> 12;
-							local45[local51] = this.anInt5197 * local100 >> 12;
-							local49[local51] = this.anInt5196 * local141 >> 12;
+						if (local66 <= this.tolerance) {
+							local41[local51] = this.redMultiplier * local58 >> 12;
+							local45[local51] = this.greenMultiplier * local100 >> 12;
+							local49[local51] = this.blueMultiplier * local141 >> 12;
 						} else {
 							local41[local51] = local58;
 							local45[local51] = local100;

@@ -9,10 +9,10 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOp33 extends TextureOp {
 
 	@OriginalMember(owner = "client!an", name = "R", descriptor = "I")
-	private int anInt316 = 4096;
+	private int strength = 4096;
 
 	@OriginalMember(owner = "client!an", name = "bb", descriptor = "Z")
-	private boolean aBoolean11 = true;
+	private boolean biased = true;
 
 	@OriginalMember(owner = "client!an", name = "<init>", descriptor = "()V")
 	public TextureOp33() {
@@ -23,9 +23,9 @@ public final class TextureOp33 extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt316 = arg1.g2();
+			this.strength = arg1.g2();
 		} else if (arg0 == 1) {
-			this.aBoolean11 = arg1.g1() == 1;
+			this.biased = arg1.g1() == 1;
 		}
 	}
 
@@ -41,8 +41,8 @@ public final class TextureOp33 extends TextureOp {
 			@Pc(49) int[] local49 = local11[1];
 			@Pc(53) int[] local53 = local11[2];
 			for (@Pc(55) int local55 = 0; local55 < Texture.width; local55++) {
-				@Pc(70) int local70 = this.anInt316 * (local41[local55] - local25[local55]);
-				@Pc(90) int local90 = this.anInt316 * (local31[local55 + 1 & Texture.widthMask] - local31[Texture.widthMask & local55 - 1]);
+				@Pc(70) int local70 = this.strength * (local41[local55] - local25[local55]);
+				@Pc(90) int local90 = this.strength * (local31[local55 + 1 & Texture.widthMask] - local31[Texture.widthMask & local55 - 1]);
 				@Pc(94) int local94 = local70 >> 12;
 				@Pc(98) int local98 = local90 >> 12;
 				@Pc(104) int local104 = local94 * local94 >> 12;
@@ -60,7 +60,7 @@ public final class TextureOp33 extends TextureOp {
 					local133 = local70 / local124;
 					local131 = local90 / local124;
 				}
-				if (this.aBoolean11) {
+				if (this.biased) {
 					local133 = (local133 >> 1) + 2048;
 					local129 = (local129 >> 1) + 2048;
 					local131 = (local131 >> 1) + 2048;

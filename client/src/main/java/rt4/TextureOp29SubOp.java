@@ -8,19 +8,19 @@ import org.openrs2.deob.annotation.OriginalMember;
 public abstract class TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!kf", name = "e", descriptor = "I")
-	public final int anInt5229;
+	public final int outlineColor;
 
 	@OriginalMember(owner = "client!kf", name = "g", descriptor = "I")
-	protected final int anInt5231;
+	protected final int lineWidth;
 
 	@OriginalMember(owner = "client!kf", name = "b", descriptor = "I")
-	public final int anInt5228;
+	public final int fillColor;
 
 	@OriginalMember(owner = "client!kf", name = "<init>", descriptor = "(III)V")
 	protected TextureOp29SubOp(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		this.anInt5229 = arg1;
-		this.anInt5231 = arg2;
-		this.anInt5228 = arg0;
+		this.outlineColor = arg1;
+		this.lineWidth = arg2;
+		this.fillColor = arg0;
 	}
 
 	@OriginalMember(owner = "client!kf", name = "a", descriptor = "(III)V")

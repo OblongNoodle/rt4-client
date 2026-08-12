@@ -11,34 +11,34 @@ import java.util.Random;
 public final class TextureOp28 extends TextureOp {
 
 	@OriginalMember(owner = "client!ol", name = "gb", descriptor = "I")
-	private int anInt4356;
+	private int cornerSize;
 
 	@OriginalMember(owner = "client!ol", name = "R", descriptor = "I")
-	private int anInt4346 = 819;
+	private int maxHeight = 819;
 
 	@OriginalMember(owner = "client!ol", name = "ab", descriptor = "I")
-	private int anInt4351 = 0;
+	private int cornerMode = 0;
 
 	@OriginalMember(owner = "client!ol", name = "Z", descriptor = "I")
-	private int anInt4350 = 2048;
+	private int maxWidth = 2048;
 
 	@OriginalMember(owner = "client!ol", name = "T", descriptor = "I")
-	private int anInt4347 = 1024;
+	private int roundness = 1024;
 
 	@OriginalMember(owner = "client!ol", name = "Q", descriptor = "I")
-	private int anInt4345 = 1024;
+	private int minWidth = 1024;
 
 	@OriginalMember(owner = "client!ol", name = "cb", descriptor = "I")
-	private int anInt4353 = 409;
+	private int minHeight = 409;
 
 	@OriginalMember(owner = "client!ol", name = "kb", descriptor = "I")
-	private int anInt4360 = 1024;
+	private int brightnessVariation = 1024;
 
 	@OriginalMember(owner = "client!ol", name = "P", descriptor = "I")
-	private int anInt4344 = 1024;
+	private int roundnessVariation = 1024;
 
 	@OriginalMember(owner = "client!ol", name = "eb", descriptor = "I")
-	private int anInt4354 = 0;
+	private int seed = 0;
 
 	@OriginalMember(owner = "client!ol", name = "<init>", descriptor = "()V")
 	public TextureOp28() {
@@ -67,18 +67,18 @@ public final class TextureOp28 extends TextureOp {
 		@Pc(43) boolean local43 = true;
 		@Pc(45) int local45 = 0;
 		@Pc(47) int local47 = 0;
-		@Pc(54) int local54 = Texture.width * this.anInt4345 >> 12;
-		@Pc(61) int local61 = Texture.width * this.anInt4350 >> 12;
-		@Pc(68) int local68 = this.anInt4346 * Texture.height >> 12;
-		@Pc(75) int local75 = Texture.height * this.anInt4353 >> 12;
+		@Pc(54) int local54 = Texture.width * this.minWidth >> 12;
+		@Pc(61) int local61 = Texture.width * this.maxWidth >> 12;
+		@Pc(68) int local68 = this.maxHeight * Texture.height >> 12;
+		@Pc(75) int local75 = Texture.height * this.minHeight >> 12;
 		if (local68 <= 1) {
 			return local29[arg0];
 		}
 		@Pc(88) int local88 = Texture.width / local54 + 1;
-		this.anInt4356 = Texture.width / 8 * this.anInt4347 >> 12;
+		this.cornerSize = Texture.width / 8 * this.roundness >> 12;
 		@Pc(102) int[][] local102 = new int[local88][3];
 		@Pc(106) int[][] local106 = new int[local88][3];
-		@Pc(113) Random local113 = new Random(this.anInt4354);
+		@Pc(113) Random local113 = new Random(this.seed);
 		while (true) {
 			while (true) {
 				@Pc(123) int local123 = local54 + RandomUtils.nextInt(local61 - local54, local113);
@@ -211,9 +211,9 @@ public final class TextureOp28 extends TextureOp {
 
 	@OriginalMember(owner = "client!ol", name = "a", descriptor = "(ILjava/util/Random;IIBI[[I)V")
 	private void renderBranch(@OriginalArg(0) int arg0, @OriginalArg(1) Random arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int[][] arg5) {
-		@Pc(26) int local26 = this.anInt4360 > 0 ? 4096 - RandomUtils.nextInt(this.anInt4360, arg1) : 4096;
-		@Pc(34) int local34 = this.anInt4344 * this.anInt4356 >> 12;
-		@Pc(47) int local47 = this.anInt4356 - (local34 > 0 ? RandomUtils.nextInt(local34, arg1) : 0);
+		@Pc(26) int local26 = this.brightnessVariation > 0 ? 4096 - RandomUtils.nextInt(this.brightnessVariation, arg1) : 4096;
+		@Pc(34) int local34 = this.roundnessVariation * this.cornerSize >> 12;
+		@Pc(47) int local47 = this.cornerSize - (local34 > 0 ? RandomUtils.nextInt(local34, arg1) : 0);
 		if (Texture.width <= arg2) {
 			arg2 -= Texture.width;
 		}
@@ -236,7 +236,7 @@ public final class TextureOp28 extends TextureOp {
 				@Pc(142) int local142;
 				if (local103 < local90) {
 					local125 = local103 * local26 / local90;
-					if (this.anInt4351 == 0) {
+					if (this.cornerMode == 0) {
 						for (local133 = 0; local133 < local79; local133++) {
 							local142 = local133 * local26 / local79;
 							local112[Texture.widthMask & local133 + arg2] = local112[arg3 + arg2 - local133 - 1 & Texture.widthMask] = local142 * local125 >> 12;
@@ -270,7 +270,7 @@ public final class TextureOp28 extends TextureOp {
 					} else {
 						local133 = local125 * local26 / local90;
 						@Pc(288) int local288;
-						if (this.anInt4351 == 0) {
+						if (this.cornerMode == 0) {
 							for (local142 = 0; local142 < local79; local142++) {
 								local288 = local26 * local142 / local79;
 								local112[Texture.widthMask & arg2 + local142] = local112[Texture.widthMask & arg2 + arg3 - local142 - 1] = local288 * local133 >> 12;
@@ -309,23 +309,23 @@ public final class TextureOp28 extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt4354 = arg1.g1();
+			this.seed = arg1.g1();
 		} else if (arg0 == 1) {
-			this.anInt4345 = arg1.g2();
+			this.minWidth = arg1.g2();
 		} else if (arg0 == 2) {
-			this.anInt4350 = arg1.g2();
+			this.maxWidth = arg1.g2();
 		} else if (arg0 == 3) {
-			this.anInt4353 = arg1.g2();
+			this.minHeight = arg1.g2();
 		} else if (arg0 == 4) {
-			this.anInt4346 = arg1.g2();
+			this.maxHeight = arg1.g2();
 		} else if (arg0 == 5) {
-			this.anInt4347 = arg1.g2();
+			this.roundness = arg1.g2();
 		} else if (arg0 == 6) {
-			this.anInt4351 = arg1.g1();
+			this.cornerMode = arg1.g1();
 		} else if (arg0 == 7) {
-			this.anInt4344 = arg1.g2();
+			this.roundnessVariation = arg1.g2();
 		} else if (arg0 == 8) {
-			this.anInt4360 = arg1.g2();
+			this.brightnessVariation = arg1.g2();
 		}
 	}
 }

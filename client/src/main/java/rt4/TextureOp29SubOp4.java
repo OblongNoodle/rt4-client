@@ -34,7 +34,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!bl", name = "a", descriptor = "(IIIIIIII)V")
 	public static void drawFramedRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		if (TextureOp29.anInt4164 <= arg6 && TextureOp29.anInt5063 >= arg5 && arg4 >= TextureOp29.anInt5773 && arg1 <= TextureOp29.anInt2869) {
+		if (TextureOp29.clipLeft <= arg6 && TextureOp29.clipRight >= arg5 && arg4 >= TextureOp29.clipTop && arg1 <= TextureOp29.clipBottom) {
 			drawFramedRectUnclamped(arg3, arg4, arg1, arg2, arg0, arg5, arg6);
 		} else {
 			drawFramedRectClipped(arg5, arg2, arg1, arg0, arg3, arg4, arg6);
@@ -64,12 +64,12 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!tl", name = "a", descriptor = "(IIIIIIII)V")
 	public static void drawFramedRectClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.anInt2869, arg5, TextureOp29.anInt5773);
-		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.anInt2869, arg2, TextureOp29.anInt5773);
-		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.anInt5063, arg6, TextureOp29.anInt4164);
-		@Pc(29) int local29 = IntUtils.clamp(TextureOp29.anInt5063, arg0, TextureOp29.anInt4164);
-		@Pc(37) int local37 = IntUtils.clamp(TextureOp29.anInt2869, arg3 + arg5, TextureOp29.anInt5773);
-		@Pc(46) int local46 = IntUtils.clamp(TextureOp29.anInt2869, arg2 - arg3, TextureOp29.anInt5773);
+		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.clipBottom, arg5, TextureOp29.clipTop);
+		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.clipBottom, arg2, TextureOp29.clipTop);
+		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.clipRight, arg6, TextureOp29.clipLeft);
+		@Pc(29) int local29 = IntUtils.clamp(TextureOp29.clipRight, arg0, TextureOp29.clipLeft);
+		@Pc(37) int local37 = IntUtils.clamp(TextureOp29.clipBottom, arg3 + arg5, TextureOp29.clipTop);
+		@Pc(46) int local46 = IntUtils.clamp(TextureOp29.clipBottom, arg2 - arg3, TextureOp29.clipTop);
 		@Pc(48) int local48;
 		for (local48 = local11; local48 < local37; local48++) {
 			ArrayUtils.fillRange(anIntArrayArray10[local48], local23, local29, arg4);
@@ -77,8 +77,8 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 		for (local48 = local17; local48 > local46; local48--) {
 			ArrayUtils.fillRange(anIntArrayArray10[local48], local23, local29, arg4);
 		}
-		@Pc(94) int local94 = IntUtils.clamp(TextureOp29.anInt5063, arg3 + arg6, TextureOp29.anInt4164);
-		@Pc(103) int local103 = IntUtils.clamp(TextureOp29.anInt5063, arg0 - arg3, TextureOp29.anInt4164);
+		@Pc(94) int local94 = IntUtils.clamp(TextureOp29.clipRight, arg3 + arg6, TextureOp29.clipLeft);
+		@Pc(103) int local103 = IntUtils.clamp(TextureOp29.clipRight, arg0 - arg3, TextureOp29.clipLeft);
 		for (local48 = local37; local48 <= local46; local48++) {
 			@Pc(122) int[] local122 = anIntArrayArray10[local48];
 			ArrayUtils.fillRange(local122, local23, local94, arg4);
@@ -89,7 +89,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!sj", name = "a", descriptor = "(IIBIII)V")
 	public static void fillSolidRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		if (arg0 >= TextureOp29.anInt4164 && arg3 <= TextureOp29.anInt5063 && TextureOp29.anInt5773 <= arg4 && TextureOp29.anInt2869 >= arg2) {
+		if (arg0 >= TextureOp29.clipLeft && arg3 <= TextureOp29.clipRight && TextureOp29.clipTop <= arg4 && TextureOp29.clipBottom >= arg2) {
 			fillSolidRectUnclamped(arg2, arg3, arg4, arg0, arg1);
 		} else {
 			fillSolidRectClipped(arg1, arg3, arg4, arg0, arg2);
@@ -105,10 +105,10 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!n", name = "a", descriptor = "(IIIIII)V")
 	public static void fillSolidRectClipped(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.anInt2869, arg2, TextureOp29.anInt5773);
-		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.anInt2869, arg4, TextureOp29.anInt5773);
-		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.anInt5063, arg3, TextureOp29.anInt4164);
-		@Pc(35) int local35 = IntUtils.clamp(TextureOp29.anInt5063, arg1, TextureOp29.anInt4164);
+		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.clipBottom, arg2, TextureOp29.clipTop);
+		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.clipBottom, arg4, TextureOp29.clipTop);
+		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.clipRight, arg3, TextureOp29.clipLeft);
+		@Pc(35) int local35 = IntUtils.clamp(TextureOp29.clipRight, arg1, TextureOp29.clipLeft);
 		for (@Pc(37) int local37 = local11; local37 <= local17; local37++) {
 			ArrayUtils.fillRange(anIntArrayArray10[local37], local23, local35, arg0);
 		}
@@ -241,7 +241,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "(IIIIIII)V")
 	public static void drawRectOutline(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		if (TextureOp29.anInt4164 <= arg1 && TextureOp29.anInt5063 >= arg3 && TextureOp29.anInt5773 <= arg2 && arg4 <= TextureOp29.anInt2869) {
+		if (TextureOp29.clipLeft <= arg1 && TextureOp29.clipRight >= arg3 && TextureOp29.clipTop <= arg2 && arg4 <= TextureOp29.clipBottom) {
 			if (arg5 == 1) {
 				drawRectOutline1pxFast(arg0, arg3, arg2, arg4, arg1);
 			} else {
@@ -288,38 +288,38 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(IIIIIB)V")
 	public static void drawRectOutline1pxClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg4 > TextureOp29.anInt2869 || arg2 < TextureOp29.anInt5773) {
+		if (arg4 > TextureOp29.clipBottom || arg2 < TextureOp29.clipTop) {
 			return;
 		}
 		@Pc(24) boolean local24;
-		if (TextureOp29.anInt4164 > arg1) {
+		if (TextureOp29.clipLeft > arg1) {
 			local24 = false;
-			arg1 = TextureOp29.anInt4164;
-		} else if (TextureOp29.anInt5063 >= arg1) {
+			arg1 = TextureOp29.clipLeft;
+		} else if (TextureOp29.clipRight >= arg1) {
 			local24 = true;
 		} else {
 			local24 = false;
-			arg1 = TextureOp29.anInt5063;
+			arg1 = TextureOp29.clipRight;
 		}
 		@Pc(43) boolean local43;
-		if (arg3 < TextureOp29.anInt4164) {
-			arg3 = TextureOp29.anInt4164;
+		if (arg3 < TextureOp29.clipLeft) {
+			arg3 = TextureOp29.clipLeft;
 			local43 = false;
-		} else if (arg3 > TextureOp29.anInt5063) {
-			arg3 = TextureOp29.anInt5063;
+		} else if (arg3 > TextureOp29.clipRight) {
+			arg3 = TextureOp29.clipRight;
 			local43 = false;
 		} else {
 			local43 = true;
 		}
-		if (TextureOp29.anInt5773 > arg4) {
-			arg4 = TextureOp29.anInt5773;
+		if (TextureOp29.clipTop > arg4) {
+			arg4 = TextureOp29.clipTop;
 		} else {
 			ArrayUtils.fillRange(anIntArrayArray10[arg4++], arg1, arg3, arg0);
 		}
-		if (arg2 <= TextureOp29.anInt2869) {
+		if (arg2 <= TextureOp29.clipBottom) {
 			ArrayUtils.fillRange(anIntArrayArray10[arg2--], arg1, arg3, arg0);
 		} else {
-			arg2 = TextureOp29.anInt2869;
+			arg2 = TextureOp29.clipBottom;
 		}
 		@Pc(98) int local98;
 		if (local24 && local43) {
@@ -340,12 +340,12 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!an", name = "a", descriptor = "(IIIIIII)V")
 	public static void drawThickRectOutlineClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.anInt2869, arg5, TextureOp29.anInt5773);
-		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.anInt2869, arg0, TextureOp29.anInt5773);
-		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.anInt5063, arg3, TextureOp29.anInt4164);
-		@Pc(29) int local29 = IntUtils.clamp(TextureOp29.anInt5063, arg2, TextureOp29.anInt4164);
-		@Pc(42) int local42 = IntUtils.clamp(TextureOp29.anInt2869, arg5 + arg1, TextureOp29.anInt5773);
-		@Pc(51) int local51 = IntUtils.clamp(TextureOp29.anInt2869, arg0 - arg1, TextureOp29.anInt5773);
+		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.clipBottom, arg5, TextureOp29.clipTop);
+		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.clipBottom, arg0, TextureOp29.clipTop);
+		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.clipRight, arg3, TextureOp29.clipLeft);
+		@Pc(29) int local29 = IntUtils.clamp(TextureOp29.clipRight, arg2, TextureOp29.clipLeft);
+		@Pc(42) int local42 = IntUtils.clamp(TextureOp29.clipBottom, arg5 + arg1, TextureOp29.clipTop);
+		@Pc(51) int local51 = IntUtils.clamp(TextureOp29.clipBottom, arg0 - arg1, TextureOp29.clipTop);
 		@Pc(53) int local53;
 		for (local53 = local11; local53 < local42; local53++) {
 			ArrayUtils.fillRange(anIntArrayArray10[local53], local23, local29, arg4);
@@ -353,8 +353,8 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 		for (local53 = local17; local53 > local51; local53--) {
 			ArrayUtils.fillRange(anIntArrayArray10[local53], local23, local29, arg4);
 		}
-		@Pc(95) int local95 = IntUtils.clamp(TextureOp29.anInt5063, arg1 + arg3, TextureOp29.anInt4164);
-		@Pc(104) int local104 = IntUtils.clamp(TextureOp29.anInt5063, arg2 - arg1, TextureOp29.anInt4164);
+		@Pc(95) int local95 = IntUtils.clamp(TextureOp29.clipRight, arg1 + arg3, TextureOp29.clipLeft);
+		@Pc(104) int local104 = IntUtils.clamp(TextureOp29.clipRight, arg2 - arg1, TextureOp29.clipLeft);
 		for (local53 = local42; local53 <= local51; local53++) {
 			@Pc(117) int[] local117 = anIntArrayArray10[local53];
 			ArrayUtils.fillRange(local117, local23, local95, arg4);
@@ -374,7 +374,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 		@Pc(17) int local17 = this.anInt5244 * arg0 >> 12;
 		@Pc(24) int local24 = this.anInt5246 * arg1 >> 12;
 		@Pc(31) int local31 = this.anInt5247 * arg0 >> 12;
-		drawRectOutline(this.anInt5229, local24, local31, local10, local17, this.anInt5231);
+		drawRectOutline(this.outlineColor, local24, local31, local10, local17, this.lineWidth);
 	}
 
 	@OriginalMember(owner = "client!ta", name = "c", descriptor = "(III)V")
@@ -384,7 +384,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 		@Pc(17) int local17 = arg0 * this.anInt5238 >> 12;
 		@Pc(24) int local24 = arg1 * this.anInt5247 >> 12;
 		@Pc(31) int local31 = arg1 * this.anInt5244 >> 12;
-		fillSolidRect(local10, this.anInt5228, local31, local17, local24);
+		fillSolidRect(local10, this.fillColor, local31, local17, local24);
 	}
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(III)V")
@@ -394,6 +394,6 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 		@Pc(21) int local21 = this.anInt5247 * arg0 >> 12;
 		@Pc(28) int local28 = arg1 * this.anInt5238 >> 12;
 		@Pc(35) int local35 = this.anInt5244 * arg0 >> 12;
-		drawFramedRect(this.anInt5231, local35, this.anInt5228, this.anInt5229, local21, local28, local14);
+		drawFramedRect(this.lineWidth, local35, this.fillColor, this.outlineColor, local21, local28, local14);
 	}
 }
