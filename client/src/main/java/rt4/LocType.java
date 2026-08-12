@@ -431,7 +431,7 @@ public final class LocType {
 		if (opcode == 1) {
 			count = buffer.g1();
 			if (count > 0) {
-				if (this.models == null || SceneGraph.aBoolean130) {
+				if (this.models == null || SceneGraph.levelsHidden) {
 					this.shapes = new int[count];
 					this.models = new int[count];
 					for (len = 0; len < count; len++) {
@@ -447,7 +447,7 @@ public final class LocType {
 		} else if (opcode == 5) {
 			count = buffer.g1();
 			if (count > 0) {
-				if (this.models == null || SceneGraph.aBoolean130) {
+				if (this.models == null || SceneGraph.levelsHidden) {
 					this.models = new int[count];
 					this.shapes = null;
 					for (len = 0; len < count; len++) {

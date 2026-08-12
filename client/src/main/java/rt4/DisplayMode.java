@@ -262,7 +262,7 @@ public final class DisplayMode {
 			GlTile.resetStaticBuffers();
 			LoginManager.clearLoginScreenSprites();
 		}
-		SceneGraph.aBoolean130 = !SceneGraph.allLevelsAreVisible();
+		SceneGraph.levelsHidden = !SceneGraph.allLevelsAreVisible();
 		if (useHD) {
 			client.reloadResourcesOnDisplayModeChange();
 		}

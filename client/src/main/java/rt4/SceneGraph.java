@@ -184,7 +184,7 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!rc", name = "p", descriptor = "I")
 	public static int anInt1142 = 0;
 	@OriginalMember(owner = "client!gn", name = "d", descriptor = "Z")
-	public static boolean aBoolean130 = false;
+	public static boolean levelsHidden = false;
 	@OriginalMember(owner = "client!gg", name = "Z", descriptor = "I")
 	public static int anInt2222;
 	@OriginalMember(owner = "client!sj", name = "u", descriptor = "Z")
@@ -5273,7 +5273,7 @@ public class SceneGraph {
 					@Pc(529) Light local529 = new Light(local95);
 					if (local529.animationPreset == 31) {
 						@Pc(541) LightType local541 = LightTypeList.get(local95.g2());
-						local529.setFlickerParams(local541.anInt2865, local541.anInt2873, local541.anInt2867, local541.anInt2872);
+						local529.setFlickerParams(local541.flickerType, local541.flickerSpeed, local541.alphaMin, local541.alphaMax);
 					}
 					local529.matchesStaticLightOverride = LightingManager.matchesStaticLightOverride(regionId, local529.x, local529.y, local529.level);
 					local529.y += arg3 << 7;
@@ -5435,7 +5435,7 @@ public class SceneGraph {
 					@Pc(517) Light local517 = new Light(local96);
 					if (local517.animationPreset == 31) {
 						@Pc(529) LightType local529 = LightTypeList.get(local96.g2());
-						local517.setFlickerParams(local529.anInt2865, local529.anInt2873, local529.anInt2867, local529.anInt2872);
+						local517.setFlickerParams(local529.flickerType, local529.flickerSpeed, local529.alphaMin, local529.alphaMax);
 					}
 					local417 = local517.x >> 7;
 					local255 = local517.y >> 7;

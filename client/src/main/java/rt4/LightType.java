@@ -9,16 +9,16 @@ import org.openrs2.deob.annotation.Pc;
 public final class LightType {
 
 	@OriginalMember(owner = "client!ic", name = "g", descriptor = "I")
-	public int anInt2867 = 2048;
+	public int alphaMin = 2048;
 
 	@OriginalMember(owner = "client!ic", name = "c", descriptor = "I")
-	public int anInt2865 = 0;
+	public int flickerType = 0;
 
 	@OriginalMember(owner = "client!ic", name = "o", descriptor = "I")
-	public int anInt2872 = 0;
+	public int alphaMax = 0;
 
 	@OriginalMember(owner = "client!ic", name = "p", descriptor = "I")
-	public int anInt2873 = 2048;
+	public int flickerSpeed = 2048;
 
 	@OriginalMember(owner = "client!ic", name = "a", descriptor = "(ILclient!wa;I)V")
 	public final void decode(@OriginalArg(1) Buffer arg0, @OriginalArg(2) int arg1) {
@@ -34,13 +34,13 @@ public final class LightType {
 	@OriginalMember(owner = "client!ic", name = "a", descriptor = "(ILclient!wa;IZ)V")
 	private void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
 		if (arg0 == 1) {
-			this.anInt2865 = arg1.g1();
+			this.flickerType = arg1.g1();
 		} else if (arg0 == 2) {
-			this.anInt2873 = arg1.g2();
+			this.flickerSpeed = arg1.g2();
 		} else if (arg0 == 3) {
-			this.anInt2867 = arg1.g2();
+			this.alphaMin = arg1.g2();
 		} else if (arg0 == 4) {
-			this.anInt2872 = arg1.g2b();
+			this.alphaMax = arg1.g2b();
 		}
 	}
 }
