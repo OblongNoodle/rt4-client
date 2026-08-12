@@ -21,60 +21,60 @@ public final class TextureOpFlip extends TextureOp {
 
 	@OriginalMember(owner = "client!ej", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.flipHorizontal = arg1.g1() == 1;
-		} else if (arg0 == 1) {
-			this.flipVertical = arg1.g1() == 1;
-		} else if (arg0 == 2) {
-			this.monochrome = arg1.g1() == 1;
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.flipHorizontal = buf.g1() == 1;
+		} else if (opcode == 1) {
+			this.flipVertical = buf.g1() == 1;
+		} else if (opcode == 2) {
+			this.monochrome = buf.g1() == 1;
 		}
 	}
 
 	@OriginalMember(owner = "client!ej", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(20) int[][] local20 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(20) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(39) int[][] local39 = this.getChildColorOutput(this.flipVertical ? Texture.heightMask - arg0 : arg0, 0);
-			@Pc(43) int[] local43 = local39[0];
-			@Pc(47) int[] local47 = local39[2];
-			@Pc(51) int[] local51 = local39[1];
-			@Pc(55) int[] local55 = local20[1];
-			@Pc(59) int[] local59 = local20[2];
-			@Pc(63) int[] local63 = local20[0];
-			@Pc(68) int local68;
+			@Pc(39) int[][] srcColor = this.getChildColorOutput(this.flipVertical ? Texture.heightMask - row : row, 0);
+			@Pc(43) int[] srcR = srcColor[0];
+			@Pc(47) int[] srcB = srcColor[2];
+			@Pc(51) int[] srcG = srcColor[1];
+			@Pc(55) int[] destG = output[1];
+			@Pc(59) int[] destB = output[2];
+			@Pc(63) int[] destR = output[0];
+			@Pc(68) int col;
 			if (this.flipHorizontal) {
-				for (local68 = 0; local68 < Texture.width; local68++) {
-					local63[local68] = local43[Texture.widthMask - local68];
-					local55[local68] = local51[Texture.widthMask - local68];
-					local59[local68] = local47[Texture.widthMask - local68];
+				for (col = 0; col < Texture.width; col++) {
+					destR[col] = srcR[Texture.widthMask - col];
+					destG[col] = srcG[Texture.widthMask - col];
+					destB[col] = srcB[Texture.widthMask - col];
 				}
 			} else {
-				for (local68 = 0; local68 < Texture.width; local68++) {
-					local63[local68] = local43[local68];
-					local55[local68] = local51[local68];
-					local59[local68] = local47[local68];
+				for (col = 0; col < Texture.width; col++) {
+					destR[col] = srcR[col];
+					destG[col] = srcG[col];
+					destB[col] = srcB[col];
 				}
 			}
 		}
-		return local20;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!ej", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(15) int[] local15 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(15) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(38) int[] local38 = this.getChildMonochromeOutput(0, this.flipVertical ? Texture.heightMask - arg0 : arg0);
+			@Pc(38) int[] srcRow = this.getChildMonochromeOutput(0, this.flipVertical ? Texture.heightMask - row : row);
 			if (this.flipHorizontal) {
-				for (@Pc(51) int local51 = 0; local51 < Texture.width; local51++) {
-					local15[local51] = local38[Texture.widthMask - local51];
+				for (@Pc(51) int col = 0; col < Texture.width; col++) {
+					output[col] = srcRow[Texture.widthMask - col];
 				}
 			} else {
-				ArrayUtils.copy(local38, 0, local15, 0, Texture.width);
+				ArrayUtils.copy(srcRow, 0, output, 0, Texture.width);
 			}
 		}
-		return local15;
+		return output;
 	}
 }

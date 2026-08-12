@@ -18,50 +18,50 @@ public final class TextureOpDiamond extends TextureOp {
 
 	@OriginalMember(owner = "client!sa", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(28) int local28 = Texture.heightFractions[arg0];
-			for (@Pc(30) int local30 = 0; local30 < Texture.width; local30++) {
-				@Pc(41) int local41 = Texture.widthFractions[local30];
-				@Pc(76) int local76;
-				if (local41 > this.borderWidth && 4096 - this.borderWidth > local41 && 2048 - this.borderWidth < local28 && local28 < this.borderWidth + 2048) {
-					local76 = 2048 - local41;
-					local76 = local76 < 0 ? -local76 : local76;
-					local76 <<= 0xC;
-					local76 /= 2048 - this.borderWidth;
-					local19[local30] = 4096 - local76;
-				} else if (local41 > 2048 - this.borderWidth && local41 < this.borderWidth + 2048) {
-					local76 = local28 - 2048;
-					local76 = local76 >= 0 ? local76 : -local76;
-					local76 -= this.borderWidth;
-					local76 <<= 0xC;
-					local19[local30] = local76 / (2048 - this.borderWidth);
-				} else if (local28 < this.borderWidth || 4096 - this.borderWidth < local28) {
-					local76 = local41 - 2048;
-					@Pc(188) int local188 = local76 < 0 ? -local76 : local76;
-					@Pc(193) int local193 = local188 - this.borderWidth;
-					@Pc(197) int local197 = local193 << 12;
-					local19[local30] = local197 / (2048 - this.borderWidth);
-				} else if (this.borderWidth <= local41 && local41 <= 4096 - this.borderWidth) {
-					local19[local30] = 0;
+			@Pc(28) int y = Texture.heightFractions[row];
+			for (@Pc(30) int col = 0; col < Texture.width; col++) {
+				@Pc(41) int x = Texture.widthFractions[col];
+				@Pc(76) int dist;
+				if (x > this.borderWidth && 4096 - this.borderWidth > x && 2048 - this.borderWidth < y && y < this.borderWidth + 2048) {
+					dist = 2048 - x;
+					dist = dist < 0 ? -dist : dist;
+					dist <<= 0xC;
+					dist /= 2048 - this.borderWidth;
+					output[col] = 4096 - dist;
+				} else if (x > 2048 - this.borderWidth && x < this.borderWidth + 2048) {
+					dist = y - 2048;
+					dist = dist >= 0 ? dist : -dist;
+					dist -= this.borderWidth;
+					dist <<= 0xC;
+					output[col] = dist / (2048 - this.borderWidth);
+				} else if (y < this.borderWidth || 4096 - this.borderWidth < y) {
+					dist = x - 2048;
+					@Pc(188) int absDist = dist < 0 ? -dist : dist;
+					@Pc(193) int borderDist = absDist - this.borderWidth;
+					@Pc(197) int scaled = borderDist << 12;
+					output[col] = scaled / (2048 - this.borderWidth);
+				} else if (this.borderWidth <= x && x <= 4096 - this.borderWidth) {
+					output[col] = 0;
 				} else {
-					local76 = 2048 - local28;
-					local76 = local76 < 0 ? -local76 : local76;
-					local76 <<= 0xC;
-					local76 /= 2048 - this.borderWidth;
-					local19[local30] = 4096 - local76;
+					dist = 2048 - y;
+					dist = dist < 0 ? -dist : dist;
+					dist <<= 0xC;
+					dist /= 2048 - this.borderWidth;
+					output[col] = 4096 - dist;
 				}
 			}
 		}
-		return local19;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!sa", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.borderWidth = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.borderWidth = buf.g2();
 		}
 	}
 }
