@@ -60,104 +60,104 @@ public final class LightMesh {
 	public int vertexCapacity;
 
 	@OriginalMember(owner = "client!fj", name = "a", descriptor = "(Lclient!gi;IIIFFF)I")
-	public final int addVertex(@OriginalArg(0) Light arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) float arg4, @OriginalArg(5) float arg5, @OriginalArg(6) float arg6) {
-		@Pc(1) long local1 = 0L;
-		if ((arg1 & 0x7F) == 0 || (arg3 & 0x7F) == 0) {
-			local1 = arg1 + (arg3 << 16);
-			@Pc(23) IntNode local23 = (IntNode) this.vertexCache.get(local1);
-			if (local23 != null) {
-				return local23.value;
+	public final int addVertex(@OriginalArg(0) Light light, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int z, @OriginalArg(4) float normalX, @OriginalArg(5) float normalY, @OriginalArg(6) float normalZ) {
+		@Pc(1) long key = 0L;
+		if ((x & 0x7F) == 0 || (z & 0x7F) == 0) {
+			key = x + (z << 16);
+			@Pc(23) IntNode cached = (IntNode) this.vertexCache.get(key);
+			if (cached != null) {
+				return cached.value;
 			}
 		}
-		@Pc(31) int local31 = arg0.color;
-		@Pc(37) float local37 = (float) (arg0.x - arg1);
-		@Pc(43) float local43 = (float) (arg0.y - arg2);
-		@Pc(49) float local49 = (float) (arg0.z - arg3);
-		@Pc(64) float local64 = (float) Math.sqrt(local37 * local37 + local43 * local43 + local49 * local49);
-		@Pc(68) float local68 = 1.0F / local64;
-		@Pc(72) float local72 = local37 * local68;
-		@Pc(76) float local76 = local43 * local68;
-		@Pc(80) float local80 = local49 * local68;
-		@Pc(90) float local90 = local64 / (float) ((arg0.radius << 7) + 64);
-		@Pc(96) float local96 = 1.0F - local90 * local90;
-		if (local96 < 0.0F) {
-			local96 = 0.0F;
+		@Pc(31) int color = light.color;
+		@Pc(37) float dx = (float) (light.x - x);
+		@Pc(43) float dy = (float) (light.y - y);
+		@Pc(49) float dz = (float) (light.z - z);
+		@Pc(64) float dist = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+		@Pc(68) float invDist = 1.0F / dist;
+		@Pc(72) float dirX = dx * invDist;
+		@Pc(76) float dirY = dy * invDist;
+		@Pc(80) float dirZ = dz * invDist;
+		@Pc(90) float attenuation = dist / (float) ((light.radius << 7) + 64);
+		@Pc(96) float falloff = 1.0F - attenuation * attenuation;
+		if (falloff < 0.0F) {
+			falloff = 0.0F;
 		}
-		@Pc(114) float local114 = local72 * arg4 + local76 * arg5 + local80 * arg6;
-		if (local114 < 0.0F) {
-			local114 = 0.0F;
+		@Pc(114) float dot = dirX * normalX + dirY * normalY + dirZ * normalZ;
+		if (dot < 0.0F) {
+			dot = 0.0F;
 		}
-		@Pc(126) float local126 = local114 * local96 * 2.0F;
-		if (local126 > 1.0F) {
-			local126 = 1.0F;
+		@Pc(126) float intensity = dot * falloff * 2.0F;
+		if (intensity > 1.0F) {
+			intensity = 1.0F;
 		}
-		@Pc(142) int local142 = (int) (local126 * (float) (local31 >> 16 & 0xFF));
-		if (local142 > 255) {
-			local142 = 255;
+		@Pc(142) int r = (int) (intensity * (float) (color >> 16 & 0xFF));
+		if (r > 255) {
+			r = 255;
 		}
-		@Pc(157) int local157 = (int) (local126 * (float) (local31 >> 8 & 0xFF));
-		if (local157 > 255) {
-			local157 = 255;
+		@Pc(157) int g = (int) (intensity * (float) (color >> 8 & 0xFF));
+		if (g > 255) {
+			g = 255;
 		}
-		@Pc(170) int local170 = (int) (local126 * (float) (local31 & 0xFF));
-		if (local170 > 255) {
-			local170 = 255;
+		@Pc(170) int b = (int) (intensity * (float) (color & 0xFF));
+		if (b > 255) {
+			b = 255;
 		}
-		this.colorR[this.vertexCount] = (byte) local142;
-		this.colorG[this.vertexCount] = (byte) local157;
-		this.colorB[this.vertexCount] = (byte) local170;
-		this.vertexX[this.vertexCount] = arg1;
-		this.vertexY[this.vertexCount] = arg2;
-		this.vertexZ[this.vertexCount] = arg3;
-		this.vertexCache.put(new IntNode(this.vertexCount), local1);
+		this.colorR[this.vertexCount] = (byte) r;
+		this.colorG[this.vertexCount] = (byte) g;
+		this.colorB[this.vertexCount] = (byte) b;
+		this.vertexX[this.vertexCount] = x;
+		this.vertexY[this.vertexCount] = y;
+		this.vertexZ[this.vertexCount] = z;
+		this.vertexCache.put(new IntNode(this.vertexCount), key);
 		return this.vertexCount++;
 	}
 
 	@OriginalMember(owner = "client!fj", name = "a", descriptor = "()V")
 	public final void upload() {
-		@Pc(7) Buffer local7 = new Buffer(this.indexCount * 4);
-		@Pc(15) Buffer local15 = new Buffer(this.vertexCount * 16);
-		@Pc(19) int local19;
+		@Pc(7) Buffer idxBuf = new Buffer(this.indexCount * 4);
+		@Pc(15) Buffer vtxBuf = new Buffer(this.vertexCount * 16);
+		@Pc(19) int i;
 		if (GlRenderer.bigEndian) {
-			for (local19 = 0; local19 < this.vertexCount; local19++) {
-				local15.p1(this.colorR[local19]);
-				local15.p1(this.colorG[local19]);
-				local15.p1(this.colorB[local19]);
-				local15.p1(255);
-				local15.pFloat((float) this.vertexX[local19]);
-				local15.pFloat((float) this.vertexY[local19]);
-				local15.pFloat((float) this.vertexZ[local19]);
+			for (i = 0; i < this.vertexCount; i++) {
+				vtxBuf.p1(this.colorR[i]);
+				vtxBuf.p1(this.colorG[i]);
+				vtxBuf.p1(this.colorB[i]);
+				vtxBuf.p1(255);
+				vtxBuf.pFloat((float) this.vertexX[i]);
+				vtxBuf.pFloat((float) this.vertexY[i]);
+				vtxBuf.pFloat((float) this.vertexZ[i]);
 			}
-			for (local19 = 0; local19 < this.indexCount; local19++) {
-				local7.p4(this.indices[local19]);
+			for (i = 0; i < this.indexCount; i++) {
+				idxBuf.p4(this.indices[i]);
 			}
 		} else {
-			for (local19 = 0; local19 < this.vertexCount; local19++) {
-				local15.p1(this.colorR[local19]);
-				local15.p1(this.colorG[local19]);
-				local15.p1(this.colorB[local19]);
-				local15.p1(255);
-				local15.gFloat((float) this.vertexX[local19]);
-				local15.gFloat((float) this.vertexY[local19]);
-				local15.gFloat((float) this.vertexZ[local19]);
+			for (i = 0; i < this.vertexCount; i++) {
+				vtxBuf.p1(this.colorR[i]);
+				vtxBuf.p1(this.colorG[i]);
+				vtxBuf.p1(this.colorB[i]);
+				vtxBuf.p1(255);
+				vtxBuf.gFloat((float) this.vertexX[i]);
+				vtxBuf.gFloat((float) this.vertexY[i]);
+				vtxBuf.gFloat((float) this.vertexZ[i]);
 			}
-			for (local19 = 0; local19 < this.indexCount; local19++) {
-				local7.ip4(this.indices[local19]);
+			for (i = 0; i < this.indexCount; i++) {
+				idxBuf.ip4(this.indices[i]);
 			}
 		}
 		if (GlRenderer.arbVboSupported) {
 			this.vertexVbo = new GlVertexBufferObject();
-			@Pc(173) ByteBuffer local173 = ByteBuffer.wrap(local15.data);
-			this.vertexVbo.setArrayBuffer(local173);
+			@Pc(173) ByteBuffer vtxData = ByteBuffer.wrap(vtxBuf.data);
+			this.vertexVbo.setArrayBuffer(vtxData);
 			this.indexVbo = new GlVertexBufferObject();
-			@Pc(186) ByteBuffer local186 = ByteBuffer.wrap(local7.data);
-			this.indexVbo.setElementArrayBuffer(local186);
+			@Pc(186) ByteBuffer idxData = ByteBuffer.wrap(idxBuf.data);
+			this.indexVbo.setElementArrayBuffer(idxData);
 		} else {
-			this.vertexBuffer = ByteBuffer.allocateDirect(local15.offset);
-			this.vertexBuffer.put(local15.data);
+			this.vertexBuffer = ByteBuffer.allocateDirect(vtxBuf.offset);
+			this.vertexBuffer.put(vtxBuf.data);
 			this.vertexBuffer.flip();
-			this.indexBuffer = ByteBuffer.allocateDirect(local7.offset);
-			this.indexBuffer.put(local7.data);
+			this.indexBuffer = ByteBuffer.allocateDirect(idxBuf.offset);
+			this.indexBuffer.put(idxBuf.data);
 			this.indexBuffer.flip();
 		}
 		this.vertexX = null;
@@ -203,11 +203,11 @@ public final class LightMesh {
 	}
 
 	@OriginalMember(owner = "client!fj", name = "a", descriptor = "([I)V")
-	public final void addFan(@OriginalArg(0) int[] arg0) {
-		for (@Pc(1) int local1 = 1; local1 < arg0.length - 1; local1++) {
-			this.indices[this.indexCount++] = arg0[0];
-			this.indices[this.indexCount++] = arg0[local1];
-			this.indices[this.indexCount++] = arg0[local1 + 1];
+	public final void addFan(@OriginalArg(0) int[] fan) {
+		for (@Pc(1) int i = 1; i < fan.length - 1; i++) {
+			this.indices[this.indexCount++] = fan[0];
+			this.indices[this.indexCount++] = fan[i];
+			this.indices[this.indexCount++] = fan[i + 1];
 		}
 	}
 }
