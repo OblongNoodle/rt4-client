@@ -15,9 +15,9 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!te", name = "B", descriptor = "[I")
 	public static final int[] WALL_DECO_ROT_SIZE_Y_DIR = new int[]{0, -1, 0, 1};
 	@OriginalMember(owner = "client!fb", name = "q", descriptor = "[I")
-	public static final int[] anIntArray154 = new int[]{-1, -1, 1, 1};
+	public static final int[] WALL_OFFSET_Y = new int[]{-1, -1, 1, 1};
 	@OriginalMember(owner = "client!j", name = "O", descriptor = "[I")
-	public static final int[] anIntArray565 = new int[]{1, -1, -1, 1};
+	public static final int[] WALL_OFFSET_X = new int[]{1, -1, -1, 1};
 	@OriginalMember(owner = "client!vl", name = "e", descriptor = "[I")
 	public static final int[] WALL_ROTATION_TYPE1 = new int[]{1, 2, 4, 8};
 	@OriginalMember(owner = "client!pg", name = "T", descriptor = "[I")
@@ -55,7 +55,7 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!fg", name = "t", descriptor = "[I")
 	public static final int[] anIntArray170 = new int[6];
 	@OriginalMember(owner = "client!ah", name = "p", descriptor = "Lclient!ih;")
-	public static final LinkedList aClass69_32 = new LinkedList();
+	public static final LinkedList tileQueue = new LinkedList();
 	@OriginalMember(owner = "client!sh", name = "i", descriptor = "[[I")
 	public static final int[][] anIntArrayArray35 = new int[][]{{0, 128, 0, 0, 128, 0, 128, 128}, {0, 128, 0, 0, 128, 0}, {0, 0, 64, 128, 0, 128}, {128, 128, 64, 128, 128, 0}, {0, 0, 128, 0, 128, 128, 64, 128}, {0, 128, 0, 0, 128, 0, 64, 128}, {64, 128, 0, 128, 0, 0, 64, 0}, {0, 0, 64, 0, 0, 64}, {128, 0, 128, 128, 0, 128, 0, 64, 64, 0}, {0, 128, 0, 0, 32, 64, 64, 96, 128, 128}, {0, 0, 128, 0, 128, 128, 64, 96, 32, 64}, {0, 0, 128, 0, 96, 32, 32, 32}};
 	@OriginalMember(owner = "client!gf", name = "S", descriptor = "[I")
@@ -120,7 +120,7 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!tk", name = "D", descriptor = "[Lclient!ec;")
 	public static Scenery[] scenery;
 	@OriginalMember(owner = "client!c", name = "bb", descriptor = "[Lclient!ec;")
-	public static Scenery[] aClass31Array2;
+	public static Scenery[] sceneryBuffer;
 	@OriginalMember(owner = "client!gf", name = "O", descriptor = "[[[I")
 	public static int[][][] underwaterTileHeights;
 	@OriginalMember(owner = "client!oj", name = "E", descriptor = "[[Lclient!hg;")
@@ -132,13 +132,13 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!wi", name = "db", descriptor = "I")
 	public static int visibility;
 	@OriginalMember(owner = "client!f", name = "ab", descriptor = "[[I")
-	public static int[][] anIntArrayArray11;
+	public static int[][] tileWaterData;
 	@OriginalMember(owner = "client!la", name = "i", descriptor = "[[[I")
-	public static int[][][] anIntArrayArrayArray12;
+	public static int[][][] occlusionCache;
 	@OriginalMember(owner = "client!dl", name = "h", descriptor = "[[Z")
-	public static boolean[][] aBooleanArrayArray1;
+	public static boolean[][] visibleTiles;
 	@OriginalMember(owner = "client!ha", name = "k", descriptor = "[[Z")
-	public static boolean[][] aBooleanArrayArray3;
+	public static boolean[][] visibilityPoints;
 	@OriginalMember(owner = "client!og", name = "b", descriptor = "I")
 	public static int currentChunkY;
 	@OriginalMember(owner = "client!ja", name = "q", descriptor = "I")
@@ -150,19 +150,19 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!rj", name = "R", descriptor = "I")
 	public static int cameraY;
 	@OriginalMember(owner = "client!pi", name = "U", descriptor = "I")
-	public static int anInt4539;
+	public static int cameraTileY;
 	@OriginalMember(owner = "client!sk", name = "mb", descriptor = "I")
-	public static int anInt5205;
+	public static int sinYaw;
 	@OriginalMember(owner = "client!bl", name = "X", descriptor = "I")
-	public static int anInt730 = -1;
+	public static int lastUnderwaterFogRange = -1;
 	@OriginalMember(owner = "client!aj", name = "Z", descriptor = "[I")
 	public static int[] anIntArray8;
 	@OriginalMember(owner = "client!jg", name = "a", descriptor = "I")
-	public static int anInt3038;
+	public static int cosPitch;
 	@OriginalMember(owner = "client!ma", name = "z", descriptor = "I")
-	public static int anInt3604 = -1;
+	public static int lastUnderwaterColor = -1;
 	@OriginalMember(owner = "client!ig", name = "i", descriptor = "I")
-	public static int anInt2886;
+	public static int sinPitch;
 	@OriginalMember(owner = "client!k", name = "l", descriptor = "[I")
 	public static int[] anIntArray292;
 	@OriginalMember(owner = "client!ta", name = "o", descriptor = "[I")
@@ -174,19 +174,19 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!ml", name = "K", descriptor = "I")
 	public static int cameraZ;
 	@OriginalMember(owner = "client!nd", name = "s", descriptor = "I")
-	public static int anInt4069;
+	public static int cameraTileX;
 	@OriginalMember(owner = "client!lj", name = "B", descriptor = "I")
 	public static int cameraX;
 	@OriginalMember(owner = "client!tb", name = "Q", descriptor = "I")
-	public static int anInt5276 = 0;
+	public static int startLevel = 0;
 	@OriginalMember(owner = "client!bc", name = "Z", descriptor = "I")
-	public static int anInt437;
+	public static int drawCycle;
 	@OriginalMember(owner = "client!rc", name = "p", descriptor = "I")
-	public static int anInt1142 = 0;
+	public static int visibleTileCount = 0;
 	@OriginalMember(owner = "client!gn", name = "d", descriptor = "Z")
 	public static boolean levelsHidden = false;
 	@OriginalMember(owner = "client!gg", name = "Z", descriptor = "I")
-	public static int anInt2222;
+	public static int cosYaw;
 	@OriginalMember(owner = "client!sj", name = "u", descriptor = "Z")
 	public static boolean dynamicMapRegion = false;
 	@OriginalMember(owner = "client!gf", name = "R", descriptor = "I")
@@ -271,9 +271,9 @@ public class SceneGraph {
 			}
 			sceneryLen = 0;
 		}
-		if (aClass31Array2 != null) {
-			for (local3 = 0; local3 < aClass31Array2.length; local3++) {
-				aClass31Array2[local3] = null;
+		if (sceneryBuffer != null) {
+			for (local3 = 0; local3 < sceneryBuffer.length; local3++) {
+				sceneryBuffer[local3] = null;
 			}
 		}
 	}
@@ -657,14 +657,14 @@ public class SceneGraph {
 		}
 		if (hasUnderWaterMap) {
 			underWaterGroundTiles = new Tile[1][width][length];
-			anIntArrayArray11 = new int[width][length];
+			tileWaterData = new int[width][length];
 			underwaterTileHeights = new int[1][width + 1][length + 1];
 			if (GlRenderer.enabled) {
 				underWaterHdTiles = new GlTile[1][];
 			}
 		} else {
 			underWaterGroundTiles = null;
-			anIntArrayArray11 = null;
+			tileWaterData = null;
 			underwaterTileHeights = null;
 			underWaterHdTiles = null;
 		}
@@ -673,12 +673,12 @@ public class SceneGraph {
 		occluderCount = 0;
 		activeOccluders = new Occluder[500];
 		activeOccluderCount = 0;
-		anIntArrayArrayArray12 = new int[4][width + 1][length + 1];
+		occlusionCache = new int[4][width + 1][length + 1];
 		scenery = new Scenery[5000];
 		sceneryLen = 0;
-		aClass31Array2 = new Scenery[100];
-		aBooleanArrayArray1 = new boolean[visibility + visibility + 1][visibility + visibility + 1];
-		aBooleanArrayArray3 = new boolean[visibility + visibility + 2][visibility + visibility + 2];
+		sceneryBuffer = new Scenery[100];
+		visibleTiles = new boolean[visibility + visibility + 1][visibility + visibility + 1];
+		visibilityPoints = new boolean[visibility + visibility + 2][visibility + visibility + 2];
 		occlusionHeights = new byte[4][width][length];
 	}
 
@@ -992,7 +992,7 @@ public class SceneGraph {
 								if (GlRenderer.enabled && local152 > 0 && local234 != -1 && FluTypeList.get(local178 - 1).blockShadow) {
 									ShadowManager.addFloorShadow(0, 0, true, false, local168, local173, local200 - tileHeights[0][local168][local173], -tileHeights[0][local168 + 1][local173] + local202, local209 - tileHeights[0][local168 + 1][local173 + 1], local349 - tileHeights[0][local168][local173 + 1]);
 								}
-								if (GlRenderer.enabled && !underwater && anIntArrayArray11 != null && local152 == 0) {
+								if (GlRenderer.enabled && !underwater && tileWaterData != null && local152 == 0) {
 									for (local322 = local168 - 1; local322 <= local168 + 1; local322++) {
 										for (@Pc(1794) int local1794 = local173 - 1; local1794 <= local173 + 1; local1794++) {
 											if ((local322 != local168 || local173 != local1794) && local322 >= 0 && local322 < 104 && local1794 >= 0 && local1794 < 104) {
@@ -1000,7 +1000,7 @@ public class SceneGraph {
 												if (local1834 != 0) {
 													@Pc(1842) FloType local1842 = FloTypeList.get(local1834 - 1);
 													if (local1842.texture != -1 && Rasteriser.textureProvider.getMaterialType(local1842.texture) == MaterialManager.WATER) {
-														anIntArrayArray11[local168][local173] = local1842.waterColor + (local1842.waterOpacity << 24);
+														tileWaterData[local168][local173] = local1842.waterColor + (local1842.waterOpacity << 24);
 														continue label771;
 													}
 												}
@@ -1015,9 +1015,9 @@ public class SceneGraph {
 								@Pc(1301) int local1301;
 								@Pc(1353) int local1353;
 								@Pc(1288) int texture;
-								if (GlRenderer.enabled && !underwater && anIntArrayArray11 != null && local152 == 0) {
+								if (GlRenderer.enabled && !underwater && tileWaterData != null && local152 == 0) {
 									if (local1248.texture != -1 && Rasteriser.textureProvider.getMaterialType(local1248.texture) == MaterialManager.WATER) {
-										anIntArrayArray11[local168][local173] = (local1248.waterOpacity << 24) + local1248.waterColor;
+										tileWaterData[local168][local173] = (local1248.waterOpacity << 24) + local1248.waterColor;
 									} else {
 										label737:
 										for (texture = local168 - 1; texture <= local168 + 1; texture++) {
@@ -1027,7 +1027,7 @@ public class SceneGraph {
 													if (local1353 != 0) {
 														@Pc(1366) FloType local1366 = FloTypeList.get(local1353 - 1);
 														if (local1366.texture != -1 && Rasteriser.textureProvider.getMaterialType(local1366.texture) == MaterialManager.WATER) {
-															anIntArrayArray11[local168][local173] = local1366.waterColor + (local1366.waterOpacity << 24);
+															tileWaterData[local168][local173] = local1366.waterColor + (local1366.waterOpacity << 24);
 															break label737;
 														}
 													}
@@ -1089,7 +1089,7 @@ public class SceneGraph {
 					if (local200 > 103) {
 						@Pc(2025) GlTile[] local2025;
 						if (underwater) {
-							local2025 = buildGlPlainTiles(renderFlags, tileShapes[local152], tileUnderlays[local152], local146, local1896, anIntArrayArray11, tileOverlays[local152], tileAngles[local152], local1888, local152, local1900, local142, tileHeights[local152], surfaceTileHeights[0]);
+							local2025 = buildGlPlainTiles(renderFlags, tileShapes[local152], tileUnderlays[local152], local146, local1896, tileWaterData, tileOverlays[local152], tileAngles[local152], local1888, local152, local1900, local142, tileHeights[local152], surfaceTileHeights[0]);
 							setUnderwaterHdTiles(local152, local2025);
 							break;
 						}
@@ -1377,16 +1377,16 @@ public class SceneGraph {
 				local174.interiorFlags[local174.sceneryLen] = local115;
 				local174.allInteriorFlags |= local115;
 				local174.sceneryLen++;
-				if (local6 && anIntArrayArray11[local17][local108] != 0) {
-					local8 = anIntArrayArray11[local17][local108];
+				if (local6 && tileWaterData[local17][local108] != 0) {
+					local8 = tileWaterData[local17][local108];
 				}
 			}
 		}
 		if (local6 && local8 != 0) {
 			for (local17 = arg1; local17 < arg1 + arg3; local17++) {
 				for (local108 = arg2; local108 < arg2 + arg4; local108++) {
-					if (anIntArrayArray11[local17][local108] == 0) {
-						anIntArrayArray11[local17][local108] = local8;
+					if (tileWaterData[local17][local108] == 0) {
+						tileWaterData[local17][local108] = local8;
 					}
 				}
 			}
@@ -1507,7 +1507,7 @@ public class SceneGraph {
 			if (local100 instanceof Loc) {
 				((Loc) local100).resetShadow();
 			} else {
-				Loc.buildStaticShadow(type, anIntArray154[angle] * 8, angle + 4, anIntArray565[angle] * 8, 4, x, y, arg4);
+				Loc.buildStaticShadow(type, WALL_OFFSET_Y[angle] * 8, angle + 4, WALL_OFFSET_X[angle] * 8, 4, x, y, arg4);
 			}
 		} else if (shape == 7) {
 			if (local100 instanceof Loc) {
@@ -1519,12 +1519,12 @@ public class SceneGraph {
 			if (local100 instanceof Loc) {
 				((Loc) local100).resetShadow();
 			} else {
-				Loc.buildStaticShadow(type, anIntArray154[angle] * 8, angle + 4, anIntArray565[angle] * 8, 4, x, y, arg4);
+				Loc.buildStaticShadow(type, WALL_OFFSET_Y[angle] * 8, angle + 4, WALL_OFFSET_X[angle] * 8, 4, x, y, arg4);
 			}
 			if (local102 instanceof Loc) {
 				((Loc) local102).resetShadow();
 			} else {
-				Loc.buildStaticShadow(type, anIntArray154[angle] * 8, (angle + 2 & 0x3) + 4, anIntArray565[angle] * 8, 4, x, y, arg4);
+				Loc.buildStaticShadow(type, WALL_OFFSET_Y[angle] * 8, (angle + 2 & 0x3) + 4, WALL_OFFSET_X[angle] * 8, 4, x, y, arg4);
 			}
 		} else if (shape == 11) {
 			if (local100 instanceof Loc) {
@@ -1568,7 +1568,7 @@ public class SceneGraph {
 		if (arg1 != arg2 || arg3 != arg4) {
 			for (local16 = arg1; local16 <= arg2; local16++) {
 				for (local20 = arg3; local20 <= arg4; local20++) {
-					if (anIntArrayArrayArray12[arg0][local16][local20] == -anInt437) {
+					if (occlusionCache[arg0][local16][local20] == -drawCycle) {
 						return false;
 					}
 				}
@@ -1634,7 +1634,7 @@ public class SceneGraph {
 
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "(Lclient!bj;Z)V")
 	public static void renderTile(@OriginalArg(0) Tile arg0, @OriginalArg(1) boolean arg1) {
-		aClass69_32.addTail(arg0);
+		tileQueue.addTail(arg0);
 		while (true) {
 			@Pc(8) Tile local8;
 			@Pc(18) int local18;
@@ -1666,7 +1666,7 @@ public class SceneGraph {
 										@Pc(1179) Tile var32;
 										while (true) {
 											do {
-												local8 = (Tile) aClass69_32.removeHead();
+												local8 = (Tile) tileQueue.removeHead();
 												if (local8 == null) {
 													return;
 												}
@@ -1679,16 +1679,16 @@ public class SceneGraph {
 											@Pc(33) float local33 = 0.0F;
 											if (GlRenderer.enabled) {
 												if (underwaterTileHeights == tileHeights) {
-													var9 = anIntArrayArray11[local18][local21];
+													var9 = tileWaterData[local18][local21];
 													var10 = var9 & 0xFFFFFF;
-													if (var10 != anInt3604) {
-														anInt3604 = var10;
+													if (var10 != lastUnderwaterColor) {
+														lastUnderwaterColor = var10;
 														WaterMaterialRenderer.setUnderwaterColor(var10);
 														FogManager.setFogColor(WaterMaterialRenderer.getWaterFogColor());
 													}
 													local65 = var9 >>> 24 << 3;
-													if (local65 != anInt730) {
-														anInt730 = local65;
+													if (local65 != lastUnderwaterFogRange) {
+														lastUnderwaterFogRange = local65;
 														MaterialManager.setUnderwaterFogRange(local65);
 													}
 													local115 = surfaceTileHeights[0][local18][local21] + surfaceTileHeights[0][local18 + 1][local21] + surfaceTileHeights[0][local18][local21 + 1] + surfaceTileHeights[0][local18 + 1][local21 + 1] >> 2;
@@ -1710,25 +1710,25 @@ public class SceneGraph {
 														continue;
 													}
 												}
-												if (local18 <= anInt4069 && local18 > LightingManager.visibleMinX) {
+												if (local18 <= cameraTileX && local18 > LightingManager.visibleMinX) {
 													local153 = local31[local18 - 1][local21];
 													if (local153 != null && local153.checkedBelowLevel && (local153.visible || (local8.allInteriorFlags & 0x1) == 0)) {
 														continue;
 													}
 												}
-												if (local18 >= anInt4069 && local18 < LightingManager.visibleMaxX - 1) {
+												if (local18 >= cameraTileX && local18 < LightingManager.visibleMaxX - 1) {
 													local153 = local31[local18 + 1][local21];
 													if (local153 != null && local153.checkedBelowLevel && (local153.visible || (local8.allInteriorFlags & 0x4) == 0)) {
 														continue;
 													}
 												}
-												if (local21 <= anInt4539 && local21 > LightingManager.visibleMinY) {
+												if (local21 <= cameraTileY && local21 > LightingManager.visibleMinY) {
 													local153 = local31[local18][local21 - 1];
 													if (local153 != null && local153.checkedBelowLevel && (local153.visible || (local8.allInteriorFlags & 0x8) == 0)) {
 														continue;
 													}
 												}
-												if (local21 >= anInt4539 && local21 < LightingManager.visibleMaxY - 1) {
+												if (local21 >= cameraTileY && local21 < LightingManager.visibleMaxY - 1) {
 													local153 = local31[local18][local21 + 1];
 													if (local153 != null && local153.checkedBelowLevel && (local153.visible || (local8.allInteriorFlags & 0x2) == 0)) {
 														continue;
@@ -1745,10 +1745,10 @@ public class SceneGraph {
 												}
 												if (local153.plainTile == null) {
 													if (local153.shapedTile != null) {
-														drawShapedTile(local153.shapedTile, anInt2886, anInt3038, anInt5205, anInt2222, local18, local21, 0, isTileOccluded(0, local18, local21));
+														drawShapedTile(local153.shapedTile, sinPitch, cosPitch, sinYaw, cosYaw, local18, local21, 0, isTileOccluded(0, local18, local21));
 													}
 												} else
-													drawPlainTile(local153.plainTile, 0, anInt2886, anInt3038, anInt5205, anInt2222, local18, local21, isTileOccluded(0, local18, local21));
+													drawPlainTile(local153.plainTile, 0, sinPitch, cosPitch, sinYaw, cosYaw, local18, local21, isTileOccluded(0, local18, local21));
 												var22 = local153.wall;
 												if (var22 != null) {
 													if (GlRenderer.enabled) {
@@ -1758,7 +1758,7 @@ public class SceneGraph {
 															LightingManager.updateLightsForWallPiece(var22.primaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
 														}
 													}
-													var22.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, var22.xFine - cameraX, var22.zFine - cameraZ, var22.yFine - cameraY, var22.key, local24, null);
+													var22.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, var22.xFine - cameraX, var22.zFine - cameraZ, var22.yFine - cameraY, var22.key, local24, null);
 												}
 												for (local65 = 0; local65 < local153.sceneryLen; local65++) {
 													var25 = local153.scenery[local65];
@@ -1766,7 +1766,7 @@ public class SceneGraph {
 														if (GlRenderer.enabled) {
 															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														}
-														var25.entity.render(var25.orientation, anInt2886, anInt3038, anInt5205, anInt2222, var25.xFine - cameraX, var25.zFine - cameraZ, var25.yFine - cameraY, var25.key, local24, null);
+														var25.entity.render(var25.orientation, sinPitch, cosPitch, sinYaw, cosYaw, var25.xFine - cameraX, var25.zFine - cameraZ, var25.yFine - cameraY, var25.key, local24, null);
 													}
 												}
 												if (GlRenderer.enabled) {
@@ -1777,18 +1777,18 @@ public class SceneGraph {
 											if (local8.plainTile == null) {
 												if (local8.shapedTile != null) {
 													if (isTileOccluded(local27, local18, local21)) {
-														drawShapedTile(local8.shapedTile, anInt2886, anInt3038, anInt5205, anInt2222, local18, local21, local27, true);
+														drawShapedTile(local8.shapedTile, sinPitch, cosPitch, sinYaw, cosYaw, local18, local21, local27, true);
 													} else {
 														var24 = true;
-														drawShapedTile(local8.shapedTile, anInt2886, anInt3038, anInt5205, anInt2222, local18, local21, local27, false);
+														drawShapedTile(local8.shapedTile, sinPitch, cosPitch, sinYaw, cosYaw, local18, local21, local27, false);
 													}
 												}
 											} else if (isTileOccluded(local27, local18, local21)) {
-												drawPlainTile(local8.plainTile, local27, anInt2886, anInt3038, anInt5205, anInt2222, local18, local21, true);
+												drawPlainTile(local8.plainTile, local27, sinPitch, cosPitch, sinYaw, cosYaw, local18, local21, true);
 											} else {
 												var24 = true;
 												if (local8.plainTile.colorNE != 12345678 || MiniMenu.walkPending && local24 <= MiniMenu.walkDestPlane) {
-													drawPlainTile(local8.plainTile, local27, anInt2886, anInt3038, anInt5205, anInt2222, local18, local21, false);
+													drawPlainTile(local8.plainTile, local27, sinPitch, cosPitch, sinYaw, cosYaw, local18, local21, false);
 												}
 											}
 											if (var24) {
@@ -1800,7 +1800,7 @@ public class SceneGraph {
 													if (GlRenderer.enabled) {
 														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
-													local549.entity.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local549.xFine - cameraX, local549.zFine - cameraZ, local549.yFine - cameraY, local549.key, local24, null);
+													local549.entity.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local549.xFine - cameraX, local549.zFine - cameraZ, local549.yFine - cameraY, local549.key, local24, null);
 													if (GlRenderer.enabled && local549.flat) {
 														GlRenderer.setDepthLayer(local33);
 													}
@@ -1811,14 +1811,14 @@ public class SceneGraph {
 											@Pc(616) Wall local616 = local8.wall;
 											@Pc(619) WallDecor local619 = local8.wallDecor;
 											if (local616 != null || local619 != null) {
-												if (anInt4069 == local18) {
+												if (cameraTileX == local18) {
 													var10++;
-												} else if (anInt4069 < local18) {
+												} else if (cameraTileX < local18) {
 													var10 += 2;
 												}
-												if (anInt4539 == local21) {
+												if (cameraTileY == local21) {
 													var10 += 3;
-												} else if (anInt4539 > local21) {
+												} else if (cameraTileY > local21) {
 													var10 += 6;
 												}
 												local65 = anIntArray324[var10];
@@ -1848,13 +1848,13 @@ public class SceneGraph {
 													if (GlRenderer.enabled) {
 														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
-													local616.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local616.xFine - cameraX, local616.zFine - cameraZ, local616.yFine - cameraY, local616.key, local24, null);
+													local616.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local616.xFine - cameraX, local616.zFine - cameraZ, local616.yFine - cameraY, local616.key, local24, null);
 												}
 												if ((local616.secondaryFlags & local65) != 0 && !isWallVisible(local27, local18, local21, local616.secondaryFlags)) {
 													if (GlRenderer.enabled) {
 														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
-													local616.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local616.xFine - cameraX, local616.zFine - cameraZ, local616.yFine - cameraY, local616.key, local24, null);
+													local616.secondary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local616.xFine - cameraX, local616.zFine - cameraZ, local616.yFine - cameraY, local616.key, local24, null);
 												}
 											}
 											if (local619 != null && !isTileVisible(local27, local18, local21, local619.primary.getMinY())) {
@@ -1865,7 +1865,7 @@ public class SceneGraph {
 													if (GlRenderer.enabled) {
 														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
-													local619.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local619.xFine + local619.xOffset - cameraX, local619.orientation - cameraZ, local619.yFine + local619.yOffset - cameraY, local619.key, local24, null);
+													local619.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local619.xFine + local619.xOffset - cameraX, local619.orientation - cameraZ, local619.yFine + local619.yOffset - cameraY, local619.key, local24, null);
 												} else if (local619.flags == 256) {
 													local894 = local619.xFine - cameraX;
 													local899 = local619.orientation - cameraZ;
@@ -1886,12 +1886,12 @@ public class SceneGraph {
 														if (GlRenderer.enabled) {
 															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														}
-														local619.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local894 + local619.xOffset, local899, local904 + local619.yOffset, local619.key, local24, null);
+														local619.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local894 + local619.xOffset, local899, local904 + local619.yOffset, local619.key, local24, null);
 													} else if (local619.secondary != null) {
 														if (GlRenderer.enabled) {
 															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														}
-														local619.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local894, local899, local904, local619.key, local24, null);
+														local619.secondary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local894, local899, local904, local619.key, local24, null);
 													}
 												}
 												if (GlRenderer.enabled) {
@@ -1907,7 +1907,7 @@ public class SceneGraph {
 													if (GlRenderer.enabled) {
 														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
-													local1001.entity.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1001.xFine - cameraX, local1001.zFine - cameraZ, local1001.yFine - cameraY, local1001.key, local24, null);
+													local1001.entity.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local1001.xFine - cameraX, local1001.zFine - cameraZ, local1001.yFine - cameraY, local1001.key, local24, null);
 													if (GlRenderer.enabled && local1001.flat) {
 														GlRenderer.setDepthLayer(local33);
 													}
@@ -1918,40 +1918,40 @@ public class SceneGraph {
 														LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 													}
 													if (local1064.secondary != null) {
-														local1064.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1064.xFine - cameraX, local1064.zFine - cameraZ, local1064.yFine - cameraY, local1064.key, local24, null);
+														local1064.secondary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local1064.xFine - cameraX, local1064.zFine - cameraZ, local1064.yFine - cameraY, local1064.key, local24, null);
 													}
 													if (local1064.tertiary != null) {
-														local1064.tertiary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1064.xFine - cameraX, local1064.zFine - cameraZ, local1064.yFine - cameraY, local1064.key, local24, null);
+														local1064.tertiary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local1064.xFine - cameraX, local1064.zFine - cameraZ, local1064.yFine - cameraY, local1064.key, local24, null);
 													}
 													if (local1064.primary != null) {
-														local1064.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1064.xFine - cameraX, local1064.zFine - cameraZ, local1064.yFine - cameraY, local1064.key, local24, null);
+														local1064.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local1064.xFine - cameraX, local1064.zFine - cameraZ, local1064.yFine - cameraY, local1064.key, local24, null);
 													}
 												}
 											}
 											local894 = local8.allInteriorFlags;
 											if (local894 != 0) {
-												if (local18 < anInt4069 && (local894 & 0x4) != 0) {
+												if (local18 < cameraTileX && (local894 & 0x4) != 0) {
 													var32 = local31[local18 + 1][local21];
 													if (var32 != null && var32.checkedBelowLevel) {
-														aClass69_32.addTail(var32);
+														tileQueue.addTail(var32);
 													}
 												}
-												if (local21 < anInt4539 && (local894 & 0x2) != 0) {
+												if (local21 < cameraTileY && (local894 & 0x2) != 0) {
 													var32 = local31[local18][local21 + 1];
 													if (var32 != null && var32.checkedBelowLevel) {
-														aClass69_32.addTail(var32);
+														tileQueue.addTail(var32);
 													}
 												}
-												if (local18 > anInt4069 && (local894 & 0x1) != 0) {
+												if (local18 > cameraTileX && (local894 & 0x1) != 0) {
 													var32 = local31[local18 - 1][local21];
 													if (var32 != null && var32.checkedBelowLevel) {
-														aClass69_32.addTail(var32);
+														tileQueue.addTail(var32);
 													}
 												}
-												if (local21 > anInt4539 && (local894 & 0x8) != 0) {
+												if (local21 > cameraTileY && (local894 & 0x8) != 0) {
 													var32 = local31[local18][local21 - 1];
 													if (var32 != null && var32.checkedBelowLevel) {
-														aClass69_32.addTail(var32);
+														tileQueue.addTail(var32);
 													}
 												}
 											}
@@ -1960,7 +1960,7 @@ public class SceneGraph {
 										if (local8.sceneryDrawFlags != 0) {
 											var24 = true;
 											for (var10 = 0; var10 < local8.sceneryLen; var10++) {
-												if (local8.scenery[var10].drawCycle != anInt437 && (local8.interiorFlags[var10] & local8.sceneryDrawFlags) == local8.sceneryDrawnDirFlags) {
+												if (local8.scenery[var10].drawCycle != drawCycle && (local8.interiorFlags[var10] & local8.sceneryDrawFlags) == local8.sceneryDrawnDirFlags) {
 													var24 = false;
 													break;
 												}
@@ -2008,7 +2008,7 @@ public class SceneGraph {
 															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 														}
 													}
-													var22.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, var22.xFine - cameraX, var22.zFine - cameraZ, var22.yFine - cameraY, var22.key, local24, null);
+													var22.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, var22.xFine - cameraX, var22.zFine - cameraZ, var22.yFine - cameraY, var22.key, local24, null);
 												}
 												local8.sceneryDrawFlags = 0;
 											}
@@ -2023,7 +2023,7 @@ public class SceneGraph {
 											label767:
 											for (local65 = 0; local65 < var9; local65++) {
 												var25 = local8.scenery[local65];
-												if (var25.drawCycle != anInt437) {
+												if (var25.drawCycle != drawCycle) {
 													for (local1332 = var25.xMin; local1332 <= var25.xMax; local1332++) {
 														for (local894 = var25.yMin; local894 <= var25.yMax; local894++) {
 															var32 = local31[local1332][local894];
@@ -2052,14 +2052,14 @@ public class SceneGraph {
 															}
 														}
 													}
-													aClass31Array2[var10++] = var25;
-													local1332 = anInt4069 - var25.xMin;
-													local894 = var25.xMax - anInt4069;
+													sceneryBuffer[var10++] = var25;
+													local1332 = cameraTileX - var25.xMin;
+													local894 = var25.xMax - cameraTileX;
 													if (local894 > local1332) {
 														local1332 = local894;
 													}
-													local899 = anInt4539 - var25.yMin;
-													local904 = var25.yMax - anInt4539;
+													local899 = cameraTileY - var25.yMin;
+													local904 = var25.yMax - cameraTileY;
 													if (local904 > local899) {
 														var25.drawPriority = local1332 + local904;
 													} else {
@@ -2071,16 +2071,16 @@ public class SceneGraph {
 												local65 = -50;
 												local115 = -1;
 												for (local1332 = 0; local1332 < var10; local1332++) {
-													@Pc(1628) Scenery local1628 = aClass31Array2[local1332];
-													if (local1628.drawCycle != anInt437) {
+													@Pc(1628) Scenery local1628 = sceneryBuffer[local1332];
+													if (local1628.drawCycle != drawCycle) {
 														if (local1628.drawPriority > local65) {
 															local65 = local1628.drawPriority;
 															local115 = local1332;
 														} else if (local1628.drawPriority == local65) {
 															local899 = local1628.xFine - cameraX;
 															local904 = local1628.yFine - cameraY;
-															var17 = aClass31Array2[local115].xFine - cameraX;
-															var18 = aClass31Array2[local115].yFine - cameraY;
+															var17 = sceneryBuffer[local115].xFine - cameraX;
+															var18 = sceneryBuffer[local115].yFine - cameraY;
 															if (local899 * local899 + local904 * local904 > var17 * var17 + var18 * var18) {
 																local115 = local1332;
 															}
@@ -2090,8 +2090,8 @@ public class SceneGraph {
 												if (local115 == -1) {
 													break;
 												}
-												@Pc(1697) Scenery local1697 = aClass31Array2[local115];
-												local1697.drawCycle = anInt437;
+												@Pc(1697) Scenery local1697 = sceneryBuffer[local115];
+												local1697.drawCycle = drawCycle;
 												if (!isAreaVisible(local27, local1697.xMin, local1697.xMax, local1697.yMin, local1697.yMax, local1697.entity.getMinY())) {
 													if (GlRenderer.enabled) {
 														if ((local1697.key & 0xFC000L) == 147456L) {
@@ -2114,15 +2114,15 @@ public class SceneGraph {
 															LightingManager.updateLightsForRegion(cameraX, cameraZ, cameraY, local24, local1697.xMin, local1697.yMin, local1697.xMax, local1697.yMax);
 														}
 													}
-													local1697.entity.render(local1697.orientation, anInt2886, anInt3038, anInt5205, anInt2222, local1697.xFine - cameraX, local1697.zFine - cameraZ, local1697.yFine - cameraY, local1697.key, local24, null);
+													local1697.entity.render(local1697.orientation, sinPitch, cosPitch, sinYaw, cosYaw, local1697.xFine - cameraX, local1697.zFine - cameraZ, local1697.yFine - cameraY, local1697.key, local24, null);
 												}
 												for (local894 = local1697.xMin; local894 <= local1697.xMax; local894++) {
 													for (local899 = local1697.yMin; local899 <= local1697.yMax; local899++) {
 														@Pc(1863) Tile local1863 = local31[local894][local899];
 														if (local1863.sceneryDrawFlags != 0) {
-															aClass69_32.addTail(local1863);
+															tileQueue.addTail(local1863);
 														} else if ((local894 != local18 || local899 != local21) && local1863.checkedBelowLevel) {
-															aClass69_32.addTail(local1863);
+															tileQueue.addTail(local1863);
 														}
 													}
 												}
@@ -2137,41 +2137,41 @@ public class SceneGraph {
 									}
 								} while (!local8.checkedBelowLevel);
 							} while (local8.sceneryDrawFlags != 0);
-							if (local18 > anInt4069 || local18 <= LightingManager.visibleMinX) {
+							if (local18 > cameraTileX || local18 <= LightingManager.visibleMinX) {
 								break;
 							}
 							local153 = local31[local18 - 1][local21];
 						} while (local153 != null && local153.checkedBelowLevel);
-						if (local18 < anInt4069 || local18 >= LightingManager.visibleMaxX - 1) {
+						if (local18 < cameraTileX || local18 >= LightingManager.visibleMaxX - 1) {
 							break;
 						}
 						local153 = local31[local18 + 1][local21];
 					} while (local153 != null && local153.checkedBelowLevel);
-					if (local21 > anInt4539 || local21 <= LightingManager.visibleMinY) {
+					if (local21 > cameraTileY || local21 <= LightingManager.visibleMinY) {
 						break;
 					}
 					local153 = local31[local18][local21 - 1];
 				} while (local153 != null && local153.checkedBelowLevel);
-				if (local21 < anInt4539 || local21 >= LightingManager.visibleMaxY - 1) {
+				if (local21 < cameraTileY || local21 >= LightingManager.visibleMaxY - 1) {
 					break;
 				}
 				local153 = local31[local18][local21 + 1];
 			} while (local153 != null && local153.checkedBelowLevel);
 			local8.checkedBelowLevel = false;
-			anInt1142--;
+			visibleTileCount--;
 			@Pc(1999) ObjStackEntity local1999 = local8.objStack;
 			if (local1999 != null && local1999.heightOffset != 0) {
 				if (GlRenderer.enabled) {
 					LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 				}
 				if (local1999.secondary != null) {
-					local1999.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1999.xFine - cameraX, local1999.zFine - cameraZ - local1999.heightOffset, local1999.yFine - cameraY, local1999.key, local24, null);
+					local1999.secondary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local1999.xFine - cameraX, local1999.zFine - cameraZ - local1999.heightOffset, local1999.yFine - cameraY, local1999.key, local24, null);
 				}
 				if (local1999.tertiary != null) {
-					local1999.tertiary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1999.xFine - cameraX, local1999.zFine - cameraZ - local1999.heightOffset, local1999.yFine - cameraY, local1999.key, local24, null);
+					local1999.tertiary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local1999.xFine - cameraX, local1999.zFine - cameraZ - local1999.heightOffset, local1999.yFine - cameraY, local1999.key, local24, null);
 				}
 				if (local1999.primary != null) {
-					local1999.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local1999.xFine - cameraX, local1999.zFine - cameraZ - local1999.heightOffset, local1999.yFine - cameraY, local1999.key, local24, null);
+					local1999.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local1999.xFine - cameraX, local1999.zFine - cameraZ - local1999.heightOffset, local1999.yFine - cameraY, local1999.key, local24, null);
 				}
 			}
 			if (local8.wallDrawFlags != 0) {
@@ -2181,7 +2181,7 @@ public class SceneGraph {
 						if (GlRenderer.enabled) {
 							LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 						}
-						local2109.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local2109.xFine + local2109.xOffset - cameraX, local2109.orientation - cameraZ, local2109.yFine + local2109.yOffset - cameraY, local2109.key, local24, null);
+						local2109.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local2109.xFine + local2109.xOffset - cameraX, local2109.orientation - cameraZ, local2109.yFine + local2109.yOffset - cameraY, local2109.key, local24, null);
 					} else if (local2109.flags == 256) {
 						local65 = local2109.xFine - cameraX;
 						local115 = local2109.orientation - cameraZ;
@@ -2201,12 +2201,12 @@ public class SceneGraph {
 							if (GlRenderer.enabled) {
 								LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 							}
-							local2109.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local65 + local2109.xOffset, local115, local1332 + local2109.yOffset, local2109.key, local24, null);
+							local2109.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local65 + local2109.xOffset, local115, local1332 + local2109.yOffset, local2109.key, local24, null);
 						} else if (local2109.secondary != null) {
 							if (GlRenderer.enabled) {
 								LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, local24, local18, local21);
 							}
-							local2109.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local65, local115, local1332, local2109.key, local24, null);
+							local2109.secondary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local65, local115, local1332, local2109.key, local24, null);
 						}
 					}
 				}
@@ -2216,13 +2216,13 @@ public class SceneGraph {
 						if (GlRenderer.enabled) {
 							LightingManager.updateLightsForWallPiece(local2275.secondaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
 						}
-						local2275.secondary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local2275.xFine - cameraX, local2275.zFine - cameraZ, local2275.yFine - cameraY, local2275.key, local24, null);
+						local2275.secondary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local2275.xFine - cameraX, local2275.zFine - cameraZ, local2275.yFine - cameraY, local2275.key, local24, null);
 					}
 					if ((local2275.primaryFlags & local8.wallDrawFlags) != 0 && !isWallVisible(local27, local18, local21, local2275.primaryFlags)) {
 						if (GlRenderer.enabled) {
 							LightingManager.updateLightsForWallPiece(local2275.primaryFlags, cameraX, cameraZ, cameraY, local27, local18, local21);
 						}
-						local2275.primary.render(0, anInt2886, anInt3038, anInt5205, anInt2222, local2275.xFine - cameraX, local2275.zFine - cameraZ, local2275.yFine - cameraY, local2275.key, local24, null);
+						local2275.primary.render(0, sinPitch, cosPitch, sinYaw, cosYaw, local2275.xFine - cameraX, local2275.zFine - cameraZ, local2275.yFine - cameraY, local2275.key, local24, null);
 					}
 				}
 			}
@@ -2230,31 +2230,31 @@ public class SceneGraph {
 			if (local24 < levels - 1) {
 				local2388 = tiles[local24 + 1][local18][local21];
 				if (local2388 != null && local2388.checkedBelowLevel) {
-					aClass69_32.addTail(local2388);
+					tileQueue.addTail(local2388);
 				}
 			}
-			if (local18 < anInt4069) {
+			if (local18 < cameraTileX) {
 				local2388 = local31[local18 + 1][local21];
 				if (local2388 != null && local2388.checkedBelowLevel) {
-					aClass69_32.addTail(local2388);
+					tileQueue.addTail(local2388);
 				}
 			}
-			if (local21 < anInt4539) {
+			if (local21 < cameraTileY) {
 				local2388 = local31[local18][local21 + 1];
 				if (local2388 != null && local2388.checkedBelowLevel) {
-					aClass69_32.addTail(local2388);
+					tileQueue.addTail(local2388);
 				}
 			}
-			if (local18 > anInt4069) {
+			if (local18 > cameraTileX) {
 				local2388 = local31[local18 - 1][local21];
 				if (local2388 != null && local2388.checkedBelowLevel) {
-					aClass69_32.addTail(local2388);
+					tileQueue.addTail(local2388);
 				}
 			}
-			if (local21 > anInt4539) {
+			if (local21 > cameraTileY) {
 				local2388 = local31[local18][local21 - 1];
 				if (local2388 != null && local2388.checkedBelowLevel) {
-					aClass69_32.addTail(local2388);
+					tileQueue.addTail(local2388);
 				}
 			}
 		}
@@ -2757,13 +2757,13 @@ public class SceneGraph {
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
 				local1950 = loc.getStaticEntity(orientation + 4, local165, currentHeightmap, 4, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
-					ShadowManager.addObjectShadow(local1950.sprite, local165 - anIntArray565[orientation] * 8, diffAverageY, local173 - anIntArray154[orientation] * 8);
+					ShadowManager.addObjectShadow(local1950.sprite, local165 - WALL_OFFSET_X[orientation] * 8, diffAverageY, local173 - WALL_OFFSET_Y[orientation] * 8);
 				}
 				local1934 = local1950.model;
 			} else {
 				local1934 = new Loc(locIndex, 4, orientation + 4, currentPlane, x, y, loc.anim, loc.allowrandomizedanimation, null);
 			}
-			setWallDecor(plane, x, y, averageY, local1934, null, 256, orientation, local1226 * anIntArray565[orientation], local1226 * anIntArray154[orientation], bitset);
+			setWallDecor(plane, x, y, averageY, local1934, null, 256, orientation, local1226 * WALL_OFFSET_X[orientation], local1226 * WALL_OFFSET_Y[orientation], bitset);
 		} else if (locType == LocType.WALLDECOR_DIAGONAL_YOFFSET) {
 			@Pc(2137) int local2137 = orientation + 2 & 0x3;
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
@@ -2785,8 +2785,8 @@ public class SceneGraph {
 			@Pc(2244) int local2244 = orientation + 2 & 0x3;
 			@Pc(2289) Entity local2289;
 			if (loc.anim == -1 && loc.multiLocs == null && !loc.dynamic) {
-				@Pc(2297) int local2297 = anIntArray154[orientation] * 8;
-				@Pc(2303) int local2303 = anIntArray565[orientation] * 8;
+				@Pc(2297) int local2297 = WALL_OFFSET_Y[orientation] * 8;
+				@Pc(2303) int local2303 = WALL_OFFSET_X[orientation] * 8;
 				@Pc(2319) LocEntity local2319 = loc.getStaticEntity(orientation + 4, local165, currentHeightmap, 4, averageY, heightmap, lowmem, null, local330, local173);
 				if (GlRenderer.enabled && local330) {
 					ShadowManager.addObjectShadow(local2319.sprite, local165 - local2303, diffAverageY, local173 - local2297);
@@ -2801,7 +2801,7 @@ public class SceneGraph {
 				local1934 = new Loc(locIndex, 4, orientation + 4, currentPlane, x, y, loc.anim, loc.allowrandomizedanimation, null);
 				local2289 = new Loc(locIndex, 4, local2244 + 4, currentPlane, x, y, loc.anim, loc.allowrandomizedanimation, null);
 			}
-			setWallDecor(plane, x, y, averageY, local1934, local2289, 256, orientation, local1226 * anIntArray565[orientation], anIntArray154[orientation] * local1226, bitset);
+			setWallDecor(plane, x, y, averageY, local1934, local2289, 256, orientation, local1226 * WALL_OFFSET_X[orientation], WALL_OFFSET_Y[orientation] * local1226, bitset);
 		}
 	}
 
@@ -2905,28 +2905,28 @@ public class SceneGraph {
 		} else if (arg2 >= length * 128) {
 			arg2 = length * 128 - 1;
 		}
-		anInt2886 = MathUtils.sin[arg3];
-		anInt3038 = MathUtils.cos[arg3];
-		anInt5205 = MathUtils.sin[arg4];
-		anInt2222 = MathUtils.cos[arg4];
+		sinPitch = MathUtils.sin[arg3];
+		cosPitch = MathUtils.cos[arg3];
+		sinYaw = MathUtils.sin[arg4];
+		cosYaw = MathUtils.cos[arg4];
 		cameraX = arg0;
 		cameraZ = arg1;
 		cameraY = arg2;
-		anInt4069 = arg0 / 128;
-		anInt4539 = arg2 / 128;
-		LightingManager.visibleMinX = anInt4069 - visibility;
+		cameraTileX = arg0 / 128;
+		cameraTileY = arg2 / 128;
+		LightingManager.visibleMinX = cameraTileX - visibility;
 		if (LightingManager.visibleMinX < 0) {
 			LightingManager.visibleMinX = 0;
 		}
-		LightingManager.visibleMinY = anInt4539 - visibility;
+		LightingManager.visibleMinY = cameraTileY - visibility;
 		if (LightingManager.visibleMinY < 0) {
 			LightingManager.visibleMinY = 0;
 		}
-		LightingManager.visibleMaxX = anInt4069 + visibility;
+		LightingManager.visibleMaxX = cameraTileX + visibility;
 		if (LightingManager.visibleMaxX > width) {
 			LightingManager.visibleMaxX = width;
 		}
-		LightingManager.visibleMaxY = anInt4539 + visibility;
+		LightingManager.visibleMaxY = cameraTileY + visibility;
 		if (LightingManager.visibleMaxY > length) {
 			LightingManager.visibleMaxY = length;
 		}
@@ -2942,8 +2942,8 @@ public class SceneGraph {
 			for (local113 = 0; local113 < visibility + visibility + 2; local113++) {
 				@Pc(130) int local130 = (local104 - visibility << 7) - (cameraX & 0x7F);
 				@Pc(140) int local140 = (local113 - visibility << 7) - (cameraY & 0x7F);
-				@Pc(146) int local146 = anInt4069 + local104 - visibility;
-				@Pc(152) int local152 = anInt4539 + local113 - visibility;
+				@Pc(146) int local146 = cameraTileX + local104 - visibility;
+				@Pc(152) int local152 = cameraTileY + local113 - visibility;
 				if (local146 >= 0 && local152 >= 0 && local146 < width && local152 < length) {
 					@Pc(176) int local176;
 					if (underwaterTileHeights == null) {
@@ -2952,15 +2952,15 @@ public class SceneGraph {
 						local176 = underwaterTileHeights[0][local146][local152] + 128 - cameraZ;
 					}
 					@Pc(201) int local201 = surfaceTileHeights[3][local146][local152] - cameraZ - 1000;
-					aBooleanArrayArray3[local104][local113] = projectToScreen(local130, local201, local176, local140, local99);
+					visibilityPoints[local104][local113] = projectToScreen(local130, local201, local176, local140, local99);
 				} else {
-					aBooleanArrayArray3[local104][local113] = false;
+					visibilityPoints[local104][local113] = false;
 				}
 			}
 		}
 		for (local104 = 0; local104 < visibility + visibility + 1; local104++) {
 			for (local113 = 0; local113 < visibility + visibility + 1; local113++) {
-				aBooleanArrayArray1[local104][local113] = aBooleanArrayArray3[local104][local113] || aBooleanArrayArray3[local104 + 1][local113] || aBooleanArrayArray3[local104][local113 + 1] || aBooleanArrayArray3[local104 + 1][local113 + 1];
+				visibleTiles[local104][local113] = visibilityPoints[local104][local113] || visibilityPoints[local104 + 1][local113] || visibilityPoints[local104][local113 + 1] || visibilityPoints[local104 + 1][local113 + 1];
 			}
 		}
 		anIntArray8 = arg6;
@@ -2985,8 +2985,8 @@ public class SceneGraph {
 
 	@OriginalMember(owner = "client!uc", name = "a", descriptor = "(III[[[BIBII)V")
 	public static void setShapedTile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte[][][] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) byte arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		anInt437++;
-		anInt1142 = 0;
+		drawCycle++;
+		visibleTileCount = 0;
 		@Pc(9) int local9 = arg6 - 16;
 		@Pc(13) int local13 = arg6 + 16;
 		@Pc(17) int local17 = arg7 - 16;
@@ -2994,17 +2994,17 @@ public class SceneGraph {
 		@Pc(32) int local32;
 		@Pc(37) int local37;
 		@Pc(183) int local183;
-		for (@Pc(23) int local23 = anInt5276; local23 < levels; local23++) {
+		for (@Pc(23) int local23 = startLevel; local23 < levels; local23++) {
 			@Pc(30) Tile[][] local30 = tiles[local23];
 			for (local32 = LightingManager.visibleMinX; local32 < LightingManager.visibleMaxX; local32++) {
 				for (local37 = LightingManager.visibleMinY; local37 < LightingManager.visibleMaxY; local37++) {
 					@Pc(46) Tile local46 = local30[local32][local37];
 					if (local46 != null) {
-						if (aBooleanArrayArray1[local32 + visibility - anInt4069][local37 + visibility - anInt4539] && (arg3 == null || local23 < arg4 || arg3[local23][local32][local37] != arg5)) {
+						if (visibleTiles[local32 + visibility - cameraTileX][local37 + visibility - cameraTileY] && (arg3 == null || local23 < arg4 || arg3[local23][local32][local37] != arg5)) {
 							local46.visible = true;
 							local46.checkedBelowLevel = true;
 							local46.hasUpdated = local46.sceneryLen > 0;
-							anInt1142++;
+							visibleTileCount++;
 						} else {
 							local46.visible = false;
 							local46.checkedBelowLevel = false;
@@ -3050,13 +3050,13 @@ public class SceneGraph {
 				MaterialManager.setMaterial(-1, 3);
 				MaterialManager.renderingUnderwater = true;
 				UnderwaterMaterialRenderer.enableSecondaryTexCoordArray();
-				anInt3604 = -1;
-				anInt730 = -1;
+				lastUnderwaterColor = -1;
+				lastUnderwaterFogRange = -1;
 				for (local32 = 0; local32 < underwaterHdTiles[0].length; local32++) {
 					@Pc(285) GlTile local285 = underwaterHdTiles[0][local32];
 					@Pc(294) float local294 = 251.5F - (local285.blend ? 1.0F : 0.5F);
-					if (local285.underwaterColor != anInt3604) {
-						anInt3604 = local285.underwaterColor;
+					if (local285.underwaterColor != lastUnderwaterColor) {
+						lastUnderwaterColor = local285.underwaterColor;
 						WaterMaterialRenderer.setUnderwaterColor(local285.underwaterColor);
 						FogManager.setFogColor(WaterMaterialRenderer.getWaterFogColor());
 					}
@@ -3064,10 +3064,10 @@ public class SceneGraph {
 				}
 				UnderwaterMaterialRenderer.disableSecondaryTexCoordArray();
 			} else {
-				local32 = anInt5276;
+				local32 = startLevel;
 				while (true) {
 					if (local32 >= levels) {
-						LightingManager.renderLightMeshes(anInt4069, anInt4539, tiles);
+						LightingManager.renderLightMeshes(cameraTileX, cameraTileY, tiles);
 						break;
 					}
 					for (local37 = 0; local37 < underwaterHdTiles[local32].length; local37++) {
@@ -3080,7 +3080,7 @@ public class SceneGraph {
 					}
 					if (local32 == 0 && Preferences.sceneryShadowsType > 0) {
 						GlRenderer.setDepthLayer(101.5F);
-						ShadowManager.renderShadowMapGL(anInt4069, anInt4539, visibility, arg1, aBooleanArrayArray1, tileHeights[0]);
+						ShadowManager.renderShadowMapGL(cameraTileX, cameraTileY, visibility, arg1, visibleTiles, tileHeights[0]);
 					}
 					local32++;
 				}
@@ -3094,15 +3094,15 @@ public class SceneGraph {
 		@Pc(406) Tile[][] local406;
 		@Pc(415) int local415;
 		@Pc(428) int local428;
-		for (local399 = anInt5276; local399 < levels; local399++) {
+		for (local399 = startLevel; local399 < levels; local399++) {
 			local406 = tiles[local399];
 			for (local37 = -visibility; local37 <= 0; local37++) {
-				local415 = anInt4069 + local37;
-				local183 = anInt4069 - local37;
+				local415 = cameraTileX + local37;
+				local183 = cameraTileX - local37;
 				if (local415 >= LightingManager.visibleMinX || local183 < LightingManager.visibleMaxX) {
 					for (local428 = -visibility; local428 <= 0; local428++) {
-						local434 = anInt4539 + local428;
-						local438 = anInt4539 - local428;
+						local434 = cameraTileY + local428;
+						local438 = cameraTileY - local428;
 						if (local415 >= LightingManager.visibleMinX) {
 							if (local434 >= LightingManager.visibleMinY) {
 								local450 = local406[local415][local434];
@@ -3131,7 +3131,7 @@ public class SceneGraph {
 								}
 							}
 						}
-						if (anInt1142 == 0) {
+						if (visibleTileCount == 0) {
 							if (!local240) {
 								MiniMenu.walkPending = false;
 							}
@@ -3141,15 +3141,15 @@ public class SceneGraph {
 				}
 			}
 		}
-		for (local399 = anInt5276; local399 < levels; local399++) {
+		for (local399 = startLevel; local399 < levels; local399++) {
 			local406 = tiles[local399];
 			for (local37 = -visibility; local37 <= 0; local37++) {
-				local415 = anInt4069 + local37;
-				local183 = anInt4069 - local37;
+				local415 = cameraTileX + local37;
+				local183 = cameraTileX - local37;
 				if (local415 >= LightingManager.visibleMinX || local183 < LightingManager.visibleMaxX) {
 					for (local428 = -visibility; local428 <= 0; local428++) {
-						local434 = anInt4539 + local428;
-						local438 = anInt4539 - local428;
+						local434 = cameraTileY + local428;
+						local438 = cameraTileY - local428;
 						if (local415 >= LightingManager.visibleMinX) {
 							if (local434 >= LightingManager.visibleMinY) {
 								local450 = local406[local415][local434];
@@ -3178,7 +3178,7 @@ public class SceneGraph {
 								}
 							}
 						}
-						if (anInt1142 == 0) {
+						if (visibleTileCount == 0) {
 							if (!local240) {
 								MiniMenu.walkPending = false;
 							}
@@ -3193,7 +3193,7 @@ public class SceneGraph {
 
 	@OriginalMember(owner = "client!lg", name = "a", descriptor = "(I)V")
 	public static void setBaseLevel(@OriginalArg(0) int arg0) {
-		anInt5276 = arg0;
+		startLevel = arg0;
 		for (@Pc(3) int local3 = 0; local3 < width; local3++) {
 			for (@Pc(8) int local8 = 0; local8 < length; local8++) {
 				if (tiles[arg0][local3][local8] == null) {
@@ -3963,19 +3963,19 @@ public class SceneGraph {
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(III)Z")
 	public static boolean isTileOccluded(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(7) int local7 = anIntArrayArrayArray12[arg0][arg1][arg2];
-		if (local7 == -anInt437) {
+		@Pc(7) int local7 = occlusionCache[arg0][arg1][arg2];
+		if (local7 == -drawCycle) {
 			return false;
-		} else if (local7 == anInt437) {
+		} else if (local7 == drawCycle) {
 			return true;
 		} else {
 			@Pc(22) int local22 = arg1 << 7;
 			@Pc(26) int local26 = arg2 << 7;
 			if (isOccluded(local22 + 1, tileHeights[arg0][arg1][arg2], local26 + 1) && isOccluded(local22 + 128 - 1, tileHeights[arg0][arg1 + 1][arg2], local26 + 1) && isOccluded(local22 + 128 - 1, tileHeights[arg0][arg1 + 1][arg2 + 1], local26 + 128 - 1) && isOccluded(local22 + 1, tileHeights[arg0][arg1][arg2 + 1], local26 + 128 - 1)) {
-				anIntArrayArrayArray12[arg0][arg1][arg2] = anInt437;
+				occlusionCache[arg0][arg1][arg2] = drawCycle;
 				return true;
 			} else {
-				anIntArrayArrayArray12[arg0][arg1][arg2] = -anInt437;
+				occlusionCache[arg0][arg1][arg2] = -drawCycle;
 				return false;
 			}
 		}
@@ -3983,17 +3983,17 @@ public class SceneGraph {
 
 	@OriginalMember(owner = "client!mj", name = "a", descriptor = "(IIIII)Z")
 	public static boolean projectToScreen(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(9) int local9 = arg3 * anInt5205 + arg0 * anInt2222 >> 16;
-		@Pc(19) int local19 = arg3 * anInt2222 - arg0 * anInt5205 >> 16;
-		@Pc(29) int local29 = arg1 * anInt2886 + local19 * anInt3038 >> 16;
-		@Pc(39) int local39 = arg1 * anInt3038 - local19 * anInt2886 >> 16;
+		@Pc(9) int local9 = arg3 * sinYaw + arg0 * cosYaw >> 16;
+		@Pc(19) int local19 = arg3 * cosYaw - arg0 * sinYaw >> 16;
+		@Pc(29) int local29 = arg1 * sinPitch + local19 * cosPitch >> 16;
+		@Pc(39) int local39 = arg1 * cosPitch - local19 * sinPitch >> 16;
 		if (local29 < 1) {
 			local29 = 1;
 		}
 		@Pc(50) int local50 = (local9 << 9) / local29;
 		@Pc(56) int local56 = (local39 << 9) / local29;
-		@Pc(66) int local66 = arg2 * anInt2886 + local19 * anInt3038 >> 16;
-		@Pc(76) int local76 = arg2 * anInt3038 - local19 * anInt2886 >> 16;
+		@Pc(66) int local66 = arg2 * sinPitch + local19 * cosPitch >> 16;
+		@Pc(76) int local76 = arg2 * cosPitch - local19 * sinPitch >> 16;
 		if (local66 < 1) {
 			local66 = 1;
 		}
@@ -4098,19 +4098,19 @@ public class SceneGraph {
 			@Pc(158) int local158;
 			@Pc(137) boolean local137;
 			if (local10.type == 1) {
-				local14 = local10.minTileX + visibility - anInt4069;
+				local14 = local10.minTileX + visibility - cameraTileX;
 				if (local14 >= 0 && local14 <= visibility + visibility) {
-					local115 = local10.minTileY + visibility - anInt4539;
+					local115 = local10.minTileY + visibility - cameraTileY;
 					if (local115 < 0) {
 						local115 = 0;
 					}
-					local126 = local10.maxTileY + visibility - anInt4539;
+					local126 = local10.maxTileY + visibility - cameraTileY;
 					if (local126 > visibility + visibility) {
 						local126 = visibility + visibility;
 					}
 					local137 = false;
 					while (local115 <= local126) {
-						if (aBooleanArrayArray1[local14][local115++]) {
+						if (visibleTiles[local14][local115++]) {
 							local137 = true;
 							break;
 						}
@@ -4134,19 +4134,19 @@ public class SceneGraph {
 					}
 				}
 			} else if (local10.type == 2) {
-				local14 = local10.minTileY + visibility - anInt4539;
+				local14 = local10.minTileY + visibility - cameraTileY;
 				if (local14 >= 0 && local14 <= visibility + visibility) {
-					local115 = local10.minTileX + visibility - anInt4069;
+					local115 = local10.minTileX + visibility - cameraTileX;
 					if (local115 < 0) {
 						local115 = 0;
 					}
-					local126 = local10.maxTileX + visibility - anInt4069;
+					local126 = local10.maxTileX + visibility - cameraTileX;
 					if (local126 > visibility + visibility) {
 						local126 = visibility + visibility;
 					}
 					local137 = false;
 					while (local115 <= local126) {
-						if (aBooleanArrayArray1[local115++][local14]) {
+						if (visibleTiles[local115++][local14]) {
 							local137 = true;
 							break;
 						}
@@ -4172,20 +4172,20 @@ public class SceneGraph {
 			} else if (local10.type == 4) {
 				local14 = local10.minZ - cameraZ;
 				if (local14 > 128) {
-					local115 = local10.minTileY + visibility - anInt4539;
+					local115 = local10.minTileY + visibility - cameraTileY;
 					if (local115 < 0) {
 						local115 = 0;
 					}
-					local126 = local10.maxTileY + visibility - anInt4539;
+					local126 = local10.maxTileY + visibility - cameraTileY;
 					if (local126 > visibility + visibility) {
 						local126 = visibility + visibility;
 					}
 					if (local115 <= local126) {
-						@Pc(408) int local408 = local10.minTileX + visibility - anInt4069;
+						@Pc(408) int local408 = local10.minTileX + visibility - cameraTileX;
 						if (local408 < 0) {
 							local408 = 0;
 						}
-						local158 = local10.maxTileX + visibility - anInt4069;
+						local158 = local10.maxTileX + visibility - cameraTileX;
 						if (local158 > visibility + visibility) {
 							local158 = visibility + visibility;
 						}
@@ -4193,7 +4193,7 @@ public class SceneGraph {
 						label166:
 						for (@Pc(432) int local432 = local408; local432 <= local158; local432++) {
 							for (@Pc(437) int local437 = local115; local437 <= local126; local437++) {
-								if (aBooleanArrayArray1[local432][local437]) {
+								if (visibleTiles[local432][local437]) {
 									local430 = true;
 									break label166;
 								}
