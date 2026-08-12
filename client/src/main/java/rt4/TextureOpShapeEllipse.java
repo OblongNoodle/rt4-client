@@ -23,335 +23,335 @@ public final class TextureOpShapeEllipse extends TextureOpShape {
 	private final int radiusX;
 
 	@OriginalMember(owner = "client!kc", name = "<init>", descriptor = "(IIIIIII)V")
-	public TextureOpShapeEllipse(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		super(arg4, arg5, arg6);
-		this.radiusY = arg3;
-		this.centerX = arg0;
-		this.centerY = arg1;
-		this.radiusX = arg2;
+	public TextureOpShapeEllipse(@OriginalArg(0) int centerX, @OriginalArg(1) int centerY, @OriginalArg(2) int radiusX, @OriginalArg(3) int radiusY, @OriginalArg(4) int fillColor, @OriginalArg(5) int outlineColor, @OriginalArg(6) int lineWidth) {
+		super(fillColor, outlineColor, lineWidth);
+		this.radiusY = radiusY;
+		this.centerX = centerX;
+		this.centerY = centerY;
+		this.radiusX = radiusX;
 	}
 
 	@OriginalMember(owner = "client!kl", name = "a", descriptor = "(Lclient!wa;B)Lclient!kc;")
-	public static TextureOpShapeEllipse create(@OriginalArg(0) Buffer arg0) {
-		return new TextureOpShapeEllipse(arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g3(), arg0.g3(), arg0.g1());
+	public static TextureOpShapeEllipse create(@OriginalArg(0) Buffer buf) {
+		return new TextureOpShapeEllipse(buf.g2b(), buf.g2b(), buf.g2b(), buf.g2b(), buf.g3(), buf.g3(), buf.g1());
 	}
 
 	@OriginalMember(owner = "client!fn", name = "a", descriptor = "(ZIIIIIII)V")
-	public static void drawEllipseBordered(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		if (arg3 == arg6) {
-			drawCircleBordered(arg0, arg2, arg5, arg6, arg1, arg4);
-		} else if (arg1 - arg6 >= TextureOpShapeRasterizer.clipLeft && arg6 + arg1 <= TextureOpShapeRasterizer.clipRight && TextureOpShapeRasterizer.clipTop <= arg2 - arg3 && TextureOpShapeRasterizer.clipBottom >= arg2 + arg3) {
-			drawEllipseBorderedFast(arg5, arg1, arg2, arg4, arg6, arg3, arg0);
+	public static void drawEllipseBordered(@OriginalArg(1) int borderWidth, @OriginalArg(2) int cx, @OriginalArg(3) int cy, @OriginalArg(4) int ry, @OriginalArg(5) int borderColor, @OriginalArg(6) int fillColor, @OriginalArg(7) int rx) {
+		if (ry == rx) {
+			drawCircleBordered(borderWidth, cy, fillColor, rx, cx, borderColor);
+		} else if (cx - rx >= TextureOpShapeRasterizer.clipLeft && rx + cx <= TextureOpShapeRasterizer.clipRight && TextureOpShapeRasterizer.clipTop <= cy - ry && TextureOpShapeRasterizer.clipBottom >= cy + ry) {
+			drawEllipseBorderedFast(fillColor, cx, cy, borderColor, rx, ry, borderWidth);
 		} else {
-			TextureOpShapeRasterizer.drawEllipseBorderedClipped(arg6, arg5, arg4, arg0, arg2, arg1, arg3);
+			TextureOpShapeRasterizer.drawEllipseBorderedClipped(rx, fillColor, borderColor, borderWidth, cy, cx, ry);
 		}
 	}
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "(IIIIIIII)V")
-	public static void drawEllipseBorderedFast(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		@Pc(7) int local7 = 0;
-		@Pc(9) int local9 = arg5;
-		@Pc(11) int local11 = 0;
-		@Pc(16) int local16 = arg4 - arg6;
-		@Pc(20) int local20 = arg4 * arg4;
-		@Pc(25) int local25 = arg5 - arg6;
-		@Pc(29) int local29 = arg5 * arg5;
-		@Pc(33) int local33 = local25 * local25;
-		@Pc(37) int local37 = local29 << 1;
-		@Pc(41) int local41 = local20 << 1;
-		@Pc(45) int local45 = local33 << 1;
-		@Pc(49) int local49 = local16 * local16;
-		@Pc(53) int local53 = local49 << 1;
-		@Pc(57) int local57 = arg5 << 1;
-		@Pc(61) int local61 = local25 << 1;
-		@Pc(70) int local70 = local29 - (local57 - 1) * local41;
-		@Pc(80) int local80 = local49 * (1 - local61) + local45;
-		@Pc(89) int local89 = (1 - local57) * local20 + local37;
-		@Pc(93) int local93 = local20 << 2;
-		@Pc(102) int local102 = local33 - local53 * (local61 - 1);
-		@Pc(106) int local106 = local49 << 2;
-		@Pc(110) int local110 = local29 << 2;
-		@Pc(114) int local114 = local33 << 2;
-		@Pc(120) int local120 = (local57 - 3) * local41;
-		@Pc(124) int local124 = local37 * 3;
-		@Pc(130) int local130 = (local61 - 3) * local53;
-		@Pc(134) int local134 = local45 * 3;
-		@Pc(136) int local136 = local110;
-		@Pc(138) int local138 = local114;
-		@Pc(144) int local144 = (local25 - 1) * local106;
-		@Pc(162) int local162 = (arg5 - 1) * local93;
-		@Pc(166) int[] local166 = TextureOpShapeLine.canvas[arg2];
-		ArrayUtils.fillRange(local166, arg1 - arg4, -local16 + arg1, arg3);
-		ArrayUtils.fillRange(local166, arg1 - local16, arg1 - -local16, arg0);
-		ArrayUtils.fillRange(local166, arg1 + local16, arg4 + arg1, arg3);
-		while (local9 > 0) {
-			if (local89 < 0) {
-				while (local89 < 0) {
-					local70 += local136;
-					local89 += local124;
-					local7++;
-					local136 += local110;
-					local124 += local110;
+	public static void drawEllipseBorderedFast(@OriginalArg(0) int fillColor, @OriginalArg(1) int cx, @OriginalArg(2) int cy, @OriginalArg(3) int borderColor, @OriginalArg(4) int rx, @OriginalArg(6) int ry, @OriginalArg(7) int borderWidth) {
+		@Pc(7) int outerX = 0;
+		@Pc(9) int y = ry;
+		@Pc(11) int innerX = 0;
+		@Pc(16) int innerRx = rx - borderWidth;
+		@Pc(20) int rxSq = rx * rx;
+		@Pc(25) int innerRy = ry - borderWidth;
+		@Pc(29) int rySq = ry * ry;
+		@Pc(33) int innerRySq = innerRy * innerRy;
+		@Pc(37) int rySq2 = rySq << 1;
+		@Pc(41) int rxSq2 = rxSq << 1;
+		@Pc(45) int innerRySq2 = innerRySq << 1;
+		@Pc(49) int innerRxSq = innerRx * innerRx;
+		@Pc(53) int innerRxSq2 = innerRxSq << 1;
+		@Pc(57) int ry2 = ry << 1;
+		@Pc(61) int innerRy2 = innerRy << 1;
+		@Pc(70) int outerErr2 = rySq - (ry2 - 1) * rxSq2;
+		@Pc(80) int innerErr1 = innerRxSq * (1 - innerRy2) + innerRySq2;
+		@Pc(89) int outerErr1 = (1 - ry2) * rxSq + rySq2;
+		@Pc(93) int rxSq4 = rxSq << 2;
+		@Pc(102) int innerErr2 = innerRySq - innerRxSq2 * (innerRy2 - 1);
+		@Pc(106) int innerRxSq4 = innerRxSq << 2;
+		@Pc(110) int rySq4 = rySq << 2;
+		@Pc(114) int innerRySq4 = innerRySq << 2;
+		@Pc(120) int outerDec1 = (ry2 - 3) * rxSq2;
+		@Pc(124) int outerInc1 = rySq2 * 3;
+		@Pc(130) int innerDec1 = (innerRy2 - 3) * innerRxSq2;
+		@Pc(134) int innerInc1 = innerRySq2 * 3;
+		@Pc(136) int outerInc2 = rySq4;
+		@Pc(138) int innerInc2 = innerRySq4;
+		@Pc(144) int innerDec2 = (innerRy - 1) * innerRxSq4;
+		@Pc(162) int outerDec2 = (ry - 1) * rxSq4;
+		@Pc(166) int[] centerRow = TextureOpShapeLine.canvas[cy];
+		ArrayUtils.fillRange(centerRow, cx - rx, -innerRx + cx, borderColor);
+		ArrayUtils.fillRange(centerRow, cx - innerRx, cx - -innerRx, fillColor);
+		ArrayUtils.fillRange(centerRow, cx + innerRx, rx + cx, borderColor);
+		while (y > 0) {
+			if (outerErr1 < 0) {
+				while (outerErr1 < 0) {
+					outerErr2 += outerInc2;
+					outerErr1 += outerInc1;
+					outerX++;
+					outerInc2 += rySq4;
+					outerInc1 += rySq4;
 				}
 			}
-			if (local70 < 0) {
-				local89 += local124;
-				local7++;
-				local124 += local110;
-				local70 += local136;
-				local136 += local110;
+			if (outerErr2 < 0) {
+				outerErr1 += outerInc1;
+				outerX++;
+				outerInc1 += rySq4;
+				outerErr2 += outerInc2;
+				outerInc2 += rySq4;
 			}
-			@Pc(258) boolean local258 = local9 <= local25;
-			if (local258) {
-				if (local80 < 0) {
-					while (local80 < 0) {
-						local80 += local134;
-						local134 += local114;
-						local11++;
-						local102 += local138;
-						local138 += local114;
+			@Pc(258) boolean hasInner = y <= innerRy;
+			if (hasInner) {
+				if (innerErr1 < 0) {
+					while (innerErr1 < 0) {
+						innerErr1 += innerInc1;
+						innerInc1 += innerRySq4;
+						innerX++;
+						innerErr2 += innerInc2;
+						innerInc2 += innerRySq4;
 					}
 				}
-				if (local102 < 0) {
-					local80 += local134;
-					local11++;
-					local134 += local114;
-					local102 += local138;
-					local138 += local114;
+				if (innerErr2 < 0) {
+					innerErr1 += innerInc1;
+					innerX++;
+					innerInc1 += innerRySq4;
+					innerErr2 += innerInc2;
+					innerInc2 += innerRySq4;
 				}
-				local102 += -local130;
-				local130 -= local106;
-				local80 += -local144;
-				local144 -= local106;
+				innerErr2 += -innerDec1;
+				innerDec1 -= innerRxSq4;
+				innerErr1 += -innerDec2;
+				innerDec2 -= innerRxSq4;
 			}
-			local89 += -local162;
-			local70 += -local120;
-			local120 -= local93;
-			local9--;
-			@Pc(348) int local348 = arg2 - local9;
-			@Pc(352) int local352 = local7 + arg1;
-			local162 -= local93;
-			@Pc(360) int local360 = local9 + arg2;
-			@Pc(365) int local365 = arg1 - local7;
-			if (local258) {
-				@Pc(371) int local371 = arg1 + local11;
-				@Pc(376) int local376 = arg1 - local11;
-				ArrayUtils.fillRange(TextureOpShapeLine.canvas[local348], local365, local376, arg3);
-				ArrayUtils.fillRange(TextureOpShapeLine.canvas[local348], local376, local371, arg0);
-				ArrayUtils.fillRange(TextureOpShapeLine.canvas[local348], local371, local352, arg3);
-				ArrayUtils.fillRange(TextureOpShapeLine.canvas[local360], local365, local376, arg3);
-				ArrayUtils.fillRange(TextureOpShapeLine.canvas[local360], local376, local371, arg0);
-				ArrayUtils.fillRange(TextureOpShapeLine.canvas[local360], local371, local352, arg3);
+			outerErr1 += -outerDec2;
+			outerErr2 += -outerDec1;
+			outerDec1 -= rxSq4;
+			y--;
+			@Pc(348) int yTop = cy - y;
+			@Pc(352) int xRight = outerX + cx;
+			outerDec2 -= rxSq4;
+			@Pc(360) int yBottom = y + cy;
+			@Pc(365) int xLeft = cx - outerX;
+			if (hasInner) {
+				@Pc(371) int innerRight = cx + innerX;
+				@Pc(376) int innerLeft = cx - innerX;
+				ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], xLeft, innerLeft, borderColor);
+				ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], innerLeft, innerRight, fillColor);
+				ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], innerRight, xRight, borderColor);
+				ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], xLeft, innerLeft, borderColor);
+				ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], innerLeft, innerRight, fillColor);
+				ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], innerRight, xRight, borderColor);
 			} else {
-				ArrayUtils.fillRange(TextureOpShapeLine.canvas[local348], local365, local352, arg3);
-				ArrayUtils.fillRange(TextureOpShapeLine.canvas[local360], local365, local352, arg3);
+				ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], xLeft, xRight, borderColor);
+				ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], xLeft, xRight, borderColor);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ma", name = "a", descriptor = "(IIBIIII)V")
-	public static void drawCircleBordered(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		if (arg4 - arg3 >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= arg4 + arg3 && TextureOpShapeRasterizer.clipTop <= arg1 - arg3 && TextureOpShapeRasterizer.clipBottom >= arg3 + arg1) {
-			drawCircleBorderedFast(arg5, arg0, arg1, arg2, arg3, arg4);
+	public static void drawCircleBordered(@OriginalArg(0) int borderWidth, @OriginalArg(1) int cy, @OriginalArg(3) int fillColor, @OriginalArg(4) int radius, @OriginalArg(5) int cx, @OriginalArg(6) int borderColor) {
+		if (cx - radius >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= cx + radius && TextureOpShapeRasterizer.clipTop <= cy - radius && TextureOpShapeRasterizer.clipBottom >= radius + cy) {
+			drawCircleBorderedFast(borderColor, borderWidth, cy, fillColor, radius, cx);
 		} else {
-			drawCircleBorderedClipped(arg2, arg1, arg3, arg5, arg0, arg4);
+			drawCircleBorderedClipped(fillColor, cy, radius, borderColor, borderWidth, cx);
 		}
 	}
 
 	@OriginalMember(owner = "client!aj", name = "a", descriptor = "(IIIZIII)V")
-	public static void drawCircleBorderedFast(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		ensureScratchBufferCapacity(arg4);
-		@Pc(8) int local8 = arg4 - arg1;
-		@Pc(10) int local10 = 0;
-		if (local8 < 0) {
-			local8 = 0;
+	public static void drawCircleBorderedFast(@OriginalArg(0) int borderColor, @OriginalArg(1) int borderWidth, @OriginalArg(2) int cy, @OriginalArg(4) int fillColor, @OriginalArg(5) int radius, @OriginalArg(6) int cx) {
+		ensureScratchBufferCapacity(radius);
+		@Pc(8) int innerRadius = radius - borderWidth;
+		@Pc(10) int x = 0;
+		if (innerRadius < 0) {
+			innerRadius = 0;
 		}
-		@Pc(21) int local21 = -arg4;
-		@Pc(23) int local23 = arg4;
-		@Pc(25) int local25 = local8;
-		@Pc(28) int local28 = -local8;
-		@Pc(30) int local30 = -1;
-		@Pc(34) int[] local34 = TextureOpShapeLine.canvas[arg2];
-		@Pc(39) int local39 = arg5 + local8;
-		@Pc(41) int local41 = -1;
-		@Pc(46) int local46 = arg5 - local8;
-		ArrayUtils.fillRange(local34, arg5 - arg4, local46, arg0);
-		ArrayUtils.fillRange(local34, local46, local39, arg3);
-		ArrayUtils.fillRange(local34, local39, arg5 + arg4, arg0);
-		while (local10 < local23) {
-			local30 += 2;
-			local28 += local30;
-			if (local28 >= 0 && local25 >= 1) {
-				scratchBuffer[local25] = local10;
-				local25--;
-				local28 -= local25 << 1;
+		@Pc(21) int outerErr = -radius;
+		@Pc(23) int outerY = radius;
+		@Pc(25) int innerY = innerRadius;
+		@Pc(28) int innerErr = -innerRadius;
+		@Pc(30) int innerStep = -1;
+		@Pc(34) int[] centerRow = TextureOpShapeLine.canvas[cy];
+		@Pc(39) int rightInnerEdge = cx + innerRadius;
+		@Pc(41) int outerStep = -1;
+		@Pc(46) int leftInnerEdge = cx - innerRadius;
+		ArrayUtils.fillRange(centerRow, cx - radius, leftInnerEdge, borderColor);
+		ArrayUtils.fillRange(centerRow, leftInnerEdge, rightInnerEdge, fillColor);
+		ArrayUtils.fillRange(centerRow, rightInnerEdge, cx + radius, borderColor);
+		while (x < outerY) {
+			innerStep += 2;
+			innerErr += innerStep;
+			if (innerErr >= 0 && innerY >= 1) {
+				scratchBuffer[innerY] = x;
+				innerY--;
+				innerErr -= innerY << 1;
 			}
-			local10++;
-			local41 += 2;
-			local21 += local41;
-			@Pc(142) int[] local142;
-			@Pc(149) int[] local149;
-			@Pc(162) int local162;
-			@Pc(158) int local158;
-			@Pc(154) int local154;
-			@Pc(171) int local171;
-			@Pc(167) int local167;
-			if (local21 >= 0) {
-				local23--;
-				local21 -= local23 << 1;
-				if (local8 > local23) {
-					local142 = TextureOpShapeLine.canvas[local23 + arg2];
-					local149 = TextureOpShapeLine.canvas[arg2 - local23];
-					local154 = arg5 - local10;
-					local158 = local10 + arg5;
-					local162 = scratchBuffer[local23];
-					local167 = arg5 - local162;
-					local171 = local162 + arg5;
-					ArrayUtils.fillRange(local142, local154, local167, arg0);
-					ArrayUtils.fillRange(local142, local167, local171, arg3);
-					ArrayUtils.fillRange(local142, local171, local158, arg0);
-					ArrayUtils.fillRange(local149, local154, local167, arg0);
-					ArrayUtils.fillRange(local149, local167, local171, arg3);
-					ArrayUtils.fillRange(local149, local171, local158, arg0);
+			x++;
+			outerStep += 2;
+			outerErr += outerStep;
+			@Pc(142) int[] rowA;
+			@Pc(149) int[] rowB;
+			@Pc(162) int innerXAtY;
+			@Pc(158) int outerRight;
+			@Pc(154) int outerLeft;
+			@Pc(171) int innerRight;
+			@Pc(167) int innerLeft;
+			if (outerErr >= 0) {
+				outerY--;
+				outerErr -= outerY << 1;
+				if (innerRadius > outerY) {
+					rowA = TextureOpShapeLine.canvas[outerY + cy];
+					rowB = TextureOpShapeLine.canvas[cy - outerY];
+					outerLeft = cx - x;
+					outerRight = x + cx;
+					innerXAtY = scratchBuffer[outerY];
+					innerLeft = cx - innerXAtY;
+					innerRight = innerXAtY + cx;
+					ArrayUtils.fillRange(rowA, outerLeft, innerLeft, borderColor);
+					ArrayUtils.fillRange(rowA, innerLeft, innerRight, fillColor);
+					ArrayUtils.fillRange(rowA, innerRight, outerRight, borderColor);
+					ArrayUtils.fillRange(rowB, outerLeft, innerLeft, borderColor);
+					ArrayUtils.fillRange(rowB, innerLeft, innerRight, fillColor);
+					ArrayUtils.fillRange(rowB, innerRight, outerRight, borderColor);
 				} else {
-					local142 = TextureOpShapeLine.canvas[arg2 + local23];
-					local149 = TextureOpShapeLine.canvas[arg2 - local23];
-					local162 = local10 + arg5;
-					local158 = arg5 - local10;
-					ArrayUtils.fillRange(local142, local158, local162, arg0);
-					ArrayUtils.fillRange(local149, local158, local162, arg0);
+					rowA = TextureOpShapeLine.canvas[cy + outerY];
+					rowB = TextureOpShapeLine.canvas[cy - outerY];
+					innerXAtY = x + cx;
+					outerRight = cx - x;
+					ArrayUtils.fillRange(rowA, outerRight, innerXAtY, borderColor);
+					ArrayUtils.fillRange(rowB, outerRight, innerXAtY, borderColor);
 				}
 			}
-			local142 = TextureOpShapeLine.canvas[arg2 + local10];
-			local149 = TextureOpShapeLine.canvas[arg2 - local10];
-			local162 = local23 + arg5;
-			local158 = arg5 - local23;
-			if (local8 <= local10) {
-				ArrayUtils.fillRange(local142, local158, local162, arg0);
-				ArrayUtils.fillRange(local149, local158, local162, arg0);
+			rowA = TextureOpShapeLine.canvas[cy + x];
+			rowB = TextureOpShapeLine.canvas[cy - x];
+			innerXAtY = outerY + cx;
+			outerRight = cx - outerY;
+			if (innerRadius <= x) {
+				ArrayUtils.fillRange(rowA, outerRight, innerXAtY, borderColor);
+				ArrayUtils.fillRange(rowB, outerRight, innerXAtY, borderColor);
 			} else {
-				local154 = local10 <= local25 ? local25 : scratchBuffer[local10];
-				local171 = local154 + arg5;
-				local167 = arg5 - local154;
-				ArrayUtils.fillRange(local142, local158, local167, arg0);
-				ArrayUtils.fillRange(local142, local167, local171, arg3);
-				ArrayUtils.fillRange(local142, local171, local162, arg0);
-				ArrayUtils.fillRange(local149, local158, local167, arg0);
-				ArrayUtils.fillRange(local149, local167, local171, arg3);
-				ArrayUtils.fillRange(local149, local171, local162, arg0);
+				outerLeft = x <= innerY ? innerY : scratchBuffer[x];
+				innerRight = outerLeft + cx;
+				innerLeft = cx - outerLeft;
+				ArrayUtils.fillRange(rowA, outerRight, innerLeft, borderColor);
+				ArrayUtils.fillRange(rowA, innerLeft, innerRight, fillColor);
+				ArrayUtils.fillRange(rowA, innerRight, innerXAtY, borderColor);
+				ArrayUtils.fillRange(rowB, outerRight, innerLeft, borderColor);
+				ArrayUtils.fillRange(rowB, innerLeft, innerRight, fillColor);
+				ArrayUtils.fillRange(rowB, innerRight, innerXAtY, borderColor);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(IBIIIII)V")
-	public static void drawCircleBorderedClipped(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		@Pc(18) int local18 = arg2 - arg4;
-		ensureScratchBufferCapacity(arg2);
-		@Pc(23) int local23 = 0;
-		if (local18 < 0) {
-			local18 = 0;
+	public static void drawCircleBorderedClipped(@OriginalArg(0) int fillColor, @OriginalArg(2) int cy, @OriginalArg(3) int radius, @OriginalArg(4) int borderColor, @OriginalArg(5) int borderWidth, @OriginalArg(6) int cx) {
+		@Pc(18) int innerRadius = radius - borderWidth;
+		ensureScratchBufferCapacity(radius);
+		@Pc(23) int x = 0;
+		if (innerRadius < 0) {
+			innerRadius = 0;
 		}
-		@Pc(32) int local32 = arg2;
-		@Pc(35) int local35 = -arg2;
-		@Pc(38) int local38 = -local18;
-		@Pc(40) int local40 = local18;
-		@Pc(42) int local42 = -1;
-		@Pc(61) int local61;
-		@Pc(69) int local69;
-		@Pc(78) int local78;
-		@Pc(87) int local87;
-		if (arg1 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= arg1) {
-			@Pc(52) int[] local52 = TextureOpShapeLine.canvas[arg1];
-			local61 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg5 - arg2, TextureOpShapeRasterizer.clipLeft);
-			local69 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg2 + arg5, TextureOpShapeRasterizer.clipLeft);
-			local78 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg5 - local18, TextureOpShapeRasterizer.clipLeft);
-			local87 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg5 + local18, TextureOpShapeRasterizer.clipLeft);
-			ArrayUtils.fillRange(local52, local61, local78, arg3);
-			ArrayUtils.fillRange(local52, local78, local87, arg0);
-			ArrayUtils.fillRange(local52, local87, local69, arg3);
+		@Pc(32) int outerY = radius;
+		@Pc(35) int outerErr = -radius;
+		@Pc(38) int innerErr = -innerRadius;
+		@Pc(40) int innerY = innerRadius;
+		@Pc(42) int outerStep = -1;
+		@Pc(61) int yBottom;
+		@Pc(69) int xRight;
+		@Pc(78) int xLeft;
+		@Pc(87) int xInner;
+		if (cy >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= cy) {
+			@Pc(52) int[] centerRow = TextureOpShapeLine.canvas[cy];
+			yBottom = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - radius, TextureOpShapeRasterizer.clipLeft);
+			xRight = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, radius + cx, TextureOpShapeRasterizer.clipLeft);
+			xLeft = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - innerRadius, TextureOpShapeRasterizer.clipLeft);
+			xInner = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx + innerRadius, TextureOpShapeRasterizer.clipLeft);
+			ArrayUtils.fillRange(centerRow, yBottom, xLeft, borderColor);
+			ArrayUtils.fillRange(centerRow, xLeft, xInner, fillColor);
+			ArrayUtils.fillRange(centerRow, xInner, xRight, borderColor);
 		}
-		@Pc(107) int local107 = -1;
-		while (local23 < local32) {
-			local42 += 2;
-			local107 += 2;
-			local38 += local107;
-			local35 += local42;
-			if (local38 >= 0 && local40 >= 1) {
-				local40--;
-				scratchBuffer[local40] = local23;
-				local38 -= local40 << 1;
+		@Pc(107) int innerStep = -1;
+		while (x < outerY) {
+			outerStep += 2;
+			innerStep += 2;
+			innerErr += innerStep;
+			outerErr += outerStep;
+			if (innerErr >= 0 && innerY >= 1) {
+				innerY--;
+				scratchBuffer[innerY] = x;
+				innerErr -= innerY << 1;
 			}
-			local23++;
-			@Pc(264) int local264;
-			@Pc(273) int local273;
-			@Pc(280) int[] local280;
-			@Pc(161) int local161;
-			if (local35 >= 0) {
-				local32--;
-				local35 -= local32 << 1;
-				local161 = arg1 - local32;
-				local61 = arg1 + local32;
-				if (TextureOpShapeRasterizer.clipTop <= local61 && TextureOpShapeRasterizer.clipBottom >= local161) {
-					if (local32 >= local18) {
-						local69 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, local23 + arg5, TextureOpShapeRasterizer.clipLeft);
-						local78 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg5 - local23, TextureOpShapeRasterizer.clipLeft);
-						if (TextureOpShapeRasterizer.clipBottom >= local61) {
-							ArrayUtils.fillRange(TextureOpShapeLine.canvas[local61], local78, local69, arg3);
+			x++;
+			@Pc(264) int innerRight;
+			@Pc(273) int innerLeft;
+			@Pc(280) int[] scanline;
+			@Pc(161) int yTop;
+			if (outerErr >= 0) {
+				outerY--;
+				outerErr -= outerY << 1;
+				yTop = cy - outerY;
+				yBottom = cy + outerY;
+				if (TextureOpShapeRasterizer.clipTop <= yBottom && TextureOpShapeRasterizer.clipBottom >= yTop) {
+					if (outerY >= innerRadius) {
+						xRight = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, x + cx, TextureOpShapeRasterizer.clipLeft);
+						xLeft = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - x, TextureOpShapeRasterizer.clipLeft);
+						if (TextureOpShapeRasterizer.clipBottom >= yBottom) {
+							ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], xLeft, xRight, borderColor);
 						}
-						if (local161 >= TextureOpShapeRasterizer.clipTop) {
-							ArrayUtils.fillRange(TextureOpShapeLine.canvas[local161], local78, local69, arg3);
+						if (yTop >= TextureOpShapeRasterizer.clipTop) {
+							ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], xLeft, xRight, borderColor);
 						}
 					} else {
-						local69 = scratchBuffer[local32];
-						local78 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, local23 + arg5, TextureOpShapeRasterizer.clipLeft);
-						local87 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg5 - local23, TextureOpShapeRasterizer.clipLeft);
-						local264 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg5 + local69, TextureOpShapeRasterizer.clipLeft);
-						local273 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg5 - local69, TextureOpShapeRasterizer.clipLeft);
-						if (TextureOpShapeRasterizer.clipBottom >= local61) {
-							local280 = TextureOpShapeLine.canvas[local61];
-							ArrayUtils.fillRange(local280, local87, local273, arg3);
-							ArrayUtils.fillRange(local280, local273, local264, arg0);
-							ArrayUtils.fillRange(local280, local264, local78, arg3);
+						xRight = scratchBuffer[outerY];
+						xLeft = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, x + cx, TextureOpShapeRasterizer.clipLeft);
+						xInner = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - x, TextureOpShapeRasterizer.clipLeft);
+						innerRight = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx + xRight, TextureOpShapeRasterizer.clipLeft);
+						innerLeft = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - xRight, TextureOpShapeRasterizer.clipLeft);
+						if (TextureOpShapeRasterizer.clipBottom >= yBottom) {
+							scanline = TextureOpShapeLine.canvas[yBottom];
+							ArrayUtils.fillRange(scanline, xInner, innerLeft, borderColor);
+							ArrayUtils.fillRange(scanline, innerLeft, innerRight, fillColor);
+							ArrayUtils.fillRange(scanline, innerRight, xLeft, borderColor);
 						}
-						if (local161 >= TextureOpShapeRasterizer.clipTop) {
-							local280 = TextureOpShapeLine.canvas[local161];
-							ArrayUtils.fillRange(local280, local87, local273, arg3);
-							ArrayUtils.fillRange(local280, local273, local264, arg0);
-							ArrayUtils.fillRange(local280, local264, local78, arg3);
+						if (yTop >= TextureOpShapeRasterizer.clipTop) {
+							scanline = TextureOpShapeLine.canvas[yTop];
+							ArrayUtils.fillRange(scanline, xInner, innerLeft, borderColor);
+							ArrayUtils.fillRange(scanline, innerLeft, innerRight, fillColor);
+							ArrayUtils.fillRange(scanline, innerRight, xLeft, borderColor);
 						}
 					}
 				}
 			}
-			local161 = arg1 - local23;
-			local61 = arg1 + local23;
-			if (TextureOpShapeRasterizer.clipTop <= local61 && TextureOpShapeRasterizer.clipBottom >= local161) {
-				local69 = arg5 + local32;
-				local78 = arg5 - local32;
-				if (local69 >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= local78) {
-					local69 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, local69, TextureOpShapeRasterizer.clipLeft);
-					local78 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, local78, TextureOpShapeRasterizer.clipLeft);
-					if (local23 < local18) {
-						local87 = local40 >= local23 ? local40 : scratchBuffer[local23];
-						local264 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, local87 + arg5, TextureOpShapeRasterizer.clipLeft);
-						local273 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg5 - local87, TextureOpShapeRasterizer.clipLeft);
-						if (TextureOpShapeRasterizer.clipBottom >= local61) {
-							local280 = TextureOpShapeLine.canvas[local61];
-							ArrayUtils.fillRange(local280, local78, local273, arg3);
-							ArrayUtils.fillRange(local280, local273, local264, arg0);
-							ArrayUtils.fillRange(local280, local264, local69, arg3);
+			yTop = cy - x;
+			yBottom = cy + x;
+			if (TextureOpShapeRasterizer.clipTop <= yBottom && TextureOpShapeRasterizer.clipBottom >= yTop) {
+				xRight = cx + outerY;
+				xLeft = cx - outerY;
+				if (xRight >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= xLeft) {
+					xRight = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, xRight, TextureOpShapeRasterizer.clipLeft);
+					xLeft = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, xLeft, TextureOpShapeRasterizer.clipLeft);
+					if (x < innerRadius) {
+						xInner = innerY >= x ? innerY : scratchBuffer[x];
+						innerRight = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, xInner + cx, TextureOpShapeRasterizer.clipLeft);
+						innerLeft = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - xInner, TextureOpShapeRasterizer.clipLeft);
+						if (TextureOpShapeRasterizer.clipBottom >= yBottom) {
+							scanline = TextureOpShapeLine.canvas[yBottom];
+							ArrayUtils.fillRange(scanline, xLeft, innerLeft, borderColor);
+							ArrayUtils.fillRange(scanline, innerLeft, innerRight, fillColor);
+							ArrayUtils.fillRange(scanline, innerRight, xRight, borderColor);
 						}
-						if (local161 >= TextureOpShapeRasterizer.clipTop) {
-							local280 = TextureOpShapeLine.canvas[local161];
-							ArrayUtils.fillRange(local280, local78, local273, arg3);
-							ArrayUtils.fillRange(local280, local273, local264, arg0);
-							ArrayUtils.fillRange(local280, local264, local69, arg3);
+						if (yTop >= TextureOpShapeRasterizer.clipTop) {
+							scanline = TextureOpShapeLine.canvas[yTop];
+							ArrayUtils.fillRange(scanline, xLeft, innerLeft, borderColor);
+							ArrayUtils.fillRange(scanline, innerLeft, innerRight, fillColor);
+							ArrayUtils.fillRange(scanline, innerRight, xRight, borderColor);
 						}
 					} else {
-						if (TextureOpShapeRasterizer.clipBottom >= local61) {
-							ArrayUtils.fillRange(TextureOpShapeLine.canvas[local61], local78, local69, arg3);
+						if (TextureOpShapeRasterizer.clipBottom >= yBottom) {
+							ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], xLeft, xRight, borderColor);
 						}
-						if (local161 >= TextureOpShapeRasterizer.clipTop) {
-							ArrayUtils.fillRange(TextureOpShapeLine.canvas[local161], local78, local69, arg3);
+						if (yTop >= TextureOpShapeRasterizer.clipTop) {
+							ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], xLeft, xRight, borderColor);
 						}
 					}
 				}
@@ -360,212 +360,212 @@ public final class TextureOpShapeEllipse extends TextureOpShape {
 	}
 
 	@OriginalMember(owner = "client!ug", name = "a", descriptor = "(II)V")
-	public static void ensureScratchBufferCapacity(@OriginalArg(0) int arg0) {
-		if (scratchBuffer == null || scratchBuffer.length < arg0) {
-			scratchBuffer = new int[arg0];
+	public static void ensureScratchBufferCapacity(@OriginalArg(0) int capacity) {
+		if (scratchBuffer == null || scratchBuffer.length < capacity) {
+			scratchBuffer = new int[capacity];
 		}
 	}
 
 	@OriginalMember(owner = "client!nb", name = "a", descriptor = "(IIIIII)V")
-	public static void fillEllipseSingleColor(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
-		if (arg1 == arg4) {
-			fillCircleSingleColor(arg4, arg2, arg0, arg3);
-		} else if (TextureOpShapeRasterizer.clipLeft <= arg2 - arg4 && arg2 + arg4 <= TextureOpShapeRasterizer.clipRight && arg3 - arg1 >= TextureOpShapeRasterizer.clipTop && arg3 + arg1 <= TextureOpShapeRasterizer.clipBottom) {
-			fillEllipseSingleColorFast(arg3, arg2, arg4, arg1, arg0);
+	public static void fillEllipseSingleColor(@OriginalArg(0) int color, @OriginalArg(1) int ry, @OriginalArg(2) int cx, @OriginalArg(3) int cy, @OriginalArg(5) int rx) {
+		if (ry == rx) {
+			fillCircleSingleColor(rx, cx, color, cy);
+		} else if (TextureOpShapeRasterizer.clipLeft <= cx - rx && cx + rx <= TextureOpShapeRasterizer.clipRight && cy - ry >= TextureOpShapeRasterizer.clipTop && cy + ry <= TextureOpShapeRasterizer.clipBottom) {
+			fillEllipseSingleColorFast(cy, cx, rx, ry, color);
 		} else {
-			fillEllipseSingleColorClipped(arg0, arg1, arg4, arg2, arg3);
+			fillEllipseSingleColorClipped(color, ry, rx, cx, cy);
 		}
 	}
 
 	@OriginalMember(owner = "client!gi", name = "a", descriptor = "(IIIIB)V")
-	public static void fillCircleSingleColor(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		if (arg1 - arg0 >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= arg0 + arg1 && arg3 - arg0 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= arg0 + arg3) {
-			TextureOpShapeLine.fillCircle(arg1, arg0, arg2, arg3);
+	public static void fillCircleSingleColor(@OriginalArg(0) int radius, @OriginalArg(1) int cx, @OriginalArg(2) int color, @OriginalArg(3) int cy) {
+		if (cx - radius >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= radius + cx && cy - radius >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= radius + cy) {
+			TextureOpShapeLine.fillCircle(cx, radius, color, cy);
 		} else {
-			fillCircleSingleColorClipped(arg2, arg3, arg0, arg1);
+			fillCircleSingleColorClipped(color, cy, radius, cx);
 		}
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(IIIII)V")
-	public static void fillCircleSingleColorClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
-		@Pc(7) int local7 = 0;
-		@Pc(9) int local9 = arg2;
-		@Pc(12) int local12 = -arg2;
-		@Pc(14) int local14 = -1;
-		@Pc(22) int local22 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg2 + arg3, TextureOpShapeRasterizer.clipLeft);
-		@Pc(30) int local30 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3 - arg2, TextureOpShapeRasterizer.clipLeft);
-		ArrayUtils.fillRange(TextureOpShapeLine.canvas[arg1], local30, local22, arg0);
-		while (local7 < local9) {
-			local14 += 2;
-			local12 += local14;
-			@Pc(58) int local58;
-			@Pc(68) int local68;
-			@Pc(84) int local84;
-			@Pc(93) int local93;
-			if (local12 > 0) {
-				local9--;
-				local58 = arg1 - local9;
-				local12 -= local9 << 1;
-				local68 = arg1 + local9;
-				if (local68 >= TextureOpShapeRasterizer.clipTop && local58 <= TextureOpShapeRasterizer.clipBottom) {
-					local84 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3 + local7, TextureOpShapeRasterizer.clipLeft);
-					local93 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3 - local7, TextureOpShapeRasterizer.clipLeft);
-					if (TextureOpShapeRasterizer.clipBottom >= local68) {
-						ArrayUtils.fillRange(TextureOpShapeLine.canvas[local68], local93, local84, arg0);
+	public static void fillCircleSingleColorClipped(@OriginalArg(0) int color, @OriginalArg(1) int cy, @OriginalArg(2) int radius, @OriginalArg(4) int cx) {
+		@Pc(7) int x = 0;
+		@Pc(9) int y = radius;
+		@Pc(12) int err = -radius;
+		@Pc(14) int step = -1;
+		@Pc(22) int clampedRight = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, radius + cx, TextureOpShapeRasterizer.clipLeft);
+		@Pc(30) int clampedLeft = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - radius, TextureOpShapeRasterizer.clipLeft);
+		ArrayUtils.fillRange(TextureOpShapeLine.canvas[cy], clampedLeft, clampedRight, color);
+		while (x < y) {
+			step += 2;
+			err += step;
+			@Pc(58) int yTop;
+			@Pc(68) int yBottom;
+			@Pc(84) int right;
+			@Pc(93) int left;
+			if (err > 0) {
+				y--;
+				yTop = cy - y;
+				err -= y << 1;
+				yBottom = cy + y;
+				if (yBottom >= TextureOpShapeRasterizer.clipTop && yTop <= TextureOpShapeRasterizer.clipBottom) {
+					right = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx + x, TextureOpShapeRasterizer.clipLeft);
+					left = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - x, TextureOpShapeRasterizer.clipLeft);
+					if (TextureOpShapeRasterizer.clipBottom >= yBottom) {
+						ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], left, right, color);
 					}
-					if (TextureOpShapeRasterizer.clipTop <= local58) {
-						ArrayUtils.fillRange(TextureOpShapeLine.canvas[local58], local93, local84, arg0);
+					if (TextureOpShapeRasterizer.clipTop <= yTop) {
+						ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], left, right, color);
 					}
 				}
 			}
-			local7++;
-			local58 = arg1 - local7;
-			local68 = local7 + arg1;
-			if (local68 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= local58) {
-				local84 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3 + local9, TextureOpShapeRasterizer.clipLeft);
-				local93 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3 - local9, TextureOpShapeRasterizer.clipLeft);
-				if (local68 <= TextureOpShapeRasterizer.clipBottom) {
-					ArrayUtils.fillRange(TextureOpShapeLine.canvas[local68], local93, local84, arg0);
+			x++;
+			yTop = cy - x;
+			yBottom = x + cy;
+			if (yBottom >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= yTop) {
+				right = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx + y, TextureOpShapeRasterizer.clipLeft);
+				left = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - y, TextureOpShapeRasterizer.clipLeft);
+				if (yBottom <= TextureOpShapeRasterizer.clipBottom) {
+					ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], left, right, color);
 				}
-				if (local58 >= TextureOpShapeRasterizer.clipTop) {
-					ArrayUtils.fillRange(TextureOpShapeLine.canvas[local58], local93, local84, arg0);
+				if (yTop >= TextureOpShapeRasterizer.clipTop) {
+					ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], left, right, color);
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!fl", name = "a", descriptor = "(IIIIII)V")
-	public static void fillEllipseSingleColorFast(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		ArrayUtils.fillRange(TextureOpShapeLine.canvas[arg0], arg1 - arg2, arg2 + arg1, arg4);
-		@Pc(17) int local17 = 0;
-		@Pc(21) int local21 = arg2 * arg2;
-		@Pc(25) int local25 = arg3 * arg3;
-		@Pc(27) int local27 = arg3;
-		@Pc(31) int local31 = local25 << 1;
-		@Pc(35) int local35 = local21 << 1;
-		@Pc(39) int local39 = arg3 << 1;
-		@Pc(48) int local48 = local31 + (1 - local39) * local21;
-		@Pc(56) int local56 = local25 - local35 * (local39 - 1);
-		@Pc(60) int local60 = local21 << 2;
-		@Pc(70) int local70 = local25 << 2;
-		@Pc(78) int local78 = local31 * 3;
-		@Pc(86) int local86 = local35 * ((arg3 << 1) - 3);
-		@Pc(92) int local92 = local70;
-		@Pc(98) int local98 = local60 * (arg3 - 1);
-		while (local27 > 0) {
-			local27--;
-			@Pc(105) int local105 = local27 + arg0;
-			@Pc(109) int local109 = arg0 - local27;
-			if (local48 < 0) {
-				while (local48 < 0) {
-					local17++;
-					local48 += local78;
-					local56 += local92;
-					local92 += local70;
-					local78 += local70;
+	public static void fillEllipseSingleColorFast(@OriginalArg(0) int cy, @OriginalArg(1) int cx, @OriginalArg(2) int rx, @OriginalArg(4) int ry, @OriginalArg(5) int color) {
+		ArrayUtils.fillRange(TextureOpShapeLine.canvas[cy], cx - rx, rx + cx, color);
+		@Pc(17) int x = 0;
+		@Pc(21) int rxSq = rx * rx;
+		@Pc(25) int rySq = ry * ry;
+		@Pc(27) int y = ry;
+		@Pc(31) int rySq2 = rySq << 1;
+		@Pc(35) int rxSq2 = rxSq << 1;
+		@Pc(39) int ry2 = ry << 1;
+		@Pc(48) int err1 = rySq2 + (1 - ry2) * rxSq;
+		@Pc(56) int err2 = rySq - rxSq2 * (ry2 - 1);
+		@Pc(60) int rxSq4 = rxSq << 2;
+		@Pc(70) int rySq4 = rySq << 2;
+		@Pc(78) int inc1 = rySq2 * 3;
+		@Pc(86) int dec1 = rxSq2 * ((ry << 1) - 3);
+		@Pc(92) int inc2 = rySq4;
+		@Pc(98) int dec2 = rxSq4 * (ry - 1);
+		while (y > 0) {
+			y--;
+			@Pc(105) int yBottom = y + cy;
+			@Pc(109) int yTop = cy - y;
+			if (err1 < 0) {
+				while (err1 < 0) {
+					x++;
+					err1 += inc1;
+					err2 += inc2;
+					inc2 += rySq4;
+					inc1 += rySq4;
 				}
 			}
-			if (local56 < 0) {
-				local48 += local78;
-				local78 += local70;
-				local56 += local92;
-				local17++;
-				local92 += local70;
+			if (err2 < 0) {
+				err1 += inc1;
+				inc1 += rySq4;
+				err2 += inc2;
+				x++;
+				inc2 += rySq4;
 			}
-			@Pc(160) int local160 = local17 + arg1;
-			local56 += -local86;
-			local86 -= local60;
-			local48 += -local98;
-			@Pc(179) int local179 = arg1 - local17;
-			local98 -= local60;
-			ArrayUtils.fillRange(TextureOpShapeLine.canvas[local109], local179, local160, arg4);
-			ArrayUtils.fillRange(TextureOpShapeLine.canvas[local105], local179, local160, arg4);
+			@Pc(160) int right = x + cx;
+			err2 += -dec1;
+			dec1 -= rxSq4;
+			err1 += -dec2;
+			@Pc(179) int left = cx - x;
+			dec2 -= rxSq4;
+			ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], left, right, color);
+			ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], left, right, color);
 		}
 	}
 
 	@OriginalMember(owner = "client!cl", name = "a", descriptor = "(IIIBII)V")
-	public static void fillEllipseSingleColorClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		@Pc(13) int local13 = arg2 * arg2;
-		@Pc(15) int local15 = 0;
-		@Pc(17) int local17 = arg1;
-		@Pc(21) int local21 = local13 << 1;
-		@Pc(25) int local25 = arg1 * arg1;
-		@Pc(29) int local29 = arg1 << 1;
-		@Pc(33) int local33 = local25 << 1;
-		@Pc(42) int local42 = local13 * (1 - local29) + local33;
-		@Pc(51) int local51 = local25 - local21 * (local29 - 1);
-		@Pc(55) int local55 = local25 << 2;
-		@Pc(63) int local63 = local33 * 3;
-		@Pc(67) int local67 = local13 << 2;
-		@Pc(75) int local75 = ((arg1 << 1) - 3) * local21;
-		@Pc(81) int local81 = local55;
-		@Pc(95) int local95;
-		@Pc(104) int local104;
-		if (arg4 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= arg4) {
-			local95 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg2 + arg3, TextureOpShapeRasterizer.clipLeft);
-			local104 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3 - arg2, TextureOpShapeRasterizer.clipLeft);
-			ArrayUtils.fillRange(TextureOpShapeLine.canvas[arg4], local104, local95, arg0);
+	public static void fillEllipseSingleColorClipped(@OriginalArg(0) int color, @OriginalArg(1) int ry, @OriginalArg(2) int rx, @OriginalArg(4) int cx, @OriginalArg(5) int cy) {
+		@Pc(13) int rxSq = rx * rx;
+		@Pc(15) int x = 0;
+		@Pc(17) int y = ry;
+		@Pc(21) int rxSq2 = rxSq << 1;
+		@Pc(25) int rySq = ry * ry;
+		@Pc(29) int ry2 = ry << 1;
+		@Pc(33) int rySq2 = rySq << 1;
+		@Pc(42) int err1 = rxSq * (1 - ry2) + rySq2;
+		@Pc(51) int err2 = rySq - rxSq2 * (ry2 - 1);
+		@Pc(55) int rySq4 = rySq << 2;
+		@Pc(63) int inc1 = rySq2 * 3;
+		@Pc(67) int rxSq4 = rxSq << 2;
+		@Pc(75) int dec1 = ((ry << 1) - 3) * rxSq2;
+		@Pc(81) int inc2 = rySq4;
+		@Pc(95) int yTop;
+		@Pc(104) int yBottom;
+		if (cy >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= cy) {
+			yTop = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, rx + cx, TextureOpShapeRasterizer.clipLeft);
+			yBottom = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - rx, TextureOpShapeRasterizer.clipLeft);
+			ArrayUtils.fillRange(TextureOpShapeLine.canvas[cy], yBottom, yTop, color);
 		}
-		@Pc(118) int local118 = local67 * (arg1 - 1);
-		while (local17 > 0) {
-			local17--;
-			if (local42 < 0) {
-				while (local42 < 0) {
-					local15++;
-					local42 += local63;
-					local51 += local81;
-					local81 += local55;
-					local63 += local55;
+		@Pc(118) int dec2 = rxSq4 * (ry - 1);
+		while (y > 0) {
+			y--;
+			if (err1 < 0) {
+				while (err1 < 0) {
+					x++;
+					err1 += inc1;
+					err2 += inc2;
+					inc2 += rySq4;
+					inc1 += rySq4;
 				}
 			}
-			local95 = arg4 - local17;
-			if (local51 < 0) {
-				local51 += local81;
-				local42 += local63;
-				local63 += local55;
-				local81 += local55;
-				local15++;
+			yTop = cy - y;
+			if (err2 < 0) {
+				err2 += inc2;
+				err1 += inc1;
+				inc1 += rySq4;
+				inc2 += rySq4;
+				x++;
 			}
-			local51 += -local75;
-			local75 -= local67;
-			local42 += -local118;
-			local104 = local17 + arg4;
-			if (TextureOpShapeRasterizer.clipTop <= local104 && TextureOpShapeRasterizer.clipBottom >= local95) {
-				@Pc(213) int local213 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, local15 + arg3, TextureOpShapeRasterizer.clipLeft);
-				@Pc(222) int local222 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3 - local15, TextureOpShapeRasterizer.clipLeft);
-				if (local95 >= TextureOpShapeRasterizer.clipTop) {
-					ArrayUtils.fillRange(TextureOpShapeLine.canvas[local95], local222, local213, arg0);
+			err2 += -dec1;
+			dec1 -= rxSq4;
+			err1 += -dec2;
+			yBottom = y + cy;
+			if (TextureOpShapeRasterizer.clipTop <= yBottom && TextureOpShapeRasterizer.clipBottom >= yTop) {
+				@Pc(213) int right = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, x + cx, TextureOpShapeRasterizer.clipLeft);
+				@Pc(222) int left = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, cx - x, TextureOpShapeRasterizer.clipLeft);
+				if (yTop >= TextureOpShapeRasterizer.clipTop) {
+					ArrayUtils.fillRange(TextureOpShapeLine.canvas[yTop], left, right, color);
 				}
-				if (TextureOpShapeRasterizer.clipBottom >= local104) {
-					ArrayUtils.fillRange(TextureOpShapeLine.canvas[local104], local222, local213, arg0);
+				if (TextureOpShapeRasterizer.clipBottom >= yBottom) {
+					ArrayUtils.fillRange(TextureOpShapeLine.canvas[yBottom], left, right, color);
 				}
 			}
-			local118 -= local67;
+			dec2 -= rxSq4;
 		}
 	}
 
 	@OriginalMember(owner = "client!kc", name = "c", descriptor = "(III)V")
 	@Override
-	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(10) int local10 = this.centerX * arg0 >> 12;
-		@Pc(17) int local17 = arg0 * this.radiusX >> 12;
-		@Pc(24) int local24 = this.centerY * arg1 >> 12;
-		@Pc(31) int local31 = this.radiusY * arg1 >> 12;
-		fillEllipseSingleColor(this.fillColor, local31, local10, local24, local17);
+	public final void renderFilledShape(@OriginalArg(1) int w, @OriginalArg(2) int h) {
+		@Pc(10) int cx = this.centerX * w >> 12;
+		@Pc(17) int rx = w * this.radiusX >> 12;
+		@Pc(24) int cy = this.centerY * h >> 12;
+		@Pc(31) int ry = this.radiusY * h >> 12;
+		fillEllipseSingleColor(this.fillColor, ry, cx, cy, rx);
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(IZI)V")
 	@Override
-	public final void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderOutlinedShape(@OriginalArg(0) int h, @OriginalArg(2) int w) {
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(III)V")
 	@Override
-	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(6) int local6 = arg1 * this.centerX >> 12;
-		@Pc(23) int local23 = this.radiusY * arg0 >> 12;
-		@Pc(30) int local30 = this.centerY * arg0 >> 12;
-		@Pc(37) int local37 = this.radiusX * arg1 >> 12;
-		drawEllipseBordered(this.lineWidth, local6, local30, local23, this.outlineColor, this.fillColor, local37);
+	public final void renderBorderedShape(@OriginalArg(0) int h, @OriginalArg(1) int w) {
+		@Pc(6) int cx = w * this.centerX >> 12;
+		@Pc(23) int ry = this.radiusY * h >> 12;
+		@Pc(30) int cy = this.centerY * h >> 12;
+		@Pc(37) int rx = this.radiusX * w >> 12;
+		drawEllipseBordered(this.lineWidth, cx, cy, ry, this.outlineColor, this.fillColor, rx);
 	}
 }

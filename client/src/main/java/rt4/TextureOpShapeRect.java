@@ -21,36 +21,36 @@ public final class TextureOpShapeRect extends TextureOpShape {
 	private final int endX;
 
 	@OriginalMember(owner = "client!ci", name = "<init>", descriptor = "(IIIIII)V")
-	public TextureOpShapeRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		super(-1, arg4, arg5);
-		this.endY = arg3;
-		this.startY = arg1;
-		this.startX = arg0;
-		this.endX = arg2;
+	public TextureOpShapeRect(@OriginalArg(0) int startX, @OriginalArg(1) int startY, @OriginalArg(2) int endX, @OriginalArg(3) int endY, @OriginalArg(4) int outlineColor, @OriginalArg(5) int lineWidth) {
+		super(-1, outlineColor, lineWidth);
+		this.endY = endY;
+		this.startY = startY;
+		this.startX = startX;
+		this.endX = endX;
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(ILclient!wa;)Lclient!ci;")
-	public static TextureOpShapeRect create(@OriginalArg(1) Buffer arg0) {
-		return new TextureOpShapeRect(arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g3(), arg0.g1());
+	public static TextureOpShapeRect create(@OriginalArg(1) Buffer buf) {
+		return new TextureOpShapeRect(buf.g2b(), buf.g2b(), buf.g2b(), buf.g2b(), buf.g3(), buf.g1());
 	}
 
 	@OriginalMember(owner = "client!ci", name = "a", descriptor = "(III)V")
 	@Override
-	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public final void renderBorderedShape(@OriginalArg(0) int h, @OriginalArg(1) int w) {
 	}
 
 	@OriginalMember(owner = "client!ci", name = "c", descriptor = "(III)V")
 	@Override
-	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderFilledShape(@OriginalArg(1) int w, @OriginalArg(2) int h) {
 	}
 
 	@OriginalMember(owner = "client!ci", name = "a", descriptor = "(IZI)V")
 	@Override
-	public final void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(10) int local10 = arg1 * this.startX >> 12;
-		@Pc(25) int local25 = this.endX * arg1 >> 12;
-		@Pc(32) int local32 = arg0 * this.startY >> 12;
-		@Pc(39) int local39 = arg0 * this.endY >> 12;
-		TextureOpShapeRasterizer.drawLine(this.outlineColor, local39, local10, local32, local25);
+	public final void renderOutlinedShape(@OriginalArg(0) int h, @OriginalArg(2) int w) {
+		@Pc(10) int x1 = w * this.startX >> 12;
+		@Pc(25) int x2 = this.endX * w >> 12;
+		@Pc(32) int y1 = h * this.startY >> 12;
+		@Pc(39) int y2 = h * this.endY >> 12;
+		TextureOpShapeRasterizer.drawLine(this.outlineColor, y2, x1, y1, x2);
 	}
 }
