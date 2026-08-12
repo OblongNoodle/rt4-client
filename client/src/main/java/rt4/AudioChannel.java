@@ -75,53 +75,53 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!id", name = "a", descriptor = "(ILsignlink!ll;Ljava/awt/Component;II)Lclient!vh;")
-	public static AudioChannel create(@OriginalArg(0) int arg0, @OriginalArg(1) SignLink arg1, @OriginalArg(2) Component arg2, @OriginalArg(3) int arg3) {
+	public static AudioChannel create(@OriginalArg(0) int bufferSize, @OriginalArg(1) SignLink signLink, @OriginalArg(2) Component component, @OriginalArg(3) int channelId) {
 		if (sampleRate == 0) {
 			throw new IllegalStateException();
 		}
 		try {
 			@Pc(33) AudioChannel audioChannel = new JavaAudioChannel();
-			audioChannel.sampleRate2 = arg0;
+			audioChannel.sampleRate2 = bufferSize;
 			audioChannel.samples = new int[(stereo ? 2 : 1) * 256];
-			audioChannel.init(arg2);
-			audioChannel.bufferCapacity = (arg0 & -1024) + 1024;
+			audioChannel.init(component);
+			audioChannel.bufferCapacity = (bufferSize & -1024) + 1024;
 			if (audioChannel.bufferCapacity > 16384) {
 				audioChannel.bufferCapacity = 16384;
 			}
 			audioChannel.open(audioChannel.bufferCapacity);
 			if (threadPriority > 0 && thread == null) {
 				thread = new AudioThread();
-				thread.signLink = arg1;
-				arg1.startThread(threadPriority, thread);
+				thread.signLink = signLink;
+				signLink.startThread(threadPriority, thread);
 			}
 			if (thread != null) {
-				if (thread.channels[arg3] != null) {
+				if (thread.channels[channelId] != null) {
 					throw new IllegalArgumentException();
 				}
-				thread.channels[arg3] = audioChannel;
+				thread.channels[channelId] = audioChannel;
 			}
 			return audioChannel;
 		} catch (@Pc(109) Throwable ex1) {
 			ex1.printStackTrace();
 			try {
-				@Pc(120) SignLinkAudioChannel local120 = new SignLinkAudioChannel(arg1, arg3);
-				local120.samples = new int[(stereo ? 2 : 1) * 256];
-				local120.sampleRate2 = arg0;
-				local120.init(arg2);
-				local120.bufferCapacity = 16384;
-				local120.open(local120.bufferCapacity);
+				@Pc(120) SignLinkAudioChannel fallbackChannel = new SignLinkAudioChannel(signLink, channelId);
+				fallbackChannel.samples = new int[(stereo ? 2 : 1) * 256];
+				fallbackChannel.sampleRate2 = bufferSize;
+				fallbackChannel.init(component);
+				fallbackChannel.bufferCapacity = 16384;
+				fallbackChannel.open(fallbackChannel.bufferCapacity);
 				if (threadPriority > 0 && thread == null) {
 					thread = new AudioThread();
-					thread.signLink = arg1;
-					arg1.startThread(threadPriority, thread);
+					thread.signLink = signLink;
+					signLink.startThread(threadPriority, thread);
 				}
 				if (thread != null) {
-					if (thread.channels[arg3] != null) {
+					if (thread.channels[channelId] != null) {
 						throw new IllegalArgumentException();
 					}
-					thread.channels[arg3] = local120;
+					thread.channels[channelId] = fallbackChannel;
 				}
-				return local120;
+				return fallbackChannel;
 			} catch (@Pc(186) Throwable ex2) {
 				ex2.printStackTrace();
 				return new AudioChannel();
@@ -130,13 +130,13 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!nd", name = "a", descriptor = "(ZLclient!qb;)V")
-	public static void setInactive(@OriginalArg(1) PcmStream arg0) {
-		if (arg0.sound != null) {
-			arg0.sound.position = 0;
+	public static void setInactive(@OriginalArg(1) PcmStream stream) {
+		if (stream.sound != null) {
+			stream.sound.position = 0;
 		}
-		arg0.active = false;
-		for (@Pc(14) PcmStream local14 = arg0.firstSubStream(); local14 != null; local14 = arg0.nextSubStream()) {
-			setInactive(local14);
+		stream.active = false;
+		for (@Pc(14) PcmStream subStream = stream.firstSubStream(); subStream != null; subStream = stream.nextSubStream()) {
+			setInactive(subStream);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "(I)V")
-	public void open(@OriginalArg(0) int arg0) throws Exception {
+	public void open(@OriginalArg(0) int capacity) throws Exception {
 	}
 
 	@OriginalMember(owner = "client!vh", name = "b", descriptor = "()V")
@@ -153,92 +153,92 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "([II)V")
-	private void read(@OriginalArg(0) int[] arg0) {
-		@Pc(1) short local1 = 256;
+	private void read(@OriginalArg(0) int[] buf) {
+		@Pc(1) short bufSize = 256;
 		if (stereo) {
-			local1 = 512;
+			bufSize = 512;
 		}
-		ArrayUtils.clear(arg0, 0, local1);
+		ArrayUtils.clear(buf, 0, bufSize);
 		this.priorityUpdateCountdown -= 256;
 		if (this.stream != null && this.priorityUpdateCountdown <= 0) {
 			this.priorityUpdateCountdown += sampleRate >> 4;
 			setInactive(this.stream);
 			this.insertStreamByPriority(this.stream, this.stream.getEffectiveVolume());
-			@Pc(45) int local45 = 0;
-			@Pc(47) int local47 = 255;
-			@Pc(49) int local49 = 7;
+			@Pc(45) int activeCount = 0;
+			@Pc(47) int bucketMask = 255;
+			@Pc(49) int priority = 7;
 			label106:
-			while (local47 != 0) {
-				@Pc(57) int local57;
-				@Pc(62) int local62;
-				if (local49 < 0) {
-					local57 = local49 & 0x3;
-					local62 = -(local49 >> 2);
+			while (bucketMask != 0) {
+				@Pc(57) int bucketIdx;
+				@Pc(62) int positionThreshold;
+				if (priority < 0) {
+					bucketIdx = priority & 0x3;
+					positionThreshold = -(priority >> 2);
 				} else {
-					local57 = local49;
-					local62 = 0;
+					bucketIdx = priority;
+					positionThreshold = 0;
 				}
-				for (@Pc(73) int local73 = local47 >>> local57 & 0x11111111; local73 != 0; local73 >>>= 0x4) {
-					if ((local73 & 0x1) != 0) {
-						local47 &= ~(0x1 << local57);
-						@Pc(91) PcmStream local91 = null;
-						@Pc(96) PcmStream local96 = this.priorityBucketHeads[local57];
+				for (@Pc(73) int mask = bucketMask >>> bucketIdx & 0x11111111; mask != 0; mask >>>= 0x4) {
+					if ((mask & 0x1) != 0) {
+						bucketMask &= ~(0x1 << bucketIdx);
+						@Pc(91) PcmStream prev = null;
+						@Pc(96) PcmStream current = this.priorityBucketHeads[bucketIdx];
 						label100:
 						while (true) {
 							while (true) {
-								if (local96 == null) {
+								if (current == null) {
 									break label100;
 								}
-								@Pc(101) Sound local101 = local96.sound;
-								if (local101 == null || local101.position <= local62) {
-									local96.active = true;
-									@Pc(125) int local125 = local96.getActiveChannelCount();
-									local45 += local125;
-									if (local101 != null) {
-										local101.position += local125;
+								@Pc(101) Sound sound = current.sound;
+								if (sound == null || sound.position <= positionThreshold) {
+									current.active = true;
+									@Pc(125) int channelCount = current.getActiveChannelCount();
+									activeCount += channelCount;
+									if (sound != null) {
+										sound.position += channelCount;
 									}
-									if (local45 >= this.maxActiveChannels) {
+									if (activeCount >= this.maxActiveChannels) {
 										break label106;
 									}
-									@Pc(145) PcmStream local145 = local96.firstSubStream();
-									if (local145 != null) {
-										@Pc(150) int local150 = local96.effectivePriority;
-										while (local145 != null) {
-											this.insertStreamByPriority(local145, local150 * local145.getEffectiveVolume() >> 8);
-											local145 = local96.nextSubStream();
+									@Pc(145) PcmStream subStream = current.firstSubStream();
+									if (subStream != null) {
+										@Pc(150) int parentPriority = current.effectivePriority;
+										while (subStream != null) {
+											this.insertStreamByPriority(subStream, parentPriority * subStream.getEffectiveVolume() >> 8);
+											subStream = current.nextSubStream();
 										}
 									}
-									@Pc(169) PcmStream local169 = local96.nextPriorityStream;
-									local96.nextPriorityStream = null;
-									if (local91 == null) {
-										this.priorityBucketHeads[local57] = local169;
+									@Pc(169) PcmStream next = current.nextPriorityStream;
+									current.nextPriorityStream = null;
+									if (prev == null) {
+										this.priorityBucketHeads[bucketIdx] = next;
 									} else {
-										local91.nextPriorityStream = local169;
+										prev.nextPriorityStream = next;
 									}
-									if (local169 == null) {
-										this.priorityBucketTails[local57] = local91;
+									if (next == null) {
+										this.priorityBucketTails[bucketIdx] = prev;
 									}
-									local96 = local169;
+									current = next;
 								} else {
-									local47 |= 0x1 << local57;
-									local91 = local96;
-									local96 = local96.nextPriorityStream;
+									bucketMask |= 0x1 << bucketIdx;
+									prev = current;
+									current = current.nextPriorityStream;
 								}
 							}
 						}
 					}
-					local57 += 4;
-					local62++;
+					bucketIdx += 4;
+					positionThreshold++;
 				}
-				local49--;
+				priority--;
 			}
-			for (local49 = 0; local49 < 8; local49++) {
-				@Pc(212) PcmStream local212 = this.priorityBucketHeads[local49];
-				this.priorityBucketHeads[local49] = this.priorityBucketTails[local49] = null;
-				while (local212 != null) {
-					@Pc(227) PcmStream local227 = local212.nextPriorityStream;
-					local212.nextPriorityStream = null;
-					local212 = local227;
+			for (priority = 0; priority < 8; priority++) {
+				@Pc(212) PcmStream head = this.priorityBucketHeads[priority];
+				this.priorityBucketHeads[priority] = this.priorityBucketTails[priority] = null;
+				while (head != null) {
+					@Pc(227) PcmStream next = head.nextPriorityStream;
+					head.nextPriorityStream = null;
+					head = next;
 				}
 			}
 		}
@@ -246,7 +246,7 @@ public class AudioChannel {
 			this.priorityUpdateCountdown = 0;
 		}
 		if (this.stream != null) {
-			this.stream.read(arg0, 0, 256);
+			this.stream.read(buf, 0, 256);
 		}
 		this.time = MonotonicClock.currentTimeMillis();
 	}
@@ -266,30 +266,30 @@ public class AudioChannel {
 				this.skipConsumptionCheck = true;
 				this.closeUntil = 0L;
 			}
-			@Pc(38) int local38 = this.getBufferSize();
-			if (this.consumedSamples < this.prevBufferSize - local38) {
-				this.consumedSamples = this.prevBufferSize - local38;
+			@Pc(38) int bufferSize = this.getBufferSize();
+			if (this.consumedSamples < this.prevBufferSize - bufferSize) {
+				this.consumedSamples = this.prevBufferSize - bufferSize;
 			}
-			@Pc(65) int local65 = this.sampleRate2 + this.bufferAdjustment;
-			if (local65 + 256 > 16384) {
-				local65 = 16128;
+			@Pc(65) int targetBufferSize = this.sampleRate2 + this.bufferAdjustment;
+			if (targetBufferSize + 256 > 16384) {
+				targetBufferSize = 16128;
 			}
-			if (this.bufferCapacity < local65 + 256) {
+			if (this.bufferCapacity < targetBufferSize + 256) {
 				this.bufferCapacity += 1024;
 				if (this.bufferCapacity > 16384) {
 					this.bufferCapacity = 16384;
 				}
 				this.flush();
-				local38 = 0;
+				bufferSize = 0;
 				this.open(this.bufferCapacity);
-				if (this.bufferCapacity < local65 + 256) {
-					local65 = this.bufferCapacity - 256;
-					this.bufferAdjustment = local65 - this.sampleRate2;
+				if (this.bufferCapacity < targetBufferSize + 256) {
+					targetBufferSize = this.bufferCapacity - 256;
+					this.bufferAdjustment = targetBufferSize - this.sampleRate2;
 				}
 				this.skipConsumptionCheck = true;
 			}
-			while (local65 > local38) {
-				local38 += 256;
+			while (targetBufferSize > bufferSize) {
+				bufferSize += 256;
 				this.read(this.samples);
 				this.write();
 			}
@@ -307,7 +307,7 @@ public class AudioChannel {
 				this.calculateConsumptionAt = now + 2000L;
 				this.consumedSamples = 0;
 			}
-			this.prevBufferSize = local38;
+			this.prevBufferSize = bufferSize;
 		} catch (@Pc(202) Exception ex) {
 			ex.printStackTrace();
 			this.flush();
@@ -328,21 +328,21 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "(ILclient!qb;)V")
-	public final synchronized void setStream(@OriginalArg(1) PcmStream arg0) {
-		this.stream = arg0;
+	public final synchronized void setStream(@OriginalArg(1) PcmStream stream) {
+		this.stream = stream;
 	}
 
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "(Lclient!qb;IB)V")
-	private void insertStreamByPriority(@OriginalArg(0) PcmStream arg0, @OriginalArg(1) int arg1) {
-		@Pc(16) int local16 = arg1 >> 5;
-		@Pc(21) PcmStream local21 = this.priorityBucketTails[local16];
-		if (local21 == null) {
-			this.priorityBucketHeads[local16] = arg0;
+	private void insertStreamByPriority(@OriginalArg(0) PcmStream stream, @OriginalArg(1) int priority) {
+		@Pc(16) int bucket = priority >> 5;
+		@Pc(21) PcmStream tail = this.priorityBucketTails[bucket];
+		if (tail == null) {
+			this.priorityBucketHeads[bucket] = stream;
 		} else {
-			local21.nextPriorityStream = arg0;
+			tail.nextPriorityStream = stream;
 		}
-		this.priorityBucketTails[local16] = arg0;
-		arg0.effectivePriority = arg1;
+		this.priorityBucketTails[bucket] = stream;
+		stream.effectivePriority = priority;
 	}
 
 	@OriginalMember(owner = "client!vh", name = "c", descriptor = "()I")
@@ -385,16 +385,16 @@ public class AudioChannel {
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "(Z)V")
 	public final synchronized void quit() {
 		if (thread != null) {
-			@Pc(6) boolean local6 = true;
-			for (@Pc(8) int local8 = 0; local8 < 2; local8++) {
-				if (thread.channels[local8] == this) {
-					thread.channels[local8] = null;
+			@Pc(6) boolean allClosed = true;
+			for (@Pc(8) int i = 0; i < 2; i++) {
+				if (thread.channels[i] == this) {
+					thread.channels[i] = null;
 				}
-				if (thread.channels[local8] != null) {
-					local6 = false;
+				if (thread.channels[i] != null) {
+					allClosed = false;
 				}
 			}
-			if (local6) {
+			if (allClosed) {
 				thread.stop = true;
 				while (thread.running) {
 					ThreadUtils.sleep(50L);
@@ -407,6 +407,6 @@ public class AudioChannel {
 	}
 
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "(Ljava/awt/Component;)V")
-	public void init(@OriginalArg(0) Component arg0) throws Exception {
+	public void init(@OriginalArg(0) Component component) throws Exception {
 	}
 }
