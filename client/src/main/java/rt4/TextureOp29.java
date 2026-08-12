@@ -143,7 +143,7 @@ public final class TextureOp29 extends TextureOp {
 		@Pc(192) int local192;
 		@Pc(201) int local201;
 		if (arg4 >= clipTop && clipBottom >= arg4) {
-			@Pc(166) int[] local166 = TextureOp29SubOp4.anIntArrayArray10[arg4];
+			@Pc(166) int[] local166 = TextureOp29SubOp4.canvas[arg4];
 			local174 = IntUtils.clamp(clipRight, arg5 - arg0, clipLeft);
 			local183 = IntUtils.clamp(clipRight, arg5 + arg0, clipLeft);
 			local192 = IntUtils.clamp(clipRight, arg5 - local12, clipLeft);
@@ -207,23 +207,23 @@ public final class TextureOp29 extends TextureOp {
 					@Pc(412) int local412 = IntUtils.clamp(clipRight, arg5 - local14, clipLeft);
 					@Pc(420) int[] local420;
 					if (clipTop <= local174) {
-						local420 = TextureOp29SubOp4.anIntArrayArray10[local174];
+						local420 = TextureOp29SubOp4.canvas[local174];
 						ArrayUtils.fillRange(local420, local201, local412, arg2);
 						ArrayUtils.fillRange(local420, local412, local404, arg1);
 						ArrayUtils.fillRange(local420, local404, local192, arg2);
 					}
 					if (local183 <= clipBottom) {
-						local420 = TextureOp29SubOp4.anIntArrayArray10[local183];
+						local420 = TextureOp29SubOp4.canvas[local183];
 						ArrayUtils.fillRange(local420, local201, local412, arg2);
 						ArrayUtils.fillRange(local420, local412, local404, arg1);
 						ArrayUtils.fillRange(local420, local404, local192, arg2);
 					}
 				} else {
 					if (clipTop <= local174) {
-						ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local174], local201, local192, arg2);
+						ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local174], local201, local192, arg2);
 					}
 					if (clipBottom >= local183) {
-						ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local183], local201, local192, arg2);
+						ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local183], local201, local192, arg2);
 					}
 				}
 			}

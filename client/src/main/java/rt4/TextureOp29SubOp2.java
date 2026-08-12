@@ -9,26 +9,26 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!th", name = "o", descriptor = "[I")
-	public static int[] anIntArray522;
+	public static int[] scratchBuffer;
 	@OriginalMember(owner = "client!kc", name = "B", descriptor = "I")
-	private final int anInt3168;
+	private final int radiusY;
 
 	@OriginalMember(owner = "client!kc", name = "y", descriptor = "I")
-	private final int anInt3165;
+	private final int centerX;
 
 	@OriginalMember(owner = "client!kc", name = "v", descriptor = "I")
-	private final int anInt3163;
+	private final int centerY;
 
 	@OriginalMember(owner = "client!kc", name = "m", descriptor = "I")
-	private final int anInt3159;
+	private final int radiusX;
 
 	@OriginalMember(owner = "client!kc", name = "<init>", descriptor = "(IIIIIII)V")
 	public TextureOp29SubOp2(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		super(arg4, arg5, arg6);
-		this.anInt3168 = arg3;
-		this.anInt3165 = arg0;
-		this.anInt3163 = arg1;
-		this.anInt3159 = arg2;
+		this.radiusY = arg3;
+		this.centerX = arg0;
+		this.centerY = arg1;
+		this.radiusX = arg2;
 	}
 
 	@OriginalMember(owner = "client!kl", name = "a", descriptor = "(Lclient!wa;B)Lclient!kc;")
@@ -80,7 +80,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 		@Pc(138) int local138 = local114;
 		@Pc(144) int local144 = (local25 - 1) * local106;
 		@Pc(162) int local162 = (arg5 - 1) * local93;
-		@Pc(166) int[] local166 = TextureOp29SubOp4.anIntArrayArray10[arg2];
+		@Pc(166) int[] local166 = TextureOp29SubOp4.canvas[arg2];
 		ArrayUtils.fillRange(local166, arg1 - arg4, -local16 + arg1, arg3);
 		ArrayUtils.fillRange(local166, arg1 - local16, arg1 - -local16, arg0);
 		ArrayUtils.fillRange(local166, arg1 + local16, arg4 + arg1, arg3);
@@ -136,15 +136,15 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 			if (local258) {
 				@Pc(371) int local371 = arg1 + local11;
 				@Pc(376) int local376 = arg1 - local11;
-				ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local348], local365, local376, arg3);
-				ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local348], local376, local371, arg0);
-				ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local348], local371, local352, arg3);
-				ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local360], local365, local376, arg3);
-				ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local360], local376, local371, arg0);
-				ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local360], local371, local352, arg3);
+				ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local348], local365, local376, arg3);
+				ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local348], local376, local371, arg0);
+				ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local348], local371, local352, arg3);
+				ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local360], local365, local376, arg3);
+				ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local360], local376, local371, arg0);
+				ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local360], local371, local352, arg3);
 			} else {
-				ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local348], local365, local352, arg3);
-				ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local360], local365, local352, arg3);
+				ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local348], local365, local352, arg3);
+				ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local360], local365, local352, arg3);
 			}
 		}
 	}
@@ -171,7 +171,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 		@Pc(25) int local25 = local8;
 		@Pc(28) int local28 = -local8;
 		@Pc(30) int local30 = -1;
-		@Pc(34) int[] local34 = TextureOp29SubOp4.anIntArrayArray10[arg2];
+		@Pc(34) int[] local34 = TextureOp29SubOp4.canvas[arg2];
 		@Pc(39) int local39 = arg5 + local8;
 		@Pc(41) int local41 = -1;
 		@Pc(46) int local46 = arg5 - local8;
@@ -182,7 +182,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 			local30 += 2;
 			local28 += local30;
 			if (local28 >= 0 && local25 >= 1) {
-				anIntArray522[local25] = local10;
+				scratchBuffer[local25] = local10;
 				local25--;
 				local28 -= local25 << 1;
 			}
@@ -200,11 +200,11 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 				local23--;
 				local21 -= local23 << 1;
 				if (local8 > local23) {
-					local142 = TextureOp29SubOp4.anIntArrayArray10[local23 + arg2];
-					local149 = TextureOp29SubOp4.anIntArrayArray10[arg2 - local23];
+					local142 = TextureOp29SubOp4.canvas[local23 + arg2];
+					local149 = TextureOp29SubOp4.canvas[arg2 - local23];
 					local154 = arg5 - local10;
 					local158 = local10 + arg5;
-					local162 = anIntArray522[local23];
+					local162 = scratchBuffer[local23];
 					local167 = arg5 - local162;
 					local171 = local162 + arg5;
 					ArrayUtils.fillRange(local142, local154, local167, arg0);
@@ -214,23 +214,23 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 					ArrayUtils.fillRange(local149, local167, local171, arg3);
 					ArrayUtils.fillRange(local149, local171, local158, arg0);
 				} else {
-					local142 = TextureOp29SubOp4.anIntArrayArray10[arg2 + local23];
-					local149 = TextureOp29SubOp4.anIntArrayArray10[arg2 - local23];
+					local142 = TextureOp29SubOp4.canvas[arg2 + local23];
+					local149 = TextureOp29SubOp4.canvas[arg2 - local23];
 					local162 = local10 + arg5;
 					local158 = arg5 - local10;
 					ArrayUtils.fillRange(local142, local158, local162, arg0);
 					ArrayUtils.fillRange(local149, local158, local162, arg0);
 				}
 			}
-			local142 = TextureOp29SubOp4.anIntArrayArray10[arg2 + local10];
-			local149 = TextureOp29SubOp4.anIntArrayArray10[arg2 - local10];
+			local142 = TextureOp29SubOp4.canvas[arg2 + local10];
+			local149 = TextureOp29SubOp4.canvas[arg2 - local10];
 			local162 = local23 + arg5;
 			local158 = arg5 - local23;
 			if (local8 <= local10) {
 				ArrayUtils.fillRange(local142, local158, local162, arg0);
 				ArrayUtils.fillRange(local149, local158, local162, arg0);
 			} else {
-				local154 = local10 <= local25 ? local25 : anIntArray522[local10];
+				local154 = local10 <= local25 ? local25 : scratchBuffer[local10];
 				local171 = local154 + arg5;
 				local167 = arg5 - local154;
 				ArrayUtils.fillRange(local142, local158, local167, arg0);
@@ -261,7 +261,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 		@Pc(78) int local78;
 		@Pc(87) int local87;
 		if (arg1 >= TextureOp29.clipTop && TextureOp29.clipBottom >= arg1) {
-			@Pc(52) int[] local52 = TextureOp29SubOp4.anIntArrayArray10[arg1];
+			@Pc(52) int[] local52 = TextureOp29SubOp4.canvas[arg1];
 			local61 = IntUtils.clamp(TextureOp29.clipRight, arg5 - arg2, TextureOp29.clipLeft);
 			local69 = IntUtils.clamp(TextureOp29.clipRight, arg2 + arg5, TextureOp29.clipLeft);
 			local78 = IntUtils.clamp(TextureOp29.clipRight, arg5 - local18, TextureOp29.clipLeft);
@@ -278,7 +278,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 			local35 += local42;
 			if (local38 >= 0 && local40 >= 1) {
 				local40--;
-				anIntArray522[local40] = local23;
+				scratchBuffer[local40] = local23;
 				local38 -= local40 << 1;
 			}
 			local23++;
@@ -296,25 +296,25 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 						local69 = IntUtils.clamp(TextureOp29.clipRight, local23 + arg5, TextureOp29.clipLeft);
 						local78 = IntUtils.clamp(TextureOp29.clipRight, arg5 - local23, TextureOp29.clipLeft);
 						if (TextureOp29.clipBottom >= local61) {
-							ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local61], local78, local69, arg3);
+							ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local61], local78, local69, arg3);
 						}
 						if (local161 >= TextureOp29.clipTop) {
-							ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local161], local78, local69, arg3);
+							ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local161], local78, local69, arg3);
 						}
 					} else {
-						local69 = anIntArray522[local32];
+						local69 = scratchBuffer[local32];
 						local78 = IntUtils.clamp(TextureOp29.clipRight, local23 + arg5, TextureOp29.clipLeft);
 						local87 = IntUtils.clamp(TextureOp29.clipRight, arg5 - local23, TextureOp29.clipLeft);
 						local264 = IntUtils.clamp(TextureOp29.clipRight, arg5 + local69, TextureOp29.clipLeft);
 						local273 = IntUtils.clamp(TextureOp29.clipRight, arg5 - local69, TextureOp29.clipLeft);
 						if (TextureOp29.clipBottom >= local61) {
-							local280 = TextureOp29SubOp4.anIntArrayArray10[local61];
+							local280 = TextureOp29SubOp4.canvas[local61];
 							ArrayUtils.fillRange(local280, local87, local273, arg3);
 							ArrayUtils.fillRange(local280, local273, local264, arg0);
 							ArrayUtils.fillRange(local280, local264, local78, arg3);
 						}
 						if (local161 >= TextureOp29.clipTop) {
-							local280 = TextureOp29SubOp4.anIntArrayArray10[local161];
+							local280 = TextureOp29SubOp4.canvas[local161];
 							ArrayUtils.fillRange(local280, local87, local273, arg3);
 							ArrayUtils.fillRange(local280, local273, local264, arg0);
 							ArrayUtils.fillRange(local280, local264, local78, arg3);
@@ -331,27 +331,27 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 					local69 = IntUtils.clamp(TextureOp29.clipRight, local69, TextureOp29.clipLeft);
 					local78 = IntUtils.clamp(TextureOp29.clipRight, local78, TextureOp29.clipLeft);
 					if (local23 < local18) {
-						local87 = local40 >= local23 ? local40 : anIntArray522[local23];
+						local87 = local40 >= local23 ? local40 : scratchBuffer[local23];
 						local264 = IntUtils.clamp(TextureOp29.clipRight, local87 + arg5, TextureOp29.clipLeft);
 						local273 = IntUtils.clamp(TextureOp29.clipRight, arg5 - local87, TextureOp29.clipLeft);
 						if (TextureOp29.clipBottom >= local61) {
-							local280 = TextureOp29SubOp4.anIntArrayArray10[local61];
+							local280 = TextureOp29SubOp4.canvas[local61];
 							ArrayUtils.fillRange(local280, local78, local273, arg3);
 							ArrayUtils.fillRange(local280, local273, local264, arg0);
 							ArrayUtils.fillRange(local280, local264, local69, arg3);
 						}
 						if (local161 >= TextureOp29.clipTop) {
-							local280 = TextureOp29SubOp4.anIntArrayArray10[local161];
+							local280 = TextureOp29SubOp4.canvas[local161];
 							ArrayUtils.fillRange(local280, local78, local273, arg3);
 							ArrayUtils.fillRange(local280, local273, local264, arg0);
 							ArrayUtils.fillRange(local280, local264, local69, arg3);
 						}
 					} else {
 						if (TextureOp29.clipBottom >= local61) {
-							ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local61], local78, local69, arg3);
+							ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local61], local78, local69, arg3);
 						}
 						if (local161 >= TextureOp29.clipTop) {
-							ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local161], local78, local69, arg3);
+							ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local161], local78, local69, arg3);
 						}
 					}
 				}
@@ -361,8 +361,8 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!ug", name = "a", descriptor = "(II)V")
 	public static void ensureScratchBufferCapacity(@OriginalArg(0) int arg0) {
-		if (anIntArray522 == null || anIntArray522.length < arg0) {
-			anIntArray522 = new int[arg0];
+		if (scratchBuffer == null || scratchBuffer.length < arg0) {
+			scratchBuffer = new int[arg0];
 		}
 	}
 
@@ -394,7 +394,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 		@Pc(14) int local14 = -1;
 		@Pc(22) int local22 = IntUtils.clamp(TextureOp29.clipRight, arg2 + arg3, TextureOp29.clipLeft);
 		@Pc(30) int local30 = IntUtils.clamp(TextureOp29.clipRight, arg3 - arg2, TextureOp29.clipLeft);
-		ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[arg1], local30, local22, arg0);
+		ArrayUtils.fillRange(TextureOp29SubOp4.canvas[arg1], local30, local22, arg0);
 		while (local7 < local9) {
 			local14 += 2;
 			local12 += local14;
@@ -411,10 +411,10 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 					local84 = IntUtils.clamp(TextureOp29.clipRight, arg3 + local7, TextureOp29.clipLeft);
 					local93 = IntUtils.clamp(TextureOp29.clipRight, arg3 - local7, TextureOp29.clipLeft);
 					if (TextureOp29.clipBottom >= local68) {
-						ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local68], local93, local84, arg0);
+						ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local68], local93, local84, arg0);
 					}
 					if (TextureOp29.clipTop <= local58) {
-						ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local58], local93, local84, arg0);
+						ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local58], local93, local84, arg0);
 					}
 				}
 			}
@@ -425,10 +425,10 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 				local84 = IntUtils.clamp(TextureOp29.clipRight, arg3 + local9, TextureOp29.clipLeft);
 				local93 = IntUtils.clamp(TextureOp29.clipRight, arg3 - local9, TextureOp29.clipLeft);
 				if (local68 <= TextureOp29.clipBottom) {
-					ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local68], local93, local84, arg0);
+					ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local68], local93, local84, arg0);
 				}
 				if (local58 >= TextureOp29.clipTop) {
-					ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local58], local93, local84, arg0);
+					ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local58], local93, local84, arg0);
 				}
 			}
 		}
@@ -436,7 +436,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!fl", name = "a", descriptor = "(IIIIII)V")
 	public static void fillEllipseSingleColorFast(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[arg0], arg1 - arg2, arg2 + arg1, arg4);
+		ArrayUtils.fillRange(TextureOp29SubOp4.canvas[arg0], arg1 - arg2, arg2 + arg1, arg4);
 		@Pc(17) int local17 = 0;
 		@Pc(21) int local21 = arg2 * arg2;
 		@Pc(25) int local25 = arg3 * arg3;
@@ -478,8 +478,8 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 			local48 += -local98;
 			@Pc(179) int local179 = arg1 - local17;
 			local98 -= local60;
-			ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local109], local179, local160, arg4);
-			ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local105], local179, local160, arg4);
+			ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local109], local179, local160, arg4);
+			ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local105], local179, local160, arg4);
 		}
 	}
 
@@ -504,7 +504,7 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 		if (arg4 >= TextureOp29.clipTop && TextureOp29.clipBottom >= arg4) {
 			local95 = IntUtils.clamp(TextureOp29.clipRight, arg2 + arg3, TextureOp29.clipLeft);
 			local104 = IntUtils.clamp(TextureOp29.clipRight, arg3 - arg2, TextureOp29.clipLeft);
-			ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[arg4], local104, local95, arg0);
+			ArrayUtils.fillRange(TextureOp29SubOp4.canvas[arg4], local104, local95, arg0);
 		}
 		@Pc(118) int local118 = local67 * (arg1 - 1);
 		while (local17 > 0) {
@@ -534,10 +534,10 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 				@Pc(213) int local213 = IntUtils.clamp(TextureOp29.clipRight, local15 + arg3, TextureOp29.clipLeft);
 				@Pc(222) int local222 = IntUtils.clamp(TextureOp29.clipRight, arg3 - local15, TextureOp29.clipLeft);
 				if (local95 >= TextureOp29.clipTop) {
-					ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local95], local222, local213, arg0);
+					ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local95], local222, local213, arg0);
 				}
 				if (TextureOp29.clipBottom >= local104) {
-					ArrayUtils.fillRange(TextureOp29SubOp4.anIntArrayArray10[local104], local222, local213, arg0);
+					ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local104], local222, local213, arg0);
 				}
 			}
 			local118 -= local67;
@@ -547,10 +547,10 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 	@OriginalMember(owner = "client!kc", name = "c", descriptor = "(III)V")
 	@Override
 	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(10) int local10 = this.anInt3165 * arg0 >> 12;
-		@Pc(17) int local17 = arg0 * this.anInt3159 >> 12;
-		@Pc(24) int local24 = this.anInt3163 * arg1 >> 12;
-		@Pc(31) int local31 = this.anInt3168 * arg1 >> 12;
+		@Pc(10) int local10 = this.centerX * arg0 >> 12;
+		@Pc(17) int local17 = arg0 * this.radiusX >> 12;
+		@Pc(24) int local24 = this.centerY * arg1 >> 12;
+		@Pc(31) int local31 = this.radiusY * arg1 >> 12;
 		fillEllipseSingleColor(this.fillColor, local31, local10, local24, local17);
 	}
 
@@ -562,10 +562,10 @@ public final class TextureOp29SubOp2 extends TextureOp29SubOp {
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(III)V")
 	@Override
 	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(6) int local6 = arg1 * this.anInt3165 >> 12;
-		@Pc(23) int local23 = this.anInt3168 * arg0 >> 12;
-		@Pc(30) int local30 = this.anInt3163 * arg0 >> 12;
-		@Pc(37) int local37 = this.anInt3159 * arg1 >> 12;
+		@Pc(6) int local6 = arg1 * this.centerX >> 12;
+		@Pc(23) int local23 = this.radiusY * arg0 >> 12;
+		@Pc(30) int local30 = this.centerY * arg0 >> 12;
+		@Pc(37) int local37 = this.radiusX * arg1 >> 12;
 		drawEllipseBordered(this.lineWidth, local6, local30, local23, this.outlineColor, this.fillColor, local37);
 	}
 }
