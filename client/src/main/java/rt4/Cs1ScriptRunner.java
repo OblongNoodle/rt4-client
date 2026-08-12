@@ -900,7 +900,7 @@ public class Cs1ScriptRunner {
 												if (local2611 != null) {
 													local2611 = local2611.getCountVariant(component.objCount);
 													@Pc(2630) SeqType local2630 = local276 == -1 ? null : SeqTypeList.get(local276);
-													local2589 = local2611.getModel(component.anInt496, component.anInt500, local2630, 1, component.anInt510);
+													local2589 = local2611.getModel(component.seqNextFrame, component.seqCycle, local2630, 1, component.seqFrame);
 													if (local2589 == null) {
 														InterfaceList.redraw(component);
 													} else {
@@ -918,7 +918,7 @@ public class Cs1ScriptRunner {
 													@Pc(2751) Player local2751 = PlayerList.players[color];
 													@Pc(2760) SeqType local2760 = local276 == -1 ? null : SeqTypeList.get(local276);
 													if (local2751 != null && (int) local2751.username.encode37() << 11 == (component.modelId & 0xFFFFF800)) {
-														local2589 = local2751.appearance.getBodyModel(null, -1, null, local2760, 0, -1, 0, component.anInt510, 0);
+														local2589 = local2751.appearance.getBodyModel(null, -1, null, local2760, 0, -1, 0, component.seqFrame, 0);
 													}
 												}
 											} else if (local276 == -1) {
@@ -928,30 +928,30 @@ public class Cs1ScriptRunner {
 												}
 											} else {
 												@Pc(2689) SeqType local2689 = SeqTypeList.get(local276);
-												local2589 = component.getModel(component.anInt496, local2689, component.anInt510, component.anInt500, local2587, PlayerList.self.appearance);
+												local2589 = component.getModel(component.seqNextFrame, local2689, component.seqFrame, component.seqCycle, local2587, PlayerList.self.appearance);
 												if (local2589 == null && Component.loadFailed) {
 													InterfaceList.redraw(component);
 												}
 											}
 											if (local2589 != null) {
-												if (component.anInt451 > 0) {
-													color = (component.width << 8) / component.anInt451;
+												if (component.modelViewportWidth > 0) {
+													color = (component.width << 8) / component.modelViewportWidth;
 												} else {
 													color = 256;
 												}
-												if (component.anInt526 <= 0) {
+												if (component.modelViewportHeight <= 0) {
 													cardMemory = 256;
 												} else {
-													cardMemory = (component.height << 8) / component.anInt526;
+													cardMemory = (component.height << 8) / component.modelViewportHeight;
 												}
-												local556 = local123 + component.width / 2 + (color * component.anInt495 >> 8);
-												objId = component.height / 2 + local114 + (cardMemory * component.anInt481 >> 8);
+												local556 = local123 + component.width / 2 + (color * component.modelOriginX >> 8);
+												objId = component.height / 2 + local114 + (cardMemory * component.modelOriginY >> 8);
 												if (GlRenderer.enabled) {
 													if (component.modelOrtho) {
-														GlRenderer.setupModelPreview(local556, objId, component.modelZoom, component.aShort11, color, cardMemory);
+														GlRenderer.setupModelPreview(local556, objId, component.modelZoom, component.modelViewAngle, color, cardMemory);
 													} else {
 														GlRenderer.setFullscreenCamera(local556, objId, color, cardMemory);
-														GlRenderer.setDepthBias(component.aShort10, (float) component.aShort11 * 1.5F);
+														GlRenderer.setDepthBias(component.modelNearClip, (float) component.modelViewAngle * 1.5F);
 													}
 													GlRenderer.restoreLighting();
 													GlRenderer.setDepthTestEnabled(true);
@@ -1234,10 +1234,10 @@ public class Cs1ScriptRunner {
 				arg0.modelYAngle = (int) (Math.sin((double) client.loop / 40.0D) * 256.0D) & 0x7FF;
 				arg0.modelType = 5;
 				arg0.modelId = ((int) PlayerList.self.username.encode37() << 11) + 2047;
-				arg0.anInt496 = PlayerList.self.movementSeqNextFrame;
-				arg0.anInt500 = 0;
+				arg0.seqNextFrame = PlayerList.self.movementSeqNextFrame;
+				arg0.seqCycle = 0;
 				arg0.modelSeqId = PlayerList.self.movementSeqId;
-				arg0.anInt510 = PlayerList.self.movementSeqFrame;
+				arg0.seqFrame = PlayerList.self.movementSeqFrame;
 			}
 		}
 	}

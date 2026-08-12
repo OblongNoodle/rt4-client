@@ -2598,19 +2598,19 @@ public class Protocol {
 					x = change.intArg1;
 					dx = change.intArg2;
 					modelId = change.intArg3;
-					if (component.modelType != x || component.modelId != modelId || dx != component.anInt498) {
+					if (component.modelType != x || component.modelId != modelId || dx != component.modelFrameCycle) {
 						component.modelId = modelId;
-						component.anInt498 = dx;
+						component.modelFrameCycle = dx;
 						component.modelType = x;
 						InterfaceList.redraw(component);
 					}
 				} else if (type == 5) {
 					component = InterfaceList.getComponent(i);
 					if (component.modelSeqId != change.intArg1 || change.intArg1 == -1) {
-						component.anInt496 = 1;
-						component.anInt500 = 0;
+						component.seqNextFrame = 1;
+						component.seqCycle = 0;
 						component.modelSeqId = change.intArg1;
-						component.anInt510 = 0;
+						component.seqFrame = 0;
 						InterfaceList.redraw(component);
 					}
 				} else if (type == 6) {
@@ -2638,8 +2638,8 @@ public class Protocol {
 						component.modelZoom = change.intArg2;
 						component.modelYAngle = change.intArg3;
 						if (component.objId != -1) {
-							if (component.anInt451 > 0) {
-								component.modelZoom = component.modelZoom * 32 / component.anInt451;
+							if (component.modelViewportWidth > 0) {
+								component.modelZoom = component.modelZoom * 32 / component.modelViewportWidth;
 							} else if (component.baseWidth > 0) {
 								component.modelZoom = component.modelZoom * 32 / component.baseWidth;
 							}

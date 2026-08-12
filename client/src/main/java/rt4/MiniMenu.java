@@ -769,7 +769,7 @@ public class MiniMenu {
 			if (local693 != null) {
 				cancelTargeting();
 				@Pc(1493) ServerActiveProperties local1493 = InterfaceList.getServerActiveProperties(local693);
-				startTargeting(local19, local15, local1493.getTargetMask(), local1493.targetParam, local693.anInt499, local693.anInt484);
+				startTargeting(local19, local15, local1493.getTargetMask(), local1493.targetParam, local693.targetCursor, local693.defaultTargetCursor);
 				itemTargetMode = 0;
 				targetVerb = MiniMap.getTargetVerb(local693);
 				if (targetVerb == null) {

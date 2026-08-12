@@ -306,9 +306,9 @@ public class InterfaceList {
 		for (@Pc(17) int local17 = 0; local17 < local15.length; local17++) {
 			@Pc(29) Component local29 = local15[local17];
 			if (local29 != null) {
-				local29.anInt496 = 1;
-				local29.anInt510 = 0;
-				local29.anInt500 = 0;
+				local29.seqNextFrame = 1;
+				local29.seqFrame = 0;
+				local29.seqCycle = 0;
 			}
 		}
 	}
@@ -684,26 +684,26 @@ public class InterfaceList {
 						@Pc(221) boolean local221 = Mouse.clickButton == 1 && Mouse.clickX >= local61 && Mouse.clickY >= local63 && Mouse.clickX < local65 && Mouse.clickY < local67;
 						@Pc(243) int i;
 						@Pc(322) int k;
-						if (component.aByteArray8 != null) {
-							for (i = 0; i < component.aByteArray8.length; i++) {
-								if (Keyboard.pressedKeys[component.aByteArray8[i]]) {
-									if (component.anIntArray49 == null || client.loop >= component.anIntArray49[i]) {
-										@Pc(279) byte local279 = component.aByteArray7[i];
+						if (component.keyCodes != null) {
+							for (i = 0; i < component.keyCodes.length; i++) {
+								if (Keyboard.pressedKeys[component.keyCodes[i]]) {
+									if (component.keyRepeatTimers == null || client.loop >= component.keyRepeatTimers[i]) {
+										@Pc(279) byte local279 = component.keyModifiers[i];
 										if (local279 == 0 || ((local279 & 0x2) == 0 || Keyboard.pressedKeys[Keyboard.KEY_ALT]) && ((local279 & 0x1) == 0 || Keyboard.pressedKeys[Keyboard.KEY_CTRL]) && ((local279 & 0x4) == 0 || Keyboard.pressedKeys[Keyboard.KEY_SHIFT])) {
 											ClientProt.sendButtonClick(JagString.EMPTY, -1, i + 1, component.id);
-											k = component.anIntArray46[i];
-											if (component.anIntArray49 == null) {
-												component.anIntArray49 = new int[component.aByteArray8.length];
+											k = component.keyRepeatDelays[i];
+											if (component.keyRepeatTimers == null) {
+												component.keyRepeatTimers = new int[component.keyCodes.length];
 											}
 											if (k == 0) {
-												component.anIntArray49[i] = Integer.MAX_VALUE;
+												component.keyRepeatTimers[i] = Integer.MAX_VALUE;
 											} else {
-												component.anIntArray49[i] = client.loop + k;
+												component.keyRepeatTimers[i] = client.loop + k;
 											}
 										}
 									}
-								} else if (component.anIntArray49 != null) {
-									component.anIntArray49[i] = 0;
+								} else if (component.keyRepeatTimers != null) {
+									component.keyRepeatTimers[i] = 0;
 								}
 							}
 						}
@@ -1264,21 +1264,21 @@ public class InterfaceList {
 						if (local105 != -1) {
 							@Pc(118) SeqType local118 = SeqTypeList.get(local105);
 							if (local118 != null) {
-								local15.anInt500 += Protocol.sceneDelta;
-								while (local15.anInt500 > local118.frameDelay[local15.anInt510]) {
-									local15.anInt500 -= local118.frameDelay[local15.anInt510];
-									local15.anInt510++;
-									if (local118.frames.length <= local15.anInt510) {
-										local15.anInt510 -= local118.replayoff;
-										if (local15.anInt510 < 0 || local118.frames.length <= local15.anInt510) {
-											local15.anInt510 = 0;
+								local15.seqCycle += Protocol.sceneDelta;
+								while (local15.seqCycle > local118.frameDelay[local15.seqFrame]) {
+									local15.seqCycle -= local118.frameDelay[local15.seqFrame];
+									local15.seqFrame++;
+									if (local118.frames.length <= local15.seqFrame) {
+										local15.seqFrame -= local118.replayoff;
+										if (local15.seqFrame < 0 || local118.frames.length <= local15.seqFrame) {
+											local15.seqFrame = 0;
 										}
 									}
-									local15.anInt496 = local15.anInt510 + 1;
-									if (local118.frames.length <= local15.anInt496) {
-										local15.anInt496 -= local118.replayoff;
-										if (local15.anInt496 < 0 || local118.frames.length <= local15.anInt496) {
-											local15.anInt496 = -1;
+									local15.seqNextFrame = local15.seqFrame + 1;
+									if (local118.frames.length <= local15.seqNextFrame) {
+										local15.seqNextFrame -= local118.replayoff;
+										if (local15.seqNextFrame < 0 || local118.frames.length <= local15.seqNextFrame) {
+											local15.seqNextFrame = -1;
 										}
 									}
 									redraw(local15);

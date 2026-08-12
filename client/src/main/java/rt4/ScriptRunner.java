@@ -2403,9 +2403,9 @@ public final class ScriptRunner {
 									int3 = intStack[isp];
 									if (component.modelSeqId != int3) {
 										component.modelSeqId = int3;
-										component.anInt510 = 0;
-										component.anInt500 = 0;
-										component.anInt496 = 1;
+										component.seqFrame = 0;
+										component.seqCycle = 0;
+										component.seqNextFrame = 1;
 										InterfaceList.redraw(component);
 									}
 									if (component.createdComponentId == -1) {
@@ -2487,8 +2487,8 @@ public final class ScriptRunner {
 								}
 								if (opcode == 1121) {
 									isp -= 2;
-									component.aShort11 = (short) intStack[isp];
-									component.aShort10 = (short) intStack[isp + 1];
+									component.modelViewAngle = (short) intStack[isp];
+									component.modelNearClip = (short) intStack[isp + 1];
 									InterfaceList.redraw(component);
 									continue;
 								}
@@ -2539,8 +2539,8 @@ public final class ScriptRunner {
 										component.modelZOffset = local13416.yOffset2D;
 										component.modelYAngle = local13416.yAngle2D;
 										component.modelZoom = local13416.zoom2d;
-										if (component.anInt451 > 0) {
-											component.modelZoom = component.modelZoom * 32 / component.anInt451;
+										if (component.modelViewportWidth > 0) {
+											component.modelZoom = component.modelZoom * 32 / component.modelViewportWidth;
 										} else if (component.baseWidth > 0) {
 											component.modelZoom = component.modelZoom * 32 / component.baseWidth;
 										}
@@ -2640,9 +2640,9 @@ public final class ScriptRunner {
 								}
 								if (opcode == 1308) {
 									isp--;
-									component.anInt484 = intStack[isp];
+									component.defaultTargetCursor = intStack[isp];
 									isp--;
-									component.anInt499 = intStack[isp];
+									component.targetCursor = intStack[isp];
 									continue;
 								}
 								if (opcode == 1309) {
@@ -5888,8 +5888,8 @@ public final class ScriptRunner {
 								isp -= 4;
 								component.baseWidth = intStack[isp];
 								component.baseHeight = intStack[isp + 1];
-								component.anInt451 = 0;
-								component.anInt526 = 0;
+								component.modelViewportWidth = 0;
+								component.modelViewportHeight = 0;
 								int3 = intStack[isp + 2];
 								int2 = intStack[isp + 3];
 								if (int2 < 0) {

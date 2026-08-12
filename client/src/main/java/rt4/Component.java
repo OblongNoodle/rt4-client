@@ -102,7 +102,7 @@ public final class Component {
 	public Object[] onDragRelease;
 
 	@OriginalMember(owner = "client!be", name = "Fb", descriptor = "[B")
-	public byte[] aByteArray7;
+	public byte[] keyModifiers;
 
 	@OriginalMember(owner = "client!be", name = "Jb", descriptor = "[Ljava/lang/Object;")
 	public Object[] onResize;
@@ -126,7 +126,7 @@ public final class Component {
 	public Component[] createdComponents;
 
 	@OriginalMember(owner = "client!be", name = "mc", descriptor = "[B")
-	public byte[] aByteArray8;
+	public byte[] keyCodes;
 
 	@OriginalMember(owner = "client!be", name = "rc", descriptor = "[Ljava/lang/Object;")
 	public Object[] onStockTransmit;
@@ -165,7 +165,7 @@ public final class Component {
 	public int[][] cs1Scripts;
 
 	@OriginalMember(owner = "client!be", name = "bd", descriptor = "[I")
-	public int[] anIntArray46;
+	public int[] keyRepeatDelays;
 
 	@OriginalMember(owner = "client!be", name = "cd", descriptor = "[I")
 	public int[] invOffsetY;
@@ -177,7 +177,7 @@ public final class Component {
 	public int[] cs1ComparisonOperands;
 
 	@OriginalMember(owner = "client!be", name = "nd", descriptor = "[I")
-	public int[] anIntArray49;
+	public int[] keyRepeatTimers;
 
 	@OriginalMember(owner = "client!be", name = "qd", descriptor = "[Ljava/lang/Object;")
 	public Object[] onClanTransmit;
@@ -219,13 +219,13 @@ public final class Component {
 	public int activeModelSeqId = -1;
 
 	@OriginalMember(owner = "client!be", name = "o", descriptor = "S")
-	public short aShort10 = 3000;
+	public short modelNearClip = 3000;
 
 	@OriginalMember(owner = "client!be", name = "D", descriptor = "I")
 	public int modelXAngle = 0;
 
 	@OriginalMember(owner = "client!be", name = "Eb", descriptor = "I")
-	public int anInt481 = 0;
+	public int modelOriginY = 0;
 
 	@OriginalMember(owner = "client!be", name = "A", descriptor = "Z")
 	public boolean modelOrtho = false;
@@ -252,7 +252,7 @@ public final class Component {
 	public int lineWidth = 1;
 
 	@OriginalMember(owner = "client!be", name = "Mb", descriptor = "I")
-	public int anInt484 = -1;
+	public int defaultTargetCursor = -1;
 
 	@OriginalMember(owner = "client!be", name = "O", descriptor = "I")
 	public int createdComponentId = -1;
@@ -278,7 +278,7 @@ public final class Component {
 	public boolean lineFlipped = false;
 
 	@OriginalMember(owner = "client!be", name = "pc", descriptor = "I")
-	public int anInt499 = -1;
+	public int targetCursor = -1;
 
 	@OriginalMember(owner = "client!be", name = "Qb", descriptor = "B")
 	public byte dynamicHeightValue = 0;
@@ -296,7 +296,7 @@ public final class Component {
 	public int rectangleLoop = -1;
 
 	@OriginalMember(owner = "client!be", name = "jc", descriptor = "I")
-	public int anInt496 = 1;
+	public int seqNextFrame = 1;
 
 	@OriginalMember(owner = "client!be", name = "Cb", descriptor = "I")
 	public int overColor = 0;
@@ -362,7 +362,7 @@ public final class Component {
 	public boolean hasAlpha = false;
 
 	@OriginalMember(owner = "client!be", name = "F", descriptor = "I")
-	public int anInt451 = 0;
+	public int modelViewportWidth = 0;
 
 	@OriginalMember(owner = "client!be", name = "wb", descriptor = "I")
 	public int alpha = 0;
@@ -383,13 +383,13 @@ public final class Component {
 	public int outlineThickness = 0;
 
 	@OriginalMember(owner = "client!be", name = "oc", descriptor = "I")
-	public int anInt498 = -1;
+	public int modelFrameCycle = -1;
 
 	@OriginalMember(owner = "client!be", name = "Rb", descriptor = "I")
 	public int updatedVarcstrsReaderIndex = 0;
 
 	@OriginalMember(owner = "client!be", name = "ic", descriptor = "I")
-	public int anInt495 = 0;
+	public int modelOriginX = 0;
 
 	@OriginalMember(owner = "client!be", name = "Sc", descriptor = "I")
 	public int invMarginY = 0;
@@ -407,7 +407,7 @@ public final class Component {
 	public byte yMode = 0;
 
 	@OriginalMember(owner = "client!be", name = "qc", descriptor = "I")
-	public int anInt500 = 0;
+	public int seqCycle = 0;
 
 	@OriginalMember(owner = "client!be", name = "uc", descriptor = "I")
 	public int font = -1;
@@ -419,7 +419,7 @@ public final class Component {
 	public int updatedInventoriesReaderIndex = 0;
 
 	@OriginalMember(owner = "client!be", name = "Vc", descriptor = "S")
-	public short aShort11 = 0;
+	public short modelViewAngle = 0;
 
 	@OriginalMember(owner = "client!be", name = "ed", descriptor = "I")
 	public int angle2d = 0;
@@ -464,7 +464,7 @@ public final class Component {
 	private int activeModelType = 1;
 
 	@OriginalMember(owner = "client!be", name = "pd", descriptor = "I")
-	public int anInt526 = 0;
+	public int modelViewportHeight = 0;
 
 	@OriginalMember(owner = "client!be", name = "ld", descriptor = "I")
 	public int modelYAngle = 0;
@@ -485,7 +485,7 @@ public final class Component {
 	public boolean objDrawText = true;
 
 	@OriginalMember(owner = "client!be", name = "Kc", descriptor = "I")
-	public int anInt510 = 0;
+	public int seqFrame = 0;
 
 	@OriginalMember(owner = "client!be", name = "mb", descriptor = "I")
 	public int updatedVarpsReaderIndex = 0;
@@ -946,7 +946,7 @@ public final class Component {
 			} else {
 				@Pc(227) int local227 = this.modelId >>> 16;
 				@Pc(232) int local232 = this.modelId & 0xFFFF;
-				@Pc(235) int local235 = this.anInt498;
+				@Pc(235) int local235 = this.modelFrameCycle;
 				@Pc(246) Model local246 = arg5.getPartialHeadModel(arg0, local235, local227, arg3, arg1, arg2, local232);
 				if (local246 == null) {
 					loadFailed = true;
@@ -1063,8 +1063,8 @@ public final class Component {
 			if (this.modelId == 65535) {
 				this.modelId = -1;
 			}
-			this.anInt495 = buffer.g2b();
-			this.anInt481 = buffer.g2b();
+			this.modelOriginX = buffer.g2b();
+			this.modelOriginY = buffer.g2b();
 			this.modelXAngle = buffer.g2();
 			this.modelYAngle = buffer.g2();
 			this.modelYOffset = buffer.g2();
@@ -1074,14 +1074,14 @@ public final class Component {
 				this.modelSeqId = -1;
 			}
 			this.modelOrtho = buffer.g1() == 1;
-			this.aShort11 = (short) buffer.g2();
-			this.aShort10 = (short) buffer.g2();
+			this.modelViewAngle = (short) buffer.g2();
+			this.modelNearClip = (short) buffer.g2();
 			this.modelTransparent = buffer.g1() == 1;
 			if (this.dynamicWidthValue != 0) {
-				this.anInt451 = buffer.g2();
+				this.modelViewportWidth = buffer.g2();
 			}
 			if (this.dynamicHeightValue != 0) {
-				this.anInt526 = buffer.g2();
+				this.modelViewportHeight = buffer.g2();
 			}
 		}
 		if (this.type == 4) {
@@ -1110,20 +1110,20 @@ public final class Component {
 		@Pc(471) int local471 = buffer.g1();
 		@Pc(497) int local497;
 		if (local471 != 0) {
-			this.anIntArray46 = new int[10];
-			this.aByteArray8 = new byte[10];
-			this.aByteArray7 = new byte[10];
+			this.keyRepeatDelays = new int[10];
+			this.keyCodes = new byte[10];
+			this.keyModifiers = new byte[10];
 			while (local471 != 0) {
 				local497 = (local471 >> 4) - 1;
 				local471 = buffer.g1() | local471 << 8;
 				local471 &= 0xFFF;
 				if (local471 == 4095) {
-					this.anIntArray46[local497] = -1;
+					this.keyRepeatDelays[local497] = -1;
 				} else {
-					this.anIntArray46[local497] = local471;
+					this.keyRepeatDelays[local497] = local471;
 				}
-				this.aByteArray8[local497] = buffer.g1b();
-				this.aByteArray7[local497] = buffer.g1b();
+				this.keyCodes[local497] = buffer.g1b();
+				this.keyModifiers[local497] = buffer.g1b();
 				local471 = buffer.g1();
 			}
 		}
@@ -1157,16 +1157,16 @@ public final class Component {
 		this.optionCircumfix = buffer.gjstr();
 		if (ServerActiveProperties.getTargetMask(local175) != 0) {
 			local567 = buffer.g2();
-			this.anInt499 = buffer.g2();
+			this.targetCursor = buffer.g2();
 			if (local567 == 65535) {
 				local567 = -1;
 			}
-			if (this.anInt499 == 65535) {
-				this.anInt499 = -1;
+			if (this.targetCursor == 65535) {
+				this.targetCursor = -1;
 			}
-			this.anInt484 = buffer.g2();
-			if (this.anInt484 == 65535) {
-				this.anInt484 = -1;
+			this.defaultTargetCursor = buffer.g2();
+			if (this.defaultTargetCursor == 65535) {
+				this.defaultTargetCursor = -1;
 			}
 		}
 		this.properties = new ServerActiveProperties(local175, local567);
