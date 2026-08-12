@@ -804,7 +804,7 @@ public final class LocType {
 			}
 			local330.uploadBuffers(this.interactable == 0 && !this.dynamic, true, true, this.interactable == 0, true, false);
 			tempLocEntity.model = local330;
-			local330.aBoolean259 = local298;
+			local330.mergeable = local298;
 			tempLocEntity.sprite = local265;
 			return tempLocEntity;
 		}

@@ -1206,7 +1206,7 @@ public class LoginManager {
 			client.audioLoop();
 			for (@Pc(36) int local36 = 0; local36 < 13; local36++) {
 				for (@Pc(43) int local43 = 0; local43 < 13; local43++) {
-					@Pc(56) int local56 = Protocol.anIntArrayArrayArray18[local29][local36][local43];
+					@Pc(56) int local56 = Protocol.buildAreaChunks[local29][local36][local43];
 					if (local56 != -1) {
 						@Pc(67) int local67 = local56 >> 24 & 0x3;
 						if (!arg0 || local67 == 0) {
@@ -1372,7 +1372,7 @@ public class LoginManager {
 			client.audioLoop();
 			for (@Pc(32) int local32 = 0; local32 < 13; local32++) {
 				for (@Pc(39) int local39 = 0; local39 < 13; local39++) {
-					@Pc(52) int local52 = Protocol.anIntArrayArrayArray18[local21][local32][local39];
+					@Pc(52) int local52 = Protocol.buildAreaChunks[local21][local32][local39];
 					@Pc(54) boolean local54 = false;
 					if (local52 != -1) {
 						@Pc(65) int local65 = local52 >> 24 & 0x3;

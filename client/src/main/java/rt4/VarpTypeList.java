@@ -10,12 +10,12 @@ public class VarpTypeList {
 	@OriginalMember(owner = "client!gg", name = "ab", descriptor = "Lclient!ve;")
 	public static Js5 archive;
 	@OriginalMember(owner = "client!nb", name = "p", descriptor = "I")
-	public static int anInt4043;
+	public static int count;
 
 	@OriginalMember(owner = "client!sj", name = "a", descriptor = "(Lclient!ve;B)V")
 	public static void init(@OriginalArg(0) Js5 arg0) {
 		archive = arg0;
-		anInt4043 = archive.getGroupCapacity(16);
+		count = archive.getGroupCapacity(16);
 	}
 
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "(II)Lclient!eh;")

@@ -11,19 +11,19 @@ import java.util.Random;
 public final class TextureOp38 extends TextureOp {
 
 	@OriginalMember(owner = "client!vc", name = "P", descriptor = "I")
-	private int anInt5709 = 0;
+	private int baseAngle = 0;
 
 	@OriginalMember(owner = "client!vc", name = "U", descriptor = "I")
-	private int anInt5712 = 2000;
+	private int lineCount = 2000;
 
 	@OriginalMember(owner = "client!vc", name = "Z", descriptor = "I")
-	private int anInt5715 = 16;
+	private int lineLength = 16;
 
 	@OriginalMember(owner = "client!vc", name = "Y", descriptor = "I")
-	private int anInt5714 = 4096;
+	private int angleSpread = 4096;
 
 	@OriginalMember(owner = "client!vc", name = "cb", descriptor = "I")
-	private int anInt5716 = 0;
+	private int seed = 0;
 
 	@OriginalMember(owner = "client!vc", name = "<init>", descriptor = "()V")
 	public TextureOp38() {
@@ -40,15 +40,15 @@ public final class TextureOp38 extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt5716 = arg1.g1();
+			this.seed = arg1.g1();
 		} else if (arg0 == 1) {
-			this.anInt5712 = arg1.g2();
+			this.lineCount = arg1.g2();
 		} else if (arg0 == 2) {
-			this.anInt5715 = arg1.g1();
+			this.lineLength = arg1.g1();
 		} else if (arg0 == 3) {
-			this.anInt5709 = arg1.g2();
+			this.baseAngle = arg1.g2();
 		} else if (arg0 == 4) {
-			this.anInt5714 = arg1.g2();
+			this.angleSpread = arg1.g2();
 		}
 	}
 
@@ -57,16 +57,16 @@ public final class TextureOp38 extends TextureOp {
 	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
 		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(28) int local28 = this.anInt5714 >> 1;
+			@Pc(28) int local28 = this.angleSpread >> 1;
 			@Pc(33) int[][] local33 = this.monochromeImageCache.getAll();
-			@Pc(40) Random local40 = new Random(this.anInt5716);
-			for (@Pc(42) int local42 = 0; local42 < this.anInt5712; local42++) {
-				@Pc(64) int local64 = this.anInt5714 > 0 ? this.anInt5709 + RandomUtils.nextInt(this.anInt5714, local40) - local28 : this.anInt5709;
+			@Pc(40) Random local40 = new Random(this.seed);
+			for (@Pc(42) int local42 = 0; local42 < this.lineCount; local42++) {
+				@Pc(64) int local64 = this.angleSpread > 0 ? this.baseAngle + RandomUtils.nextInt(this.angleSpread, local40) - local28 : this.baseAngle;
 				@Pc(69) int local69 = RandomUtils.nextInt(Texture.width, local40);
 				@Pc(75) int local75 = local64 >> 4 & 0xFF;
 				@Pc(80) int local80 = RandomUtils.nextInt(Texture.height, local40);
-				@Pc(92) int local92 = local69 + (this.anInt5715 * TextureOp.COSINE[local75] >> 12);
-				@Pc(103) int local103 = local80 + (TextureOp.SINE[local75] * this.anInt5715 >> 12);
+				@Pc(92) int local92 = local69 + (this.lineLength * TextureOp.COSINE[local75] >> 12);
+				@Pc(103) int local103 = local80 + (TextureOp.SINE[local75] * this.lineLength >> 12);
 				@Pc(107) int local107 = local92 - local69;
 				@Pc(112) int local112 = local103 - local80;
 				if (local107 != 0 || local112 != 0) {

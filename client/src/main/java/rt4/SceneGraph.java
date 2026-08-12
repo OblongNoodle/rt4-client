@@ -144,9 +144,9 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!ja", name = "q", descriptor = "I")
 	public static int currentChunkX;
 	@OriginalMember(owner = "client!gm", name = "R", descriptor = "I")
-	public static int anInt2293 = (int) (Math.random() * 17.0D) - 8;
+	public static int lightnessJitter = (int) (Math.random() * 17.0D) - 8;
 	@OriginalMember(owner = "client!ok", name = "c", descriptor = "I")
-	public static int anInt4272 = (int) (Math.random() * 33.0D) - 16;
+	public static int hueJitter = (int) (Math.random() * 33.0D) - 16;
 	@OriginalMember(owner = "client!rj", name = "R", descriptor = "I")
 	public static int cameraY;
 	@OriginalMember(owner = "client!pi", name = "U", descriptor = "I")
@@ -796,19 +796,19 @@ public class SceneGraph {
 					}
 				}
 			}
-			anInt4272 += (int) (Math.random() * 5.0D) - 2;
-			if (anInt4272 < -16) {
-				anInt4272 = -16;
+			hueJitter += (int) (Math.random() * 5.0D) - 2;
+			if (hueJitter < -16) {
+				hueJitter = -16;
 			}
-			if (anInt4272 > 16) {
-				anInt4272 = 16;
+			if (hueJitter > 16) {
+				hueJitter = 16;
 			}
-			anInt2293 += (int) (Math.random() * 5.0D) - 2;
-			if (anInt2293 < -8) {
-				anInt2293 = -8;
+			lightnessJitter += (int) (Math.random() * 5.0D) - 2;
+			if (lightnessJitter < -8) {
+				lightnessJitter = -8;
 			}
-			if (anInt2293 > 8) {
-				anInt2293 = 8;
+			if (lightnessJitter > 8) {
+				lightnessJitter = 8;
 			}
 		}
 		@Pc(128) byte levels;
@@ -817,10 +817,10 @@ public class SceneGraph {
 		} else {
 			levels = 4;
 		}
-		level = anInt2293 >> 2 << 10;
+		level = lightnessJitter >> 2 << 10;
 		@Pc(142) int[][] local142 = new int[104][104];
 		@Pc(146) int[][] local146 = new int[104][104];
-		x = anInt4272 >> 1;
+		x = hueJitter >> 1;
 		@Pc(152) int local152;
 		@Pc(168) int local168;
 		@Pc(173) int local173;

@@ -201,11 +201,11 @@ public class ClientProt {
 		if (client.gameState != 30 && client.gameState != 25) {
 			return;
 		}
-		Protocol.anInt3251++;
-		if (Protocol.anInt3251 < 50 && !arg0) {
+		Protocol.ticksSinceWrite++;
+		if (Protocol.ticksSinceWrite < 50 && !arg0) {
 			return;
 		}
-		Protocol.anInt3251 = 0;
+		Protocol.ticksSinceWrite = 0;
 		if (!LoginManager.pingFailed && Protocol.socket != null) {
 			Protocol.outboundBuffer.p1isaac(ClientProt.NO_TIMEOUT);
 			try {

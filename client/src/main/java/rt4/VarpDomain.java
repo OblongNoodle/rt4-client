@@ -53,7 +53,7 @@ public class VarpDomain {
 
 	@OriginalMember(owner = "client!aj", name = "i", descriptor = "(I)V")
 	public static void reset() {
-		for (@Pc(3) int local3 = 0; local3 < VarpTypeList.anInt4043; local3++) {
+		for (@Pc(3) int local3 = 0; local3 < VarpTypeList.count; local3++) {
 			@Pc(19) VarpType local19 = VarpTypeList.get(local3);
 			if (local19 != null && local19.clientCode == 0) {
 				varp[local3] = 0;

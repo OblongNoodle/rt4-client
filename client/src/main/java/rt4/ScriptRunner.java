@@ -246,7 +246,7 @@ public final class ScriptRunner {
 		@Pc(171) int local171;
 		for (local127 = 0; local127 < 5; local127++) {
 			if (Camera.customCameraActive[local127]) {
-				local171 = (int) ((double) -Camera.cameraJitter[local127] + (double) (Camera.cameraJitter[local127] * 2 + 1) * Math.random() + Math.sin((double) Protocol.anIntArray76[local127] * ((double) Camera.cameraFrequency[local127] / 100.0D)) * (double) Camera.cameraAmplitude[local127]);
+				local171 = (int) ((double) -Camera.cameraJitter[local127] + (double) (Camera.cameraJitter[local127] * 2 + 1) * Math.random() + Math.sin((double) Protocol.cameraShakePhase[local127] * ((double) Camera.cameraFrequency[local127] / 100.0D)) * (double) Camera.cameraAmplitude[local127]);
 				if (local127 == 3) {
 					Camera.cameraYaw = local171 + Camera.cameraYaw & 0x7FF;
 				}

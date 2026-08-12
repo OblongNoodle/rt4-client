@@ -32,7 +32,7 @@ public class Protocol {
 	@OriginalMember(owner = "client!km", name = "Sc", descriptor = "Lclient!na;")
 	public static final JagString TRADE = JagString.parse(":trade:");
 	@OriginalMember(owner = "client!pb", name = "x", descriptor = "[[[I")
-	public static final int[][][] anIntArrayArrayArray18 = new int[4][13][13];
+	public static final int[][][] buildAreaChunks = new int[4][13][13];
 	@OriginalMember(owner = "client!fc", name = "f", descriptor = "Lclient!na;")
 	public static final JagString IMG0 = JagString.parse("<img=0>");
 	@OriginalMember(owner = "client!en", name = "h", descriptor = "Lclient!na;")
@@ -40,31 +40,31 @@ public class Protocol {
 	@OriginalMember(owner = "client!ef", name = "f", descriptor = "Lclient!na;")
 	public static final JagString DUELSTAKE = JagString.parse(":duelstake:");
 	@OriginalMember(owner = "client!wd", name = "e", descriptor = "Lclient!na;")
-	public static final JagString aClass100_989 = JagString.parse("cookieprefix");
+	public static final JagString COOKIE_PREFIX_KEY = JagString.parse("cookieprefix");
 	@OriginalMember(owner = "client!u", name = "g", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1029 = JagString.parse("cookiehost");
+	public static final JagString COOKIE_HOST_KEY = JagString.parse("cookiehost");
 	@OriginalMember(owner = "client!lc", name = "m", descriptor = "Lclient!na;")
-	public static final JagString aClass100_667 = JagString.parse("settings=");
+	public static final JagString COOKIE_SETTINGS_PREFIX = JagString.parse("settings=");
 	@OriginalMember(owner = "client!wh", name = "n", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1095 = JagString.parse("; version=1; path=)4; domain=");
+	public static final JagString COOKIE_PATH_DOMAIN = JagString.parse("; version=1; path=)4; domain=");
 	@OriginalMember(owner = "client!tm", name = "d", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1018 = JagString.parse("; Expires=Thu)1 01)2Jan)21970 00:00:00 GMT; Max)2Age=0");
+	public static final JagString COOKIE_EXPIRE_IMMEDIATELY = JagString.parse("; Expires=Thu)1 01)2Jan)21970 00:00:00 GMT; Max)2Age=0");
 	@OriginalMember(owner = "client!vg", name = "h", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1082 = JagString.parse("; Expires=");
+	public static final JagString COOKIE_EXPIRES_PREFIX = JagString.parse("; Expires=");
 	@OriginalMember(owner = "client!s", name = "g", descriptor = "Lclient!na;")
-	public static final JagString aClass100_821 = JagString.parse("document)3cookie=(R");
+	public static final JagString COOKIE_SET_JS = JagString.parse("document)3cookie=(R");
 	@OriginalMember(owner = "client!sc", name = "f", descriptor = "Lclient!na;")
-	public static final JagString aClass100_946 = JagString.parse("(R");
+	public static final JagString COOKIE_SUFFIX = JagString.parse("(R");
 	@OriginalMember(owner = "client!fb", name = "i", descriptor = "Lclient!na;")
-	public static final JagString aClass100_431 = JagString.parse("; Max)2Age=");
+	public static final JagString COOKIE_MAX_AGE_PREFIX = JagString.parse("; Max)2Age=");
 	@OriginalMember(owner = "client!ch", name = "z", descriptor = "[I")
-	public static final int[] anIntArray76 = new int[5];
+	public static final int[] cameraShakePhase = new int[5];
 	@OriginalMember(owner = "client!pg", name = "db", descriptor = "Lclient!na;")
 	public static final JagString ASSISTREQ = JagString.parse(":assistreq:");
 	@OriginalMember(owner = "client!rj", name = "ab", descriptor = "Lclient!na;")
-	public static final JagString aClass100_916 = JagString.parse(":clanreq:");
+	public static final JagString CLAN_REQUEST_SUFFIX = JagString.parse(":clanreq:");
 	@OriginalMember(owner = "client!na", name = "cb", descriptor = "Lclient!na;")
-	public static final JagString aClass100_770 = JagString.parse(":allyreq:");
+	public static final JagString ALLY_REQUEST_SUFFIX = JagString.parse(":allyreq:");
 	@OriginalMember(owner = "client!dh", name = "i", descriptor = "Lclient!na;")
 	public static final JagString IMG1 = JagString.parse("<img=1>");
 	@OriginalMember(owner = "client!jk", name = "B", descriptor = "Lclient!ma;")
@@ -92,11 +92,11 @@ public class Protocol {
 	@OriginalMember(owner = "client!sj", name = "t", descriptor = "I")
 	public static int opcode2 = 0;
 	@OriginalMember(owner = "client!bj", name = "r", descriptor = "I")
-	public static int anInt659 = 2;
+	public static int cameraYOffsetDelta = 2;
 	@OriginalMember(owner = "client!dg", name = "h", descriptor = "Lclient!be;")
 	public static Component tooltipComponent;
 	@OriginalMember(owner = "client!ld", name = "i", descriptor = "I")
-	public static int anInt3486 = 0;
+	public static int cameraJitterTimer = 0;
 	@OriginalMember(owner = "client!kf", name = "l", descriptor = "I")
 	public static int tooltipTimer = 0;
 	@OriginalMember(owner = "client!pm", name = "ab", descriptor = "Z")
@@ -114,13 +114,13 @@ public class Protocol {
 	@OriginalMember(owner = "client!fe", name = "R", descriptor = "Z")
 	public static boolean prevFocus = true;
 	@OriginalMember(owner = "client!rm", name = "c", descriptor = "I")
-	public static int anInt4941 = 1;
+	public static int yawDriftDelta = 1;
 	@OriginalMember(owner = "client!cj", name = "n", descriptor = "Lsignlink!im;")
 	public static PrivilegedRequest openUrlRequest;
 	@OriginalMember(owner = "client!na", name = "W", descriptor = "Z")
 	public static boolean newTab;
 	@OriginalMember(owner = "client!kd", name = "ob", descriptor = "I")
-	public static int anInt3251 = 0;
+	public static int ticksSinceWrite = 0;
 
 	@OriginalMember(owner = "client!g", name = "b", descriptor = "(B)V")
 	public static void readZonePacket() {
@@ -478,9 +478,9 @@ public class Protocol {
 				for (local391 = 0; local391 < 13; local391++) {
 					local138 = inboundBuffer.gBits(1);
 					if (local138 == 1) {
-						anIntArrayArrayArray18[local60][local64][local391] = inboundBuffer.gBits(26);
+						buildAreaChunks[local60][local64][local391] = inboundBuffer.gBits(26);
 					} else {
-						anIntArrayArrayArray18[local60][local64][local391] = -1;
+						buildAreaChunks[local60][local64][local391] = -1;
 					}
 				}
 			}
@@ -509,7 +509,7 @@ public class Protocol {
 		for (local391 = 0; local391 < 4; local391++) {
 			for (local138 = 0; local138 < 13; local138++) {
 				for (local151 = 0; local151 < 13; local151++) {
-					local169 = anIntArrayArrayArray18[local391][local138][local151];
+					local169 = buildAreaChunks[local391][local138][local151];
 					if (local169 != -1) {
 						@Pc(555) int local555 = local169 >> 14 & 0x3FF;
 						@Pc(561) int local561 = local169 >> 3 & 0x7FF;
@@ -1046,7 +1046,7 @@ public class Protocol {
 				if (!ignored && Player.inTutorialIsland == 0) {
 					Chat.add(name, 15, JagString.EMPTY);
 				}
-			} else if (message.endsWith(aClass100_916)) {
+			} else if (message.endsWith(CLAN_REQUEST_SUFFIX)) {
 				JagString name = message.substring(message.indexOf(JagString.COLON), 0);
 				long name37 = name.encode37();
 				boolean ignored = false;
@@ -1059,7 +1059,7 @@ public class Protocol {
 				if (!ignored && Player.inTutorialIsland == 0) {
 					Chat.add(name, 16, JagString.EMPTY);
 				}
-			} else if (message.endsWith(aClass100_770)) {
+			} else if (message.endsWith(ALLY_REQUEST_SUFFIX)) {
 				JagString name = message.substring(message.indexOf(JagString.COLON), 0);
 				long name37 = name.encode37();
 				boolean ignored = false;
@@ -1746,7 +1746,7 @@ public class Protocol {
 			Camera.cameraJitter[cameraId] = jitter;
 			Camera.cameraAmplitude[cameraId] = amplitude;
 			Camera.cameraFrequency[cameraId] = frequency;
-			anIntArray76[cameraId] = shake4;
+			cameraShakePhase[cameraId] = shake4;
 			opcode = -1;
 			return true;
 		} else if (opcode == ServerProt.IF_SETCOLOUR) {
@@ -2888,7 +2888,7 @@ public class Protocol {
 												Camera.updateLoginScreenCamera();
 											}
 											for (y = 0; y < 5; y++) {
-												@Pc(2001) int local2001 = anIntArray76[y]++;
+												@Pc(2001) int local2001 = cameraShakePhase[y]++;
 											}
 											y = Mouse.getIdleLoops();
 											x = Keyboard.getIdleLoops();
@@ -2905,17 +2905,17 @@ public class Protocol {
 												openUrlRequest = null;
 												newTab = false;
 											}
-											anInt3251++;
+											ticksSinceWrite++;
 											MiniMap.jitterTimer++;
-											anInt3486++;
-											if (anInt3486 > 500) {
-												anInt3486 = 0;
+											cameraJitterTimer++;
+											if (cameraJitterTimer > 500) {
+												cameraJitterTimer = 0;
 												modelId = (int) (Math.random() * 8.0D);
 												if ((modelId & 0x4) == 4) {
-													Camera.yawDrift += anInt4941;
+													Camera.yawDrift += yawDriftDelta;
 												}
 												if ((modelId & 0x2) == 2) {
-													Camera.cameraOffsetY += anInt659;
+													Camera.cameraOffsetY += cameraYOffsetDelta;
 												}
 												if ((modelId & 0x1) == 1) {
 													Camera.cameraOffsetX += Camera.offsetXDelta;
@@ -2941,19 +2941,19 @@ public class Protocol {
 												MiniMap.zoomJitterStep = 1;
 											}
 											if (Camera.cameraOffsetY < -55) {
-												anInt659 = 2;
+												cameraYOffsetDelta = 2;
 											}
 											if (Camera.cameraOffsetY > 55) {
-												anInt659 = -2;
+												cameraYOffsetDelta = -2;
 											}
 											if (Camera.yawDrift < -40) {
-												anInt4941 = 1;
+												yawDriftDelta = 1;
 											}
 											if (Camera.cameraOffsetX > 50) {
 												Camera.offsetXDelta = -2;
 											}
 											if (Camera.yawDrift > 40) {
-												anInt4941 = -1;
+												yawDriftDelta = -1;
 											}
 											if (MiniMap.zoomOffset > 10) {
 												MiniMap.zoomJitterStep = -1;
@@ -2961,7 +2961,7 @@ public class Protocol {
 											if (MiniMap.compassAngleOffset > 60) {
 												MiniMap.angleJitterStep = -2;
 											}
-											if (anInt3251 > 50) {
+											if (ticksSinceWrite > 50) {
 												outboundBuffer.p1isaac(93);
 											}
 											if (verifyIdChanged) {
@@ -2971,7 +2971,7 @@ public class Protocol {
 											try {
 												if (socket != null && outboundBuffer.offset > 0) {
 													socket.write(outboundBuffer.data, outboundBuffer.offset);
-													anInt3251 = 0;
+													ticksSinceWrite = 0;
 													outboundBuffer.offset = 0;
 												}
 											} catch (@Pc(2266) IOException local2266) {
@@ -3415,15 +3415,15 @@ public class Protocol {
 			return;
 		}
 		try {
-			@Pc(17) JagString local17 = aClass100_989.fromParameters(GameShell.signLink.applet);
-			@Pc(23) JagString local23 = aClass100_1029.fromParameters(GameShell.signLink.applet);
-			@Pc(48) JagString local48 = JagString.concatenate(new JagString[]{local17, aClass100_667, arg0, aClass100_1095, local23});
+			@Pc(17) JagString local17 = COOKIE_PREFIX_KEY.fromParameters(GameShell.signLink.applet);
+			@Pc(23) JagString local23 = COOKIE_HOST_KEY.fromParameters(GameShell.signLink.applet);
+			@Pc(48) JagString local48 = JagString.concatenate(new JagString[]{local17, COOKIE_SETTINGS_PREFIX, arg0, COOKIE_PATH_DOMAIN, local23});
 			if (arg0.length() == 0) {
-				local48 = JagString.concatenate(new JagString[]{local48, aClass100_1018});
+				local48 = JagString.concatenate(new JagString[]{local48, COOKIE_EXPIRE_IMMEDIATELY});
 			} else {
-				local48 = JagString.concatenate(new JagString[]{local48, aClass100_1082, DateUtil.getDateString(MonotonicClock.currentTimeMillis() + 94608000000L), aClass100_431, JagString.parseLong(94608000L)});
+				local48 = JagString.concatenate(new JagString[]{local48, COOKIE_EXPIRES_PREFIX, DateUtil.getDateString(MonotonicClock.currentTimeMillis() + 94608000000L), COOKIE_MAX_AGE_PREFIX, JagString.parseLong(94608000L)});
 			}
-			JagString.concatenate(new JagString[]{aClass100_821, local48, aClass100_946}).evalInBrowser(GameShell.signLink.applet);
+			JagString.concatenate(new JagString[]{COOKIE_SET_JS, local48, COOKIE_SUFFIX}).evalInBrowser(GameShell.signLink.applet);
 		} catch (@Pc(124) Throwable local124) {
 		}
 	}

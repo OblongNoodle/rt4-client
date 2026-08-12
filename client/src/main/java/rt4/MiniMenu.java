@@ -1207,7 +1207,7 @@ public class MiniMenu {
 		}
 		@Pc(112) long local112 = -1L;
 		for (local15 = 0; local15 < pickResultCount; local15++) {
-			@Pc(121) long local121 = Model.aLongArray11[local15];
+			@Pc(121) long local121 = Model.pickResults[local15];
 			x = (int) local121 & 0x7F;
 			@Pc(133) int local133 = (int) local121 >> 29 & 0x3;
 			@Pc(140) int local140 = (int) (local121 >>> 32) & Integer.MAX_VALUE;

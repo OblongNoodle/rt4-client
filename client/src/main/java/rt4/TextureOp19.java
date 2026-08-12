@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOp19 extends TextureOp {
 
 	@OriginalMember(owner = "client!ke", name = "V", descriptor = "I")
-	private int anInt3292 = 32768;
+	private int amplitude = 32768;
 
 	@OriginalMember(owner = "client!ke", name = "<init>", descriptor = "()V")
 	public TextureOp19() {
@@ -28,7 +28,7 @@ public final class TextureOp19 extends TextureOp {
 			@Pc(46) int[] local46 = local17[0];
 			for (@Pc(48) int local48 = 0; local48 < Texture.width; local48++) {
 				@Pc(61) int local61 = local28[local48] * 255 >> 12 & 0xFF;
-				@Pc(70) int local70 = local34[local48] * this.anInt3292 >> 12;
+				@Pc(70) int local70 = local34[local48] * this.amplitude >> 12;
 				@Pc(78) int local78 = local70 * TextureOp.COSINE[local61] >> 12;
 				@Pc(86) int local86 = TextureOp.SINE[local61] * local70 >> 12;
 				@Pc(94) int local94 = (local78 >> 12) + local48 & Texture.widthMask;
@@ -50,7 +50,7 @@ public final class TextureOp19 extends TextureOp {
 			@Pc(29) int[] local29 = this.getChildMonochromeOutput(1, arg0);
 			@Pc(35) int[] local35 = this.getChildMonochromeOutput(2, arg0);
 			for (@Pc(37) int local37 = 0; local37 < Texture.width; local37++) {
-				@Pc(49) int local49 = this.anInt3292 * local35[local37] >> 12;
+				@Pc(49) int local49 = this.amplitude * local35[local37] >> 12;
 				@Pc(57) int local57 = local29[local37] >> 4 & 0xFF;
 				@Pc(65) int local65 = TextureOp.COSINE[local57] * local49 >> 12;
 				@Pc(73) int local73 = TextureOp.SINE[local57] * local49 >> 12;
@@ -67,7 +67,7 @@ public final class TextureOp19 extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt3292 = arg1.g2() << 4;
+			this.amplitude = arg1.g2() << 4;
 		} else if (arg0 == 1) {
 			this.monochrome = arg1.g1() == 1;
 		}

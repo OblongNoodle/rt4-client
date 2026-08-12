@@ -77,21 +77,21 @@ public class WorldMap {
 	@OriginalMember(owner = "client!qh", name = "a", descriptor = "Lclient!se;")
 	public static MapElementList labels;
 	@OriginalMember(owner = "client!ck", name = "J", descriptor = "[[[B")
-	public static byte[][][] aByteArrayArrayArray3;
+	public static byte[][][] overlayIds;
 	@OriginalMember(owner = "client!fi", name = "m", descriptor = "[[[B")
-	public static byte[][][] aByteArrayArrayArray7;
+	public static byte[][][] wallData;
 	@OriginalMember(owner = "client!hb", name = "v", descriptor = "[[[B")
-	public static byte[][][] aByteArrayArrayArray8;
+	public static byte[][][] overlayShapes;
 	@OriginalMember(owner = "client!si", name = "R", descriptor = "[[[B")
-	public static byte[][][] aByteArrayArrayArray12;
+	public static byte[][][] secondaryOverlayIds;
 	@OriginalMember(owner = "client!jl", name = "I", descriptor = "[[[B")
-	public static byte[][][] aByteArrayArrayArray10;
+	public static byte[][][] secondaryOverlayShapes;
 	@OriginalMember(owner = "client!eh", name = "g", descriptor = "[[[I")
 	public static int[][][] scenery;
 	@OriginalMember(owner = "client!gj", name = "i", descriptor = "[[[I")
 	public static int[][][] underlayColors;
 	@OriginalMember(owner = "client!uc", name = "d", descriptor = "[[[I")
-	public static int[][][] anIntArrayArrayArray17;
+	public static int[][][] blendedUnderlayColors;
 	@OriginalMember(owner = "client!bn", name = "N", descriptor = "Lclient!be;")
 	public static Component component;
 	@OriginalMember(owner = "client!mc", name = "Q", descriptor = "Lclient!na;")
@@ -168,15 +168,15 @@ public class WorldMap {
 			overlayColors = new int[FloTypeList.capacity + 1];
 			@Pc(235) int length = WorldMap.length >> 6;
 			@Pc(239) int width = WorldMap.width >> 6;
-			aByteArrayArrayArray8 = new byte[width][length][];
-			@Pc(249) int local249 = SceneGraph.anInt2293 >> 2 << 10;
-			aByteArrayArrayArray7 = new byte[width][length][];
+			overlayShapes = new byte[width][length][];
+			@Pc(249) int local249 = SceneGraph.lightnessJitter >> 2 << 10;
+			wallData = new byte[width][length][];
 			underlayColors = new int[width][length][];
-			aByteArrayArrayArray3 = new byte[width][length][];
-			anIntArrayArrayArray17 = new int[width][length][];
-			aByteArrayArrayArray12 = new byte[width][length][];
-			@Pc(273) int local273 = SceneGraph.anInt4272 >> 1;
-			aByteArrayArrayArray10 = new byte[width][length][];
+			overlayIds = new byte[width][length][];
+			blendedUnderlayColors = new int[width][length][];
+			secondaryOverlayIds = new byte[width][length][];
+			@Pc(273) int local273 = SceneGraph.hueJitter >> 1;
+			secondaryOverlayShapes = new byte[width][length][];
 			scenery = new int[width][length][];
 			loadOverlayColors(local273, local249);
 			loadPercentage = 20;
@@ -351,7 +351,7 @@ public class WorldMap {
 				}
 			}
 			if (local102 >= 0) {
-				@Pc(355) int[][] local355 = anIntArrayArrayArray17[local102 >> 6];
+				@Pc(355) int[][] local355 = blendedUnderlayColors[local102 >> 6];
 				local114 = 0;
 				local225 = 0;
 				@Pc(361) int local361 = 0;
@@ -429,15 +429,15 @@ public class WorldMap {
 							if (!local24 || local97 >= local22 * 8 && local97 < local22 * 8 + 8 && local104 >= local26 * 8 && local104 < local26 * 8 + 8) {
 								local147 = arg0.g1b();
 								if (local147 != 0) {
-									if (aByteArrayArrayArray3[local91][local95] == null) {
-										aByteArrayArrayArray3[local91][local95] = new byte[4096];
+									if (overlayIds[local91][local95] == null) {
+										overlayIds[local91][local95] = new byte[4096];
 									}
-									aByteArrayArrayArray3[local91][local95][local97 + (63 - local104 << 6)] = local147;
+									overlayIds[local91][local95][local97 + (63 - local104 << 6)] = local147;
 									@Pc(186) byte local186 = arg0.g1b();
-									if (aByteArrayArrayArray8[local91][local95] == null) {
-										aByteArrayArrayArray8[local91][local95] = new byte[4096];
+									if (overlayShapes[local91][local95] == null) {
+										overlayShapes[local91][local95] = new byte[4096];
 									}
-									aByteArrayArrayArray8[local91][local95][local97 + (63 - local104 << 6)] = local186;
+									overlayShapes[local91][local95][local97 + (63 - local104 << 6)] = local186;
 								}
 							}
 						}
@@ -491,15 +491,15 @@ public class WorldMap {
 							if (!local25 || local23 * 8 <= local102 && local23 * 8 + 8 > local102 && local107 >= local27 * 8 && local27 * 8 + 8 > local107) {
 								local146 = arg0.g1b();
 								if (local146 != 0) {
-									if (aByteArrayArrayArray12[local96][local100] == null) {
-										aByteArrayArrayArray12[local96][local100] = new byte[4096];
+									if (secondaryOverlayIds[local96][local100] == null) {
+										secondaryOverlayIds[local96][local100] = new byte[4096];
 									}
-									aByteArrayArrayArray12[local96][local100][(63 - local107 << 6) + local102] = local146;
+									secondaryOverlayIds[local96][local100][(63 - local107 << 6) + local102] = local146;
 									@Pc(182) byte local182 = arg0.g1b();
-									if (aByteArrayArrayArray10[local96][local100] == null) {
-										aByteArrayArrayArray10[local96][local100] = new byte[4096];
+									if (secondaryOverlayShapes[local96][local100] == null) {
+										secondaryOverlayShapes[local96][local100] = new byte[4096];
 									}
-									aByteArrayArrayArray10[local96][local100][local102 + (63 - local107 << 6)] = local182;
+									secondaryOverlayShapes[local96][local100][local102 + (63 - local107 << 6)] = local182;
 								}
 							}
 						}
@@ -556,10 +556,10 @@ public class WorldMap {
 									@Pc(214) int id;
 									if ((local202 & 0x1) == 1) {
 										id = arg0.g1();
-										if (aByteArrayArrayArray7[local84][local95] == null) {
-											aByteArrayArrayArray7[local84][local95] = new byte[4096];
+										if (wallData[local84][local95] == null) {
+											wallData[local84][local95] = new byte[4096];
 										}
-										aByteArrayArrayArray7[local84][local95][local150 + (63 - local155 << 6)] = (byte) id;
+										wallData[local84][local95][local150 + (63 - local155 << 6)] = (byte) id;
 									}
 									if ((local202 & 0x2) == 2) {
 										id = arg0.g3();
@@ -652,15 +652,15 @@ public class WorldMap {
 			local62 = local57 - local47;
 			if (local62 > 0) {
 				local71 = local32 + arg5 >> 6;
-				if (local71 >= 0 && anIntArrayArrayArray17.length - 1 >= local71) {
+				if (local71 >= 0 && blendedUnderlayColors.length - 1 >= local71) {
 					local47 += arg4;
-					local185 = anIntArrayArrayArray17[local71];
-					@Pc(189) byte[][] local189 = aByteArrayArrayArray3[local71];
-					@Pc(193) byte[][] local193 = aByteArrayArrayArray8[local71];
-					@Pc(197) byte[][] local197 = aByteArrayArrayArray7[local71];
-					@Pc(201) byte[][] local201 = aByteArrayArrayArray10[local71];
+					local185 = blendedUnderlayColors[local71];
+					@Pc(189) byte[][] local189 = overlayIds[local71];
+					@Pc(193) byte[][] local193 = overlayShapes[local71];
+					@Pc(197) byte[][] local197 = wallData[local71];
+					@Pc(201) byte[][] local201 = secondaryOverlayShapes[local71];
 					local57 += arg4;
-					@Pc(209) byte[][] local209 = aByteArrayArrayArray12[local71];
+					@Pc(209) byte[][] local209 = secondaryOverlayIds[local71];
 					for (local211 = 0; local211 < local14; local211++) {
 						mapScene = arg6 * local211 >> 16;
 						mapSceneId = (local211 + 1) * arg6 >> 16;
@@ -867,21 +867,21 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IZ)V")
 	public static void clear(@OriginalArg(1) boolean arg0) {
-		aByteArrayArrayArray8 = null;
+		overlayShapes = null;
 		underlayColors = null;
 		component = null;
-		aByteArrayArrayArray3 = null;
+		overlayIds = null;
 		overlayColors = null;
-		aByteArrayArrayArray10 = null;
+		secondaryOverlayShapes = null;
 		if (arg0 && currentMap != null) {
 			previousMapName = currentMap.group;
 		} else {
 			previousMapName = null;
 		}
-		aByteArrayArrayArray7 = null;
-		aByteArrayArrayArray12 = null;
+		wallData = null;
+		secondaryOverlayIds = null;
 		scenery = null;
-		anIntArrayArrayArray17 = null;
+		blendedUnderlayColors = null;
 		loadPercentage = 0;
 		currentMap = null;
 		mapElements.clear();

@@ -199,7 +199,7 @@ public final class DisplayMode {
 				 * for its turn. This along with the while loop waits long enough to cause a de-sync in the start process which causes
 				 * lag and delay when switching to HD Mode and when launching the client in HD Mode.
 				 * GLProfile.initSingleton() is automatically run starting with jogl 2.0 and later. So no need to execute it.
-				 * After it returns status code 1, it also sets an important variable aBoolean73(Start_Renderer) to true.
+				 * After it returns status code 1, it also sets an important variable start_GLRenderer to true.
 				 * This triggers the needed GLRenderer.init() function which we can control to be true manually as intended.
 				 **/
 

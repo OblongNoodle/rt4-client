@@ -184,7 +184,7 @@ public final class GlModel extends Model {
 	private short aShort29;
 
 	@OriginalMember(owner = "client!td", name = "u", descriptor = "Z")
-	public boolean aBoolean259 = false;
+	public boolean mergeable = false;
 
 	@OriginalMember(owner = "client!td", name = "I", descriptor = "I")
 	public int vertexCount = 0;
@@ -1050,7 +1050,7 @@ public final class GlModel extends Model {
 				if (anInt3582 >= local187 && anInt3582 <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
 					if (this.pickable) {
 						if (miniMenuPick) {
-							Model.aLongArray11[MiniMenu.pickResultCount++] = arg8;
+							Model.pickResults[MiniMenu.pickResultCount++] = arg8;
 						}
 						if (roofVisibilityLocPick) {
 							API.ReportRoofVisibilityLoc(arg8, arg9);
@@ -1079,7 +1079,7 @@ public final class GlModel extends Model {
 										@Pc(708) short local708 = this.aShortArray83[local362];
 										if (this.pointWithinTriangle(anInt3582, RawModel.pickScreenY, anIntArray467[local698], anIntArray467[local703], anIntArray467[local708], anIntArray468[local698], anIntArray468[local703], anIntArray468[local708])) {
 											if (miniMenuPick) {
-												Model.aLongArray11[MiniMenu.pickResultCount++] = arg8;
+												Model.pickResults[MiniMenu.pickResultCount++] = arg8;
 											}
 											if (roofVisibilityLocPick) {
 												API.ReportRoofVisibilityLoc(arg8, arg9);
@@ -1201,7 +1201,7 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "()Z")
 	@Override
 	public final boolean canMerge() {
-		return this.aBoolean259 && this.vertexX != null && this.aShortArray76 != null;
+		return this.mergeable && this.vertexX != null && this.aShortArray76 != null;
 	}
 
 	@OriginalMember(owner = "client!td", name = "k", descriptor = "()I")
@@ -2782,7 +2782,7 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(III)Lclient!th;")
 	@Override
 	public final Entity createModel() {
-		this.aBoolean259 = false;
+		this.mergeable = false;
 		if (this.recoloring != null) {
 			this.aShortArray76 = this.recoloring.recolorSrc;
 			this.aShortArray79 = this.recoloring.recolorDst;

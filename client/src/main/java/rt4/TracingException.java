@@ -12,10 +12,10 @@ import java.net.URL;
 public final class TracingException extends RuntimeException {
 
 	@OriginalMember(owner = "client!ld", name = "e", descriptor = "Ljava/lang/String;")
-	public String aString3;
+	public String message;
 
 	@OriginalMember(owner = "client!ld", name = "f", descriptor = "Ljava/lang/Throwable;")
-	public Throwable aThrowable1;
+	public Throwable cause;
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(Ljava/lang/String;Ljava/lang/Throwable;B)V")
 	public static void report(@OriginalArg(0) String arg0, @OriginalArg(1) Throwable arg1) {
@@ -61,8 +61,8 @@ public final class TracingException extends RuntimeException {
 		@Pc(24) String local24;
 		if (arg0 instanceof TracingException) {
 			@Pc(11) TracingException local11 = (TracingException) arg0;
-			arg0 = local11.aThrowable1;
-			local24 = local11.aString3 + " | ";
+			arg0 = local11.cause;
+			local24 = local11.message + " | ";
 		} else {
 			local24 = "";
 		}
