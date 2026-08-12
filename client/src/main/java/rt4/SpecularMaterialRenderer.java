@@ -12,38 +12,38 @@ import java.nio.ByteBuffer;
 public final class SpecularMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!vm", name = "a", descriptor = "I")
-	private int anInt5777 = -1;
+	private int displayListBase = -1;
 
 	@OriginalMember(owner = "client!vm", name = "c", descriptor = "[I")
-	private int[] anIntArray519 = null;
+	private int[] cubeMapTextureIds = null;
 
 	@OriginalMember(owner = "client!vm", name = "b", descriptor = "Z")
-	private boolean aBoolean301 = false;
+	private boolean limitedTextureUnits = false;
 
 	@OriginalMember(owner = "client!vm", name = "<init>", descriptor = "()V")
 	public SpecularMaterialRenderer() {
 		if (GlRenderer.arbTextureCubeMapSupported && GlRenderer.maxTextureUnits >= 2) {
 			this.createCubeMapTextures();
 			@Pc(19) GL2 gl = GlRenderer.gl;
-			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.anIntArray519[0]);
+			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[0]);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP_TO_EDGE);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
-			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.anIntArray519[1]);
+			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[1]);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP_TO_EDGE);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
-			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.anIntArray519[2]);
+			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[2]);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP_TO_EDGE);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
 			gl.glTexParameteri(GL2.GL_TEXTURE_CUBE_MAP, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
-			this.aBoolean301 = GlRenderer.maxTextureUnits < 3;
+			this.limitedTextureUnits = GlRenderer.maxTextureUnits < 3;
 		}
 		this.initDisplayLists();
 	}
@@ -51,9 +51,9 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!vm", name = "d", descriptor = "()V")
 	private void initDisplayLists() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		this.anInt5777 = gl.glGenLists(2);
-		gl.glNewList(this.anInt5777, GL2.GL_COMPILE);
-		if (this.anIntArray519 == null) {
+		this.displayListBase = gl.glGenLists(2);
+		gl.glNewList(this.displayListBase, GL2.GL_COMPILE);
+		if (this.cubeMapTextureIds == null) {
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_ALPHA, GL2.GL_PRIMARY_COLOR);
 		} else {
 			gl.glActiveTexture(GL2.GL_TEXTURE1);
@@ -68,7 +68,7 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 			gl.glLoadIdentity();
 			gl.glRotatef(22.5F, 1.0F, 0.0F, 0.0F);
 			gl.glMatrixMode(GL2.GL_MODELVIEW);
-			if (this.aBoolean301) {
+			if (this.limitedTextureUnits) {
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_ADD);
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_ALPHA);
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_ALPHA, GL2.GL_REPLACE);
@@ -91,8 +91,8 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 			gl.glActiveTexture(GL2.GL_TEXTURE0);
 		}
 		gl.glEndList();
-		gl.glNewList(this.anInt5777 + 1, GL2.GL_COMPILE);
-		if (this.anIntArray519 == null) {
+		gl.glNewList(this.displayListBase + 1, GL2.GL_COMPILE);
+		if (this.cubeMapTextureIds == null) {
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_ALPHA, GL2.GL_TEXTURE);
 		} else {
 			gl.glActiveTexture(GL2.GL_TEXTURE1);
@@ -103,7 +103,7 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 			gl.glMatrixMode(GL2.GL_TEXTURE);
 			gl.glLoadIdentity();
 			gl.glMatrixMode(GL2.GL_MODELVIEW);
-			if (this.aBoolean301) {
+			if (this.limitedTextureUnits) {
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_MODULATE);
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_COLOR);
 				gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_ALPHA, GL2.GL_MODULATE);
@@ -130,7 +130,7 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 	public final void unbind() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		if (Preferences.highDetailLighting) {
-			gl.glCallList(this.anInt5777 + 1);
+			gl.glCallList(this.displayListBase + 1);
 		} else {
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_ALPHA, GL2.GL_TEXTURE);
 		}
@@ -148,7 +148,7 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureCombineAlphaMode(1);
 		if (Preferences.highDetailLighting) {
-			gl.glCallList(this.anInt5777);
+			gl.glCallList(this.displayListBase);
 		} else {
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_ALPHA, GL2.GL_PRIMARY_COLOR);
 		}
@@ -158,9 +158,9 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 	@Override
 	public final void setArgument(@OriginalArg(0) int arg0) {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		if (Preferences.highDetailLighting && this.anIntArray519 != null) {
+		if (Preferences.highDetailLighting && this.cubeMapTextureIds != null) {
 			gl.glActiveTexture(GL2.GL_TEXTURE1);
-			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.anIntArray519[arg0 - 1]);
+			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[arg0 - 1]);
 			gl.glActiveTexture(GL2.GL_TEXTURE0);
 		}
 	}
@@ -168,9 +168,9 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!vm", name = "e", descriptor = "()V")
 	private void createCubeMapTextures() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		if (this.anIntArray519 == null) {
-			this.anIntArray519 = new int[3];
-			gl.glGenTextures(3, this.anIntArray519, 0);
+		if (this.cubeMapTextureIds == null) {
+			this.cubeMapTextureIds = new int[3];
+			gl.glGenTextures(3, this.cubeMapTextureIds, 0);
 		}
 		@Pc(19) byte[] local19 = new byte[4096];
 		@Pc(22) byte[] local22 = new byte[4096];
@@ -225,11 +225,11 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 					local32++;
 				}
 			}
-			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.anIntArray519[0]);
+			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[0]);
 			gl.glTexImage2D(local27 + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local22));
-			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.anIntArray519[1]);
+			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[1]);
 			gl.glTexImage2D(local27 + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local25));
-			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.anIntArray519[2]);
+			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[2]);
 			gl.glTexImage2D(local27 + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local19));
 			GlCleaner.onCardTexture += 12288;
 		}

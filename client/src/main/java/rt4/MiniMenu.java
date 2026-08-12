@@ -617,7 +617,7 @@ public class MiniMenu {
 					if (API.IsRoofVisibilityActive()) {
 						API.SetDestinationRoofTarget(local15, local19);
 					}
-					Protocol.outboundBuffer.p1(InterfaceList.anInt5);
+					Protocol.outboundBuffer.p1(InterfaceList.clickOffsetX);
 					Protocol.outboundBuffer.p1(clickOffsetY);
 					Protocol.outboundBuffer.p2((int) Camera.yawTarget);
 					Protocol.outboundBuffer.p1(57);

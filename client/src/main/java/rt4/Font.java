@@ -61,9 +61,9 @@ public abstract class Font extends SecondaryNode {
 	@OriginalMember(owner = "client!rk", name = "Ab", descriptor = "[Lclient!na;")
 	public static final JagString[] lines = new JagString[100];
 	@OriginalMember(owner = "client!rk", name = "Z", descriptor = "Lclient!na;")
-	private static final JagString aClass100_706 = JagString.parse("<gt>");
+	private static final JagString ESCAPED_GT = JagString.parse("<gt>");
 	@OriginalMember(owner = "client!rk", name = "hb", descriptor = "Lclient!na;")
-	private static final JagString aClass100_711 = JagString.parse("<lt>");
+	private static final JagString ESCAPED_LT = JagString.parse("<lt>");
 	@OriginalMember(owner = "client!rk", name = "tb", descriptor = "I")
 	public static int strikethroughColor = -1;
 	@OriginalMember(owner = "client!rk", name = "ub", descriptor = "I")
@@ -158,9 +158,9 @@ public abstract class Font extends SecondaryNode {
 		for (local15 = 0; local15 < local3; local15++) {
 			@Pc(40) int local40 = arg0.charAt(local15);
 			if (local40 == 60) {
-				local30.appendString(aClass100_711);
+				local30.appendString(ESCAPED_LT);
 			} else if (local40 == 62) {
-				local30.appendString(aClass100_706);
+				local30.appendString(ESCAPED_GT);
 			} else {
 				local30.append(local40);
 			}

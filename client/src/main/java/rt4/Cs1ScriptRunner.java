@@ -330,15 +330,15 @@ public class Cs1ScriptRunner {
 							deferredDragComponents = components;
 							continue;
 						}
-						if (isDragging && InterfaceList.aBoolean174) {
+						if (isDragging && InterfaceList.dragParentFound) {
 							local164 = Mouse.lastMouseY;
 							local166 = Mouse.lastMouseX;
 							local164 -= dragStartMouseY;
-							if (local164 < InterfaceList.anInt5103) {
-								local164 = InterfaceList.anInt5103;
+							if (local164 < InterfaceList.dragParentY) {
+								local164 = InterfaceList.dragParentY;
 							}
-							if (local164 + component.height > dragParentComponent.height + InterfaceList.anInt5103) {
-								local164 = dragParentComponent.height + InterfaceList.anInt5103 - component.height;
+							if (local164 + component.height > dragParentComponent.height + InterfaceList.dragParentY) {
+								local164 = dragParentComponent.height + InterfaceList.dragParentY - component.height;
 							}
 							local114 = local164;
 							local166 -= dragStartMouseX;
@@ -386,7 +386,7 @@ public class Cs1ScriptRunner {
 						@Pc(545) int objId;
 						if (component.clientCode != 0) {
 							if (component.clientCode == 1337 || component.clientCode == 1403 && GlRenderer.enabled) {
-								InterfaceList.aClass13_26 = component;
+								InterfaceList.gameViewportComponent = component;
 								InterfaceList.viewportX = local114;
 								gameSceneTooltipX = local123;
 								ScriptRunner.renderGameScene(component.height, component.clientCode == 1403, local123, component.width, local114);
@@ -551,7 +551,7 @@ public class Cs1ScriptRunner {
 							}
 						}
 						if (component.type == 0) {
-							if (!component.if3 && InterfaceList.isHidden(component) && InterfaceList.aClass13_22 != component) {
+							if (!component.if3 && InterfaceList.isHidden(component) && InterfaceList.hoveredComponent != component) {
 								continue;
 							}
 							if (!component.if3) {
@@ -705,12 +705,12 @@ public class Cs1ScriptRunner {
 								} else if (component.type == 3) {
 									if (isTrue(component)) {
 										local270 = component.activeColor;
-										if (InterfaceList.aClass13_22 == component && component.activeOverColor != 0) {
+										if (InterfaceList.hoveredComponent == component && component.activeOverColor != 0) {
 											local270 = component.activeOverColor;
 										}
 									} else {
 										local270 = component.color;
-										if (component == InterfaceList.aClass13_22 && component.overColor != 0) {
+										if (component == InterfaceList.hoveredComponent && component.overColor != 0) {
 											local270 = component.overColor;
 										}
 									}
@@ -746,7 +746,7 @@ public class Cs1ScriptRunner {
 											@Pc(1934) JagString local1934 = component.text;
 											if (isTrue(component)) {
 												local276 = component.activeColor;
-												if (InterfaceList.aClass13_22 == component && component.activeOverColor != 0) {
+												if (InterfaceList.hoveredComponent == component && component.activeOverColor != 0) {
 													local276 = component.activeOverColor;
 												}
 												if (component.activeText.length() > 0) {
@@ -754,7 +754,7 @@ public class Cs1ScriptRunner {
 												}
 											} else {
 												local276 = component.color;
-												if (InterfaceList.aClass13_22 == component && component.overColor != 0) {
+												if (InterfaceList.hoveredComponent == component && component.overColor != 0) {
 													local276 = component.overColor;
 												}
 											}
@@ -1026,7 +1026,7 @@ public class Cs1ScriptRunner {
 												}
 												PluginRepository.ComponentDraw(i, component, local123 + component.invMarginX + 115, local114 + component.invMarginY + 12);
 											}
-											if (component.type == 8 && Protocol.aClass13_11 == component && Protocol.anInt5235 == TOOLTIP_DISPLAY_DELAY) {
+											if (component.type == 8 && Protocol.tooltipComponent == component && Protocol.tooltipTimer == TOOLTIP_DISPLAY_DELAY) {
 												local276 = 0;
 												local270 = 0;
 												@Pc(3297) JagString local3297 = component.text;
@@ -1348,7 +1348,7 @@ public class Cs1ScriptRunner {
 	public static void updateComponentDrag() {
 		InterfaceList.redraw(draggedComponent);
 		dragElapsedTicks++;
-		if (InterfaceList.aBoolean83 && InterfaceList.aBoolean174) {
+		if (InterfaceList.dragSourceFound && InterfaceList.dragParentFound) {
 			@Pc(30) int local30 = Mouse.lastMouseX;
 			local30 -= dragStartMouseX;
 			if (dragBoundsMinX > local30) {
@@ -1359,16 +1359,16 @@ public class Cs1ScriptRunner {
 				local30 = dragBoundsMinX + dragParentComponent.width - draggedComponent.width;
 			}
 			local41 -= dragStartMouseY;
-			if (local41 < InterfaceList.anInt5103) {
-				local41 = InterfaceList.anInt5103;
+			if (local41 < InterfaceList.dragParentY) {
+				local41 = InterfaceList.dragParentY;
 			}
-			if (InterfaceList.anInt5103 + dragParentComponent.height < local41 - -draggedComponent.height) {
-				local41 = InterfaceList.anInt5103 + dragParentComponent.height - draggedComponent.height;
+			if (InterfaceList.dragParentY + dragParentComponent.height < local41 - -draggedComponent.height) {
+				local41 = InterfaceList.dragParentY + dragParentComponent.height - draggedComponent.height;
 			}
-			@Pc(109) int local109 = local41 - InterfaceList.anInt660;
-			@Pc(114) int local114 = local30 - InterfaceList.anInt3075;
+			@Pc(109) int local109 = local41 - InterfaceList.dragSourceY;
+			@Pc(114) int local114 = local30 - InterfaceList.dragSourceX;
 			@Pc(122) int local122 = local30 + dragParentComponent.scrollX - dragBoundsMinX;
-			@Pc(130) int local130 = dragParentComponent.scrollY + local41 - InterfaceList.anInt5103;
+			@Pc(130) int local130 = dragParentComponent.scrollY + local41 - InterfaceList.dragParentY;
 			@Pc(133) int local133 = draggedComponent.dragDeadzone;
 			if (dragElapsedTicks > draggedComponent.dragDeadtime && (local133 < local114 || -local133 > local114 || local109 > local133 || local109 < -local133)) {
 				isDragging = true;
@@ -1387,17 +1387,17 @@ public class Cs1ScriptRunner {
 					if (draggedComponent.onDragRelease != null) {
 						local176 = new HookRequest();
 						local176.mouseY = local130;
-						local176.target = InterfaceList.aClass13_12;
+						local176.target = InterfaceList.dragTargetComponent;
 						local176.mouseX = local122;
 						local176.arguments = draggedComponent.onDragRelease;
 						local176.source = draggedComponent;
 						ScriptRunner.run(local176);
 					}
-					if (InterfaceList.aClass13_12 != null && InterfaceList.getDragRenderParent(draggedComponent) != null) {
+					if (InterfaceList.dragTargetComponent != null && InterfaceList.getDragRenderParent(draggedComponent) != null) {
 						Protocol.outboundBuffer.p1isaac(79);
 						Protocol.outboundBuffer.mp4(draggedComponent.id);
-						Protocol.outboundBuffer.ip2(InterfaceList.aClass13_12.createdComponentId);
-						Protocol.outboundBuffer.p4(InterfaceList.aClass13_12.id);
+						Protocol.outboundBuffer.ip2(InterfaceList.dragTargetComponent.createdComponentId);
+						Protocol.outboundBuffer.p4(InterfaceList.dragTargetComponent.id);
 						Protocol.outboundBuffer.ip2(draggedComponent.createdComponentId);
 					}
 				} else if ((VarpDomain.mouseButtons == 1 || MiniMenu.isComponentOptionAction(MiniMenu.size - 1)) && MiniMenu.size > 2) {

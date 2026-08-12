@@ -60,7 +60,7 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!je", name = "T", descriptor = "Lclient!sc;")
 	public static HashTable openInterfaces = new HashTable(8);
 	@OriginalMember(owner = "client!wl", name = "h", descriptor = "Lclient!be;")
-	public static Component aClass13_26 = null;
+	public static Component gameViewportComponent = null;
 	@OriginalMember(owner = "client!jd", name = "i", descriptor = "Lclient!be;")
 	public static Component clickedInventoryComponent;
 	@OriginalMember(owner = "client!nf", name = "h", descriptor = "Lclient!be;")
@@ -68,7 +68,7 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!qk", name = "f", descriptor = "I")
 	public static int clickedInventoryComponentY = 0;
 	@OriginalMember(owner = "client!ef", name = "r", descriptor = "Lclient!be;")
-	public static Component aClass13_12 = null;
+	public static Component dragTargetComponent = null;
 	@OriginalMember(owner = "client!bn", name = "O", descriptor = "I")
 	public static int anInt761;
 	@OriginalMember(owner = "client!bc", name = "X", descriptor = "I")
@@ -76,17 +76,17 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!si", name = "ab", descriptor = "I")
 	public static int anInt5138;
 	@OriginalMember(owner = "client!sh", name = "f", descriptor = "I")
-	public static int anInt5103 = -1;
+	public static int dragParentY = -1;
 	@OriginalMember(owner = "client!gd", name = "j", descriptor = "I")
 	public static int clickedInventoryComponentCycle = 0;
 	@OriginalMember(owner = "client!lj", name = "w", descriptor = "I")
 	public static int clickedInventoryComponentX = 0;
 	@OriginalMember(owner = "client!og", name = "e", descriptor = "Lclient!be;")
-	public static Component aClass13_22;
+	public static Component hoveredComponent;
 	@OriginalMember(owner = "client!ok", name = "b", descriptor = "I")
 	public static int anInt4271;
 	@OriginalMember(owner = "client!lg", name = "b", descriptor = "Z")
-	public static boolean aBoolean174 = false;
+	public static boolean dragParentFound = false;
 	@OriginalMember(owner = "client!ac", name = "n", descriptor = "I")
 	public static int mouseOverInventoryObjectIndex = 0;
 	@OriginalMember(owner = "client!jj", name = "j", descriptor = "Z")
@@ -100,21 +100,21 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!fk", name = "e", descriptor = "I")
 	public static int anInt1885;
 	@OriginalMember(owner = "client!bj", name = "s", descriptor = "I")
-	public static int anInt660 = -1;
+	public static int dragSourceY = -1;
 	@OriginalMember(owner = "client!kl", name = "s", descriptor = "I")
 	public static int anInt3337 = 0;
 	@OriginalMember(owner = "client!jk", name = "p", descriptor = "I")
-	public static int anInt3075 = -1;
+	public static int dragSourceX = -1;
 	@OriginalMember(owner = "client!df", name = "n", descriptor = "I")
 	public static int anInt1396 = 0;
 	@OriginalMember(owner = "client!di", name = "H", descriptor = "Z")
 	public static boolean aBoolean84 = false;
 	@OriginalMember(owner = "client!dh", name = "a", descriptor = "Z")
-	public static boolean aBoolean83 = false;
+	public static boolean dragSourceFound = false;
 	@OriginalMember(owner = "client!ja", name = "r", descriptor = "I")
 	public static int anInt2941 = -1;
 	@OriginalMember(owner = "client!a", name = "h", descriptor = "I")
-	public static int anInt5;
+	public static int clickOffsetX;
 	@OriginalMember(owner = "client!ve", name = "w", descriptor = "Z")
 	public static boolean useStyledMenu = false;
 
@@ -531,7 +531,7 @@ public class InterfaceList {
 			}
 		}
 		if (arg2.clientCode == 1337) {
-			aClass13_26 = arg2;
+			gameViewportComponent = arg2;
 		}
 		if (arg3 && arg2.onResize != null && (local4 != arg2.width || arg2.height != local7)) {
 			@Pc(305) HookRequest local305 = new HookRequest();
@@ -654,13 +654,13 @@ public class InterfaceList {
 					local67 = local78 < arg5 ? local78 : arg5;
 				}
 				if (component == Cs1ScriptRunner.draggedComponent) {
-					aBoolean83 = true;
-					anInt3075 = local50;
-					anInt660 = local55;
+					dragSourceFound = true;
+					dragSourceX = local50;
+					dragSourceY = local55;
 				}
 				if (!component.if3 || local61 < local65 && local63 < local67) {
 					if (component.type == 0) {
-						if (!component.if3 && isHidden(component) && aClass13_22 != component) {
+						if (!component.if3 && isHidden(component) && hoveredComponent != component) {
 							continue;
 						}
 						if (component.noClickThrough && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
@@ -711,12 +711,12 @@ public class InterfaceList {
 							Cs1ScriptRunner.startComponentDrag(Mouse.clickY - local55, Mouse.clickX - local50, component);
 						}
 						if (Cs1ScriptRunner.draggedComponent != null && Cs1ScriptRunner.draggedComponent != component && local207 && getServerActiveProperties(component).isDragTarget()) {
-							aClass13_12 = component;
+							dragTargetComponent = component;
 						}
 						if (component == Cs1ScriptRunner.dragParentComponent) {
-							aBoolean174 = true;
+							dragParentFound = true;
 							Cs1ScriptRunner.dragBoundsMinX = local50;
-							anInt5103 = local55;
+							dragParentY = local55;
 						}
 						if (component.hasEventHandlers || component.clientCode != 0) {
 							@Pc(399) HookRequest request;
@@ -736,13 +736,13 @@ public class InterfaceList {
 							@Pc(508) int skill;
 							if (component.clientCode != 0) {
 								if (component.clientCode == 1337) {
-									aClass13_26 = component;
+									gameViewportComponent = component;
 									redraw(component);
 									continue;
 								}
 								if (component.clientCode == 1338) {
 									if (local221) {
-										anInt5 = Mouse.clickX - local50;
+										clickOffsetX = Mouse.clickX - local50;
 										MiniMenu.clickOffsetY = Mouse.clickY - local55;
 									}
 									continue;
@@ -1043,13 +1043,13 @@ public class InterfaceList {
 					if (!component.if3 && Cs1ScriptRunner.draggedComponent == null && clickedInventoryComponent == null && !Cs1ScriptRunner.isMenuOpen) {
 						if ((component.hoverOverlayer >= 0 || component.overColor != 0) && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
 							if (component.hoverOverlayer >= 0) {
-								aClass13_22 = arg0[component.hoverOverlayer];
+								hoveredComponent = arg0[component.hoverOverlayer];
 							} else {
-								aClass13_22 = component;
+								hoveredComponent = component;
 							}
 						}
 						if (component.type == 8 && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
-							Protocol.aClass13_11 = component;
+							Protocol.tooltipComponent = component;
 						}
 						if (component.scrollMaxV > component.height) {
 							handleScrollbar(Mouse.lastMouseY, component.height, component, Mouse.lastMouseX, local50 + component.width, local55, component.scrollMaxV);
@@ -1240,7 +1240,7 @@ public class InterfaceList {
 			@Pc(15) Component local15 = arg1[local7];
 			if (local15 != null && local15.overlayer == arg0 && (!local15.if3 || !isHidden(local15))) {
 				if (local15.type == 0) {
-					if (!local15.if3 && isHidden(local15) && local15 != aClass13_22) {
+					if (!local15.if3 && isHidden(local15) && local15 != hoveredComponent) {
 						continue;
 					}
 					updateAnimationsRecursive(local15.id, arg1);

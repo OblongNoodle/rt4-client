@@ -94,11 +94,11 @@ public class Protocol {
 	@OriginalMember(owner = "client!bj", name = "r", descriptor = "I")
 	public static int anInt659 = 2;
 	@OriginalMember(owner = "client!dg", name = "h", descriptor = "Lclient!be;")
-	public static Component aClass13_11;
+	public static Component tooltipComponent;
 	@OriginalMember(owner = "client!ld", name = "i", descriptor = "I")
 	public static int anInt3486 = 0;
 	@OriginalMember(owner = "client!kf", name = "l", descriptor = "I")
-	public static int anInt5235 = 0;
+	public static int tooltipTimer = 0;
 	@OriginalMember(owner = "client!pm", name = "ab", descriptor = "Z")
 	public static boolean aBoolean228 = true;
 	@OriginalMember(owner = "client!vl", name = "k", descriptor = "I")
@@ -2764,14 +2764,14 @@ public class Protocol {
 				InterfaceList.clickedInventoryComponent = null;
 			}
 		}
-		InterfaceList.aBoolean174 = false;
-		InterfaceList.aClass13_12 = null;
-		InterfaceList.aBoolean83 = false;
+		InterfaceList.dragParentFound = false;
+		InterfaceList.dragTargetComponent = null;
+		InterfaceList.dragSourceFound = false;
 		InterfaceList.keyQueueSize = 0;
-		component = InterfaceList.aClass13_22;
-		InterfaceList.aClass13_22 = null;
-		@Pc(1508) Component local1508 = aClass13_11;
-		aClass13_11 = null;
+		component = InterfaceList.hoveredComponent;
+		InterfaceList.hoveredComponent = null;
+		@Pc(1508) Component local1508 = tooltipComponent;
+		tooltipComponent = null;
 		while (Keyboard.nextKey() && InterfaceList.keyQueueSize < 128) {
 			InterfaceList.keyCodes[InterfaceList.keyQueueSize] = Keyboard.keyCode;
 			InterfaceList.keyChars[InterfaceList.keyQueueSize] = Keyboard.keyChar;
@@ -2854,30 +2854,30 @@ public class Protocol {
 											}
 											MiniMenu.clickTileX = -1;
 											processDefaultAction();
-											if (InterfaceList.aClass13_22 != component) {
+											if (InterfaceList.hoveredComponent != component) {
 												if (component != null) {
 													InterfaceList.redraw(component);
 												}
-												if (InterfaceList.aClass13_22 != null) {
-													InterfaceList.redraw(InterfaceList.aClass13_22);
+												if (InterfaceList.hoveredComponent != null) {
+													InterfaceList.redraw(InterfaceList.hoveredComponent);
 												}
 											}
-											if (local1508 != aClass13_11 && Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY == anInt5235) {
+											if (local1508 != tooltipComponent && Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY == tooltipTimer) {
 												if (local1508 != null) {
 													InterfaceList.redraw(local1508);
 												}
-												if (aClass13_11 != null) {
-													InterfaceList.redraw(aClass13_11);
+												if (tooltipComponent != null) {
+													InterfaceList.redraw(tooltipComponent);
 												}
 											}
-											if (aClass13_11 == null) {
-												if (anInt5235 > 0) {
-													anInt5235--;
+											if (tooltipComponent == null) {
+												if (tooltipTimer > 0) {
+													tooltipTimer--;
 												}
-											} else if (anInt5235 < Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY) {
-												anInt5235++;
-												if (Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY == anInt5235) {
-													InterfaceList.redraw(aClass13_11);
+											} else if (tooltipTimer < Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY) {
+												tooltipTimer++;
+												if (Cs1ScriptRunner.TOOLTIP_DISPLAY_DELAY == tooltipTimer) {
+													InterfaceList.redraw(tooltipComponent);
 												}
 											}
 											if (Camera.cameraType == 1) {

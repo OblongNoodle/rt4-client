@@ -951,7 +951,7 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!u", name = "a", descriptor = "(Z)V")
 	public static void updateSceneSpotAnims() {
 		for (@Pc(9) SpotAnimNode local9 = (SpotAnimNode) SceneGraph.spotanims.head(); local9 != null; local9 = (SpotAnimNode) SceneGraph.spotanims.next()) {
-			@Pc(15) SpotAnim local15 = local9.aClass8_Sub2_1;
+			@Pc(15) SpotAnim local15 = local9.spotAnim;
 			if (local15.plane != Player.plane || local15.finished) {
 				local9.unlink();
 			} else if (local15.endLoop <= client.loop) {
@@ -5434,7 +5434,7 @@ public final class ScriptRunner {
 														continue;
 													}
 													if (opcode == 6203) {
-														calculateViewportBounds(InterfaceList.aClass13_26.width, 0, InterfaceList.aClass13_26.height, 0, false);
+														calculateViewportBounds(InterfaceList.gameViewportComponent.width, 0, InterfaceList.gameViewportComponent.height, 0, false);
 														intStack[isp++] = anInt4055;
 														intStack[isp++] = anInt5377;
 														continue;
