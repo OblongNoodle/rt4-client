@@ -42,32 +42,32 @@ public final class MonochromeImageCache {
 	private int[][][] pixels;
 
 	static {
-		@Pc(8) int local8 = 0;
-		for (@Pc(10) int local10 = 0; local10 < 256; local10++) {
-			for (@Pc(15) int local15 = 0; local15 <= local10; local15++) {
-				normalBrightnessLookup[local8++] = (byte) (255.0D / Math.sqrt((float) (local15 * local15 + local10 * local10 + 65535) / 65535.0F));
+		@Pc(8) int offset = 0;
+		for (@Pc(10) int i = 0; i < 256; i++) {
+			for (@Pc(15) int j = 0; j <= i; j++) {
+				normalBrightnessLookup[offset++] = (byte) (255.0D / Math.sqrt((float) (j * j + i * i + 65535) / 65535.0F));
 			}
 		}
 
-		for (@Pc(4) int local4 = 0; local4 < 4096; local4++) {
-			smoothstepLookup[local4] = smoothstep(local4);
+		for (@Pc(4) int i = 0; i < 4096; i++) {
+			smoothstepLookup[i] = smoothstep(i);
 		}
 	}
 
 	@OriginalMember(owner = "client!nd", name = "<init>", descriptor = "(III)V")
-	public MonochromeImageCache(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int width) {
-		this.height = arg1;
-		this.capacity = arg0;
+	public MonochromeImageCache(@OriginalArg(0) int capacity, @OriginalArg(1) int height, @OriginalArg(2) int width) {
+		this.height = height;
+		this.capacity = capacity;
 		this.entries = new MonochromeImageCacheEntry[this.height];
 		this.pixels = new int[this.capacity][3][width];
 	}
 
 	@OriginalMember(owner = "client!we", name = "a", descriptor = "(BI)I")
-	public static int smoothstep(@OriginalArg(1) int arg0) {
-		@Pc(13) int local13 = arg0 * (arg0 * arg0 >> 12) >> 12;
-		@Pc(26) int local26 = arg0 * 6 - 61440;
-		@Pc(34) int local34 = (arg0 * local26 >> 12) + 40960;
-		return local13 * local34 >> 12;
+	public static int smoothstep(@OriginalArg(1) int x) {
+		@Pc(13) int cubed = x * (x * x >> 12) >> 12;
+		@Pc(26) int linear = x * 6 - 61440;
+		@Pc(34) int factor = (x * linear >> 12) + 40960;
+		return cubed * factor >> 12;
 	}
 
 	@OriginalMember(owner = "client!nd", name = "a", descriptor = "(B)[[[I")
@@ -75,19 +75,19 @@ public final class MonochromeImageCache {
 		if (this.height != this.capacity) {
 			throw new RuntimeException("Can only retrieve a full image cache");
 		}
-		for (@Pc(27) int local27 = 0; local27 < this.capacity; local27++) {
-			this.entries[local27] = entry;
+		for (@Pc(27) int i = 0; i < this.capacity; i++) {
+			this.entries[i] = entry;
 		}
 		return this.pixels;
 	}
 
 	@OriginalMember(owner = "client!nd", name = "b", descriptor = "(B)V")
 	public final void clear() {
-		for (@Pc(7) int local7 = 0; local7 < this.capacity; local7++) {
-			this.pixels[local7][0] = null;
-			this.pixels[local7][1] = null;
-			this.pixels[local7][2] = null;
-			this.pixels[local7] = null;
+		for (@Pc(7) int i = 0; i < this.capacity; i++) {
+			this.pixels[i][0] = null;
+			this.pixels[i][1] = null;
+			this.pixels[i][2] = null;
+			this.pixels[i] = null;
 		}
 		this.entries = null;
 		this.pixels = null;
@@ -96,34 +96,34 @@ public final class MonochromeImageCache {
 	}
 
 	@OriginalMember(owner = "client!nd", name = "a", descriptor = "(BI)[[I")
-	public final int[][] get(@OriginalArg(1) int arg0) {
+	public final int[][] get(@OriginalArg(1) int row) {
 		if (this.capacity == this.height) {
-			this.invalid = this.entries[arg0] == null;
-			this.entries[arg0] = entry;
-			return this.pixels[arg0];
+			this.invalid = this.entries[row] == null;
+			this.entries[row] = entry;
+			return this.pixels[row];
 		} else if (this.capacity == 1) {
-			this.invalid = this.singleRow != arg0;
-			this.singleRow = arg0;
+			this.invalid = this.singleRow != row;
+			this.singleRow = row;
 			return this.pixels[0];
 		} else {
-			@Pc(44) MonochromeImageCacheEntry local44 = this.entries[arg0];
-			if (local44 == null) {
+			@Pc(44) MonochromeImageCacheEntry cacheEntry = this.entries[row];
+			if (cacheEntry == null) {
 				this.invalid = true;
 				if (this.size < this.capacity) {
-					local44 = new MonochromeImageCacheEntry(arg0, this.size);
+					cacheEntry = new MonochromeImageCacheEntry(row, this.size);
 					this.size++;
 				} else {
-					@Pc(80) MonochromeImageCacheEntry local80 = (MonochromeImageCacheEntry) this.recentlyUsed.tail();
-					local44 = new MonochromeImageCacheEntry(arg0, local80.row);
-					this.entries[local80.index] = null;
-					local80.unlink();
+					@Pc(80) MonochromeImageCacheEntry evicted = (MonochromeImageCacheEntry) this.recentlyUsed.tail();
+					cacheEntry = new MonochromeImageCacheEntry(row, evicted.row);
+					this.entries[evicted.index] = null;
+					evicted.unlink();
 				}
-				this.entries[arg0] = local44;
+				this.entries[row] = cacheEntry;
 			} else {
 				this.invalid = false;
 			}
-			this.recentlyUsed.addHead(local44);
-			return this.pixels[local44.row];
+			this.recentlyUsed.addHead(cacheEntry);
+			return this.pixels[cacheEntry.row];
 		}
 	}
 }

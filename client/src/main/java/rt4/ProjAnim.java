@@ -93,19 +93,19 @@ public final class ProjAnim extends Entity {
 	private final SeqType seq;
 
 	@OriginalMember(owner = "client!ra", name = "<init>", descriptor = "(IIIIIIIIIII)V")
-	public ProjAnim(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10) {
-		this.lastCycle = arg6;
-		this.sourceX = arg2;
-		this.targetIndex = arg9;
-		this.spotanimId = arg0;
-		this.currentPlane = arg1;
-		this.elevationPitch = arg7;
-		this.sourceY = arg3;
+	public ProjAnim(@OriginalArg(0) int spotanimId, @OriginalArg(1) int plane, @OriginalArg(2) int sourceX, @OriginalArg(3) int sourceY, @OriginalArg(4) int sourceZ, @OriginalArg(5) int firstCycle, @OriginalArg(6) int lastCycle, @OriginalArg(7) int elevationPitch, @OriginalArg(8) int arcScale, @OriginalArg(9) int targetIndex, @OriginalArg(10) int baseZ) {
+		this.lastCycle = lastCycle;
+		this.sourceX = sourceX;
+		this.targetIndex = targetIndex;
+		this.spotanimId = spotanimId;
+		this.currentPlane = plane;
+		this.elevationPitch = elevationPitch;
+		this.sourceY = sourceY;
 		this.isMobile = false;
-		this.baseZ = arg10;
-		this.arcScale = arg8;
-		this.firstCycle = arg5;
-		this.sourceZ = arg4;
+		this.baseZ = baseZ;
+		this.arcScale = arcScale;
+		this.firstCycle = firstCycle;
+		this.sourceZ = sourceZ;
 		@Pc(58) int seqId = SpotAnimTypeList.get(this.spotanimId).seqId;
 		if (seqId == -1) {
 			this.seq = null;
@@ -116,7 +116,7 @@ public final class ProjAnim extends Entity {
 
 	@OriginalMember(owner = "client!ra", name = "a", descriptor = "(IIIII)V")
 	@Override
-	public final void updateModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void updateModel(@OriginalArg(0) int x, @OriginalArg(1) int z, @OriginalArg(2) int y, @OriginalArg(3) int yaw, @OriginalArg(4) int pitch) {
 	}
 
 	@OriginalMember(owner = "client!ra", name = "b", descriptor = "(I)Lclient!ak;")
@@ -132,22 +132,22 @@ public final class ProjAnim extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ra", name = "b", descriptor = "(BI)V")
-	public final void update(@OriginalArg(1) int arg0) {
-		this.x += this.velocityX * (double) arg0;
-		this.y += this.velocityY * (double) arg0;
+	public final void update(@OriginalArg(1) int delta) {
+		this.x += this.velocityX * (double) delta;
+		this.y += this.velocityY * (double) delta;
 		this.isMobile = true;
 		if (this.elevationPitch == -1) {
-			this.z += this.velocityZ * (double) arg0;
+			this.z += this.velocityZ * (double) delta;
 		} else {
-			this.z += (double) arg0 * this.accelerationZ * 0.5D * (double) arg0 + (double) arg0 * this.velocityZ;
-			this.velocityZ += this.accelerationZ * (double) arg0;
+			this.z += (double) delta * this.accelerationZ * 0.5D * (double) delta + (double) delta * this.velocityZ;
+			this.velocityZ += this.accelerationZ * (double) delta;
 		}
 		this.yaw = (int) (Math.atan2(this.velocityX, this.velocityY) * 325.949D) + 1024 & 0x7FF;
 		this.pitch = (int) (Math.atan2(this.velocityZ, this.velocity) * 325.949D) & 0x7FF;
 		if (this.seq == null) {
 			return;
 		}
-		this.frameCycle += arg0;
+		this.frameCycle += delta;
 		while (true) {
 			do {
 				do {
@@ -171,37 +171,37 @@ public final class ProjAnim extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ra", name = "b", descriptor = "(IIIII)V")
-	public final void setTarget(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		@Pc(17) double local17;
+	public final void setTarget(@OriginalArg(0) int targetY, @OriginalArg(2) int cycle, @OriginalArg(3) int targetZ, @OriginalArg(4) int targetX) {
+		@Pc(17) double remaining;
 		if (!this.isMobile) {
-			@Pc(10) double local10 = arg0 - this.sourceY;
-			local17 = arg3 - this.sourceX;
-			@Pc(26) double local26 = Math.sqrt(local17 * local17 + local10 * local10);
+			@Pc(10) double dy = targetY - this.sourceY;
+			remaining = targetX - this.sourceX;
+			@Pc(26) double dist = Math.sqrt(remaining * remaining + dy * dy);
 			this.z = this.sourceZ;
-			this.y = local10 * (double) this.arcScale / local26 + (double) this.sourceY;
-			this.x = (double) this.arcScale * local17 / local26 + (double) this.sourceX;
+			this.y = dy * (double) this.arcScale / dist + (double) this.sourceY;
+			this.x = (double) this.arcScale * remaining / dist + (double) this.sourceX;
 		}
-		local17 = this.lastCycle + 1 - arg1;
-		this.velocityY = ((double) arg0 - this.y) / local17;
-		this.velocityX = ((double) arg3 - this.x) / local17;
+		remaining = this.lastCycle + 1 - cycle;
+		this.velocityY = ((double) targetY - this.y) / remaining;
+		this.velocityX = ((double) targetX - this.x) / remaining;
 		this.velocity = Math.sqrt(this.velocityY * this.velocityY + this.velocityX * this.velocityX);
 		if (this.elevationPitch == -1) {
-			this.velocityZ = ((double) arg2 - this.z) / local17;
+			this.velocityZ = ((double) targetZ - this.z) / remaining;
 		} else {
 			if (!this.isMobile) {
 				this.velocityZ = -this.velocity * Math.tan((double) this.elevationPitch * 0.02454369D);
 			}
-			this.accelerationZ = ((double) arg2 - this.z - this.velocityZ * local17) * 2.0D / (local17 * local17);
+			this.accelerationZ = ((double) targetZ - this.z - this.velocityZ * remaining) * 2.0D / (remaining * remaining);
 		}
 	}
 
 	@OriginalMember(owner = "client!ra", name = "a", descriptor = "(IIIIIIIIJILclient!ga;)V")
 	@Override
-	public final void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) long arg8, @OriginalArg(9) int arg9, @OriginalArg(10) ParticleSystem arg10) {
-		@Pc(3) Model local3 = this.getModel();
-		if (local3 != null) {
-			local3.render(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, this.particleSystem);
-			this.minY = local3.getMinY();
+	public final void render(@OriginalArg(0) int orientation, @OriginalArg(1) int sinPitch, @OriginalArg(2) int cosPitch, @OriginalArg(3) int sinYaw, @OriginalArg(4) int cosYaw, @OriginalArg(5) int x, @OriginalArg(6) int z, @OriginalArg(7) int y, @OriginalArg(8) long key, @OriginalArg(9) int bitset, @OriginalArg(10) ParticleSystem particles) {
+		@Pc(3) Model model = this.getModel();
+		if (model != null) {
+			model.render(orientation, sinPitch, cosPitch, sinYaw, cosYaw, x, z, y, key, bitset, this.particleSystem);
+			this.minY = model.getMinY();
 		}
 	}
 

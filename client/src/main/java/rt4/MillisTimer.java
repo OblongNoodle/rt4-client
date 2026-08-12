@@ -28,67 +28,67 @@ public final class MillisTimer extends Timer {
 
 	@OriginalMember(owner = "client!lj", name = "<init>", descriptor = "()V")
 	public MillisTimer() {
-		for (@Pc(22) int local22 = 0; local22 < 10; local22++) {
-			this.sampleTimes[local22] = this.currentTime;
+		for (@Pc(22) int i = 0; i < 10; i++) {
+			this.sampleTimes[i] = this.currentTime;
 		}
 	}
 
 	@OriginalMember(owner = "client!lj", name = "b", descriptor = "(I)V")
 	@Override
 	public final void reset() {
-		for (@Pc(7) int local7 = 0; local7 < 10; local7++) {
-			this.sampleTimes[local7] = 0L;
+		for (@Pc(7) int i = 0; i < 10; i++) {
+			this.sampleTimes[i] = 0L;
 		}
 	}
 
 	@OriginalMember(owner = "client!lj", name = "a", descriptor = "(III)I")
 	@Override
-	public final int sleep(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(17) int local17 = this.sleepTime;
-		@Pc(20) int local20 = this.tickRate;
+	public final int sleep(@OriginalArg(1) int minSleep, @OriginalArg(2) int maxSleep) {
+		@Pc(17) int prevSleepTime = this.sleepTime;
+		@Pc(20) int prevTickRate = this.tickRate;
 		this.tickRate = 300;
 		this.sleepTime = 1;
 		this.currentTime = MonotonicClock.currentTimeMillis();
 		if (this.sampleTimes[this.sampleIndex] == 0L) {
-			this.tickRate = local20;
-			this.sleepTime = local17;
+			this.tickRate = prevTickRate;
+			this.sleepTime = prevSleepTime;
 		} else if (this.sampleTimes[this.sampleIndex] < this.currentTime) {
-			this.tickRate = (int) ((long) (arg1 * 2560) / (this.currentTime - this.sampleTimes[this.sampleIndex]));
+			this.tickRate = (int) ((long) (maxSleep * 2560) / (this.currentTime - this.sampleTimes[this.sampleIndex]));
 		}
 		if (this.tickRate < 25) {
 			this.tickRate = 25;
 		}
 		if (this.tickRate > 256) {
 			this.tickRate = 256;
-			this.sleepTime = (int) ((long) arg1 - (this.currentTime - this.sampleTimes[this.sampleIndex]) / 10L);
+			this.sleepTime = (int) ((long) maxSleep - (this.currentTime - this.sampleTimes[this.sampleIndex]) / 10L);
 		}
-		if (arg1 < this.sleepTime) {
-			this.sleepTime = arg1;
+		if (maxSleep < this.sleepTime) {
+			this.sleepTime = maxSleep;
 		}
 		this.sampleTimes[this.sampleIndex] = this.currentTime;
 		this.sampleIndex = (this.sampleIndex + 1) % 10;
-		@Pc(139) int local139;
+		@Pc(139) int i;
 		if (this.sleepTime > 1) {
-			for (local139 = 0; local139 < 10; local139++) {
-				if (this.sampleTimes[local139] != 0L) {
-					this.sampleTimes[local139] += this.sleepTime;
+			for (i = 0; i < 10; i++) {
+				if (this.sampleTimes[i] != 0L) {
+					this.sampleTimes[i] += this.sleepTime;
 				}
 			}
 		}
-		if (arg0 > this.sleepTime) {
-			this.sleepTime = arg0;
+		if (minSleep > this.sleepTime) {
+			this.sleepTime = minSleep;
 		}
 		ThreadUtils.sleep(this.sleepTime);
-		local139 = 0;
+		i = 0;
 		while (this.tickAccumulator < 256) {
 			this.tickAccumulator += this.tickRate;
-			local139++;
+			i++;
 		}
 		this.tickAccumulator &= 0xFF;
-		return local139;
+		return i;
 	}
 
-	public int count(int arg0, int arg1) {
+	public int count(int minSleep, int maxSleep) {
 		return 1;
 	}
 }

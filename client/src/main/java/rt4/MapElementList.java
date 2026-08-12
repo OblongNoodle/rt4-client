@@ -27,8 +27,8 @@ public final class MapElementList {
 	public final short[] coordX;
 
 	@OriginalMember(owner = "client!se", name = "<init>", descriptor = "(I)V")
-	public MapElementList(@OriginalArg(0) int arg0) {
-		this.count = arg0;
+	public MapElementList(@OriginalArg(0) int count) {
+		this.count = count;
 		this.names = new JagString[this.count];
 		this.coordY = new short[this.count];
 		this.colors = new int[this.count];
@@ -37,41 +37,41 @@ public final class MapElementList {
 	}
 
 	@OriginalMember(owner = "client!la", name = "a", descriptor = "(ILclient!na;Lclient!ve;)Lclient!se;")
-	public static MapElementList create(@OriginalArg(1) JagString arg0, @OriginalArg(2) Js5 arg1) {
-		@Pc(10) int local10 = arg1.getGroupId(arg0);
-		if (local10 == -1) {
+	public static MapElementList create(@OriginalArg(1) JagString name, @OriginalArg(2) Js5 archive) {
+		@Pc(10) int groupId = archive.getGroupId(name);
+		if (groupId == -1) {
 			return new MapElementList(0);
 		}
-		@Pc(29) int[] local29 = arg1.getFileIds(local10);
-		@Pc(35) MapElementList local35 = new MapElementList(local29.length);
-		for (@Pc(37) int local37 = 0; local37 < local35.count; local37++) {
-			@Pc(56) Buffer local56 = new Buffer(arg1.fetchFile(local10, local29[local37]));
-			local35.names[local37] = local56.gjstr();
-			local35.flags[local37] = local56.g1b();
-			local35.coordX[local37] = (short) local56.g2();
-			local35.coordY[local37] = (short) local56.g2();
-			local35.colors[local37] = local56.g4();
+		@Pc(29) int[] fileIds = archive.getFileIds(groupId);
+		@Pc(35) MapElementList list = new MapElementList(fileIds.length);
+		for (@Pc(37) int i = 0; i < list.count; i++) {
+			@Pc(56) Buffer buf = new Buffer(archive.fetchFile(groupId, fileIds[i]));
+			list.names[i] = buf.gjstr();
+			list.flags[i] = buf.g1b();
+			list.coordX[i] = (short) buf.g2();
+			list.coordY[i] = (short) buf.g2();
+			list.colors[i] = buf.g4();
 		}
-		return local35;
+		return list;
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(IB)Z")
-	public final boolean isTextLabel(@OriginalArg(0) int arg0) {
-		return (this.flags[arg0] & 0x8) != 0;
+	public final boolean isTextLabel(@OriginalArg(0) int index) {
+		return (this.flags[index] & 0x8) != 0;
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(II)Z")
-	public final boolean isMinimapLabelVisible(@OriginalArg(0) int arg0) {
-		return (this.flags[arg0] & 0x4) != 0;
+	public final boolean isMinimapLabelVisible(@OriginalArg(0) int index) {
+		return (this.flags[index] & 0x4) != 0;
 	}
 
 	@OriginalMember(owner = "client!se", name = "b", descriptor = "(II)I")
-	public final int getLabelSize(@OriginalArg(0) int arg0) {
-		return this.flags[arg0] & 0x3;
+	public final int getLabelSize(@OriginalArg(0) int index) {
+		return this.flags[index] & 0x3;
 	}
 
 	@OriginalMember(owner = "client!se", name = "c", descriptor = "(II)Z")
-	public final boolean isVisible(@OriginalArg(0) int arg0) {
-		return (this.flags[arg0] & 0x10) == 0;
+	public final boolean isVisible(@OriginalArg(0) int index) {
+		return (this.flags[index] & 0x10) == 0;
 	}
 }

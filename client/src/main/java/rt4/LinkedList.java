@@ -23,93 +23,93 @@ public final class LinkedList {
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(I)V")
 	public final void clear() {
 		while (true) {
-			@Pc(5) Node local5 = this.sentinel.nextNode;
-			if (local5 == this.sentinel) {
+			@Pc(5) Node node = this.sentinel.nextNode;
+			if (node == this.sentinel) {
 				this.iteratorCursor = null;
 				return;
 			}
-			local5.unlink();
+			node.unlink();
 		}
 	}
 
 	@OriginalMember(owner = "client!ih", name = "b", descriptor = "(I)Lclient!ab;")
 	public final Node tail() {
-		@Pc(7) Node local7 = this.sentinel.previousNode;
-		if (this.sentinel == local7) {
+		@Pc(7) Node node = this.sentinel.previousNode;
+		if (this.sentinel == node) {
 			this.iteratorCursor = null;
 			return null;
 		} else {
-			this.iteratorCursor = local7.previousNode;
-			return local7;
+			this.iteratorCursor = node.previousNode;
+			return node;
 		}
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(ZLclient!ab;)V")
-	public final void addTail(@OriginalArg(1) Node arg0) {
-		if (arg0.previousNode != null) {
-			arg0.unlink();
+	public final void addTail(@OriginalArg(1) Node node) {
+		if (node.previousNode != null) {
+			node.unlink();
 		}
-		arg0.nextNode = this.sentinel;
-		arg0.previousNode = this.sentinel.previousNode;
-		arg0.previousNode.nextNode = arg0;
-		arg0.nextNode.previousNode = arg0;
+		node.nextNode = this.sentinel;
+		node.previousNode = this.sentinel.previousNode;
+		node.previousNode.nextNode = node;
+		node.nextNode.previousNode = node;
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(ILclient!ab;)V")
-	public final void addHead(@OriginalArg(1) Node arg0) {
-		if (arg0.previousNode != null) {
-			arg0.unlink();
+	public final void addHead(@OriginalArg(1) Node node) {
+		if (node.previousNode != null) {
+			node.unlink();
 		}
-		arg0.nextNode = this.sentinel.nextNode;
-		arg0.previousNode = this.sentinel;
-		arg0.previousNode.nextNode = arg0;
-		arg0.nextNode.previousNode = arg0;
+		node.nextNode = this.sentinel.nextNode;
+		node.previousNode = this.sentinel;
+		node.previousNode.nextNode = node;
+		node.nextNode.previousNode = node;
 	}
 
 	@OriginalMember(owner = "client!ih", name = "d", descriptor = "(I)Lclient!ab;")
 	public final Node prev() {
-		@Pc(13) Node local13 = this.iteratorCursor;
-		if (this.sentinel == local13) {
+		@Pc(13) Node node = this.iteratorCursor;
+		if (this.sentinel == node) {
 			this.iteratorCursor = null;
 			return null;
 		} else {
-			this.iteratorCursor = local13.previousNode;
-			return local13;
+			this.iteratorCursor = node.previousNode;
+			return node;
 		}
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(B)Lclient!ab;")
 	public final Node removeHead() {
-		@Pc(3) Node local3 = this.sentinel.nextNode;
-		if (this.sentinel == local3) {
+		@Pc(3) Node node = this.sentinel.nextNode;
+		if (this.sentinel == node) {
 			return null;
 		} else {
-			local3.unlink();
-			return local3;
+			node.unlink();
+			return node;
 		}
 	}
 
 	@OriginalMember(owner = "client!ih", name = "e", descriptor = "(I)Lclient!ab;")
 	public final Node next() {
-		@Pc(12) Node local12 = this.iteratorCursor;
-		if (local12 == this.sentinel) {
+		@Pc(12) Node node = this.iteratorCursor;
+		if (node == this.sentinel) {
 			this.iteratorCursor = null;
 			return null;
 		} else {
-			this.iteratorCursor = local12.nextNode;
-			return local12;
+			this.iteratorCursor = node.nextNode;
+			return node;
 		}
 	}
 
 	@OriginalMember(owner = "client!ih", name = "f", descriptor = "(I)Lclient!ab;")
 	public final Node head() {
-		@Pc(3) Node local3 = this.sentinel.nextNode;
-		if (this.sentinel == local3) {
+		@Pc(3) Node node = this.sentinel.nextNode;
+		if (this.sentinel == node) {
 			this.iteratorCursor = null;
 			return null;
 		} else {
-			this.iteratorCursor = local3.nextNode;
-			return local3;
+			this.iteratorCursor = node.nextNode;
+			return node;
 		}
 	}
 }

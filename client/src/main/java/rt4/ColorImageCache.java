@@ -35,10 +35,10 @@ public final class ColorImageCache {
 	private int[][] pixels;
 
 	@OriginalMember(owner = "client!pf", name = "<init>", descriptor = "(III)V")
-	public ColorImageCache(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int width) {
-		this.height = arg1;
+	public ColorImageCache(@OriginalArg(0) int capacity, @OriginalArg(1) int height, @OriginalArg(2) int width) {
+		this.height = height;
 		this.entries = new ColorImageCacheEntry[this.height];
-		this.capacity = arg0;
+		this.capacity = capacity;
 		this.pixels = new int[this.capacity][width];
 	}
 
@@ -64,24 +64,24 @@ public final class ColorImageCache {
 			this.singleRow = row;
 			return this.pixels[0];
 		} else {
-			@Pc(29) ColorImageCacheEntry local29 = this.entries[row];
-			if (local29 == null) {
+			@Pc(29) ColorImageCacheEntry entry = this.entries[row];
+			if (entry == null) {
 				this.invalid = true;
 				if (this.size < this.capacity) {
-					local29 = new ColorImageCacheEntry(row, this.size);
+					entry = new ColorImageCacheEntry(row, this.size);
 					this.size++;
 				} else {
-					@Pc(66) ColorImageCacheEntry local66 = (ColorImageCacheEntry) this.recentlyUsed.tail();
-					local29 = new ColorImageCacheEntry(row, local66.index);
-					this.entries[local66.row] = null;
-					local66.unlink();
+					@Pc(66) ColorImageCacheEntry evicted = (ColorImageCacheEntry) this.recentlyUsed.tail();
+					entry = new ColorImageCacheEntry(row, evicted.index);
+					this.entries[evicted.row] = null;
+					evicted.unlink();
 				}
-				this.entries[row] = local29;
+				this.entries[row] = entry;
 			} else {
 				this.invalid = false;
 			}
-			this.recentlyUsed.addHead(local29);
-			return this.pixels[local29.index];
+			this.recentlyUsed.addHead(entry);
+			return this.pixels[entry.index];
 		}
 	}
 
@@ -90,8 +90,8 @@ public final class ColorImageCache {
 		if (this.capacity != this.height) {
 			throw new RuntimeException("Can only retrieve a full image cache");
 		}
-		for (@Pc(24) int local24 = 0; local24 < this.capacity; local24++) {
-			this.entries[local24] = VALID;
+		for (@Pc(24) int i = 0; i < this.capacity; i++) {
+			this.entries[i] = VALID;
 		}
 		return this.pixels;
 	}

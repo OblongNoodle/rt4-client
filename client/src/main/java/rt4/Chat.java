@@ -31,30 +31,30 @@ public class Chat {
 	public static int messageCounter = 0;
 
 	@OriginalMember(owner = "client!md", name = "a", descriptor = "(IILclient!na;Lclient!na;BLclient!na;)V")
-	public static void add(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) JagString arg2, @OriginalArg(3) JagString arg3, @OriginalArg(5) JagString arg4) {
-		for (@Pc(14) int local14 = 99; local14 > 0; local14--) {
-			types[local14] = types[local14 - 1];
-			names[local14] = names[local14 - 1];
-			messages[local14] = messages[local14 - 1];
-			clans[local14] = clans[local14 - 1];
-			phraseIds[local14] = phraseIds[local14 - 1];
+	public static void add(@OriginalArg(0) int phraseId, @OriginalArg(1) int type, @OriginalArg(2) JagString message, @OriginalArg(3) JagString clan, @OriginalArg(5) JagString name) {
+		for (@Pc(14) int i = 99; i > 0; i--) {
+			types[i] = types[i - 1];
+			names[i] = names[i - 1];
+			messages[i] = messages[i - 1];
+			clans[i] = clans[i - 1];
+			phraseIds[i] = phraseIds[i - 1];
 		}
 		size++;
-		types[0] = arg1;
-		names[0] = arg4;
+		types[0] = type;
+		names[0] = name;
 		transmitAt = InterfaceList.transmitTimer;
-		phraseIds[0] = arg0;
-		messages[0] = arg2;
-		clans[0] = arg3;
+		phraseIds[0] = phraseId;
+		messages[0] = message;
+		clans[0] = clan;
 	}
 
 	@OriginalMember(owner = "client!i", name = "a", descriptor = "(Lclient!na;ILclient!na;I)V")
-	public static void add(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) JagString arg2) {
-		add(-1, arg1, arg2, null, arg0);
+	public static void add(@OriginalArg(0) JagString name, @OriginalArg(1) int type, @OriginalArg(2) JagString message) {
+		add(-1, type, message, null, name);
 	}
 
 	@OriginalMember(owner = "client!fm", name = "a", descriptor = "(ILclient!na;Lclient!na;Lclient!na;I)V")
-	public static void addClanChannelMessage(@OriginalArg(1) JagString arg0, @OriginalArg(2) JagString arg1, @OriginalArg(3) JagString arg2) {
-		add(-1, 9, arg0, arg2, arg1);
+	public static void addClanChannelMessage(@OriginalArg(1) JagString message, @OriginalArg(2) JagString name, @OriginalArg(3) JagString clan) {
+		add(-1, 9, message, clan, name);
 	}
 }

@@ -45,14 +45,14 @@ public final class Map extends SecondaryNode {
 	public final LinkedList chunks;
 
 	@OriginalMember(owner = "client!bn", name = "<init>", descriptor = "(Lclient!na;Lclient!na;IIIZI)V")
-	public Map(@OriginalArg(0) JagString arg0, @OriginalArg(1) JagString arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6) {
-		this.originY = arg3;
-		this.backgroundColor = arg4;
-		this.valid = arg5;
-		this.group = arg0;
-		this.name = arg1;
-		this.defaultZoom = arg6;
-		this.originX = arg2;
+	public Map(@OriginalArg(0) JagString group, @OriginalArg(1) JagString name, @OriginalArg(2) int originX, @OriginalArg(3) int originY, @OriginalArg(4) int backgroundColor, @OriginalArg(5) boolean valid, @OriginalArg(6) int defaultZoom) {
+		this.originY = originY;
+		this.backgroundColor = backgroundColor;
+		this.valid = valid;
+		this.group = group;
+		this.name = name;
+		this.defaultZoom = defaultZoom;
+		this.originX = originX;
 		if (this.defaultZoom == 255) {
 			this.defaultZoom = 0;
 		}
@@ -71,12 +71,12 @@ public final class Map extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!bn", name = "a", descriptor = "(IBI)Z")
-	public final boolean containsDisplayCoordinate(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		if (this.displayMinX > arg1 || arg1 > this.displayMaxZ || arg0 < this.displayMaxX || arg0 > this.displayMinZ) {
+	public final boolean containsDisplayCoordinate(@OriginalArg(0) int displayY, @OriginalArg(2) int displayX) {
+		if (this.displayMinX > displayX || displayX > this.displayMaxZ || displayY < this.displayMaxX || displayY > this.displayMinZ) {
 			return false;
 		}
 		for (@Pc(33) MapChunk chunk = (MapChunk) this.chunks.head(); chunk != null; chunk = (MapChunk) this.chunks.next()) {
-			if (chunk.containsDisplay(arg0, arg1)) {
+			if (chunk.containsDisplay(displayY, displayX)) {
 				return true;
 			}
 		}
@@ -89,18 +89,18 @@ public final class Map extends SecondaryNode {
 		this.displayMaxZ = 0;
 		this.displayMinZ = 0;
 		this.displayMinX = 12800;
-		for (@Pc(29) MapChunk local29 = (MapChunk) this.chunks.head(); local29 != null; local29 = (MapChunk) this.chunks.next()) {
-			if (local29.displayMaxX < this.displayMaxX) {
-				this.displayMaxX = local29.displayMaxX;
+		for (@Pc(29) MapChunk chunk = (MapChunk) this.chunks.head(); chunk != null; chunk = (MapChunk) this.chunks.next()) {
+			if (chunk.displayMaxX < this.displayMaxX) {
+				this.displayMaxX = chunk.displayMaxX;
 			}
-			if (local29.displayMinX < this.displayMinX) {
-				this.displayMinX = local29.displayMinX;
+			if (chunk.displayMinX < this.displayMinX) {
+				this.displayMinX = chunk.displayMinX;
 			}
-			if (local29.displayMaxZ > this.displayMaxZ) {
-				this.displayMaxZ = local29.displayMaxZ;
+			if (chunk.displayMaxZ > this.displayMaxZ) {
+				this.displayMaxZ = chunk.displayMaxZ;
 			}
-			if (this.displayMinZ < local29.displayMinZ) {
-				this.displayMinZ = local29.displayMinZ;
+			if (this.displayMinZ < chunk.displayMinZ) {
+				this.displayMinZ = chunk.displayMinZ;
 			}
 		}
 	}

@@ -237,8 +237,8 @@ public class Sprites {
 		Fonts.b12Full.setNameIcons(nameIcons, null);
 		if (GlRenderer.enabled) {
 			floorShadows = SpriteLoader.loadSoftwareIndexedSprites(floorShadowsId, archive);
-			for (@Pc(101) int local101 = 0; local101 < floorShadows.length; local101++) {
-				floorShadows[local101].trim();
+			for (@Pc(101) int i = 0; i < floorShadows.length; i++) {
+				floorShadows[i].trim();
 			}
 		}
 		@Pc(124) SoftwareSprite newCompass = SpriteLoader.loadSoftwareSprite(0, archive, compassId);
@@ -248,31 +248,31 @@ public class Sprites {
 		} else {
 			compass = newCompass;
 		}
-		@Pc(143) SoftwareSprite[] local143 = SpriteLoader.loadSoftwareSprites(hintMapEdgeId, archive);
-		@Pc(145) int local145;
-		for (local145 = 0; local145 < local143.length; local145++) {
-			local143[local145].trim();
+		@Pc(143) SoftwareSprite[] edgeSprites = SpriteLoader.loadSoftwareSprites(hintMapEdgeId, archive);
+		@Pc(145) int i;
+		for (i = 0; i < edgeSprites.length; i++) {
+			edgeSprites[i].trim();
 		}
 		if (GlRenderer.enabled) {
-			hintMapEdge = new Sprite[local143.length];
-			for (local145 = 0; local145 < local143.length; local145++) {
-				hintMapEdge[local145] = new GlSprite(local143[local145]);
+			hintMapEdge = new Sprite[edgeSprites.length];
+			for (i = 0; i < edgeSprites.length; i++) {
+				hintMapEdge[i] = new GlSprite(edgeSprites[i]);
 			}
 		} else {
-			hintMapEdge = local143;
+			hintMapEdge = edgeSprites;
 		}
-		@Pc(196) int local196 = (int) ((double) 21 * Math.random()) - 10;
-		local145 = (int) (Math.random() * 21.0D) - 10;
-		@Pc(210) int local210 = (int) (Math.random() * 21.0D) - 10;
-		@Pc(217) int local217 = (int) (Math.random() * 41.0D) - 20;
-		@Pc(219) int local219;
-		for (local219 = 0; local219 < mapfunctions.length; local219++) {
-			mapfunctions[local219].adjustRgb(local145 + local217, local217 + local196, local217 + local210);
+		@Pc(196) int redOffset = (int) ((double) 21 * Math.random()) - 10;
+		i = (int) (Math.random() * 21.0D) - 10;
+		@Pc(210) int blueOffset = (int) (Math.random() * 21.0D) - 10;
+		@Pc(217) int baseOffset = (int) (Math.random() * 41.0D) - 20;
+		@Pc(219) int j;
+		for (j = 0; j < mapfunctions.length; j++) {
+			mapfunctions[j].adjustRgb(i + baseOffset, baseOffset + redOffset, baseOffset + blueOffset);
 		}
 		if (GlRenderer.enabled) {
 			mapfuncs = new Sprite[mapfunctions.length];
-			for (local219 = 0; local219 < mapfunctions.length; local219++) {
-				mapfuncs[local219] = new GlSprite(mapfunctions[local219]);
+			for (j = 0; j < mapfunctions.length; j++) {
+				mapfuncs[j] = new GlSprite(mapfunctions[j]);
 			}
 		} else {
 			mapfuncs = mapfunctions;

@@ -87,13 +87,13 @@ public final class DateUtil {
 	@OriginalMember(owner = "client!cj", name = "a", descriptor = "(JB)Lclient!na;")
 	public static JagString getDateString(@OriginalArg(0) long date) {
 		calendar.setTime(new Date(date));
-		@Pc(13) int local13 = calendar.get(Calendar.DAY_OF_WEEK);
-		@Pc(17) int local17 = calendar.get(Calendar.DATE);
-		@Pc(21) int local21 = calendar.get(Calendar.MONTH);
-		@Pc(32) int local32 = calendar.get(Calendar.YEAR);
-		@Pc(36) int local36 = calendar.get(Calendar.HOUR_OF_DAY);
-		@Pc(40) int local40 = calendar.get(Calendar.MINUTE);
-		@Pc(44) int local44 = calendar.get(Calendar.SECOND);
-		return JagString.concatenate(new JagString[]{DAYS[local13 - 1], JagString.COMMA_SPACE, JagString.parseInt(local17 / 10), JagString.parseInt(local17 % 10), JagString.HYPHEN, MONTHS[local21], JagString.HYPHEN, JagString.parseInt(local32), JagString.SPACE, JagString.parseInt(local36 / 10), JagString.parseInt(local36 % 10), JagString.COLON, JagString.parseInt(local40 / 10), JagString.parseInt(local40 % 10), JagString.COLON, JagString.parseInt(local44 / 10), JagString.parseInt(local44 % 10), JagString.TIMEZONE});
+		@Pc(13) int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+		@Pc(17) int day = calendar.get(Calendar.DATE);
+		@Pc(21) int month = calendar.get(Calendar.MONTH);
+		@Pc(32) int year = calendar.get(Calendar.YEAR);
+		@Pc(36) int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		@Pc(40) int minute = calendar.get(Calendar.MINUTE);
+		@Pc(44) int second = calendar.get(Calendar.SECOND);
+		return JagString.concatenate(new JagString[]{DAYS[dayOfWeek - 1], JagString.COMMA_SPACE, JagString.parseInt(day / 10), JagString.parseInt(day % 10), JagString.HYPHEN, MONTHS[month], JagString.HYPHEN, JagString.parseInt(year), JagString.SPACE, JagString.parseInt(hour / 10), JagString.parseInt(hour % 10), JagString.COLON, JagString.parseInt(minute / 10), JagString.parseInt(minute % 10), JagString.COLON, JagString.parseInt(second / 10), JagString.parseInt(second % 10), JagString.TIMEZONE});
 	}
 }

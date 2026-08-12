@@ -29,95 +29,95 @@ public final class Inv extends Node {
 	public int[] objectStackSizes = new int[]{0};
 
 	@OriginalMember(owner = "client!ba", name = "a", descriptor = "(IB)I")
-	public static int getFreeSpace(@OriginalArg(0) int arg0) {
-		if (arg0 < 0) {
+	public static int getFreeSpace(@OriginalArg(0) int invId) {
+		if (invId < 0) {
 			return 0;
 		}
-		@Pc(17) Inv local17 = (Inv) objectContainerCache.get(arg0);
-		if (local17 == null) {
-			return InvTypeList.get(arg0).size;
+		@Pc(17) Inv inv = (Inv) objectContainerCache.get(invId);
+		if (inv == null) {
+			return InvTypeList.get(invId).size;
 		}
 		@Pc(31) int freeSpaces = 0;
-		for (@Pc(33) int id = 0; id < local17.objectIds.length; id++) {
-			if (local17.objectIds[id] == -1) {
+		for (@Pc(33) int id = 0; id < inv.objectIds.length; id++) {
+			if (inv.objectIds[id] == -1) {
 				freeSpaces++;
 			}
 		}
-		return freeSpaces + InvTypeList.get(arg0).size - local17.objectIds.length;
+		return freeSpaces + InvTypeList.get(invId).size - inv.objectIds.length;
 	}
 
 	@OriginalMember(owner = "client!od", name = "a", descriptor = "(IZII)I")
-	public static int getTotalParam(@OriginalArg(1) boolean arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
-		@Pc(19) Inv local19 = (Inv) objectContainerCache.get(arg1);
-		if (local19 == null) {
+	public static int getTotalParam(@OriginalArg(1) boolean multiplyByStack, @OriginalArg(2) int invId, @OriginalArg(3) int paramId) {
+		@Pc(19) Inv inv = (Inv) objectContainerCache.get(invId);
+		if (inv == null) {
 			return 0;
 		}
-		@Pc(27) int local27 = 0;
-		for (@Pc(29) int local29 = 0; local29 < local19.objectIds.length; local29++) {
-			if (local19.objectIds[local29] >= 0 && ObjTypeList.capacity > local19.objectIds[local29]) {
-				@Pc(56) ObjType local56 = ObjTypeList.get(local19.objectIds[local29]);
-				if (local56.params != null) {
-					@Pc(68) IntNode local68 = (IntNode) local56.params.get(arg2);
-					if (local68 != null) {
-						if (arg0) {
-							local27 += local19.objectStackSizes[local29] * local68.value;
+		@Pc(27) int total = 0;
+		for (@Pc(29) int i = 0; i < inv.objectIds.length; i++) {
+			if (inv.objectIds[i] >= 0 && ObjTypeList.capacity > inv.objectIds[i]) {
+				@Pc(56) ObjType objType = ObjTypeList.get(inv.objectIds[i]);
+				if (objType.params != null) {
+					@Pc(68) IntNode param = (IntNode) objType.params.get(paramId);
+					if (param != null) {
+						if (multiplyByStack) {
+							total += inv.objectStackSizes[i] * param.value;
 						} else {
-							local27 += local68.value;
+							total += param.value;
 						}
 					}
 				}
 			}
 		}
-		return local27;
+		return total;
 	}
 
 	@OriginalMember(owner = "client!wj", name = "a", descriptor = "(BII)I")
-	public static int getSlotTotal(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(8) Inv local8 = (Inv) objectContainerCache.get(arg0);
-		if (local8 == null) {
+	public static int getSlotTotal(@OriginalArg(1) int invId, @OriginalArg(2) int objId) {
+		@Pc(8) Inv inv = (Inv) objectContainerCache.get(invId);
+		if (inv == null) {
 			return 0;
-		} else if (arg1 == -1) {
+		} else if (objId == -1) {
 			return 0;
 		} else {
-			@Pc(25) int local25 = 0;
-			for (@Pc(27) int local27 = 0; local27 < local8.objectStackSizes.length; local27++) {
-				if (arg1 == local8.objectIds[local27]) {
-					local25 += local8.objectStackSizes[local27];
+			@Pc(25) int total = 0;
+			for (@Pc(27) int i = 0; i < inv.objectStackSizes.length; i++) {
+				if (objId == inv.objectIds[i]) {
+					total += inv.objectStackSizes[i];
 				}
 			}
-			return local25;
+			return total;
 		}
 	}
 
 	@OriginalMember(owner = "client!bm", name = "a", descriptor = "(III)I")
-	public static int getItemCount(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(10) Inv local10 = (Inv) objectContainerCache.get(arg0);
-		if (local10 == null) {
+	public static int getItemCount(@OriginalArg(1) int invId, @OriginalArg(2) int slot) {
+		@Pc(10) Inv inv = (Inv) objectContainerCache.get(invId);
+		if (inv == null) {
 			return 0;
-		} else if (arg1 >= 0 && arg1 < local10.objectStackSizes.length) {
-			return local10.objectStackSizes[arg1];
+		} else if (slot >= 0 && slot < inv.objectStackSizes.length) {
+			return inv.objectStackSizes[slot];
 		} else {
 			return 0;
 		}
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(III)I")
-	public static int getItemType(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(10) Inv local10 = (Inv) objectContainerCache.get(arg0);
-		if (local10 == null) {
+	public static int getItemType(@OriginalArg(0) int invId, @OriginalArg(2) int slot) {
+		@Pc(10) Inv inv = (Inv) objectContainerCache.get(invId);
+		if (inv == null) {
 			return -1;
-		} else if (arg1 >= 0 && arg1 < local10.objectIds.length) {
-			return local10.objectIds[arg1];
+		} else if (slot >= 0 && slot < inv.objectIds.length) {
+			return inv.objectIds[slot];
 		} else {
 			return -1;
 		}
 	}
 
 	@OriginalMember(owner = "client!bc", name = "d", descriptor = "(II)V")
-	public static void delete(@OriginalArg(0) int arg0) {
-		@Pc(14) Inv local14 = (Inv) objectContainerCache.get(arg0);
-		if (local14 != null) {
-			local14.unlink();
+	public static void delete(@OriginalArg(0) int invId) {
+		@Pc(14) Inv inv = (Inv) objectContainerCache.get(invId);
+		if (inv != null) {
+			inv.unlink();
 		}
 	}
 
@@ -127,29 +127,29 @@ public final class Inv extends Node {
 	}
 
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(IIIIB)V")
-	public static void updateContainer(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(12) Inv local12 = (Inv) objectContainerCache.get(arg3);
-		if (local12 == null) {
-			local12 = new Inv();
-			objectContainerCache.put(local12, arg3);
+	public static void updateContainer(@OriginalArg(0) int objId, @OriginalArg(1) int slot, @OriginalArg(2) int count, @OriginalArg(3) int invId) {
+		@Pc(12) Inv inv = (Inv) objectContainerCache.get(invId);
+		if (inv == null) {
+			inv = new Inv();
+			objectContainerCache.put(inv, invId);
 		}
-		if (arg1 >= local12.objectIds.length) {
-			@Pc(39) int[] local39 = new int[arg1 + 1];
-			@Pc(44) int[] local44 = new int[arg1 + 1];
-			@Pc(46) int local46;
-			for (local46 = 0; local46 < local12.objectIds.length; local46++) {
-				local39[local46] = local12.objectIds[local46];
-				local44[local46] = local12.objectStackSizes[local46];
+		if (slot >= inv.objectIds.length) {
+			@Pc(39) int[] newIds = new int[slot + 1];
+			@Pc(44) int[] newCounts = new int[slot + 1];
+			@Pc(46) int i;
+			for (i = 0; i < inv.objectIds.length; i++) {
+				newIds[i] = inv.objectIds[i];
+				newCounts[i] = inv.objectStackSizes[i];
 			}
-			for (local46 = local12.objectIds.length; local46 < arg1; local46++) {
-				local39[local46] = -1;
-				local44[local46] = 0;
+			for (i = inv.objectIds.length; i < slot; i++) {
+				newIds[i] = -1;
+				newCounts[i] = 0;
 			}
-			local12.objectIds = local39;
-			local12.objectStackSizes = local44;
+			inv.objectIds = newIds;
+			inv.objectStackSizes = newCounts;
 		}
-		local12.objectIds[arg1] = arg0;
-		local12.objectStackSizes[arg1] = arg2;
+		inv.objectIds[slot] = objId;
+		inv.objectStackSizes[slot] = count;
 	}
 
 	@OriginalMember(owner = "client!pf", name = "a", descriptor = "(IIZIII)Lclient!qf;")
@@ -261,23 +261,23 @@ public final class Inv extends Node {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "b", descriptor = "(II)Lclient!na;")
-	public static JagString formatObjAmount(@OriginalArg(1) int arg0) {
-		if (arg0 < 100000) {
-			return JagString.concatenate(new JagString[]{COL_YELLOW, JagString.parseInt(arg0), COL_END});
-		} else if (arg0 >= 10000000) {
-			return JagString.concatenate(new JagString[]{COL_GREEN, JagString.parseInt(arg0 / 1000000), LocalizedText.MILLION, COL_END});
+	public static JagString formatObjAmount(@OriginalArg(1) int amount) {
+		if (amount < 100000) {
+			return JagString.concatenate(new JagString[]{COL_YELLOW, JagString.parseInt(amount), COL_END});
+		} else if (amount >= 10000000) {
+			return JagString.concatenate(new JagString[]{COL_GREEN, JagString.parseInt(amount / 1000000), LocalizedText.MILLION, COL_END});
 		} else {
-			return JagString.concatenate(new JagString[]{COL_WHITE, JagString.parseInt(arg0 / 1000), LocalizedText.THOUSAND, COL_END});
+			return JagString.concatenate(new JagString[]{COL_WHITE, JagString.parseInt(amount / 1000), LocalizedText.THOUSAND, COL_END});
 		}
 	}
 
 	@OriginalMember(owner = "client!bd", name = "a", descriptor = "(BI)V")
-	public static void clearContainer(@OriginalArg(1) int arg0) {
-		@Pc(8) Inv local8 = (Inv) objectContainerCache.get(arg0);
-		if (local8 != null) {
-			for (@Pc(24) int local24 = 0; local24 < local8.objectIds.length; local24++) {
-				local8.objectIds[local24] = -1;
-				local8.objectStackSizes[local24] = 0;
+	public static void clearContainer(@OriginalArg(1) int invId) {
+		@Pc(8) Inv inv = (Inv) objectContainerCache.get(invId);
+		if (inv != null) {
+			for (@Pc(24) int i = 0; i < inv.objectIds.length; i++) {
+				inv.objectIds[i] = -1;
+				inv.objectStackSizes[i] = 0;
 			}
 		}
 	}

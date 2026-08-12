@@ -28,7 +28,7 @@ public class AreaSoundManager {
 	}
 
 	@OriginalMember(owner = "client!jh", name = "a", descriptor = "(IZLclient!pb;ILclient!km;IILclient!e;)V")
-	public static void add(@OriginalArg(0) int y, @OriginalArg(2) LocType loc, @OriginalArg(3) int arg2, @OriginalArg(4) Npc npc, @OriginalArg(5) int x, @OriginalArg(6) int level, @OriginalArg(7) Player player) {
+	public static void add(@OriginalArg(0) int y, @OriginalArg(2) LocType loc, @OriginalArg(3) int rotation, @OriginalArg(4) Npc npc, @OriginalArg(5) int x, @OriginalArg(6) int level, @OriginalArg(7) Player player) {
 		@Pc(13) AreaSound sound = new AreaSound();
 		sound.minYFine = y * 128;
 		sound.minXFine = x * 128;
@@ -40,14 +40,14 @@ public class AreaSoundManager {
 			sound.locType = loc;
 			sound.sound = loc.bgsound;
 			sound.minInterval = loc.bgsoundmin;
-			@Pc(57) int local57 = loc.width;
-			@Pc(60) int local60 = loc.length;
-			if (arg2 == 1 || arg2 == 3) {
-				local57 = loc.length;
-				local60 = loc.width;
+			@Pc(57) int width = loc.width;
+			@Pc(60) int length = loc.length;
+			if (rotation == 1 || rotation == 3) {
+				width = loc.length;
+				length = loc.width;
 			}
-			sound.maxYFine = (local60 + y) * 128;
-			sound.maxXFine = (x + local57) * 128;
+			sound.maxYFine = (length + y) * 128;
+			sound.maxXFine = (x + width) * 128;
 			if (loc.multiLocs != null) {
 				sound.multiLocOrNpc = true;
 				sound.update();
@@ -95,10 +95,10 @@ public class AreaSoundManager {
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(IIIII)V")
-	public static void redraw(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static void redraw(@OriginalArg(0) int loops, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int level) {
 		@Pc(6) AreaSound areaSound;
 		for (areaSound = (AreaSound) locSounds.head(); areaSound != null; areaSound = (AreaSound) locSounds.next()) {
-			redraw(arg1, areaSound, arg3, arg0, arg2);
+			redraw(x, areaSound, level, loops, y);
 		}
 		@Pc(37) byte movementSpeed;
 		@Pc(42) BasType basType;
@@ -128,7 +128,7 @@ public class AreaSoundManager {
 			areaSound.maxXFine = areaSound.npc.xFine + areaSound.npc.getSize() * 64;
 			areaSound.minYFine = areaSound.npc.yFine;
 			areaSound.maxYFine = areaSound.npc.yFine + areaSound.npc.getSize() * 64;
-			redraw(arg1, areaSound, arg3, arg0, arg2);
+			redraw(x, areaSound, level, loops, y);
 		}
 		for (areaSound = (AreaSound) playerSounds.head(); areaSound != null; areaSound = (AreaSound) playerSounds.next()) {
 			movementSpeed = 1;
@@ -155,7 +155,7 @@ public class AreaSoundManager {
 			areaSound.maxXFine = areaSound.player.xFine + areaSound.player.getSize() * 64;
 			areaSound.minYFine = areaSound.player.yFine;
 			areaSound.maxYFine = areaSound.player.yFine + areaSound.player.getSize() * 64;
-			redraw(arg1, areaSound, arg3, arg0, arg2);
+			redraw(x, areaSound, level, loops, y);
 		}
 	}
 

@@ -69,26 +69,26 @@ public class Flames {
 	public static void load(@OriginalArg(1) Js5 archive) {
 		runes = SpriteLoader.loadSoftwareIndexedSpritesAutoDetect(runesId, archive);
 		flameGradient = new int[256];
-		@Pc(15) int local15;
-		for (local15 = 0; local15 < 3; local15++) {
-			@Pc(30) int local30 = flameGradientSource[local15 + 1] >> 16 & 0xFF;
-			@Pc(39) float local39 = (float) (flameGradientSource[local15] >> 16 & 0xFF);
-			@Pc(48) float local48 = (float) (flameGradientSource[local15] >> 8 & 0xFF);
-			@Pc(55) float local55 = (float) (flameGradientSource[local15] & 0xFF);
-			@Pc(62) float local62 = ((float) local30 - local39) / 64.0F;
-			@Pc(72) int local72 = flameGradientSource[local15 + 1] >> 8 & 0xFF;
-			@Pc(80) float local80 = ((float) local72 - local48) / 64.0F;
-			@Pc(88) int local88 = flameGradientSource[local15 + 1] & 0xFF;
-			@Pc(95) float local95 = ((float) local88 - local55) / 64.0F;
-			for (@Pc(97) int local97 = 0; local97 < 64; local97++) {
-				flameGradient[local97 + local15 * 64] = (int) local55 | (int) local48 << 8 | (int) local39 << 16;
-				local48 += local80;
-				local55 += local95;
-				local39 += local62;
+		@Pc(15) int i;
+		for (i = 0; i < 3; i++) {
+			@Pc(30) int nextRed = flameGradientSource[i + 1] >> 16 & 0xFF;
+			@Pc(39) float red = (float) (flameGradientSource[i] >> 16 & 0xFF);
+			@Pc(48) float green = (float) (flameGradientSource[i] >> 8 & 0xFF);
+			@Pc(55) float blue = (float) (flameGradientSource[i] & 0xFF);
+			@Pc(62) float redStep = ((float) nextRed - red) / 64.0F;
+			@Pc(72) int nextGreen = flameGradientSource[i + 1] >> 8 & 0xFF;
+			@Pc(80) float greenStep = ((float) nextGreen - green) / 64.0F;
+			@Pc(88) int nextBlue = flameGradientSource[i + 1] & 0xFF;
+			@Pc(95) float blueStep = ((float) nextBlue - blue) / 64.0F;
+			for (@Pc(97) int j = 0; j < 64; j++) {
+				flameGradient[j + i * 64] = (int) blue | (int) green << 8 | (int) red << 16;
+				green += greenStep;
+				blue += blueStep;
+				red += redStep;
 			}
 		}
-		for (local15 = 192; local15 < 255; local15++) {
-			flameGradient[local15] = flameGradientSource[3];
+		for (i = 192; i < 255; i++) {
+			flameGradient[i] = flameGradientSource[3];
 		}
 		flameBuffer1 = new int[32768];
 		flameBuffer2 = new int[32768];
@@ -99,91 +99,91 @@ public class Flames {
 	}
 
 	@OriginalMember(owner = "client!vl", name = "a", descriptor = "(II)V")
-	public static void updateFlames(@OriginalArg(0) int arg0) {
-		if (arg0 > 256) {
-			arg0 = 256;
+	public static void updateFlames(@OriginalArg(0) int delta) {
+		if (delta > 256) {
+			delta = 256;
 		}
-		if (arg0 > 10) {
-			arg0 = 10;
+		if (delta > 10) {
+			delta = 10;
 		}
-		flameOffset += arg0 * 128;
-		@Pc(40) int local40;
+		flameOffset += delta * 128;
+		@Pc(40) int i;
 		if (flameBuffer1.length < flameOffset) {
 			flameOffset -= flameBuffer1.length;
-			local40 = (int) (Math.random() * 12.0D);
-			setRune(runes[local40]);
+			i = (int) (Math.random() * 12.0D);
+			setRune(runes[i]);
 		}
-		local40 = 0;
-		@Pc(54) int local54 = (256 - arg0) * 128;
-		@Pc(58) int local58 = arg0 * 128;
-		@Pc(60) int local60;
-		@Pc(89) int local89;
-		for (local60 = 0; local60 < local54; local60++) {
-			local89 = flameIntensityBuffer[local40 + local58] - arg0 * flameBuffer1[flameBuffer1.length - 1 & flameOffset + local40] / 6;
-			if (local89 < 0) {
-				local89 = 0;
+		i = 0;
+		@Pc(54) int decayLen = (256 - delta) * 128;
+		@Pc(58) int decayOffset = delta * 128;
+		@Pc(60) int row;
+		@Pc(89) int intensity;
+		for (row = 0; row < decayLen; row++) {
+			intensity = flameIntensityBuffer[i + decayOffset] - delta * flameBuffer1[flameBuffer1.length - 1 & flameOffset + i] / 6;
+			if (intensity < 0) {
+				intensity = 0;
 			}
-			flameIntensityBuffer[local40++] = local89;
+			flameIntensityBuffer[i++] = intensity;
 		}
-		@Pc(117) int local117;
-		@Pc(125) int local125;
-		for (local60 = 256 - arg0; local60 < 256; local60++) {
-			local89 = local60 * 128;
-			for (local117 = 0; local117 < 128; local117++) {
-				local125 = (int) (Math.random() * 100.0D);
-				if (local125 < 50 && local117 > 10 && local117 < 118) {
-					flameIntensityBuffer[local117 + local89] = 255;
+		@Pc(117) int x;
+		@Pc(125) int rand;
+		for (row = 256 - delta; row < 256; row++) {
+			intensity = row * 128;
+			for (x = 0; x < 128; x++) {
+				rand = (int) (Math.random() * 100.0D);
+				if (rand < 50 && x > 10 && x < 118) {
+					flameIntensityBuffer[x + intensity] = 255;
 				} else {
-					flameIntensityBuffer[local117 + local89] = 0;
+					flameIntensityBuffer[x + intensity] = 0;
 				}
 			}
 		}
-		for (local60 = 0; local60 < 256 - arg0; local60++) {
-			flameShiftX[local60] = flameShiftX[local60 + arg0];
+		for (row = 0; row < 256 - delta; row++) {
+			flameShiftX[row] = flameShiftX[row + delta];
 		}
-		for (local60 = 256 - arg0; local60 < 256; local60++) {
-			flameShiftX[local60] = (int) (Math.sin((double) flameSinePhase / 14.0D) * 16.0D + Math.sin((double) flameSinePhase / 15.0D) * 14.0D + Math.sin((double) flameSinePhase / 16.0D) * 12.0D);
+		for (row = 256 - delta; row < 256; row++) {
+			flameShiftX[row] = (int) (Math.sin((double) flameSinePhase / 14.0D) * 16.0D + Math.sin((double) flameSinePhase / 15.0D) * 14.0D + Math.sin((double) flameSinePhase / 16.0D) * 12.0D);
 			flameSinePhase++;
 		}
-		pendingSparks += arg0;
-		local60 = (arg0 + (client.loop & 0x1)) / 2;
-		if (local60 <= 0) {
+		pendingSparks += delta;
+		row = (delta + (client.loop & 0x1)) / 2;
+		if (row <= 0) {
 			return;
 		}
-		for (local89 = 0; local89 < pendingSparks; local89++) {
-			local117 = (int) (Math.random() * 124.0D) + 2;
-			local125 = (int) (Math.random() * 128.0D) + 128;
-			flameIntensityBuffer[local117 + (local125 << 7)] = 192;
+		for (intensity = 0; intensity < pendingSparks; intensity++) {
+			x = (int) (Math.random() * 124.0D) + 2;
+			rand = (int) (Math.random() * 128.0D) + 128;
+			flameIntensityBuffer[x + (rand << 7)] = 192;
 		}
 		pendingSparks = 0;
-		@Pc(290) int local290;
-		for (local89 = 0; local89 < 256; local89++) {
-			local125 = local89 * 128;
-			local117 = 0;
-			for (local290 = -local60; local290 < 128; local290++) {
-				if (local60 + local290 < 128) {
-					local117 += flameIntensityBuffer[local125 + local290 + local60];
+		@Pc(290) int j;
+		for (intensity = 0; intensity < 256; intensity++) {
+			rand = intensity * 128;
+			x = 0;
+			for (j = -row; j < 128; j++) {
+				if (row + j < 128) {
+					x += flameIntensityBuffer[rand + j + row];
 				}
-				if (local290 - local60 - 1 >= 0) {
-					local117 -= flameIntensityBuffer[local290 + local125 - local60 - 1];
+				if (j - row - 1 >= 0) {
+					x -= flameIntensityBuffer[j + rand - row - 1];
 				}
-				if (local290 >= 0) {
-					flameIntensity[local290 + local125] = local117 / (local60 * 2 + 1);
+				if (j >= 0) {
+					flameIntensity[j + rand] = x / (row * 2 + 1);
 				}
 			}
 		}
-		for (local89 = 0; local89 < 128; local89++) {
-			local117 = 0;
-			for (local125 = -local60; local125 < 256; local125++) {
-				local290 = local125 * 128;
-				if (local125 + local60 < 256) {
-					local117 += flameIntensity[local60 * 128 + local89 + local290];
+		for (intensity = 0; intensity < 128; intensity++) {
+			x = 0;
+			for (rand = -row; rand < 256; rand++) {
+				j = rand * 128;
+				if (rand + row < 256) {
+					x += flameIntensity[row * 128 + intensity + j];
 				}
-				if (local125 - local60 - 1 >= 0) {
-					local117 -= flameIntensity[local89 + local290 - (local60 + 1) * 128];
+				if (rand - row - 1 >= 0) {
+					x -= flameIntensity[intensity + j - (row + 1) * 128];
 				}
-				if (local125 >= 0) {
-					flameIntensityBuffer[local290 + local89] = local117 / (local60 * 2 + 1);
+				if (rand >= 0) {
+					flameIntensityBuffer[j + intensity] = x / (row * 2 + 1);
 				}
 			}
 		}
@@ -191,87 +191,87 @@ public class Flames {
 
 	@OriginalMember(owner = "client!fh", name = "a", descriptor = "(BLclient!ek;)V")
 	public static void setRune(@OriginalArg(1) SoftwareIndexedSprite sprite) {
-		@Pc(5) int local5;
-		for (local5 = 0; local5 < flameBuffer1.length; local5++) {
-			flameBuffer1[local5] = 0;
+		@Pc(5) int i;
+		for (i = 0; i < flameBuffer1.length; i++) {
+			flameBuffer1[i] = 0;
 		}
-		@Pc(36) int local36;
-		for (local5 = 0; local5 < 5000; local5++) {
-			local36 = (int) ((double) 256 * Math.random() * 128.0D);
-			flameBuffer1[local36] = (int) (Math.random() * 284.0D);
+		@Pc(36) int offset;
+		for (i = 0; i < 5000; i++) {
+			offset = (int) ((double) 256 * Math.random() * 128.0D);
+			flameBuffer1[offset] = (int) (Math.random() * 284.0D);
 		}
-		@Pc(66) int local66;
-		@Pc(76) int local76;
-		for (local5 = 0; local5 < 20; local5++) {
-			for (local36 = 1; local36 < 255; local36++) {
-				for (local66 = 1; local66 < 127; local66++) {
-					local76 = local66 + (local36 << 7);
-					flameBuffer2[local76] = (flameBuffer1[local76 + 128] + flameBuffer1[local76 - 1] + flameBuffer1[local76 + 1] + flameBuffer1[local76 + -128]) / 4;
+		@Pc(66) int x;
+		@Pc(76) int index;
+		for (i = 0; i < 20; i++) {
+			for (offset = 1; offset < 255; offset++) {
+				for (x = 1; x < 127; x++) {
+					index = x + (offset << 7);
+					flameBuffer2[index] = (flameBuffer1[index + 128] + flameBuffer1[index - 1] + flameBuffer1[index + 1] + flameBuffer1[index + -128]) / 4;
 				}
 			}
-			@Pc(113) int[] local113 = flameBuffer1;
+			@Pc(113) int[] temp = flameBuffer1;
 			flameBuffer1 = flameBuffer2;
-			flameBuffer2 = local113;
+			flameBuffer2 = temp;
 		}
 		if (sprite == null) {
 			return;
 		}
-		local5 = 0;
-		for (local36 = 0; local36 < sprite.height; local36++) {
-			for (local66 = 0; local66 < sprite.width; local66++) {
-				if (sprite.pixels[local5++] != 0) {
-					local76 = sprite.xOffset + local66 + 16;
-					@Pc(162) int local162 = sprite.yOffset + local36 + 16;
-					@Pc(169) int local169 = local76 + (local162 << 7);
-					flameBuffer1[local169] = 0;
+		i = 0;
+		for (offset = 0; offset < sprite.height; offset++) {
+			for (x = 0; x < sprite.width; x++) {
+				if (sprite.pixels[i++] != 0) {
+					index = sprite.xOffset + x + 16;
+					@Pc(162) int y = sprite.yOffset + offset + 16;
+					@Pc(169) int idx = index + (y << 7);
+					flameBuffer1[idx] = 0;
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!s", name = "b", descriptor = "(III)V")
-	public static void render(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public static void render(@OriginalArg(0) int x, @OriginalArg(2) int y) {
 		if (flameCycle > 0) {
 			updateFlames(flameCycle);
 			flameCycle = 0;
 		}
-		@Pc(20) int local20 = 0;
-		@Pc(24) int local24 = SoftwareRaster.width * arg1;
-		@Pc(26) int local26 = 0;
-		for (@Pc(28) int local28 = 1; local28 < 255; local28++) {
-			@Pc(43) int local43 = (256 - local28) * flameShiftX[local28] / 256;
-			if (local43 < 0) {
-				local43 = 0;
+		@Pc(20) int srcIndex = 0;
+		@Pc(24) int rasterOffset = SoftwareRaster.width * y;
+		@Pc(26) int destIndex = 0;
+		for (@Pc(28) int row = 1; row < 255; row++) {
+			@Pc(43) int shift = (256 - row) * flameShiftX[row] / 256;
+			if (shift < 0) {
+				shift = 0;
 			}
-			local20 += local43;
-			@Pc(55) int local55;
-			for (local55 = local43; local55 < 128; local55++) {
-				@Pc(65) int local65 = SoftwareRaster.pixels[local24++ + arg0];
-				@Pc(70) int local70 = flameIntensityBuffer[local20++];
-				if (local70 == 0) {
-					imageFlames.pixels[local26++] = local65;
+			srcIndex += shift;
+			@Pc(55) int col;
+			for (col = shift; col < 128; col++) {
+				@Pc(65) int bg = SoftwareRaster.pixels[rasterOffset++ + x];
+				@Pc(70) int intensity = flameIntensityBuffer[srcIndex++];
+				if (intensity == 0) {
+					imageFlames.pixels[destIndex++] = bg;
 				} else {
-					@Pc(76) int local76 = local70 + 18;
-					if (local76 > 255) {
-						local76 = 255;
+					@Pc(76) int bright = intensity + 18;
+					if (bright > 255) {
+						bright = 255;
 					}
-					@Pc(89) int local89 = 256 - local70 - 18;
-					if (local89 > 255) {
-						local89 = 255;
+					@Pc(89) int fade = 256 - intensity - 18;
+					if (fade > 255) {
+						fade = 255;
 					}
-					local70 = flameGradient[local70];
-					imageFlames.pixels[local26++] = (local89 * (local65 & 0xFF00FF) + (local70 & 0xFF00FF) * local76 & 0xFF00FF00) + ((local70 & 0xFF00) * local76 + ((local65 & 0xFF00) * local89) & 0xFF0000) >> 8;
+					intensity = flameGradient[intensity];
+					imageFlames.pixels[destIndex++] = (fade * (bg & 0xFF00FF) + (intensity & 0xFF00FF) * bright & 0xFF00FF00) + ((intensity & 0xFF00) * bright + ((bg & 0xFF00) * fade) & 0xFF0000) >> 8;
 				}
 			}
-			for (local55 = 0; local55 < local43; local55++) {
-				imageFlames.pixels[local26++] = SoftwareRaster.pixels[arg0 + local24++];
+			for (col = 0; col < shift; col++) {
+				imageFlames.pixels[destIndex++] = SoftwareRaster.pixels[x + rasterOffset++];
 			}
-			local24 += SoftwareRaster.width - 128;
+			rasterOffset += SoftwareRaster.width - 128;
 		}
 		if (GlRenderer.enabled) {
-			GlRaster.drawPixels(imageFlames.pixels, arg0, arg1, imageFlames.width, imageFlames.height);
+			GlRaster.drawPixels(imageFlames.pixels, x, y, imageFlames.width, imageFlames.height);
 		} else {
-			imageFlames.drawPixels(arg0, arg1);
+			imageFlames.drawPixels(x, y);
 		}
 	}
 }

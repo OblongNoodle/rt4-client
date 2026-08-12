@@ -34,22 +34,22 @@ public final class QuickChatPhraseType extends SecondaryNode {
 	public boolean searchable = true;
 
 	@OriginalMember(owner = "client!vh", name = "a", descriptor = "(ILclient!wa;)Lclient!bd;")
-	public static QuickChatPhrase decodePhrase(@OriginalArg(1) Buffer arg0) {
-		@Pc(3) QuickChatPhrase local3 = new QuickChatPhrase();
-		local3.id = arg0.g2();
-		local3.type = QuickChatPhraseTypeList.get(local3.id);
-		return local3;
+	public static QuickChatPhrase decodePhrase(@OriginalArg(1) Buffer buf) {
+		@Pc(3) QuickChatPhrase phrase = new QuickChatPhrase();
+		phrase.id = buf.g2();
+		phrase.type = QuickChatPhraseTypeList.get(phrase.id);
+		return phrase;
 	}
 
 	@OriginalMember(owner = "client!cb", name = "a", descriptor = "(Lclient!wa;[IZ)V")
-	public final void encodeMessage(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int[] arg1) {
+	public final void encodeMessage(@OriginalArg(0) Buffer buf, @OriginalArg(1) int[] values) {
 		if (this.dynamicCommandTypes == null) {
 			return;
 		}
-		for (@Pc(14) int local14 = 0; this.dynamicCommandTypes.length > local14 && local14 < arg1.length; local14++) {
-			@Pc(38) int local38 = DYNAMIC_COMMAND_ENCODE_BYTES[this.getDynamicCommand(local14)];
-			if (local38 > 0) {
-				arg0.pVarLong(local38, arg1[local14]);
+		for (@Pc(14) int i = 0; this.dynamicCommandTypes.length > i && i < values.length; i++) {
+			@Pc(38) int byteCount = DYNAMIC_COMMAND_ENCODE_BYTES[this.getDynamicCommand(i)];
+			if (byteCount > 0) {
+				buf.pVarLong(byteCount, values[i]);
 			}
 		}
 	}
@@ -68,26 +68,26 @@ public final class QuickChatPhraseType extends SecondaryNode {
 	@OriginalMember(owner = "client!cb", name = "e", descriptor = "(I)V")
 	public final void postDecode() {
 		if (this.automaticResponses != null) {
-			for (@Pc(7) int local7 = 0; local7 < this.automaticResponses.length; local7++) {
-				this.automaticResponses[local7] |= 0x8000;
+			for (@Pc(7) int i = 0; i < this.automaticResponses.length; i++) {
+				this.automaticResponses[i] |= 0x8000;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!cb", name = "a", descriptor = "(III)I")
-	public final int getDynamicCommandParam(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		if (this.dynamicCommandTypes == null || arg1 < 0 || arg1 > this.dynamicCommandTypes.length) {
+	public final int getDynamicCommandParam(@OriginalArg(1) int paramIndex, @OriginalArg(2) int commandIndex) {
+		if (this.dynamicCommandTypes == null || commandIndex < 0 || commandIndex > this.dynamicCommandTypes.length) {
 			return -1;
-		} else if (this.dynamicCommandParams[arg1] == null || arg0 < 0 || arg0 > this.dynamicCommandParams[arg1].length) {
+		} else if (this.dynamicCommandParams[commandIndex] == null || paramIndex < 0 || paramIndex > this.dynamicCommandParams[commandIndex].length) {
 			return -1;
 		} else {
-			return this.dynamicCommandParams[arg1][arg0];
+			return this.dynamicCommandParams[commandIndex][paramIndex];
 		}
 	}
 
 	@OriginalMember(owner = "client!cb", name = "c", descriptor = "(II)I")
-	public final int getDynamicCommand(@OriginalArg(1) int arg0) {
-		return this.dynamicCommandTypes == null || arg0 < 0 || arg0 > this.dynamicCommandTypes.length ? -1 : this.dynamicCommandTypes[arg0];
+	public final int getDynamicCommand(@OriginalArg(1) int index) {
+		return this.dynamicCommandTypes == null || index < 0 || index > this.dynamicCommandTypes.length ? -1 : this.dynamicCommandTypes[index];
 	}
 
 	@OriginalMember(owner = "client!cb", name = "a", descriptor = "(Z)I")
@@ -101,24 +101,24 @@ public final class QuickChatPhraseType extends SecondaryNode {
 			this.textSegments = buffer.gjstr().split(60);
 			return;
 		}
-		@Pc(32) int local32;
-		@Pc(42) int local42;
+		@Pc(32) int count;
+		@Pc(42) int i;
 		if (opcode == 2) {
-			local32 = buffer.g1();
-			this.automaticResponses = new int[local32];
-			for (local42 = 0; local42 < local32; local42++) {
-				this.automaticResponses[local42] = buffer.g2();
+			count = buffer.g1();
+			this.automaticResponses = new int[count];
+			for (i = 0; i < count; i++) {
+				this.automaticResponses[i] = buffer.g2();
 			}
 		} else if (opcode == 3) {
-			local32 = buffer.g1();
-			this.dynamicCommandTypes = new int[local32];
-			this.dynamicCommandParams = new int[local32][];
-			for (local42 = 0; local42 < local32; local42++) {
-				@Pc(49) int local49 = buffer.g2();
-				this.dynamicCommandTypes[local42] = local49;
-				this.dynamicCommandParams[local42] = new int[DYNAMIC_COMMAND_PARAM_COUNTS[local49]];
-				for (@Pc(64) int local64 = 0; local64 < DYNAMIC_COMMAND_PARAM_COUNTS[local49]; local64++) {
-					this.dynamicCommandParams[local42][local64] = buffer.g2();
+			count = buffer.g1();
+			this.dynamicCommandTypes = new int[count];
+			this.dynamicCommandParams = new int[count][];
+			for (i = 0; i < count; i++) {
+				@Pc(49) int commandType = buffer.g2();
+				this.dynamicCommandTypes[i] = commandType;
+				this.dynamicCommandParams[i] = new int[DYNAMIC_COMMAND_PARAM_COUNTS[commandType]];
+				for (@Pc(64) int j = 0; j < DYNAMIC_COMMAND_PARAM_COUNTS[commandType]; j++) {
+					this.dynamicCommandParams[i][j] = buffer.g2();
 				}
 			}
 		} else if (opcode == 4) {
@@ -128,28 +128,28 @@ public final class QuickChatPhraseType extends SecondaryNode {
 
 	@OriginalMember(owner = "client!cb", name = "f", descriptor = "(I)Lclient!na;")
 	public final JagString getText() {
-		@Pc(15) JagString local15 = JagString.allocate(80);
+		@Pc(15) JagString result = JagString.allocate(80);
 		if (this.textSegments == null) {
 			return EMPTY_TEXT;
 		}
-		local15.appendString(this.textSegments[0]);
-		for (@Pc(31) int local31 = 1; local31 < this.textSegments.length; local31++) {
-			local15.appendString(DYNAMIC_VALUE_PLACEHOLDER);
-			local15.appendString(this.textSegments[local31]);
+		result.appendString(this.textSegments[0]);
+		for (@Pc(31) int i = 1; i < this.textSegments.length; i++) {
+			result.appendString(DYNAMIC_VALUE_PLACEHOLDER);
+			result.appendString(this.textSegments[i]);
 		}
-		return local15.compact();
+		return result.compact();
 	}
 
 	@OriginalMember(owner = "client!cb", name = "a", descriptor = "(ILclient!wa;)Lclient!na;")
-	public final JagString decodeMessage(@OriginalArg(1) Buffer arg0) {
-		@Pc(17) JagString local17 = JagString.allocate(80);
+	public final JagString decodeMessage(@OriginalArg(1) Buffer buf) {
+		@Pc(17) JagString result = JagString.allocate(80);
 		if (this.dynamicCommandTypes != null) {
-			for (@Pc(22) int local22 = 0; local22 < this.dynamicCommandTypes.length; local22++) {
-				local17.appendString(this.textSegments[local22]);
-				local17.appendString(QuickChatPhraseTypeList.formatDynamicValue(this.dynamicCommandParams[local22], arg0.gVarLong(DYNAMIC_COMMAND_DECODE_BYTES[this.dynamicCommandTypes[local22]]), this.dynamicCommandTypes[local22]));
+			for (@Pc(22) int i = 0; i < this.dynamicCommandTypes.length; i++) {
+				result.appendString(this.textSegments[i]);
+				result.appendString(QuickChatPhraseTypeList.formatDynamicValue(this.dynamicCommandParams[i], buf.gVarLong(DYNAMIC_COMMAND_DECODE_BYTES[this.dynamicCommandTypes[i]]), this.dynamicCommandTypes[i]));
 			}
 		}
-		local17.appendString(this.textSegments[this.textSegments.length - 1]);
-		return local17.compact();
+		result.appendString(this.textSegments[this.textSegments.length - 1]);
+		return result.compact();
 	}
 }

@@ -17,47 +17,47 @@ public class MapList {
 	public static boolean[] visibility;
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "([Lclient!mm;ILclient!ve;)V")
-	public static void init(@OriginalArg(0) SoftwareSprite[] arg0, @OriginalArg(2) Js5 arg1) {
-		archive = arg1;
-		sprites = arg0;
+	public static void init(@OriginalArg(0) SoftwareSprite[] mapSprites, @OriginalArg(2) Js5 js5) {
+		archive = js5;
+		sprites = mapSprites;
 		visibility = new boolean[sprites.length];
 		maps.clear();
-		@Pc(25) int local25 = archive.getGroupId(DETAILS_GROUP);
-		@Pc(30) int[] local30 = archive.getFileIds(local25);
-		for (@Pc(32) int local32 = 0; local32 < local30.length; local32++) {
-			maps.addTail(Map.create(new Buffer(archive.fetchFile(local25, local30[local32]))));
+		@Pc(25) int groupId = archive.getGroupId(DETAILS_GROUP);
+		@Pc(30) int[] fileIds = archive.getFileIds(groupId);
+		for (@Pc(32) int i = 0; i < fileIds.length; i++) {
+			maps.addTail(Map.create(new Buffer(archive.fetchFile(groupId, fileIds[i]))));
 		}
 	}
 
 	@OriginalMember(owner = "client!jk", name = "a", descriptor = "(ILclient!na;)Lclient!bn;")
-	public static Map get(@OriginalArg(1) JagString arg0) {
-		for (@Pc(15) Map local15 = (Map) maps.head(); local15 != null; local15 = (Map) maps.next()) {
-			if (local15.group.strEquals(arg0)) {
-				return local15;
+	public static Map get(@OriginalArg(1) JagString name) {
+		for (@Pc(15) Map map = (Map) maps.head(); map != null; map = (Map) maps.next()) {
+			if (map.group.strEquals(name)) {
+				return map;
 			}
 		}
 		return null;
 	}
 
 	@OriginalMember(owner = "client!ce", name = "a", descriptor = "(IBI)Lclient!bn;")
-	public static Map getContainingSource(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		for (@Pc(10) Map local10 = (Map) maps.head(); local10 != null; local10 = (Map) maps.next()) {
-			if (local10.valid && local10.containsDisplayCoordinate(arg1, arg0)) {
-				return local10;
+	public static Map getContainingSource(@OriginalArg(0) int displayX, @OriginalArg(2) int displayY) {
+		for (@Pc(10) Map map = (Map) maps.head(); map != null; map = (Map) maps.next()) {
+			if (map.valid && map.containsDisplayCoordinate(displayY, displayX)) {
+				return map;
 			}
 		}
 		return null;
 	}
 
 	@OriginalMember(owner = "client!hb", name = "b", descriptor = "(II)Z")
-	public static boolean isMapVisible(@OriginalArg(0) int arg0) {
-		return arg0 >= 0 && visibility.length > arg0 && visibility[arg0];
+	public static boolean isMapVisible(@OriginalArg(0) int index) {
+		return index >= 0 && visibility.length > index && visibility[index];
 	}
 
 	@OriginalMember(owner = "client!ui", name = "d", descriptor = "(II)V")
-	public static void toggleMapVisibility(@OriginalArg(0) int arg0) {
-		if (arg0 >= 0 && visibility.length > arg0) {
-			visibility[arg0] = !visibility[arg0];
+	public static void toggleMapVisibility(@OriginalArg(0) int index) {
+		if (index >= 0 && visibility.length > index) {
+			visibility[index] = !visibility[index];
 		}
 	}
 }

@@ -18,26 +18,26 @@ public final class HashTableIterator {
 	private final HashTable table;
 
 	@OriginalMember(owner = "client!l", name = "<init>", descriptor = "(Lclient!sc;)V")
-	public HashTableIterator(@OriginalArg(0) HashTable arg0) {
-		this.table = arg0;
+	public HashTableIterator(@OriginalArg(0) HashTable table) {
+		this.table = table;
 	}
 
 	@OriginalMember(owner = "client!l", name = "a", descriptor = "(I)Lclient!ab;")
 	public final Node next() {
-		@Pc(30) Node local30;
+		@Pc(30) Node node;
 		if (this.bucketIndex > 0 && this.table.nodes[this.bucketIndex - 1] != this.cursor) {
-			local30 = this.cursor;
-			this.cursor = local30.nextNode;
-			return local30;
+			node = this.cursor;
+			this.cursor = node.nextNode;
+			return node;
 		}
 		do {
 			if (this.table.bucketCount <= this.bucketIndex) {
 				return null;
 			}
-			local30 = this.table.nodes[this.bucketIndex++].nextNode;
-		} while (local30 == this.table.nodes[this.bucketIndex - 1]);
-		this.cursor = local30.nextNode;
-		return local30;
+			node = this.table.nodes[this.bucketIndex++].nextNode;
+		} while (node == this.table.nodes[this.bucketIndex - 1]);
+		this.cursor = node.nextNode;
+		return node;
 	}
 
 	@OriginalMember(owner = "client!l", name = "a", descriptor = "(B)Lclient!ab;")

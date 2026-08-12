@@ -69,30 +69,30 @@ public class Preferences {
 	static int particles = 2;
 
 	@OriginalMember(owner = "client!qh", name = "a", descriptor = "(Lsignlink!ll;B)V")
-	public static void write(@OriginalArg(0) SignLink arg0) {
-		@Pc(11) FileOnDisk local11 = null;
+	public static void write(@OriginalArg(0) SignLink signLink) {
+		@Pc(11) FileOnDisk file = null;
 		try {
-			@Pc(16) PrivilegedRequest local16 = arg0.openPreferences("runescape");
-			while (local16.status == 0) {
+			@Pc(16) PrivilegedRequest request = signLink.openPreferences("runescape");
+			while (request.status == 0) {
 				ThreadUtils.sleep(1L);
 			}
-			if (local16.status == 1) {
-				local11 = (FileOnDisk) local16.result;
-				@Pc(39) Buffer local39 = encode();
-				local11.write(local39.data, local39.offset, 0);
+			if (request.status == 1) {
+				file = (FileOnDisk) request.result;
+				@Pc(39) Buffer buf = encode();
+				file.write(buf.data, buf.offset, 0);
 			}
-		} catch (@Pc(49) Exception local49) {
+		} catch (@Pc(49) Exception ignored) {
 		}
 		try {
-			if (local11 != null) {
-				local11.close();
+			if (file != null) {
+				file.close();
 			}
-		} catch (@Pc(56) Exception local56) {
+		} catch (@Pc(56) Exception ignored) {
 		}
 	}
 
 	@OriginalMember(owner = "client!gf", name = "a", descriptor = "(Lsignlink!ll;I)V")
-	public static void read(@OriginalArg(0) SignLink arg0) {
+	public static void read(@OriginalArg(0) SignLink signLink) {
 		brightness = 3;
 		setAllVisibleLevels(true);
 		removeRoofsSelectively = true;
@@ -113,7 +113,7 @@ public class Preferences {
 		musicVolume = 255;
 		highDetailTextures = true;
 		antiAliasingMode = 0;
-		@Pc(48) FileOnDisk local48 = null;
+		@Pc(48) FileOnDisk file = null;
 		soundEffectVolume = 127;
 		if (GameShell.maxMemory >= 96) {
 			setParticles(2);
@@ -128,41 +128,41 @@ public class Preferences {
 		hdr = false;
 		favoriteWorlds = 0;
 		try {
-			@Pc(78) PrivilegedRequest request = arg0.openPreferences("runescape");
+			@Pc(78) PrivilegedRequest request = signLink.openPreferences("runescape");
 			while (request.status == 0) {
 				ThreadUtils.sleep(1L);
 			}
 			if (request.status == 1) {
-				local48 = (FileOnDisk) request.result;
-				@Pc(106) byte[] local106 = new byte[(int) local48.length()];
-				@Pc(128) int local128;
-				for (@Pc(108) int local108 = 0; local108 < local106.length; local108 += local128) {
-					local128 = local48.read(local108, local106.length - local108, local106);
-					if (local128 == -1) {
+				file = (FileOnDisk) request.result;
+				@Pc(106) byte[] data = new byte[(int) file.length()];
+				@Pc(128) int bytesRead;
+				for (@Pc(108) int offset = 0; offset < data.length; offset += bytesRead) {
+					bytesRead = file.read(offset, data.length - offset, data);
+					if (bytesRead == -1) {
 						throw new IOException("EOF");
 					}
 				}
-				decode(new Buffer(local106));
+				decode(new Buffer(data));
 			}
-		} catch (@Pc(151) Exception local151) {
+		} catch (@Pc(151) Exception ignored) {
 		}
 		try {
-			if (local48 != null) {
-				local48.close();
+			if (file != null) {
+				file.close();
 			}
-		} catch (@Pc(158) Exception local158) {
+		} catch (@Pc(158) Exception ignored) {
 		}
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IZ)V")
-	public static void setAllVisibleLevels(@OriginalArg(1) boolean arg0) {
-		allLevelsVisible = arg0;
+	public static void setAllVisibleLevels(@OriginalArg(1) boolean visible) {
+		allLevelsVisible = visible;
 		SceneGraph.levelsHidden = !SceneGraph.allLevelsAreVisible();
 	}
 
 	@OriginalMember(owner = "client!ga", name = "b", descriptor = "(I)V")
-	public static void setParticles(@OriginalArg(0) int arg0) {
-		particles = arg0;
+	public static void setParticles(@OriginalArg(0) int value) {
+		particles = value;
 	}
 
 	@OriginalMember(owner = "client!ga", name = "c", descriptor = "()I")
@@ -288,37 +288,37 @@ public class Preferences {
 
 	@OriginalMember(owner = "client!dl", name = "a", descriptor = "(B)Lclient!wa;")
 	public static Buffer encode() {
-		@Pc(4) Buffer local4 = new Buffer(34);
-		local4.p1(11);
-		local4.p1(brightness);
-		local4.p1(allLevelsVisible ? 1 : 0);
-		local4.p1(removeRoofsSelectively ? 1 : 0);
-		local4.p1(showGroundDecorations ? 1 : 0);
-		local4.p1(highDetailTextures ? 1 : 0);
-		local4.p1(manyIdleAnimations ? 1 : 0);
-		local4.p1(flickeringEffectsOn ? 1 : 0);
-		local4.p1(manyGroundTextures ? 1 : 0);
-		local4.p1(characterShadowsOn ? 1 : 0);
-		local4.p1(sceneryShadowsType);
-		local4.p1(highDetailLighting ? 1 : 0);
-		local4.p1(highWaterDetail ? 1 : 0);
-		local4.p1(fogEnabled ? 1 : 0);
-		local4.p1(windowMode);
-		local4.p1(stereo ? 1 : 0);
-		local4.p1(soundEffectVolume);
-		local4.p1(musicVolume);
-		local4.p1(ambientSoundsVolume);
-		local4.p2(fullScreenWidth);
-		local4.p2(fullScreenHeight);
-		local4.p1(getParticleSetting());
-		local4.p4(lastWorldId);
-		local4.p1(favoriteWorlds);
-		local4.p1(safeMode ? 1 : 0);
-		local4.p1(keyboardCameraEnabled ? 1 : 0);
-		local4.p1(buildArea);
-		local4.p1(hdr ? 1 : 0);
-		local4.p1(cursorsEnabled ? 1 : 0);
-		return local4;
+		@Pc(4) Buffer buf = new Buffer(34);
+		buf.p1(11);
+		buf.p1(brightness);
+		buf.p1(allLevelsVisible ? 1 : 0);
+		buf.p1(removeRoofsSelectively ? 1 : 0);
+		buf.p1(showGroundDecorations ? 1 : 0);
+		buf.p1(highDetailTextures ? 1 : 0);
+		buf.p1(manyIdleAnimations ? 1 : 0);
+		buf.p1(flickeringEffectsOn ? 1 : 0);
+		buf.p1(manyGroundTextures ? 1 : 0);
+		buf.p1(characterShadowsOn ? 1 : 0);
+		buf.p1(sceneryShadowsType);
+		buf.p1(highDetailLighting ? 1 : 0);
+		buf.p1(highWaterDetail ? 1 : 0);
+		buf.p1(fogEnabled ? 1 : 0);
+		buf.p1(windowMode);
+		buf.p1(stereo ? 1 : 0);
+		buf.p1(soundEffectVolume);
+		buf.p1(musicVolume);
+		buf.p1(ambientSoundsVolume);
+		buf.p2(fullScreenWidth);
+		buf.p2(fullScreenHeight);
+		buf.p1(getParticleSetting());
+		buf.p4(lastWorldId);
+		buf.p1(favoriteWorlds);
+		buf.p1(safeMode ? 1 : 0);
+		buf.p1(keyboardCameraEnabled ? 1 : 0);
+		buf.p1(buildArea);
+		buf.p1(hdr ? 1 : 0);
+		buf.p1(cursorsEnabled ? 1 : 0);
+		return buf;
 	}
 
 	@OriginalMember(owner = "client!lf", name = "c", descriptor = "(I)I")

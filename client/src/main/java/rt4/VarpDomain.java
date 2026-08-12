@@ -28,10 +28,10 @@ public class VarpDomain {
 	public static int inserting = 0;
 
 	static {
-		@Pc(10) int local10 = 2;
-		for (@Pc(12) int local12 = 0; local12 < 32; local12++) {
-			BIT_MASKS[local12] = local10 - 1;
-			local10 += local10;
+		@Pc(10) int value = 2;
+		for (@Pc(12) int i = 0; i < 32; i++) {
+			BIT_MASKS[i] = value - 1;
+			value += value;
 		}
 	}
 
@@ -42,109 +42,109 @@ public class VarpDomain {
 		if (id > varp.length) return;
 
 		varp[id] = value;
-		@Pc(20) LongNode local20 = (LongNode) pendingVarpTimers.get(id);
-		if (local20 == null) {
-			local20 = new LongNode(4611686018427387905L);
-			pendingVarpTimers.put(local20, id);
-		} else if (local20.value != 4611686018427387905L) {
-			local20.value = MonotonicClock.currentTimeMillis() + 500L | 0x4000000000000000L;
+		@Pc(20) LongNode node = (LongNode) pendingVarpTimers.get(id);
+		if (node == null) {
+			node = new LongNode(4611686018427387905L);
+			pendingVarpTimers.put(node, id);
+		} else if (node.value != 4611686018427387905L) {
+			node.value = MonotonicClock.currentTimeMillis() + 500L | 0x4000000000000000L;
 		}
 	}
 
 	@OriginalMember(owner = "client!aj", name = "i", descriptor = "(I)V")
 	public static void reset() {
-		for (@Pc(3) int local3 = 0; local3 < VarpTypeList.count; local3++) {
-			@Pc(19) VarpType local19 = VarpTypeList.get(local3);
-			if (local19 != null && local19.clientCode == 0) {
-				varp[local3] = 0;
-				activeVarps[local3] = 0;
+		for (@Pc(3) int i = 0; i < VarpTypeList.count; i++) {
+			@Pc(19) VarpType type = VarpTypeList.get(i);
+			if (type != null && type.clientCode == 0) {
+				varp[i] = 0;
+				activeVarps[i] = 0;
 			}
 		}
 		pendingVarpTimers = new HashTable(16);
 	}
 
 	@OriginalMember(owner = "client!li", name = "a", descriptor = "(III)V")
-	public static void setVarp(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		activeVarps[arg0] = arg1;
-		@Pc(21) LongNode local21 = (LongNode) pendingVarpTimers.get(arg0);
-		if (local21 == null) {
-			local21 = new LongNode(MonotonicClock.currentTimeMillis() + 500L);
-			pendingVarpTimers.put(local21, arg0);
+	public static void setVarp(@OriginalArg(0) int id, @OriginalArg(2) int value) {
+		activeVarps[id] = value;
+		@Pc(21) LongNode node = (LongNode) pendingVarpTimers.get(id);
+		if (node == null) {
+			node = new LongNode(MonotonicClock.currentTimeMillis() + 500L);
+			pendingVarpTimers.put(node, id);
 		} else {
-			local21.value = MonotonicClock.currentTimeMillis() + 500L;
+			node.value = MonotonicClock.currentTimeMillis() + 500L;
 		}
 	}
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(II)I")
-	public static int getVarbit(@OriginalArg(1) int arg0) {
-		@Pc(13) VarbitType local13 = VarbitTypeList.get(arg0);
-		@Pc(16) int local16 = local13.baseVar;
-		@Pc(19) int local19 = local13.endBit;
-		@Pc(22) int local22 = local13.startBit;
-		@Pc(29) int local29 = BIT_MASKS[local19 - local22];
-		return activeVarps[local16] >> local22 & local29;
+	public static int getVarbit(@OriginalArg(1) int id) {
+		@Pc(13) VarbitType type = VarbitTypeList.get(id);
+		@Pc(16) int baseVar = type.baseVar;
+		@Pc(19) int endBit = type.endBit;
+		@Pc(22) int startBit = type.startBit;
+		@Pc(29) int mask = BIT_MASKS[endBit - startBit];
+		return activeVarps[baseVar] >> startBit & mask;
 	}
 
 	@OriginalMember(owner = "client!qg", name = "a", descriptor = "(IZI)V")
-	public static void setVarbitClient(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(7) VarbitType local7 = VarbitTypeList.get(arg0);
-		@Pc(10) int local10 = local7.endBit;
-		@Pc(16) int local16 = local7.startBit;
-		@Pc(19) int local19 = local7.baseVar;
-		@Pc(25) int local25 = BIT_MASKS[local10 - local16];
-		if (arg1 < 0 || arg1 > local25) {
-			arg1 = 0;
+	public static void setVarbitClient(@OriginalArg(0) int id, @OriginalArg(2) int value) {
+		@Pc(7) VarbitType type = VarbitTypeList.get(id);
+		@Pc(10) int endBit = type.endBit;
+		@Pc(16) int startBit = type.startBit;
+		@Pc(19) int baseVar = type.baseVar;
+		@Pc(25) int mask = BIT_MASKS[endBit - startBit];
+		if (value < 0 || value > mask) {
+			value = 0;
 		}
-		local25 <<= local16;
-		setVarp(local19, local25 & arg1 << local16 | activeVarps[local19] & ~local25);
+		mask <<= startBit;
+		setVarp(baseVar, mask & value << startBit | activeVarps[baseVar] & ~mask);
 	}
 
 	@OriginalMember(owner = "client!wd", name = "a", descriptor = "(BII)V")
-	public static void setVarbit(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(14) VarbitType local14 = VarbitTypeList.get(arg1);
-		@Pc(17) int local17 = local14.baseVar;
-		@Pc(20) int local20 = local14.endBit;
-		@Pc(23) int local23 = local14.startBit;
-		@Pc(29) int local29 = BIT_MASKS[local20 - local23];
-		if (arg0 < 0 || local29 < arg0) {
-			arg0 = 0;
+	public static void setVarbit(@OriginalArg(1) int value, @OriginalArg(2) int id) {
+		@Pc(14) VarbitType type = VarbitTypeList.get(id);
+		@Pc(17) int baseVar = type.baseVar;
+		@Pc(20) int endBit = type.endBit;
+		@Pc(23) int startBit = type.startBit;
+		@Pc(29) int mask = BIT_MASKS[endBit - startBit];
+		if (value < 0 || mask < value) {
+			value = 0;
 		}
-		local29 <<= local23;
-		set(arg0 << local23 & local29 | ~local29 & varp[local17], local17);
+		mask <<= startBit;
+		set(value << startBit & mask | ~mask & varp[baseVar], baseVar);
 	}
 
 	@OriginalMember(owner = "client!gl", name = "a", descriptor = "(II)V")
-	public static void refreshMagicVarp(@OriginalArg(1) int arg0) {
+	public static void refreshMagicVarp(@OriginalArg(1) int id) {
 		InterfaceList.redrawActiveInterfaces();
 		AreaSoundManager.updateMulti();
-		@Pc(17) int local17 = VarpTypeList.get(arg0).clientCode;
-		if (local17 == 0) {
+		@Pc(17) int clientCode = VarpTypeList.get(id).clientCode;
+		if (clientCode == 0) {
 			return;
 		}
-		@Pc(25) int local25 = activeVarps[arg0];
-		if (local17 == 6) {
-			chatEffectsDisabled = local25;
+		@Pc(25) int value = activeVarps[id];
+		if (clientCode == 6) {
+			chatEffectsDisabled = value;
 		}
-		if (local17 == 5) {
-			mouseButtons = local25;
+		if (clientCode == 5) {
+			mouseButtons = value;
 		}
-		if (local17 == 9) {
-			inserting = local25;
+		if (clientCode == 9) {
+			inserting = value;
 		}
 	}
 
 	@OriginalMember(owner = "client!cn", name = "a", descriptor = "(ZI)I")
-	public static int poll(@OriginalArg(0) boolean arg0) {
-		@Pc(4) long local4 = MonotonicClock.currentTimeMillis();
-		for (@Pc(28) LongNode local28 = arg0 ? (LongNode) pendingVarpTimers.head() : (LongNode) pendingVarpTimers.next(); local28 != null; local28 = (LongNode) pendingVarpTimers.next()) {
-			if ((local28.value & 0x3FFFFFFFFFFFFFFFL) < local4) {
-				if ((local28.value & 0x4000000000000000L) != 0L) {
-					@Pc(58) int local58 = (int) local28.key;
-					activeVarps[local58] = varp[local58];
-					local28.unlink();
-					return local58;
+	public static int poll(@OriginalArg(0) boolean first) {
+		@Pc(4) long now = MonotonicClock.currentTimeMillis();
+		for (@Pc(28) LongNode node = first ? (LongNode) pendingVarpTimers.head() : (LongNode) pendingVarpTimers.next(); node != null; node = (LongNode) pendingVarpTimers.next()) {
+			if ((node.value & 0x3FFFFFFFFFFFFFFFL) < now) {
+				if ((node.value & 0x4000000000000000L) != 0L) {
+					@Pc(58) int id = (int) node.key;
+					activeVarps[id] = varp[id];
+					node.unlink();
+					return id;
 				}
-				local28.unlink();
+				node.unlink();
 			}
 		}
 		return -1;

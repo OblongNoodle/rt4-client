@@ -283,9 +283,9 @@ public final class CollisionMap {
 	}
 
 	@OriginalMember(owner = "client!mj", name = "a", descriptor = "(IIIIIIIIB)Z")
-	private boolean isInsideRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		if (arg1 + arg2 > arg7 && arg2 < arg0 + arg7) {
-			return arg3 + arg5 > arg4 && arg6 + arg4 > arg5;
+	private boolean isInsideRect(@OriginalArg(0) int srcWidth, @OriginalArg(1) int destWidth, @OriginalArg(2) int destX, @OriginalArg(3) int destHeight, @OriginalArg(4) int srcY, @OriginalArg(5) int destY, @OriginalArg(6) int srcHeight, @OriginalArg(7) int srcX) {
+		if (destWidth + destX > srcX && destX < srcWidth + srcX) {
+			return destHeight + destY > srcY && srcHeight + srcY > destY;
 		} else {
 			return false;
 		}
@@ -533,16 +533,16 @@ public final class CollisionMap {
 	}
 
 	@OriginalMember(owner = "client!mj", name = "a", descriptor = "(IZBIII)V")
-	public final void flagScenery(@OriginalArg(0) int startX, @OriginalArg(1) boolean blocksProjectiles, @OriginalArg(3) int startY, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
+	public final void flagScenery(@OriginalArg(0) int startX, @OriginalArg(1) boolean blocksProjectiles, @OriginalArg(3) int startY, @OriginalArg(4) int sizeX, @OriginalArg(5) int sizeY) {
 		@Pc(6) int y = startY - this.yOffset;
 		@Pc(11) int x = startX - this.xOffset;
 		@Pc(17) int flags = 256;
 		if (blocksProjectiles) {
 			flags = 131328;
 		}
-		for (@Pc(25) int x0 = x; x0 < x + arg3; x0++) {
+		for (@Pc(25) int x0 = x; x0 < x + sizeX; x0++) {
 			if (x0 >= 0 && x0 < this.width) {
-				for (@Pc(47) int y0 = y; y0 < arg4 + y; y0++) {
+				for (@Pc(47) int y0 = y; y0 < sizeY + y; y0++) {
 					if (y0 >= 0 && this.length > y0) {
 						this.flag(flags, x0, y0);
 					}
@@ -670,77 +670,77 @@ public final class CollisionMap {
 	}
 
 	@OriginalMember(owner = "client!mj", name = "a", descriptor = "(IIIIZIIIII)Z")
-	private boolean isOutsideRect(@OriginalArg(0) int arg0, @OriginalArg(1) int y1, @OriginalArg(2) int arg2, @OriginalArg(3) int destBlockedSides, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int destY, @OriginalArg(8) int arg7, @OriginalArg(9) int destLength) {
-		@Pc(9) int local9 = arg5 + arg7;
-		@Pc(13) int destY1 = destY + destLength;
-		@Pc(22) int local22 = arg2 + arg0;
-		@Pc(27) int local27 = y1 + arg4;
-		@Pc(45) int y0;
-		@Pc(52) int local52;
-		if (arg5 >= arg0 && arg5 < local22) {
-			if (destY1 == y1 && (destBlockedSides & 0x4) == 0) {
-				y0 = arg5;
-				local52 = local22 >= local9 ? local9 : local22;
-				while (local52 > y0) {
-					if ((this.flags[y0 - this.xOffset][destY1 - this.yOffset - 1] & 0x2) == 0) {
+	private boolean isOutsideRect(@OriginalArg(0) int destX, @OriginalArg(1) int destY, @OriginalArg(2) int destWidth, @OriginalArg(3) int destBlockedSides, @OriginalArg(5) int destHeight, @OriginalArg(6) int srcX, @OriginalArg(7) int srcY, @OriginalArg(8) int srcWidth, @OriginalArg(9) int srcHeight) {
+		@Pc(9) int srcRight = srcX + srcWidth;
+		@Pc(13) int srcTop = srcY + srcHeight;
+		@Pc(22) int destRight = destWidth + destX;
+		@Pc(27) int destTop = destY + destHeight;
+		@Pc(45) int i;
+		@Pc(52) int limit;
+		if (srcX >= destX && srcX < destRight) {
+			if (srcTop == destY && (destBlockedSides & 0x4) == 0) {
+				i = srcX;
+				limit = destRight >= srcRight ? srcRight : destRight;
+				while (limit > i) {
+					if ((this.flags[i - this.xOffset][srcTop - this.yOffset - 1] & 0x2) == 0) {
 						return true;
 					}
-					y0++;
+					i++;
 				}
-			} else if (local27 == destY && (destBlockedSides & 0x1) == 0) {
-				y0 = arg5;
-				local52 = local9 > local22 ? local22 : local9;
-				while (local52 > y0) {
-					if ((this.flags[y0 - this.xOffset][destY - this.yOffset] & 0x20) == 0) {
+			} else if (destTop == srcY && (destBlockedSides & 0x1) == 0) {
+				i = srcX;
+				limit = srcRight > destRight ? destRight : srcRight;
+				while (limit > i) {
+					if ((this.flags[i - this.xOffset][srcY - this.yOffset] & 0x20) == 0) {
 						return true;
 					}
-					y0++;
-				}
-			}
-		} else if (local9 > arg0 && local9 <= local22) {
-			if (y1 == destY1 && (destBlockedSides & 0x4) == 0) {
-				for (y0 = arg0; y0 < local9; y0++) {
-					if ((this.flags[y0 - this.xOffset][destY1 - this.yOffset - 1] & 0x2) == 0) {
-						return true;
-					}
-				}
-			} else if (destY == local27 && (destBlockedSides & 0x1) == 0) {
-				for (y0 = arg0; y0 < local9; y0++) {
-					if ((this.flags[y0 - this.xOffset][destY - this.yOffset] & 0x20) == 0) {
-						return true;
-					}
+					i++;
 				}
 			}
-		} else if (destY >= y1 && local27 > destY) {
-			if (local9 == arg0 && (destBlockedSides & 0x8) == 0) {
-				y0 = destY;
-				local52 = local27 >= destY1 ? destY1 : local27;
-				while (y0 < local52) {
-					if ((this.flags[local9 - this.xOffset - 1][y0 - this.yOffset] & 0x8) == 0) {
+		} else if (srcRight > destX && srcRight <= destRight) {
+			if (destY == srcTop && (destBlockedSides & 0x4) == 0) {
+				for (i = destX; i < srcRight; i++) {
+					if ((this.flags[i - this.xOffset][srcTop - this.yOffset - 1] & 0x2) == 0) {
 						return true;
 					}
-					y0++;
 				}
-			} else if (arg5 == local22 && (destBlockedSides & 0x2) == 0) {
-				y0 = destY;
-				local52 = local27 < destY1 ? local27 : destY1;
-				while (y0 < local52) {
-					if ((this.flags[arg5 - this.xOffset][y0 - this.yOffset] & 0x80) == 0) {
+			} else if (srcY == destTop && (destBlockedSides & 0x1) == 0) {
+				for (i = destX; i < srcRight; i++) {
+					if ((this.flags[i - this.xOffset][srcY - this.yOffset] & 0x20) == 0) {
 						return true;
 					}
-					y0++;
 				}
 			}
-		} else if (y1 < destY1 && local27 >= destY1) {
-			if (local9 == arg0 && (destBlockedSides & 0x8) == 0) {
-				for (y0 = y1; y0 < destY1; y0++) {
-					if ((this.flags[local9 - this.xOffset - 1][y0 - this.yOffset] & 0x8) == 0) {
+		} else if (srcY >= destY && destTop > srcY) {
+			if (srcRight == destX && (destBlockedSides & 0x8) == 0) {
+				i = srcY;
+				limit = destTop >= srcTop ? srcTop : destTop;
+				while (i < limit) {
+					if ((this.flags[srcRight - this.xOffset - 1][i - this.yOffset] & 0x8) == 0) {
+						return true;
+					}
+					i++;
+				}
+			} else if (srcX == destRight && (destBlockedSides & 0x2) == 0) {
+				i = srcY;
+				limit = destTop < srcTop ? destTop : srcTop;
+				while (i < limit) {
+					if ((this.flags[srcX - this.xOffset][i - this.yOffset] & 0x80) == 0) {
+						return true;
+					}
+					i++;
+				}
+			}
+		} else if (destY < srcTop && destTop >= srcTop) {
+			if (srcRight == destX && (destBlockedSides & 0x8) == 0) {
+				for (i = destY; i < srcTop; i++) {
+					if ((this.flags[srcRight - this.xOffset - 1][i - this.yOffset] & 0x8) == 0) {
 						return true;
 					}
 				}
-			} else if (local22 == arg5 && (destBlockedSides & 0x2) == 0) {
-				for (y0 = y1; y0 < destY1; y0++) {
-					if ((this.flags[arg5 - this.xOffset][y0 - this.yOffset] & 0x80) == 0) {
+			} else if (destRight == srcX && (destBlockedSides & 0x2) == 0) {
+				for (i = destY; i < srcTop; i++) {
+					if ((this.flags[srcX - this.xOffset][i - this.yOffset] & 0x80) == 0) {
 						return true;
 					}
 				}
@@ -751,12 +751,12 @@ public final class CollisionMap {
 
 	@OriginalMember(owner = "client!mj", name = "a", descriptor = "(I)V")
 	public final void clear() {
-		for (@Pc(3) int local3 = 0; local3 < this.width; local3++) {
-			for (@Pc(13) int local13 = 0; local13 < this.length; local13++) {
-				if (local3 == 0 || local13 == 0 || local3 >= this.width - 5 || this.length - 5 <= local13) {
-					this.flags[local3][local13] = 16777215;
+		for (@Pc(3) int x = 0; x < this.width; x++) {
+			for (@Pc(13) int y = 0; y < this.length; y++) {
+				if (x == 0 || y == 0 || x >= this.width - 5 || this.length - 5 <= y) {
+					this.flags[x][y] = 16777215;
 				} else {
-					this.flags[local3][local13] = 16777216;
+					this.flags[x][y] = 16777216;
 				}
 			}
 		}
@@ -798,95 +798,95 @@ public final class CollisionMap {
 	}
 
 	@OriginalMember(owner = "client!mj", name = "b", descriptor = "(IIIII)Z")
-	public final boolean isPathClear(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		if (arg3 == arg2 && arg0 == arg1) {
+	public final boolean isPathClear(@OriginalArg(1) int srcY, @OriginalArg(2) int destX, @OriginalArg(3) int destY, @OriginalArg(4) int srcX) {
+		if (srcX == destX && srcY == destY) {
 			return true;
 		}
-		@Pc(22) int local22 = arg1 - this.yOffset;
-		@Pc(33) int local33 = arg2 - this.xOffset;
-		if (local33 < 0 || this.width <= local33 || local22 < 0 || local22 >= this.length) {
+		@Pc(22) int dy = destY - this.yOffset;
+		@Pc(33) int dx = destX - this.xOffset;
+		if (dx < 0 || this.width <= dx || dy < 0 || dy >= this.length) {
 			return false;
 		}
-		@Pc(61) int local61 = arg0 - this.yOffset;
-		@Pc(66) int local66 = arg3 - this.xOffset;
-		@Pc(77) int local77;
-		if (local33 > local66) {
-			local77 = local33 - local66;
+		@Pc(61) int sy = srcY - this.yOffset;
+		@Pc(66) int sx = srcX - this.xOffset;
+		@Pc(77) int absDx;
+		if (dx > sx) {
+			absDx = dx - sx;
 		} else {
-			local77 = local66 - local33;
+			absDx = sx - dx;
 		}
-		@Pc(96) int local96;
-		if (local22 <= local61) {
-			local96 = local61 - local22;
+		@Pc(96) int absDy;
+		if (dy <= sy) {
+			absDy = sy - dy;
 		} else {
-			local96 = local22 - local61;
+			absDy = dy - sy;
 		}
-		@Pc(117) int local117;
-		@Pc(111) int local111;
-		if (local77 <= local96) {
-			local111 = 32768;
-			local117 = local77 * 65536 / local96;
-			while (local61 != local22) {
-				if (local22 > local61) {
-					if ((this.flags[local66][local61] & 0x12C0102) != 0) {
+		@Pc(117) int step;
+		@Pc(111) int accumulator;
+		if (absDx <= absDy) {
+			accumulator = 32768;
+			step = absDx * 65536 / absDy;
+			while (sy != dy) {
+				if (dy > sy) {
+					if ((this.flags[sx][sy] & 0x12C0102) != 0) {
 						return false;
 					}
-					local61++;
-				} else if (local22 < local61) {
-					if ((this.flags[local66][local61] & 0x12C0120) != 0) {
+					sy++;
+				} else if (dy < sy) {
+					if ((this.flags[sx][sy] & 0x12C0120) != 0) {
 						return false;
 					}
-					local61--;
+					sy--;
 				}
-				local111 += local117;
-				if (local111 >= 65536) {
-					local111 -= 65536;
-					if (local66 < local33) {
-						if ((this.flags[local66][local61] & 0x12C0108) != 0) {
+				accumulator += step;
+				if (accumulator >= 65536) {
+					accumulator -= 65536;
+					if (sx < dx) {
+						if ((this.flags[sx][sy] & 0x12C0108) != 0) {
 							return false;
 						}
-						local66++;
-					} else if (local66 > local33) {
-						if ((this.flags[local66][local61] & 0x12C0180) != 0) {
+						sx++;
+					} else if (sx > dx) {
+						if ((this.flags[sx][sy] & 0x12C0180) != 0) {
 							return false;
 						}
-						local66--;
+						sx--;
 					}
 				}
 			}
 		} else {
-			local117 = local96 * 65536 / local77;
-			local111 = 32768;
-			while (local33 != local66) {
-				if (local66 < local33) {
-					if ((this.flags[local66][local61] & 0x12C0108) != 0) {
+			step = absDy * 65536 / absDx;
+			accumulator = 32768;
+			while (dx != sx) {
+				if (sx < dx) {
+					if ((this.flags[sx][sy] & 0x12C0108) != 0) {
 						return false;
 					}
-					local66++;
-				} else if (local33 < local66) {
-					if ((this.flags[local66][local61] & 0x12C0180) != 0) {
+					sx++;
+				} else if (dx < sx) {
+					if ((this.flags[sx][sy] & 0x12C0180) != 0) {
 						return false;
 					}
-					local66--;
+					sx--;
 				}
-				local111 += local117;
-				if (local111 >= 65536) {
-					local111 -= 65536;
-					if (local61 < local22) {
-						if ((this.flags[local66][local61] & 0x12C0102) != 0) {
+				accumulator += step;
+				if (accumulator >= 65536) {
+					accumulator -= 65536;
+					if (sy < dy) {
+						if ((this.flags[sx][sy] & 0x12C0102) != 0) {
 							return false;
 						}
-						local61++;
-					} else if (local22 < local61) {
-						if ((this.flags[local66][local61] & 0x12C0120) != 0) {
+						sy++;
+					} else if (dy < sy) {
+						if ((this.flags[sx][sy] & 0x12C0120) != 0) {
 							return false;
 						}
-						local61--;
+						sy--;
 					}
 				}
 			}
 		}
-		return (this.flags[local33][local22] & 0x1240100) == 0;
+		return (this.flags[dx][dy] & 0x1240100) == 0;
 	}
 
 	@OriginalMember(owner = "client!mj", name = "a", descriptor = "(BIII)V")

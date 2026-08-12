@@ -273,8 +273,8 @@ public final class DisplayMode {
 		if (Protocol.socket != null && (client.gameState == 30 || client.gameState == 25)) {
 			ClientProt.sendWindowDetails();
 		}
-		for (@Pc(466) int local466 = 0; local466 < 100; local466++) {
-			InterfaceList.rectangleDirty[local466] = true;
+		for (@Pc(466) int i = 0; i < 100; i++) {
+			InterfaceList.rectangleDirty[i] = true;
 		}
 		GameShell.fullRedraw = true;
 		PluginRepository.reloadPlugins();
@@ -283,61 +283,61 @@ public final class DisplayMode {
 	@OriginalMember(owner = "client!ab", name = "c", descriptor = "(B)[Lclient!od;")
 	public static DisplayMode[] getDisplayModes() {
 		if (cachedDisplayModes == null) {
-			@Pc(16) DisplayMode[] local16 = getAvailableDisplayModes(GameShell.signLink);
-			@Pc(20) DisplayMode[] local20 = new DisplayMode[local16.length];
-			@Pc(22) int local22 = 0;
+			@Pc(16) DisplayMode[] available = getAvailableDisplayModes(GameShell.signLink);
+			@Pc(20) DisplayMode[] filtered = new DisplayMode[available.length];
+			@Pc(22) int count = 0;
 			label52:
-			for (@Pc(24) int local24 = 0; local24 < local16.length; local24++) {
-				@Pc(32) DisplayMode local32 = local16[local24];
-				if ((local32.bitDepth <= 0 || local32.bitDepth >= 24) && local32.width >= 800 && local32.height >= 600) {
-					for (@Pc(52) int local52 = 0; local52 < local22; local52++) {
-						@Pc(59) DisplayMode local59 = local20[local52];
-						if (local32.width == local59.width && local59.height == local32.height) {
-							if (local32.bitDepth > local59.bitDepth) {
-								local20[local52] = local32;
+			for (@Pc(24) int i = 0; i < available.length; i++) {
+				@Pc(32) DisplayMode mode = available[i];
+				if ((mode.bitDepth <= 0 || mode.bitDepth >= 24) && mode.width >= 800 && mode.height >= 600) {
+					for (@Pc(52) int j = 0; j < count; j++) {
+						@Pc(59) DisplayMode existing = filtered[j];
+						if (mode.width == existing.width && existing.height == mode.height) {
+							if (mode.bitDepth > existing.bitDepth) {
+								filtered[j] = mode;
 							}
 							continue label52;
 						}
 					}
-					local20[local22] = local32;
-					local22++;
+					filtered[count] = mode;
+					count++;
 				}
 			}
-			cachedDisplayModes = new DisplayMode[local22];
-			ArrayUtils.copy(local20, 0, cachedDisplayModes, 0, local22);
-			@Pc(112) int[] local112 = new int[cachedDisplayModes.length];
-			for (@Pc(114) int local114 = 0; local114 < cachedDisplayModes.length; local114++) {
-				@Pc(122) DisplayMode local122 = cachedDisplayModes[local114];
-				local112[local114] = local122.height * local122.width;
+			cachedDisplayModes = new DisplayMode[count];
+			ArrayUtils.copy(filtered, 0, cachedDisplayModes, 0, count);
+			@Pc(112) int[] sortKeys = new int[cachedDisplayModes.length];
+			for (@Pc(114) int i = 0; i < cachedDisplayModes.length; i++) {
+				@Pc(122) DisplayMode mode = cachedDisplayModes[i];
+				sortKeys[i] = mode.height * mode.width;
 			}
-			ArrayUtils.sort(local112, cachedDisplayModes);
+			ArrayUtils.sort(sortKeys, cachedDisplayModes);
 		}
 		return cachedDisplayModes;
 	}
 
 	@OriginalMember(owner = "client!pm", name = "a", descriptor = "(ILsignlink!ll;)[Lclient!od;")
-	public static DisplayMode[] getAvailableDisplayModes(@OriginalArg(1) SignLink arg0) {
-		if (!arg0.isFullScreenSupported()) {
+	public static DisplayMode[] getAvailableDisplayModes(@OriginalArg(1) SignLink signLink) {
+		if (!signLink.isFullScreenSupported()) {
 			return new DisplayMode[0];
 		}
-		@Pc(17) PrivilegedRequest local17 = arg0.getDisplayModes();
-		while (local17.status == 0) {
+		@Pc(17) PrivilegedRequest request = signLink.getDisplayModes();
+		while (request.status == 0) {
 			ThreadUtils.sleep(10L);
 		}
-		if (local17.status == 2) {
+		if (request.status == 2) {
 			return new DisplayMode[0];
 		}
-		@Pc(39) int[] local39 = (int[]) local17.result;
-		@Pc(45) DisplayMode[] local45 = new DisplayMode[local39.length >> 2];
-		for (@Pc(47) int local47 = 0; local47 < local45.length; local47++) {
-			@Pc(59) DisplayMode local59 = new DisplayMode();
-			local45[local47] = local59;
-			local59.width = local39[local47 << 2];
-			local59.height = local39[(local47 << 2) + 1];
-			local59.bitDepth = local39[(local47 << 2) + 2];
-			local59.refreshRate = local39[(local47 << 2) + 3];
+		@Pc(39) int[] data = (int[]) request.result;
+		@Pc(45) DisplayMode[] modes = new DisplayMode[data.length >> 2];
+		for (@Pc(47) int i = 0; i < modes.length; i++) {
+			@Pc(59) DisplayMode mode = new DisplayMode();
+			modes[i] = mode;
+			mode.width = data[i << 2];
+			mode.height = data[(i << 2) + 1];
+			mode.bitDepth = data[(i << 2) + 2];
+			mode.refreshRate = data[(i << 2) + 3];
 		}
-		return local45;
+		return modes;
 	}
 
 	@OriginalMember(owner = "client!nf", name = "a", descriptor = "(IIIIILsignlink!ll;)Ljava/awt/Frame;")
@@ -349,14 +349,14 @@ public final class DisplayMode {
 		if (displayModes == null) {
 			return null;
 		}
-		@Pc(27) boolean local27 = false;
-		for (@Pc(29) int local29 = 0; local29 < displayModes.length; local29++) {
-			if (width == displayModes[local29].width && height == displayModes[local29].height && (!local27 || displayModes[local29].bitDepth > bitDepth)) {
-				bitDepth = displayModes[local29].bitDepth;
-				local27 = true;
+		@Pc(27) boolean found = false;
+		for (@Pc(29) int i = 0; i < displayModes.length; i++) {
+			if (width == displayModes[i].width && height == displayModes[i].height && (!found || displayModes[i].bitDepth > bitDepth)) {
+				bitDepth = displayModes[i].bitDepth;
+				found = true;
 			}
 		}
-		if (!local27) {
+		if (!found) {
 			return null;
 		}
 		@Pc(90) PrivilegedRequest request = signLink.enterFullScreen(bitDepth, height, width);

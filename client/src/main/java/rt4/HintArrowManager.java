@@ -24,42 +24,42 @@ public class HintArrowManager {
 	}
 
 	@OriginalMember(owner = "client!rm", name = "a", descriptor = "(ZIIIILclient!ak;I)Lclient!ak;")
-	public static Model getModel(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) Model arg4, @OriginalArg(6) int arg5) {
-		@Pc(4) long local4 = arg2;
-		@Pc(10) Model model = (Model) models.get(local4);
+	public static Model getModel(@OriginalArg(1) int rotation, @OriginalArg(2) int y, @OriginalArg(3) int modelId, @OriginalArg(4) int x, @OriginalArg(5) Model baseModel, @OriginalArg(6) int baseHeight) {
+		@Pc(4) long cacheKey = modelId;
+		@Pc(10) Model model = (Model) models.get(cacheKey);
 		if (model == null) {
-			@Pc(22) RawModel local22 = RawModel.create(client.js5Archive7, arg2);
-			if (local22 == null) {
+			@Pc(22) RawModel rawModel = RawModel.create(client.js5Archive7, modelId);
+			if (rawModel == null) {
 				return null;
 			}
-			model = local22.createModel(64, 768, -50, -10, -50);
-			models.put(model, local4);
+			model = rawModel.createModel(64, 768, -50, -10, -50);
+			models.put(model, cacheKey);
 		}
-		@Pc(42) int minX = arg4.getMinX();
-		@Pc(45) int maxX = arg4.getMaxX();
-		@Pc(48) int minZ = arg4.getMinZ();
-		@Pc(51) int maxZ = arg4.getMaxZ();
+		@Pc(42) int minX = baseModel.getMinX();
+		@Pc(45) int maxX = baseModel.getMaxX();
+		@Pc(48) int minZ = baseModel.getMinZ();
+		@Pc(51) int maxZ = baseModel.getMaxZ();
 		model = model.copyForAnimation(true, true, true);
-		if (arg0 != 0) {
-			model.rotateY(arg0);
+		if (rotation != 0) {
+			model.rotateY(rotation);
 		}
-		@Pc(94) int local94;
+		@Pc(94) int i;
 		if (GlRenderer.enabled) {
-			@Pc(68) GlModel local68 = (GlModel) model;
-			if (arg5 != SceneGraph.getTileHeight(Player.plane, arg3 + minX, arg1 + minZ) || arg5 != SceneGraph.getTileHeight(Player.plane, arg3 + maxX, maxZ + arg1)) {
-				for (local94 = 0; local94 < local68.vertexCount; local94++) {
-					local68.vertexY[local94] += SceneGraph.getTileHeight(Player.plane, local68.vertexX[local94] + arg3, local68.vertexZ[local94] + arg1) - arg5;
+			@Pc(68) GlModel glModel = (GlModel) model;
+			if (baseHeight != SceneGraph.getTileHeight(Player.plane, x + minX, y + minZ) || baseHeight != SceneGraph.getTileHeight(Player.plane, x + maxX, maxZ + y)) {
+				for (i = 0; i < glModel.vertexCount; i++) {
+					glModel.vertexY[i] += SceneGraph.getTileHeight(Player.plane, glModel.vertexX[i] + x, glModel.vertexZ[i] + y) - baseHeight;
 				}
-				local68.vertexBuffer.valid = false;
-				local68.bounds.valid = false;
+				glModel.vertexBuffer.valid = false;
+				glModel.bounds.valid = false;
 			}
 		} else {
-			@Pc(142) SoftwareModel local142 = (SoftwareModel) model;
-			if (arg5 != SceneGraph.getTileHeight(Player.plane, minX + arg3, minZ + arg1) || arg5 != SceneGraph.getTileHeight(Player.plane, arg3 + maxX, maxZ + arg1)) {
-				for (local94 = 0; local94 < local142.vertexCount; local94++) {
-					local142.vertexY[local94] += SceneGraph.getTileHeight(Player.plane, arg3 + local142.vertexX[local94], local142.vertexZ[local94] + arg1) - arg5;
+			@Pc(142) SoftwareModel swModel = (SoftwareModel) model;
+			if (baseHeight != SceneGraph.getTileHeight(Player.plane, minX + x, minZ + y) || baseHeight != SceneGraph.getTileHeight(Player.plane, x + maxX, maxZ + y)) {
+				for (i = 0; i < swModel.vertexCount; i++) {
+					swModel.vertexY[i] += SceneGraph.getTileHeight(Player.plane, x + swModel.vertexX[i], swModel.vertexZ[i] + y) - baseHeight;
 				}
-				local142.boundsValid = false;
+				swModel.boundsValid = false;
 			}
 		}
 		return model;

@@ -53,7 +53,7 @@ public class CreateManager {
 				Protocol.socketRequest = GameShell.signLink.openSocket(client.hostname, client.port);
 				step = 2;
 			}
-			@Pc(120) int local120;
+			@Pc(120) int response;
 			if (step == 2) {
 				if (Protocol.socketRequest.status == 2) {
 					throw new IOException();
@@ -70,15 +70,15 @@ public class CreateManager {
 				if (client.soundChannel != null) {
 					client.soundChannel.pauseConsumptionCheck();
 				}
-				local120 = Protocol.socket.read();
+				response = Protocol.socket.read();
 				if (client.musicChannel != null) {
 					client.musicChannel.pauseConsumptionCheck();
 				}
 				if (client.soundChannel != null) {
 					client.soundChannel.pauseConsumptionCheck();
 				}
-				if (local120 != 21) {
-					reply = local120;
+				if (response != 21) {
+					reply = response;
 					step = 0;
 					Protocol.socket.close();
 					Protocol.socket = null;
@@ -99,8 +99,8 @@ public class CreateManager {
 				}
 				Protocol.inboundBuffer.offset = 0;
 				Protocol.socket.read(0, suggestedNames.length * 8, Protocol.inboundBuffer.data);
-				for (local120 = 0; local120 < suggestedNames.length; local120++) {
-					suggestedNames[local120] = Base37.decode37(Protocol.inboundBuffer.g8());
+				for (response = 0; response < suggestedNames.length; response++) {
+					suggestedNames[response] = Base37.decode37(Protocol.inboundBuffer.g8());
 				}
 				reply = 21;
 				step = 0;
@@ -158,7 +158,7 @@ public class CreateManager {
 	}
 
 	@OriginalMember(owner = "client!da", name = "a", descriptor = "(IIIILclient!na;JI)V")
-	public static void createAccount(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) JagString password, @OriginalArg(5) long name, @OriginalArg(6) int arg5) {
+	public static void createAccount(@OriginalArg(0) int day, @OriginalArg(2) int country, @OriginalArg(3) int month, @OriginalArg(4) JagString password, @OriginalArg(5) long name, @OriginalArg(6) int year) {
 		@Pc(8) Buffer buffer = new Buffer(GlobalConfig.LOGIN_USE_STRINGS ? 129 : 128);
 		buffer.p1(10);
 		buffer.p2((int) (Math.random() * 99999.0D));
@@ -172,11 +172,11 @@ public class CreateManager {
 		buffer.pjstr(password);
 		buffer.p4((int) (Math.random() * 9.9999999E7D));
 		buffer.p2(client.affiliate);
-		buffer.p1(arg0);
-		buffer.p1(arg2);
+		buffer.p1(day);
+		buffer.p1(month);
 		buffer.p4((int) (Math.random() * 9.9999999E7D));
-		buffer.p2(arg5);
-		buffer.p2(arg1);
+		buffer.p2(year);
+		buffer.p2(country);
 		buffer.p4((int) (Math.random() * 9.9999999E7D));
 		buffer.rsaenc(GlobalConfig.RSA_EXPONENT, GlobalConfig.RSA_MODULUS);
 		Protocol.outboundBuffer.offset = 0;

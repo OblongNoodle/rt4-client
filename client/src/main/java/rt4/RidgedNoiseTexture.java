@@ -25,12 +25,12 @@ public final class RidgedNoiseTexture extends RidgedNoiseGenerator {
 
 	@OriginalMember(owner = "client!ng", name = "a", descriptor = "(IB)V")
 	@Override
-	protected final void writeSample(@OriginalArg(0) int arg0, @OriginalArg(1) byte arg1) {
-		@Pc(3) int local3 = arg0 * 2;
-		@Pc(7) int local7 = arg1 & 0xFF;
-		@Pc(10) int local10 = local3;
-		@Pc(11) int local11 = local3 + 1;
-		this.textureData[local10] = (byte) (local7 * 3 >> 5);
-		this.textureData[local11] = (byte) (local7 >> 2);
+	protected final void writeSample(@OriginalArg(0) int index, @OriginalArg(1) byte sample) {
+		@Pc(3) int offset = index * 2;
+		@Pc(7) int value = sample & 0xFF;
+		@Pc(10) int even = offset;
+		@Pc(11) int odd = offset + 1;
+		this.textureData[even] = (byte) (value * 3 >> 5);
+		this.textureData[odd] = (byte) (value >> 2);
 	}
 }

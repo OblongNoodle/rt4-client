@@ -101,119 +101,119 @@ public class Cheat {
 	public static final JagString RELOADPLUGINS = JagString.parse("::reloadplugins");
 
 	@OriginalMember(owner = "client!en", name = "a", descriptor = "(IIIB)V")
-	public static void teleport(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(66) JagString local66 = JagString.concatenate(new JagString[]{TELE, JagString.parseInt(arg2), JagString.COMMA, JagString.parseInt(arg0 >> 6), JagString.COMMA, JagString.parseInt(arg1 >> 6), JagString.COMMA, JagString.parseInt(arg0 & 0x3F), JagString.COMMA, JagString.parseInt(arg1 & 0x3F)});
-		local66.print();
-		execute(local66);
+	public static void teleport(@OriginalArg(0) int tileX, @OriginalArg(1) int tileY, @OriginalArg(2) int plane) {
+		@Pc(66) JagString command = JagString.concatenate(new JagString[]{TELE, JagString.parseInt(plane), JagString.COMMA, JagString.parseInt(tileX >> 6), JagString.COMMA, JagString.parseInt(tileY >> 6), JagString.COMMA, JagString.parseInt(tileX & 0x3F), JagString.COMMA, JagString.parseInt(tileY & 0x3F)});
+		command.print();
+		execute(command);
 	}
 
 	@OriginalMember(owner = "client!k", name = "a", descriptor = "(Lclient!na;Z)V")
-	public static void execute(@OriginalArg(0) JagString arg0) {
-		PluginRepository.ProcessCommand(arg0);
+	public static void execute(@OriginalArg(0) JagString command) {
+		PluginRepository.ProcessCommand(command);
 		// if (LoginManager.staffModLevel >= 2) {
-			@Pc(18) int local18;
-			@Pc(38) int local38;
-			@Pc(29) Runtime local29;
-			if (arg0.equalsIgnoreCase(GC)) {
+			@Pc(18) int i;
+			@Pc(38) int memory;
+			@Pc(29) Runtime runtime;
+			if (command.equalsIgnoreCase(GC)) {
 				client.unloadSoft();
-				for (local18 = 0; local18 < 10; local18++) {
+				for (i = 0; i < 10; i++) {
 					System.gc();
 				}
-				local29 = Runtime.getRuntime();
-				local38 = (int) ((local29.totalMemory() - local29.freeMemory()) / 1024L);
-				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
+				runtime = Runtime.getRuntime();
+				memory = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
+				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY, JagString.parseInt(memory), DEBUG_MEM_UNIT}));
 			}
-			@Pc(117) int local117;
-			if (arg0.equalsIgnoreCase(MM)) {
+			@Pc(117) int j;
+			if (command.equalsIgnoreCase(MM)) {
 				client.unloadSoft();
-				for (local18 = 0; local18 < 10; local18++) {
+				for (i = 0; i < 10; i++) {
 					System.gc();
 				}
-				local29 = Runtime.getRuntime();
-				local38 = (int) ((local29.totalMemory() - local29.freeMemory()) / 1024L);
-				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY_BEFORE_CLEANUP, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
+				runtime = Runtime.getRuntime();
+				memory = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
+				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY_BEFORE_CLEANUP, JagString.parseInt(memory), DEBUG_MEM_UNIT}));
 				Player.invalidateGlModels();
 				client.unloadSoft();
-				for (local117 = 0; local117 < 10; local117++) {
+				for (j = 0; j < 10; j++) {
 					System.gc();
 				}
-				local38 = (int) ((local29.totalMemory() - local29.freeMemory()) / 1024L);
-				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY_AFTER_CLEANUP, JagString.parseInt(local38), DEBUG_MEM_UNIT}));
+				memory = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
+				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MEMORY_AFTER_CLEANUP, JagString.parseInt(memory), DEBUG_MEM_UNIT}));
 			}
-			if (arg0.equalsIgnoreCase(PCACHESIZE)) {
+			if (command.equalsIgnoreCase(PCACHESIZE)) {
 				Chat.add(null, 0, JagString.concatenate(new JagString[]{MSG_MODEL_CACHE_SIZE, JagString.parseInt(PlayerAppearance.getModelCacheSize())}));
 			}
-			if (GlRenderer.enabled && arg0.equalsIgnoreCase(CARDMEM)) {
+			if (GlRenderer.enabled && command.equalsIgnoreCase(CARDMEM)) {
 				System.out.println("oncard_geometry:" + GlCleaner.onCardGeometry);
 				System.out.println("oncard_2d:" + GlCleaner.onCard2d);
 				System.out.println("oncard_texture:" + GlCleaner.onCardTexture);
 			}
-			if (arg0.equalsIgnoreCase(CLIENTDROP)) {
+			if (command.equalsIgnoreCase(CLIENTDROP)) {
 				Protocol.handleConnectionLost();
 			}
-			if (arg0.equalsIgnoreCase(CLIENTJS5DROP)) {
+			if (command.equalsIgnoreCase(CLIENTJS5DROP)) {
 				client.js5NetQueue.quit();
 			}
-			if (arg0.equalsIgnoreCase(JS5DROP)) {
+			if (command.equalsIgnoreCase(JS5DROP)) {
 				client.js5NetQueue.drop();
 			}
-			if (arg0.equalsIgnoreCase(BREAKCON)) {
+			if (command.equalsIgnoreCase(BREAKCON)) {
 				GameShell.signLink.breakConnection();
 				Protocol.socket.breakConnection();
 				client.js5NetQueue.breakConnection();
 			}
-			if (arg0.equalsIgnoreCase(REPLACECANVAS)) {
+			if (command.equalsIgnoreCase(REPLACECANVAS)) {
 				GameShell.replaceCanvas = true;
 			}
-			if (arg0.equalsIgnoreCase(REBUILD)) {
+			if (command.equalsIgnoreCase(REBUILD)) {
 				client.setGameState(25);
 			}
-			if (arg0.equalsIgnoreCase(FPSON)) {
+			if (command.equalsIgnoreCase(FPSON)) {
 				displayFps = true;
 			}
-			if (arg0.equalsIgnoreCase(FPSOFF)) {
+			if (command.equalsIgnoreCase(FPSOFF)) {
 				displayFps = false;
 			}
-			if (arg0.equalsIgnoreCase(WM0)) {
+			if (command.equalsIgnoreCase(WM0)) {
 				DisplayMode.setWindowMode(false, 0, -1, -1);
 			}
-			if (arg0.equalsIgnoreCase(WM1)) {
+			if (command.equalsIgnoreCase(WM1)) {
 				DisplayMode.setWindowMode(false, 1, -1, -1);
 			}
-			if (arg0.equalsIgnoreCase(WM2)) {
+			if (command.equalsIgnoreCase(WM2)) {
 				DisplayMode.setWindowMode(false, 2, -1, -1);
 			}
-			if (arg0.equalsIgnoreCase(WM3)) {
+			if (command.equalsIgnoreCase(WM3)) {
 				DisplayMode.setWindowMode(false, 3, 1024, 768);
 			}
-			if (arg0.equalsIgnoreCase(NOCLIP)) {
-				for (local18 = 0; local18 < 4; local18++) {
-					for (local38 = 1; local38 < 103; local38++) {
-						for (local117 = 1; local117 < 103; local117++) {
-							PathFinder.collisionMaps[local18].flags[local38][local117] = 0;
+			if (command.equalsIgnoreCase(NOCLIP)) {
+				for (i = 0; i < 4; i++) {
+					for (memory = 1; memory < 103; memory++) {
+						for (j = 1; j < 103; j++) {
+							PathFinder.collisionMaps[i].flags[memory][j] = 0;
 						}
 					}
 				}
 			}
-			if (arg0.startsWith(PARTICLES)) {
-				Preferences.setParticles(arg0.substring(15).parseInt());
+			if (command.startsWith(PARTICLES)) {
+				Preferences.setParticles(command.substring(15).parseInt());
 				Preferences.write(GameShell.signLink);
 				Preferences.sentToServer = false;
 			}
-			if (arg0.startsWith(COMMAND_FPS) && client.modeWhere != 0) {
-				GameShell.setFpsTarget(arg0.substring(6).parseInt());
+			if (command.startsWith(COMMAND_FPS) && client.modeWhere != 0) {
+				GameShell.setFpsTarget(command.substring(6).parseInt());
 			}
-			if (arg0.equalsIgnoreCase(ERROR_TEST)) {
+			if (command.equalsIgnoreCase(ERROR_TEST)) {
 				throw new RuntimeException();
 			}
-			if (arg0.startsWith(RECT_DEBUG)) {
-				rectDebug = arg0.substring(12).trim().parseInt();
+			if (command.startsWith(RECT_DEBUG)) {
+				rectDebug = command.substring(12).trim().parseInt();
 				Chat.add(null, 0, JagString.concatenate(new JagString[]{RECT_DEBUG_EQUALS, JagString.parseInt(rectDebug)}));
 			}
-			if (arg0.equalsIgnoreCase(QA_OP_TEST)) {
+			if (command.equalsIgnoreCase(QA_OP_TEST)) {
 				qaOpTest = true;
 			}
-			if (arg0.equalsIgnoreCase(TWEENING)) {
+			if (command.equalsIgnoreCase(TWEENING)) {
 				if (SeqType.applyTweening) {
 					SeqType.applyTweening = false;
 					Chat.add(null, 0, MSG_TWEENING_DISABLED);
@@ -222,7 +222,7 @@ public class Cheat {
 					Chat.add(null, 0, MSG_TWEENING_ENABLED);
 				}
 			}
-			if (arg0.equalsIgnoreCase(SHIFTCLICK)) {
+			if (command.equalsIgnoreCase(SHIFTCLICK)) {
 				if (shiftClick) {
 					MSG_SHIFTCLICK_DISABLED.print();
 					shiftClick = false;
@@ -232,11 +232,11 @@ public class Cheat {
 				}
 			}
 
-		if (arg0.equalsIgnoreCase(RELOADPLUGINS)) {
+		if (command.equalsIgnoreCase(RELOADPLUGINS)) {
 			PluginRepository.reloadPlugins();
 		}
 		//}
-		sendCheatPacket(arg0);
+		sendCheatPacket(command);
 	}
 
 	public static void sendCheatPacket(JagString commandLine) {

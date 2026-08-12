@@ -49,32 +49,32 @@ public final class ChangeLocRequest extends Node {
 
 	@OriginalMember(owner = "client!ug", name = "a", descriptor = "(B)V")
 	public static void loop() {
-		for (@Pc(10) ChangeLocRequest local10 = (ChangeLocRequest) queue.head(); local10 != null; local10 = (ChangeLocRequest) queue.next()) {
-			if (local10.resetLoops > 0) {
-				local10.resetLoops--;
+		for (@Pc(10) ChangeLocRequest request = (ChangeLocRequest) queue.head(); request != null; request = (ChangeLocRequest) queue.next()) {
+			if (request.resetLoops > 0) {
+				request.resetLoops--;
 			}
-			if (local10.resetLoops != 0) {
-				if (local10.setLoops > 0) {
-					local10.setLoops--;
+			if (request.resetLoops != 0) {
+				if (request.setLoops > 0) {
+					request.setLoops--;
 				}
-				if (local10.setLoops == 0 && local10.x >= 1 && local10.y >= 1 && local10.x <= 102 && local10.y <= 102 && (local10.newId < 0 || isLocModelReady(local10.newId, local10.newShape))) {
-					SceneGraph.addLocModel(local10.newId, local10.x, local10.level, local10.newAngle, local10.y, local10.newShape, local10.layer);
-					local10.setLoops = -1;
-					if (local10.originalId == local10.newId && local10.originalId == -1) {
-						local10.unlink();
-					} else if (local10.newId == local10.originalId && local10.newAngle == local10.originalAngle && local10.originalShape == local10.newShape) {
-						local10.unlink();
+				if (request.setLoops == 0 && request.x >= 1 && request.y >= 1 && request.x <= 102 && request.y <= 102 && (request.newId < 0 || isLocModelReady(request.newId, request.newShape))) {
+					SceneGraph.addLocModel(request.newId, request.x, request.level, request.newAngle, request.y, request.newShape, request.layer);
+					request.setLoops = -1;
+					if (request.originalId == request.newId && request.originalId == -1) {
+						request.unlink();
+					} else if (request.newId == request.originalId && request.newAngle == request.originalAngle && request.originalShape == request.newShape) {
+						request.unlink();
 					}
 				}
-			} else if (local10.originalId < 0 || isLocModelReady(local10.originalId, local10.originalShape)) {
-				SceneGraph.addLocModel(local10.originalId, local10.x, local10.level, local10.originalAngle, local10.y, local10.originalShape, local10.layer);
-				local10.unlink();
+			} else if (request.originalId < 0 || isLocModelReady(request.originalId, request.originalShape)) {
+				SceneGraph.addLocModel(request.originalId, request.x, request.level, request.originalAngle, request.y, request.originalShape, request.layer);
+				request.unlink();
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ce", name = "a", descriptor = "(IIIIIIIIII)V")
-	public static void push(@OriginalArg(0) int level, @OriginalArg(1) int y, @OriginalArg(3) int arg2, @OriginalArg(4) int x, @OriginalArg(5) int resetLoops, @OriginalArg(6) int arg5, @OriginalArg(7) int layer, @OriginalArg(8) int arg7, @OriginalArg(9) int setLoops) {
+	public static void push(@OriginalArg(0) int level, @OriginalArg(1) int y, @OriginalArg(3) int newAngle, @OriginalArg(4) int x, @OriginalArg(5) int resetLoops, @OriginalArg(6) int newId, @OriginalArg(7) int layer, @OriginalArg(8) int newShape, @OriginalArg(9) int setLoops) {
 		@Pc(9) ChangeLocRequest loc = null;
 		for (@Pc(14) ChangeLocRequest l = (ChangeLocRequest) queue.head(); l != null; l = (ChangeLocRequest) queue.next()) {
 			if (l.level == level && x == l.x && l.y == y && layer == l.layer) {
@@ -91,11 +91,11 @@ public final class ChangeLocRequest extends Node {
 			init(loc);
 			queue.addTail(loc);
 		}
-		loc.newShape = arg7;
+		loc.newShape = newShape;
 		loc.setLoops = setLoops;
 		loc.resetLoops = resetLoops;
-		loc.newId = arg5;
-		loc.newAngle = arg2;
+		loc.newId = newId;
+		loc.newAngle = newAngle;
 	}
 
 	@OriginalMember(owner = "client!sf", name = "a", descriptor = "(ILclient!cd;)V")
@@ -139,14 +139,14 @@ public final class ChangeLocRequest extends Node {
 	}
 
 	@OriginalMember(owner = "client!il", name = "a", descriptor = "(BII)Z")
-	public static boolean isLocModelReady(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		if (arg1 == 11) {
-			arg1 = 10;
+	public static boolean isLocModelReady(@OriginalArg(1) int locId, @OriginalArg(2) int shape) {
+		if (shape == 11) {
+			shape = 10;
 		}
-		if (arg1 >= 5 && arg1 <= 8) {
-			arg1 = 4;
+		if (shape >= 5 && shape <= 8) {
+			shape = 4;
 		}
-		@Pc(30) LocType local30 = LocTypeList.get(arg0);
-		return local30.isReady(arg1);
+		@Pc(30) LocType type = LocTypeList.get(locId);
+		return type.isReady(shape);
 	}
 }

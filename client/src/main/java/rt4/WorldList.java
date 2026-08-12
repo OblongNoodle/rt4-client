@@ -83,8 +83,8 @@ public class WorldList {
 			if (openTime + 30000L < MonotonicClock.currentTimeMillis()) {
 				return close(1000);
 			}
-			@Pc(82) int local82;
-			@Pc(124) int local124;
+			@Pc(82) int available;
+			@Pc(124) int response;
 			if (step == 1) {
 				if (Protocol.socketRequest.status == 2) {
 					return close(1001);
@@ -95,12 +95,12 @@ public class WorldList {
 				Protocol.socket = new BufferedSocket((Socket) Protocol.socketRequest.result, GameShell.signLink);
 				Protocol.outboundBuffer.offset = 0;
 				Protocol.socketRequest = null;
-				local82 = 0;
+				available = 0;
 				if (loaded) {
-					local82 = checksum;
+					available = checksum;
 				}
 				Protocol.outboundBuffer.p1(255);
-				Protocol.outboundBuffer.p4(local82);
+				Protocol.outboundBuffer.p4(available);
 				Protocol.socket.write(Protocol.outboundBuffer.data, Protocol.outboundBuffer.offset);
 				if (client.musicChannel != null) {
 					client.musicChannel.pauseConsumptionCheck();
@@ -108,15 +108,15 @@ public class WorldList {
 				if (client.soundChannel != null) {
 					client.soundChannel.pauseConsumptionCheck();
 				}
-				local124 = Protocol.socket.read();
+				response = Protocol.socket.read();
 				if (client.musicChannel != null) {
 					client.musicChannel.pauseConsumptionCheck();
 				}
 				if (client.soundChannel != null) {
 					client.soundChannel.pauseConsumptionCheck();
 				}
-				if (local124 != 0) {
-					return close(local124);
+				if (response != 0) {
+					return close(response);
 				}
 				step = 2;
 			}
@@ -134,24 +134,24 @@ public class WorldList {
 			if (step != 3) {
 				return -1;
 			}
-			local82 = Protocol.socket.available();
-			if (local82 < 1) {
+			available = Protocol.socket.available();
+			if (available < 1) {
 				return -1;
 			}
-			if (local82 > bufferLen - bufferOff) {
-				local82 = bufferLen - bufferOff;
+			if (available > bufferLen - bufferOff) {
+				available = bufferLen - bufferOff;
 			}
-			Protocol.socket.read(bufferOff, local82, buffer);
-			bufferOff += local82;
+			Protocol.socket.read(bufferOff, available, buffer);
+			bufferOff += available;
 			if (bufferOff < bufferLen) {
 				return -1;
 			} else if (decode(buffer)) {
 				sorted = new World[size];
-				local124 = 0;
-				for (@Pc(240) int local240 = minId; local240 <= maxId; local240++) {
-					@Pc(247) World local247 = ScriptRunner.getWorld(local240);
-					if (local247 != null) {
-						sorted[local124++] = local247;
+				response = 0;
+				for (@Pc(240) int worldId = minId; worldId <= maxId; worldId++) {
+					@Pc(247) World world = ScriptRunner.getWorld(worldId);
+					if (world != null) {
+						sorted[response++] = world;
 					}
 				}
 				Protocol.socket.close();
@@ -164,13 +164,13 @@ public class WorldList {
 			} else {
 				return close(1002);
 			}
-		} catch (@Pc(277) IOException local277) {
+		} catch (@Pc(277) IOException ignored) {
 			return close(1003);
 		}
 	}
 
 	@OriginalMember(owner = "client!an", name = "a", descriptor = "(BI)I")
-	public static int close(@OriginalArg(1) int arg0) {
+	public static int close(@OriginalArg(1) int errorCode) {
 		if (Protocol.socket != null) {
 			Protocol.socket.close();
 			Protocol.socket = null;
@@ -179,7 +179,7 @@ public class WorldList {
 		if (errors > 4) {
 			step = 0;
 			errors = 0;
-			return arg0;
+			return errorCode;
 		}
 		step = 0;
 		if (client.worldListPort == client.worldListDefaultPort) {
@@ -218,30 +218,30 @@ public class WorldList {
 	}
 
 	@OriginalMember(owner = "client!nh", name = "a", descriptor = "(I[B)Z")
-	public static boolean decode(@OriginalArg(1) byte[] arg0) {
-		@Pc(13) Buffer local13 = new Buffer(arg0);
-		@Pc(17) int local17 = local13.g1();
-		if (local17 != 1) {
+	public static boolean decode(@OriginalArg(1) byte[] data) {
+		@Pc(13) Buffer buf = new Buffer(data);
+		@Pc(17) int version = buf.g1();
+		if (version != 1) {
 			return false;
 		}
-		@Pc(33) boolean local33 = local13.g1() == 1;
-		if (local33) {
-			decodeWorlds(local13);
+		@Pc(33) boolean hasWorlds = buf.g1() == 1;
+		if (hasWorlds) {
+			decodeWorlds(buf);
 		}
-		decodePlayers(local13);
+		decodePlayers(buf);
 		return true;
 	}
 
 	@OriginalMember(owner = "client!fh", name = "a", descriptor = "(Lclient!wa;I)V")
-	public static void decodePlayers(@OriginalArg(0) Buffer arg0) {
-		for (@Pc(7) int local7 = 0; local7 < size; local7++) {
-			@Pc(18) int local18 = arg0.gsmarts();
-			@Pc(22) int local22 = arg0.g2();
-			if (local22 == 65535) {
-				local22 = -1;
+	public static void decodePlayers(@OriginalArg(0) Buffer buf) {
+		for (@Pc(7) int i = 0; i < size; i++) {
+			@Pc(18) int index = buf.gsmarts();
+			@Pc(22) int players = buf.g2();
+			if (players == 65535) {
+				players = -1;
 			}
-			if (worlds[local18] != null) {
-				worlds[local18].players = local22;
+			if (worlds[index] != null) {
+				worlds[index].players = players;
 			}
 		}
 	}
@@ -252,31 +252,31 @@ public class WorldList {
 	}
 
 	@OriginalMember(owner = "client!sh", name = "a", descriptor = "(IZBIZ)V")
-	public static void sortWorldList(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(3) int arg2, @OriginalArg(4) boolean arg3) {
-		quicksort(arg0, arg2, sorted.length - 1, arg3, 0, arg1);
+	public static void sortWorldList(@OriginalArg(0) int primaryField, @OriginalArg(1) boolean primaryReverse, @OriginalArg(3) int secondaryField, @OriginalArg(4) boolean secondaryReverse) {
+		quicksort(primaryField, secondaryField, sorted.length - 1, secondaryReverse, 0, primaryReverse);
 	}
 
 	@OriginalMember(owner = "client!ge", name = "a", descriptor = "(IIIZIZZ)V")
-	public static void quicksort(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
-		if (arg2 <= arg4) {
+	public static void quicksort(@OriginalArg(0) int primaryField, @OriginalArg(1) int secondaryField, @OriginalArg(2) int high, @OriginalArg(3) boolean secondaryReverse, @OriginalArg(4) int low, @OriginalArg(5) boolean primaryReverse) {
+		if (high <= low) {
 			return;
 		}
-		@Pc(13) int local13 = (arg2 + arg4) / 2;
-		@Pc(15) int local15 = arg4;
-		@Pc(19) World local19 = sorted[local13];
-		sorted[local13] = sorted[arg2];
-		sorted[arg2] = local19;
-		for (@Pc(31) int local31 = arg4; local31 < arg2; local31++) {
-			if (compareWorlds(local19, sorted[local31], arg0, arg1, arg3, arg5) <= 0) {
-				@Pc(53) World local53 = sorted[local31];
-				sorted[local31] = sorted[local15];
-				sorted[local15++] = local53;
+		@Pc(13) int mid = (high + low) / 2;
+		@Pc(15) int storeIndex = low;
+		@Pc(19) World pivot = sorted[mid];
+		sorted[mid] = sorted[high];
+		sorted[high] = pivot;
+		for (@Pc(31) int i = low; i < high; i++) {
+			if (compareWorlds(pivot, sorted[i], primaryField, secondaryField, secondaryReverse, primaryReverse) <= 0) {
+				@Pc(53) World temp = sorted[i];
+				sorted[i] = sorted[storeIndex];
+				sorted[storeIndex++] = temp;
 			}
 		}
-		sorted[arg2] = sorted[local15];
-		sorted[local15] = local19;
-		quicksort(arg0, arg1, local15 - 1, arg3, arg4, arg5);
-		quicksort(arg0, arg1, arg2, arg3, local15 + 1, arg5);
+		sorted[high] = sorted[storeIndex];
+		sorted[storeIndex] = pivot;
+		quicksort(primaryField, secondaryField, storeIndex - 1, secondaryReverse, low, primaryReverse);
+		quicksort(primaryField, secondaryField, high, secondaryReverse, storeIndex + 1, primaryReverse);
 	}
 
 	@OriginalMember(owner = "client!bh", name = "a", descriptor = "(B)Lclient!ba;")
@@ -286,8 +286,8 @@ public class WorldList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(IB)Z")
-	public static boolean hopWorld(@OriginalArg(0) int arg0) {
-		@Pc(3) World local3 = ScriptRunner.getWorld(arg0);
+	public static boolean hopWorld(@OriginalArg(0) int worldId) {
+		@Pc(3) World local3 = ScriptRunner.getWorld(worldId);
 		if (local3 == null) {
 			return false;
 		} else if (SignLink.clientMode == 1 || SignLink.clientMode == 2 || client.modeWhere == 2) {
@@ -301,77 +301,77 @@ public class WorldList {
 			}
 			return true;
 		} else {
-			@Pc(62) JagString local62 = EMPTY_STRING;
+			@Pc(62) JagString portStr = EMPTY_STRING;
 			if (client.modeWhere != 0) {
-				local62 = JagString.concatenate(new JagString[]{PORT_SEPARATOR, JagString.parseInt(local3.id + 7000)});
+				portStr = JagString.concatenate(new JagString[]{PORT_SEPARATOR, JagString.parseInt(local3.id + 7000)});
 			}
-			@Pc(89) JagString local89 = EMPTY_STRING;
+			@Pc(89) JagString settingsStr = EMPTY_STRING;
 			if (client.settings != null) {
-				local89 = JagString.concatenate(new JagString[]{URL_PARAM_SETTINGS, client.settings});
+				settingsStr = JagString.concatenate(new JagString[]{URL_PARAM_SETTINGS, client.settings});
 			}
-			@Pc(182) JagString local182 = JagString.concatenate(new JagString[]{HTTP_PROTOCOL, local3.hostname, local62, URL_PARAM_LANGUAGE, JagString.parseInt(client.language), URL_PARAM_AFFILIATE, JagString.parseInt(client.affiliate), local89, URL_PARAM_JAVA_FLAG, client.objectTag ? TRUE_STRING : FALSE_STRING, URL_PARAM_JAVASCRIPT, client.javaScript ? TRUE_STRING : FALSE_STRING, URL_PARAM_ADVERT, client.advertSuppressed ? TRUE_STRING : FALSE_STRING});
+			@Pc(182) JagString url = JagString.concatenate(new JagString[]{HTTP_PROTOCOL, local3.hostname, portStr, URL_PARAM_LANGUAGE, JagString.parseInt(client.language), URL_PARAM_AFFILIATE, JagString.parseInt(client.affiliate), settingsStr, URL_PARAM_JAVA_FLAG, client.objectTag ? TRUE_STRING : FALSE_STRING, URL_PARAM_JAVASCRIPT, client.javaScript ? TRUE_STRING : FALSE_STRING, URL_PARAM_ADVERT, client.advertSuppressed ? TRUE_STRING : FALSE_STRING});
 			try {
-				client.instance.getAppletContext().showDocument(local182.toUrl(), "_self");
+				client.instance.getAppletContext().showDocument(url.toUrl(), "_self");
 				return true;
-			} catch (@Pc(191) Exception local191) {
+			} catch (@Pc(191) Exception ex) {
 				return false;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!ba;Lclient!ba;IIIZZ)I")
-	public static int compareWorlds(@OriginalArg(0) World arg0, @OriginalArg(1) World arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5) {
-		@Pc(8) int local8 = compareWorldField(arg1, arg3, arg0, arg5);
-		if (local8 != 0) {
-			return arg5 ? -local8 : local8;
-		} else if (arg2 == -1) {
+	public static int compareWorlds(@OriginalArg(0) World a, @OriginalArg(1) World b, @OriginalArg(3) int primaryField, @OriginalArg(4) int secondaryField, @OriginalArg(5) boolean secondaryReverse, @OriginalArg(6) boolean primaryReverse) {
+		@Pc(8) int result = compareWorldField(b, secondaryField, a, primaryReverse);
+		if (result != 0) {
+			return primaryReverse ? -result : result;
+		} else if (primaryField == -1) {
 			return 0;
 		} else {
-			@Pc(42) int local42 = compareWorldField(arg1, arg2, arg0, arg4);
-			return arg4 ? -local42 : local42;
+			@Pc(42) int fallback = compareWorldField(b, primaryField, a, secondaryReverse);
+			return secondaryReverse ? -fallback : fallback;
 		}
 	}
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "(Lclient!ba;IILclient!ba;Z)I")
-	public static int compareWorldField(@OriginalArg(0) World arg0, @OriginalArg(1) int arg1, @OriginalArg(3) World arg2, @OriginalArg(4) boolean arg3) {
-		if (arg1 == 1) {
-			@Pc(11) int local11 = arg0.players;
-			@Pc(14) int local14 = arg2.players;
-			if (!arg3) {
-				if (local14 == -1) {
-					local14 = 2001;
+	public static int compareWorldField(@OriginalArg(0) World a, @OriginalArg(1) int field, @OriginalArg(3) World b, @OriginalArg(4) boolean reverse) {
+		if (field == 1) {
+			@Pc(11) int playersA = a.players;
+			@Pc(14) int playersB = b.players;
+			if (!reverse) {
+				if (playersB == -1) {
+					playersB = 2001;
 				}
-				if (local11 == -1) {
-					local11 = 2001;
+				if (playersA == -1) {
+					playersA = 2001;
 				}
 			}
-			return local11 - local14;
-		} else if (arg1 == 2) {
-			return arg0.getWorldInfo().name.compare(arg2.getWorldInfo().name);
-		} else if (arg1 == 3) {
-			if (arg0.activity.strEquals(NO_ACTIVITY)) {
-				if (arg2.activity.strEquals(NO_ACTIVITY)) {
+			return playersA - playersB;
+		} else if (field == 2) {
+			return a.getWorldInfo().name.compare(b.getWorldInfo().name);
+		} else if (field == 3) {
+			if (a.activity.strEquals(NO_ACTIVITY)) {
+				if (b.activity.strEquals(NO_ACTIVITY)) {
 					return 0;
-				} else if (arg3) {
+				} else if (reverse) {
 					return -1;
 				} else {
 					return 1;
 				}
-			} else if (arg2.activity.strEquals(NO_ACTIVITY)) {
-				return arg3 ? 1 : -1;
+			} else if (b.activity.strEquals(NO_ACTIVITY)) {
+				return reverse ? 1 : -1;
 			} else {
-				return arg0.activity.compare(arg2.activity);
+				return a.activity.compare(b.activity);
 			}
-		} else if (arg1 == 4) {
-			return arg0.isLootShare() ? (arg2.isLootShare() ? 0 : 1) : arg2.isLootShare() ? -1 : 0;
-		} else if (arg1 == 5) {
-			return arg0.isQuickChat() ? (arg2.isQuickChat() ? 0 : 1) : (arg2.isQuickChat() ? -1 : 0);
-		} else if (arg1 == 6) {
-			return arg0.isPvp() ? (arg2.isPvp() ? 0 : 1) : (arg2.isPvp() ? -1 : 0);
-		} else if (arg1 == 7) {
-			return arg0.isMembers() ? (arg2.isMembers() ? 0 : 1) : (arg2.isMembers() ? -1 : 0);
+		} else if (field == 4) {
+			return a.isLootShare() ? (b.isLootShare() ? 0 : 1) : b.isLootShare() ? -1 : 0;
+		} else if (field == 5) {
+			return a.isQuickChat() ? (b.isQuickChat() ? 0 : 1) : (b.isQuickChat() ? -1 : 0);
+		} else if (field == 6) {
+			return a.isPvp() ? (b.isPvp() ? 0 : 1) : (b.isPvp() ? -1 : 0);
+		} else if (field == 7) {
+			return a.isMembers() ? (b.isMembers() ? 0 : 1) : (b.isMembers() ? -1 : 0);
 		} else {
-			return arg0.id - arg2.id;
+			return a.id - b.id;
 		}
 	}
 }

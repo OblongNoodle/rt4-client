@@ -210,59 +210,59 @@ public final class FogManager {
 	}
 
 	@OriginalMember(owner = "client!si", name = "a", descriptor = "(IZ)V")
-	public static void init(@OriginalArg(0) int arg0) {
-		setLightParams(defaultLightColorRgb, ((float) arg0 * 0.1F + 0.7F) * 1.1523438F, 0.69921875F, 0.69921875F);
+	public static void init(@OriginalArg(0) int brightness) {
+		setLightParams(defaultLightColorRgb, ((float) brightness * 0.1F + 0.7F) * 1.1523438F, 0.69921875F, 0.69921875F);
 		setLightPosition(-50.0F, -60.0F, -50.0F);
 		setFogParams(defaulFogColorRgb, 0);
 		applyLightPosition();
 	}
 
 	@OriginalMember(owner = "client!i", name = "b", descriptor = "(IIIII)I")
-	public static int updateAtmosphere(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public static int updateAtmosphere(@OriginalArg(0) int delta, @OriginalArg(1) int chunkZ, @OriginalArg(2) int brightness, @OriginalArg(3) int chunkX) {
 		if (instantScreenFade) {
-			arg0 = 1000000;
+			delta = 1000000;
 			instantScreenFade = false;
 		}
-		@Pc(15) Environment local15 = chunksAtmosphere[arg3][arg1];
-		@Pc(25) float local25 = ((float) arg2 * 0.1F + 0.7F) * local15.lightModelAmbient;
-		@Pc(28) float local28 = local15.light0Diffuse;
-		@Pc(31) int local31 = local15.screenColorRgb;
-		@Pc(34) int local34 = local15.fogDepth;
-		@Pc(37) int local37 = local15.fogColorRgb;
+		@Pc(15) Environment env = chunksAtmosphere[chunkX][chunkZ];
+		@Pc(25) float ambient = ((float) brightness * 0.1F + 0.7F) * env.lightModelAmbient;
+		@Pc(28) float l0Diffuse = env.light0Diffuse;
+		@Pc(31) int screenColor = env.screenColorRgb;
+		@Pc(34) int fogDepth = env.fogDepth;
+		@Pc(37) int envFogColor = env.fogColorRgb;
 		if (!Preferences.fogEnabled) {
-			local34 = 0;
+			fogDepth = 0;
 		}
-		@Pc(44) float local44 = local15.light1Diffuse;
-		if (local31 != targetScreenColor || targetAmbient != local25 || targetLight0Diffuse != local28 || local44 != targetLight1Diffuse || targetFogColor != local37 || targetFogDepth != local34) {
-			targetAmbient = local25;
+		@Pc(44) float l1Diffuse = env.light1Diffuse;
+		if (screenColor != targetScreenColor || targetAmbient != ambient || targetLight0Diffuse != l0Diffuse || l1Diffuse != targetLight1Diffuse || targetFogColor != envFogColor || targetFogDepth != fogDepth) {
+			targetAmbient = ambient;
 			prevLight0Diffuse = currentLight0Diffuse;
 			prevAmbient = currentAmbient;
-			targetScreenColor = local31;
+			targetScreenColor = screenColor;
 			prevFogColor = currentFogColor;
 			prevFogDepth = currentFogDepth;
-			targetLight1Diffuse = local44;
+			targetLight1Diffuse = l1Diffuse;
 			fadeProgress = 0;
 			prevScreenColor = currentScreenColor;
-			targetFogDepth = local34;
-			targetLight0Diffuse = local28;
-			targetFogColor = local37;
+			targetFogDepth = fogDepth;
+			targetLight0Diffuse = l0Diffuse;
+			targetFogColor = envFogColor;
 			prevLight1Diffuse = currentLight1Diffuse;
 		}
 		if (fadeProgress < 65536) {
-			fadeProgress += arg0 * 250;
+			fadeProgress += delta * 250;
 			if (fadeProgress >= 65536) {
 				fadeProgress = 65536;
 			}
-			@Pc(114) float local114 = (float) fadeProgress / 65536.0F;
-			@Pc(118) int local118 = fadeProgress >> 8;
-			@Pc(125) int local125 = 65536 - fadeProgress >> 8;
-			currentFogColor = (local118 * (targetFogColor & 0xFF00FF) + (prevFogColor & 0xFF00FF) * local125 & 0xFF00FF00) + (local125 * (prevFogColor & 0xFF00) + (targetFogColor & 0xFF00) * local118 & 0xFF0000) >> 8;
-			@Pc(162) float local162 = (float) (65536 - fadeProgress) / 65536.0F;
-			currentAmbient = local162 * prevAmbient + local114 * targetAmbient;
-			currentLight0Diffuse = prevLight0Diffuse * local162 + local114 * targetLight0Diffuse;
-			currentLight1Diffuse = local114 * targetLight1Diffuse + local162 * prevLight1Diffuse;
-			currentScreenColor = ((targetScreenColor & 0xFF00) * local118 + local125 * (prevScreenColor & 0xFF00) & 0xFF0000) + ((prevScreenColor & 0xFF00FF) * local125 + ((targetScreenColor & 0xFF00FF) * local118) & 0xFF00FF00) >> 8;
-			currentFogDepth = local118 * targetFogDepth + local125 * prevFogDepth >> 8;
+			@Pc(114) float progress = (float) fadeProgress / 65536.0F;
+			@Pc(118) int targetWeight = fadeProgress >> 8;
+			@Pc(125) int prevWeight = 65536 - fadeProgress >> 8;
+			currentFogColor = (targetWeight * (targetFogColor & 0xFF00FF) + (prevFogColor & 0xFF00FF) * prevWeight & 0xFF00FF00) + (prevWeight * (prevFogColor & 0xFF00) + (targetFogColor & 0xFF00) * targetWeight & 0xFF0000) >> 8;
+			@Pc(162) float prevProgress = (float) (65536 - fadeProgress) / 65536.0F;
+			currentAmbient = prevProgress * prevAmbient + progress * targetAmbient;
+			currentLight0Diffuse = prevLight0Diffuse * prevProgress + progress * targetLight0Diffuse;
+			currentLight1Diffuse = progress * targetLight1Diffuse + prevProgress * prevLight1Diffuse;
+			currentScreenColor = ((targetScreenColor & 0xFF00) * targetWeight + prevWeight * (prevScreenColor & 0xFF00) & 0xFF0000) + ((prevScreenColor & 0xFF00FF) * prevWeight + ((targetScreenColor & 0xFF00FF) * targetWeight) & 0xFF00FF00) >> 8;
+			currentFogDepth = targetWeight * targetFogDepth + prevWeight * prevFogDepth >> 8;
 		}
 		setLightParams(currentScreenColor, currentAmbient, currentLight0Diffuse, currentLight1Diffuse);
 		setFogParams(currentFogColor, currentFogDepth);
@@ -277,19 +277,19 @@ public final class FogManager {
 	}
 
 	@OriginalMember(owner = "client!fm", name = "a", descriptor = "(ZII)V")
-	public static void setLightPosition(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		currentLightX = chunksAtmosphere[arg1][arg0].lightX;
-		currentLightY = chunksAtmosphere[arg1][arg0].lightY;
-		currentLightZ = chunksAtmosphere[arg1][arg0].lightZ;
+	public static void setLightPosition(@OriginalArg(1) int chunkX, @OriginalArg(2) int chunkZ) {
+		currentLightX = chunksAtmosphere[chunkZ][chunkX].lightX;
+		currentLightY = chunksAtmosphere[chunkZ][chunkX].lightY;
+		currentLightZ = chunksAtmosphere[chunkZ][chunkX].lightZ;
 		setLightPosition((float) currentLightX, (float) currentLightY, (float) currentLightZ);
 	}
 
 	@OriginalMember(owner = "client!g", name = "b", descriptor = "(I)V")
 	public static void setDefaultChunksAtmosphere() {
-		@Pc(9) Environment local9 = new Environment();
-		for (@Pc(18) int local18 = 0; local18 < 13; local18++) {
-			for (@Pc(25) int local25 = 0; local25 < 13; local25++) {
-				chunksAtmosphere[local18][local25] = local9;
+		@Pc(9) Environment defaultEnv = new Environment();
+		for (@Pc(18) int x = 0; x < 13; x++) {
+			for (@Pc(25) int z = 0; z < 13; z++) {
+				chunksAtmosphere[x][z] = defaultEnv;
 			}
 		}
 	}

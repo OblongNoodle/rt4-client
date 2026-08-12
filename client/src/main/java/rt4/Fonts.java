@@ -17,24 +17,24 @@ public class Fonts {
 	public static SoftwareFont p11FullSoftware;
 
 	@OriginalMember(owner = "client!fn", name = "a", descriptor = "(Lclient!ve;Lclient!ve;Z)I")
-	public static int getReady(@OriginalArg(0) Js5 arg0, @OriginalArg(1) Js5 arg1) {
+	public static int getReady(@OriginalArg(0) Js5 fontArchive, @OriginalArg(1) Js5 metricsArchive) {
 		@Pc(5) int ready = 0;
-		if (arg0.isFileReady(Sprites.p11FullId)) {
+		if (fontArchive.isFileReady(Sprites.p11FullId)) {
 			ready++;
 		}
-		if (arg0.isFileReady(Sprites.p12FullId)) {
+		if (fontArchive.isFileReady(Sprites.p12FullId)) {
 			ready++;
 		}
-		if (arg0.isFileReady(Sprites.b12FullId)) {
+		if (fontArchive.isFileReady(Sprites.b12FullId)) {
 			ready++;
 		}
-		if (arg1.isFileReady(Sprites.p11FullId)) {
+		if (metricsArchive.isFileReady(Sprites.p11FullId)) {
 			ready++;
 		}
-		if (arg1.isFileReady(Sprites.p12FullId)) {
+		if (metricsArchive.isFileReady(Sprites.p12FullId)) {
 			ready++;
 		}
-		if (arg1.isFileReady(Sprites.b12FullId)) {
+		if (metricsArchive.isFileReady(Sprites.b12FullId)) {
 			ready++;
 		}
 		return ready;
@@ -46,39 +46,39 @@ public class Fonts {
 	}
 
 	@OriginalMember(owner = "client!hn", name = "a", descriptor = "(Lclient!ve;ILclient!ve;)V")
-	public static void load(@OriginalArg(0) Js5 arg0, @OriginalArg(2) Js5 arg1) {
-		p11Full = Font.load(Sprites.p11FullId, arg1, arg0);
+	public static void load(@OriginalArg(0) Js5 fontArchive, @OriginalArg(2) Js5 metricsArchive) {
+		p11Full = Font.load(Sprites.p11FullId, metricsArchive, fontArchive);
 		if (GlRenderer.enabled) {
-			p11FullSoftware = SoftwareFont.load(Sprites.p11FullId, arg0, arg1);
+			p11FullSoftware = SoftwareFont.load(Sprites.p11FullId, fontArchive, metricsArchive);
 		} else {
 			p11FullSoftware = (SoftwareFont) p11Full;
 		}
-		p12Full = Font.load(Sprites.p12FullId, arg1, arg0);
-		b12Full = Font.load(Sprites.b12FullId, arg1, arg0);
+		p12Full = Font.load(Sprites.p12FullId, metricsArchive, fontArchive);
+		b12Full = Font.load(Sprites.b12FullId, metricsArchive, fontArchive);
 	}
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "(BZLclient!na;)V")
-	public static void drawTextOnScreen(@OriginalArg(1) boolean arg0, @OriginalArg(2) JagString arg1) {
-		@Pc(24) int local24 = p12Full.getMaxLineWidth(arg1, 250);
-		@Pc(31) int local31 = p12Full.getParagraphLineCount(arg1, 250) * 13;
+	public static void drawTextOnScreen(@OriginalArg(1) boolean swapBuffers, @OriginalArg(2) JagString text) {
+		@Pc(24) int maxWidth = p12Full.getMaxLineWidth(text, 250);
+		@Pc(31) int textHeight = p12Full.getParagraphLineCount(text, 250) * 13;
 		if (GlRenderer.enabled) {
-			GlRaster.fillRect(6, 6, local24 + 4 + 4, local31 + 8, 0);
-			GlRaster.drawRect(6, 6, local24 + 4 + 4, local31 + 4 + 4, 16777215);
+			GlRaster.fillRect(6, 6, maxWidth + 4 + 4, textHeight + 8, 0);
+			GlRaster.drawRect(6, 6, maxWidth + 4 + 4, textHeight + 4 + 4, 16777215);
 		} else {
-			SoftwareRaster.fillRect(6, 6, local24 + 4 + 4, local31 + 8, 0);
-			SoftwareRaster.drawRect(6, 6, local24 + 8, 4 + 4 + local31, 16777215);
+			SoftwareRaster.fillRect(6, 6, maxWidth + 4 + 4, textHeight + 8, 0);
+			SoftwareRaster.drawRect(6, 6, maxWidth + 8, 4 + 4 + textHeight, 16777215);
 		}
-		p12Full.drawInterfaceText(arg1, 10, 10, local24, local31, 16777215, -1, 1, 1, 0);
-		InterfaceList.redrawScreen(6, local24 + 8, 6, local31 + 4 + 4);
-		if (!arg0) {
-			InterfaceList.forceRedrawScreen(10, 10, local31, local24);
+		p12Full.drawInterfaceText(text, 10, 10, maxWidth, textHeight, 16777215, -1, 1, 1, 0);
+		InterfaceList.redrawScreen(6, maxWidth + 8, 6, textHeight + 4 + 4);
+		if (!swapBuffers) {
+			InterfaceList.forceRedrawScreen(10, 10, textHeight, maxWidth);
 		} else if (GlRenderer.enabled) {
 			GlRenderer.swapBuffers();
 		} else {
 			try {
-				@Pc(159) Graphics local159 = GameShell.canvas.getGraphics();
-				SoftwareRaster.frameBuffer.draw(local159);
-			} catch (@Pc(167) Exception local167) {
+				@Pc(159) Graphics graphics = GameShell.canvas.getGraphics();
+				SoftwareRaster.frameBuffer.draw(graphics);
+			} catch (@Pc(167) Exception ex) {
 				GameShell.canvas.repaint();
 			}
 		}

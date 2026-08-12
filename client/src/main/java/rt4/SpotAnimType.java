@@ -100,47 +100,47 @@ public final class SpotAnimType {
 	}
 
 	@OriginalMember(owner = "client!eg", name = "a", descriptor = "(IBII)Lclient!ak;")
-	public final Model constructModel(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
-		@Pc(13) Model local13 = (Model) SpotAnimTypeList.models.get(this.id);
-		if (local13 == null) {
-			@Pc(28) RawModel local28 = RawModel.create(SpotAnimTypeList.modelsArchive, this.modelId);
-			if (local28 == null) {
+	public final Model constructModel(@OriginalArg(0) int nextFrame, @OriginalArg(2) int frame, @OriginalArg(3) int frameClock) {
+		@Pc(13) Model cachedModel = (Model) SpotAnimTypeList.models.get(this.id);
+		if (cachedModel == null) {
+			@Pc(28) RawModel rawModel = RawModel.create(SpotAnimTypeList.modelsArchive, this.modelId);
+			if (rawModel == null) {
 				return null;
 			}
-			@Pc(40) int local40;
+			@Pc(40) int i;
 			if (this.recol_s != null) {
-				for (local40 = 0; local40 < this.recol_s.length; local40++) {
-					local28.recolor(this.recol_s[local40], this.recol_d[local40]);
+				for (i = 0; i < this.recol_s.length; i++) {
+					rawModel.recolor(this.recol_s[i], this.recol_d[i]);
 				}
 			}
 			if (this.retex_s != null) {
-				for (local40 = 0; local40 < this.retex_s.length; local40++) {
-					local28.retexture(this.retex_s[local40], this.retex_d[local40]);
+				for (i = 0; i < this.retex_s.length; i++) {
+					rawModel.retexture(this.retex_s[i], this.retex_d[i]);
 				}
 			}
-			local13 = local28.createModel(this.ambient + 64, this.contrast + 850, -30, -50, -30);
-			SpotAnimTypeList.models.put(local13, this.id);
+			cachedModel = rawModel.createModel(this.ambient + 64, this.contrast + 850, -30, -50, -30);
+			SpotAnimTypeList.models.put(cachedModel, this.id);
 		}
-		@Pc(118) Model local118;
-		if (this.seqId == -1 || arg1 == -1) {
-			local118 = local13.copyForAnimation(true, true, true);
+		@Pc(118) Model model;
+		if (this.seqId == -1 || frame == -1) {
+			model = cachedModel.copyForAnimation(true, true, true);
 		} else {
-			local118 = SeqTypeList.get(this.seqId).animateSpotAnim(arg0, arg2, arg1, local13);
+			model = SeqTypeList.get(this.seqId).animateSpotAnim(nextFrame, frameClock, frame, cachedModel);
 		}
 		if (this.resizeXZ != 128 || this.resizeY != 128) {
-			local118.resize(this.resizeXZ, this.resizeY, this.resizeXZ);
+			model.resize(this.resizeXZ, this.resizeY, this.resizeXZ);
 		}
 		if (this.angle != 0) {
 			if (this.angle == 90) {
-				local118.rotateCounterClockwise();
+				model.rotateCounterClockwise();
 			}
 			if (this.angle == 180) {
-				local118.rotate180();
+				model.rotate180();
 			}
 			if (this.angle == 270) {
-				local118.rotateClockwise();
+				model.rotateClockwise();
 			}
 		}
-		return local118;
+		return model;
 	}
 }

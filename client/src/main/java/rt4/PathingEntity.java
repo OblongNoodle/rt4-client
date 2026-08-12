@@ -278,47 +278,47 @@ public abstract class PathingEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(IIIIZ)V")
-	public final void teleport(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) boolean arg3) {
+	public final void teleport(@OriginalArg(1) int sizeOffset, @OriginalArg(2) int tileX, @OriginalArg(3) int tileY, @OriginalArg(4) boolean teleporting) {
 		if (this.seqId != -1 && SeqTypeList.get(this.seqId).movetype == 1) {
 			this.seqId = -1;
 		}
-		if (!arg3) {
-			@Pc(32) int local32 = arg1 - this.movementQueueX[0];
-			@Pc(40) int local40 = arg2 - this.movementQueueY[0];
-			if (local32 >= -8 && local32 <= 8 && local40 >= -8 && local40 <= 8) {
+		if (!teleporting) {
+			@Pc(32) int dx = tileX - this.movementQueueX[0];
+			@Pc(40) int dy = tileY - this.movementQueueY[0];
+			if (dx >= -8 && dx <= 8 && dy >= -8 && dy <= 8) {
 				if (this.movementQueueSize < 9) {
 					this.movementQueueSize++;
 				}
-				for (@Pc(72) int local72 = this.movementQueueSize; local72 > 0; local72--) {
-					this.movementQueueX[local72] = this.movementQueueX[local72 - 1];
-					this.movementQueueY[local72] = this.movementQueueY[local72 - 1];
-					this.movementQueueSpeed[local72] = this.movementQueueSpeed[local72 - 1];
+				for (@Pc(72) int i = this.movementQueueSize; i > 0; i--) {
+					this.movementQueueX[i] = this.movementQueueX[i - 1];
+					this.movementQueueY[i] = this.movementQueueY[i - 1];
+					this.movementQueueSpeed[i] = this.movementQueueSpeed[i - 1];
 				}
 				this.movementQueueSpeed[0] = 1;
-				this.movementQueueX[0] = arg1;
-				this.movementQueueY[0] = arg2;
+				this.movementQueueX[0] = tileX;
+				this.movementQueueY[0] = tileY;
 				return;
 			}
 		}
 		this.movementCatchupTicks = 0;
-		this.movementQueueX[0] = arg1;
-		this.movementQueueY[0] = arg2;
+		this.movementQueueX[0] = tileX;
+		this.movementQueueY[0] = tileY;
 		this.movementQueueSize = 0;
 		this.seqMovementSteps = 0;
-		this.yFine = arg0 * 64 + this.movementQueueY[0] * 128;
-		this.xFine = arg0 * 64 + this.movementQueueX[0] * 128;
+		this.yFine = sizeOffset * 64 + this.movementQueueY[0] * 128;
+		this.xFine = sizeOffset * 64 + this.movementQueueX[0] * 128;
 		if (GlRenderer.enabled && PlayerList.self == this) {
 			FogManager.setInstantFade();
 		}
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(IBI)V")
-	public final void move(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(10) int local10 = this.movementQueueX[0];
-		@Pc(15) int local15 = this.movementQueueY[0];
-		if (arg1 == 0) {
-			local10--;
-			local15++;
+	public final void move(@OriginalArg(0) int speed, @OriginalArg(2) int direction) {
+		@Pc(10) int tileX = this.movementQueueX[0];
+		@Pc(15) int tileY = this.movementQueueY[0];
+		if (direction == 0) {
+			tileX--;
+			tileY++;
 		}
 		if (this.seqId != -1 && SeqTypeList.get(this.seqId).movetype == 1) {
 			this.seqId = -1;
@@ -326,92 +326,92 @@ public abstract class PathingEntity extends Entity {
 		if (this.movementQueueSize < 9) {
 			this.movementQueueSize++;
 		}
-		for (@Pc(50) int local50 = this.movementQueueSize; local50 > 0; local50--) {
-			this.movementQueueX[local50] = this.movementQueueX[local50 - 1];
-			this.movementQueueY[local50] = this.movementQueueY[local50 - 1];
-			this.movementQueueSpeed[local50] = this.movementQueueSpeed[local50 - 1];
+		for (@Pc(50) int i = this.movementQueueSize; i > 0; i--) {
+			this.movementQueueX[i] = this.movementQueueX[i - 1];
+			this.movementQueueY[i] = this.movementQueueY[i - 1];
+			this.movementQueueSpeed[i] = this.movementQueueSpeed[i - 1];
 		}
-		if (arg1 == 1) {
-			local15++;
+		if (direction == 1) {
+			tileY++;
 		}
-		this.movementQueueSpeed[0] = (byte) arg0;
-		if (arg1 == 2) {
-			local15++;
-			local10++;
+		this.movementQueueSpeed[0] = (byte) speed;
+		if (direction == 2) {
+			tileY++;
+			tileX++;
 		}
-		if (arg1 == 3) {
-			local10--;
+		if (direction == 3) {
+			tileX--;
 		}
-		if (arg1 == 4) {
-			local10++;
+		if (direction == 4) {
+			tileX++;
 		}
-		if (arg1 == 5) {
-			local15--;
-			local10--;
+		if (direction == 5) {
+			tileY--;
+			tileX--;
 		}
-		if (arg1 == 6) {
-			local15--;
+		if (direction == 6) {
+			tileY--;
 		}
-		if (arg1 == 7) {
-			local15--;
-			local10++;
+		if (direction == 7) {
+			tileY--;
+			tileX++;
 		}
-		this.movementQueueX[0] = local10;
-		this.movementQueueY[0] = local15;
+		this.movementQueueX[0] = tileX;
+		this.movementQueueY[0] = tileY;
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(BLclient!ak;I)V")
-	protected final void alignToTerrain(@OriginalArg(1) Model arg0, @OriginalArg(2) int arg1) {
+	protected final void alignToTerrain(@OriginalArg(1) Model model, @OriginalArg(2) int yaw) {
 		terrainRollAngle = 0;
 		terrainPitchAngle = 0;
 		terrainYOffset = 0;
 		@Pc(21) BasType type = this.getBasType();
-		@Pc(24) int local24 = type.terrainAlignWidth;
-		@Pc(27) int local27 = type.terrainAlignDepth;
-		if (local24 == 0 || local27 == 0) {
+		@Pc(24) int alignWidth = type.terrainAlignWidth;
+		@Pc(27) int alignDepth = type.terrainAlignDepth;
+		if (alignWidth == 0 || alignDepth == 0) {
 			return;
 		}
-		@Pc(39) int local39 = MathUtils.sin[arg1];
-		@Pc(43) int local43 = MathUtils.cos[arg1];
-		@Pc(48) int local48 = -local24 / 2;
-		@Pc(53) int local53 = -local27 / 2;
-		@Pc(64) int local64 = local53 * local43 - local48 * local39 >> 16;
-		@Pc(75) int local75 = local39 * local53 + local43 * local48 >> 16;
-		@Pc(87) int local87 = SceneGraph.getTileHeight(Player.plane, local75 + this.xFine, this.yFine + local64);
-		@Pc(91) int local91 = local24 / 2;
-		@Pc(96) int local96 = -local27 / 2;
-		@Pc(106) int local106 = local91 * local43 + local96 * local39 >> 16;
-		@Pc(110) int local110 = local27 / 2;
-		@Pc(121) int local121 = local96 * local43 - local91 * local39 >> 16;
-		@Pc(134) int local134 = SceneGraph.getTileHeight(Player.plane, local106 + this.xFine, this.yFine - -local121);
-		@Pc(139) int local139 = -local24 / 2;
-		@Pc(150) int local150 = local110 * local43 - local39 * local139 >> 16;
-		@Pc(154) int local154 = local27 / 2;
-		@Pc(158) int local158 = local24 / 2;
-		@Pc(169) int local169 = local39 * local110 + local43 * local139 >> 16;
-		@Pc(179) int local179 = local154 * local43 - local39 * local158 >> 16;
-		@Pc(189) int local189 = local39 * local154 + local43 * local158 >> 16;
-		@Pc(201) int local201 = SceneGraph.getTileHeight(Player.plane, this.xFine + local169, local150 + this.yFine);
-		@Pc(212) int local212 = local134 > local87 ? local87 : local134;
-		@Pc(224) int local224 = SceneGraph.getTileHeight(Player.plane, local189 + this.xFine, local179 + this.yFine);
-		@Pc(231) int local231 = local224 > local201 ? local201 : local224;
-		@Pc(238) int local238 = local224 > local134 ? local134 : local224;
-		@Pc(245) int local245 = local201 <= local87 ? local201 : local87;
-		terrainPitchAngle = (int) (Math.atan2(local212 - local231, local27) * 325.95D) & 0x7FF;
+		@Pc(39) int sin = MathUtils.sin[yaw];
+		@Pc(43) int cos = MathUtils.cos[yaw];
+		@Pc(48) int halfWidthNeg = -alignWidth / 2;
+		@Pc(53) int halfDepthNeg = -alignDepth / 2;
+		@Pc(64) int dy0 = halfDepthNeg * cos - halfWidthNeg * sin >> 16;
+		@Pc(75) int dx0 = sin * halfDepthNeg + cos * halfWidthNeg >> 16;
+		@Pc(87) int h0 = SceneGraph.getTileHeight(Player.plane, dx0 + this.xFine, this.yFine + dy0);
+		@Pc(91) int halfWidth = alignWidth / 2;
+		@Pc(96) int halfDepthNeg2 = -alignDepth / 2;
+		@Pc(106) int dx1 = halfWidth * cos + halfDepthNeg2 * sin >> 16;
+		@Pc(110) int halfDepth = alignDepth / 2;
+		@Pc(121) int dy1 = halfDepthNeg2 * cos - halfWidth * sin >> 16;
+		@Pc(134) int h1 = SceneGraph.getTileHeight(Player.plane, dx1 + this.xFine, this.yFine - -dy1);
+		@Pc(139) int halfWidthNeg2 = -alignWidth / 2;
+		@Pc(150) int dy2 = halfDepth * cos - sin * halfWidthNeg2 >> 16;
+		@Pc(154) int halfDepth2 = alignDepth / 2;
+		@Pc(158) int halfWidth2 = alignWidth / 2;
+		@Pc(169) int dx2 = sin * halfDepth + cos * halfWidthNeg2 >> 16;
+		@Pc(179) int dy3 = halfDepth2 * cos - sin * halfWidth2 >> 16;
+		@Pc(189) int dx3 = sin * halfDepth2 + cos * halfWidth2 >> 16;
+		@Pc(201) int h2 = SceneGraph.getTileHeight(Player.plane, this.xFine + dx2, dy2 + this.yFine);
+		@Pc(212) int minFront = h1 > h0 ? h0 : h1;
+		@Pc(224) int h3 = SceneGraph.getTileHeight(Player.plane, dx3 + this.xFine, dy3 + this.yFine);
+		@Pc(231) int minBack = h3 > h2 ? h2 : h3;
+		@Pc(238) int minRight = h3 > h1 ? h1 : h3;
+		@Pc(245) int minLeft = h2 <= h0 ? h2 : h0;
+		terrainPitchAngle = (int) (Math.atan2(minFront - minBack, alignDepth) * 325.95D) & 0x7FF;
 		if (terrainPitchAngle != 0) {
-			arg0.rotateX(terrainPitchAngle);
+			model.rotateX(terrainPitchAngle);
 		}
-		terrainRollAngle = (int) (Math.atan2(local245 - local238, local24) * 325.95D) & 0x7FF;
+		terrainRollAngle = (int) (Math.atan2(minLeft - minRight, alignWidth) * 325.95D) & 0x7FF;
 		if (terrainRollAngle != 0) {
-			arg0.rotateZ(terrainRollAngle);
+			model.rotateZ(terrainRollAngle);
 		}
-		terrainYOffset = local224 + local87;
-		if (local201 + local134 < terrainYOffset) {
-			terrainYOffset = local201 + local134;
+		terrainYOffset = h3 + h0;
+		if (h2 + h1 < terrainYOffset) {
+			terrainYOffset = h2 + h1;
 		}
 		terrainYOffset = (terrainYOffset >> 1) - this.tileHeight;
 		if (terrainYOffset != 0) {
-			arg0.translate(0, terrainYOffset, 0);
+			model.translate(0, terrainYOffset, 0);
 		}
 	}
 
@@ -428,51 +428,51 @@ public abstract class PathingEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(Lclient!ak;B)V")
-	protected final void applyBodyLean(@OriginalArg(0) Model arg0) {
-		@Pc(16) BasType local16 = this.getBasType();
-		if (local16.rollTargetAngle == 0 && local16.pitchTargetAngle == 0) {
+	protected final void applyBodyLean(@OriginalArg(0) Model model) {
+		@Pc(16) BasType basType = this.getBasType();
+		if (basType.rollTargetAngle == 0 && basType.pitchTargetAngle == 0) {
 			return;
 		}
-		@Pc(26) int local26 = 0;
-		@Pc(28) int local28 = 0;
+		@Pc(26) int targetRoll = 0;
+		@Pc(28) int targetPitch = 0;
 		if (this.yawAccelerating && this.yawVelocity != 0) {
-			local28 = local16.pitchTargetAngle;
+			targetPitch = basType.pitchTargetAngle;
 			if (this.yawVelocity >= 0) {
-				local26 = local16.rollTargetAngle;
+				targetRoll = basType.rollTargetAngle;
 			} else {
-				local26 = -local16.rollTargetAngle;
+				targetRoll = -basType.rollTargetAngle;
 			}
 		}
-		@Pc(101) int local101;
-		@Pc(106) int local106;
-		@Pc(134) int local134;
-		@Pc(138) int local138;
-		if (this.rollTarget != local26) {
-			this.rollTarget = local26;
-			if (this.rollVelocity > 0 && this.rollAngle < local26) {
-				local101 = this.rollVelocity * this.rollVelocity / (local16.rollAcceleration * 2);
-				local106 = local26 - this.rollAngle;
-				if (local101 <= local106) {
+		@Pc(101) int stoppingDist;
+		@Pc(106) int delta;
+		@Pc(134) int maxSpeedDist;
+		@Pc(138) int limit;
+		if (this.rollTarget != targetRoll) {
+			this.rollTarget = targetRoll;
+			if (this.rollVelocity > 0 && this.rollAngle < targetRoll) {
+				stoppingDist = this.rollVelocity * this.rollVelocity / (basType.rollAcceleration * 2);
+				delta = targetRoll - this.rollAngle;
+				if (stoppingDist <= delta) {
 					this.rollAccelerating = true;
-					this.rollMidpoint = (local26 + this.rollAngle - local101) / 2;
-					local134 = local16.rollMaxSpeed * local16.rollMaxSpeed / (local16.rollAcceleration * 2);
-					local138 = local26 - local134;
-					if (this.rollMidpoint < local138) {
-						this.rollMidpoint = local138;
+					this.rollMidpoint = (targetRoll + this.rollAngle - stoppingDist) / 2;
+					maxSpeedDist = basType.rollMaxSpeed * basType.rollMaxSpeed / (basType.rollAcceleration * 2);
+					limit = targetRoll - maxSpeedDist;
+					if (this.rollMidpoint < limit) {
+						this.rollMidpoint = limit;
 					}
 				} else {
 					this.rollAccelerating = false;
 				}
-			} else if (this.rollVelocity < 0 && this.rollAngle > local26) {
-				local101 = this.rollVelocity * this.rollVelocity / (local16.rollAcceleration * 2);
-				local106 = local26 - this.rollAngle;
-				if (local106 >= local101) {
+			} else if (this.rollVelocity < 0 && this.rollAngle > targetRoll) {
+				stoppingDist = this.rollVelocity * this.rollVelocity / (basType.rollAcceleration * 2);
+				delta = targetRoll - this.rollAngle;
+				if (delta >= stoppingDist) {
 					this.rollAccelerating = true;
-					this.rollMidpoint = (this.rollAngle + local101 + local26) / 2;
-					local134 = local16.rollMaxSpeed * local16.rollMaxSpeed / (local16.rollAcceleration * 2);
-					local138 = local134 + local26;
-					if (this.rollMidpoint > local138) {
-						this.rollMidpoint = local138;
+					this.rollMidpoint = (this.rollAngle + stoppingDist + targetRoll) / 2;
+					maxSpeedDist = basType.rollMaxSpeed * basType.rollMaxSpeed / (basType.rollAcceleration * 2);
+					limit = maxSpeedDist + targetRoll;
+					if (this.rollMidpoint > limit) {
+						this.rollMidpoint = limit;
 					}
 				} else {
 					this.rollAccelerating = false;
@@ -482,24 +482,24 @@ public abstract class PathingEntity extends Entity {
 			}
 		}
 		if (this.rollVelocity == 0) {
-			local101 = this.rollTarget - this.rollAngle;
-			if (-local16.rollAcceleration < local101 && local16.rollAcceleration > local101) {
+			stoppingDist = this.rollTarget - this.rollAngle;
+			if (-basType.rollAcceleration < stoppingDist && basType.rollAcceleration > stoppingDist) {
 				this.rollAngle = this.rollTarget;
 			} else {
 				this.rollAccelerating = true;
-				local106 = local16.rollMaxSpeed * local16.rollMaxSpeed / (local16.rollAcceleration * 2);
+				delta = basType.rollMaxSpeed * basType.rollMaxSpeed / (basType.rollAcceleration * 2);
 				this.rollMidpoint = (this.rollTarget + this.rollAngle) / 2;
-				if (local101 >= 0) {
-					local134 = this.rollTarget - local106;
-					this.rollVelocity = local16.rollAcceleration;
-					if (local134 > this.rollMidpoint) {
-						this.rollMidpoint = local134;
+				if (stoppingDist >= 0) {
+					maxSpeedDist = this.rollTarget - delta;
+					this.rollVelocity = basType.rollAcceleration;
+					if (maxSpeedDist > this.rollMidpoint) {
+						this.rollMidpoint = maxSpeedDist;
 					}
 				} else {
-					this.rollVelocity = -local16.rollAcceleration;
-					local134 = local106 + this.rollTarget;
-					if (this.rollMidpoint > local134) {
-						this.rollMidpoint = local134;
+					this.rollVelocity = -basType.rollAcceleration;
+					maxSpeedDist = delta + this.rollTarget;
+					if (this.rollMidpoint > maxSpeedDist) {
+						this.rollMidpoint = maxSpeedDist;
 					}
 				}
 			}
@@ -508,60 +508,60 @@ public abstract class PathingEntity extends Entity {
 				this.rollAccelerating = false;
 			}
 			if (!this.rollAccelerating) {
-				this.rollVelocity -= local16.rollAcceleration;
+				this.rollVelocity -= basType.rollAcceleration;
 				if (this.rollVelocity < 0) {
 					this.rollVelocity = 0;
 				}
-			} else if (local16.rollMaxSpeed > this.rollVelocity) {
-				this.rollVelocity += local16.rollAcceleration;
+			} else if (basType.rollMaxSpeed > this.rollVelocity) {
+				this.rollVelocity += basType.rollAcceleration;
 			}
 		} else {
 			if (this.rollMidpoint >= this.rollAngle) {
 				this.rollAccelerating = false;
 			}
 			if (!this.rollAccelerating) {
-				this.rollVelocity += local16.rollAcceleration;
+				this.rollVelocity += basType.rollAcceleration;
 				if (this.rollVelocity > 0) {
 					this.rollVelocity = 0;
 				}
-			} else if (this.rollVelocity > -local16.rollMaxSpeed) {
-				this.rollVelocity -= local16.rollAcceleration;
+			} else if (this.rollVelocity > -basType.rollMaxSpeed) {
+				this.rollVelocity -= basType.rollAcceleration;
 			}
 		}
 		this.rollAngle += this.rollVelocity;
 		if (this.rollAngle != 0) {
-			local101 = this.rollAngle >> 5 & 0x7FF;
-			local106 = arg0.getMinY() / 2;
-			arg0.translate(0, -local106, 0);
-			arg0.rotateZ(local101);
-			arg0.translate(0, local106, 0);
+			stoppingDist = this.rollAngle >> 5 & 0x7FF;
+			delta = model.getMinY() / 2;
+			model.translate(0, -delta, 0);
+			model.rotateZ(stoppingDist);
+			model.translate(0, delta, 0);
 		}
-		if (local28 != this.pitchTarget) {
-			this.pitchTarget = local28;
-			if (this.pitchVelocity > 0 && this.pitchAngle < local28) {
-				local101 = this.pitchVelocity * this.pitchVelocity / (local16.pitchAcceleration * 2);
-				local106 = local28 - this.pitchAngle;
-				if (local101 > local106) {
+		if (targetPitch != this.pitchTarget) {
+			this.pitchTarget = targetPitch;
+			if (this.pitchVelocity > 0 && this.pitchAngle < targetPitch) {
+				stoppingDist = this.pitchVelocity * this.pitchVelocity / (basType.pitchAcceleration * 2);
+				delta = targetPitch - this.pitchAngle;
+				if (stoppingDist > delta) {
 					this.pitchAccelerating = false;
 				} else {
-					this.pitchMidpoint = (this.pitchAngle + local28 - local101) / 2;
+					this.pitchMidpoint = (this.pitchAngle + targetPitch - stoppingDist) / 2;
 					this.pitchAccelerating = true;
-					local134 = local16.pitchMaxSpeed * local16.pitchMaxSpeed / (local16.pitchAcceleration * 2);
-					local138 = local28 - local134;
-					if (this.pitchMidpoint < local138) {
-						this.pitchMidpoint = local138;
+					maxSpeedDist = basType.pitchMaxSpeed * basType.pitchMaxSpeed / (basType.pitchAcceleration * 2);
+					limit = targetPitch - maxSpeedDist;
+					if (this.pitchMidpoint < limit) {
+						this.pitchMidpoint = limit;
 					}
 				}
-			} else if (this.pitchVelocity < 0 && this.pitchAngle > local28) {
-				local106 = local28 - this.pitchAngle;
-				local101 = this.pitchVelocity * this.pitchVelocity / (local16.pitchAcceleration * 2);
-				if (local106 >= local101) {
-					this.pitchMidpoint = (local101 + this.pitchAngle + local28) / 2;
+			} else if (this.pitchVelocity < 0 && this.pitchAngle > targetPitch) {
+				delta = targetPitch - this.pitchAngle;
+				stoppingDist = this.pitchVelocity * this.pitchVelocity / (basType.pitchAcceleration * 2);
+				if (delta >= stoppingDist) {
+					this.pitchMidpoint = (stoppingDist + this.pitchAngle + targetPitch) / 2;
 					this.pitchAccelerating = true;
-					local134 = local16.pitchMaxSpeed * local16.pitchMaxSpeed / (local16.pitchAcceleration * 2);
-					local138 = local134 + local28;
-					if (local138 < this.pitchMidpoint) {
-						this.pitchMidpoint = local138;
+					maxSpeedDist = basType.pitchMaxSpeed * basType.pitchMaxSpeed / (basType.pitchAcceleration * 2);
+					limit = maxSpeedDist + targetPitch;
+					if (limit < this.pitchMidpoint) {
+						this.pitchMidpoint = limit;
 					}
 				} else {
 					this.pitchAccelerating = false;
@@ -571,24 +571,24 @@ public abstract class PathingEntity extends Entity {
 			}
 		}
 		if (this.pitchVelocity == 0) {
-			local101 = this.pitchTarget - this.pitchAngle;
-			if (local101 > -local16.pitchAcceleration && local16.pitchAcceleration > local101) {
+			stoppingDist = this.pitchTarget - this.pitchAngle;
+			if (stoppingDist > -basType.pitchAcceleration && basType.pitchAcceleration > stoppingDist) {
 				this.pitchAngle = this.pitchTarget;
 			} else {
 				this.pitchMidpoint = (this.pitchTarget + this.pitchAngle) / 2;
 				this.pitchAccelerating = true;
-				local106 = local16.pitchMaxSpeed * local16.pitchMaxSpeed / (local16.pitchAcceleration * 2);
-				if (local101 < 0) {
-					this.pitchVelocity = -local16.pitchAcceleration;
-					local134 = local106 + this.pitchTarget;
-					if (this.pitchMidpoint > local134) {
-						this.pitchMidpoint = local134;
+				delta = basType.pitchMaxSpeed * basType.pitchMaxSpeed / (basType.pitchAcceleration * 2);
+				if (stoppingDist < 0) {
+					this.pitchVelocity = -basType.pitchAcceleration;
+					maxSpeedDist = delta + this.pitchTarget;
+					if (this.pitchMidpoint > maxSpeedDist) {
+						this.pitchMidpoint = maxSpeedDist;
 					}
 				} else {
-					this.pitchVelocity = local16.pitchAcceleration;
-					local134 = this.pitchTarget - local106;
-					if (this.pitchMidpoint < local134) {
-						this.pitchMidpoint = local134;
+					this.pitchVelocity = basType.pitchAcceleration;
+					maxSpeedDist = this.pitchTarget - delta;
+					if (this.pitchMidpoint < maxSpeedDist) {
+						this.pitchMidpoint = maxSpeedDist;
 					}
 				}
 			}
@@ -597,33 +597,33 @@ public abstract class PathingEntity extends Entity {
 				this.pitchAccelerating = false;
 			}
 			if (!this.pitchAccelerating) {
-				this.pitchVelocity -= local16.pitchAcceleration;
+				this.pitchVelocity -= basType.pitchAcceleration;
 				if (this.pitchVelocity < 0) {
 					this.pitchVelocity = 0;
 				}
-			} else if (this.pitchVelocity < local16.pitchMaxSpeed) {
-				this.pitchVelocity += local16.pitchAcceleration;
+			} else if (this.pitchVelocity < basType.pitchMaxSpeed) {
+				this.pitchVelocity += basType.pitchAcceleration;
 			}
 		} else {
 			if (this.pitchMidpoint >= this.pitchAngle) {
 				this.pitchAccelerating = false;
 			}
 			if (!this.pitchAccelerating) {
-				this.pitchVelocity += local16.pitchAcceleration;
+				this.pitchVelocity += basType.pitchAcceleration;
 				if (this.pitchVelocity > 0) {
 					this.pitchVelocity = 0;
 				}
-			} else if (-local16.pitchMaxSpeed < this.pitchVelocity) {
-				this.pitchVelocity -= local16.pitchAcceleration;
+			} else if (-basType.pitchMaxSpeed < this.pitchVelocity) {
+				this.pitchVelocity -= basType.pitchAcceleration;
 			}
 		}
 		this.pitchAngle += this.pitchVelocity;
 		if (this.pitchAngle != 0) {
-			local101 = this.pitchAngle >> 5 & 0x7FF;
-			local106 = arg0.getMinY() / 2;
-			arg0.translate(0, -local106, 0);
-			arg0.rotateX(local101);
-			arg0.translate(0, local106, 0);
+			stoppingDist = this.pitchAngle >> 5 & 0x7FF;
+			delta = model.getMinY() / 2;
+			model.translate(0, -delta, 0);
+			model.rotateX(stoppingDist);
+			model.translate(0, delta, 0);
 		}
 	}
 

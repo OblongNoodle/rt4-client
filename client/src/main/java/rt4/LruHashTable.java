@@ -24,23 +24,23 @@ public final class LruHashTable {
 	private final HashTable table;
 
 	@OriginalMember(owner = "client!gn", name = "<init>", descriptor = "(I)V")
-	public LruHashTable(@OriginalArg(0) int arg0) {
-		@Pc(13) int local13 = 1;
-		this.available = arg0;
-		while (arg0 > local13 + local13) {
-			local13 += local13;
+	public LruHashTable(@OriginalArg(0) int capacity) {
+		@Pc(13) int bucketCount = 1;
+		this.available = capacity;
+		while (capacity > bucketCount + bucketCount) {
+			bucketCount += bucketCount;
 		}
-		this.capacity = arg0;
-		this.table = new HashTable(local13);
+		this.capacity = capacity;
+		this.table = new HashTable(bucketCount);
 	}
 
 	@OriginalMember(owner = "client!gn", name = "a", descriptor = "(JI)Lclient!rg;")
-	public final SecondaryNode get(@OriginalArg(0) long arg0) {
-		@Pc(16) SecondaryNode local16 = (SecondaryNode) this.table.get(arg0);
-		if (local16 != null) {
-			this.queue.addTail(local16);
+	public final SecondaryNode get(@OriginalArg(0) long key) {
+		@Pc(16) SecondaryNode node = (SecondaryNode) this.table.get(key);
+		if (node != null) {
+			this.queue.addTail(node);
 		}
-		return local16;
+		return node;
 	}
 
 	@OriginalMember(owner = "client!gn", name = "a", descriptor = "(I)Lclient!ab;")
@@ -49,21 +49,21 @@ public final class LruHashTable {
 	}
 
 	@OriginalMember(owner = "client!gn", name = "a", descriptor = "(Lclient!rg;JB)V")
-	public final void put(@OriginalArg(0) SecondaryNode arg0, @OriginalArg(1) long arg1) {
+	public final void put(@OriginalArg(0) SecondaryNode node, @OriginalArg(1) long key) {
 		if (this.available == 0) {
-			@Pc(14) SecondaryNode local14 = this.queue.removeHead();
-			local14.unlink();
-			local14.unlinkSecondary();
-			if (this.sentinel == local14) {
-				local14 = this.queue.removeHead();
-				local14.unlink();
-				local14.unlinkSecondary();
+			@Pc(14) SecondaryNode evicted = this.queue.removeHead();
+			evicted.unlink();
+			evicted.unlinkSecondary();
+			if (this.sentinel == evicted) {
+				evicted = this.queue.removeHead();
+				evicted.unlink();
+				evicted.unlinkSecondary();
 			}
 		} else {
 			this.available--;
 		}
-		this.table.put(arg0, arg1);
-		this.queue.addTail(arg0);
+		this.table.put(node, key);
+		this.queue.addTail(node);
 	}
 
 	@OriginalMember(owner = "client!gn", name = "b", descriptor = "(I)Lclient!ab;")

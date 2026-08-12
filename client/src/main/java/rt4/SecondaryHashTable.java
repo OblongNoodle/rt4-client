@@ -12,12 +12,12 @@ public final class SecondaryHashTable {
 	private final SecondaryNode[] buckets;
 
 	@OriginalMember(owner = "client!rm", name = "<init>", descriptor = "(I)V")
-	public SecondaryHashTable(@OriginalArg(0) int arg0) {
-		this.buckets = new SecondaryNode[arg0];
-		for (@Pc(7) int local7 = 0; local7 < arg0; local7++) {
-			@Pc(23) SecondaryNode local23 = this.buckets[local7] = new SecondaryNode();
-			local23.secondaryPrev = local23;
-			local23.secondaryNext = local23;
+	public SecondaryHashTable(@OriginalArg(0) int size) {
+		this.buckets = new SecondaryNode[size];
+		for (@Pc(7) int i = 0; i < size; i++) {
+			@Pc(23) SecondaryNode sentinel = this.buckets[i] = new SecondaryNode();
+			sentinel.secondaryPrev = sentinel;
+			sentinel.secondaryNext = sentinel;
 		}
 	}
 }

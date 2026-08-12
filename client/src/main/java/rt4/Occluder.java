@@ -63,19 +63,19 @@ public final class Occluder {
 	public int maxTileY;
 
 	@OriginalMember(owner = "client!wj", name = "a", descriptor = "(IIIIIII)V")
-	public static void add(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		@Pc(3) Occluder local3 = new Occluder();
-		local3.minTileX = arg1 / 128;
-		local3.maxTileX = arg2 / 128;
-		local3.minTileY = arg3 / 128;
-		local3.maxTileY = arg4 / 128;
-		local3.type = arg0;
-		local3.minX = arg1;
-		local3.maxX = arg2;
-		local3.minY = arg3;
-		local3.maxY = arg4;
-		local3.minZ = arg5;
-		local3.maxZ = arg6;
-		SceneGraph.occluders[SceneGraph.occluderCount++] = local3;
+	public static void add(@OriginalArg(0) int type, @OriginalArg(1) int minX, @OriginalArg(2) int maxX, @OriginalArg(3) int minY, @OriginalArg(4) int maxY, @OriginalArg(5) int minZ, @OriginalArg(6) int maxZ) {
+		@Pc(3) Occluder occluder = new Occluder();
+		occluder.minTileX = minX / 128;
+		occluder.maxTileX = maxX / 128;
+		occluder.minTileY = minY / 128;
+		occluder.maxTileY = maxY / 128;
+		occluder.type = type;
+		occluder.minX = minX;
+		occluder.maxX = maxX;
+		occluder.minY = minY;
+		occluder.maxY = maxY;
+		occluder.minZ = minZ;
+		occluder.maxZ = maxZ;
+		SceneGraph.occluders[SceneGraph.occluderCount++] = occluder;
 	}
 }

@@ -21,26 +21,26 @@ public final class LightType {
 	public int flickerSpeed = 2048;
 
 	@OriginalMember(owner = "client!ic", name = "a", descriptor = "(ILclient!wa;I)V")
-	public final void decode(@OriginalArg(1) Buffer arg0, @OriginalArg(2) int arg1) {
+	public final void decode(@OriginalArg(1) Buffer buf, @OriginalArg(2) int id) {
 		while (true) {
-			@Pc(5) int local5 = arg0.g1();
-			if (local5 == 0) {
+			@Pc(5) int opcode = buf.g1();
+			if (opcode == 0) {
 				return;
 			}
-			this.decode(local5, arg0, arg1);
+			this.decode(opcode, buf, id);
 		}
 	}
 
 	@OriginalMember(owner = "client!ic", name = "a", descriptor = "(ILclient!wa;IZ)V")
-	private void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
-		if (arg0 == 1) {
-			this.flickerType = arg1.g1();
-		} else if (arg0 == 2) {
-			this.flickerSpeed = arg1.g2();
-		} else if (arg0 == 3) {
-			this.alphaMin = arg1.g2();
-		} else if (arg0 == 4) {
-			this.alphaMax = arg1.g2b();
+	private void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf, @OriginalArg(2) int id) {
+		if (opcode == 1) {
+			this.flickerType = buf.g1();
+		} else if (opcode == 2) {
+			this.flickerSpeed = buf.g2();
+		} else if (opcode == 3) {
+			this.alphaMin = buf.g2();
+		} else if (opcode == 4) {
+			this.alphaMax = buf.g2b();
 		}
 	}
 }

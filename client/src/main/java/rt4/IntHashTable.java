@@ -12,38 +12,38 @@ public final class IntHashTable {
 	private final int[] table;
 
 	@OriginalMember(owner = "client!jg", name = "<init>", descriptor = "([I)V")
-	public IntHashTable(@OriginalArg(0) int[] arg0) {
-		@Pc(5) int local5;
-		for (local5 = 1; local5 <= (arg0.length >> 1) + arg0.length; local5 <<= 0x1) {
+	public IntHashTable(@OriginalArg(0) int[] keys) {
+		@Pc(5) int capacity;
+		for (capacity = 1; capacity <= (keys.length >> 1) + keys.length; capacity <<= 0x1) {
 		}
-		this.table = new int[local5 + local5];
-		@Pc(28) int local28;
-		for (local28 = 0; local28 < local5 + local5; local28++) {
-			this.table[local28] = -1;
+		this.table = new int[capacity + capacity];
+		@Pc(28) int i;
+		for (i = 0; i < capacity + capacity; i++) {
+			this.table[i] = -1;
 		}
-		local28 = 0;
-		while (arg0.length > local28) {
-			@Pc(55) int local55;
-			for (local55 = local5 - 1 & arg0[local28]; this.table[local55 + local55 + 1] != -1; local55 = local5 - 1 & local55 + 1) {
+		i = 0;
+		while (keys.length > i) {
+			@Pc(55) int slot;
+			for (slot = capacity - 1 & keys[i]; this.table[slot + slot + 1] != -1; slot = capacity - 1 & slot + 1) {
 			}
-			this.table[local55 + local55] = arg0[local28];
-			this.table[local55 + local55 + 1] = local28++;
+			this.table[slot + slot] = keys[i];
+			this.table[slot + slot + 1] = i++;
 		}
 	}
 
 	@OriginalMember(owner = "client!jg", name = "a", descriptor = "(II)I")
-	public final int get(@OriginalArg(0) int arg0) {
-		@Pc(16) int local16 = (this.table.length >> 1) - 1;
-		@Pc(20) int local20 = local16 & arg0;
+	public final int get(@OriginalArg(0) int key) {
+		@Pc(16) int mask = (this.table.length >> 1) - 1;
+		@Pc(20) int slot = mask & key;
 		while (true) {
-			@Pc(29) int local29 = this.table[local20 + local20 + 1];
-			if (local29 == -1) {
+			@Pc(29) int value = this.table[slot + slot + 1];
+			if (value == -1) {
 				return -1;
 			}
-			if (arg0 == this.table[local20 + local20]) {
-				return local29;
+			if (key == this.table[slot + slot]) {
+				return value;
 			}
-			local20 = local20 + 1 & local16;
+			slot = slot + 1 & mask;
 		}
 	}
 }

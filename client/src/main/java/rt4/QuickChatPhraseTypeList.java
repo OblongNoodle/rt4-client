@@ -19,10 +19,10 @@ public class QuickChatPhraseTypeList {
 	public static int archive2PhraseCount = 0;
 
 	@OriginalMember(owner = "client!ej", name = "a", descriptor = "(Lclient!ve;ILclient!ve;Lclient!of;)V")
-	public static void init(@OriginalArg(0) Js5 arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) QuickChatCommandDecoder arg2) {
-		archive2 = arg0;
-		decoder = arg2;
-		archive1 = arg1;
+	public static void init(@OriginalArg(0) Js5 js5Archive2, @OriginalArg(2) Js5 js5Archive1, @OriginalArg(3) QuickChatCommandDecoder commandDecoder) {
+		archive2 = js5Archive2;
+		decoder = commandDecoder;
+		archive1 = js5Archive1;
 		if (archive1 != null) {
 			archive1PhraseCount = archive1.getGroupCapacity(1);
 		}
@@ -55,13 +55,13 @@ public class QuickChatPhraseTypeList {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "([IJIZ)Lclient!na;")
-	public static JagString formatDynamicValue(@OriginalArg(0) int[] arg0, @OriginalArg(1) long arg1, @OriginalArg(2) int arg2) {
+	public static JagString formatDynamicValue(@OriginalArg(0) int[] params, @OriginalArg(1) long value, @OriginalArg(2) int commandType) {
 		if (decoder != null) {
-			@Pc(17) JagString local17 = decoder.decode(arg2, arg0, arg1);
-			if (local17 != null) {
-				return local17;
+			@Pc(17) JagString decoded = decoder.decode(commandType, params, value);
+			if (decoded != null) {
+				return decoded;
 			}
 		}
-		return JagString.parseLong(arg1);
+		return JagString.parseLong(value);
 	}
 }
