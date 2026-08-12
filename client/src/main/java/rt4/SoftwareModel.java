@@ -851,7 +851,7 @@ public final class SoftwareModel extends Model {
 				x = maxScreenY / d;
 				z = minScreenY / c;
 			}
-			if (GlModel.anInt3582 >= v && GlModel.anInt3582 <= y && RawModel.pickScreenY >= x && RawModel.pickScreenY <= z) {
+			if (GlModel.pickScreenX >= v && GlModel.pickScreenX <= y && RawModel.pickScreenY >= x && RawModel.pickScreenY <= z) {
 				v = 999999;
 				y = -999999;
 				x = 999999;
@@ -894,7 +894,7 @@ public final class SoftwareModel extends Model {
 						}
 					}
 				}
-				if (GlModel.anInt3582 >= v && GlModel.anInt3582 <= y && RawModel.pickScreenY >= x && RawModel.pickScreenY <= z) {
+				if (GlModel.pickScreenX >= v && GlModel.pickScreenX <= y && RawModel.pickScreenY >= x && RawModel.pickScreenY <= z) {
 					if (this.pickable) {
 						if (miniMenuPick) {
 							Model.pickResults[MiniMenu.pickResultCount++] = key;
@@ -1666,7 +1666,7 @@ public final class SoftwareModel extends Model {
 						}
 					}
 				} else {
-					if (arg1 && this.pointWithinTriangle(GlModel.anInt3582 + Rasteriser.centerX, RawModel.pickScreenY + Rasteriser.centerY, vertexScreenY[local51], vertexScreenY[local56], vertexScreenY[pri], local65, local69, local73)) {
+					if (arg1 && this.pointWithinTriangle(GlModel.pickScreenX + Rasteriser.centerX, RawModel.pickScreenY + Rasteriser.centerY, vertexScreenY[local51], vertexScreenY[local56], vertexScreenY[pri], local65, local69, local73)) {
 						if (arg2 >= 0L) {
 							Model.pickResults[MiniMenu.pickResultCount++] = arg2;
 						}

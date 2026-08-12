@@ -169,8 +169,8 @@ object RoofHider {
         }
         val rebuild = !wasActive ||
             ScriptRunner.getRoofRemovalMode() != 2 ||
-            ScriptRunner.aByteArrayArrayArray15 == null ||
-            ScriptRunner.anIntArray205.size < SELECTIVE_ROOF_GROUP_COUNT
+            ScriptRunner.roofVisibility == null ||
+            ScriptRunner.roofGroupMaxHeight.size < SELECTIVE_ROOF_GROUP_COUNT
         if (rebuild) {
             ScriptRunner.updateRoofRemovalMode()
         } else {
@@ -179,10 +179,10 @@ object RoofHider {
     }
 
     private fun ensureSelectiveRoofBuffers() {
-        if (ScriptRunner.aByteArrayArrayArray15 == null) {
+        if (ScriptRunner.roofVisibility == null) {
             ScriptRunner.fillRoofVisibility(((ScriptRunner.renderCycle - 4) and 0xFF).toByte())
         }
-        if (ScriptRunner.anIntArray205.size < SELECTIVE_ROOF_GROUP_COUNT) {
+        if (ScriptRunner.roofGroupMaxHeight.size < SELECTIVE_ROOF_GROUP_COUNT) {
             ScriptRunner.allocateRoofVisibilityGroupArrays(SELECTIVE_ROOF_GROUP_COUNT)
         }
     }
@@ -212,7 +212,7 @@ object RoofHider {
     }
 
     private fun hideRoofFromSeedTile(sceneX: Int, sceneY: Int, radius: Int, group: Int, plane: Int): Boolean {
-        if (sceneX == -1 || !isRoofHidePlane(plane) || ScriptRunner.anIntArray205.size <= group) {
+        if (sceneX == -1 || !isRoofHidePlane(plane) || ScriptRunner.roofGroupMaxHeight.size <= group) {
             return false
         }
         for (currentRadius in 0..radius) {
@@ -234,7 +234,7 @@ object RoofHider {
         if (!isHideableRoofTile(sceneX, sceneY, plane)) {
             return false
         }
-        val masks = ScriptRunner.aByteArrayArrayArray15 ?: return false
+        val masks = ScriptRunner.roofVisibility ?: return false
         val currentRoofMask = (ScriptRunner.renderCycle and 0xFF).toByte()
         if (masks[plane][sceneX][sceneY] == currentRoofMask) {
             return true
@@ -675,7 +675,7 @@ object RoofHider {
     }
 
     private fun isHideableRoofTile(sceneX: Int, sceneY: Int, plane: Int): Boolean {
-        if (ScriptRunner.aByteArrayArrayArray15 == null) {
+        if (ScriptRunner.roofVisibility == null) {
             return false
         }
         return isRoofHidePlane(plane) &&

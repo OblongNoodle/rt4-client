@@ -19,17 +19,17 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!fl", name = "Q", descriptor = "Lclient!na;")
 	public static final JagString EMPTY_STRING = JagString.parse("");
 	@OriginalMember(owner = "client!bb", name = "A", descriptor = "Lclient!na;")
-	public static final JagString aClass100_74 = JagString.parse("::");
+	public static final JagString DOUBLE_COLON = JagString.parse("::");
 	@OriginalMember(owner = "client!be", name = "ib", descriptor = "Lclient!na;")
 	public static final JagString EVENT_OPBASE = JagString.parse("event_opbase");
 	@OriginalMember(owner = "client!da", name = "O", descriptor = "Lclient!na;")
-	public static final JagString aClass100_253 = JagString.parse("(U0a )2 via: ");
+	public static final JagString ERROR_VIA = JagString.parse("(U0a )2 via: ");
 	@OriginalMember(owner = "client!fl", name = "H", descriptor = "Lclient!na;")
-	public static final JagString aClass100_446 = JagString.parse("<img=0>");
+	public static final JagString IMG0 = JagString.parse("<img=0>");
 	@OriginalMember(owner = "client!nd", name = "b", descriptor = "Lclient!na;")
-	public static final JagString aClass100_780 = JagString.parse("Clientscript error in: ");
+	public static final JagString CLIENTSCRIPT_ERROR = JagString.parse("Clientscript error in: ");
 	@OriginalMember(owner = "client!hm", name = "R", descriptor = "Lclient!na;")
-	public static final JagString aClass100_537 = JagString.parse("<img=1>");
+	public static final JagString IMG1 = JagString.parse("<img=1>");
 	@OriginalMember(owner = "client!hn", name = "K", descriptor = "Ljava/util/Calendar;")
 	public static final Calendar aCalendar2 = Calendar.getInstance();
 	@OriginalMember(owner = "client!kk", name = "m", descriptor = "Lclient!na;")
@@ -37,37 +37,37 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!fe", name = "nc", descriptor = "[Lclient!hj;")
 	public static final GoSubFrame[] callStack = new GoSubFrame[50];
 	@OriginalMember(owner = "client!ee", name = "j", descriptor = "[I")
-	public static final int[] anIntArray140 = new int[5];
+	public static final int[] globalArrayLengths = new int[5];
 	@OriginalMember(owner = "client!oe", name = "i", descriptor = "[[I")
-	public static final int[][] anIntArrayArray33 = new int[5][5000];
+	public static final int[][] globalArrays = new int[5][5000];
 	@OriginalMember(owner = "client!rl", name = "eb", descriptor = "Lclient!na;")
-	public static final JagString aClass100_928 = JagString.parse("(U0a )2 in: ");
+	public static final JagString ERROR_IN = JagString.parse("(U0a )2 in: ");
 	@OriginalMember(owner = "client!fe", name = "I", descriptor = "Lclient!na;")
-	public static final JagString aClass100_639 = JagString.parse(" ");
+	public static final JagString SPACE = JagString.parse(" ");
 	@OriginalMember(owner = "client!dc", name = "M", descriptor = "Lclient!na;")
-	public static final JagString aClass100_268 = JagString.parse(")4");
+	public static final JagString SLASH = JagString.parse(")4");
 	@OriginalMember(owner = "client!he", name = "gb", descriptor = "Lclient!na;")
-	public static final JagString aClass100_518 = JagString.parse("www");
+	public static final JagString WWW = JagString.parse("www");
 	@OriginalMember(owner = "client!e", name = "Tc", descriptor = "Lclient!na;")
-	public static final JagString aClass100_365 = JagString.parse("www)2wtqa");
+	public static final JagString WWW_QA = JagString.parse("www)2wtqa");
 	@OriginalMember(owner = "client!lk", name = "J", descriptor = "Lclient!na;")
-	public static final JagString aClass100_687 = JagString.parse(")4p=");
+	public static final JagString PARAM_SETTINGS = JagString.parse(")4p=");
 	@OriginalMember(owner = "client!en", name = "x", descriptor = "Lclient!na;")
-	public static final JagString aClass100_424 = JagString.parse("http:)4)4");
+	public static final JagString HTTP_PREFIX = JagString.parse("http:)4)4");
 	@OriginalMember(owner = "client!gf", name = "I", descriptor = "Lclient!na;")
-	public static final JagString aClass100_886 = JagString.parse(")3runescape)3com)4l=");
+	public static final JagString DOMAIN_LANG = JagString.parse(")3runescape)3com)4l=");
 	@OriginalMember(owner = "client!v", name = "a", descriptor = "Lclient!na;")
-	public static final JagString aClass100_98 = JagString.parse(")4a=");
+	public static final JagString PARAM_AFFILIATE = JagString.parse(")4a=");
 	@OriginalMember(owner = "client!ch", name = "C", descriptor = "[[I")
-	public static final int[][] anIntArrayArray6 = new int[104][104];
+	public static final int[][] tileEntityCounts = new int[104][104];
 	@OriginalMember(owner = "client!n", name = "e", descriptor = "Lclient!na;")
-	public static final JagString aClass100_767 = JagString.parse(")2");
+	public static final JagString DASH = JagString.parse(")2");
 	@OriginalMember(owner = "client!je", name = "U", descriptor = "Lclient!na;")
-	public static final JagString aClass100_588 = JagString.parse("showingVideoAd");
+	public static final JagString SHOWING_VIDEO_AD = JagString.parse("showingVideoAd");
 	@OriginalMember(owner = "client!ob", name = "p", descriptor = "Lclient!na;")
-	public static final JagString aClass100_802 = JagString.parse("(U0a )2 non)2existant gosub script)2num: ");
+	public static final JagString ERROR_NONEXISTENT_GOSUB = JagString.parse("(U0a )2 non)2existant gosub script)2num: ");
 	@OriginalMember(owner = "client!af", name = "m", descriptor = "Lclient!na;")
-	public static final JagString aClass100_10 = JagString.parse("<br>");
+	public static final JagString BR_TAG = JagString.parse("<br>");
 	@OriginalMember(owner = "client!jh", name = "n", descriptor = "Lclient!bd;")
 	public static QuickChatPhrase activePhrase;
 	@OriginalMember(owner = "client!wf", name = "j", descriptor = "Lclient!be;")
@@ -89,15 +89,15 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!ac", name = "k", descriptor = "S")
 	public static short maxZoom = 32767;
 	@OriginalMember(owner = "client!nc", name = "n", descriptor = "I")
-	public static int anInt4055 = 0;
+	public static int viewportWidth = 0;
 	@OriginalMember(owner = "client!tm", name = "i", descriptor = "I")
-	public static int anInt5377 = 0;
+	public static int viewportHeight = 0;
 	@OriginalMember(owner = "client!bn", name = "eb", descriptor = "I")
-	public static int anInt773 = 0;
+	public static int viewportTop = 0;
 	@OriginalMember(owner = "client!ah", name = "n", descriptor = "I")
-	public static int anInt983 = 0;
+	public static int viewportLeft = 0;
 	@OriginalMember(owner = "client!sc", name = "p", descriptor = "I")
-	public static int anInt5029 = 0;
+	public static int viewportZoom = 0;
 	@OriginalMember(owner = "client!kd", name = "yb", descriptor = "S")
 	public static short maxFov = 32767;
 	@OriginalMember(owner = "client!ee", name = "f", descriptor = "S")
@@ -111,21 +111,21 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!k", name = "m", descriptor = "Z")
 	public static boolean neverRemoveRoofs = false;
 	@OriginalMember(owner = "client!vk", name = "f", descriptor = "[[[B")
-	public static byte[][][] aByteArrayArrayArray15;
+	public static byte[][][] roofVisibility;
 	@OriginalMember(owner = "client!vg", name = "b", descriptor = "S")
 	public static short minViewDistance = 256;
 	@OriginalMember(owner = "client!vg", name = "c", descriptor = "Z")
 	public static boolean glSceneNeedsRender = false;
 	@OriginalMember(owner = "client!lj", name = "z", descriptor = "[I")
-	public static int[] anIntArray338 = new int[8];
+	public static int[] roofGroupMinX = new int[8];
 	@OriginalMember(owner = "client!vl", name = "i", descriptor = "[I")
-	public static int[] anIntArray518 = new int[8];
+	public static int[] roofGroupMaxX = new int[8];
 	@OriginalMember(owner = "client!tk", name = "K", descriptor = "[I")
-	public static int[] anIntArray476 = new int[8];
+	public static int[] roofGroupMinZ = new int[8];
 	@OriginalMember(owner = "client!e", name = "xc", descriptor = "[I")
-	public static int[] anIntArray134 = new int[8];
+	public static int[] roofGroupMaxZ = new int[8];
 	@OriginalMember(owner = "client!ge", name = "k", descriptor = "[I")
-	public static int[] anIntArray205 = new int[8];
+	public static int[] roofGroupMaxHeight = new int[8];
 	@OriginalMember(owner = "client!nm", name = "W", descriptor = "Lclient!na;")
 	public static JagString url;
 	@OriginalMember(owner = "client!bf", name = "B", descriptor = "I")
@@ -195,12 +195,12 @@ public final class ScriptRunner {
 					arg1 += local122;
 				}
 			}
-			anInt5029 = local51 * arg2 / 334;
+			viewportZoom = local51 * arg2 / 334;
 		}
-		anInt4055 = (short) arg0;
-		anInt5377 = (short) arg2;
-		anInt773 = arg1;
-		anInt983 = arg3;
+		viewportWidth = (short) arg0;
+		viewportHeight = (short) arg2;
+		viewportTop = arg1;
+		viewportLeft = arg3;
 	}
 
 	@OriginalMember(owner = "client!ui", name = "a", descriptor = "(IIZIII)V")
@@ -219,10 +219,10 @@ public final class ScriptRunner {
 		updateSceneSpotAnims();
 		if (GlRenderer.enabled) {
 			calculateViewportBounds(arg3, arg4, arg0, arg2, true);
-			arg2 = anInt983;
-			arg4 = anInt773;
-			arg3 = anInt4055;
-			arg0 = anInt5377;
+			arg2 = viewportLeft;
+			arg4 = viewportTop;
+			arg3 = viewportWidth;
+			arg0 = viewportHeight;
 		}
 		@Pc(59) int local59;
 		@Pc(57) int local57;
@@ -279,7 +279,7 @@ public final class ScriptRunner {
 				local248 = Camera.pitchRadians * 360.0F / 6.2831855F;
 				local253 = Camera.yawRadians * 360.0F / 6.2831855F;
 			}
-			GlRenderer.setupPerspectiveView(arg2, arg4, arg3, arg0, arg3 / 2 + arg2, arg4 - -(arg0 / 2), local248, local253, anInt5029, anInt5029);
+			GlRenderer.setupPerspectiveView(arg2, arg4, arg3, arg0, arg3 / 2 + arg2, arg4 - -(arg0 / 2), local248, local253, viewportZoom, viewportZoom);
 		} else {
 			SoftwareRaster.setClip(arg2, arg4, arg3 + arg2, arg0 + arg4);
 			Rasteriser.prepare();
@@ -293,7 +293,7 @@ public final class ScriptRunner {
 			local171 = Rasteriser.screenUpperX;
 			@Pc(344) int local344 = Rasteriser.screenLowerY;
 			local127 = Rasteriser.screenLowerX;
-			GlModel.anInt3582 = local127 + (local171 - local127) * (-arg2 + interfaceMouseX) / arg3;
+			GlModel.pickScreenX = local127 + (local171 - local127) * (-arg2 + interfaceMouseX) / arg3;
 			@Pc(361) int local361 = Rasteriser.screenUpperY;
 			RawModel.pickScreenY = (local361 - local344) * (interfaceMouseY - arg4) / arg0 + local344;
 		}
@@ -312,17 +312,17 @@ public final class ScriptRunner {
 			GlRenderer.clearColorAndDepthBuffers(local171);
 			MaterialManager.setCameraTransform(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
 			GlRenderer.animationClock = client.loop;
-			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
+			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, roofVisibility, roofGroupMaxHeight, roofGroupMinX, roofGroupMaxX, roofGroupMaxZ, roofGroupMinZ, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			glSceneNeedsRender = true;
 			LightingManager.resetActiveLights();
 			MaterialManager.setCameraTransform(0, 0, 0, 0, 0);
 			client.audioLoop();
 			clearSceneScenery();
-			drawOverheads(arg4, arg3, arg2, anInt5029, arg0, anInt5029);
-			MiniMap.renderHeadHints(arg3, arg2, arg0, anInt5029, anInt5029, arg4);
+			drawOverheads(arg4, arg3, arg2, viewportZoom, arg0, viewportZoom);
+			MiniMap.renderHeadHints(arg3, arg2, arg0, viewportZoom, viewportZoom, arg4);
 		} else {
 			SoftwareRaster.fillRect(arg2, arg4, arg3, arg0, 0);
-			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, aByteArrayArrayArray15, anIntArray205, anIntArray338, anIntArray518, anIntArray134, anIntArray476, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
+			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, roofVisibility, roofGroupMaxHeight, roofGroupMinX, roofGroupMaxX, roofGroupMaxZ, roofGroupMinZ, Player.plane + 1, local387, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			client.audioLoop();
 			clearSceneScenery();
 			drawOverheads(arg4, arg3, arg2, 256, arg0, 256);
@@ -659,7 +659,7 @@ public final class ScriptRunner {
 	public static void clearTileEntityCounts() {
 		for (@Pc(7) int local7 = 0; local7 < 104; local7++) {
 			for (@Pc(14) int local14 = 0; local14 < 104; local14++) {
-				anIntArrayArray6[local7][local14] = 0;
+				tileEntityCounts[local7][local14] = 0;
 			}
 		}
 	}
@@ -695,7 +695,7 @@ public final class ScriptRunner {
 						local77 = local39.xFine >> 7;
 						local82 = local39.yFine >> 7;
 						if (local77 >= 0 && local77 < 104 && local82 >= 0 && local82 < 104) {
-							local106 = anIntArrayArray6[local77][local82]++;
+							local106 = tileEntityCounts[local77][local82]++;
 						}
 					}
 				} else if (((local55 & 0x1) != 0 || (local39.xFine & 0x7F) == 0 && (local39.yFine & 0x7F) == 0) && ((local55 & 0x1) != 1 || (local39.xFine & 0x7F) == 64 && (local39.yFine & 0x7F) == 64)) {
@@ -717,7 +717,7 @@ public final class ScriptRunner {
 					}
 					for (local214 = local77; local214 < local182; local214++) {
 						for (local223 = local82; local223 < local200; local223++) {
-							local106 = anIntArrayArray6[local214][local223]++;
+							local106 = tileEntityCounts[local214][local223]++;
 						}
 					}
 				}
@@ -743,8 +743,8 @@ public final class ScriptRunner {
 						if (local182 < 0 || local182 >= 104 || local200 < 0 || local200 >= 104) {
 							continue;
 						}
-						if (anIntArrayArray6[local182][local200] > 1) {
-							local106 = anIntArrayArray6[local182][local200]--;
+						if (tileEntityCounts[local182][local200] > 1) {
+							local106 = tileEntityCounts[local182][local200]--;
 							continue;
 						}
 					}
@@ -770,7 +770,7 @@ public final class ScriptRunner {
 					@Pc(485) int local485;
 					for (local476 = local182; local476 < local214; local476++) {
 						for (local485 = local200; local485 < local223; local485++) {
-							if (anIntArrayArray6[local476][local485] <= 1) {
+							if (tileEntityCounts[local476][local485] <= 1) {
 								local468 = false;
 								break;
 							}
@@ -783,7 +783,7 @@ public final class ScriptRunner {
 								continue label220;
 							}
 							for (local485 = local200; local485 < local223; local485++) {
-								local106 = anIntArrayArray6[local476][local485]--;
+								local106 = tileEntityCounts[local476][local485]--;
 							}
 							local476++;
 						}
@@ -821,7 +821,7 @@ public final class ScriptRunner {
 						local97 = local16.xFine >> 7;
 						local107 = local16.yFine >> 7;
 						if (local97 >= 0 && local97 < 104 && local107 >= 0 && local107 < 104) {
-							local171 = anIntArrayArray6[local97][local107]++;
+							local171 = tileEntityCounts[local97][local107]++;
 						}
 					}
 				} else if (((local42 & 0x1) != 0 || (local16.xFine & 0x7F) == 0 && (local16.yFine & 0x7F) == 0) && ((local42 & 0x1) != 1 || (local16.xFine & 0x7F) == 64 && (local16.yFine & 0x7F) == 64)) {
@@ -843,7 +843,7 @@ public final class ScriptRunner {
 					}
 					for (local149 = local97; local149 < local113; local149++) {
 						for (local158 = local107; local158 < local133; local158++) {
-							local171 = anIntArrayArray6[local149][local158]++;
+							local171 = tileEntityCounts[local149][local158]++;
 						}
 					}
 				}
@@ -862,8 +862,8 @@ public final class ScriptRunner {
 						if (local113 < 0 || local113 >= 104 || local133 < 0 || local133 >= 104) {
 							continue;
 						}
-						if (anIntArrayArray6[local113][local133] > 1) {
-							local171 = anIntArrayArray6[local113][local133]--;
+						if (tileEntityCounts[local113][local133] > 1) {
+							local171 = tileEntityCounts[local113][local133]--;
 							continue;
 						}
 					}
@@ -889,7 +889,7 @@ public final class ScriptRunner {
 					@Pc(401) int local401;
 					for (local396 = local113; local396 < local149; local396++) {
 						for (local401 = local133; local401 < local158; local401++) {
-							if (anIntArrayArray6[local396][local401] <= 1) {
+							if (tileEntityCounts[local396][local401] <= 1) {
 								local368 = false;
 								break;
 							}
@@ -902,7 +902,7 @@ public final class ScriptRunner {
 								continue label200;
 							}
 							for (local401 = local133; local401 < local158; local401++) {
-								local171 = anIntArrayArray6[local396][local401]--;
+								local171 = tileEntityCounts[local396][local401]--;
 							}
 							local396++;
 						}
@@ -969,7 +969,7 @@ public final class ScriptRunner {
 	public static void updateRoofRemovalMode() {
 		@Pc(8) int local8 = getRoofRemovalMode();
 		if (local8 == 0) {
-			aByteArrayArrayArray15 = null;
+			roofVisibility = null;
 			allocateRoofVisibilityGroupArrays(0);
 		} else if (local8 == 1) {
 			fillRoofVisibility((byte) 0);
@@ -1014,13 +1014,13 @@ public final class ScriptRunner {
 
 	@OriginalMember(owner = "client!cn", name = "a", descriptor = "(BB)V")
 	public static void fillRoofVisibility(@OriginalArg(0) byte arg0) {
-		if (aByteArrayArrayArray15 == null) {
-			aByteArrayArrayArray15 = new byte[4][104][104];
+		if (roofVisibility == null) {
+			roofVisibility = new byte[4][104][104];
 		}
 		for (@Pc(20) int local20 = 0; local20 < 4; local20++) {
 			for (@Pc(25) int local25 = 0; local25 < 104; local25++) {
 				for (@Pc(32) int local32 = 0; local32 < 104; local32++) {
-					aByteArrayArrayArray15[local20][local25][local32] = arg0;
+					roofVisibility[local20][local25][local32] = arg0;
 				}
 			}
 		}
@@ -1028,11 +1028,11 @@ public final class ScriptRunner {
 
 	@OriginalMember(owner = "client!sm", name = "a", descriptor = "(II)V")
 	public static void allocateRoofVisibilityGroupArrays(@OriginalArg(0) int arg0) {
-		anIntArray338 = new int[arg0];
-		anIntArray518 = new int[arg0];
-		anIntArray476 = new int[arg0];
-		anIntArray134 = new int[arg0];
-		anIntArray205 = new int[arg0];
+		roofGroupMinX = new int[arg0];
+		roofGroupMaxX = new int[arg0];
+		roofGroupMinZ = new int[arg0];
+		roofGroupMaxZ = new int[arg0];
+		roofGroupMaxHeight = new int[arg0];
 	}
 
 	@OriginalMember(owner = "client!ke", name = "f", descriptor = "(B)V")
@@ -1065,7 +1065,7 @@ public final class ScriptRunner {
 			return false;
 		}
 		@Pc(14) byte local14 = arg0 ? 1 : (byte) (renderCycle & 0xFF);
-		if (local14 == aByteArrayArrayArray15[plane][arg1][arg2]) {
+		if (local14 == roofVisibility[plane][arg1][arg2]) {
 			return false;
 		} else if ((SceneGraph.renderFlags[plane][arg1][arg2] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 			return false;
@@ -1076,7 +1076,7 @@ public final class ScriptRunner {
 			PathFinder.queueX[0] = arg1;
 			@Pc(69) int local69 = local49 + 1;
 			PathFinder.queueY[0] = arg2;
-			aByteArrayArrayArray15[plane][arg1][arg2] = local14;
+			roofVisibility[plane][arg1][arg2] = local14;
 			while (local47 != local69) {
 				@Pc(94) int local94 = PathFinder.queueX[local47] >> 16 & 0xFF;
 				@Pc(102) int local102 = PathFinder.queueX[local47] >> 24 & 0xFF;
@@ -1137,97 +1137,97 @@ public final class ScriptRunner {
 								if (local418.xMax != local418.xMin || local418.yMax != local418.yMin) {
 									for (local358 = local418.xMin; local358 <= local418.xMax; local358++) {
 										for (@Pc(450) int local450 = local418.yMin; local450 <= local418.yMax; local450++) {
-											aByteArrayArrayArray15[local150][local358][local450] = local14;
+											roofVisibility[local150][local358][local450] = local14;
 										}
 									}
 								}
 							}
 						}
-						aByteArrayArrayArray15[local150][local108][local122] = local14;
+						roofVisibility[local150][local108][local122] = local14;
 					}
 				}
 				if (local132) {
-					if (SceneGraph.tileHeights[plane + 1][local108][local122] > anIntArray205[arg4]) {
-						anIntArray205[arg4] = SceneGraph.tileHeights[plane + 1][local108][local122];
+					if (SceneGraph.tileHeights[plane + 1][local108][local122] > roofGroupMaxHeight[arg4]) {
+						roofGroupMaxHeight[arg4] = SceneGraph.tileHeights[plane + 1][local108][local122];
 					}
 					local150 = local108 << 7;
-					if (local150 < anIntArray338[arg4]) {
-						anIntArray338[arg4] = local150;
-					} else if (anIntArray518[arg4] < local150) {
-						anIntArray518[arg4] = local150;
+					if (local150 < roofGroupMinX[arg4]) {
+						roofGroupMinX[arg4] = local150;
+					} else if (roofGroupMaxX[arg4] < local150) {
+						roofGroupMaxX[arg4] = local150;
 					}
 					local191 = local122 << 7;
-					if (anIntArray476[arg4] > local191) {
-						anIntArray476[arg4] = local191;
-					} else if (anIntArray134[arg4] < local191) {
-						anIntArray134[arg4] = local191;
+					if (roofGroupMinZ[arg4] > local191) {
+						roofGroupMinZ[arg4] = local191;
+					} else if (roofGroupMaxZ[arg4] < local191) {
+						roofGroupMaxZ[arg4] = local191;
 					}
 					API.AddRoofVisibilityGroupTile(arg4, plane, local108, local122);
 				}
 				if (!local130) {
-					if (local108 >= 1 && aByteArrayArrayArray15[plane][local108 - 1][local122] != local14) {
+					if (local108 >= 1 && roofVisibility[plane][local108 - 1][local122] != local14) {
 						PathFinder.queueX[local69] = local108 - 1 | 0x120000 | 0xD3000000;
 						PathFinder.queueY[local69] = local122 | 0x130000;
 						local69 = local69 + 1 & 0xFFF;
-						aByteArrayArrayArray15[plane][local108 - 1][local122] = local14;
+						roofVisibility[plane][local108 - 1][local122] = local14;
 					}
 					local122++;
 					if (local122 < 104) {
-						if (local108 - 1 >= 0 && local14 != aByteArrayArrayArray15[plane][local108 - 1][local122] && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 - 1][local122 - 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
+						if (local108 - 1 >= 0 && local14 != roofVisibility[plane][local108 - 1][local122] && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 - 1][local122 - 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 							PathFinder.queueX[local69] = 0x52000000 | 0x120000 | local108 - 1;
 							PathFinder.queueY[local69] = local122 | 0x130000;
-							aByteArrayArrayArray15[plane][local108 - 1][local122] = local14;
+							roofVisibility[plane][local108 - 1][local122] = local14;
 							local69 = local69 + 1 & 0xFFF;
 						}
-						if (local14 != aByteArrayArrayArray15[plane][local108][local122]) {
+						if (local14 != roofVisibility[plane][local108][local122]) {
 							PathFinder.queueX[local69] = local108 | 0x13000000 | 0x520000;
 							PathFinder.queueY[local69] = local122 | 0x530000;
 							local69 = local69 + 1 & 0xFFF;
-							aByteArrayArrayArray15[plane][local108][local122] = local14;
+							roofVisibility[plane][local108][local122] = local14;
 						}
-						if (local108 + 1 < 104 && aByteArrayArrayArray15[plane][local108 + 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 + 1][local122 - 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
+						if (local108 + 1 < 104 && roofVisibility[plane][local108 + 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 + 1][local122 - 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 							PathFinder.queueX[local69] = 0x92000000 | 0x520000 | local108 + 1;
 							PathFinder.queueY[local69] = local122 | 0x530000;
-							aByteArrayArrayArray15[plane][local108 + 1][local122] = local14;
+							roofVisibility[plane][local108 + 1][local122] = local14;
 							local69 = local69 + 1 & 0xFFF;
 						}
 					}
 					local122--;
-					if (local108 + 1 < 104 && local14 != aByteArrayArrayArray15[plane][local108 + 1][local122]) {
+					if (local108 + 1 < 104 && local14 != roofVisibility[plane][local108 + 1][local122]) {
 						PathFinder.queueX[local69] = local108 + 1 | 0x920000 | 0x53000000;
 						PathFinder.queueY[local69] = local122 | 0x930000;
-						aByteArrayArrayArray15[plane][local108 + 1][local122] = local14;
+						roofVisibility[plane][local108 + 1][local122] = local14;
 						local69 = local69 + 1 & 0xFFF;
 					}
 					local122--;
 					if (local122 >= 0) {
-						if (local108 - 1 >= 0 && aByteArrayArrayArray15[plane][local108 - 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 - 1][local122 + 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
+						if (local108 - 1 >= 0 && roofVisibility[plane][local108 - 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 - 1][local122 + 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 							PathFinder.queueX[local69] = local108 - 1 | 0xD20000 | 0x12000000;
 							PathFinder.queueY[local69] = local122 | 0xD30000;
-							aByteArrayArrayArray15[plane][local108 - 1][local122] = local14;
+							roofVisibility[plane][local108 - 1][local122] = local14;
 							local69 = local69 + 1 & 0xFFF;
 						}
-						if (local14 != aByteArrayArrayArray15[plane][local108][local122]) {
+						if (local14 != roofVisibility[plane][local108][local122]) {
 							PathFinder.queueX[local69] = local108 | 0xD20000 | 0x93000000;
 							PathFinder.queueY[local69] = local122 | 0xD30000;
 							local69 = local69 + 1 & 0xFFF;
-							aByteArrayArrayArray15[plane][local108][local122] = local14;
+							roofVisibility[plane][local108][local122] = local14;
 						}
-						if (local108 + 1 < 104 && aByteArrayArrayArray15[plane][local108 + 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 + 1][local122 + 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
+						if (local108 + 1 < 104 && roofVisibility[plane][local108 + 1][local122] != local14 && (SceneGraph.renderFlags[plane][local108][local122] & API.TILE_FLAG_UNDER_ROOF) == 0 && (SceneGraph.renderFlags[plane][local108 + 1][local122 + 1] & API.TILE_FLAG_UNDER_ROOF) == 0) {
 							PathFinder.queueX[local69] = local108 + 1 | 0xD2000000 | 0x920000;
 							PathFinder.queueY[local69] = local122 | 0x930000;
-							aByteArrayArrayArray15[plane][local108 + 1][local122] = local14;
+							roofVisibility[plane][local108 + 1][local122] = local14;
 							local69 = local69 + 1 & 0xFFF;
 						}
 					}
 				}
 			}
-			if (anIntArray205[arg4] != -1000000) {
-				anIntArray205[arg4] += 10;
-				anIntArray338[arg4] -= 50;
-				anIntArray518[arg4] += 50;
-				anIntArray134[arg4] += 50;
-				anIntArray476[arg4] -= 50;
+			if (roofGroupMaxHeight[arg4] != -1000000) {
+				roofGroupMaxHeight[arg4] += 10;
+				roofGroupMinX[arg4] -= 50;
+				roofGroupMaxX[arg4] += 50;
+				roofGroupMaxZ[arg4] += 50;
+				roofGroupMinZ[arg4] -= 50;
 			}
 			return true;
 		}
@@ -1311,15 +1311,15 @@ public final class ScriptRunner {
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(Z)Lclient!na;")
 	public static JagString buildSettingsUrl() {
-		@Pc(8) JagString local8 = aClass100_518;
+		@Pc(8) JagString local8 = WWW;
 		@Pc(10) JagString local10 = JagString.EMPTY;
 		if (client.modeWhere != 0) {
-			local8 = aClass100_365;
+			local8 = WWW_QA;
 		}
 		if (client.settings != null) {
-			local10 = JagString.concatenate(new JagString[]{aClass100_687, client.settings});
+			local10 = JagString.concatenate(new JagString[]{PARAM_SETTINGS, client.settings});
 		}
-		return JagString.concatenate(new JagString[]{aClass100_424, local8, aClass100_886, JagString.parseInt(client.language), aClass100_98, JagString.parseInt(client.affiliate), local10, aClass100_268});
+		return JagString.concatenate(new JagString[]{HTTP_PREFIX, local8, DOMAIN_LANG, JagString.parseInt(client.language), PARAM_AFFILIATE, JagString.parseInt(client.affiliate), local10, SLASH});
 	}
 
 	@OriginalMember(owner = "client!ol", name = "a", descriptor = "(IIIILclient!th;IJIIII)Z")
@@ -1331,7 +1331,7 @@ public final class ScriptRunner {
 	public static boolean isShowingVideoAd() {
 		if (client.objectTag) {
 			try {
-				return !((Boolean) aClass100_588.browserControlCall(GameShell.signLink.applet));
+				return !((Boolean) SHOWING_VIDEO_AD.browserControlCall(GameShell.signLink.applet));
 			} catch (@Pc(21) Throwable local21) {
 			}
 		}
@@ -1352,18 +1352,18 @@ public final class ScriptRunner {
 		@Pc(40) int local40;
 		for (local33 = 0; local33 < 4; local33++) {
 			for (local40 = 0; local40 < 104; local40++) {
-				aByteArrayArrayArray15[local33][local31][local40] = local27;
+				roofVisibility[local33][local31][local40] = local27;
 			}
 		}
 		if (Player.plane == 3) {
 			return;
 		}
-		for (local33 = 0; local33 < anIntArray205.length; local33++) {
-			anIntArray205[local33] = -1000000;
-			anIntArray338[local33] = 1000000;
-			anIntArray518[local33] = 0;
-			anIntArray476[local33] = 1000000;
-			anIntArray134[local33] = 0;
+		for (local33 = 0; local33 < roofGroupMaxHeight.length; local33++) {
+			roofGroupMaxHeight[local33] = -1000000;
+			roofGroupMinX[local33] = 1000000;
+			roofGroupMaxX[local33] = 0;
+			roofGroupMinZ[local33] = 1000000;
+			roofGroupMaxZ[local33] = 0;
 		}
 		if (Camera.cameraType != 1) {
 			local33 = SceneGraph.getTileHeight(Player.plane, Camera.renderX, Camera.renderY);
@@ -2097,7 +2097,7 @@ public final class ScriptRunner {
 						int3 = intStack[isp];
 						int1 = intOperands[pc] & 0xFFFF;
 						if (int3 >= 0 && int3 <= 5000) {
-							anIntArray140[id] = int3;
+							globalArrayLengths[id] = int3;
 							@Pc(828) byte local828 = -1;
 							if (int1 == 105) {
 								local828 = 0;
@@ -2107,7 +2107,7 @@ public final class ScriptRunner {
 								if (int3 <= local652) {
 									continue nextOp;
 								}
-								anIntArrayArray33[id][local652] = local828;
+								globalArrays[id][local652] = local828;
 								local652++;
 							}
 						}
@@ -2117,8 +2117,8 @@ public final class ScriptRunner {
 						id = intOperands[pc];
 						isp--;
 						int1 = intStack[isp];
-						if (int1 >= 0 && int1 < anIntArray140[id]) {
-							intStack[isp++] = anIntArrayArray33[id][int1];
+						if (int1 >= 0 && int1 < globalArrayLengths[id]) {
+							intStack[isp++] = globalArrays[id][int1];
 							continue;
 						}
 						throw new RuntimeException();
@@ -2127,8 +2127,8 @@ public final class ScriptRunner {
 						id = intOperands[pc];
 						isp -= 2;
 						int1 = intStack[isp];
-						if (int1 >= 0 && int1 < anIntArray140[id]) {
-							anIntArrayArray33[id][int1] = intStack[isp + 1];
+						if (int1 >= 0 && int1 < globalArrayLengths[id]) {
+							globalArrays[id][int1] = intStack[isp + 1];
 							continue;
 						}
 						throw new RuntimeException();
@@ -3488,7 +3488,7 @@ public final class ScriptRunner {
 									if (opcode == Cs2Opcodes.isFriend) {
 										ssp--;
 										string = stringStack[ssp];
-										if (string.startsWith(aClass100_446) || string.startsWith(aClass100_537)) {
+										if (string.startsWith(IMG0) || string.startsWith(IMG1)) {
 											string = string.substring(7);
 										}
 										intStack[isp++] = FriendsList.contains(string) ? 1 : 0;
@@ -3595,7 +3595,7 @@ public final class ScriptRunner {
 									if (opcode == 3623) {
 										ssp--;
 										string = stringStack[ssp];
-										if (string.startsWith(aClass100_446) || string.startsWith(aClass100_537)) {
+										if (string.startsWith(IMG0) || string.startsWith(IMG1)) {
 											string = string.substring(7);
 										}
 										intStack[isp++] = IgnoreList.contains(string) ? 1 : 0;
@@ -3642,7 +3642,7 @@ public final class ScriptRunner {
 									if (opcode == 3628) {
 										ssp--;
 										string = stringStack[ssp];
-										if (string.startsWith(aClass100_446) || string.startsWith(aClass100_537)) {
+										if (string.startsWith(IMG0) || string.startsWith(IMG1)) {
 											string = string.substring(7);
 										}
 										intStack[isp++] = FriendsList.indexOf(string);
@@ -4046,7 +4046,7 @@ public final class ScriptRunner {
 												if (opcode == 5008) {
 													ssp--;
 													string = stringStack[ssp];
-													if (!string.startsWith(aClass100_74)) {
+													if (!string.startsWith(DOUBLE_COLON)) {
 														if (LoginManager.staffModLevel == 0 && (LoginManager.playerUnderage && !LoginManager.parentalChatConsent || LoginManager.mapQuickChat)) {
 															continue;
 														}
@@ -4566,7 +4566,7 @@ public final class ScriptRunner {
 															str1 = WorldMap.labels.names[int1];
 															int2 = WorldMap.labels.getLabelSize(int1);
 														}
-														str1 = str1.replaceAll(aClass100_639, aClass100_10);
+														str1 = str1.replaceAll(SPACE, BR_TAG);
 														stringStack[ssp++] = str1;
 														intStack[isp++] = int2;
 														continue;
@@ -4580,7 +4580,7 @@ public final class ScriptRunner {
 															str1 = WorldMap.labels.names[int1];
 															int2 = WorldMap.labels.getLabelSize(int1);
 														}
-														str1 = str1.replaceAll(aClass100_639, aClass100_10);
+														str1 = str1.replaceAll(SPACE, BR_TAG);
 														stringStack[ssp++] = str1;
 														intStack[isp++] = int2;
 														continue;
@@ -5435,8 +5435,8 @@ public final class ScriptRunner {
 													}
 													if (opcode == 6203) {
 														calculateViewportBounds(InterfaceList.gameViewportComponent.width, 0, InterfaceList.gameViewportComponent.height, 0, false);
-														intStack[isp++] = anInt4055;
-														intStack[isp++] = anInt5377;
+														intStack[isp++] = viewportWidth;
+														intStack[isp++] = viewportHeight;
 														continue;
 													}
 													if (opcode == 6204) {
@@ -5677,7 +5677,7 @@ public final class ScriptRunner {
 										local652 = aCalendar2.get(Calendar.DATE);
 										c = aCalendar2.get(Calendar.MONTH);
 										local1087 = aCalendar2.get(Calendar.YEAR);
-										stringStack[ssp++] = JagString.concatenate(new JagString[]{JagString.parseInt(local652), aClass100_767, DateUtil.SCRIPT_MONTHS[c], aClass100_767, JagString.parseInt(local1087)});
+										stringStack[ssp++] = JagString.concatenate(new JagString[]{JagString.parseInt(local652), DASH, DateUtil.SCRIPT_MONTHS[c], DASH, JagString.parseInt(local1087)});
 										continue;
 									}
 									if (opcode == Cs2Opcodes.strForGender) {
@@ -5952,16 +5952,16 @@ public final class ScriptRunner {
 				TracingException.report("CS2 - scr:" + script.key + " op:" + op, ex);
 			} else {
 				@Pc(14385) JagString str = JagString.allocate(30);
-				str.appendString(aClass100_928).appendString(script.name);
+				str.appendString(ERROR_IN).appendString(script.name);
 				for (cycles = fp - 1; cycles >= 0; cycles--) {
-					str.appendString(aClass100_253).appendString(callStack[cycles].script.name);
+					str.appendString(ERROR_VIA).appendString(callStack[cycles].script.name);
 				}
 				if (op == 40) {
 					cycles = intOperands[pc];
-					str.appendString(aClass100_802).appendString(JagString.parseInt(cycles));
+					str.appendString(ERROR_NONEXISTENT_GOSUB).appendString(JagString.parseInt(cycles));
 				}
 				if (client.modeWhere != 0) {
-					Chat.add(EMPTY_STRING, 0, JagString.concatenate(new JagString[]{aClass100_780, script.name}));
+					Chat.add(EMPTY_STRING, 0, JagString.concatenate(new JagString[]{CLIENTSCRIPT_ERROR, script.name}));
 				}
 				TracingException.report("CS2 - scr:" + script.key + " op:" + op + new String(str.toByteArray()), ex);
 			}

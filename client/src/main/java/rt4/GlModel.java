@@ -79,7 +79,7 @@ public final class GlModel extends Model {
 	public static float aFloat28;
 
 	@OriginalMember(owner = "client!lk", name = "V", descriptor = "I")
-	public static int anInt3582 = 0;
+	public static int pickScreenX = 0;
 
 	@OriginalMember(owner = "client!td", name = "t", descriptor = "[S")
 	private short[] triangleColors;
@@ -994,7 +994,7 @@ public final class GlModel extends Model {
 				local206 = local153 / local70;
 				local210 = local132 / local53;
 			}
-			if (anInt3582 >= local187 && anInt3582 <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
+			if (pickScreenX >= local187 && pickScreenX <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
 				local187 = 999999;
 				local191 = -999999;
 				local206 = 999999;
@@ -1047,7 +1047,7 @@ public final class GlModel extends Model {
 						}
 					}
 				}
-				if (anInt3582 >= local187 && anInt3582 <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
+				if (pickScreenX >= local187 && pickScreenX <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
 					if (this.pickable) {
 						if (miniMenuPick) {
 							Model.pickResults[MiniMenu.pickResultCount++] = arg8;
@@ -1077,7 +1077,7 @@ public final class GlModel extends Model {
 										@Pc(698) short local698 = this.aShortArray77[local362];
 										@Pc(703) short local703 = this.aShortArray82[local362];
 										@Pc(708) short local708 = this.aShortArray83[local362];
-										if (this.pointWithinTriangle(anInt3582, RawModel.pickScreenY, anIntArray467[local698], anIntArray467[local703], anIntArray467[local708], anIntArray468[local698], anIntArray468[local703], anIntArray468[local708])) {
+										if (this.pointWithinTriangle(pickScreenX, RawModel.pickScreenY, anIntArray467[local698], anIntArray467[local703], anIntArray467[local708], anIntArray468[local698], anIntArray468[local703], anIntArray468[local708])) {
 											if (miniMenuPick) {
 												Model.pickResults[MiniMenu.pickResultCount++] = arg8;
 											}
