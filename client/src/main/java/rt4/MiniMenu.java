@@ -1603,7 +1603,7 @@ public class MiniMenu {
 	@OriginalMember(owner = "client!ud", name = "a", descriptor = "(ILclient!be;)Z")
 	public static boolean handleSpecialButtonAction(@OriginalArg(1) Component arg0) {
 		if (arg0.clientCode == 205) {
-			Protocol.anInt5775 = 250;
+			Protocol.logoutOnDisconnectTimer = 250;
 			return true;
 		} else {
 			return false;

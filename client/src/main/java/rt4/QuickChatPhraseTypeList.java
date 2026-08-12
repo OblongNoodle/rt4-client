@@ -14,9 +14,9 @@ public class QuickChatPhraseTypeList {
 	@OriginalMember(owner = "client!te", name = "y", descriptor = "Lclient!ve;")
 	public static Js5 archive1;
 	@OriginalMember(owner = "client!le", name = "e", descriptor = "I")
-	public static int anInt3490 = 0;
+	public static int archive1PhraseCount = 0;
 	@OriginalMember(owner = "client!ck", name = "C", descriptor = "I")
-	public static int anInt1047 = 0;
+	public static int archive2PhraseCount = 0;
 
 	@OriginalMember(owner = "client!ej", name = "a", descriptor = "(Lclient!ve;ILclient!ve;Lclient!of;)V")
 	public static void init(@OriginalArg(0) Js5 arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) QuickChatCommandDecoder arg2) {
@@ -24,10 +24,10 @@ public class QuickChatPhraseTypeList {
 		decoder = arg2;
 		archive1 = arg1;
 		if (archive1 != null) {
-			anInt3490 = archive1.getGroupCapacity(1);
+			archive1PhraseCount = archive1.getGroupCapacity(1);
 		}
 		if (archive2 != null) {
-			anInt1047 = archive2.getGroupCapacity(1);
+			archive2PhraseCount = archive2.getGroupCapacity(1);
 		}
 	}
 

@@ -20,7 +20,7 @@ public class MidiPlayer {
 	@OriginalMember(owner = "client!eg", name = "t", descriptor = "I")
 	public static int volumeFadeRate;
 	@OriginalMember(owner = "client!fl", name = "u", descriptor = "Z")
-	public static boolean aBoolean116;
+	public static boolean songLoop;
 	@OriginalMember(owner = "client!rb", name = "f", descriptor = "Lclient!ve;")
 	public static Js5 instrumentsArchive;
 	@OriginalMember(owner = "client!gd", name = "m", descriptor = "Lclient!ve;")
@@ -50,7 +50,7 @@ public class MidiPlayer {
 				if (stream.isSongReady(song, instrumentsArchive, soundBank)) {
 					stream.releaseInstruments();
 					stream.setVolume(volume);
-					stream.playSong(aBoolean116, song);
+					stream.playSong(songLoop, song);
 					state = 0;
 					song = null;
 					soundBank = null;
@@ -75,7 +75,7 @@ public class MidiPlayer {
 		songFileId = -1;
 		state = 1;
 		volumeFadeRate = 2;
-		aBoolean116 = false;
+		songLoop = false;
 		songArchive = null;
 		songGroupId = -1;
 	}
@@ -85,7 +85,7 @@ public class MidiPlayer {
 		songArchive = archive;
 		songFileId = 0;
 		songGroupId = group;
-		aBoolean116 = false;
+		songLoop = false;
 		state = 1;
 		volumeFadeRate = 2;
 		volume = arg2;
@@ -145,7 +145,7 @@ public class MidiPlayer {
 		volume = vol;
 		songFileId = 0;
 		songGroupId = group;
-		aBoolean116 = false;
+		songLoop = false;
 		volumeFadeRate = 10000;
 	}
 

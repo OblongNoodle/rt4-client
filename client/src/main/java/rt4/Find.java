@@ -18,7 +18,7 @@ public class Find {
 		@Pc(11) int local11 = 0;
 		@Pc(22) short[] local22 = new short[16];
 		@Pc(28) int local28 = arg0 ? 32768 : 0;
-		@Pc(36) int local36 = (arg0 ? QuickChatPhraseTypeList.anInt1047 : QuickChatPhraseTypeList.anInt3490) + local28;
+		@Pc(36) int local36 = (arg0 ? QuickChatPhraseTypeList.archive2PhraseCount : QuickChatPhraseTypeList.archive1PhraseCount) + local28;
 		for (@Pc(38) int local38 = local28; local38 < local36; local38++) {
 			@Pc(45) QuickChatPhraseType local45 = QuickChatPhraseTypeList.get(local38);
 			if (local45.searchable && local45.getText().toLowerCase().indexOf(local9) != -1) {

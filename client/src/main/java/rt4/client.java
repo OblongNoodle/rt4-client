@@ -363,9 +363,9 @@ public final class client extends GameShell {
 			LoginManager.clear();
 		}
 		@Pc(37) boolean local37 = arg0 == 5 || arg0 == 10 || arg0 == 28;
-		if (arg0 != 40 && Protocol.aClass95_4 != null) {
-			Protocol.aClass95_4.close();
-			Protocol.aClass95_4 = null;
+		if (arg0 != 40 && Protocol.previousSocket != null) {
+			Protocol.previousSocket.close();
+			Protocol.previousSocket = null;
 		}
 		if (arg0 == 25 || arg0 == 28) {
 			LoginManager.missingLocModelCount = 0;
@@ -629,7 +629,7 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(Z)V")
 	public static void resetGameSessionState() {
-		Protocol.anInt4762 = 0;
+		Protocol.mouseIdleSamples = 0;
 		Protocol.prevFocus = true;
 		Mouse.prevClickTime = 0L;
 		MouseRecorder.instance.samples = 0;
@@ -638,7 +638,7 @@ public final class client extends GameShell {
 		Protocol.opcode4 = -1;
 		Protocol.opcode3 = -1;
 		Protocol.opcode = -1;
-		Protocol.anInt5775 = 0;
+		Protocol.logoutOnDisconnectTimer = 0;
 		Player.rebootTimer = 0;
 		Protocol.outboundBuffer.offset = 0;
 		Protocol.opcode2 = -1;
@@ -744,7 +744,7 @@ public final class client extends GameShell {
 		if (GlRenderer.enabled) {
 			FogManager.setInstantFade();
 		}
-		Protocol.aBoolean228 = true;
+		Protocol.cameraPositionChanged = true;
 		Protocol.verifyId = 0;
 		MiniMenu.walkText = LocalizedText.WALKHERE;
 		ScriptRunner.neverRemoveRoofs = false;

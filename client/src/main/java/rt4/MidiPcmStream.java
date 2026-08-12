@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 public final class MidiPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!va", name = "Kb", descriptor = "Z")
-	private boolean aBoolean293;
+	private boolean loop;
 
 	@OriginalMember(owner = "client!va", name = "Lb", descriptor = "J")
 	private long aLong188;
@@ -156,7 +156,7 @@ public final class MidiPcmStream extends PcmStream {
 	private synchronized void loadSong(@OriginalArg(0) boolean arg0, @OriginalArg(1) Song arg1, @OriginalArg(2) boolean arg2) {
 		this.stopPlayback(arg2);
 		this.aClass84_1.init(arg1.midiBytes);
-		this.aBoolean293 = arg0;
+		this.loop = arg0;
 		this.aLong189 = 0L;
 		@Pc(24) int local24 = this.aClass84_1.getTrackCount();
 		for (@Pc(26) int local26 = 0; local26 < local24; local26++) {
@@ -628,7 +628,7 @@ public final class MidiPcmStream extends PcmStream {
 		@Pc(11) int local11 = this.anInt5674;
 		@Pc(20) long local20 = this.aLong188;
 		if (this.aClass3_Sub29_2 != null && local11 == this.anInt5676) {
-			this.loadSong(this.aBoolean293, this.aClass3_Sub29_2, this.aBoolean294);
+			this.loadSong(this.loop, this.aClass3_Sub29_2, this.aBoolean294);
 			this.advanceSequencer();
 			return;
 		}
@@ -641,11 +641,11 @@ public final class MidiPcmStream extends PcmStream {
 					this.aClass84_1.saveTrackPosition(local8);
 					if (this.aClass84_1.hasNextTrack()) {
 						if (this.aClass3_Sub29_2 != null) {
-							this.playSong(this.aBoolean293, this.aClass3_Sub29_2);
+							this.playSong(this.loop, this.aClass3_Sub29_2);
 							this.advanceSequencer();
 							return;
 						}
-						if (!this.aBoolean293 || local11 == 0) {
+						if (!this.loop || local11 == 0) {
 							this.stopAllNotes(true);
 							this.aClass84_1.release();
 							return;

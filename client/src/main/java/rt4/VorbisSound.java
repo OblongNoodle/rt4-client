@@ -49,7 +49,7 @@ public final class VorbisSound extends Node {
 	@OriginalMember(owner = "client!jc", name = "T", descriptor = "[B")
 	private static byte[] bytes;
 	@OriginalMember(owner = "client!jc", name = "H", descriptor = "Z")
-	private static boolean aBoolean149 = false;
+	private static boolean codebooksLoaded = false;
 	@OriginalMember(owner = "client!jc", name = "r", descriptor = "I")
 	private int prevN;
 
@@ -60,7 +60,7 @@ public final class VorbisSound extends Node {
 	private float[] prevVector;
 
 	@OriginalMember(owner = "client!jc", name = "x", descriptor = "Z")
-	private boolean aBoolean148;
+	private boolean pingPongLoop;
 
 	@OriginalMember(owner = "client!jc", name = "z", descriptor = "I")
 	private int start;
@@ -107,13 +107,13 @@ public final class VorbisSound extends Node {
 
 	@OriginalMember(owner = "client!jc", name = "a", descriptor = "(Lclient!ve;)Z")
 	private static boolean ensureCodebooksLoaded(@OriginalArg(0) Js5 arg0) {
-		if (!aBoolean149) {
+		if (!codebooksLoaded) {
 			@Pc(7) byte[] local7 = arg0.fetchFile(0, 0);
 			if (local7 == null) {
 				return false;
 			}
 			decodeCodebooks(local7);
-			aBoolean149 = true;
+			codebooksLoaded = true;
 		}
 		return true;
 	}
@@ -290,7 +290,7 @@ public final class VorbisSound extends Node {
 		this.prevVector = null;
 		@Pc(129) byte[] local129 = this.samples;
 		this.samples = null;
-		return new PcmSound(this.rate, local129, this.start, this.end, this.aBoolean148);
+		return new PcmSound(this.rate, local129, this.start, this.end, this.pingPongLoop);
 	}
 
 	@OriginalMember(owner = "client!jc", name = "a", descriptor = "([B)V")
@@ -302,7 +302,7 @@ public final class VorbisSound extends Node {
 		this.end = buffer.g4();
 		if (this.end < 0) {
 			this.end = ~this.end;
-			this.aBoolean148 = true;
+			this.pingPongLoop = true;
 		}
 		@Pc(40) int packetsLen = buffer.g4();
 		this.packets = new byte[packetsLen][];

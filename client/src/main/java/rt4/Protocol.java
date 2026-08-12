@@ -82,7 +82,7 @@ public class Protocol {
 	@OriginalMember(owner = "client!tg", name = "h", descriptor = "I")
 	public static int removedCount = 0;
 	@OriginalMember(owner = "client!qi", name = "t", descriptor = "I")
-	public static int anInt4762 = 0;
+	public static int mouseIdleSamples = 0;
 	@OriginalMember(owner = "client!ck", name = "eb", descriptor = "Z")
 	public static boolean verifyIdChanged = false;
 	@OriginalMember(owner = "client!dm", name = "q", descriptor = "I")
@@ -100,15 +100,15 @@ public class Protocol {
 	@OriginalMember(owner = "client!kf", name = "l", descriptor = "I")
 	public static int tooltipTimer = 0;
 	@OriginalMember(owner = "client!pm", name = "ab", descriptor = "Z")
-	public static boolean aBoolean228 = true;
+	public static boolean cameraPositionChanged = true;
 	@OriginalMember(owner = "client!vl", name = "k", descriptor = "I")
-	public static int anInt5775 = 0;
+	public static int logoutOnDisconnectTimer = 0;
 	@OriginalMember(owner = "client!t", name = "l", descriptor = "Lclient!ma;")
-	public static BufferedSocket aClass95_4;
+	public static BufferedSocket previousSocket;
 	@OriginalMember(owner = "client!od", name = "i", descriptor = "I")
 	public static int sceneDelta = 0;
 	@OriginalMember(owner = "client!bf", name = "G", descriptor = "I")
-	public static int anInt551 = 0;
+	public static int cameraSendCooldown = 0;
 	@OriginalMember(owner = "client!pb", name = "ab", descriptor = "I")
 	public static int viewportWalkState = 0;
 	@OriginalMember(owner = "client!fe", name = "R", descriptor = "Z")
@@ -2385,8 +2385,8 @@ public class Protocol {
 	@OriginalMember(owner = "client!gg", name = "a", descriptor = "(Z)V")
 	public static void loop() {
 		// todo: consolidate/rename static classes
-		if (anInt5775 > 0) {
-			anInt5775--;
+		if (logoutOnDisconnectTimer > 0) {
+			logoutOnDisconnectTimer--;
 		}
 		if (Player.rebootTimer > 1) {
 			Player.rebootTimer--;
@@ -2444,36 +2444,36 @@ public class Protocol {
 						MouseRecorder.mouseRecorderPrevX = x;
 						dy = y - MouseRecorder.mouseRecorderPrevY;
 						MouseRecorder.mouseRecorderPrevY = y;
-						if (anInt4762 < 8 && dx >= -32 && dx <= 31 && dy >= -32 && dy <= 31) {
+						if (mouseIdleSamples < 8 && dx >= -32 && dx <= 31 && dy >= -32 && dy <= 31) {
 							dy += 32;
 							dx += 32;
-							outboundBuffer.p2(dy + (anInt4762 << 12) + (dx << 6));
-							anInt4762 = 0;
-						} else if (anInt4762 < 32 && dx >= -128 && dx <= 127 && dy >= -128 && dy <= 127) {
-							outboundBuffer.p1(anInt4762 + 128);
+							outboundBuffer.p2(dy + (mouseIdleSamples << 12) + (dx << 6));
+							mouseIdleSamples = 0;
+						} else if (mouseIdleSamples < 32 && dx >= -128 && dx <= 127 && dy >= -128 && dy <= 127) {
+							outboundBuffer.p1(mouseIdleSamples + 128);
 							dy += 128;
 							dx += 128;
 							outboundBuffer.p2((dx << 8) + dy);
-							anInt4762 = 0;
-						} else if (anInt4762 < 32) {
-							outboundBuffer.p1(anInt4762 + 192);
+							mouseIdleSamples = 0;
+						} else if (mouseIdleSamples < 32) {
+							outboundBuffer.p1(mouseIdleSamples + 192);
 							if (outsideWindow) {
 								outboundBuffer.p4(Integer.MIN_VALUE);
 							} else {
 								outboundBuffer.p4(x | y << 16);
 							}
-							anInt4762 = 0;
+							mouseIdleSamples = 0;
 						} else {
-							outboundBuffer.p2(anInt4762 + 57344);
+							outboundBuffer.p2(mouseIdleSamples + 57344);
 							if (outsideWindow) {
 								outboundBuffer.p4(Integer.MIN_VALUE);
 							} else {
 								outboundBuffer.p4(x | y << 16);
 							}
-							anInt4762 = 0;
+							mouseIdleSamples = 0;
 						}
-					} else if (anInt4762 < 2047) {
-						anInt4762++;
+					} else if (mouseIdleSamples < 2047) {
+						mouseIdleSamples++;
 					}
 				}
 				outboundBuffer.psize1(outboundBuffer.offset - offset);
@@ -2515,23 +2515,23 @@ public class Protocol {
 			outboundBuffer.ip2add(button << 15 | x);
 			outboundBuffer.mp4(i | type << 16);
 		}
-		if (anInt551 > 0) {
-			anInt551--;
+		if (cameraSendCooldown > 0) {
+			cameraSendCooldown--;
 		}
 		if (Preferences.keyboardCameraEnabled) {
 			for (i = 0; i < InterfaceList.keyQueueSize; i++) {
 				offset = InterfaceList.keyCodes[i];
 				if (offset == 98 || offset == 99 || offset == 96 || offset == 97) {
-					aBoolean228 = true;
+					cameraPositionChanged = true;
 					break;
 				}
 			}
 		} else if (Keyboard.pressedKeys[Keyboard.KEY_LEFT] || Keyboard.pressedKeys[Keyboard.KEY_RIGHT] || Keyboard.pressedKeys[Keyboard.KEY_UP] || Keyboard.pressedKeys[Keyboard.KEY_DOWN]) {
-			aBoolean228 = true;
+			cameraPositionChanged = true;
 		}
-		if (aBoolean228 && anInt551 <= 0) {
-			anInt551 = 20;
-			aBoolean228 = false;
+		if (cameraPositionChanged && cameraSendCooldown <= 0) {
+			cameraSendCooldown = 20;
+			cameraPositionChanged = false;
 			outboundBuffer.p1isaac(ClientProt.EVENT_CAMERA_POSITION);
 			outboundBuffer.p2add((int) Camera.pitchTarget);
 			outboundBuffer.ip2((int) Camera.yawTarget);
@@ -2893,7 +2893,7 @@ public class Protocol {
 											y = Mouse.getIdleLoops();
 											x = Keyboard.getIdleLoops();
 											if (y > 15000 && x > 15000) {
-												anInt5775 = 250;
+												logoutOnDisconnectTimer = 250;
 												Mouse.setIdleLoops(14500);
 												outboundBuffer.p1isaac(245);
 											}
@@ -3300,10 +3300,10 @@ public class Protocol {
 
 	@OriginalMember(owner = "client!nm", name = "a", descriptor = "(Z)V")
 	public static void handleConnectionLost() {
-		if (anInt5775 > 0) {
+		if (logoutOnDisconnectTimer > 0) {
 			LoginManager.processLogout();
 		} else {
-			aClass95_4 = socket;
+			previousSocket = socket;
 			socket = null;
 			client.setGameState(40);
 		}
