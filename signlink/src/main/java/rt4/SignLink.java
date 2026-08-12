@@ -52,7 +52,7 @@ public final class SignLink implements Runnable {
 	public static Method setFocusTraversalKeysEnabled;
 
 	@OriginalMember(owner = "signlink!ll", name = "e", descriptor = "I")
-	public static final int anInt5928 = 1;
+	public static final int clientMode = 1;
 
 	@OriginalMember(owner = "signlink!ll", name = "w", descriptor = "Ljava/util/Hashtable;")
 	private static final Hashtable fileCache = new Hashtable(16);

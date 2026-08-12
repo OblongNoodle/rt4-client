@@ -4732,7 +4732,7 @@ public final class ScriptRunner {
 													}
 													if (opcode == 5401) {
 														isp -= 2;
-														client.aShortArray88[intStack[isp]] = (short) ColorUtils.rgbToHsl(intStack[isp + 1]);
+														client.scriptRecolorPalette[intStack[isp]] = (short) ColorUtils.rgbToHsl(intStack[isp + 1]);
 														ObjTypeList.clearModels();
 														ObjTypeList.clearSprites();
 														NpcTypeList.clearModels();
@@ -4794,7 +4794,7 @@ public final class ScriptRunner {
 														continue;
 													}
 													if (opcode == 5420) {
-														intStack[isp++] = SignLink.anInt5928 == 3 ? 1 : 0;
+														intStack[isp++] = SignLink.clientMode == 3 ? 1 : 0;
 														continue;
 													}
 													if (opcode == 5421) {
@@ -4806,7 +4806,7 @@ public final class ScriptRunner {
 														ssp--;
 														string = stringStack[ssp];
 														@Pc(8356) JagString local8356 = JagString.concatenate(new JagString[]{buildSettingsUrl(), string});
-														if (GameShell.frame != null || local1552 && SignLink.anInt5928 != 3 && SignLink.osName.startsWith("win") && !client.haveIe6) {
+														if (GameShell.frame != null || local1552 && SignLink.clientMode != 3 && SignLink.osName.startsWith("win") && !client.haveIe6) {
 															Protocol.newTab = local1552;
 															url = local8356;
 															Protocol.openUrlRequest = GameShell.signLink.openUrl(new String(local8356.toByteArray(), StandardCharsets.ISO_8859_1));

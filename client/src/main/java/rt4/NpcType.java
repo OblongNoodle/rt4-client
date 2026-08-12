@@ -339,7 +339,7 @@ public final class NpcType {
 					if (this.recol_p == null || this.recol_p.length <= local173) {
 						local593.recolor(this.recol_s[local173], this.recol_d[local173]);
 					} else {
-						local593.recolor(this.recol_s[local173], client.aShortArray74[this.recol_p[local173] & 0xFF]);
+						local593.recolor(this.recol_s[local173], client.npcRecolorPalette[this.recol_p[local173] & 0xFF]);
 					}
 				}
 			}
@@ -552,7 +552,7 @@ public final class NpcType {
 						if (this.recol_p == null || local130 >= this.recol_p.length) {
 							local119.recolor(this.recol_s[local130], this.recol_d[local130]);
 						} else {
-							local119.recolor(this.recol_s[local130], client.aShortArray74[this.recol_p[local130] & 0xFF]);
+							local119.recolor(this.recol_s[local130], client.npcRecolorPalette[this.recol_p[local130] & 0xFF]);
 						}
 					}
 				}

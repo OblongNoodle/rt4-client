@@ -290,7 +290,7 @@ public class WorldList {
 		@Pc(3) World local3 = ScriptRunner.getWorld(arg0);
 		if (local3 == null) {
 			return false;
-		} else if (SignLink.anInt5928 == 1 || SignLink.anInt5928 == 2 || client.modeWhere == 2) {
+		} else if (SignLink.clientMode == 1 || SignLink.clientMode == 2 || client.modeWhere == 2) {
 			@Pc(31) byte[] local31 = local3.hostname.toByteArray();
 			client.hostname = new String(local31, 0, local31.length);
 			Player.worldId = local3.id;

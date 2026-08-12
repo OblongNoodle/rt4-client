@@ -350,7 +350,7 @@ public final class LocType {
 				if (this.recol_p == null || this.recol_p.length <= local315) {
 					local265.recolor(this.recol_s[local315], this.recol_d[local315]);
 				} else {
-					local265.recolor(this.recol_s[local315], client.aShortArray19[this.recol_p[local315] & 0xFF]);
+					local265.recolor(this.recol_s[local315], client.locRecolorPalette[this.recol_p[local315] & 0xFF]);
 				}
 			}
 		}

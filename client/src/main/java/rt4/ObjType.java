@@ -556,7 +556,7 @@ public final class ObjType {
 					if (this.recol_p == null || i >= this.recol_p.length) {
 						model2.recolor(this.recol_s[i], this.recol_d[i]);
 					} else {
-						model2.recolor(this.recol_s[i], client.aShortArray87[this.recol_p[i] & 0xFF]);
+						model2.recolor(this.recol_s[i], client.objRecolorPalette[this.recol_p[i] & 0xFF]);
 					}
 				}
 			}
@@ -593,7 +593,7 @@ public final class ObjType {
 				if (this.recol_p == null || i >= this.recol_p.length) {
 					model.recolor(this.recol_s[i], this.recol_d[i]);
 				} else {
-					model.recolor(this.recol_s[i], client.aShortArray87[this.recol_p[i] & 0xFF]);
+					model.recolor(this.recol_s[i], client.objRecolorPalette[this.recol_p[i] & 0xFF]);
 				}
 			}
 		}

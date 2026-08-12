@@ -33,27 +33,27 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!nh", name = "fb", descriptor = "[I")
 	public static final int[] JS5_ARCHIVE_WEIGHTS = new int[]{4, 4, 1, 2, 6, 4, 2, 49, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 	@OriginalMember(owner = "client!si", name = "gb", descriptor = "Lclient!na;")
-	public static final JagString aClass100_974 = JagString.parse("<br>(X");
+	public static final JagString LOADING_PERCENT_PREFIX = JagString.parse("<br>(X");
 	@OriginalMember(owner = "client!sg", name = "e", descriptor = "Lclient!na;")
 	public static final JagString SETTINGS = JagString.parse("settings");
 	@OriginalMember(owner = "client!km", name = "Mc", descriptor = "Lclient!na;")
 	public static final JagString LOGINSCREEN = JagString.parse("loginscreen");
 	@OriginalMember(owner = "client!qk", name = "a", descriptor = "Lclient!na;")
-	public static final JagString aClass100_899 = JagString.parse("0(U");
+	public static final JagString ZERO_PERCENT = JagString.parse("0(U");
 	@OriginalMember(owner = "client!uh", name = "Y", descriptor = "Lclient!na;")
 	public static final JagString HUFFMAN_GROUP = JagString.parse("huffman");
 	@OriginalMember(owner = "client!nb", name = "n", descriptor = "Lclient!na;")
 	public static final JagString DETAILS = JagString.parse("details");
 	@OriginalMember(owner = "client!qk", name = "b", descriptor = "Lclient!na;")
-	public static final JagString aClass100_900 = JagString.parse("tbrefresh");
+	public static final JagString BROWSER_REFRESH_CMD = JagString.parse("tbrefresh");
 	@OriginalMember(owner = "client!al", name = "r", descriptor = "Lclient!na;")
-	public static final JagString aClass100_35 = JagString.parse("showVideoAd");
+	public static final JagString BROWSER_SHOW_AD_CMD = JagString.parse("showVideoAd");
 	@OriginalMember(owner = "client!a", name = "e", descriptor = "Lclient!na;")
 	public static JagString TITLE_SONG = JagString.parse("scape main");
 	@OriginalMember(owner = "client!jm", name = "A", descriptor = "Lclient!na;")
-	static final JagString aClass100_603 = JagString.parse("");
+	static final JagString DEFAULT_STATUS_TEXT = JagString.parse("");
 	@OriginalMember(owner = "client!jm", name = "z", descriptor = "Lclient!na;")
-	public static JagString mainLoadSecondaryText = aClass100_603;
+	public static JagString mainLoadSecondaryText = DEFAULT_STATUS_TEXT;
 	@OriginalMember(owner = "client!sg", name = "k", descriptor = "Lclient!ve;")
 	public static Js5 js5Archive23;
 	@OriginalMember(owner = "client!pb", name = "Q", descriptor = "I")
@@ -191,13 +191,13 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!em", name = "v", descriptor = "Ljava/lang/String;")
 	public static String hostname;
 	@OriginalMember(owner = "client!vc", name = "db", descriptor = "[S")
-	public static short[] aShortArray88;
+	public static short[] scriptRecolorPalette;
 	@OriginalMember(owner = "client!f", name = "T", descriptor = "[S")
-	public static short[] aShortArray19 = new short[256];
+	public static short[] locRecolorPalette = new short[256];
 	@OriginalMember(owner = "client!sm", name = "l", descriptor = "[S")
-	public static short[] aShortArray74 = new short[256];
+	public static short[] npcRecolorPalette = new short[256];
 	@OriginalMember(owner = "client!vc", name = "bb", descriptor = "[S")
-	public static short[] aShortArray87 = new short[256];
+	public static short[] objRecolorPalette = new short[256];
 	@OriginalMember(owner = "client!cm", name = "f", descriptor = "Lsignlink!im;")
 	public static PrivilegedRequest js5SocketRequest;
 	@OriginalMember(owner = "client!qk", name = "g", descriptor = "Lclient!ma;")
@@ -215,11 +215,11 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!wj", name = "e", descriptor = "Lclient!na;")
 	public static JagString mainLoadPrimaryText = null;
 	@OriginalMember(owner = "client!sj", name = "p", descriptor = "I")
-	public static int anInt5150 = 1;
+	public static int peakMapFilesMissing = 1;
 	@OriginalMember(owner = "client!cn", name = "B", descriptor = "I")
-	public static int anInt1196 = 1;
+	public static int peakLocModelsMissing = 1;
 	@OriginalMember(owner = "client!ah", name = "t", descriptor = "I")
-	public static int anInt986;
+	public static int startupClientMode;
 
 	@OriginalMember(owner = "client!client", name = "main", descriptor = "([Ljava/lang/String;)V")
 	public static void main(@OriginalArg(0) String[] arg0) {
@@ -369,9 +369,9 @@ public final class client extends GameShell {
 		}
 		if (arg0 == 25 || arg0 == 28) {
 			LoginManager.missingLocModelCount = 0;
-			anInt5150 = 1;
+			peakMapFilesMissing = 1;
 			LoginManager.loadingScreenState = 0;
-			anInt1196 = 1;
+			peakLocModelsMissing = 1;
 			LoginManager.mapFilesMissingCount = 0;
 			WorldMap.clear(true);
 		}
@@ -748,7 +748,7 @@ public final class client extends GameShell {
 		Protocol.verifyId = 0;
 		MiniMenu.walkText = LocalizedText.WALKHERE;
 		ScriptRunner.neverRemoveRoofs = false;
-		aShortArray88 = aShortArray19 = aShortArray74 = aShortArray87 = new short[256];
+		scriptRecolorPalette = locRecolorPalette = npcRecolorPalette = objRecolorPalette = new short[256];
 		LoginManager.clearLoginScreenSprites();
 		InterfaceList.useStyledMenu = false;
 		ClientProt.sendWindowDetails();
@@ -782,7 +782,7 @@ public final class client extends GameShell {
 	public static void topBannerRefresh() {
 		if (!advertSuppressed && modeWhere != 2) {
 			try {
-				aClass100_900.browserControlCall(instance);
+				BROWSER_REFRESH_CMD.browserControlCall(instance);
 			} catch (@Pc(26) Throwable local26) {
 			}
 		}
@@ -792,7 +792,7 @@ public final class client extends GameShell {
 	public static boolean showVideoAd() {
 		if (objectTag) {
 			try {
-				aClass100_35.browserControlCall(signLink.applet);
+				BROWSER_SHOW_AD_CMD.browserControlCall(signLink.applet);
 				return true;
 			} catch (@Pc(14) Throwable local14) {
 			}
@@ -870,17 +870,17 @@ public final class client extends GameShell {
 			InterfaceList.updateLoginScreen();
 		} else if (gameState == 25 || gameState == 28) {
 			if (LoginManager.loadingScreenState == 1) {
-				if (anInt5150 < LoginManager.mapFilesMissingCount) {
-					anInt5150 = LoginManager.mapFilesMissingCount;
+				if (peakMapFilesMissing < LoginManager.mapFilesMissingCount) {
+					peakMapFilesMissing = LoginManager.mapFilesMissingCount;
 				}
-				local80 = (anInt5150 - LoginManager.mapFilesMissingCount) * 50 / anInt5150;
-				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, aClass100_974, JagString.parseInt(local80), Cs1ScriptRunner.CACHE_STAT_SUFFIX}));
+				local80 = (peakMapFilesMissing - LoginManager.mapFilesMissingCount) * 50 / peakMapFilesMissing;
+				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, LOADING_PERCENT_PREFIX, JagString.parseInt(local80), Cs1ScriptRunner.CACHE_STAT_SUFFIX}));
 			} else if (LoginManager.loadingScreenState == 2) {
-				if (anInt1196 < LoginManager.missingLocModelCount) {
-					anInt1196 = LoginManager.missingLocModelCount;
+				if (peakLocModelsMissing < LoginManager.missingLocModelCount) {
+					peakLocModelsMissing = LoginManager.missingLocModelCount;
 				}
-				local80 = (anInt1196 - LoginManager.missingLocModelCount) * 50 / anInt1196 + 50;
-				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, aClass100_974, JagString.parseInt(local80), Cs1ScriptRunner.CACHE_STAT_SUFFIX}));
+				local80 = (peakLocModelsMissing - LoginManager.missingLocModelCount) * 50 / peakLocModelsMissing + 50;
+				Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.LOADING, LOADING_PERCENT_PREFIX, JagString.parseInt(local80), Cs1ScriptRunner.CACHE_STAT_SUFFIX}));
 			} else {
 				Fonts.drawTextOnScreen(false, LocalizedText.LOADING);
 			}
@@ -1096,9 +1096,9 @@ public final class client extends GameShell {
 		defaultPort = worldListDefaultPort;
 		hostname = worldListHostname;
 		worldListPort = worldListDefaultPort;
-		aShortArray88 = aShortArray19 = aShortArray74 = aShortArray87 = new short[256];
+		scriptRecolorPalette = locRecolorPalette = npcRecolorPalette = objRecolorPalette = new short[256];
 		port = worldListPort;
-		if ((SignLink.anInt5928 == 3 && modeWhere != 2) || GlobalConfig.SELECT_DEFAULT_WORLD) {
+		if ((SignLink.clientMode == 3 && modeWhere != 2) || GlobalConfig.SELECT_DEFAULT_WORLD) {
 			Player.worldId = worldListId;
 		}
 
@@ -1109,7 +1109,7 @@ public final class client extends GameShell {
 		if (mouseWheel != null) {
 			mouseWheel.start(GameShell.canvas);
 		}
-		anInt986 = SignLink.anInt5928;
+		startupClientMode = SignLink.clientMode;
 		try {
 			if (GameShell.signLink.cacheData != null) {
 				cacheData = new BufferedFile(GameShell.signLink.cacheData, 5200, 0);
@@ -1619,7 +1619,7 @@ public final class client extends GameShell {
 				mainLoadState = 130;
 				mainLoadPercentage = 80;
 			} else {
-				mainLoadSecondaryText = JagString.concatenate(new JagString[]{LocalizedText.MAINLOAD120, aClass100_899});
+				mainLoadSecondaryText = JagString.concatenate(new JagString[]{LocalizedText.MAINLOAD120, ZERO_PERCENT});
 				mainLoadPercentage = 80;
 			}
 		} else if (mainLoadState == 130) {

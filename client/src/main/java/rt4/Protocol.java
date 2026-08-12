@@ -1821,7 +1821,7 @@ public class Protocol {
 			@Pc(3848) byte[] data = new byte[length];
 			inboundBuffer.gBytesIsaac(data, length);
 			JagString url = JagString.decodeString(data, length, 0);
-			if (GameShell.frame == null && (SignLink.anInt5928 == 3 || !SignLink.osName.startsWith("win") || client.haveIe6)) {
+			if (GameShell.frame == null && (SignLink.clientMode == 3 || !SignLink.osName.startsWith("win") || client.haveIe6)) {
 				ScriptRunner.openUrl(url, true);
 			} else {
 				ScriptRunner.url = url;
