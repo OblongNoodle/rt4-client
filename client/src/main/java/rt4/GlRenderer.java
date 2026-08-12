@@ -135,15 +135,15 @@ public final class GlRenderer {
 	private static JAWTWindow window;
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(Ljava/lang/String;)Lclient!na;")
-	private static JagString toJagString(@OriginalArg(0) String arg0) {
-		@Pc(3) byte[] local3;
-		local3 = arg0.getBytes(StandardCharsets.ISO_8859_1);
-		return JagString.decodeString(local3, local3.length, 0);
+	private static JagString toJagString(@OriginalArg(0) String str) {
+		@Pc(3) byte[] bytes;
+		bytes = str.getBytes(StandardCharsets.ISO_8859_1);
+		return JagString.decodeString(bytes, bytes.length, 0);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(IIII)V")
-	public static void setFullscreenCamera(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		setupPerspectiveView(0, 0, canvasWidth, canvasHeight, arg0, arg1, 0.0F, 0.0F, arg2, arg3);
+	public static void setFullscreenCamera(@OriginalArg(0) int nearClip, @OriginalArg(1) int farClip, @OriginalArg(2) int viewportWidth, @OriginalArg(3) int viewportHeight) {
+		setupPerspectiveView(0, 0, canvasWidth, canvasHeight, nearClip, farClip, 0.0F, 0.0F, viewportWidth, viewportHeight);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "()V")
@@ -181,21 +181,21 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(FF)V")
-	public static void setDepthBias(@OriginalArg(0) float arg0, @OriginalArg(1) float arg1) {
-		if (orthographicActive || arg0 == projectionDistance && arg1 == depthBias) {
+	public static void setDepthBias(@OriginalArg(0) float distance, @OriginalArg(1) float bias) {
+		if (orthographicActive || distance == projectionDistance && bias == depthBias) {
 			return;
 		}
-		projectionDistance = arg0;
-		depthBias = arg1;
-		if (arg1 == 0.0F) {
+		projectionDistance = distance;
+		depthBias = bias;
+		if (bias == 0.0F) {
 			matrix[10] = projectionZScale;
 			matrix[14] = projectionZOffset;
 		} else {
-			@Pc(25) float local25 = arg0 / (arg1 + arg0);
-			@Pc(29) float local29 = local25 * local25;
-			@Pc(42) float local42 = -projectionZOffset * (1.0F - local25) * (1.0F - local25) / arg1;
-			matrix[10] = projectionZScale + local42;
-			matrix[14] = projectionZOffset * local29;
+			@Pc(25) float scale = distance / (bias + distance);
+			@Pc(29) float scaleSq = scale * scale;
+			@Pc(42) float zAdjust = -projectionZOffset * (1.0F - scale) * (1.0F - scale) / bias;
+			matrix[10] = projectionZScale + zAdjust;
+			matrix[14] = projectionZOffset * scaleSq;
 		}
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glLoadMatrixf(matrix, 0);
@@ -207,7 +207,7 @@ public final class GlRenderer {
 		try {
 			drawable.swapBuffers();
 			readPixels();
-		} catch (@Pc(3) Exception local3) {
+		} catch (@Pc(3) Exception ex) {
 		}
 	}
 
@@ -326,15 +326,15 @@ public final class GlRenderer {
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(F)V")
-	public static void setDepthLayer(@OriginalArg(0) float arg0) {
-		setDepthBias(3000.0F, arg0 * 1.5F);
+	public static void setDepthLayer(@OriginalArg(0) float layer) {
+		setDepthBias(3000.0F, layer * 1.5F);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "h", descriptor = "()V")
 	public static void draw() {
-		@Pc(2) int[] local2 = new int[2];
-		gl.glGetIntegerv(GL2.GL_DRAW_BUFFER, local2, 0);
-		gl.glGetIntegerv(GL2.GL_READ_BUFFER, local2, 1);
+		@Pc(2) int[] buffers = new int[2];
+		gl.glGetIntegerv(GL2.GL_DRAW_BUFFER, buffers, 0);
+		gl.glGetIntegerv(GL2.GL_READ_BUFFER, buffers, 1);
 		gl.glDrawBuffer(GL2.GL_BACK_LEFT);
 		gl.glReadBuffer(GL2.GL_FRONT_LEFT);
 		setTextureId(-1);
@@ -346,8 +346,8 @@ public final class GlRenderer {
 		gl.glRasterPos2i(0, 0);
 		gl.glCopyPixels(0, 0, canvasWidth, canvasHeight, GL2.GL_COLOR);
 		gl.glPopAttrib();
-		gl.glDrawBuffer(local2[0]);
-		gl.glReadBuffer(local2[1]);
+		gl.glDrawBuffer(buffers[0]);
+		gl.glReadBuffer(buffers[1]);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(Ljava/awt/Canvas;)V")
@@ -510,7 +510,7 @@ public final class GlRenderer {
 		if (gl != null) {
 			try {
 				MaterialManager.quit(); // MaterialManager
-			} catch (@Pc(5) Throwable local5) {
+			} catch (@Pc(5) Throwable ex) {
 			}
 		}
 
@@ -636,13 +636,13 @@ public final class GlRenderer {
 		hFOV = (float)Math.toDegrees(hFOV);
 		vFOV = (float)Math.toDegrees(vFOV);
 
-		@Pc(3) float local3 = nearClip * 2.0F;
-		matrix[0] = local3 / (xMax - xMin);
+		@Pc(3) float nearClip2 = nearClip * 2.0F;
+		matrix[0] = nearClip2 / (xMax - xMin);
 		matrix[1] = 0.0F;
 		matrix[2] = 0.0F;
 		matrix[3] = 0.0F;
 		matrix[4] = 0.0F;
-		matrix[5] = local3 / (yMax - yMin);
+		matrix[5] = nearClip2 / (yMax - yMin);
 		matrix[6] = 0.0F;
 		matrix[7] = 0.0F;
 		matrix[8] = (xMax + xMin) / (xMax - xMin);
@@ -651,7 +651,7 @@ public final class GlRenderer {
 		matrix[11] = -1.0F;
 		matrix[12] = 0.0F;
 		matrix[13] = 0.0F;
-		matrix[14] = projectionZOffset = -(local3 * farClip) / (farClip - nearClip);
+		matrix[14] = projectionZOffset = -(nearClip2 * farClip) / (farClip - nearClip);
 		matrix[15] = 0.0F;
 		gl.glLoadMatrixf(matrix, 0);
 		projectionDistance = 0.0F;
@@ -724,7 +724,7 @@ public final class GlRenderer {
 					if (result != 0) {
 						break;
 					}
-				} catch (@Pc(41) Exception local41) {
+				} catch (@Pc(41) Exception ex) {
 				}
 				if (swapBuffersAttempts++ > 5) {
 					return -2;
@@ -844,9 +844,9 @@ public final class GlRenderer {
 
 	@OriginalMember(owner = "client!tf", name = "s", descriptor = "()V")
 	private static void initDefaultTexture() {
-		@Pc(2) int[] local2 = new int[1];
-		gl.glGenTextures(1, local2, 0);
-		defaultTextureId = local2[0];
+		@Pc(2) int[] texId = new int[1];
+		gl.glGenTextures(1, texId, 0);
+		defaultTextureId = texId[0];
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, defaultTextureId);
 		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, 4, 1, 1, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, IntBuffer.wrap(new int[]{-1}));
 		LightingManager.allocateLightArrays();

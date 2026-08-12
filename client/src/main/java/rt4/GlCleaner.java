@@ -38,20 +38,20 @@ public final class GlCleaner {
 	private static final int[] deleteIdBatch = new int[1000];
 
 	@OriginalMember(owner = "client!fa", name = "a", descriptor = "(III)V")
-	public static synchronized void deleteTexture(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		if (arg2 == contextId) {
-			@Pc(8) IntNode local8 = new IntNode(arg1);
-			local8.key = arg0;
-			pendingTextureDeletes.addTail(local8);
+	public static synchronized void deleteTexture(@OriginalArg(0) int id, @OriginalArg(1) int size, @OriginalArg(2) int context) {
+		if (context == contextId) {
+			@Pc(8) IntNode node = new IntNode(size);
+			node.key = id;
+			pendingTextureDeletes.addTail(node);
 		}
 	}
 
 	@OriginalMember(owner = "client!fa", name = "a", descriptor = "(II)V")
-	public static synchronized void deleteList(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		if (arg1 == contextId) {
-			@Pc(7) IntNode local7 = new IntNode();
-			local7.key = arg0;
-			pendingListDeletes.addTail(local7);
+	public static synchronized void deleteList(@OriginalArg(0) int id, @OriginalArg(1) int context) {
+		if (context == contextId) {
+			@Pc(7) IntNode node = new IntNode();
+			node.key = id;
+			pendingListDeletes.addTail(node);
 		}
 	}
 
@@ -68,78 +68,78 @@ public final class GlCleaner {
 	}
 
 	@OriginalMember(owner = "client!fa", name = "b", descriptor = "(III)V")
-	public static synchronized void deleteBuffer(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		if (arg2 == contextId) {
-			@Pc(8) IntNode local8 = new IntNode(arg1);
-			local8.key = arg0;
-			pendingBufferDeletes.addTail(local8);
+	public static synchronized void deleteBuffer(@OriginalArg(0) int id, @OriginalArg(1) int size, @OriginalArg(2) int context) {
+		if (context == contextId) {
+			@Pc(8) IntNode node = new IntNode(size);
+			node.key = id;
+			pendingBufferDeletes.addTail(node);
 		}
 	}
 
 	@OriginalMember(owner = "client!fa", name = "c", descriptor = "()V")
 	public static synchronized void process() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		@Pc(3) int local3 = 0;
+		@Pc(3) int count = 0;
 		while (true) {
-			@Pc(8) IntNode local8 = (IntNode) pendingBufferDeletes.removeHead();
-			if (local8 == null) {
-				if (local3 > 0) {
-					gl.glDeleteBuffers(local3, deleteIdBatch, 0);
-					local3 = 0;
+			@Pc(8) IntNode node = (IntNode) pendingBufferDeletes.removeHead();
+			if (node == null) {
+				if (count > 0) {
+					gl.glDeleteBuffers(count, deleteIdBatch, 0);
+					count = 0;
 				}
 				while (true) {
-					local8 = (IntNode) pendingTexture2dDeletes.removeHead();
-					if (local8 == null) {
+					node = (IntNode) pendingTexture2dDeletes.removeHead();
+					if (node == null) {
 						while (true) {
-							local8 = (IntNode) pendingTextureDeletes.removeHead();
-							if (local8 == null) {
-								if (local3 > 0) {
-									gl.glDeleteTextures(local3, deleteIdBatch, 0);
+							node = (IntNode) pendingTextureDeletes.removeHead();
+							if (node == null) {
+								if (count > 0) {
+									gl.glDeleteTextures(count, deleteIdBatch, 0);
 								}
 								while (true) {
-									local8 = (IntNode) pendingListDeletes.removeHead();
-									if (local8 == null) {
+									node = (IntNode) pendingListDeletes.removeHead();
+									if (node == null) {
 										if (onCardGeometry + onCard2d + onCardTexture > 100663296 && MonotonicClock.currentTimeMillis() > lastGcTime + 60000L) {
 											System.gc();
 											lastGcTime = MonotonicClock.currentTimeMillis();
 										}
 										return;
 									}
-									@Pc(126) int local126 = (int) local8.key;
-									gl.glDeleteLists(local126, 1);
+									@Pc(126) int listId = (int) node.key;
+									gl.glDeleteLists(listId, 1);
 								}
 							}
-							deleteIdBatch[local3++] = (int) local8.key;
-							onCardTexture -= local8.value;
-							if (local3 == 1000) {
-								gl.glDeleteTextures(local3, deleteIdBatch, 0);
-								local3 = 0;
+							deleteIdBatch[count++] = (int) node.key;
+							onCardTexture -= node.value;
+							if (count == 1000) {
+								gl.glDeleteTextures(count, deleteIdBatch, 0);
+								count = 0;
 							}
 						}
 					}
-					deleteIdBatch[local3++] = (int) local8.key;
-					onCard2d -= local8.value;
-					if (local3 == 1000) {
-						gl.glDeleteTextures(local3, deleteIdBatch, 0);
-						local3 = 0;
+					deleteIdBatch[count++] = (int) node.key;
+					onCard2d -= node.value;
+					if (count == 1000) {
+						gl.glDeleteTextures(count, deleteIdBatch, 0);
+						count = 0;
 					}
 				}
 			}
-			deleteIdBatch[local3++] = (int) local8.key;
-			onCardGeometry -= local8.value;
-			if (local3 == 1000) {
-				gl.glDeleteBuffers(local3, deleteIdBatch, 0);
-				local3 = 0;
+			deleteIdBatch[count++] = (int) node.key;
+			onCardGeometry -= node.value;
+			if (count == 1000) {
+				gl.glDeleteBuffers(count, deleteIdBatch, 0);
+				count = 0;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!fa", name = "c", descriptor = "(III)V")
-	public static synchronized void deleteTexture2d(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		if (arg2 == contextId) {
-			@Pc(8) IntNode local8 = new IntNode(arg1);
-			local8.key = arg0;
-			pendingTexture2dDeletes.addTail(local8);
+	public static synchronized void deleteTexture2d(@OriginalArg(0) int id, @OriginalArg(1) int size, @OriginalArg(2) int context) {
+		if (context == contextId) {
+			@Pc(8) IntNode node = new IntNode(size);
+			node.key = id;
+			pendingTexture2dDeletes.addTail(node);
 		}
 	}
 }

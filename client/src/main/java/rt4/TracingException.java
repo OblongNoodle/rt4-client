@@ -18,93 +18,93 @@ public final class TracingException extends RuntimeException {
 	public Throwable cause;
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(Ljava/lang/String;Ljava/lang/Throwable;B)V")
-	public static void report(@OriginalArg(0) String arg0, @OriginalArg(1) Throwable arg1) {
+	public static void report(@OriginalArg(0) String message, @OriginalArg(1) Throwable throwable) {
 		try {
-			@Pc(13) String local13 = "";
-			if (arg1 != null) {
-				local13 = getStackTraceString(arg1);
+			@Pc(13) String errorStr = "";
+			if (throwable != null) {
+				errorStr = getStackTraceString(throwable);
 			}
-			if (arg0 != null) {
-				if (arg1 != null) {
-					local13 = local13 + " | ";
+			if (message != null) {
+				if (throwable != null) {
+					errorStr = errorStr + " | ";
 				}
-				local13 = local13 + arg0;
+				errorStr = errorStr + message;
 			}
-			printError(local13);
-			local13 = replaceAll(":", "%3a", local13);
-			local13 = replaceAll("@", "%40", local13);
-			local13 = replaceAll("&", "%26", local13);
-			local13 = replaceAll("#", "%23", local13);
+			printError(errorStr);
+			errorStr = replaceAll(":", "%3a", errorStr);
+			errorStr = replaceAll("@", "%40", errorStr);
+			errorStr = replaceAll("&", "%26", errorStr);
+			errorStr = replaceAll("#", "%23", errorStr);
 			if (GameShell.signLink2.applet == null) {
 				return;
 			}
-			@Pc(109) PrivilegedRequest local109 = GameShell.signLink2.openUrlStream(new URL(GameShell.signLink2.applet.getCodeBase(), "clienterror.ws?c=" + GameShell.clientBuild + "&u=" + Player.name37 + "&v1=" + SignLink.javaVendor + "&v2=" + SignLink.javaVersion + "&e=" + local13));
-			while (local109.status == 0) {
+			@Pc(109) PrivilegedRequest request = GameShell.signLink2.openUrlStream(new URL(GameShell.signLink2.applet.getCodeBase(), "clienterror.ws?c=" + GameShell.clientBuild + "&u=" + Player.name37 + "&v1=" + SignLink.javaVendor + "&v2=" + SignLink.javaVersion + "&e=" + errorStr));
+			while (request.status == 0) {
 				ThreadUtils.sleep(1L);
 			}
-			if (local109.status == 1) {
-				@Pc(128) DataInputStream local128 = (DataInputStream) local109.result;
-				local128.read();
-				local128.close();
+			if (request.status == 1) {
+				@Pc(128) DataInputStream stream = (DataInputStream) request.result;
+				stream.read();
+				stream.close();
 			}
-		} catch (@Pc(135) Exception local135) {
+		} catch (@Pc(135) Exception ex) {
 		}
 	}
 
 	@OriginalMember(owner = "client!af", name = "a", descriptor = "(ILjava/lang/String;)V")
-	public static void printError(@OriginalArg(1) String arg0) {
-		System.out.println("Error: " + replaceAll("%0a", "\n", arg0));
+	public static void printError(@OriginalArg(1) String error) {
+		System.out.println("Error: " + replaceAll("%0a", "\n", error));
 	}
 
 	@OriginalMember(owner = "client!hi", name = "a", descriptor = "(ILjava/lang/Throwable;)Ljava/lang/String;")
-	public static String getStackTraceString(@OriginalArg(1) Throwable arg0) throws IOException {
-		@Pc(24) String local24;
-		if (arg0 instanceof TracingException) {
-			@Pc(11) TracingException local11 = (TracingException) arg0;
-			arg0 = local11.cause;
-			local24 = local11.message + " | ";
+	public static String getStackTraceString(@OriginalArg(1) Throwable throwable) throws IOException {
+		@Pc(24) String result;
+		if (throwable instanceof TracingException) {
+			@Pc(11) TracingException tracing = (TracingException) throwable;
+			throwable = tracing.cause;
+			result = tracing.message + " | ";
 		} else {
-			local24 = "";
+			result = "";
 		}
-		@Pc(32) StringWriter local32 = new StringWriter();
-		@Pc(37) PrintWriter local37 = new PrintWriter(local32);
-		arg0.printStackTrace(local37);
-		local37.close();
-		@Pc(45) String local45 = local32.toString();
-		@Pc(53) BufferedReader local53 = new BufferedReader(new StringReader(local45));
-		@Pc(56) String local56 = local53.readLine();
+		@Pc(32) StringWriter sw = new StringWriter();
+		@Pc(37) PrintWriter pw = new PrintWriter(sw);
+		throwable.printStackTrace(pw);
+		pw.close();
+		@Pc(45) String trace = sw.toString();
+		@Pc(53) BufferedReader reader = new BufferedReader(new StringReader(trace));
+		@Pc(56) String firstLine = reader.readLine();
 		while (true) {
-			@Pc(59) String local59 = local53.readLine();
-			if (local59 == null) {
-				return local24 + "| " + local56;
+			@Pc(59) String line = reader.readLine();
+			if (line == null) {
+				return result + "| " + firstLine;
 			}
-			@Pc(65) int local65 = local59.indexOf(40);
-			@Pc(72) int local72 = local59.indexOf(41, local65 + 1);
-			@Pc(79) String local79;
-			if (local65 == -1) {
-				local79 = local59;
+			@Pc(65) int openParen = line.indexOf(40);
+			@Pc(72) int closeParen = line.indexOf(41, openParen + 1);
+			@Pc(79) String method;
+			if (openParen == -1) {
+				method = line;
 			} else {
-				local79 = local59.substring(0, local65);
+				method = line.substring(0, openParen);
 			}
-			local79 = local79.trim();
-			local79 = local79.substring(local79.lastIndexOf(32) + 1);
-			local79 = local79.substring(local79.lastIndexOf(9) + 1);
-			local24 = local24 + local79;
-			if (local65 != -1 && local72 != -1) {
-				@Pc(126) int local126 = local59.indexOf(".java:", local65);
-				if (local126 >= 0) {
-					local24 = local24 + local59.substring(local126 + 5, local72);
+			method = method.trim();
+			method = method.substring(method.lastIndexOf(32) + 1);
+			method = method.substring(method.lastIndexOf(9) + 1);
+			result = result + method;
+			if (openParen != -1 && closeParen != -1) {
+				@Pc(126) int javaIdx = line.indexOf(".java:", openParen);
+				if (javaIdx >= 0) {
+					result = result + line.substring(javaIdx + 5, closeParen);
 				}
 			}
-			local24 = local24 + ' ';
+			result = result + ' ';
 		}
 	}
 
 	@OriginalMember(owner = "client!da", name = "a", descriptor = "(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;")
-	public static String replaceAll(@OriginalArg(0) String arg0, @OriginalArg(1) String arg1, @OriginalArg(3) String arg2) {
-		for (@Pc(5) int local5 = arg2.indexOf(arg0); local5 != -1; local5 = arg2.indexOf(arg0, local5 + arg1.length())) {
-			arg2 = arg2.substring(0, local5) + arg1 + arg2.substring(arg0.length() + local5);
+	public static String replaceAll(@OriginalArg(0) String target, @OriginalArg(1) String replacement, @OriginalArg(3) String str) {
+		for (@Pc(5) int idx = str.indexOf(target); idx != -1; idx = str.indexOf(target, idx + replacement.length())) {
+			str = str.substring(0, idx) + replacement + str.substring(target.length() + idx);
 		}
-		return arg2;
+		return str;
 	}
 }

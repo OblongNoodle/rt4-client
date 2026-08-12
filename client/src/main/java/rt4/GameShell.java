@@ -164,12 +164,12 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(Z)V")
 	public static void resetTimer() {
 		timer.reset();
-		@Pc(10) int local10;
-		for (local10 = 0; local10 < 32; local10++) {
-			redrawTimes[local10] = 0L;
+		@Pc(10) int i;
+		for (i = 0; i < 32; i++) {
+			redrawTimes[i] = 0L;
 		}
-		for (local10 = 0; local10 < 32; local10++) {
-			logicTimes[local10] = 0L;
+		for (i = 0; i < 32; i++) {
+			logicTimes[i] = 0L;
 		}
 		logicCycles = 0;
 	}
@@ -182,21 +182,21 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 
 	@OriginalMember(owner = "client!qh", name = "a", descriptor = "(Z)V")
 	public static void updateCanvasSize() {
-		@Pc(8) Container local8;
+		@Pc(8) Container container;
 		if (fullScreenFrame != null) {
-			local8 = fullScreenFrame;
+			container = fullScreenFrame;
 		} else if (frame == null) {
-			local8 = signLink.applet;
+			container = signLink.applet;
 		} else {
-			local8 = frame;
+			container = frame;
 		}
-		frameWidth = local8.getSize().width;
-		frameHeight = local8.getSize().height;
-		@Pc(35) Insets local35;
-		if (local8 == frame) {
-			local35 = frame.getInsets();
-			frameHeight -= local35.bottom + local35.top;
-			frameWidth -= local35.right + local35.left;
+		frameWidth = container.getSize().width;
+		frameHeight = container.getSize().height;
+		@Pc(35) Insets insets;
+		if (container == frame) {
+			insets = frame.getInsets();
+			frameHeight -= insets.bottom + insets.top;
+			frameWidth -= insets.right + insets.left;
 		}
 		if (DisplayMode.getWindowMode() >= 2) {
 			canvasWidth = frameWidth;
@@ -213,9 +213,9 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 			GlRenderer.setCanvasSize(canvasWidth, canvasHeight);
 		}
 		canvas.setSize(canvasWidth, canvasHeight);
-		if (local8 == frame) {
-			local35 = frame.getInsets();
-			canvas.setLocation(local35.left + leftMargin, topMargin + local35.top);
+		if (container == frame) {
+			insets = frame.getInsets();
+			canvas.setLocation(insets.left + leftMargin, topMargin + insets.top);
 		} else {
 			canvas.setLocation(leftMargin, topMargin);
 		}
@@ -227,44 +227,44 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 
 	@OriginalMember(owner = "client!l", name = "b", descriptor = "(I)V")
 	public static void paintFrameLetterbox() {
-		@Pc(7) int local7 = topMargin;
-		@Pc(9) int local9 = leftMargin;
-		@Pc(16) int local16 = frameHeight - canvasHeight - local7;
-		@Pc(23) int local23 = frameWidth - local9 - canvasWidth;
-		if (local9 <= 0 && local23 <= 0 && local7 <= 0 && local16 <= 0) {
+		@Pc(7) int top = topMargin;
+		@Pc(9) int left = leftMargin;
+		@Pc(16) int bottom = frameHeight - canvasHeight - top;
+		@Pc(23) int right = frameWidth - left - canvasWidth;
+		if (left <= 0 && right <= 0 && top <= 0 && bottom <= 0) {
 			return;
 		}
 		try {
-			@Pc(46) Container local46;
+			@Pc(46) Container container;
 			if (fullScreenFrame != null) {
-				local46 = fullScreenFrame;
+				container = fullScreenFrame;
 			} else if (frame == null) {
-				local46 = signLink.applet;
+				container = signLink.applet;
 			} else {
-				local46 = frame;
+				container = frame;
 			}
-			@Pc(59) int local59 = 0;
-			@Pc(61) int local61 = 0;
-			if (frame == local46) {
-				@Pc(68) Insets local68 = frame.getInsets();
-				local61 = local68.left;
-				local59 = local68.top;
+			@Pc(59) int insetsTop = 0;
+			@Pc(61) int insetsLeft = 0;
+			if (frame == container) {
+				@Pc(68) Insets insets = frame.getInsets();
+				insetsLeft = insets.left;
+				insetsTop = insets.top;
 			}
-			@Pc(77) Graphics local77 = local46.getGraphics();
-			local77.setColor(Color.black);
-			if (local9 > 0) {
-				local77.fillRect(local61, local59, local9, frameHeight);
+			@Pc(77) Graphics g = container.getGraphics();
+			g.setColor(Color.black);
+			if (left > 0) {
+				g.fillRect(insetsLeft, insetsTop, left, frameHeight);
 			}
-			if (local7 > 0) {
-				local77.fillRect(local61, local59, frameWidth, local7);
+			if (top > 0) {
+				g.fillRect(insetsLeft, insetsTop, frameWidth, top);
 			}
-			if (local23 > 0) {
-				local77.fillRect(local61 + frameWidth - local23, local59, local23, frameHeight);
+			if (right > 0) {
+				g.fillRect(insetsLeft + frameWidth - right, insetsTop, right, frameHeight);
 			}
-			if (local16 > 0) {
-				local77.fillRect(local61, local59 + frameHeight - local16, frameWidth, local16);
+			if (bottom > 0) {
+				g.fillRect(insetsLeft, insetsTop + frameHeight - bottom, frameWidth, bottom);
 			}
-		} catch (@Pc(132) Exception local132) {
+		} catch (@Pc(132) Exception ex) {
 		}
 	}
 

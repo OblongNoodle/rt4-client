@@ -170,37 +170,37 @@ public final class Song extends Node {
 		out.p2(division);
 		in.offset = deltaTimePos;
 		@Pc(530) int channel = 0;
-		@Pc(532) int local532 = 0;
-		@Pc(534) int local534 = 0;
-		@Pc(536) int local536 = 0;
-		@Pc(538) int local538 = 0;
-		@Pc(540) int local540 = 0;
-		@Pc(542) int local542 = 0;
+		@Pc(532) int keyDelta = 0;
+		@Pc(534) int onVelocityDelta = 0;
+		@Pc(536) int offVelocityDelta = 0;
+		@Pc(538) int pitchWheelDelta = 0;
+		@Pc(540) int channelPressureDelta = 0;
+		@Pc(542) int keyPressureDelta = 0;
 		@Pc(545) int[] values = new int[128];
 		controller = 0;
 		track:
-		for (@Pc(549) int local549 = 0; local549 < tracks; local549++) {
+		for (@Pc(549) int t = 0; t < tracks; t++) {
 			out.p4(1297379947);
 			out.offset += 4;
-			@Pc(565) int local565 = out.offset;
-			@Pc(567) int local567 = -1;
+			@Pc(565) int trackStart = out.offset;
+			@Pc(567) int statusType = -1;
 			while (true) {
 				while (true) {
 					@Pc(571) int deltaTime = in.gVarInt();
 					out.pVarInt(deltaTime);
-					@Pc(583) int local583 = in.data[i++] & 0xFF;
-					@Pc(590) boolean statusChanged = local583 != local567;
-					local567 = local583 & 0xF;
-					if (local583 == 7) {
+					@Pc(583) int eventByte = in.data[i++] & 0xFF;
+					@Pc(590) boolean statusChanged = eventByte != statusType;
+					statusType = eventByte & 0xF;
+					if (eventByte == 7) {
 						if (statusChanged) {
 							out.p1(255);
 						}
 						out.p1(47);
 						out.p1(0);
-						out.psize4(out.offset - local565);
+						out.psize4(out.offset - trackStart);
 						continue track;
 					}
-					if (local583 == 23) {
+					if (eventByte == 23) {
 						if (statusChanged) {
 							out.p1(255);
 						}
@@ -210,24 +210,24 @@ public final class Song extends Node {
 						out.p1(in.data[tempoPos++]);
 						out.p1(in.data[tempoPos++]);
 					} else {
-						channel ^= local583 >> 4;
-						if (local567 == 0) {
+						channel ^= eventByte >> 4;
+						if (statusType == 0) {
 							if (statusChanged) {
 								out.p1(channel + 144);
 							}
-							local532 += in.data[keyPos++];
-							local534 += in.data[onVelocityPos++];
-							out.p1(local532 & 0x7F);
-							out.p1(local534 & 0x7F);
-						} else if (local567 == 1) {
+							keyDelta += in.data[keyPos++];
+							onVelocityDelta += in.data[onVelocityPos++];
+							out.p1(keyDelta & 0x7F);
+							out.p1(onVelocityDelta & 0x7F);
+						} else if (statusType == 1) {
 							if (statusChanged) {
 								out.p1(channel + 128);
 							}
-							local532 += in.data[keyPos++];
-							local536 += in.data[offVelocityPos++];
-							out.p1(local532 & 0x7F);
-							out.p1(local536 & 0x7F);
-						} else if (local567 == 2) {
+							keyDelta += in.data[keyPos++];
+							offVelocityDelta += in.data[offVelocityPos++];
+							out.p1(keyDelta & 0x7F);
+							out.p1(offVelocityDelta & 0x7F);
+						} else if (statusType == 2) {
 							if (statusChanged) {
 								out.p1(channel + 176);
 							}
@@ -261,32 +261,32 @@ public final class Song extends Node {
 							} else {
 								valueDelta = in.data[unknownControllerPos++];
 							}
-							@Pc(910) int local910 = valueDelta + values[controller];
-							values[controller] = local910;
-							out.p1(local910 & 0x7F);
-						} else if (local567 == 3) {
+							@Pc(910) int controllerValue = valueDelta + values[controller];
+							values[controller] = controllerValue;
+							out.p1(controllerValue & 0x7F);
+						} else if (statusType == 3) {
 							if (statusChanged) {
 								out.p1(channel + 224);
 							}
-							local538 += in.data[pitchWheelLsbPos++];
-							local538 += in.data[pitchWheelMsbPos++] << 7;
-							out.p1(local538 & 0x7F);
-							out.p1(local538 >> 7 & 0x7F);
-						} else if (local567 == 4) {
+							pitchWheelDelta += in.data[pitchWheelLsbPos++];
+							pitchWheelDelta += in.data[pitchWheelMsbPos++] << 7;
+							out.p1(pitchWheelDelta & 0x7F);
+							out.p1(pitchWheelDelta >> 7 & 0x7F);
+						} else if (statusType == 4) {
 							if (statusChanged) {
 								out.p1(channel + 208);
 							}
-							local540 += in.data[channelPressurePos++];
-							out.p1(local540 & 0x7F);
-						} else if (local567 == 5) {
+							channelPressureDelta += in.data[channelPressurePos++];
+							out.p1(channelPressureDelta & 0x7F);
+						} else if (statusType == 5) {
 							if (statusChanged) {
 								out.p1(channel + 160);
 							}
-							local532 += in.data[keyPos++];
-							local542 += in.data[keyPressurePos++];
-							out.p1(local532 & 0x7F);
-							out.p1(local542 & 0x7F);
-						} else if (local567 == 6) {
+							keyDelta += in.data[keyPos++];
+							keyPressureDelta += in.data[keyPressurePos++];
+							out.p1(keyDelta & 0x7F);
+							out.p1(keyPressureDelta & 0x7F);
+						} else if (statusType == 6) {
 							if (statusChanged) {
 								out.p1(channel + 192);
 							}
@@ -321,9 +321,9 @@ public final class Song extends Node {
 		@Pc(15) int[] programs = new int[16];
 		banks[9] = programs[9] = 128;
 		@Pc(29) MidiDecoder song = new MidiDecoder(this.midiBytes);
-		@Pc(32) int local32 = song.getTrackCount();
+		@Pc(32) int trackCount = song.getTrackCount();
 		@Pc(34) int track;
-		for (track = 0; track < local32; track++) {
+		for (track = 0; track < trackCount; track++) {
 			song.loadTrackPosition(track);
 			song.addDeltaTime(track);
 			song.saveTrackPosition(track);
@@ -332,8 +332,8 @@ public final class Song extends Node {
 		do {
 			while (true) {
 				track = song.getNextTrack();
-				@Pc(56) int local56 = song.times[track];
-				while (song.times[track] == local56) {
+				@Pc(56) int time = song.times[track];
+				while (song.times[track] == time) {
 					song.loadTrackPosition(track);
 					@Pc(69) int event = song.getNextEvent(track);
 					if (event == 1) {
@@ -341,38 +341,38 @@ public final class Song extends Node {
 						song.saveTrackPosition(track);
 						continue label53;
 					}
-					@Pc(85) int local85 = event & 0xF0;
+					@Pc(85) int eventType = event & 0xF0;
 					@Pc(92) int controller;
-					@Pc(98) int local98;
-					@Pc(104) int local104;
-					if (local85 == 176) {
+					@Pc(98) int data1;
+					@Pc(104) int data2;
+					if (eventType == 176) {
 						controller = event & 0xF;
-						local98 = event >> 8 & 0x7F;
-						local104 = event >> 16 & 0x7F;
-						if (local98 == 0) {
-							banks[controller] = (banks[controller] & 0xFFE03FFF) + (local104 << 14);
+						data1 = event >> 8 & 0x7F;
+						data2 = event >> 16 & 0x7F;
+						if (data1 == 0) {
+							banks[controller] = (banks[controller] & 0xFFE03FFF) + (data2 << 14);
 						}
-						if (local98 == 32) {
-							banks[controller] = (banks[controller] & 0xFFFFC07F) + (local104 << 7);
+						if (data1 == 32) {
+							banks[controller] = (banks[controller] & 0xFFFFC07F) + (data2 << 7);
 						}
 					}
-					if (local85 == 192) {
+					if (eventType == 192) {
 						controller = event & 0xF;
-						local98 = event >> 8 & 0x7F;
-						programs[controller] = banks[controller] + local98;
+						data1 = event >> 8 & 0x7F;
+						programs[controller] = banks[controller] + data1;
 					}
-					if (local85 == 144) {
+					if (eventType == 144) {
 						controller = event & 0xF;
-						local98 = event >> 8 & 0x7F;
-						local104 = event >> 16 & 0x7F;
-						if (local104 > 0) {
+						data1 = event >> 8 & 0x7F;
+						data2 = event >> 16 & 0x7F;
+						if (data2 > 0) {
 							@Pc(179) int program = programs[controller];
 							@Pc(187) ByteArrayNode node = (ByteArrayNode) this.programs.get(program);
 							if (node == null) {
 								node = new ByteArrayNode(new byte[128]);
 								this.programs.put(node, program);
 							}
-							node.value[local98] = 1;
+							node.value[data1] = 1;
 						}
 					}
 					song.addDeltaTime(track);

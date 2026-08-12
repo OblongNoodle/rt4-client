@@ -28,9 +28,9 @@ public abstract class TextureOp extends Node {
 	public boolean monochrome;
 
 	@OriginalMember(owner = "client!j", name = "<init>", descriptor = "(IZ)V")
-	protected TextureOp(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1) {
-		this.inputs = new TextureOp[arg0];
-		this.monochrome = arg1;
+	protected TextureOp(@OriginalArg(0) int inputCount, @OriginalArg(1) boolean monochrome) {
+		this.inputs = new TextureOp[inputCount];
+		this.monochrome = monochrome;
 	}
 
 	@OriginalMember(owner = "client!al", name = "b", descriptor = "(B)V")
@@ -48,12 +48,12 @@ public abstract class TextureOp extends Node {
 	}
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "(III)[I")
-	protected final int[] getChildMonochromeOutput(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		return this.inputs[arg0].monochrome ? this.inputs[arg0].getMonochromeOutput(arg1) : this.inputs[arg0].getColorOutput(arg1)[0];
+	protected final int[] getChildMonochromeOutput(@OriginalArg(0) int inputIndex, @OriginalArg(1) int row) {
+		return this.inputs[inputIndex].monochrome ? this.inputs[inputIndex].getMonochromeOutput(row) : this.inputs[inputIndex].getColorOutput(row)[0];
 	}
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "(IB)[I")
-	public int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
+	public int[] getMonochromeOutput(@OriginalArg(0) int row) {
 		throw new IllegalStateException("This operation does not have a monochrome output");
 	}
 
@@ -63,7 +63,7 @@ public abstract class TextureOp extends Node {
 	}
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "(ILclient!wa;Z)V")
-	public void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
+	public void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
 	}
 
 	@OriginalMember(owner = "client!j", name = "e", descriptor = "(I)V")
@@ -76,12 +76,12 @@ public abstract class TextureOp extends Node {
 	}
 
 	@OriginalMember(owner = "client!j", name = "b", descriptor = "(III)V")
-	public final void allocateImageCache(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(15) int local15 = this.cacheHeight == 255 ? arg0 : this.cacheHeight;
+	public final void allocateImageCache(@OriginalArg(0) int width, @OriginalArg(1) int height) {
+		@Pc(15) int effectiveHeight = this.cacheHeight == 255 ? width : this.cacheHeight;
 		if (this.monochrome) {
-			this.monochromeImageCache = new ColorImageCache(local15, arg0, arg1);
+			this.monochromeImageCache = new ColorImageCache(effectiveHeight, width, height);
 		} else {
-			this.colorImageCache = new MonochromeImageCache(local15, arg0, arg1);
+			this.colorImageCache = new MonochromeImageCache(effectiveHeight, width, height);
 		}
 	}
 
@@ -97,17 +97,17 @@ public abstract class TextureOp extends Node {
 	}
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "(IIB)[[I")
-	protected final int[][] getChildColorOutput(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		if (this.inputs[arg1].monochrome) {
-			@Pc(32) int[] local32 = this.inputs[arg1].getMonochromeOutput(arg0);
-			return new int[][]{local32, local32, local32};
+	protected final int[][] getChildColorOutput(@OriginalArg(0) int row, @OriginalArg(1) int inputIndex) {
+		if (this.inputs[inputIndex].monochrome) {
+			@Pc(32) int[] mono = this.inputs[inputIndex].getMonochromeOutput(row);
+			return new int[][]{mono, mono, mono};
 		} else {
-			return this.inputs[arg1].getColorOutput(arg0);
+			return this.inputs[inputIndex].getColorOutput(row);
 		}
 	}
 
 	@OriginalMember(owner = "client!j", name = "b", descriptor = "(II)[[I")
-	public int[][] getColorOutput(@OriginalArg(1) int arg0) {
+	public int[][] getColorOutput(@OriginalArg(1) int row) {
 		throw new IllegalStateException("This operation does not have a colour output");
 	}
 }
