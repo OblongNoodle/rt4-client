@@ -51,11 +51,11 @@ public final class MidiNoteStream extends PcmStream {
 	@OriginalMember(owner = "client!te", name = "a", descriptor = "(Lclient!mf;II)V")
 	private void skip(@OriginalArg(0) MidiNote instrument, @OriginalArg(2) int len) {
 		if ((this.parent.channelFlags[instrument.channel] & 0x4) != 0 && instrument.releaseTimer < 0) {
-			@Pc(27) int local27 = this.parent.anIntArray503[instrument.channel] / AudioChannel.sampleRate;
+			@Pc(27) int local27 = this.parent.channelDetuneRatio[instrument.channel] / AudioChannel.sampleRate;
 			@Pc(37) int local37 = (local27 + 1048575 - instrument.portamentoPos) / local27;
 			instrument.portamentoPos = local27 * len + instrument.portamentoPos & 0xFFFFF;
 			if (len >= local37) {
-				if (this.parent.anIntArray509[instrument.channel] == 0) {
+				if (this.parent.channelSampleOffset[instrument.channel] == 0) {
 					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.getAbsoluteRate(), instrument.stream.getVolume(), instrument.stream.getPan());
 				} else {
 					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.getAbsoluteRate(), 0, instrument.stream.getPan());
@@ -121,7 +121,7 @@ public final class MidiNoteStream extends PcmStream {
 	@OriginalMember(owner = "client!te", name = "a", descriptor = "([ILclient!mf;IIIB)V")
 	private void readNoteWithRetrigger(@OriginalArg(0) int[] arg0, @OriginalArg(1) MidiNote arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if ((this.parent.channelFlags[arg1.channel] & 0x4) != 0 && arg1.releaseTimer < 0) {
-			@Pc(26) int local26 = this.parent.anIntArray503[arg1.channel] / AudioChannel.sampleRate;
+			@Pc(26) int local26 = this.parent.channelDetuneRatio[arg1.channel] / AudioChannel.sampleRate;
 			while (true) {
 				@Pc(36) int local36 = (local26 + 1048575 - arg1.portamentoPos) / local26;
 				if (arg3 < local36) {
@@ -137,7 +137,7 @@ public final class MidiNoteStream extends PcmStream {
 					local55 = local62;
 				}
 				arg1.portamentoPos += local26 * local36 - 1048576;
-				if (this.parent.anIntArray509[arg1.channel] == 0) {
+				if (this.parent.channelSampleOffset[arg1.channel] == 0) {
 					arg1.stream = SoundPcmStream.create(arg1.sound, local58.getAbsoluteRate(), local58.getVolume(), local58.getPan());
 				} else {
 					arg1.stream = SoundPcmStream.create(arg1.sound, local58.getAbsoluteRate(), 0, local58.getPan());
