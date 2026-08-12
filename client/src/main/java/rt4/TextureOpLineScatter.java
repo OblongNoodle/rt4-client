@@ -38,91 +38,91 @@ public final class TextureOpLineScatter extends TextureOp {
 
 	@OriginalMember(owner = "client!vc", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.seed = arg1.g1();
-		} else if (arg0 == 1) {
-			this.lineCount = arg1.g2();
-		} else if (arg0 == 2) {
-			this.lineLength = arg1.g1();
-		} else if (arg0 == 3) {
-			this.baseAngle = arg1.g2();
-		} else if (arg0 == 4) {
-			this.angleSpread = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.seed = buf.g1();
+		} else if (opcode == 1) {
+			this.lineCount = buf.g2();
+		} else if (opcode == 2) {
+			this.lineLength = buf.g1();
+		} else if (opcode == 3) {
+			this.baseAngle = buf.g2();
+		} else if (opcode == 4) {
+			this.angleSpread = buf.g2();
 		}
 	}
 
 	@OriginalMember(owner = "client!vc", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(28) int local28 = this.angleSpread >> 1;
-			@Pc(33) int[][] local33 = this.monochromeImageCache.getAll();
-			@Pc(40) Random local40 = new Random(this.seed);
-			for (@Pc(42) int local42 = 0; local42 < this.lineCount; local42++) {
-				@Pc(64) int local64 = this.angleSpread > 0 ? this.baseAngle + RandomUtils.nextInt(this.angleSpread, local40) - local28 : this.baseAngle;
-				@Pc(69) int local69 = RandomUtils.nextInt(Texture.width, local40);
-				@Pc(75) int local75 = local64 >> 4 & 0xFF;
-				@Pc(80) int local80 = RandomUtils.nextInt(Texture.height, local40);
-				@Pc(92) int local92 = local69 + (this.lineLength * TextureOp.COSINE[local75] >> 12);
-				@Pc(103) int local103 = local80 + (TextureOp.SINE[local75] * this.lineLength >> 12);
-				@Pc(107) int local107 = local92 - local69;
-				@Pc(112) int local112 = local103 - local80;
-				if (local107 != 0 || local112 != 0) {
-					if (local107 < 0) {
-						local107 = -local107;
+			@Pc(28) int halfSpread = this.angleSpread >> 1;
+			@Pc(33) int[][] allRows = this.monochromeImageCache.getAll();
+			@Pc(40) Random rng = new Random(this.seed);
+			for (@Pc(42) int i = 0; i < this.lineCount; i++) {
+				@Pc(64) int angle = this.angleSpread > 0 ? this.baseAngle + RandomUtils.nextInt(this.angleSpread, rng) - halfSpread : this.baseAngle;
+				@Pc(69) int x0 = RandomUtils.nextInt(Texture.width, rng);
+				@Pc(75) int trigIdx = angle >> 4 & 0xFF;
+				@Pc(80) int y0 = RandomUtils.nextInt(Texture.height, rng);
+				@Pc(92) int x1 = x0 + (this.lineLength * TextureOp.COSINE[trigIdx] >> 12);
+				@Pc(103) int y1 = y0 + (TextureOp.SINE[trigIdx] * this.lineLength >> 12);
+				@Pc(107) int dx = x1 - x0;
+				@Pc(112) int dy = y1 - y0;
+				if (dx != 0 || dy != 0) {
+					if (dx < 0) {
+						dx = -dx;
 					}
-					if (local112 < 0) {
-						local112 = -local112;
+					if (dy < 0) {
+						dy = -dy;
 					}
-					@Pc(146) boolean local146 = local112 > local107;
-					@Pc(150) int local150;
-					@Pc(152) int local152;
-					if (local146) {
-						local150 = local69;
-						local152 = local92;
-						local92 = local103;
-						local103 = local152;
-						local69 = local80;
-						local80 = local150;
+					@Pc(146) boolean steep = dy > dx;
+					@Pc(150) int tmp;
+					@Pc(152) int tmp2;
+					if (steep) {
+						tmp = x0;
+						tmp2 = x1;
+						x1 = y1;
+						y1 = tmp2;
+						x0 = y0;
+						y0 = tmp;
 					}
-					if (local69 > local92) {
-						local150 = local69;
-						local152 = local80;
-						local69 = local92;
-						local80 = local103;
-						local103 = local152;
-						local92 = local150;
+					if (x0 > x1) {
+						tmp = x0;
+						tmp2 = y0;
+						x0 = x1;
+						y0 = y1;
+						y1 = tmp2;
+						x1 = tmp;
 					}
-					local152 = local92 - local69;
-					@Pc(190) int local190 = local103 - local80;
-					local150 = local80;
-					if (local190 < 0) {
-						local190 = -local190;
+					tmp2 = x1 - x0;
+					@Pc(190) int deltaY = y1 - y0;
+					tmp = y0;
+					if (deltaY < 0) {
+						deltaY = -deltaY;
 					}
-					@Pc(206) int local206 = -local152 / 2;
-					@Pc(216) int local216 = 1024 - (RandomUtils.nextInt(4096, local40) >> 2);
-					@Pc(227) int local227 = local103 <= local80 ? -1 : 1;
-					@Pc(231) int local231 = 2048 / local152;
-					for (@Pc(233) int local233 = local69; local233 < local92; local233++) {
-						local206 += local190;
-						@Pc(251) int local251 = local231 * (local233 - local69) + local216 + 1024;
-						@Pc(255) int local255 = local150 & Texture.heightMask;
-						if (local206 > 0) {
-							local206 += -local152;
-							local150 += local227;
+					@Pc(206) int error = -tmp2 / 2;
+					@Pc(216) int baseIntensity = 1024 - (RandomUtils.nextInt(4096, rng) >> 2);
+					@Pc(227) int yStep = y1 <= y0 ? -1 : 1;
+					@Pc(231) int intensityStep = 2048 / tmp2;
+					for (@Pc(233) int x = x0; x < x1; x++) {
+						error += deltaY;
+						@Pc(251) int intensity = intensityStep * (x - x0) + baseIntensity + 1024;
+						@Pc(255) int maskedY = tmp & Texture.heightMask;
+						if (error > 0) {
+							error += -tmp2;
+							tmp += yStep;
 						}
-						@Pc(271) int local271 = Texture.widthMask & local233;
-						if (local146) {
-							local33[local255][local271] = local251;
+						@Pc(271) int maskedX = Texture.widthMask & x;
+						if (steep) {
+							allRows[maskedY][maskedX] = intensity;
 						} else {
-							local33[local271][local255] = local251;
+							allRows[maskedX][maskedY] = intensity;
 						}
 					}
 				}
 			}
 		}
-		return local19;
+		return output;
 	}
 }

@@ -50,35 +50,35 @@ public final class TextureOpVoronoi extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(II)[B")
-	public static byte[] getPermutationTable(@OriginalArg(1) int arg0) {
-		@Pc(10) ByteArrayNodeSecondary local10 = (ByteArrayNodeSecondary) permutationTableCache.get(arg0);
-		if (local10 == null) {
-			@Pc(24) Random local24 = new Random(arg0);
-			@Pc(27) byte[] local27 = new byte[512];
-			@Pc(29) int local29;
-			for (local29 = 0; local29 < 255; local29++) {
-				local27[local29] = (byte) local29;
+	public static byte[] getPermutationTable(@OriginalArg(1) int seed) {
+		@Pc(10) ByteArrayNodeSecondary cached = (ByteArrayNodeSecondary) permutationTableCache.get(seed);
+		if (cached == null) {
+			@Pc(24) Random rng = new Random(seed);
+			@Pc(27) byte[] table = new byte[512];
+			@Pc(29) int i;
+			for (i = 0; i < 255; i++) {
+				table[i] = (byte) i;
 			}
-			for (local29 = 0; local29 < 255; local29++) {
-				@Pc(53) int local53 = 255 - local29;
-				@Pc(58) int local58 = RandomUtils.nextInt(local53, local24);
-				@Pc(62) byte local62 = local27[local58];
-				local27[local58] = local27[local53];
-				local27[local53] = local27[511 - local29] = local62;
+			for (i = 0; i < 255; i++) {
+				@Pc(53) int remaining = 255 - i;
+				@Pc(58) int swapIdx = RandomUtils.nextInt(remaining, rng);
+				@Pc(62) byte tmp = table[swapIdx];
+				table[swapIdx] = table[remaining];
+				table[remaining] = table[511 - i] = tmp;
 			}
-			local10 = new ByteArrayNodeSecondary(local27);
-			permutationTableCache.put(local10, arg0);
+			cached = new ByteArrayNodeSecondary(table);
+			permutationTableCache.put(cached, seed);
 		}
-		return local10.value;
+		return cached.value;
 	}
 
 	@OriginalMember(owner = "client!hm", name = "f", descriptor = "(B)V")
 	private void initRandomOffsets() {
-		@Pc(12) Random local12 = new Random(this.seed);
+		@Pc(12) Random rng = new Random(this.seed);
 		this.cellOffsets = new short[512];
 		if (this.jitter > 0) {
-			for (@Pc(26) int local26 = 0; local26 < 512; local26++) {
-				this.cellOffsets[local26] = (short) RandomUtils.nextInt(this.jitter, local12);
+			for (@Pc(26) int i = 0; i < 512; i++) {
+				this.cellOffsets[i] = (short) RandomUtils.nextInt(this.jitter, rng);
 			}
 		}
 	}
@@ -92,102 +92,102 @@ public final class TextureOpVoronoi extends TextureOp {
 
 	@OriginalMember(owner = "client!hm", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(32) int local32 = this.cellCountY * Texture.heightFractions[arg0] + 2048;
-			@Pc(36) int local36 = local32 >> 12;
-			@Pc(40) int local40 = local36 + 1;
-			for (@Pc(42) int local42 = 0; local42 < Texture.width; local42++) {
+			@Pc(32) int scaledY = this.cellCountY * Texture.heightFractions[row] + 2048;
+			@Pc(36) int cellY = scaledY >> 12;
+			@Pc(40) int cellYMax = cellY + 1;
+			for (@Pc(42) int col = 0; col < Texture.width; col++) {
 				fourthNearest = Integer.MAX_VALUE;
 				thirdNearest = Integer.MAX_VALUE;
 				secondNearest = Integer.MAX_VALUE;
 				nearestDistance = Integer.MAX_VALUE;
-				@Pc(62) int local62 = this.cellCountX * Texture.widthFractions[local42] + 2048;
-				@Pc(66) int local66 = local62 >> 12;
-				@Pc(70) int local70 = local66 + 1;
-				@Pc(165) int local165;
-				for (@Pc(74) int local74 = local36 - 1; local74 <= local40; local74++) {
-					@Pc(104) int local104 = this.permutationTable[(this.cellCountY <= local74 ? local74 - this.cellCountY : local74) & 0xFF] & 0xFF;
-					for (@Pc(108) int local108 = local66 - 1; local108 <= local70; local108++) {
-						@Pc(138) int local138 = (this.permutationTable[(this.cellCountX <= local108 ? local108 - this.cellCountX : local108) + local104 & 0xFF] & 0xFF) * 2;
-						@Pc(142) int local142 = -(local108 << 12);
-						@Pc(146) int local146 = local138 + 1;
-						@Pc(151) int local151 = local142 + local62 - this.cellOffsets[local138];
-						@Pc(162) int local162 = local32 - this.cellOffsets[local146] - (local74 << 12);
-						local165 = this.distanceMetric;
-						@Pc(201) int local201;
-						if (local165 == 1) {
-							local201 = local162 * local162 + local151 * local151 >> 12;
-						} else if (local165 == 3) {
-							local151 = local151 < 0 ? -local151 : local151;
-							local162 = local162 >= 0 ? local162 : -local162;
-							local201 = local162 >= local151 ? local162 : local151;
-						} else if (local165 == 4) {
-							local151 = (int) (Math.sqrt((float) (local151 < 0 ? -local151 : local151) / 4096.0F) * 4096.0D);
-							local162 = (int) (Math.sqrt((float) (local162 >= 0 ? local162 : -local162) / 4096.0F) * 4096.0D);
-							local201 = local162 + local151;
-							local201 = local201 * local201 >> 12;
-						} else if (local165 == 5) {
-							local151 *= local151;
-							local162 *= local162;
-							local201 = (int) (Math.sqrt(Math.sqrt((float) (local162 + local151) / 1.6777216E7F)) * 4096.0D);
-						} else if (local165 == 2) {
-							local201 = (local151 >= 0 ? local151 : -local151) + (local162 < 0 ? -local162 : local162);
+				@Pc(62) int scaledX = this.cellCountX * Texture.widthFractions[col] + 2048;
+				@Pc(66) int cellX = scaledX >> 12;
+				@Pc(70) int cellXMax = cellX + 1;
+				@Pc(165) int type;
+				for (@Pc(74) int cy = cellY - 1; cy <= cellYMax; cy++) {
+					@Pc(104) int permY = this.permutationTable[(this.cellCountY <= cy ? cy - this.cellCountY : cy) & 0xFF] & 0xFF;
+					for (@Pc(108) int cx = cellX - 1; cx <= cellXMax; cx++) {
+						@Pc(138) int permIdx = (this.permutationTable[(this.cellCountX <= cx ? cx - this.cellCountX : cx) + permY & 0xFF] & 0xFF) * 2;
+						@Pc(142) int negCellX = -(cx << 12);
+						@Pc(146) int permIdxY = permIdx + 1;
+						@Pc(151) int dx = negCellX + scaledX - this.cellOffsets[permIdx];
+						@Pc(162) int dy = scaledY - this.cellOffsets[permIdxY] - (cy << 12);
+						type = this.distanceMetric;
+						@Pc(201) int dist;
+						if (type == 1) {
+							dist = dy * dy + dx * dx >> 12;
+						} else if (type == 3) {
+							dx = dx < 0 ? -dx : dx;
+							dy = dy >= 0 ? dy : -dy;
+							dist = dy >= dx ? dy : dx;
+						} else if (type == 4) {
+							dx = (int) (Math.sqrt((float) (dx < 0 ? -dx : dx) / 4096.0F) * 4096.0D);
+							dy = (int) (Math.sqrt((float) (dy >= 0 ? dy : -dy) / 4096.0F) * 4096.0D);
+							dist = dy + dx;
+							dist = dist * dist >> 12;
+						} else if (type == 5) {
+							dx *= dx;
+							dy *= dy;
+							dist = (int) (Math.sqrt(Math.sqrt((float) (dy + dx) / 1.6777216E7F)) * 4096.0D);
+						} else if (type == 2) {
+							dist = (dx >= 0 ? dx : -dx) + (dy < 0 ? -dy : dy);
 						} else {
-							local201 = (int) (Math.sqrt((float) (local162 * local162 + local151 * local151) / 1.6777216E7F) * 4096.0D);
+							dist = (int) (Math.sqrt((float) (dy * dy + dx * dx) / 1.6777216E7F) * 4096.0D);
 						}
-						if (local201 < nearestDistance) {
+						if (dist < nearestDistance) {
 							fourthNearest = thirdNearest;
 							thirdNearest = secondNearest;
 							secondNearest = nearestDistance;
-							nearestDistance = local201;
-						} else if (local201 < secondNearest) {
+							nearestDistance = dist;
+						} else if (dist < secondNearest) {
 							fourthNearest = thirdNearest;
 							thirdNearest = secondNearest;
-							secondNearest = local201;
-						} else if (thirdNearest > local201) {
+							secondNearest = dist;
+						} else if (thirdNearest > dist) {
 							fourthNearest = thirdNearest;
-							thirdNearest = local201;
-						} else if (local201 < fourthNearest) {
-							fourthNearest = local201;
+							thirdNearest = dist;
+						} else if (dist < fourthNearest) {
+							fourthNearest = dist;
 						}
 					}
 				}
-				local165 = this.outputType;
-				if (local165 == 0) {
-					local19[local42] = nearestDistance;
-				} else if (local165 == 1) {
-					local19[local42] = secondNearest;
-				} else if (local165 == 3) {
-					local19[local42] = thirdNearest;
-				} else if (local165 == 4) {
-					local19[local42] = fourthNearest;
-				} else if (local165 == 2) {
-					local19[local42] = secondNearest - nearestDistance;
+				type = this.outputType;
+				if (type == 0) {
+					output[col] = nearestDistance;
+				} else if (type == 1) {
+					output[col] = secondNearest;
+				} else if (type == 3) {
+					output[col] = thirdNearest;
+				} else if (type == 4) {
+					output[col] = fourthNearest;
+				} else if (type == 2) {
+					output[col] = secondNearest - nearestDistance;
 				}
 			}
 		}
-		return local19;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!hm", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.cellCountX = this.cellCountY = arg1.g1();
-		} else if (arg0 == 1) {
-			this.seed = arg1.g1();
-		} else if (arg0 == 2) {
-			this.jitter = arg1.g2();
-		} else if (arg0 == 3) {
-			this.outputType = arg1.g1();
-		} else if (arg0 == 4) {
-			this.distanceMetric = arg1.g1();
-		} else if (arg0 == 5) {
-			this.cellCountX = arg1.g1();
-		} else if (arg0 == 6) {
-			this.cellCountY = arg1.g1();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.cellCountX = this.cellCountY = buf.g1();
+		} else if (opcode == 1) {
+			this.seed = buf.g1();
+		} else if (opcode == 2) {
+			this.jitter = buf.g2();
+		} else if (opcode == 3) {
+			this.outputType = buf.g1();
+		} else if (opcode == 4) {
+			this.distanceMetric = buf.g1();
+		} else if (opcode == 5) {
+			this.cellCountX = buf.g1();
+		} else if (opcode == 6) {
+			this.cellCountY = buf.g1();
 		}
 	}
 }

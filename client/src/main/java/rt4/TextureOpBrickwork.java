@@ -65,107 +65,107 @@ public final class TextureOpBrickwork extends TextureOp {
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.columns = arg1.g1();
-		} else if (arg0 == 1) {
-			this.rows = arg1.g1();
-		} else if (arg0 == 2) {
-			this.columnJitter = arg1.g2();
-		} else if (arg0 == 3) {
-			this.rowJitter = arg1.g2();
-		} else if (arg0 == 4) {
-			this.columnOffset = arg1.g2();
-		} else if (arg0 == 5) {
-			this.scrollOffsetY = arg1.g2();
-		} else if (arg0 == 6) {
-			this.mortarSize = arg1.g2();
-		} else if (arg0 == 7) {
-			this.colorVariation = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.columns = buf.g1();
+		} else if (opcode == 1) {
+			this.rows = buf.g1();
+		} else if (opcode == 2) {
+			this.columnJitter = buf.g2();
+		} else if (opcode == 3) {
+			this.rowJitter = buf.g2();
+		} else if (opcode == 4) {
+			this.columnOffset = buf.g2();
+		} else if (opcode == 5) {
+			this.scrollOffsetY = buf.g2();
+		} else if (opcode == 6) {
+			this.mortarSize = buf.g2();
+		} else if (opcode == 7) {
+			this.colorVariation = buf.g2();
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "i", descriptor = "(I)V")
 	private void buildLookupTable() {
-		@Pc(8) Random local8 = new Random(this.rows);
+		@Pc(8) Random rng = new Random(this.rows);
 		this.rowHeight = 4096 / this.rows;
 		this.halfMortarSize = this.mortarSize / 2;
 		this.columnPositions = new int[this.rows][this.columns + 1];
-		@Pc(34) int local34 = this.rowHeight / 2;
+		@Pc(34) int halfRowHeight = this.rowHeight / 2;
 		this.rowPositions = new int[this.rows + 1];
 		this.cellBrightness = new int[this.rows][this.columns];
 		this.columnWidth = 4096 / this.columns;
 		this.rowPositions[0] = 0;
-		@Pc(64) int local64 = this.columnWidth / 2;
-		for (@Pc(66) int local66 = 0; local66 < this.rows; local66++) {
-			@Pc(82) int local82;
-			@Pc(94) int local94;
-			if (local66 > 0) {
-				local82 = this.rowHeight;
-				local94 = (RandomUtils.nextInt(4096, local8) - 2048) * this.rowJitter >> 12;
-				@Pc(102) int local102 = local82 + (local94 * local34 >> 12);
-				this.rowPositions[local66] = this.rowPositions[local66 - 1] + local102;
+		@Pc(64) int halfColWidth = this.columnWidth / 2;
+		for (@Pc(66) int r = 0; r < this.rows; r++) {
+			@Pc(82) int height;
+			@Pc(94) int jitter;
+			if (r > 0) {
+				height = this.rowHeight;
+				jitter = (RandomUtils.nextInt(4096, rng) - 2048) * this.rowJitter >> 12;
+				@Pc(102) int adjustedHeight = height + (jitter * halfRowHeight >> 12);
+				this.rowPositions[r] = this.rowPositions[r - 1] + adjustedHeight;
 			}
-			this.columnPositions[local66][0] = 0;
-			for (local82 = 0; local82 < this.columns; local82++) {
-				if (local82 > 0) {
-					local94 = this.columnWidth;
-					@Pc(150) int local150 = (RandomUtils.nextInt(4096, local8) - 2048) * this.columnJitter >> 12;
-					local94 += local64 * local150 >> 12;
-					this.columnPositions[local66][local82] = this.columnPositions[local66][local82 - 1] + local94;
+			this.columnPositions[r][0] = 0;
+			for (height = 0; height < this.columns; height++) {
+				if (height > 0) {
+					jitter = this.columnWidth;
+					@Pc(150) int colJitter = (RandomUtils.nextInt(4096, rng) - 2048) * this.columnJitter >> 12;
+					jitter += halfColWidth * colJitter >> 12;
+					this.columnPositions[r][height] = this.columnPositions[r][height - 1] + jitter;
 				}
-				this.cellBrightness[local66][local82] = this.colorVariation <= 0 ? 4096 : 4096 - RandomUtils.nextInt(this.colorVariation, local8);
+				this.cellBrightness[r][height] = this.colorVariation <= 0 ? 4096 : 4096 - RandomUtils.nextInt(this.colorVariation, rng);
 			}
-			this.columnPositions[local66][this.columns] = 4096;
+			this.columnPositions[r][this.columns] = 4096;
 		}
 		this.rowPositions[this.rows] = 4096;
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(11) int[] local11 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(11) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(18) int local18 = 0;
-			@Pc(25) int local25;
-			for (local25 = Texture.heightFractions[arg0] + this.scrollOffsetY; local25 < 0; local25 += 4096) {
+			@Pc(18) int rowIdx = 0;
+			@Pc(25) int y;
+			for (y = Texture.heightFractions[row] + this.scrollOffsetY; y < 0; y += 4096) {
 			}
-			while (local25 > 4096) {
-				local25 -= 4096;
+			while (y > 4096) {
+				y -= 4096;
 			}
-			while (this.rows > local18 && local25 >= this.rowPositions[local18]) {
-				local18++;
+			while (this.rows > rowIdx && y >= this.rowPositions[rowIdx]) {
+				rowIdx++;
 			}
-			@Pc(60) int local60 = local18 - 1;
-			@Pc(65) int local65 = this.rowPositions[local18];
-			@Pc(74) boolean local74 = (local18 & 0x1) == 0;
-			@Pc(81) int local81 = this.rowPositions[local18 - 1];
-			if (local81 + this.halfMortarSize < local25 && local65 - this.halfMortarSize > local25) {
-				for (@Pc(100) int local100 = 0; local100 < Texture.width; local100++) {
-					@Pc(105) int local105 = 0;
-					@Pc(114) int local114 = local74 ? this.columnOffset : -this.columnOffset;
-					@Pc(126) int local126;
-					for (local126 = Texture.widthFractions[local100] + (this.columnWidth * local114 >> 12); local126 < 0; local126 += 4096) {
+			@Pc(60) int brickRow = rowIdx - 1;
+			@Pc(65) int rowEnd = this.rowPositions[rowIdx];
+			@Pc(74) boolean evenRow = (rowIdx & 0x1) == 0;
+			@Pc(81) int rowStart = this.rowPositions[rowIdx - 1];
+			if (rowStart + this.halfMortarSize < y && rowEnd - this.halfMortarSize > y) {
+				for (@Pc(100) int col = 0; col < Texture.width; col++) {
+					@Pc(105) int colIdx = 0;
+					@Pc(114) int offset = evenRow ? this.columnOffset : -this.columnOffset;
+					@Pc(126) int x;
+					for (x = Texture.widthFractions[col] + (this.columnWidth * offset >> 12); x < 0; x += 4096) {
 					}
-					while (local126 > 4096) {
-						local126 -= 4096;
+					while (x > 4096) {
+						x -= 4096;
 					}
-					while (this.columns > local105 && local126 >= this.columnPositions[local60][local105]) {
-						local105++;
+					while (this.columns > colIdx && x >= this.columnPositions[brickRow][colIdx]) {
+						colIdx++;
 					}
-					@Pc(172) int local172 = this.columnPositions[local60][local105];
-					@Pc(176) int local176 = local105 - 1;
-					@Pc(183) int local183 = this.columnPositions[local60][local176];
-					if (local183 + this.halfMortarSize < local126 && local172 - this.halfMortarSize > local126) {
-						local11[local100] = this.cellBrightness[local60][local176];
+					@Pc(172) int colEnd = this.columnPositions[brickRow][colIdx];
+					@Pc(176) int brickCol = colIdx - 1;
+					@Pc(183) int colStart = this.columnPositions[brickRow][brickCol];
+					if (colStart + this.halfMortarSize < x && colEnd - this.halfMortarSize > x) {
+						output[col] = this.cellBrightness[brickRow][brickCol];
 					} else {
-						local11[local100] = 0;
+						output[col] = 0;
 					}
 				}
 			} else {
-				ArrayUtils.fill(local11, 0, Texture.width, 0);
+				ArrayUtils.fill(output, 0, Texture.width, 0);
 			}
 		}
-		return local11;
+		return output;
 	}
 }

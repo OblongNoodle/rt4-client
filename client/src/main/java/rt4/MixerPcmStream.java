@@ -21,64 +21,64 @@ public final class MixerPcmStream extends PcmStream {
 	private int nextListenerTime = -1;
 
 	@OriginalMember(owner = "client!ok", name = "a", descriptor = "(Lclient!ab;Lclient!ab;I)V")
-	public static void insertBefore(@OriginalArg(0) Node arg0, @OriginalArg(1) Node arg1) {
-		if (arg0.previousNode != null) {
-			arg0.unlink();
+	public static void insertBefore(@OriginalArg(0) Node node, @OriginalArg(1) Node before) {
+		if (node.previousNode != null) {
+			node.unlink();
 		}
-		arg0.nextNode = arg1;
-		arg0.previousNode = arg1.previousNode;
-		arg0.previousNode.nextNode = arg0;
-		arg0.nextNode.previousNode = arg0;
+		node.nextNode = before;
+		node.previousNode = before.previousNode;
+		node.previousNode.nextNode = node;
+		node.nextNode.previousNode = node;
 	}
 
 	@OriginalMember(owner = "client!ei", name = "a", descriptor = "(Lclient!cc;)V")
-	private void removeListener(@OriginalArg(0) MixerListener arg0) {
-		arg0.unlink();
-		arg0.onRemoved();
-		@Pc(9) Node local9 = this.listeners.sentinel.nextNode;
-		if (local9 == this.listeners.sentinel) {
+	private void removeListener(@OriginalArg(0) MixerListener listener) {
+		listener.unlink();
+		listener.onRemoved();
+		@Pc(9) Node first = this.listeners.sentinel.nextNode;
+		if (first == this.listeners.sentinel) {
 			this.nextListenerTime = -1;
 		} else {
-			this.nextListenerTime = ((MixerListener) local9).delay;
+			this.nextListenerTime = ((MixerListener) first).delay;
 		}
 	}
 
 	@OriginalMember(owner = "client!ei", name = "a", descriptor = "(Lclient!qb;)V")
-	public final synchronized void addSubStream(@OriginalArg(0) PcmStream arg0) {
-		this.subStreams.addHead(arg0);
+	public final synchronized void addSubStream(@OriginalArg(0) PcmStream stream) {
+		this.subStreams.addHead(stream);
 	}
 
 	@OriginalMember(owner = "client!ei", name = "b", descriptor = "([III)V")
 	@Override
-	public final synchronized void read(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final synchronized void read(@OriginalArg(0) int[] buf, @OriginalArg(1) int offset, @OriginalArg(2) int len) {
 		do {
 			if (this.nextListenerTime < 0) {
-				this.readSubStreams(arg0, arg1, arg2);
+				this.readSubStreams(buf, offset, len);
 				return;
 			}
-			if (this.samplePosition + arg2 < this.nextListenerTime) {
-				this.samplePosition += arg2;
-				this.readSubStreams(arg0, arg1, arg2);
+			if (this.samplePosition + len < this.nextListenerTime) {
+				this.samplePosition += len;
+				this.readSubStreams(buf, offset, len);
 				return;
 			}
-			@Pc(33) int local33 = this.nextListenerTime - this.samplePosition;
-			this.readSubStreams(arg0, arg1, local33);
-			arg1 += local33;
-			arg2 -= local33;
-			this.samplePosition += local33;
+			@Pc(33) int samplesUntilListener = this.nextListenerTime - this.samplePosition;
+			this.readSubStreams(buf, offset, samplesUntilListener);
+			offset += samplesUntilListener;
+			len -= samplesUntilListener;
+			this.samplePosition += samplesUntilListener;
 			this.advanceListeners();
-			@Pc(60) MixerListener local60 = (MixerListener) this.listeners.head();
-			synchronized (local60) {
-				@Pc(68) int local68 = local60.process(this);
-				if (local68 < 0) {
-					local60.delay = 0;
-					this.removeListener(local60);
+			@Pc(60) MixerListener listener = (MixerListener) this.listeners.head();
+			synchronized (listener) {
+				@Pc(68) int result = listener.process(this);
+				if (result < 0) {
+					listener.delay = 0;
+					this.removeListener(listener);
 				} else {
-					local60.delay = local68;
-					this.insertListenerSorted(local60.nextNode, local60);
+					listener.delay = result;
+					this.insertListenerSorted(listener.nextNode, listener);
 				}
 			}
-		} while (arg2 != 0);
+		} while (len != 0);
 	}
 
 	@OriginalMember(owner = "client!ei", name = "e", descriptor = "()V")
@@ -86,8 +86,8 @@ public final class MixerPcmStream extends PcmStream {
 		if (this.samplePosition <= 0) {
 			return;
 		}
-		for (@Pc(8) MixerListener local8 = (MixerListener) this.listeners.head(); local8 != null; local8 = (MixerListener) this.listeners.next()) {
-			local8.delay -= this.samplePosition;
+		for (@Pc(8) MixerListener listener = (MixerListener) this.listeners.head(); listener != null; listener = (MixerListener) this.listeners.next()) {
+			listener.delay -= this.samplePosition;
 		}
 		this.nextListenerTime -= this.samplePosition;
 		this.samplePosition = 0;
@@ -100,22 +100,22 @@ public final class MixerPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!ei", name = "d", descriptor = "(I)V")
-	private void skipSubStreams(@OriginalArg(0) int arg0) {
-		for (@Pc(5) PcmStream local5 = (PcmStream) this.subStreams.head(); local5 != null; local5 = (PcmStream) this.subStreams.next()) {
-			local5.skip(arg0);
+	private void skipSubStreams(@OriginalArg(0) int len) {
+		for (@Pc(5) PcmStream stream = (PcmStream) this.subStreams.head(); stream != null; stream = (PcmStream) this.subStreams.next()) {
+			stream.skip(len);
 		}
 	}
 
 	@OriginalMember(owner = "client!ei", name = "c", descriptor = "([III)V")
-	private void readSubStreams(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		for (@Pc(5) PcmStream local5 = (PcmStream) this.subStreams.head(); local5 != null; local5 = (PcmStream) this.subStreams.next()) {
-			local5.readIfActive(arg0, arg1, arg2);
+	private void readSubStreams(@OriginalArg(0) int[] buf, @OriginalArg(1) int offset, @OriginalArg(2) int len) {
+		for (@Pc(5) PcmStream stream = (PcmStream) this.subStreams.head(); stream != null; stream = (PcmStream) this.subStreams.next()) {
+			stream.readIfActive(buf, offset, len);
 		}
 	}
 
 	@OriginalMember(owner = "client!ei", name = "b", descriptor = "(Lclient!qb;)V")
-	public final synchronized void removeSubStream(@OriginalArg(0) PcmStream arg0) {
-		arg0.unlink();
+	public final synchronized void removeSubStream(@OriginalArg(0) PcmStream stream) {
+		stream.unlink();
 	}
 
 	@OriginalMember(owner = "client!ei", name = "a", descriptor = "()I")
@@ -126,34 +126,34 @@ public final class MixerPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!ei", name = "c", descriptor = "(I)V")
 	@Override
-	public final synchronized void skip(@OriginalArg(0) int arg0) {
+	public final synchronized void skip(@OriginalArg(0) int len) {
 		do {
 			if (this.nextListenerTime < 0) {
-				this.skipSubStreams(arg0);
+				this.skipSubStreams(len);
 				return;
 			}
-			if (this.samplePosition + arg0 < this.nextListenerTime) {
-				this.samplePosition += arg0;
-				this.skipSubStreams(arg0);
+			if (this.samplePosition + len < this.nextListenerTime) {
+				this.samplePosition += len;
+				this.skipSubStreams(len);
 				return;
 			}
-			@Pc(29) int local29 = this.nextListenerTime - this.samplePosition;
-			this.skipSubStreams(local29);
-			arg0 -= local29;
-			this.samplePosition += local29;
+			@Pc(29) int samplesUntilListener = this.nextListenerTime - this.samplePosition;
+			this.skipSubStreams(samplesUntilListener);
+			len -= samplesUntilListener;
+			this.samplePosition += samplesUntilListener;
 			this.advanceListeners();
-			@Pc(50) MixerListener local50 = (MixerListener) this.listeners.head();
-			synchronized (local50) {
-				@Pc(58) int local58 = local50.process(this);
-				if (local58 < 0) {
-					local50.delay = 0;
-					this.removeListener(local50);
+			@Pc(50) MixerListener listener = (MixerListener) this.listeners.head();
+			synchronized (listener) {
+				@Pc(58) int result = listener.process(this);
+				if (result < 0) {
+					listener.delay = 0;
+					this.removeListener(listener);
 				} else {
-					local50.delay = local58;
-					this.insertListenerSorted(local50.nextNode, local50);
+					listener.delay = result;
+					this.insertListenerSorted(listener.nextNode, listener);
 				}
 			}
-		} while (arg0 != 0);
+		} while (len != 0);
 	}
 
 	@OriginalMember(owner = "client!ei", name = "d", descriptor = "()Lclient!qb;")
@@ -163,11 +163,11 @@ public final class MixerPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!ei", name = "a", descriptor = "(Lclient!ab;Lclient!cc;)V")
-	private void insertListenerSorted(@OriginalArg(0) Node arg0, @OriginalArg(1) MixerListener arg1) {
-		while (arg0 != this.listeners.sentinel && ((MixerListener) arg0).delay <= arg1.delay) {
-			arg0 = arg0.nextNode;
+	private void insertListenerSorted(@OriginalArg(0) Node cursor, @OriginalArg(1) MixerListener listener) {
+		while (cursor != this.listeners.sentinel && ((MixerListener) cursor).delay <= listener.delay) {
+			cursor = cursor.nextNode;
 		}
-		insertBefore(arg1, arg0);
+		insertBefore(listener, cursor);
 		this.nextListenerTime = ((MixerListener) this.listeners.sentinel.nextNode).delay;
 	}
 }
