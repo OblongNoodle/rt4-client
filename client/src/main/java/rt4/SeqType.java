@@ -42,7 +42,7 @@ public final class SeqType {
 	public int offhand = -1;
 
 	@OriginalMember(owner = "client!tk", name = "d", descriptor = "Z")
-	public boolean aBoolean278 = false;
+	public boolean hasModelTransforms = false;
 
 	@OriginalMember(owner = "client!tk", name = "t", descriptor = "I")
 	public int replaycount = 99;
@@ -63,7 +63,7 @@ public final class SeqType {
 	public int mainhand = -1;
 
 	@OriginalMember(owner = "client!tk", name = "L", descriptor = "Z")
-	public boolean aBoolean280 = false;
+	public boolean updateShadows = false;
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(Lclient!wa;B)V")
 	public void decode(@OriginalArg(0) Buffer buffer) {
@@ -94,11 +94,11 @@ public final class SeqType {
 		}
 		@Pc(124) Model local124;
 		if (local41 == null) {
-			local124 = arg2.copyForLoc(!local23.isAlphaTransformed(local27), !local23.isColorTransformed(local27), !this.aBoolean278);
+			local124 = arg2.copyForLoc(!local23.isAlphaTransformed(local27), !local23.isColorTransformed(local27), !this.hasModelTransforms);
 		} else {
-			local124 = arg2.copyForLoc(!local23.isAlphaTransformed(local27) & !local41.isAlphaTransformed(arg1), !local23.isColorTransformed(local27) & !local41.isColorTransformed(arg1), !this.aBoolean278);
+			local124 = arg2.copyForLoc(!local23.isAlphaTransformed(local27) & !local41.isAlphaTransformed(arg1), !local23.isColorTransformed(local27) & !local41.isColorTransformed(arg1), !this.hasModelTransforms);
 		}
-		if (GlRenderer.enabled && this.aBoolean278) {
+		if (GlRenderer.enabled && this.hasModelTransforms) {
 			if (local39 == 1) {
 				((GlModel) local124).rotateClockwiseAll();
 			} else if (local39 == 2) {
@@ -113,8 +113,8 @@ public final class SeqType {
 		} else if (local39 == 3) {
 			local124.rotateCounterClockwise();
 		}
-		local124.applyAnimation(local23, local27, local41, arg1, arg4 - 1, local10, this.aBoolean278);
-		if (GlRenderer.enabled && this.aBoolean278) {
+		local124.applyAnimation(local23, local27, local41, arg1, arg4 - 1, local10, this.hasModelTransforms);
+		if (GlRenderer.enabled && this.hasModelTransforms) {
 			if (local39 == 1) {
 				((GlModel) local124).rotateCounterClockwiseAll();
 			} else if (local39 == 2) {
@@ -181,10 +181,10 @@ public final class SeqType {
 			local163 &= !local81.isAlphaTransformed(local85);
 			local172 &= !local81.isColorTransformed(local85);
 		}
-		@Pc(258) Model local258 = arg0.copyForEntity(local163, local172, !this.aBoolean278);
-		local258.applyAnimation(local19, local23, local34, arg1, arg2 - 1, local13, this.aBoolean278);
+		@Pc(258) Model local258 = arg0.copyForEntity(local163, local172, !this.hasModelTransforms);
+		local258.applyAnimation(local19, local23, local34, arg1, arg2 - 1, local13, this.hasModelTransforms);
 		if (local71 != null) {
-			local258.applyAnimation(local71, local83, local81, local85, arg2 - 1, local13, this.aBoolean278);
+			local258.applyAnimation(local71, local83, local81, local85, arg2 - 1, local13, this.hasModelTransforms);
 		}
 		return local258;
 	}
@@ -207,11 +207,11 @@ public final class SeqType {
 		}
 		@Pc(106) Model local106;
 		if (local42 == null) {
-			local106 = arg4.copyForEntity(!local19.isAlphaTransformed(local27), !local19.isColorTransformed(local27), !this.aBoolean278);
+			local106 = arg4.copyForEntity(!local19.isAlphaTransformed(local27), !local19.isColorTransformed(local27), !this.hasModelTransforms);
 		} else {
-			local106 = arg4.copyForEntity(!local19.isAlphaTransformed(local27) & !local42.isAlphaTransformed(arg0), !local19.isColorTransformed(local27) & !local42.isColorTransformed(arg0), !this.aBoolean278);
+			local106 = arg4.copyForEntity(!local19.isAlphaTransformed(local27) & !local42.isAlphaTransformed(arg0), !local19.isColorTransformed(local27) & !local42.isColorTransformed(arg0), !this.hasModelTransforms);
 		}
-		if (this.aBoolean278 && GlRenderer.enabled) {
+		if (this.hasModelTransforms && GlRenderer.enabled) {
 			if (local40 == 1) {
 				((GlModel) local106).rotateClockwiseAll();
 			} else if (local40 == 2) {
@@ -226,8 +226,8 @@ public final class SeqType {
 		} else if (local40 == 3) {
 			local106.rotateCounterClockwise();
 		}
-		local106.applyAnimation(local19, local27, local42, arg0, arg2 - 1, local6, this.aBoolean278);
-		if (this.aBoolean278 && GlRenderer.enabled) {
+		local106.applyAnimation(local19, local27, local42, arg0, arg2 - 1, local6, this.hasModelTransforms);
+		if (this.hasModelTransforms && GlRenderer.enabled) {
 			if (local40 == 1) {
 				((GlModel) local106).rotateCounterClockwiseAll();
 			} else if (local40 == 2) {
@@ -281,11 +281,11 @@ public final class SeqType {
 		}
 		@Pc(103) Model local103;
 		if (local42 == null) {
-			local103 = arg3.copyForAnimation(!local27.isAlphaTransformed(local31), !local27.isColorTransformed(local31), !this.aBoolean278);
+			local103 = arg3.copyForAnimation(!local27.isAlphaTransformed(local31), !local27.isColorTransformed(local31), !this.hasModelTransforms);
 		} else {
-			local103 = arg3.copyForAnimation(!local27.isAlphaTransformed(local31) & !local42.isAlphaTransformed(arg0), !local27.isColorTransformed(local31) & !local42.isColorTransformed(arg0), !this.aBoolean278);
+			local103 = arg3.copyForAnimation(!local27.isAlphaTransformed(local31) & !local42.isAlphaTransformed(arg0), !local27.isColorTransformed(local31) & !local42.isColorTransformed(arg0), !this.hasModelTransforms);
 		}
-		local103.applyAnimation(local27, local31, local42, arg0, arg1 - 1, local16, this.aBoolean278);
+		local103.applyAnimation(local27, local31, local42, arg0, arg1 - 1, local16, this.hasModelTransforms);
 		return local103;
 	}
 
@@ -354,11 +354,11 @@ public final class SeqType {
 				}
 			}
 		} else if (opcode == 14) {
-			this.aBoolean278 = true;
+			this.hasModelTransforms = true;
 		} else if (opcode == 15) { // TODO: (probably) not an authentic name
 			this.tween = true;
 		} else if (opcode == 16) {
-			this.aBoolean280 = true;
+			this.updateShadows = true;
 		}
 	}
 }

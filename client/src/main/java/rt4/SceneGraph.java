@@ -1072,7 +1072,7 @@ public class SceneGraph {
 								}
 								setTile(local152, local168, local173, local322, local1242, texture, local200, local202, local209, local349, ColorUtils.multiplyLightnessSafe(local267, local234), ColorUtils.multiplyLightnessSafe(local273, local234), ColorUtils.multiplyLightnessSafe(local326, local234), ColorUtils.multiplyLightnessSafe(local332, local234), ColorUtils.multiplyLightnessGrayscale(local1301, local267), ColorUtils.multiplyLightnessGrayscale(local1301, local273), ColorUtils.multiplyLightnessGrayscale(local1301, local326), ColorUtils.multiplyLightnessGrayscale(local1301, local332), local254, local1353);
 								if (GlRenderer.enabled && local152 > 0) {
-									ShadowManager.addFloorShadow(local322, local1242, local1301 == -2 || !local1248.aBoolean311, local234 == -1 || !FluTypeList.get(local178 - 1).blockShadow, local168, local173, local200 - tileHeights[0][local168][local173], local202 - tileHeights[0][local168 + 1][local173], local209 - tileHeights[0][local168 + 1][local173 + 1], -tileHeights[0][local168][local173 + 1] + local349);
+									ShadowManager.addFloorShadow(local322, local1242, local1301 == -2 || !local1248.castsShadow, local234 == -1 || !FluTypeList.get(local178 - 1).blockShadow, local168, local173, local200 - tileHeights[0][local168][local173], local202 - tileHeights[0][local168 + 1][local173], local209 - tileHeights[0][local168 + 1][local173 + 1], -tileHeights[0][local168][local173 + 1] + local349);
 								}
 							}
 						}
@@ -4805,10 +4805,10 @@ public class SceneGraph {
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(Lclient!sc;ZLclient!wl;)Lclient!hg;")
 	public static GlTile getOrCreateGlTile(@OriginalArg(0) HashTable arg0, @OriginalArg(2) FloType arg1) {
-		@Pc(23) long local23 = ((long) arg1.texture + 1 << 16) + arg1.anInt5885 + ((long) arg1.textureBrightness << 56) + ((long) arg1.waterColor << 32);
+		@Pc(23) long local23 = ((long) arg1.texture + 1 << 16) + arg1.textureScale + ((long) arg1.textureBrightness << 56) + ((long) arg1.waterColor << 32);
 		@Pc(38) GlTile local38 = (GlTile) arg0.get(local23);
 		if (local38 == null) {
-			local38 = new GlTile(arg1.texture, (float) arg1.anInt5885, true, false, arg1.waterColor);
+			local38 = new GlTile(arg1.texture, (float) arg1.textureScale, true, false, arg1.waterColor);
 			arg0.put(local38, local23);
 		}
 		return local38;

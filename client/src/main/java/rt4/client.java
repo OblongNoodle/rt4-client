@@ -814,7 +814,7 @@ public final class client extends GameShell {
 		if (local15 && MidiPlayer.jingle && musicChannel != null) {
 			musicChannel.forceClose();
 		}
-		if ((gameState == 30 || gameState == 10) && (GameShell.replaceCanvas || DisplayMode.aLong89 != 0L && DisplayMode.aLong89 < MonotonicClock.currentTimeMillis())) {
+		if ((gameState == 30 || gameState == 10) && (GameShell.replaceCanvas || DisplayMode.canvasReplaceTime != 0L && DisplayMode.canvasReplaceTime < MonotonicClock.currentTimeMillis())) {
 			DisplayMode.setWindowMode(GameShell.replaceCanvas, DisplayMode.getWindowMode(), Preferences.fullScreenWidth, Preferences.fullScreenHeight);
 		}
 		@Pc(80) int local80;
@@ -837,7 +837,7 @@ public final class client extends GameShell {
 			}
 			if (local80 != GameShell.frameWidth || local84 != GameShell.frameHeight) {
 				GameShell.updateCanvasSize();
-				DisplayMode.aLong89 = MonotonicClock.currentTimeMillis() + 500L;
+				DisplayMode.canvasReplaceTime = MonotonicClock.currentTimeMillis() + 500L;
 			}
 		}
 		/**

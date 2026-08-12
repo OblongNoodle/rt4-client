@@ -12,13 +12,13 @@ import java.awt.*;
 public final class DisplayMode {
 
 	@OriginalMember(owner = "client!ib", name = "i", descriptor = "[Lclient!od;")
-	public static DisplayMode[] aClass114Array1;
+	public static DisplayMode[] cachedDisplayModes;
 	@OriginalMember(owner = "client!rc", name = "M", descriptor = "Z")
 	public static boolean start_GLRenderer = false;
 	@OriginalMember(owner = "client!jk", name = "y", descriptor = "Z")
 	public static boolean resizable = false;
 	@OriginalMember(owner = "client!hi", name = "f", descriptor = "J")
-	public static long aLong89 = 0L;
+	public static long canvasReplaceTime = 0L;
 
 	@OriginalMember(owner = "client!od", name = "j", descriptor = "I")
 	public int width;
@@ -52,7 +52,7 @@ public final class DisplayMode {
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(ZIIII)V")
 	public static void setWindowMode(@OriginalArg(0) boolean replaceCanvas, @OriginalArg(1) int newMode, @OriginalArg(3) int width, @OriginalArg(4) int height) {
-		aLong89 = 0L;
+		canvasReplaceTime = 0L;
 		@Pc(4) int currentMode = getWindowMode();
 		if (newMode == 3 || currentMode == 3) {
 			replaceCanvas = true;
@@ -282,7 +282,7 @@ public final class DisplayMode {
 
 	@OriginalMember(owner = "client!ab", name = "c", descriptor = "(B)[Lclient!od;")
 	public static DisplayMode[] getDisplayModes() {
-		if (aClass114Array1 == null) {
+		if (cachedDisplayModes == null) {
 			@Pc(16) DisplayMode[] local16 = getAvailableDisplayModes(GameShell.signLink);
 			@Pc(20) DisplayMode[] local20 = new DisplayMode[local16.length];
 			@Pc(22) int local22 = 0;
@@ -303,16 +303,16 @@ public final class DisplayMode {
 					local22++;
 				}
 			}
-			aClass114Array1 = new DisplayMode[local22];
-			ArrayUtils.copy(local20, 0, aClass114Array1, 0, local22);
-			@Pc(112) int[] local112 = new int[aClass114Array1.length];
-			for (@Pc(114) int local114 = 0; local114 < aClass114Array1.length; local114++) {
-				@Pc(122) DisplayMode local122 = aClass114Array1[local114];
+			cachedDisplayModes = new DisplayMode[local22];
+			ArrayUtils.copy(local20, 0, cachedDisplayModes, 0, local22);
+			@Pc(112) int[] local112 = new int[cachedDisplayModes.length];
+			for (@Pc(114) int local114 = 0; local114 < cachedDisplayModes.length; local114++) {
+				@Pc(122) DisplayMode local122 = cachedDisplayModes[local114];
 				local112[local114] = local122.height * local122.width;
 			}
-			ArrayUtils.sort(local112, aClass114Array1);
+			ArrayUtils.sort(local112, cachedDisplayModes);
 		}
-		return aClass114Array1;
+		return cachedDisplayModes;
 	}
 
 	@OriginalMember(owner = "client!pm", name = "a", descriptor = "(ILsignlink!ll;)[Lclient!od;")

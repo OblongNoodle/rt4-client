@@ -11,10 +11,10 @@ public class OverheadChat {
 	public static final int CAPACITY = 50;
 
 	@OriginalMember(owner = "client!pg", name = "cb", descriptor = "[I")
-	public static final int[] anIntArray389 = new int[CAPACITY];
+	public static final int[] textHalfWidths = new int[CAPACITY];
 
 	@OriginalMember(owner = "client!pg", name = "Z", descriptor = "[I")
-	public static final int[] anIntArray387 = new int[CAPACITY];
+	public static final int[] textHeights = new int[CAPACITY];
 
 	@OriginalMember(owner = "client!pg", name = "kb", descriptor = "[I")
 	public static final int[] effects = new int[CAPACITY];
@@ -26,10 +26,10 @@ public class OverheadChat {
 	public static final int[] colors = new int[CAPACITY];
 
 	@OriginalMember(owner = "client!pg", name = "lb", descriptor = "[I")
-	public static final int[] anIntArray392 = new int[CAPACITY];
+	public static final int[] screenY = new int[CAPACITY];
 
 	@OriginalMember(owner = "client!pg", name = "R", descriptor = "[I")
-	public static final int[] anIntArray385 = new int[CAPACITY];
+	public static final int[] screenX = new int[CAPACITY];
 
 	@OriginalMember(owner = "client!pg", name = "P", descriptor = "[Lclient!na;")
 	public static final JagString[] messages = new JagString[CAPACITY];

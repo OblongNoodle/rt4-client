@@ -16,7 +16,7 @@ public class PathFinder {
 	@OriginalMember(owner = "client!gk", name = "c", descriptor = "[I")
 	public static final int[] queueY = new int[4096];
 	@OriginalMember(owner = "client!s", name = "d", descriptor = "I")
-	public static int anInt4364 = 0;
+	public static int approximateDestination = 0;
 
 	@OriginalMember(owner = "client!hn", name = "a", descriptor = "(IIIZIIIIIIII)Z")
 	public static boolean findPath(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10) {
@@ -131,7 +131,7 @@ public class PathFinder {
 				costs[x + 1][y + 1] = cost;
 			}
 		}
-		anInt4364 = 0;
+		approximateDestination = 0;
 		@Pc(921) int local921;
 		if (!local59) {
 			if (!arg5) {
@@ -170,7 +170,7 @@ public class PathFinder {
 			if (arg10 == x && y == arg3) {
 				return false;
 			}
-			anInt4364 = 1;
+			approximateDestination = 1;
 		}
 		@Pc(1121) byte local1121 = 0;
 		queueX[0] = x;
@@ -303,7 +303,7 @@ public class PathFinder {
 				costs[local3 + 1][local10 + 1] = local198;
 			}
 		}
-		anInt4364 = 0;
+		approximateDestination = 0;
 		@Pc(839) int local839;
 		if (!local53) {
 			if (!arg7) {
@@ -342,7 +342,7 @@ public class PathFinder {
 			if (arg2 == local3 && local10 == arg9) {
 				return false;
 			}
-			anInt4364 = 1;
+			approximateDestination = 1;
 		}
 		@Pc(1032) byte local1032 = 0;
 		queueX[0] = local3;
@@ -552,7 +552,7 @@ public class PathFinder {
 				local65 = local65 + 1 & 0xFFF;
 			}
 		}
-		anInt4364 = 0;
+		approximateDestination = 0;
 		if (!local71) {
 			if (!arg10) {
 				return false;
@@ -590,7 +590,7 @@ public class PathFinder {
 			if (local3 == arg8 && arg11 == local10) {
 				return false;
 			}
-			anInt4364 = 1;
+			approximateDestination = 1;
 		}
 		@Pc(1438) byte local1438 = 0;
 		queueX[0] = local3;

@@ -24,13 +24,13 @@ public final class ChangeLocRequest extends Node {
 	public int originalId;
 
 	@OriginalMember(owner = "client!cd", name = "z", descriptor = "I")
-	public int anInt922;
+	public int newAngle;
 
 	@OriginalMember(owner = "client!cd", name = "A", descriptor = "I")
 	public int originalAngle;
 
 	@OriginalMember(owner = "client!cd", name = "F", descriptor = "I")
-	public int anInt926;
+	public int newShape;
 
 	@OriginalMember(owner = "client!cd", name = "G", descriptor = "I")
 	public int layer;
@@ -39,7 +39,7 @@ public final class ChangeLocRequest extends Node {
 	public int x;
 
 	@OriginalMember(owner = "client!cd", name = "I", descriptor = "I")
-	public int anInt929;
+	public int newId;
 
 	@OriginalMember(owner = "client!cd", name = "C", descriptor = "I")
 	public int resetLoops = -1;
@@ -57,12 +57,12 @@ public final class ChangeLocRequest extends Node {
 				if (local10.setLoops > 0) {
 					local10.setLoops--;
 				}
-				if (local10.setLoops == 0 && local10.x >= 1 && local10.y >= 1 && local10.x <= 102 && local10.y <= 102 && (local10.anInt929 < 0 || isLocModelReady(local10.anInt929, local10.anInt926))) {
-					SceneGraph.addLocModel(local10.anInt929, local10.x, local10.level, local10.anInt922, local10.y, local10.anInt926, local10.layer);
+				if (local10.setLoops == 0 && local10.x >= 1 && local10.y >= 1 && local10.x <= 102 && local10.y <= 102 && (local10.newId < 0 || isLocModelReady(local10.newId, local10.newShape))) {
+					SceneGraph.addLocModel(local10.newId, local10.x, local10.level, local10.newAngle, local10.y, local10.newShape, local10.layer);
 					local10.setLoops = -1;
-					if (local10.originalId == local10.anInt929 && local10.originalId == -1) {
+					if (local10.originalId == local10.newId && local10.originalId == -1) {
 						local10.unlink();
-					} else if (local10.anInt929 == local10.originalId && local10.anInt922 == local10.originalAngle && local10.originalShape == local10.anInt926) {
+					} else if (local10.newId == local10.originalId && local10.newAngle == local10.originalAngle && local10.originalShape == local10.newShape) {
 						local10.unlink();
 					}
 				}
@@ -91,11 +91,11 @@ public final class ChangeLocRequest extends Node {
 			init(loc);
 			queue.addTail(loc);
 		}
-		loc.anInt926 = arg7;
+		loc.newShape = arg7;
 		loc.setLoops = setLoops;
 		loc.resetLoops = resetLoops;
-		loc.anInt929 = arg5;
-		loc.anInt922 = arg2;
+		loc.newId = arg5;
+		loc.newAngle = arg2;
 	}
 
 	@OriginalMember(owner = "client!sf", name = "a", descriptor = "(ILclient!cd;)V")

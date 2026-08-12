@@ -626,7 +626,7 @@ public class MiniMenu {
 					Protocol.outboundBuffer.p1(89);
 					Protocol.outboundBuffer.p2(PlayerList.self.xFine);
 					Protocol.outboundBuffer.p2(PlayerList.self.yFine);
-					Protocol.outboundBuffer.p1(PathFinder.anInt4364);
+					Protocol.outboundBuffer.p1(PathFinder.approximateDestination);
 					Protocol.outboundBuffer.p1(63);
 				}
 			}

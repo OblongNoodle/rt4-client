@@ -9,18 +9,18 @@ import org.openrs2.deob.annotation.Pc;
 public final class FloType {
 
 	@OriginalMember(owner = "client!ca", name = "db", descriptor = "I")
-	public static int anInt865 = 0;
+	public static int waterOverlayId = 0;
 	@OriginalMember(owner = "client!wl", name = "j", descriptor = "Z")
 	public boolean blendTexture = false;
 
 	@OriginalMember(owner = "client!wl", name = "l", descriptor = "Z")
-	public boolean aBoolean311 = true;
+	public boolean castsShadow = true;
 
 	@OriginalMember(owner = "client!wl", name = "p", descriptor = "I")
 	public int texture = -1;
 
 	@OriginalMember(owner = "client!wl", name = "f", descriptor = "I")
-	public int anInt5885 = 128;
+	public int textureScale = 128;
 
 	@OriginalMember(owner = "client!wl", name = "w", descriptor = "I")
 	public int textureBrightness = 8;
@@ -72,11 +72,11 @@ public final class FloType {
 		} else if (opcode == 7) {
 			this.secondaryColor = decodeColor(buffer.g3());
 		} else if (opcode == 8) {
-			anInt865 = id;
+			waterOverlayId = id;
 		} else if (opcode == 9) {
-			this.anInt5885 = buffer.g2();
+			this.textureScale = buffer.g2();
 		} else if (opcode == 10) {
-			this.aBoolean311 = false;
+			this.castsShadow = false;
 		} else if (opcode == 11) {
 			this.textureBrightness = buffer.g1();
 		} else if (opcode == 12) {

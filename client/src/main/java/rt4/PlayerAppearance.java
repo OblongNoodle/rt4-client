@@ -422,7 +422,7 @@ public final class PlayerAppearance {
 					if (slotCurrentFramesets[local353] != null) {
 						local836 |= slotCurrentFramesets[local353].isColorTransformed(local381);
 						local827 |= slotCurrentFramesets[local353].isAlphaTransformed(local381);
-						local838 |= local858.aBoolean278;
+						local838 |= local858.hasModelTransforms;
 					}
 					if ((local858.tween || SeqType.applyTweening) && local367 != -1 && local367 < local858.frames.length) {
 						slotFrameDelays[local353] = local858.frameDelay[local374];
@@ -460,7 +460,7 @@ public final class PlayerAppearance {
 			if (local1042 != null) {
 				local836 |= local1042.isColorTransformed(local353);
 				local827 |= local1042.isAlphaTransformed(local353);
-				local838 |= arg3.aBoolean278;
+				local838 |= arg3.hasModelTransforms;
 			}
 			if ((arg3.tween || SeqType.applyTweening) && arg1 != -1 && arg3.frames.length > arg1) {
 				local360 = arg3.frames[arg1];
@@ -491,7 +491,7 @@ public final class PlayerAppearance {
 			if (local1154 != null) {
 				local836 |= local1154.isColorTransformed(local979);
 				local827 |= local1154.isAlphaTransformed(local979);
-				local838 |= arg2.aBoolean278;
+				local838 |= arg2.hasModelTransforms;
 			}
 			if ((arg2.tween || SeqType.applyTweening) && arg5 != -1 && arg2.frames.length > arg5) {
 				local457 = arg2.frameDelay[arg8];
@@ -514,17 +514,17 @@ public final class PlayerAppearance {
 		local598 = 1;
 		while (local481 < local346) {
 			if (slotCurrentFramesets[local481] != null) {
-				local1284.applyMaskedAnimation(slotCurrentFramesets[local481], slotCurrentFrames[local481], slotTweenFramesets[local481], slotTweenFrames[local481], slotDelayClocks[local481] - 1, slotFrameDelays[local481], local598, slotSeqTypes[local481].aBoolean278, this.modelTransformCache[local481]);
+				local1284.applyMaskedAnimation(slotCurrentFramesets[local481], slotCurrentFrames[local481], slotTweenFramesets[local481], slotTweenFrames[local481], slotDelayClocks[local481] - 1, slotFrameDelays[local481], local598, slotSeqTypes[local481].hasModelTransforms, this.modelTransformCache[local481]);
 			}
 			local481++;
 			local598 <<= 0x1;
 		}
 		if (local1042 != null && local1154 != null) {
-			local1284.applyDualAnimation(local1042, local353, local1040, local360, arg6 - 1, local374, local1154, local979, local1156, local451, arg4 - 1, local457, arg3.framegroup, arg3.aBoolean278 | arg2.aBoolean278);
+			local1284.applyDualAnimation(local1042, local353, local1040, local360, arg6 - 1, local374, local1154, local979, local1156, local451, arg4 - 1, local457, arg3.framegroup, arg3.hasModelTransforms | arg2.hasModelTransforms);
 		} else if (local1042 != null) {
-			local1284.applyAnimation(local1042, local353, local1040, local360, arg6 - 1, local374, arg3.aBoolean278);
+			local1284.applyAnimation(local1042, local353, local1040, local360, arg6 - 1, local374, arg3.hasModelTransforms);
 		} else if (local1154 != null) {
-			local1284.applyAnimation(local1154, local979, local1156, local451, arg4 - 1, local457, arg2.aBoolean278);
+			local1284.applyAnimation(local1154, local979, local1156, local451, arg4 - 1, local457, arg2.hasModelTransforms);
 		}
 		for (local481 = 0; local481 < local346; local481++) {
 			slotCurrentFramesets[local481] = null;

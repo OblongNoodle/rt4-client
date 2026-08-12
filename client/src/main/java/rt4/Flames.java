@@ -45,10 +45,10 @@ public class Flames {
 	public static int flameOffset = 0;
 
 	@OriginalMember(owner = "client!a", name = "i", descriptor = "I")
-	public static int anInt6 = 0;
+	public static int flameSinePhase = 0;
 
 	@OriginalMember(owner = "client!sf", name = "i", descriptor = "I")
-	public static int anInt5084 = 0;
+	public static int pendingSparks = 0;
 
 	@OriginalMember(owner = "client!gg", name = "a", descriptor = "(ILclient!ve;)V")
 	public static void init(@OriginalArg(1) Js5 archive) {
@@ -142,20 +142,20 @@ public class Flames {
 			flameShiftX[local60] = flameShiftX[local60 + arg0];
 		}
 		for (local60 = 256 - arg0; local60 < 256; local60++) {
-			flameShiftX[local60] = (int) (Math.sin((double) anInt6 / 14.0D) * 16.0D + Math.sin((double) anInt6 / 15.0D) * 14.0D + Math.sin((double) anInt6 / 16.0D) * 12.0D);
-			anInt6++;
+			flameShiftX[local60] = (int) (Math.sin((double) flameSinePhase / 14.0D) * 16.0D + Math.sin((double) flameSinePhase / 15.0D) * 14.0D + Math.sin((double) flameSinePhase / 16.0D) * 12.0D);
+			flameSinePhase++;
 		}
-		anInt5084 += arg0;
+		pendingSparks += arg0;
 		local60 = (arg0 + (client.loop & 0x1)) / 2;
 		if (local60 <= 0) {
 			return;
 		}
-		for (local89 = 0; local89 < anInt5084; local89++) {
+		for (local89 = 0; local89 < pendingSparks; local89++) {
 			local117 = (int) (Math.random() * 124.0D) + 2;
 			local125 = (int) (Math.random() * 128.0D) + 128;
 			flameIntensityBuffer[local117 + (local125 << 7)] = 192;
 		}
-		anInt5084 = 0;
+		pendingSparks = 0;
 		@Pc(290) int local290;
 		for (local89 = 0; local89 < 256; local89++) {
 			local125 = local89 * 128;

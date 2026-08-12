@@ -325,7 +325,7 @@ public final class Loc extends Entity {
 		@Pc(192) int local192 = (local157 >> 1) + this.tileY;
 		@Pc(201) int local201 = (local157 + 1 >> 1) + this.tileY;
 		this.advanceAnimation(local192 * 128, local185 * 128);
-		@Pc(256) boolean local256 = !local12 && local19.castshadow && (local19.id != this.lastLocTypeId || (this.seqFrame != this.lastSeqFrame || this.seq != null && (this.seq.aBoolean280 || SeqType.applyTweening) && this.seqFrame != this.seqNextFrame) && Preferences.sceneryShadowsType >= 2);
+		@Pc(256) boolean local256 = !local12 && local19.castshadow && (local19.id != this.lastLocTypeId || (this.seqFrame != this.lastSeqFrame || this.seq != null && (this.seq.updateShadows || SeqType.applyTweening) && this.seqFrame != this.seqNextFrame) && Preferences.sceneryShadowsType >= 2);
 		if (arg0 && !local256) {
 			return null;
 		}

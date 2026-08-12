@@ -452,10 +452,10 @@ public final class ScriptRunner {
 				if (entity.chatMessage != null && (local5 >= PlayerList.size || Chat.publicFilter == 0 || Chat.publicFilter == 3 || Chat.publicFilter == 1 && FriendsList.contains(((Player) entity).username))) {
 					setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight(), arg1 >> 1);
 					if (anInt1951 > -1 && OverheadChat.size < OverheadChat.CAPACITY) {
-						OverheadChat.anIntArray389[OverheadChat.size] = Fonts.b12Full.getStringWidth(entity.chatMessage) / 2;
-						OverheadChat.anIntArray387[OverheadChat.size] = Fonts.b12Full.lineHeight;
-						OverheadChat.anIntArray385[OverheadChat.size] = anInt1951;
-						OverheadChat.anIntArray392[OverheadChat.size] = anInt548;
+						OverheadChat.textHalfWidths[OverheadChat.size] = Fonts.b12Full.getStringWidth(entity.chatMessage) / 2;
+						OverheadChat.textHeights[OverheadChat.size] = Fonts.b12Full.lineHeight;
+						OverheadChat.screenX[OverheadChat.size] = anInt1951;
+						OverheadChat.screenY[OverheadChat.size] = anInt548;
 						OverheadChat.colors[OverheadChat.size] = entity.chatColor;
 						OverheadChat.effects[OverheadChat.size] = entity.chatEffect;
 						OverheadChat.loops[OverheadChat.size] = entity.chatLoops;
@@ -542,22 +542,22 @@ public final class ScriptRunner {
 			}
 		}
 		for (local5 = 0; local5 < OverheadChat.size; local5++) {
-			local74 = OverheadChat.anIntArray392[local5];
-			@Pc(859) int local859 = OverheadChat.anIntArray385[local5];
-			local310 = OverheadChat.anIntArray387[local5];
-			local265 = OverheadChat.anIntArray389[local5];
+			local74 = OverheadChat.screenY[local5];
+			@Pc(859) int local859 = OverheadChat.screenX[local5];
+			local310 = OverheadChat.textHeights[local5];
+			local265 = OverheadChat.textHalfWidths[local5];
 			@Pc(869) boolean local869 = true;
 			while (local869) {
 				local869 = false;
 				for (local359 = 0; local359 < local5; local359++) {
-					if (OverheadChat.anIntArray392[local359] - OverheadChat.anIntArray387[local359] < local74 + 2 && local74 - local310 < OverheadChat.anIntArray392[local359] - -2 && local859 - local265 < OverheadChat.anIntArray385[local359] + OverheadChat.anIntArray389[local359] && OverheadChat.anIntArray385[local359] - OverheadChat.anIntArray389[local359] < local265 + local859 && OverheadChat.anIntArray392[local359] - OverheadChat.anIntArray387[local359] < local74) {
-						local74 = OverheadChat.anIntArray392[local359] - OverheadChat.anIntArray387[local359];
+					if (OverheadChat.screenY[local359] - OverheadChat.textHeights[local359] < local74 + 2 && local74 - local310 < OverheadChat.screenY[local359] - -2 && local859 - local265 < OverheadChat.screenX[local359] + OverheadChat.textHalfWidths[local359] && OverheadChat.screenX[local359] - OverheadChat.textHalfWidths[local359] < local265 + local859 && OverheadChat.screenY[local359] - OverheadChat.textHeights[local359] < local74) {
+						local74 = OverheadChat.screenY[local359] - OverheadChat.textHeights[local359];
 						local869 = true;
 					}
 				}
 			}
-			anInt1951 = OverheadChat.anIntArray385[local5];
-			anInt548 = OverheadChat.anIntArray392[local5] = local74;
+			anInt1951 = OverheadChat.screenX[local5];
+			anInt548 = OverheadChat.screenY[local5] = local74;
 			@Pc(962) JagString local962 = OverheadChat.messages[local5];
 			if (VarpDomain.chatEffectsDisabled == 0) {
 				local639 = 16776960;

@@ -14,10 +14,10 @@ public final class ShadowManager {
 	public static Shadow[][] shadows;
 
 	@OriginalMember(owner = "client!tj", name = "c", descriptor = "I")
-	private static int anInt5345;
+	private static int gridRows;
 
 	@OriginalMember(owner = "client!tj", name = "e", descriptor = "I")
-	private static int anInt5346;
+	private static int gridColumns;
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(Lclient!ek;Lclient!ek;II)V")
 	private static void addShadowSprite(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) SoftwareIndexedSprite arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
@@ -127,9 +127,9 @@ public final class ShadowManager {
 		GlRenderer.setLightingEnabled(false);
 		MaterialManager.setMaterial(0, 0);
 		gl.glDepthMask(false);
-		for (@Pc(17) int local17 = 0; local17 < anInt5346; local17++) {
+		for (@Pc(17) int local17 = 0; local17 < gridColumns; local17++) {
 			label52:
-			for (@Pc(22) int local22 = 0; local22 < anInt5345; local22++) {
+			for (@Pc(22) int local22 = 0; local22 < gridRows; local22++) {
 				for (@Pc(29) int local29 = local17 * 8; local29 < local17 * 8 + 8; local29++) {
 					if (local29 - arg0 >= -arg2 && local29 - arg0 <= arg2) {
 						for (@Pc(51) int local51 = local22 * 8; local51 < local22 * 8 + 8; local51++) {
@@ -224,12 +224,12 @@ public final class ShadowManager {
 
 	@OriginalMember(owner = "client!tj", name = "a", descriptor = "(II)V")
 	public static void init() {
-		anInt5346 = 13;
-		anInt5345 = 13;
-		shadowMapImage = new SoftwareIndexedSprite(anInt5346 * 128 + 2, anInt5345 * 128 + 2, 0);
-		shadows = new Shadow[anInt5346][anInt5345];
-		for (@Pc(32) int local32 = 0; local32 < anInt5346; local32++) {
-			for (@Pc(37) int local37 = 0; local37 < anInt5345; local37++) {
+		gridColumns = 13;
+		gridRows = 13;
+		shadowMapImage = new SoftwareIndexedSprite(gridColumns * 128 + 2, gridRows * 128 + 2, 0);
+		shadows = new Shadow[gridColumns][gridRows];
+		for (@Pc(32) int local32 = 0; local32 < gridColumns; local32++) {
+			for (@Pc(37) int local37 = 0; local37 < gridRows; local37++) {
 				shadows[local32][local37] = new Shadow();
 			}
 		}

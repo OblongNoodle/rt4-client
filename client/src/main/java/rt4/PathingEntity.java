@@ -366,8 +366,8 @@ public abstract class PathingEntity extends Entity {
 		terrainPitchAngle = 0;
 		terrainYOffset = 0;
 		@Pc(21) BasType type = this.getBasType();
-		@Pc(24) int local24 = type.anInt1059;
-		@Pc(27) int local27 = type.anInt1050;
+		@Pc(24) int local24 = type.terrainAlignWidth;
+		@Pc(27) int local27 = type.terrainAlignDepth;
 		if (local24 == 0 || local27 == 0) {
 			return;
 		}
