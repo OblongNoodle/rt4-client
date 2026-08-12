@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!kf")
-public abstract class TextureOp29SubOp {
+public abstract class TextureOpShape {
 
 	@OriginalMember(owner = "client!kf", name = "e", descriptor = "I")
 	public final int outlineColor;
@@ -17,7 +17,7 @@ public abstract class TextureOp29SubOp {
 	public final int fillColor;
 
 	@OriginalMember(owner = "client!kf", name = "<init>", descriptor = "(III)V")
-	protected TextureOp29SubOp(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	protected TextureOpShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		this.outlineColor = arg1;
 		this.lineWidth = arg2;
 		this.fillColor = arg0;

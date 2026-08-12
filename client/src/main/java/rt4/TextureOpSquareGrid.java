@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!f")
-public final class TextureOp16 extends TextureOp {
+public final class TextureOpSquareGrid extends TextureOp {
 
 	@OriginalMember(owner = "client!f", name = "R", descriptor = "I")
 	private int borderSize = 204;
@@ -18,7 +18,7 @@ public final class TextureOp16 extends TextureOp {
 	private int repeatX = 1;
 
 	@OriginalMember(owner = "client!f", name = "<init>", descriptor = "()V")
-	public TextureOp16() {
+	public TextureOpSquareGrid() {
 		super(0, true);
 	}
 

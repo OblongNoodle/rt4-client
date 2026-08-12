@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!hk")
-public final class TextureOp17 extends TextureOp {
+public final class TextureOpHslAdjust extends TextureOp {
 
 	@OriginalMember(owner = "client!hk", name = "Q", descriptor = "I")
 	private int green;
@@ -36,7 +36,7 @@ public final class TextureOp17 extends TextureOp {
 	private int saturationShift = 0;
 
 	@OriginalMember(owner = "client!hk", name = "<init>", descriptor = "()V")
-	public TextureOp17() {
+	public TextureOpHslAdjust() {
 		super(1, false);
 	}
 

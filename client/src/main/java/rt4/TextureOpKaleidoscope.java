@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!je")
-public final class TextureOp23 extends TextureOp {
+public final class TextureOpKaleidoscope extends TextureOp {
 
 	@OriginalMember(owner = "client!hd", name = "i", descriptor = "I")
 	public static int mappedY = 0;
@@ -14,7 +14,7 @@ public final class TextureOp23 extends TextureOp {
 	public static int mappedX = 0;
 
 	@OriginalMember(owner = "client!je", name = "<init>", descriptor = "()V")
-	public TextureOp23() {
+	public TextureOpKaleidoscope() {
 		super(1, false);
 	}
 

@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!ta")
-public final class TextureOp29SubOp4 extends TextureOp29SubOp {
+public final class TextureOpShapeLine extends TextureOpShape {
 
 	@OriginalMember(owner = "client!fk", name = "j", descriptor = "[[I")
 	public static int[][] canvas;
@@ -24,7 +24,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 	private final int bottom;
 
 	@OriginalMember(owner = "client!ta", name = "<init>", descriptor = "(IIIIIII)V")
-	public TextureOp29SubOp4(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	public TextureOpShapeLine(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		super(arg4, arg5, arg6);
 		this.top = arg1;
 		this.right = arg2;
@@ -34,7 +34,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!bl", name = "a", descriptor = "(IIIIIIII)V")
 	public static void drawFramedRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		if (TextureOp29.clipLeft <= arg6 && TextureOp29.clipRight >= arg5 && arg4 >= TextureOp29.clipTop && arg1 <= TextureOp29.clipBottom) {
+		if (TextureOpShapeRasterizer.clipLeft <= arg6 && TextureOpShapeRasterizer.clipRight >= arg5 && arg4 >= TextureOpShapeRasterizer.clipTop && arg1 <= TextureOpShapeRasterizer.clipBottom) {
 			drawFramedRectUnclamped(arg3, arg4, arg1, arg2, arg0, arg5, arg6);
 		} else {
 			drawFramedRectClipped(arg5, arg2, arg1, arg0, arg3, arg4, arg6);
@@ -64,12 +64,12 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!tl", name = "a", descriptor = "(IIIIIIII)V")
 	public static void drawFramedRectClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.clipBottom, arg5, TextureOp29.clipTop);
-		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.clipBottom, arg2, TextureOp29.clipTop);
-		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.clipRight, arg6, TextureOp29.clipLeft);
-		@Pc(29) int local29 = IntUtils.clamp(TextureOp29.clipRight, arg0, TextureOp29.clipLeft);
-		@Pc(37) int local37 = IntUtils.clamp(TextureOp29.clipBottom, arg3 + arg5, TextureOp29.clipTop);
-		@Pc(46) int local46 = IntUtils.clamp(TextureOp29.clipBottom, arg2 - arg3, TextureOp29.clipTop);
+		@Pc(11) int local11 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg5, TextureOpShapeRasterizer.clipTop);
+		@Pc(17) int local17 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg2, TextureOpShapeRasterizer.clipTop);
+		@Pc(23) int local23 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg6, TextureOpShapeRasterizer.clipLeft);
+		@Pc(29) int local29 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg0, TextureOpShapeRasterizer.clipLeft);
+		@Pc(37) int local37 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg3 + arg5, TextureOpShapeRasterizer.clipTop);
+		@Pc(46) int local46 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg2 - arg3, TextureOpShapeRasterizer.clipTop);
 		@Pc(48) int local48;
 		for (local48 = local11; local48 < local37; local48++) {
 			ArrayUtils.fillRange(canvas[local48], local23, local29, arg4);
@@ -77,8 +77,8 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 		for (local48 = local17; local48 > local46; local48--) {
 			ArrayUtils.fillRange(canvas[local48], local23, local29, arg4);
 		}
-		@Pc(94) int local94 = IntUtils.clamp(TextureOp29.clipRight, arg3 + arg6, TextureOp29.clipLeft);
-		@Pc(103) int local103 = IntUtils.clamp(TextureOp29.clipRight, arg0 - arg3, TextureOp29.clipLeft);
+		@Pc(94) int local94 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3 + arg6, TextureOpShapeRasterizer.clipLeft);
+		@Pc(103) int local103 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg0 - arg3, TextureOpShapeRasterizer.clipLeft);
 		for (local48 = local37; local48 <= local46; local48++) {
 			@Pc(122) int[] local122 = canvas[local48];
 			ArrayUtils.fillRange(local122, local23, local94, arg4);
@@ -89,7 +89,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!sj", name = "a", descriptor = "(IIBIII)V")
 	public static void fillSolidRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		if (arg0 >= TextureOp29.clipLeft && arg3 <= TextureOp29.clipRight && TextureOp29.clipTop <= arg4 && TextureOp29.clipBottom >= arg2) {
+		if (arg0 >= TextureOpShapeRasterizer.clipLeft && arg3 <= TextureOpShapeRasterizer.clipRight && TextureOpShapeRasterizer.clipTop <= arg4 && TextureOpShapeRasterizer.clipBottom >= arg2) {
 			fillSolidRectUnclamped(arg2, arg3, arg4, arg0, arg1);
 		} else {
 			fillSolidRectClipped(arg1, arg3, arg4, arg0, arg2);
@@ -105,18 +105,18 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!n", name = "a", descriptor = "(IIIIII)V")
 	public static void fillSolidRectClipped(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.clipBottom, arg2, TextureOp29.clipTop);
-		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.clipBottom, arg4, TextureOp29.clipTop);
-		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.clipRight, arg3, TextureOp29.clipLeft);
-		@Pc(35) int local35 = IntUtils.clamp(TextureOp29.clipRight, arg1, TextureOp29.clipLeft);
+		@Pc(11) int local11 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg2, TextureOpShapeRasterizer.clipTop);
+		@Pc(17) int local17 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg4, TextureOpShapeRasterizer.clipTop);
+		@Pc(23) int local23 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3, TextureOpShapeRasterizer.clipLeft);
+		@Pc(35) int local35 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg1, TextureOpShapeRasterizer.clipLeft);
 		for (@Pc(37) int local37 = local11; local37 <= local17; local37++) {
 			ArrayUtils.fillRange(canvas[local37], local23, local35, arg0);
 		}
 	}
 
 	@OriginalMember(owner = "client!mf", name = "a", descriptor = "(BLclient!wa;)Lclient!ta;")
-	public static TextureOp29SubOp4 create(@OriginalArg(1) Buffer arg0) {
-		return new TextureOp29SubOp4(arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g3(), arg0.g3(), arg0.g1());
+	public static TextureOpShapeLine create(@OriginalArg(1) Buffer arg0) {
+		return new TextureOpShapeLine(arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g3(), arg0.g3(), arg0.g1());
 	}
 
 	@OriginalMember(owner = "client!dm", name = "a", descriptor = "(IBIII)V")
@@ -241,7 +241,7 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "(IIIIIII)V")
 	public static void drawRectOutline(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		if (TextureOp29.clipLeft <= arg1 && TextureOp29.clipRight >= arg3 && TextureOp29.clipTop <= arg2 && arg4 <= TextureOp29.clipBottom) {
+		if (TextureOpShapeRasterizer.clipLeft <= arg1 && TextureOpShapeRasterizer.clipRight >= arg3 && TextureOpShapeRasterizer.clipTop <= arg2 && arg4 <= TextureOpShapeRasterizer.clipBottom) {
 			if (arg5 == 1) {
 				drawRectOutline1pxFast(arg0, arg3, arg2, arg4, arg1);
 			} else {
@@ -288,38 +288,38 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(IIIIIB)V")
 	public static void drawRectOutline1pxClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg4 > TextureOp29.clipBottom || arg2 < TextureOp29.clipTop) {
+		if (arg4 > TextureOpShapeRasterizer.clipBottom || arg2 < TextureOpShapeRasterizer.clipTop) {
 			return;
 		}
 		@Pc(24) boolean local24;
-		if (TextureOp29.clipLeft > arg1) {
+		if (TextureOpShapeRasterizer.clipLeft > arg1) {
 			local24 = false;
-			arg1 = TextureOp29.clipLeft;
-		} else if (TextureOp29.clipRight >= arg1) {
+			arg1 = TextureOpShapeRasterizer.clipLeft;
+		} else if (TextureOpShapeRasterizer.clipRight >= arg1) {
 			local24 = true;
 		} else {
 			local24 = false;
-			arg1 = TextureOp29.clipRight;
+			arg1 = TextureOpShapeRasterizer.clipRight;
 		}
 		@Pc(43) boolean local43;
-		if (arg3 < TextureOp29.clipLeft) {
-			arg3 = TextureOp29.clipLeft;
+		if (arg3 < TextureOpShapeRasterizer.clipLeft) {
+			arg3 = TextureOpShapeRasterizer.clipLeft;
 			local43 = false;
-		} else if (arg3 > TextureOp29.clipRight) {
-			arg3 = TextureOp29.clipRight;
+		} else if (arg3 > TextureOpShapeRasterizer.clipRight) {
+			arg3 = TextureOpShapeRasterizer.clipRight;
 			local43 = false;
 		} else {
 			local43 = true;
 		}
-		if (TextureOp29.clipTop > arg4) {
-			arg4 = TextureOp29.clipTop;
+		if (TextureOpShapeRasterizer.clipTop > arg4) {
+			arg4 = TextureOpShapeRasterizer.clipTop;
 		} else {
 			ArrayUtils.fillRange(canvas[arg4++], arg1, arg3, arg0);
 		}
-		if (arg2 <= TextureOp29.clipBottom) {
+		if (arg2 <= TextureOpShapeRasterizer.clipBottom) {
 			ArrayUtils.fillRange(canvas[arg2--], arg1, arg3, arg0);
 		} else {
-			arg2 = TextureOp29.clipBottom;
+			arg2 = TextureOpShapeRasterizer.clipBottom;
 		}
 		@Pc(98) int local98;
 		if (local24 && local43) {
@@ -340,12 +340,12 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 
 	@OriginalMember(owner = "client!an", name = "a", descriptor = "(IIIIIII)V")
 	public static void drawThickRectOutlineClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		@Pc(11) int local11 = IntUtils.clamp(TextureOp29.clipBottom, arg5, TextureOp29.clipTop);
-		@Pc(17) int local17 = IntUtils.clamp(TextureOp29.clipBottom, arg0, TextureOp29.clipTop);
-		@Pc(23) int local23 = IntUtils.clamp(TextureOp29.clipRight, arg3, TextureOp29.clipLeft);
-		@Pc(29) int local29 = IntUtils.clamp(TextureOp29.clipRight, arg2, TextureOp29.clipLeft);
-		@Pc(42) int local42 = IntUtils.clamp(TextureOp29.clipBottom, arg5 + arg1, TextureOp29.clipTop);
-		@Pc(51) int local51 = IntUtils.clamp(TextureOp29.clipBottom, arg0 - arg1, TextureOp29.clipTop);
+		@Pc(11) int local11 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg5, TextureOpShapeRasterizer.clipTop);
+		@Pc(17) int local17 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg0, TextureOpShapeRasterizer.clipTop);
+		@Pc(23) int local23 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg3, TextureOpShapeRasterizer.clipLeft);
+		@Pc(29) int local29 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg2, TextureOpShapeRasterizer.clipLeft);
+		@Pc(42) int local42 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg5 + arg1, TextureOpShapeRasterizer.clipTop);
+		@Pc(51) int local51 = IntUtils.clamp(TextureOpShapeRasterizer.clipBottom, arg0 - arg1, TextureOpShapeRasterizer.clipTop);
 		@Pc(53) int local53;
 		for (local53 = local11; local53 < local42; local53++) {
 			ArrayUtils.fillRange(canvas[local53], local23, local29, arg4);
@@ -353,8 +353,8 @@ public final class TextureOp29SubOp4 extends TextureOp29SubOp {
 		for (local53 = local17; local53 > local51; local53--) {
 			ArrayUtils.fillRange(canvas[local53], local23, local29, arg4);
 		}
-		@Pc(95) int local95 = IntUtils.clamp(TextureOp29.clipRight, arg1 + arg3, TextureOp29.clipLeft);
-		@Pc(104) int local104 = IntUtils.clamp(TextureOp29.clipRight, arg2 - arg1, TextureOp29.clipLeft);
+		@Pc(95) int local95 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg1 + arg3, TextureOpShapeRasterizer.clipLeft);
+		@Pc(104) int local104 = IntUtils.clamp(TextureOpShapeRasterizer.clipRight, arg2 - arg1, TextureOpShapeRasterizer.clipLeft);
 		for (local53 = local42; local53 <= local51; local53++) {
 			@Pc(117) int[] local117 = canvas[local53];
 			ArrayUtils.fillRange(local117, local23, local95, arg4);

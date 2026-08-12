@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!pk")
-public final class TextureOp32 extends TextureOp {
+public final class TextureOpBumpMap extends TextureOp {
 
 	@OriginalMember(owner = "client!pk", name = "U", descriptor = "[I")
 	private final int[] lightDirection = new int[3];
@@ -21,7 +21,7 @@ public final class TextureOp32 extends TextureOp {
 	private int lightElevation = 3216;
 
 	@OriginalMember(owner = "client!pk", name = "<init>", descriptor = "()V")
-	public TextureOp32() {
+	public TextureOpBumpMap() {
 		super(1, true);
 	}
 

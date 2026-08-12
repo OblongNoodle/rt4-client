@@ -66,7 +66,7 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!cj", name = "a", descriptor = "(ZIIIIIIFB)[[I")
 	public static int[][] generateNoiseTable(@OriginalArg(7) float arg0) {
 		@Pc(15) int[][] local15 = new int[256][64];
-		@Pc(19) TextureOp34 local19 = new TextureOp34();
+		@Pc(19) TextureOpPerlinNoise local19 = new TextureOpPerlinNoise();
 		local19.persistence = (int) (arg0 * 4096.0F);
 		local19.octaveCount = 3;
 		local19.frequencyY = 4;

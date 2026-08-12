@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!re")
-public final class TextureOp29SubOp3 extends TextureOp29SubOp {
+public final class TextureOpShapeBezier extends TextureOpShape {
 
 	@OriginalMember(owner = "client!re", name = "x", descriptor = "I")
 	private final int startY;
@@ -33,7 +33,7 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 	private final int controlX1;
 
 	@OriginalMember(owner = "client!re", name = "<init>", descriptor = "(IIIIIIIIII)V")
-	public TextureOp29SubOp3(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
+	public TextureOpShapeBezier(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
 		super(-1, arg8, arg9);
 		this.startY = arg1;
 		this.endX = arg6;
@@ -46,13 +46,13 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 	}
 
 	@OriginalMember(owner = "client!bk", name = "a", descriptor = "(BLclient!wa;)Lclient!re;")
-	public static TextureOp29SubOp3 create(@OriginalArg(1) Buffer arg0) {
-		return new TextureOp29SubOp3(arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g3(), arg0.g1());
+	public static TextureOpShapeBezier create(@OriginalArg(1) Buffer arg0) {
+		return new TextureOpShapeBezier(arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g3(), arg0.g1());
 	}
 
 	@OriginalMember(owner = "client!oi", name = "a", descriptor = "(IIIIIIIIII)V")
 	public static void drawCurve(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
-		if (arg5 >= TextureOp29.clipLeft && arg5 <= TextureOp29.clipRight && arg0 >= TextureOp29.clipLeft && arg0 <= TextureOp29.clipRight && arg6 >= TextureOp29.clipLeft && TextureOp29.clipRight >= arg6 && TextureOp29.clipLeft <= arg1 && arg1 <= TextureOp29.clipRight && TextureOp29.clipTop <= arg4 && arg4 <= TextureOp29.clipBottom && arg7 >= TextureOp29.clipTop && TextureOp29.clipBottom >= arg7 && arg2 >= TextureOp29.clipTop && TextureOp29.clipBottom >= arg2 && arg3 >= TextureOp29.clipTop && arg3 <= TextureOp29.clipBottom) {
+		if (arg5 >= TextureOpShapeRasterizer.clipLeft && arg5 <= TextureOpShapeRasterizer.clipRight && arg0 >= TextureOpShapeRasterizer.clipLeft && arg0 <= TextureOpShapeRasterizer.clipRight && arg6 >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= arg6 && TextureOpShapeRasterizer.clipLeft <= arg1 && arg1 <= TextureOpShapeRasterizer.clipRight && TextureOpShapeRasterizer.clipTop <= arg4 && arg4 <= TextureOpShapeRasterizer.clipBottom && arg7 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= arg7 && arg2 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= arg2 && arg3 >= TextureOpShapeRasterizer.clipTop && arg3 <= TextureOpShapeRasterizer.clipBottom) {
 			drawCurveFast(arg2, arg8, arg7, arg6, arg1, arg3, arg4, arg0, arg5);
 		} else {
 			drawCurveClipped(arg5, arg0, arg7, arg8, arg3, arg2, arg1, arg6, arg4);
@@ -62,7 +62,7 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 	@OriginalMember(owner = "client!cn", name = "a", descriptor = "(IIIIIIIIII)V")
 	public static void drawCurveFast(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
 		if (arg8 == arg7 && arg2 == arg6 && arg4 == arg3 && arg0 == arg5) {
-			TextureOp29SubOp4.plotLine(arg1, arg5, arg6, arg4, arg8);
+			TextureOpShapeLine.plotLine(arg1, arg5, arg6, arg4, arg8);
 			return;
 		}
 		@Pc(37) int local37 = arg6;
@@ -90,7 +90,7 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 			@Pc(156) int local156 = local113 * local115;
 			@Pc(167) int local167 = (local152 + local144 + local140 >> 12) + arg8;
 			@Pc(177) int local177 = arg6 + (local156 + local136 + local148 >> 12);
-			TextureOp29SubOp4.plotLine(arg1, local177, local37, local167, local39);
+			TextureOpShapeLine.plotLine(arg1, local177, local37, local167, local39);
 			local39 = local167;
 			local37 = local177;
 		}
@@ -99,7 +99,7 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 	@OriginalMember(owner = "client!nb", name = "a", descriptor = "(IIIIIIIIII)V")
 	public static void drawCurveClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
 		if (arg0 == arg1 && arg8 == arg2 && arg7 == arg6 && arg4 == arg5) {
-			TextureOp29.drawLine(arg3, arg4, arg0, arg8, arg6);
+			TextureOpShapeRasterizer.drawLine(arg3, arg4, arg0, arg8, arg6);
 			return;
 		}
 		@Pc(32) int local32 = arg0;
@@ -127,7 +127,7 @@ public final class TextureOp29SubOp3 extends TextureOp29SubOp {
 			@Pc(156) int local156 = arg0 + (local136 + local140 + local144 >> 12);
 			@Pc(160) int local160 = local107 * local105;
 			@Pc(172) int local172 = arg8 + (local160 + local132 + local128 >> 12);
-			TextureOp29.drawLine(arg3, local172, local32, local42, local156);
+			TextureOpShapeRasterizer.drawLine(arg3, local172, local32, local42, local156);
 			local32 = local156;
 			local42 = local172;
 		}

@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!gm")
-public final class TextureOp31 extends TextureOp {
+public final class TextureOpMandelbrot extends TextureOp {
 
 	@OriginalMember(owner = "client!gm", name = "Z", descriptor = "I")
 	private int zoom = 1365;
@@ -21,7 +21,7 @@ public final class TextureOp31 extends TextureOp {
 	private int maxIterations = 20;
 
 	@OriginalMember(owner = "client!gm", name = "<init>", descriptor = "()V")
-	public TextureOp31() {
+	public TextureOpMandelbrot() {
 		super(0, true);
 	}
 

@@ -6,13 +6,13 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!pg")
-public final class TextureOp35 extends TextureOp {
+public final class TextureOpEmboss extends TextureOp {
 
 	@OriginalMember(owner = "client!pg", name = "U", descriptor = "I")
 	private int bumpStrength = 4096;
 
 	@OriginalMember(owner = "client!pg", name = "<init>", descriptor = "()V")
-	public TextureOp35() {
+	public TextureOpEmboss() {
 		super(1, true);
 	}
 

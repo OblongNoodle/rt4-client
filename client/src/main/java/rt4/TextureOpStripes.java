@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!d")
-public final class TextureOp27 extends TextureOp {
+public final class TextureOpStripes extends TextureOp {
 
 	@OriginalMember(owner = "client!d", name = "U", descriptor = "[I")
 	private int[] stripeStarts;
@@ -24,7 +24,7 @@ public final class TextureOp27 extends TextureOp {
 	private int stripeWidth = 2048;
 
 	@OriginalMember(owner = "client!d", name = "<init>", descriptor = "()V")
-	public TextureOp27() {
+	public TextureOpStripes() {
 		super(0, true);
 	}
 

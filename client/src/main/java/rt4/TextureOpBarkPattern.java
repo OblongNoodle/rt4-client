@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.Pc;
 import java.util.Random;
 
 @OriginalClass("client!ol")
-public final class TextureOp28 extends TextureOp {
+public final class TextureOpBarkPattern extends TextureOp {
 
 	@OriginalMember(owner = "client!ol", name = "gb", descriptor = "I")
 	private int cornerSize;
@@ -41,7 +41,7 @@ public final class TextureOp28 extends TextureOp {
 	private int seed = 0;
 
 	@OriginalMember(owner = "client!ol", name = "<init>", descriptor = "()V")
-	public TextureOp28() {
+	public TextureOpBarkPattern() {
 		super(0, true);
 	}
 

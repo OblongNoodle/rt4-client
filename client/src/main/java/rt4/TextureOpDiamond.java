@@ -6,13 +6,13 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!sa")
-public final class TextureOp14 extends TextureOp {
+public final class TextureOpDiamond extends TextureOp {
 
 	@OriginalMember(owner = "client!sa", name = "T", descriptor = "I")
 	private int borderWidth = 585;
 
 	@OriginalMember(owner = "client!sa", name = "<init>", descriptor = "()V")
-	public TextureOp14() {
+	public TextureOpDiamond() {
 		super(0, true);
 	}
 

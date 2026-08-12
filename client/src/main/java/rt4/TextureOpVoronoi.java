@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.Pc;
 import java.util.Random;
 
 @OriginalClass("client!hm")
-public final class TextureOp15 extends TextureOp {
+public final class TextureOpVoronoi extends TextureOp {
 
 	@OriginalMember(owner = "client!ec", name = "d", descriptor = "Lclient!gn;")
 	public static final LruHashTable permutationTableCache = new LruHashTable(16);
@@ -45,7 +45,7 @@ public final class TextureOp15 extends TextureOp {
 	private short[] cellOffsets = new short[512];
 
 	@OriginalMember(owner = "client!hm", name = "<init>", descriptor = "()V")
-	public TextureOp15() {
+	public TextureOpVoronoi() {
 		super(0, true);
 	}
 

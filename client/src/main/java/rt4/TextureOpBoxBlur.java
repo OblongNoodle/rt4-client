@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!nm")
-public final class TextureOp5 extends TextureOp {
+public final class TextureOpBoxBlur extends TextureOp {
 
 	@OriginalMember(owner = "client!nm", name = "V", descriptor = "I")
 	private int radiusX = 1;
@@ -15,7 +15,7 @@ public final class TextureOp5 extends TextureOp {
 	private int radiusY = 1;
 
 	@OriginalMember(owner = "client!nm", name = "<init>", descriptor = "()V")
-	public TextureOp5() {
+	public TextureOpBoxBlur() {
 		super(1, false);
 	}
 

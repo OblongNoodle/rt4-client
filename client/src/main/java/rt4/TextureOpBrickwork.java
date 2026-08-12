@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.Pc;
 import java.util.Random;
 
 @OriginalClass("client!mc")
-public final class TextureOp4 extends TextureOp {
+public final class TextureOpBrickwork extends TextureOp {
 
 	@OriginalMember(owner = "client!mc", name = "U", descriptor = "I")
 	private int rowHeight;
@@ -53,7 +53,7 @@ public final class TextureOp4 extends TextureOp {
 	private int columnOffset = 1024;
 
 	@OriginalMember(owner = "client!mc", name = "<init>", descriptor = "()V")
-	public TextureOp4() {
+	public TextureOpBrickwork() {
 		super(0, true);
 	}
 

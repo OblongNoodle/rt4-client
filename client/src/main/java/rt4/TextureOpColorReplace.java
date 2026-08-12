@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!sk")
-public final class TextureOp25 extends TextureOp {
+public final class TextureOpColorReplace extends TextureOp {
 
 	@OriginalMember(owner = "client!sk", name = "Y", descriptor = "I")
 	private int greenMultiplier = 4096;
@@ -24,7 +24,7 @@ public final class TextureOp25 extends TextureOp {
 	private final int[] targetColor = new int[3];
 
 	@OriginalMember(owner = "client!sk", name = "<init>", descriptor = "()V")
-	public TextureOp25() {
+	public TextureOpColorReplace() {
 		super(1, false);
 	}
 

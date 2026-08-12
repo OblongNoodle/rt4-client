@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!an")
-public final class TextureOp33 extends TextureOp {
+public final class TextureOpNormalMap extends TextureOp {
 
 	@OriginalMember(owner = "client!an", name = "R", descriptor = "I")
 	private int strength = 4096;
@@ -15,7 +15,7 @@ public final class TextureOp33 extends TextureOp {
 	private boolean biased = true;
 
 	@OriginalMember(owner = "client!an", name = "<init>", descriptor = "()V")
-	public TextureOp33() {
+	public TextureOpNormalMap() {
 		super(1, false);
 	}
 

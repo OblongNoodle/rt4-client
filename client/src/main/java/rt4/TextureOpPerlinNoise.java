@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!bi")
-public final class TextureOp34 extends TextureOp {
+public final class TextureOpPerlinNoise extends TextureOp {
 
 	@OriginalMember(owner = "client!bi", name = "ib", descriptor = "[S")
 	private short[] octaveFrequencies;
@@ -36,7 +36,7 @@ public final class TextureOp34 extends TextureOp {
 	public int seed = 0;
 
 	@OriginalMember(owner = "client!bi", name = "<init>", descriptor = "()V")
-	public TextureOp34() {
+	public TextureOpPerlinNoise() {
 		super(0, true);
 	}
 
@@ -145,7 +145,7 @@ public final class TextureOp34 extends TextureOp {
 	@OriginalMember(owner = "client!bi", name = "e", descriptor = "(I)V")
 	@Override
 	public final void postDecode() {
-		this.permutationTable = TextureOp15.getPermutationTable(this.seed);
+		this.permutationTable = TextureOpVoronoi.getPermutationTable(this.seed);
 		this.initOctaves();
 		for (@Pc(15) int local15 = this.octaveCount - 1; local15 >= 1; local15--) {
 			@Pc(23) short local23 = this.octaveAmplitudes[local15];

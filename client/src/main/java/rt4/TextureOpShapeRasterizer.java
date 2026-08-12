@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!si")
-public final class TextureOp29 extends TextureOp {
+public final class TextureOpShapeRasterizer extends TextureOp {
 
 	@OriginalMember(owner = "client!sd", name = "S", descriptor = "I")
 	public static int clipRight = 100;
@@ -17,10 +17,10 @@ public final class TextureOp29 extends TextureOp {
 	@OriginalMember(owner = "client!vl", name = "h", descriptor = "I")
 	public static int clipTop = 0;
 	@OriginalMember(owner = "client!si", name = "U", descriptor = "[Lclient!kf;")
-	private TextureOp29SubOp[] shapes;
+	private TextureOpShape[] shapes;
 
 	@OriginalMember(owner = "client!si", name = "<init>", descriptor = "()V")
-	public TextureOp29() {
+	public TextureOpShapeRasterizer() {
 		super(0, true);
 	}
 
@@ -37,7 +37,7 @@ public final class TextureOp29 extends TextureOp {
 		if (arg3 >= clipLeft && arg3 <= clipRight) {
 			@Pc(22) int local22 = IntUtils.clamp(clipBottom, arg1, clipTop);
 			@Pc(28) int local28 = IntUtils.clamp(clipBottom, arg0, clipTop);
-			TextureOp29SubOp4.fillVerticalLine(local22, arg3, local28, arg2);
+			TextureOpShapeLine.fillVerticalLine(local22, arg3, local28, arg2);
 		}
 	}
 
@@ -46,7 +46,7 @@ public final class TextureOp29 extends TextureOp {
 		if (arg3 >= clipTop && arg3 <= clipBottom) {
 			@Pc(15) int local15 = IntUtils.clamp(clipRight, arg0, clipLeft);
 			@Pc(21) int local21 = IntUtils.clamp(clipRight, arg2, clipLeft);
-			TextureOp29SubOp4.fillRange(arg1, arg3, local21, local15);
+			TextureOpShapeLine.fillRange(arg1, arg3, local21, local15);
 		}
 	}
 
@@ -101,7 +101,7 @@ public final class TextureOp29 extends TextureOp {
 				local76 = clipBottom;
 				local68 = (clipBottom - local59 << 12) / local50;
 			}
-			TextureOp29SubOp4.plotLine(arg0, local118, local76, local109, local68);
+			TextureOpShapeLine.plotLine(arg0, local118, local76, local109, local68);
 		}
 	}
 
@@ -143,7 +143,7 @@ public final class TextureOp29 extends TextureOp {
 		@Pc(192) int local192;
 		@Pc(201) int local201;
 		if (arg4 >= clipTop && clipBottom >= arg4) {
-			@Pc(166) int[] local166 = TextureOp29SubOp4.canvas[arg4];
+			@Pc(166) int[] local166 = TextureOpShapeLine.canvas[arg4];
 			local174 = IntUtils.clamp(clipRight, arg5 - arg0, clipLeft);
 			local183 = IntUtils.clamp(clipRight, arg5 + arg0, clipLeft);
 			local192 = IntUtils.clamp(clipRight, arg5 - local12, clipLeft);
@@ -207,23 +207,23 @@ public final class TextureOp29 extends TextureOp {
 					@Pc(412) int local412 = IntUtils.clamp(clipRight, arg5 - local14, clipLeft);
 					@Pc(420) int[] local420;
 					if (clipTop <= local174) {
-						local420 = TextureOp29SubOp4.canvas[local174];
+						local420 = TextureOpShapeLine.canvas[local174];
 						ArrayUtils.fillRange(local420, local201, local412, arg2);
 						ArrayUtils.fillRange(local420, local412, local404, arg1);
 						ArrayUtils.fillRange(local420, local404, local192, arg2);
 					}
 					if (local183 <= clipBottom) {
-						local420 = TextureOp29SubOp4.canvas[local183];
+						local420 = TextureOpShapeLine.canvas[local183];
 						ArrayUtils.fillRange(local420, local201, local412, arg2);
 						ArrayUtils.fillRange(local420, local412, local404, arg1);
 						ArrayUtils.fillRange(local420, local404, local192, arg2);
 					}
 				} else {
 					if (clipTop <= local174) {
-						ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local174], local201, local192, arg2);
+						ArrayUtils.fillRange(TextureOpShapeLine.canvas[local174], local201, local192, arg2);
 					}
 					if (clipBottom >= local183) {
-						ArrayUtils.fillRange(TextureOp29SubOp4.canvas[local183], local201, local192, arg2);
+						ArrayUtils.fillRange(TextureOpShapeLine.canvas[local183], local201, local192, arg2);
 					}
 				}
 			}
@@ -244,13 +244,13 @@ public final class TextureOp29 extends TextureOp {
 	private void rasterizeShapes(@OriginalArg(1) int[][] arg0) {
 		@Pc(7) int local7 = Texture.height;
 		@Pc(9) int local9 = Texture.width;
-		TextureOp29SubOp4.setCanvas(arg0);
+		TextureOpShapeLine.setCanvas(arg0);
 		setClipBounds(Texture.heightMask, Texture.widthMask);
 		if (this.shapes == null) {
 			return;
 		}
 		for (@Pc(23) int local23 = 0; local23 < this.shapes.length; local23++) {
-			@Pc(33) TextureOp29SubOp local33 = this.shapes[local23];
+			@Pc(33) TextureOpShape local33 = this.shapes[local23];
 			@Pc(36) int local36 = local33.fillColor;
 			@Pc(39) int local39 = local33.outlineColor;
 			if (local36 >= 0) {
@@ -269,17 +269,17 @@ public final class TextureOp29 extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.shapes = new TextureOp29SubOp[arg1.g1()];
+			this.shapes = new TextureOpShape[arg1.g1()];
 			for (@Pc(11) int local11 = 0; local11 < this.shapes.length; local11++) {
 				@Pc(24) int local24 = arg1.g1();
 				if (local24 == 0) {
-					this.shapes[local11] = TextureOp29SubOp1.create(arg1);
+					this.shapes[local11] = TextureOpShapeRect.create(arg1);
 				} else if (local24 == 1) {
-					this.shapes[local11] = TextureOp29SubOp3.create(arg1);
+					this.shapes[local11] = TextureOpShapeBezier.create(arg1);
 				} else if (local24 == 2) {
-					this.shapes[local11] = TextureOp29SubOp4.create(arg1);
+					this.shapes[local11] = TextureOpShapeLine.create(arg1);
 				} else if (local24 == 3) {
-					this.shapes[local11] = TextureOp29SubOp2.create(arg1);
+					this.shapes[local11] = TextureOpShapeEllipse.create(arg1);
 				}
 			}
 		} else if (arg0 == 1) {

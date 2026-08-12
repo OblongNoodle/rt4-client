@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!mg")
-public final class TextureOp11 extends TextureOp {
+public final class TextureOpColorMultiply extends TextureOp {
 
 	@OriginalMember(owner = "client!mg", name = "R", descriptor = "I")
 	private int greenMultiplier = 4096;
@@ -18,7 +18,7 @@ public final class TextureOp11 extends TextureOp {
 	private int blueMultiplier = 4096;
 
 	@OriginalMember(owner = "client!mg", name = "<init>", descriptor = "()V")
-	public TextureOp11() {
+	public TextureOpColorMultiply() {
 		super(1, false);
 	}
 
