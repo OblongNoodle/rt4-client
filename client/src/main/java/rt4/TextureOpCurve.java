@@ -18,10 +18,10 @@ public final class TextureOpCurve extends TextureOp {
 	private int[][] markers;
 
 	@OriginalMember(owner = "client!wi", name = "cb", descriptor = "[S")
-	private final short[] aShortArray96 = new short[257];
+	private final short[] lookupTable = new short[257];
 
 	@OriginalMember(owner = "client!wi", name = "Z", descriptor = "I")
-	private int anInt5852 = 0;
+	private int interpolationMode = 0;
 
 	@OriginalMember(owner = "client!wi", name = "<init>", descriptor = "()V")
 	public TextureOpCurve() {
@@ -30,7 +30,7 @@ public final class TextureOpCurve extends TextureOp {
 
 	@OriginalMember(owner = "client!wi", name = "h", descriptor = "(I)V")
 	private void buildLookupTable() {
-		@Pc(8) int local8 = this.anInt5852;
+		@Pc(8) int local8 = this.interpolationMode;
 		@Pc(29) int local29;
 		@Pc(27) int local27;
 		@Pc(59) int[] local59;
@@ -65,7 +65,7 @@ public final class TextureOpCurve extends TextureOp {
 				if (local162 >= 32768) {
 					local162 = 32767;
 				}
-				this.aShortArray96[local8] = (short) local162;
+				this.lookupTable[local8] = (short) local162;
 			}
 		} else if (local8 == 1) {
 			for (local8 = 0; local8 < 257; local8++) {
@@ -84,7 +84,7 @@ public final class TextureOpCurve extends TextureOp {
 				if (local89 >= 32768) {
 					local89 = 32767;
 				}
-				this.aShortArray96[local8] = (short) local89;
+				this.lookupTable[local8] = (short) local89;
 			}
 		} else {
 			for (local8 = 0; local8 < 257; local8++) {
@@ -102,7 +102,7 @@ public final class TextureOpCurve extends TextureOp {
 				if (local72 >= 32768) {
 					local72 = 32767;
 				}
-				this.aShortArray96[local8] = (short) local72;
+				this.lookupTable[local8] = (short) local72;
 			}
 		}
 	}
@@ -121,7 +121,7 @@ public final class TextureOpCurve extends TextureOp {
 				if (local44 > 256) {
 					local44 = 256;
 				}
-				local19[local31] = this.aShortArray96[local44];
+				local19[local31] = this.lookupTable[local44];
 			}
 		}
 		return local19;
@@ -136,7 +136,7 @@ public final class TextureOpCurve extends TextureOp {
 		if (this.markers.length < 2) {
 			throw new RuntimeException("Curve operation requires at least two markers");
 		}
-		if (this.anInt5852 == 2) {
+		if (this.interpolationMode == 2) {
 			this.initExtrapolationMarkers();
 		}
 		TextureOp.createTrigonometryTables();
@@ -159,7 +159,7 @@ public final class TextureOpCurve extends TextureOp {
 		if (arg0 != 0) {
 			return;
 		}
-		this.anInt5852 = arg1.g1();
+		this.interpolationMode = arg1.g1();
 		this.markers = new int[arg1.g1()][2];
 		for (@Pc(23) int local23 = 0; local23 < this.markers.length; local23++) {
 			this.markers[local23][0] = arg1.g2();

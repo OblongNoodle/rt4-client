@@ -9,13 +9,13 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOp11 extends TextureOp {
 
 	@OriginalMember(owner = "client!mg", name = "R", descriptor = "I")
-	private int anInt3812 = 4096;
+	private int greenMultiplier = 4096;
 
 	@OriginalMember(owner = "client!mg", name = "Z", descriptor = "I")
-	private int anInt3816 = 4096;
+	private int redMultiplier = 4096;
 
 	@OriginalMember(owner = "client!mg", name = "X", descriptor = "I")
-	private int anInt3815 = 4096;
+	private int blueMultiplier = 4096;
 
 	@OriginalMember(owner = "client!mg", name = "<init>", descriptor = "()V")
 	public TextureOp11() {
@@ -26,11 +26,11 @@ public final class TextureOp11 extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt3816 = arg1.g2();
+			this.redMultiplier = arg1.g2();
 		} else if (arg0 == 1) {
-			this.anInt3812 = arg1.g2();
+			this.greenMultiplier = arg1.g2();
 		} else if (arg0 == 2) {
-			this.anInt3815 = arg1.g2();
+			this.blueMultiplier = arg1.g2();
 		}
 	}
 
@@ -51,13 +51,13 @@ public final class TextureOp11 extends TextureOp {
 				@Pc(68) int local68 = local35[local53];
 				@Pc(72) int local72 = local39[local53];
 				if (local64 == local72 && local68 == local72) {
-					local47[local53] = this.anInt3816 * local64 >> 12;
-					local43[local53] = local72 * this.anInt3812 >> 12;
-					local51[local53] = local68 * this.anInt3815 >> 12;
+					local47[local53] = this.redMultiplier * local64 >> 12;
+					local43[local53] = local72 * this.greenMultiplier >> 12;
+					local51[local53] = local68 * this.blueMultiplier >> 12;
 				} else {
-					local47[local53] = this.anInt3816;
-					local43[local53] = this.anInt3812;
-					local51[local53] = this.anInt3815;
+					local47[local53] = this.redMultiplier;
+					local43[local53] = this.greenMultiplier;
+					local51[local53] = this.blueMultiplier;
 				}
 			}
 		}

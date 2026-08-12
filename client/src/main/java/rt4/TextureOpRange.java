@@ -9,13 +9,13 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOpRange extends TextureOp {
 
 	@OriginalMember(owner = "client!fh", name = "jb", descriptor = "I")
-	private int anInt2007 = 1024;
+	private int rangeMin = 1024;
 
 	@OriginalMember(owner = "client!fh", name = "db", descriptor = "I")
-	private int anInt2001 = 2048;
+	private int rangeSpan = 2048;
 
 	@OriginalMember(owner = "client!fh", name = "eb", descriptor = "I")
-	private int anInt2002 = 3072;
+	private int rangeMax = 3072;
 
 	@OriginalMember(owner = "client!fh", name = "<init>", descriptor = "()V")
 	public TextureOpRange() {
@@ -26,9 +26,9 @@ public final class TextureOpRange extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt2007 = arg1.g2();
+			this.rangeMin = arg1.g2();
 		} else if (arg0 == 1) {
-			this.anInt2002 = arg1.g2();
+			this.rangeMax = arg1.g2();
 		} else if (arg0 == 2) {
 			this.monochrome = arg1.g1() == 1;
 		}
@@ -41,7 +41,7 @@ public final class TextureOpRange extends TextureOp {
 		if (this.monochromeImageCache.invalid) {
 			@Pc(30) int[] local30 = this.getChildMonochromeOutput(0, arg0);
 			for (@Pc(32) int local32 = 0; local32 < Texture.width; local32++) {
-				local19[local32] = this.anInt2007 + (local30[local32] * this.anInt2001 >> 12);
+				local19[local32] = this.rangeMin + (local30[local32] * this.rangeSpan >> 12);
 			}
 		}
 		return local19;
@@ -60,9 +60,9 @@ public final class TextureOpRange extends TextureOp {
 			@Pc(37) int[] local37 = local7[1];
 			@Pc(41) int[] local41 = local7[2];
 			for (@Pc(43) int local43 = 0; local43 < Texture.width; local43++) {
-				local33[local43] = this.anInt2007 + (this.anInt2001 * local29[local43] >> 12);
-				local37[local43] = (this.anInt2001 * local21[local43] >> 12) + this.anInt2007;
-				local41[local43] = this.anInt2007 + (this.anInt2001 * local25[local43] >> 12);
+				local33[local43] = this.rangeMin + (this.rangeSpan * local29[local43] >> 12);
+				local37[local43] = (this.rangeSpan * local21[local43] >> 12) + this.rangeMin;
+				local41[local43] = this.rangeMin + (this.rangeSpan * local25[local43] >> 12);
 			}
 		}
 		return local7;
@@ -71,6 +71,6 @@ public final class TextureOpRange extends TextureOp {
 	@OriginalMember(owner = "client!fh", name = "e", descriptor = "(I)V")
 	@Override
 	public final void postDecode() {
-		this.anInt2001 = this.anInt2002 - this.anInt2007;
+		this.rangeSpan = this.rangeMax - this.rangeMin;
 	}
 }

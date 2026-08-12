@@ -9,10 +9,10 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOpClamp extends TextureOp {
 
 	@OriginalMember(owner = "client!aj", name = "V", descriptor = "I")
-	private int anInt148 = 0;
+	private int lowerBound = 0;
 
 	@OriginalMember(owner = "client!aj", name = "ab", descriptor = "I")
-	private int anInt151 = 4096;
+	private int upperBound = 4096;
 
 	@OriginalMember(owner = "client!aj", name = "<init>", descriptor = "()V")
 	public TextureOpClamp() {
@@ -23,9 +23,9 @@ public final class TextureOpClamp extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt148 = arg1.g2();
+			this.lowerBound = arg1.g2();
 		} else if (arg0 == 1) {
-			this.anInt151 = arg1.g2();
+			this.upperBound = arg1.g2();
 		} else if (arg0 == 2) {
 			this.monochrome = arg1.g1() == 1;
 		}
@@ -47,26 +47,26 @@ public final class TextureOpClamp extends TextureOp {
 				@Pc(69) int local69 = local36[local58];
 				@Pc(73) int local73 = local44[local58];
 				@Pc(77) int local77 = local40[local58];
-				if (this.anInt148 > local73) {
-					local48[local58] = this.anInt148;
-				} else if (local73 > this.anInt151) {
-					local48[local58] = this.anInt151;
+				if (this.lowerBound > local73) {
+					local48[local58] = this.lowerBound;
+				} else if (local73 > this.upperBound) {
+					local48[local58] = this.upperBound;
 				} else {
 					local48[local58] = local73;
 				}
-				if (this.anInt148 > local69) {
-					local52[local58] = this.anInt148;
-				} else if (local69 <= this.anInt151) {
+				if (this.lowerBound > local69) {
+					local52[local58] = this.lowerBound;
+				} else if (local69 <= this.upperBound) {
 					local52[local58] = local69;
 				} else {
-					local52[local58] = this.anInt151;
+					local52[local58] = this.upperBound;
 				}
-				if (local77 < this.anInt148) {
-					local56[local58] = this.anInt148;
-				} else if (this.anInt151 >= local77) {
+				if (local77 < this.lowerBound) {
+					local56[local58] = this.lowerBound;
+				} else if (this.upperBound >= local77) {
 					local56[local58] = local77;
 				} else {
-					local56[local58] = this.anInt151;
+					local56[local58] = this.upperBound;
 				}
 			}
 		}
@@ -81,12 +81,12 @@ public final class TextureOpClamp extends TextureOp {
 			@Pc(29) int[] local29 = this.getChildMonochromeOutput(0, arg0);
 			for (@Pc(31) int local31 = 0; local31 < Texture.width; local31++) {
 				@Pc(38) int local38 = local29[local31];
-				if (this.anInt148 > local38) {
-					local19[local31] = this.anInt148;
-				} else if (this.anInt151 >= local38) {
+				if (this.lowerBound > local38) {
+					local19[local31] = this.lowerBound;
+				} else if (this.upperBound >= local38) {
 					local19[local31] = local38;
 				} else {
-					local19[local31] = this.anInt151;
+					local19[local31] = this.upperBound;
 				}
 			}
 		}

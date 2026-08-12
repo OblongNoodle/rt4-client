@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOp14 extends TextureOp {
 
 	@OriginalMember(owner = "client!sa", name = "T", descriptor = "I")
-	private int anInt4971 = 585;
+	private int borderWidth = 585;
 
 	@OriginalMember(owner = "client!sa", name = "<init>", descriptor = "()V")
 	public TextureOp14() {
@@ -25,31 +25,31 @@ public final class TextureOp14 extends TextureOp {
 			for (@Pc(30) int local30 = 0; local30 < Texture.width; local30++) {
 				@Pc(41) int local41 = Texture.widthFractions[local30];
 				@Pc(76) int local76;
-				if (local41 > this.anInt4971 && 4096 - this.anInt4971 > local41 && 2048 - this.anInt4971 < local28 && local28 < this.anInt4971 + 2048) {
+				if (local41 > this.borderWidth && 4096 - this.borderWidth > local41 && 2048 - this.borderWidth < local28 && local28 < this.borderWidth + 2048) {
 					local76 = 2048 - local41;
 					local76 = local76 < 0 ? -local76 : local76;
 					local76 <<= 0xC;
-					local76 /= 2048 - this.anInt4971;
+					local76 /= 2048 - this.borderWidth;
 					local19[local30] = 4096 - local76;
-				} else if (local41 > 2048 - this.anInt4971 && local41 < this.anInt4971 + 2048) {
+				} else if (local41 > 2048 - this.borderWidth && local41 < this.borderWidth + 2048) {
 					local76 = local28 - 2048;
 					local76 = local76 >= 0 ? local76 : -local76;
-					local76 -= this.anInt4971;
+					local76 -= this.borderWidth;
 					local76 <<= 0xC;
-					local19[local30] = local76 / (2048 - this.anInt4971);
-				} else if (local28 < this.anInt4971 || 4096 - this.anInt4971 < local28) {
+					local19[local30] = local76 / (2048 - this.borderWidth);
+				} else if (local28 < this.borderWidth || 4096 - this.borderWidth < local28) {
 					local76 = local41 - 2048;
 					@Pc(188) int local188 = local76 < 0 ? -local76 : local76;
-					@Pc(193) int local193 = local188 - this.anInt4971;
+					@Pc(193) int local193 = local188 - this.borderWidth;
 					@Pc(197) int local197 = local193 << 12;
-					local19[local30] = local197 / (2048 - this.anInt4971);
-				} else if (this.anInt4971 <= local41 && local41 <= 4096 - this.anInt4971) {
+					local19[local30] = local197 / (2048 - this.borderWidth);
+				} else if (this.borderWidth <= local41 && local41 <= 4096 - this.borderWidth) {
 					local19[local30] = 0;
 				} else {
 					local76 = 2048 - local28;
 					local76 = local76 < 0 ? -local76 : local76;
 					local76 <<= 0xC;
-					local76 /= 2048 - this.anInt4971;
+					local76 /= 2048 - this.borderWidth;
 					local19[local30] = 4096 - local76;
 				}
 			}
@@ -61,7 +61,7 @@ public final class TextureOp14 extends TextureOp {
 	@Override
 	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		if (arg0 == 0) {
-			this.anInt4971 = arg1.g2();
+			this.borderWidth = arg1.g2();
 		}
 	}
 }
