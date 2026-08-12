@@ -726,7 +726,7 @@ public final class client extends GameShell {
 			Player.cursors[local3506] = -1;
 		}
 		Inv.clear();
-		ScriptRunner.aBoolean43 = true;
+		ScriptRunner.loadingScene = true;
 		for (local3506 = 0; local3506 < 100; local3506++) {
 			InterfaceList.rectangleDirty[local3506] = true;
 		}

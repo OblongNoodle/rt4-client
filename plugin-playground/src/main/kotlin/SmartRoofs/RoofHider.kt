@@ -180,7 +180,7 @@ object RoofHider {
 
     private fun ensureSelectiveRoofBuffers() {
         if (ScriptRunner.aByteArrayArrayArray15 == null) {
-            ScriptRunner.fillRoofVisibility(((ScriptRunner.anInt3325 - 4) and 0xFF).toByte())
+            ScriptRunner.fillRoofVisibility(((ScriptRunner.renderCycle - 4) and 0xFF).toByte())
         }
         if (ScriptRunner.anIntArray205.size < SELECTIVE_ROOF_GROUP_COUNT) {
             ScriptRunner.allocateRoofVisibilityGroupArrays(SELECTIVE_ROOF_GROUP_COUNT)
@@ -235,7 +235,7 @@ object RoofHider {
             return false
         }
         val masks = ScriptRunner.aByteArrayArrayArray15 ?: return false
-        val currentRoofMask = (ScriptRunner.anInt3325 and 0xFF).toByte()
+        val currentRoofMask = (ScriptRunner.renderCycle and 0xFF).toByte()
         if (masks[plane][sceneX][sceneY] == currentRoofMask) {
             return true
         }

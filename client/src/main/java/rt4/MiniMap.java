@@ -519,8 +519,8 @@ public class MiniMap {
 			@Pc(17) MapMarker local17 = local5[local3];
 			if (local17 != null && local17.type == 2) {
 				ScriptRunner.projectToScreen(arg0 >> 1, arg4, (local17.targetY - Camera.originY << 7) + local17.targetYFine, local17.targetHeight * 2, arg2 >> 1, local17.targetXFine + (local17.targetX - Camera.originX << 7), arg3);
-				if (ScriptRunner.anInt1951 > -1 && client.loop % 20 < 10) {
-					Sprites.headhints[local17.arrowSpriteId].render(arg1 + ScriptRunner.anInt1951 - 12, arg5 + -28 - -ScriptRunner.anInt548);
+				if (ScriptRunner.screenX > -1 && client.loop % 20 < 10) {
+					Sprites.headhints[local17.arrowSpriteId].render(arg1 + ScriptRunner.screenX - 12, arg5 + -28 - -ScriptRunner.screenY);
 				}
 			}
 			local3++;

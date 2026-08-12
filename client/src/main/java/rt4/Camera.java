@@ -401,7 +401,7 @@ public class Camera {
 			} else if (local5 > 100) {
 				local5 = 100;
 			}
-			local29 = local5 * (ScriptRunner.aShort27 - ScriptRunner.aShort30) / 100 + ScriptRunner.aShort30;
+			local29 = local5 * (ScriptRunner.maxViewDistance - ScriptRunner.minViewDistance) / 100 + ScriptRunner.minViewDistance;
 			arg3 = local29 * arg3 >> 8;
 		}
 		local5 = 2048 - arg6 & 0x7FF;

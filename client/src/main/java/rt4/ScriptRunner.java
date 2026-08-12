@@ -81,13 +81,13 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!km", name = "ad", descriptor = "I")
 	public static int fp = 0;
 	@OriginalMember(owner = "client!od", name = "g", descriptor = "S")
-	public static short aShort25 = 256;
+	public static short nearZoom = 256;
 	@OriginalMember(owner = "client!an", name = "db", descriptor = "S")
-	public static short aShort9 = 205;
+	public static short farZoom = 205;
 	@OriginalMember(owner = "client!mc", name = "tb", descriptor = "S")
-	public static short aShort22 = 1;
+	public static short minZoom = 1;
 	@OriginalMember(owner = "client!ac", name = "k", descriptor = "S")
-	public static short aShort1 = 32767;
+	public static short maxZoom = 32767;
 	@OriginalMember(owner = "client!nc", name = "n", descriptor = "I")
 	public static int anInt4055 = 0;
 	@OriginalMember(owner = "client!tm", name = "i", descriptor = "I")
@@ -99,13 +99,13 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!sc", name = "p", descriptor = "I")
 	public static int anInt5029 = 0;
 	@OriginalMember(owner = "client!kd", name = "yb", descriptor = "S")
-	public static short aShort21 = 32767;
+	public static short maxFov = 32767;
 	@OriginalMember(owner = "client!ee", name = "f", descriptor = "S")
-	public static short aShort12 = 1;
+	public static short minFov = 1;
 	@OriginalMember(owner = "client!kk", name = "j", descriptor = "I")
-	public static int anInt3325 = 0;
+	public static int renderCycle = 0;
 	@OriginalMember(owner = "client!bi", name = "jb", descriptor = "Z")
-	public static boolean aBoolean43 = true;
+	public static boolean loadingScene = true;
 	@OriginalMember(owner = "client!wb", name = "c", descriptor = "I")
 	public static int scriptCursorId = -1;
 	@OriginalMember(owner = "client!k", name = "m", descriptor = "Z")
@@ -113,7 +113,7 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!vk", name = "f", descriptor = "[[[B")
 	public static byte[][][] aByteArrayArrayArray15;
 	@OriginalMember(owner = "client!vg", name = "b", descriptor = "S")
-	public static short aShort30 = 256;
+	public static short minViewDistance = 256;
 	@OriginalMember(owner = "client!vg", name = "c", descriptor = "Z")
 	public static boolean glSceneNeedsRender = false;
 	@OriginalMember(owner = "client!lj", name = "z", descriptor = "[I")
@@ -129,11 +129,11 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!nm", name = "W", descriptor = "Lclient!na;")
 	public static JagString url;
 	@OriginalMember(owner = "client!bf", name = "B", descriptor = "I")
-	public static int anInt548 = -1;
+	public static int screenY = -1;
 	@OriginalMember(owner = "client!pb", name = "rb", descriptor = "S")
-	public static short aShort27 = 320;
+	public static short maxViewDistance = 320;
 	@OriginalMember(owner = "client!fc", name = "a", descriptor = "I")
-	public static int anInt1951 = -1;
+	public static int screenX = -1;
 	@OriginalMember(owner = "client!em", name = "w", descriptor = "I")
 	public static int interfaceMouseY;
 	@OriginalMember(owner = "client!me", name = "nb", descriptor = "I")
@@ -154,21 +154,21 @@ public final class ScriptRunner {
 			} else if (local25 > 100) {
 				local25 = 100;
 			}
-			@Pc(51) int local51 = local25 * (aShort9 - aShort25) / 100 + aShort25;
-			if (aShort22 > local51) {
-				local51 = aShort22;
-			} else if (aShort1 < local51) {
-				local51 = aShort1;
+			@Pc(51) int local51 = local25 * (farZoom - nearZoom) / 100 + nearZoom;
+			if (minZoom > local51) {
+				local51 = minZoom;
+			} else if (maxZoom < local51) {
+				local51 = maxZoom;
 			}
 			@Pc(73) int local73 = local51 * arg2 * 512 / (arg0 * 334);
 			@Pc(115) int local115;
 			@Pc(122) int local122;
 			@Pc(86) short local86;
-			if (local73 < aShort12) {
-				local86 = aShort12;
+			if (local73 < minFov) {
+				local86 = minFov;
 				local51 = arg0 * 334 * local86 / (arg2 * 512);
-				if (aShort1 < local51) {
-					local51 = aShort1;
+				if (maxZoom < local51) {
+					local51 = maxZoom;
 					local115 = arg2 * 512 * local51 / (local86 * 334);
 					local122 = (arg0 - local115) / 2;
 					if (arg4) {
@@ -179,11 +179,11 @@ public final class ScriptRunner {
 					arg3 += local122;
 					arg0 -= local122 * 2;
 				}
-			} else if (aShort21 < local73) {
-				local86 = aShort21;
+			} else if (maxFov < local73) {
+				local86 = maxFov;
 				local51 = local86 * arg0 * 334 / (arg2 * 512);
-				if (aShort22 > local51) {
-					local51 = aShort22;
+				if (minZoom > local51) {
+					local51 = minZoom;
 					local115 = local86 * arg0 * 334 / (local51 * 512);
 					local122 = (arg2 - local115) / 2;
 					if (arg4) {
@@ -205,7 +205,7 @@ public final class ScriptRunner {
 
 	@OriginalMember(owner = "client!ui", name = "a", descriptor = "(IIZIII)V")
 	public static void renderGameScene(@OriginalArg(1) int arg0, @OriginalArg(2) boolean arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		anInt3325++;
+		renderCycle++;
 		clearTileEntityCounts();
 		if (!arg1) {
 			addPlayersToScene(true);
@@ -298,7 +298,7 @@ public final class ScriptRunner {
 			RawModel.pickScreenY = (local361 - local344) * (interfaceMouseY - arg4) / arg0 + local344;
 		}
 		client.audioLoop();
-		@Pc(387) byte local387 = getRoofRemovalMode() == 2 ? (byte) anInt3325 : 1;
+		@Pc(387) byte local387 = getRoofRemovalMode() == 2 ? (byte) renderCycle : 1;
 		if (GlRenderer.enabled) {
 			GlRenderer.restoreLighting();
 			GlRenderer.setDepthTestEnabled(true);
@@ -335,10 +335,10 @@ public final class ScriptRunner {
 		Camera.renderZ = local57;
 		Camera.renderX = local59;
 		Camera.cameraYaw = local125;
-		if (aBoolean43 && client.js5NetQueue.getUrgentRequestCount() == 0) {
-			aBoolean43 = false;
+		if (loadingScene && client.js5NetQueue.getUrgentRequestCount() == 0) {
+			loadingScene = false;
 		}
-		if (aBoolean43) {
+		if (loadingScene) {
 			if (GlRenderer.enabled) {
 				GlRaster.fillRect(arg2, arg4, arg3, arg0, 0);
 			} else {
@@ -346,7 +346,7 @@ public final class ScriptRunner {
 			}
 			Fonts.drawTextOnScreen(false, LocalizedText.LOADING);
 		}
-		if (!arg1 && !aBoolean43 && !Cs1ScriptRunner.isMenuOpen && arg2 <= interfaceMouseX && arg3 + arg2 > interfaceMouseX && arg4 <= interfaceMouseY && arg0 + arg4 > interfaceMouseY) {
+		if (!arg1 && !loadingScene && !Cs1ScriptRunner.isMenuOpen && arg2 <= interfaceMouseX && arg3 + arg2 > interfaceMouseX && arg4 <= interfaceMouseY && arg0 + arg4 > interfaceMouseY) {
 			MiniMenu.addEntries(arg4, arg3, arg0, arg2, interfaceMouseY, interfaceMouseX);
 		}
 	}
@@ -373,9 +373,9 @@ public final class ScriptRunner {
 			if (entity != null && entity.isVisible()) {
 				setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight() + 15, arg1 >> 1);
 				if (local5 >= PlayerList.size) {
-					PluginRepository.NPCOverheadDraw((Npc) entity,arg2 + anInt1951, arg0 + anInt548);
+					PluginRepository.NPCOverheadDraw((Npc) entity,arg2 + screenX, arg0 + screenY);
 				} else {
-					PluginRepository.PlayerOverheadDraw((Player) entity,arg2 + anInt1951, arg0 + anInt548);
+					PluginRepository.PlayerOverheadDraw((Player) entity,arg2 + screenX, arg0 + screenY);
 				}
 
 				@Pc(58) NpcType local58;
@@ -401,8 +401,8 @@ public final class ScriptRunner {
 							local265 = local58.iconHeight + 15;
 						}
 						setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, local265, arg1 >> 1);
-						if (anInt1951 > -1) {
-							Sprites.headiconPrayers[local58.headicon].render(arg2 + anInt1951 - 12, arg0 + -30 - -anInt548);
+						if (screenX > -1) {
+							Sprites.headiconPrayers[local58.headicon].render(arg2 + screenX - 12, arg0 + -30 - -screenY);
 						}
 					}
 					@Pc(308) MapMarker[] local308 = MiniMap.hintMapMarkers;
@@ -415,8 +415,8 @@ public final class ScriptRunner {
 								local359 = local58.iconHeight + 15;
 							}
 							setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, local359, arg1 >> 1);
-							if (anInt1951 > -1) {
-								Sprites.headhints[local322.arrowSpriteId].render(arg2 + anInt1951 - 12, anInt548 + -28 + arg0);
+							if (screenX > -1) {
+								Sprites.headhints[local322.arrowSpriteId].render(arg2 + screenX - 12, screenY + -28 + arg0);
 							}
 						}
 					}
@@ -425,13 +425,13 @@ public final class ScriptRunner {
 					@Pc(77) Player local77 = (Player) entity;
 					if (local77.skullHeadIcon != -1 || local77.prayerHeadIcon != -1) {
 						setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight() + 15, arg1 >> 1);
-						if (anInt1951 > -1) {
+						if (screenX > -1) {
 							if (local77.skullHeadIcon != -1) {
-								Sprites.headiconPks[local77.skullHeadIcon].render(anInt1951 + arg2 - 12, arg0 + -30 + anInt548);
+								Sprites.headiconPks[local77.skullHeadIcon].render(screenX + arg2 - 12, arg0 + -30 + screenY);
 								local74 += 25;
 							}
 							if (local77.prayerHeadIcon != -1) {
-								Sprites.headiconPrayers[local77.prayerHeadIcon].render(arg2 + anInt1951 - 12, arg0 - (-anInt548 + local74));
+								Sprites.headiconPrayers[local77.prayerHeadIcon].render(arg2 + screenX - 12, arg0 - (-screenY + local74));
 								local74 += 25;
 							}
 						}
@@ -442,8 +442,8 @@ public final class ScriptRunner {
 							@Pc(173) MapMarker local173 = local159[local161];
 							if (local173 != null && local173.type == 10 && PlayerList.ids[local5] == local173.actorTargetId) {
 								setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight() + 15, arg1 >> 1);
-								if (anInt1951 > -1) {
-									Sprites.headhints[local173.arrowSpriteId].render(arg2 + anInt1951 - 12, arg0 + (anInt548 - local74));
+								if (screenX > -1) {
+									Sprites.headhints[local173.arrowSpriteId].render(arg2 + screenX - 12, arg0 + (screenY - local74));
 								}
 							}
 						}
@@ -451,11 +451,11 @@ public final class ScriptRunner {
 				}
 				if (entity.chatMessage != null && (local5 >= PlayerList.size || Chat.publicFilter == 0 || Chat.publicFilter == 3 || Chat.publicFilter == 1 && FriendsList.contains(((Player) entity).username))) {
 					setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, entity.getModelHeight(), arg1 >> 1);
-					if (anInt1951 > -1 && OverheadChat.size < OverheadChat.CAPACITY) {
+					if (screenX > -1 && OverheadChat.size < OverheadChat.CAPACITY) {
 						OverheadChat.textHalfWidths[OverheadChat.size] = Fonts.b12Full.getStringWidth(entity.chatMessage) / 2;
 						OverheadChat.textHeights[OverheadChat.size] = Fonts.b12Full.lineHeight;
-						OverheadChat.screenX[OverheadChat.size] = anInt1951;
-						OverheadChat.screenY[OverheadChat.size] = anInt548;
+						OverheadChat.screenX[OverheadChat.size] = screenX;
+						OverheadChat.screenY[OverheadChat.size] = screenY;
 						OverheadChat.colors[OverheadChat.size] = entity.chatColor;
 						OverheadChat.effects[OverheadChat.size] = entity.chatEffect;
 						OverheadChat.loops[OverheadChat.size] = entity.chatLoops;
@@ -489,9 +489,9 @@ public final class ScriptRunner {
 						local310 = entity.getModelHeight();
 					}
 					setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, local508.height + local310 + 10, arg1 >> 1);
-					if (anInt1951 > -1) {
-						local161 = anInt1951 + arg2 - (local508.width >> 1);
-						local359 = anInt548 + arg0 - 3;
+					if (screenX > -1) {
+						local161 = screenX + arg2 - (local508.width >> 1);
+						local359 = screenY + arg0 - 3;
 						local508.render(local161, local359);
 						local639 = local508.width * entity.hitpointsBar / 255;
 						local642 = local508.height;
@@ -522,20 +522,20 @@ public final class ScriptRunner {
 							local265 = entity.getModelHeight() / 2;
 						}
 						setOverheadScreenCoordinateOffsets(arg4 >> 1, arg3, entity, arg5, local265, arg1 >> 1);
-						if (anInt1951 > -1) {
+						if (screenX > -1) {
 							if (local74 == 1) {
-								anInt548 -= 20;
+								screenY -= 20;
 							}
 							if (local74 == 2) {
-								anInt548 -= 10;
-								anInt1951 -= 15;
+								screenY -= 10;
+								screenX -= 15;
 							}
 							if (local74 == 3) {
-								anInt548 -= 10;
-								anInt1951 += 15;
+								screenY -= 10;
+								screenX += 15;
 							}
-							Sprites.hitmarks[entity.hitTypes[local74]].render(arg2 + anInt1951 - 12, arg0 + anInt548 - 12);
-							Fonts.p11Full.renderCenter(JagString.parseInt(entity.hitDamages[local74]), anInt1951 + arg2 - 1, anInt548 + 3 + arg0, 16777215, 0);
+							Sprites.hitmarks[entity.hitTypes[local74]].render(arg2 + screenX - 12, arg0 + screenY - 12);
+							Fonts.p11Full.renderCenter(JagString.parseInt(entity.hitDamages[local74]), screenX + arg2 - 1, screenY + 3 + arg0, 16777215, 0);
 						}
 					}
 				}
@@ -556,8 +556,8 @@ public final class ScriptRunner {
 					}
 				}
 			}
-			anInt1951 = OverheadChat.screenX[local5];
-			anInt548 = OverheadChat.screenY[local5] = local74;
+			screenX = OverheadChat.screenX[local5];
+			screenY = OverheadChat.screenY[local5] = local74;
 			@Pc(962) JagString local962 = OverheadChat.messages[local5];
 			if (VarpDomain.chatEffectsDisabled == 0) {
 				local639 = 16776960;
@@ -565,13 +565,13 @@ public final class ScriptRunner {
 					local639 = OverheadChat.COLORS[OverheadChat.colors[local5]];
 				}
 				if (OverheadChat.colors[local5] == 6) {
-					local639 = anInt3325 % 20 >= 10 ? 16776960 : 16711680;
+					local639 = renderCycle % 20 >= 10 ? 16776960 : 16711680;
 				}
 				if (OverheadChat.colors[local5] == 7) {
-					local639 = anInt3325 % 20 < 10 ? 255 : 65535;
+					local639 = renderCycle % 20 < 10 ? 255 : 65535;
 				}
 				if (OverheadChat.colors[local5] == 8) {
-					local639 = anInt3325 % 20 >= 10 ? 8454016 : 45056;
+					local639 = renderCycle % 20 >= 10 ? 8454016 : 45056;
 				}
 				if (OverheadChat.colors[local5] == 9) {
 					local642 = 150 - OverheadChat.loops[local5];
@@ -604,25 +604,25 @@ public final class ScriptRunner {
 					}
 				}
 				if (OverheadChat.effects[local5] == 0) {
-					Fonts.b12Full.renderCenter(local962, anInt1951 + arg2, arg0 + anInt548, local639, 0);
+					Fonts.b12Full.renderCenter(local962, screenX + arg2, arg0 + screenY, local639, 0);
 				}
 				if (OverheadChat.effects[local5] == 1) {
-					Fonts.b12Full.renderWave(local962, arg2 + anInt1951, anInt548 + arg0, local639, anInt3325);
+					Fonts.b12Full.renderWave(local962, arg2 + screenX, screenY + arg0, local639, renderCycle);
 				}
 				if (OverheadChat.effects[local5] == 2) {
-					Fonts.b12Full.renderWave2(local962, arg2 + anInt1951, arg0 - -anInt548, local639, anInt3325);
+					Fonts.b12Full.renderWave2(local962, arg2 + screenX, arg0 - -screenY, local639, renderCycle);
 				}
 				if (OverheadChat.effects[local5] == 3) {
-					Fonts.b12Full.renderShake(local962, arg2 + anInt1951, anInt548 + arg0, local639, anInt3325, 150 - OverheadChat.loops[local5]);
+					Fonts.b12Full.renderShake(local962, arg2 + screenX, screenY + arg0, local639, renderCycle, 150 - OverheadChat.loops[local5]);
 				}
 				if (OverheadChat.effects[local5] == 4) {
 					local642 = (150 - OverheadChat.loops[local5]) * (Fonts.b12Full.getStringWidth(local962) + 100) / 150;
 					if (GlRenderer.enabled) {
-						GlRaster.setClipRegion(anInt1951 + arg2 - 50, arg0, anInt1951 + arg2 + 50, arg4 + arg0);
+						GlRaster.setClipRegion(screenX + arg2 - 50, arg0, screenX + arg2 + 50, arg4 + arg0);
 					} else {
-						SoftwareRaster.shrinkClip(arg2 + anInt1951 - 50, arg0, anInt1951 + arg2 + 50, arg4 + arg0);
+						SoftwareRaster.shrinkClip(arg2 + screenX - 50, arg0, screenX + arg2 + 50, arg4 + arg0);
 					}
-					Fonts.b12Full.renderLeft(local962, arg2 + anInt1951 + 50 - local642, arg0 + anInt548, local639, 0);
+					Fonts.b12Full.renderLeft(local962, arg2 + screenX + 50 - local642, arg0 + screenY, local639, 0);
 					if (GlRenderer.enabled) {
 						GlRaster.setClip(arg2, arg0, arg1 + arg2, arg4 + arg0);
 					} else {
@@ -633,16 +633,16 @@ public final class ScriptRunner {
 					@Pc(1372) int local1372 = 0;
 					local642 = 150 - OverheadChat.loops[local5];
 					if (GlRenderer.enabled) {
-						GlRaster.setClipRegion(arg2, anInt548 + arg0 - Fonts.b12Full.lineHeight - 1, arg1 + arg2, arg0 + anInt548 + 5);
+						GlRaster.setClipRegion(arg2, screenY + arg0 - Fonts.b12Full.lineHeight - 1, arg1 + arg2, arg0 + screenY + 5);
 					} else {
-						SoftwareRaster.shrinkClip(arg2, anInt548 + arg0 - Fonts.b12Full.lineHeight - 1, arg2 + arg1, anInt548 + arg0 + 5);
+						SoftwareRaster.shrinkClip(arg2, screenY + arg0 - Fonts.b12Full.lineHeight - 1, arg2 + arg1, screenY + arg0 + 5);
 					}
 					if (local642 < 25) {
 						local1372 = local642 - 25;
 					} else if (local642 > 125) {
 						local1372 = local642 - 125;
 					}
-					Fonts.b12Full.renderCenter(local962, anInt1951 + arg2, local1372 + arg0 + anInt548, local639, 0);
+					Fonts.b12Full.renderCenter(local962, screenX + arg2, local1372 + arg0 + screenY, local639, 0);
 					if (GlRenderer.enabled) {
 						GlRaster.setClip(arg2, arg0, arg2 + arg1, arg0 + arg4);
 					} else {
@@ -650,7 +650,7 @@ public final class ScriptRunner {
 					}
 				}
 			} else {
-				Fonts.b12Full.renderCenter(local962, arg2 + anInt1951, arg0 + anInt548, 16776960, 0);
+				Fonts.b12Full.renderCenter(local962, arg2 + screenX, arg0 + screenY, 16776960, 0);
 			}
 		}
 	}
@@ -976,7 +976,7 @@ public final class ScriptRunner {
 			allocateRoofVisibilityGroupArrays(512);
 			buildAllRoofVisibilityGroups();
 		} else {
-			fillRoofVisibility((byte) (anInt3325 - 4 & 0xFF));
+			fillRoofVisibility((byte) (renderCycle - 4 & 0xFF));
 			allocateRoofVisibilityGroupArrays(API.GetRoofVisibilityGroupLimit());
 		}
 	}
@@ -1064,7 +1064,7 @@ public final class ScriptRunner {
 		if (plane < 0 || plane >= 3) {
 			return false;
 		}
-		@Pc(14) byte local14 = arg0 ? 1 : (byte) (anInt3325 & 0xFF);
+		@Pc(14) byte local14 = arg0 ? 1 : (byte) (renderCycle & 0xFF);
 		if (local14 == aByteArrayArrayArray15[plane][arg1][arg2]) {
 			return false;
 		} else if ((SceneGraph.renderFlags[plane][arg1][arg2] & API.TILE_FLAG_UNDER_ROOF) == 0) {
@@ -1263,8 +1263,8 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!q", name = "a", descriptor = "(IIIIIIBI)V")
 	public static void projectToScreen(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6) {
 		if (arg5 < 128 || arg2 < 128 || arg5 > 13056 || arg2 > 13056) {
-			anInt548 = -1;
-			anInt1951 = -1;
+			screenY = -1;
+			screenX = -1;
 			return;
 		}
 		@Pc(38) int local38 = SceneGraph.getTileHeight(Player.plane, arg5, arg2) - arg3;
@@ -1281,16 +1281,16 @@ public final class ScriptRunner {
 		@Pc(99) int local99 = local58 * local46 - local87 * local54 >> 16;
 		@Pc(113) int local113 = local87 * local58 + local46 * local54 >> 16;
 		if (local113 < 50) {
-			anInt548 = -1;
-			anInt1951 = -1;
+			screenY = -1;
+			screenX = -1;
 		} else if (GlRenderer.enabled) {
 			@Pc(150) int local150 = arg1 * 512 >> 8;
-			anInt1951 = local150 * local89 / local113 + arg0;
+			screenX = local150 * local89 / local113 + arg0;
 			@Pc(164) int local164 = arg6 * 512 >> 8;
-			anInt548 = local164 * local99 / local113 + arg4;
+			screenY = local164 * local99 / local113 + arg4;
 		} else {
-			anInt1951 = (local89 << 9) / local113 + arg0;
-			anInt548 = (local99 << 9) / local113 + arg4;
+			screenX = (local89 << 9) / local113 + arg0;
+			screenY = (local99 << 9) / local113 + arg4;
 		}
 	}
 
@@ -1346,8 +1346,8 @@ public final class ScriptRunner {
 		}
 		API.EnsureRoofVisibilityBuffers();
 		boolean roofVisibilityActive = API.IsRoofVisibilityActive();
-		@Pc(27) byte local27 = (byte) (anInt3325 - 4 & 0xFF);
-		@Pc(31) int local31 = anInt3325 % 104;
+		@Pc(27) byte local27 = (byte) (renderCycle - 4 & 0xFF);
+		@Pc(31) int local31 = renderCycle % 104;
 		@Pc(33) int local33;
 		@Pc(40) int local40;
 		for (local33 = 0; local33 < 4; local33++) {
@@ -5387,49 +5387,49 @@ public final class ScriptRunner {
 												} else if (opcode < 6300) {
 													if (opcode == 6200) {
 														isp -= 2;
-														aShort25 = (short) intStack[isp];
-														if (aShort25 <= 0) {
-															aShort25 = 256;
+														nearZoom = (short) intStack[isp];
+														if (nearZoom <= 0) {
+															nearZoom = 256;
 														}
-														aShort9 = (short) intStack[isp + 1];
-														if (aShort9 <= 0) {
-															aShort9 = 205;
+														farZoom = (short) intStack[isp + 1];
+														if (farZoom <= 0) {
+															farZoom = 205;
 														}
 														continue;
 													}
 													if (opcode == 6201) {
 														isp -= 2;
-														aShort30 = (short) intStack[isp];
-														if (aShort30 <= 0) {
-															aShort30 = 256;
+														minViewDistance = (short) intStack[isp];
+														if (minViewDistance <= 0) {
+															minViewDistance = 256;
 														}
-														aShort27 = (short) intStack[isp + 1];
-														if (aShort27 <= 0) {
-															aShort27 = 320;
+														maxViewDistance = (short) intStack[isp + 1];
+														if (maxViewDistance <= 0) {
+															maxViewDistance = 320;
 														}
 														continue;
 													}
 													if (opcode == 6202) {
 														isp -= 4;
-														aShort22 = (short) intStack[isp];
-														if (aShort22 <= 0) {
-															aShort22 = 1;
+														minZoom = (short) intStack[isp];
+														if (minZoom <= 0) {
+															minZoom = 1;
 														}
-														aShort1 = (short) intStack[isp + 1];
-														if (aShort1 <= 0) {
-															aShort1 = 32767;
-														} else if (aShort22 > aShort1) {
-															aShort1 = aShort22;
+														maxZoom = (short) intStack[isp + 1];
+														if (maxZoom <= 0) {
+															maxZoom = 32767;
+														} else if (minZoom > maxZoom) {
+															maxZoom = minZoom;
 														}
-														aShort12 = (short) intStack[isp + 2];
-														if (aShort12 <= 0) {
-															aShort12 = 1;
+														minFov = (short) intStack[isp + 2];
+														if (minFov <= 0) {
+															minFov = 1;
 														}
-														aShort21 = (short) intStack[isp + 3];
-														if (aShort21 <= 0) {
-															aShort21 = 32767;
-														} else if (aShort21 < aShort12) {
-															aShort21 = aShort12;
+														maxFov = (short) intStack[isp + 3];
+														if (maxFov <= 0) {
+															maxFov = 32767;
+														} else if (maxFov < minFov) {
+															maxFov = minFov;
 														}
 														continue;
 													}
@@ -5440,13 +5440,13 @@ public final class ScriptRunner {
 														continue;
 													}
 													if (opcode == 6204) {
-														intStack[isp++] = aShort30;
-														intStack[isp++] = aShort27;
+														intStack[isp++] = minViewDistance;
+														intStack[isp++] = maxViewDistance;
 														continue;
 													}
 													if (opcode == 6205) {
-														intStack[isp++] = aShort25;
-														intStack[isp++] = aShort9;
+														intStack[isp++] = nearZoom;
+														intStack[isp++] = farZoom;
 														continue;
 													}
 												} else if (opcode < 6400) {
