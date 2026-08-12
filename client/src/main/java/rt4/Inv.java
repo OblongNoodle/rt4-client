@@ -11,13 +11,13 @@ public final class Inv extends Node {
 	@OriginalMember(owner = "client!cb", name = "I", descriptor = "[I")
 	public static final int[] updatedInventories = new int[32];
 	@OriginalMember(owner = "client!kl", name = "u", descriptor = "Lclient!na;")
-	public static final JagString aClass100_637 = JagString.parse("<col=ffffff>");
+	public static final JagString COL_WHITE = JagString.parse("<col=ffffff>");
 	@OriginalMember(owner = "client!ol", name = "Y", descriptor = "Lclient!na;")
-	public static final JagString aClass100_819 = JagString.parse("<col=00ff80>");
+	public static final JagString COL_GREEN = JagString.parse("<col=00ff80>");
 	@OriginalMember(owner = "client!ib", name = "g", descriptor = "Lclient!na;")
-	public static final JagString aClass100_559 = JagString.parse("<col=ffff00>");
+	public static final JagString COL_YELLOW = JagString.parse("<col=ffff00>");
 	@OriginalMember(owner = "client!jj", name = "m", descriptor = "Lclient!na;")
-	public static final JagString aClass100_594 = JagString.parse("<)4col>");
+	public static final JagString COL_END = JagString.parse("<)4col>");
 	@OriginalMember(owner = "client!ii", name = "c", descriptor = "I")
 	public static int updatedInventoriesWriterIndex = 0;
 	@OriginalMember(owner = "client!bj", name = "v", descriptor = "Lclient!sc;")
@@ -263,11 +263,11 @@ public final class Inv extends Node {
 	@OriginalMember(owner = "client!eb", name = "b", descriptor = "(II)Lclient!na;")
 	public static JagString formatObjAmount(@OriginalArg(1) int arg0) {
 		if (arg0 < 100000) {
-			return JagString.concatenate(new JagString[]{aClass100_559, JagString.parseInt(arg0), aClass100_594});
+			return JagString.concatenate(new JagString[]{COL_YELLOW, JagString.parseInt(arg0), COL_END});
 		} else if (arg0 >= 10000000) {
-			return JagString.concatenate(new JagString[]{aClass100_819, JagString.parseInt(arg0 / 1000000), LocalizedText.MILLION, aClass100_594});
+			return JagString.concatenate(new JagString[]{COL_GREEN, JagString.parseInt(arg0 / 1000000), LocalizedText.MILLION, COL_END});
 		} else {
-			return JagString.concatenate(new JagString[]{aClass100_637, JagString.parseInt(arg0 / 1000), LocalizedText.THOUSAND, aClass100_594});
+			return JagString.concatenate(new JagString[]{COL_WHITE, JagString.parseInt(arg0 / 1000), LocalizedText.THOUSAND, COL_END});
 		}
 	}
 

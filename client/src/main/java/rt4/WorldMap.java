@@ -948,7 +948,7 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!kf", name = "a", descriptor = "(Lclient!na;I)V")
 	public static void setMapByName(@OriginalArg(0) JagString arg0) {
-		for (@Pc(15) Map local15 = (Map) MapList.aClass69_120.head(); local15 != null; local15 = (Map) MapList.aClass69_120.next()) {
+		for (@Pc(15) Map local15 = (Map) MapList.maps.head(); local15 != null; local15 = (Map) MapList.maps.next()) {
 			if (local15.group.strEquals(arg0)) {
 				currentMap = local15;
 				return;
@@ -1728,7 +1728,7 @@ public class WorldMap {
 								@Pc(209) int local209 = local116[local163][local203];
 								if (local209 != 0) {
 									@Pc(222) LocType local222 = LocTypeList.get(local209 - 1);
-									if (!MapList.aBooleanArray130[local222.mapfunction]) {
+									if (!MapList.visibility[local222.mapfunction]) {
 										if (local11 != -1 && local222.mapfunction == anInt172) {
 											@Pc(243) MapElement local243 = new MapElement();
 											local243.anInt4307 = local65;

@@ -373,7 +373,7 @@ public class Camera {
 		if (cameraX != playerX) {
 			cameraX += (playerX - cameraX) / 16;
 		}
-		if (Preferences.aBoolean63) {
+		if (Preferences.keyboardCameraEnabled) {
 			for (@Pc(93) int local93 = 0; local93 < InterfaceList.keyQueueSize; local93++) {
 				@Pc(104) int code = InterfaceList.keyCodes[local93];
 				if (code == Keyboard.KEY_UP) {

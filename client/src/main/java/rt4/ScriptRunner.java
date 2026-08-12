@@ -1004,7 +1004,7 @@ public final class ScriptRunner {
 	@OriginalMember(owner = "client!ok", name = "a", descriptor = "(IIB)Lclient!ce;")
 	public static SecondaryLinkedList findMapsAtCoordinate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(9) SecondaryLinkedList local9 = new SecondaryLinkedList();
-		for (@Pc(14) Map local14 = (Map) MapList.aClass69_120.head(); local14 != null; local14 = (Map) MapList.aClass69_120.next()) {
+		for (@Pc(14) Map local14 = (Map) MapList.maps.head(); local14 != null; local14 = (Map) MapList.maps.next()) {
 			if (local14.valid && local14.containsDisplayCoordinate(arg1, arg0)) {
 				local9.addTail(local14);
 			}
@@ -5605,12 +5605,12 @@ public final class ScriptRunner {
 												} else if (opcode < 6700) {
 													if (opcode == 6600) {
 														isp--;
-														Preferences.aBoolean63 = intStack[isp] == 1;
+														Preferences.keyboardCameraEnabled = intStack[isp] == 1;
 														Preferences.write(GameShell.signLink);
 														continue;
 													}
 													if (opcode == 6601) {
-														intStack[isp++] = Preferences.aBoolean63 ? 1 : 0;
+														intStack[isp++] = Preferences.keyboardCameraEnabled ? 1 : 0;
 														continue;
 													}
 												}

@@ -2518,7 +2518,7 @@ public class Protocol {
 		if (anInt551 > 0) {
 			anInt551--;
 		}
-		if (Preferences.aBoolean63) {
+		if (Preferences.keyboardCameraEnabled) {
 			for (i = 0; i < InterfaceList.keyQueueSize; i++) {
 				offset = InterfaceList.keyCodes[i];
 				if (offset == 98 || offset == 99 || offset == 96 || offset == 97) {

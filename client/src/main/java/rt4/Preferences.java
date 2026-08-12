@@ -56,7 +56,7 @@ public class Preferences {
 	@OriginalMember(owner = "client!ml", name = "ab", descriptor = "Z")
 	public static boolean allLevelsVisible = true;
 	@OriginalMember(owner = "client!cj", name = "h", descriptor = "Z")
-	public static boolean aBoolean63;
+	public static boolean keyboardCameraEnabled;
 	@OriginalMember(owner = "client!fb", name = "m", descriptor = "Z")
 	public static boolean cursorsEnabled = true;
 	@OriginalMember(owner = "client!k", name = "c", descriptor = "Z")
@@ -122,7 +122,7 @@ public class Preferences {
 		}
 		lastWorldId = 0;
 		buildArea = 0;
-		aBoolean63 = false;
+		keyboardCameraEnabled = false;
 		cursorsEnabled = true;
 		safeMode = false;
 		hdr = false;
@@ -157,7 +157,7 @@ public class Preferences {
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IZ)V")
 	public static void setAllVisibleLevels(@OriginalArg(1) boolean arg0) {
 		allLevelsVisible = arg0;
-		SceneGraph.aBoolean130 = !SceneGraph.allLevelsAreVisible();
+		SceneGraph.levelsHidden = !SceneGraph.allLevelsAreVisible();
 	}
 
 	@OriginalMember(owner = "client!ga", name = "b", descriptor = "(I)V")
@@ -273,7 +273,7 @@ public class Preferences {
 			safeMode = buffer.g1() == 1;
 		}
 		if (version >= 8) {
-			aBoolean63 = buffer.g1() == 1;
+			keyboardCameraEnabled = buffer.g1() == 1;
 		}
 		if (version >= 9) {
 			buildArea = buffer.g1();
@@ -314,7 +314,7 @@ public class Preferences {
 		local4.p4(lastWorldId);
 		local4.p1(favoriteWorlds);
 		local4.p1(safeMode ? 1 : 0);
-		local4.p1(aBoolean63 ? 1 : 0);
+		local4.p1(keyboardCameraEnabled ? 1 : 0);
 		local4.p1(buildArea);
 		local4.p1(hdr ? 1 : 0);
 		local4.p1(cursorsEnabled ? 1 : 0);
