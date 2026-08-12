@@ -654,7 +654,7 @@ public final class client extends GameShell {
 		for (local3506 = 0; local3506 < 100; local3506++) {
 			Chat.messages[local3506] = null;
 		}
-		MiniMenu.anInt5014 = 0;
+		MiniMenu.itemTargetMode = 0;
 		Camera.cameraOffsetX = (int) (Math.random() * 100.0D) - 50;
 		LoginManager.mapFlagY = 0;
 		Camera.yawTarget = (int) (Math.random() * 20.0D) - 10 & 0x7FF;
@@ -662,7 +662,7 @@ public final class client extends GameShell {
 		PlayerList.size = 0;
 		MiniMap.state = 0;
 		Camera.cameraOffsetY = (int) (Math.random() * 110.0D) - 55;
-		MiniMenu.aBoolean302 = false;
+		MiniMenu.isTargeting = false;
 		MiniMap.zoomOffset = (int) (Math.random() * 30.0D) - 20;
 		SoundPlayer.size = 0;
 		LoginManager.mapFlagX = 0;

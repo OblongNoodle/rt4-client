@@ -897,7 +897,7 @@ public final class SoftwareModel extends Model {
 				if (GlModel.anInt3582 >= v && GlModel.anInt3582 <= y && RawModel.pickScreenY >= x && RawModel.pickScreenY <= z) {
 					if (this.pickable) {
 						if (miniMenuPick) {
-							Model.aLongArray11[MiniMenu.anInt7++] = key;
+							Model.aLongArray11[MiniMenu.pickResultCount++] = key;
 						}
 						if (roofVisibilityLocPick) {
 							API.ReportRoofVisibilityLoc(key, arg9);
@@ -1668,7 +1668,7 @@ public final class SoftwareModel extends Model {
 				} else {
 					if (arg1 && this.pointWithinTriangle(GlModel.anInt3582 + Rasteriser.centerX, RawModel.pickScreenY + Rasteriser.centerY, vertexScreenY[local51], vertexScreenY[local56], vertexScreenY[pri], local65, local69, local73)) {
 						if (arg2 >= 0L) {
-							Model.aLongArray11[MiniMenu.anInt7++] = arg2;
+							Model.aLongArray11[MiniMenu.pickResultCount++] = arg2;
 						}
 						if (API.IsRoofVisibilityLocPickable(arg2)) {
 							API.ReportRoofVisibilityLoc(arg2, roofHidePlane);

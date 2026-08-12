@@ -427,12 +427,12 @@ public class Cs1ScriptRunner {
 								local556 = local276 * color + local270 * cardMemory >> 11;
 								local563 = PlayerList.self.xFine + local556 >> 7;
 								local571 = PlayerList.self.yFine - objId >> 7;
-								if (MiniMenu.aBoolean302 && (MiniMenu.anInt4999 & 0x40) != 0) {
-									@Pc(583) Component local583 = InterfaceList.getComponent(MiniMenu.anInt2512, MiniMenu.anInt506);
+								if (MiniMenu.isTargeting && (MiniMenu.targetMask & 0x40) != 0) {
+									@Pc(583) Component local583 = InterfaceList.getComponent(MiniMenu.targetInterfaceId, MiniMenu.targetChildId);
 									if (local583 == null) {
 										MiniMenu.cancelTargeting();
 									} else {
-										MiniMenu.add(MiniMenu.anInt5393, 1L, MiniMenu.aClass100_961, local563, (short) 11, MiniMenu.aClass100_545, local571);
+										MiniMenu.add(MiniMenu.targetCursorId, 1L, MiniMenu.ARROW_SUFFIX, local563, (short) 11, MiniMenu.targetVerb, local571);
 									}
 									continue;
 								}
@@ -605,7 +605,7 @@ public class Cs1ScriptRunner {
 												if (arg0 < x + 32 && x < arg4 && arg6 < y + 32 && y < arg7 || component == InterfaceList.clickedInventoryComponent && InterfaceList.mouseOverInventoryObjectIndex == local270) {
 													@Pc(1476) Sprite sprite;
 
-													if (MiniMenu.anInt5014 == 1 && MiniMenu.anInt4370 == local270 && component.id == MiniMap.selectedComponentId) {
+													if (MiniMenu.itemTargetMode == 1 && MiniMenu.selectedObjSlot == local270 && component.id == MiniMap.selectedComponentId) {
 														sprite = Inv.getObjectSprite(2, objId, component.objDrawText, component.objCounts[local270], 0);
 													} else {
 														sprite = Inv.getObjectSprite(1, objId, component.objDrawText, component.objCounts[local270], 3153952);
@@ -681,7 +681,7 @@ public class Cs1ScriptRunner {
 																InterfaceList.redraw(local1571);
 															}
 														}
-													} else if (component == MiniMenu.pressedInventoryComponent && local270 == MiniMenu.anInt5444) {
+													} else if (component == MiniMenu.pressedInventoryComponent && local270 == MiniMenu.pressedSlotIndex) {
 														sprite.renderAlpha(x, y, 128);
 													} else {
 														sprite.render(x, y);
@@ -765,7 +765,7 @@ public class Cs1ScriptRunner {
 													local1934 = MiniMenu.NULL;
 												}
 												if ((local1989.stackable == 1 || component.objCount != 1) && component.objCount != -1) {
-													local1934 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local1934, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCount)});
+													local1934 = JagString.concatenate(new JagString[]{MiniMenu.COLOR_ITEM_ORANGE, local1934, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCount)});
 												}
 											}
 											if (pleaseWaitComponent == component) {
@@ -1007,9 +1007,9 @@ public class Cs1ScriptRunner {
 															local2611 = ObjTypeList.get(component.objTypes[local276] - 1);
 															@Pc(3159) JagString local3159;
 															if (local2611.stackable != 1 && component.objCounts[local276] == 1) {
-																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.CLOSE_COLOR});
+																local3159 = JagString.concatenate(new JagString[]{MiniMenu.COLOR_ITEM_ORANGE, local2611.name, JagString.CLOSE_COLOR});
 															} else {
-																local3159 = JagString.concatenate(new JagString[]{MiniMenu.aClass100_32, local2611.name, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCounts[local276])});
+																local3159 = JagString.concatenate(new JagString[]{MiniMenu.COLOR_ITEM_ORANGE, local2611.name, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCounts[local276])});
 															}
 															local556 = local123 + memory * (component.invMarginX + 115);
 															objId = (component.invMarginY + 12) * local468 + local114;

@@ -1787,7 +1787,7 @@ public class SceneGraph {
 												drawPlainTile(local8.plainTile, local27, anInt2886, anInt3038, anInt5205, anInt2222, local18, local21, true);
 											} else {
 												var24 = true;
-												if (local8.plainTile.colorNE != 12345678 || MiniMenu.aBoolean187 && local24 <= MiniMenu.anInt3902) {
+												if (local8.plainTile.colorNE != 12345678 || MiniMenu.walkPending && local24 <= MiniMenu.walkDestPlane) {
 													drawPlainTile(local8.plainTile, local27, anInt2886, anInt3038, anInt5205, anInt2222, local18, local21, false);
 												}
 											}
@@ -3133,7 +3133,7 @@ public class SceneGraph {
 						}
 						if (anInt1142 == 0) {
 							if (!local240) {
-								MiniMenu.aBoolean187 = false;
+								MiniMenu.walkPending = false;
 							}
 							return;
 						}
@@ -3180,7 +3180,7 @@ public class SceneGraph {
 						}
 						if (anInt1142 == 0) {
 							if (!local240) {
-								MiniMenu.aBoolean187 = false;
+								MiniMenu.walkPending = false;
 							}
 							return;
 						}
@@ -3188,7 +3188,7 @@ public class SceneGraph {
 				}
 			}
 		}
-		MiniMenu.aBoolean187 = false;
+		MiniMenu.walkPending = false;
 	}
 
 	@OriginalMember(owner = "client!lg", name = "a", descriptor = "(I)V")
@@ -3912,9 +3912,9 @@ public class SceneGraph {
 		Rasteriser.alpha = 0;
 		@Pc(475) int local475;
 		if ((local307 - local323) * (local299 - local331) - (local315 - local331) * (local291 - local323) > 0) {
-			if (MiniMenu.aBoolean187 && isRectVisible(MiniMenu.anInt2388 + Rasteriser.centerX, MiniMenu.anInt3259 + Rasteriser.centerY, local315, local331, local299, local307, local323, local291)) {
-				MiniMenu.anInt1742 = arg6;
-				MiniMenu.anInt2954 = arg7;
+			if (MiniMenu.walkPending && isRectVisible(MiniMenu.walkDestTileX + Rasteriser.centerX, MiniMenu.walkDestTileY + Rasteriser.centerY, local315, local331, local299, local307, local323, local291)) {
+				MiniMenu.clickTileX = arg6;
+				MiniMenu.clickTileY = arg7;
 			}
 			if (API.IsRoofVisibilityPicking() && isRectVisible(API.GetRoofVisibilityPickScreenX() + Rasteriser.centerX, API.GetRoofVisibilityPickScreenY() + Rasteriser.centerY, local315, local331, local299, local307, local323, local291)) {
 				API.ReportRoofVisibilityTile(arg6, arg7, arg1);
@@ -3938,9 +3938,9 @@ public class SceneGraph {
 		if ((local275 - local291) * (local331 - local299) - (local283 - local299) * (local323 - local291) <= 0) {
 			return;
 		}
-		if (MiniMenu.aBoolean187 && isRectVisible(MiniMenu.anInt2388 + Rasteriser.centerX, MiniMenu.anInt3259 + Rasteriser.centerY, local283, local299, local331, local275, local291, local323)) {
-			MiniMenu.anInt1742 = arg6;
-			MiniMenu.anInt2954 = arg7;
+		if (MiniMenu.walkPending && isRectVisible(MiniMenu.walkDestTileX + Rasteriser.centerX, MiniMenu.walkDestTileY + Rasteriser.centerY, local283, local299, local331, local275, local291, local323)) {
+			MiniMenu.clickTileX = arg6;
+			MiniMenu.clickTileY = arg7;
 		}
 		if (API.IsRoofVisibilityPicking() && isRectVisible(API.GetRoofVisibilityPickScreenX() + Rasteriser.centerX, API.GetRoofVisibilityPickScreenY() + Rasteriser.centerY, local283, local299, local331, local275, local291, local323)) {
 			API.ReportRoofVisibilityTile(arg6, arg7, arg1);
@@ -4271,9 +4271,9 @@ public class SceneGraph {
 			@Pc(160) int local160 = anIntArray164[local22];
 			@Pc(164) int local164 = anIntArray164[local29];
 			if ((local39 - local148) * (local164 - local160) - (local156 - local160) * (local152 - local148) > 0) {
-				if (MiniMenu.aBoolean187 && isRectVisible(MiniMenu.anInt2388 + Rasteriser.centerX, MiniMenu.anInt3259 + Rasteriser.centerY, local156, local160, local164, local39, local148, local152)) {
-					MiniMenu.anInt1742 = arg5;
-					MiniMenu.anInt2954 = arg6;
+				if (MiniMenu.walkPending && isRectVisible(MiniMenu.walkDestTileX + Rasteriser.centerX, MiniMenu.walkDestTileY + Rasteriser.centerY, local156, local160, local164, local39, local148, local152)) {
+					MiniMenu.clickTileX = arg5;
+					MiniMenu.clickTileY = arg6;
 				}
 				if (API.IsRoofVisibilityPicking() && isRectVisible(API.GetRoofVisibilityPickScreenX() + Rasteriser.centerX, API.GetRoofVisibilityPickScreenY() + Rasteriser.centerY, local156, local160, local164, local39, local148, local152)) {
 					API.ReportRoofVisibilityTile(arg5, arg6, arg7);

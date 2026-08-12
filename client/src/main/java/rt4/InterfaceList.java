@@ -743,7 +743,7 @@ public class InterfaceList {
 								if (component.clientCode == 1338) {
 									if (local221) {
 										anInt5 = Mouse.clickX - local50;
-										MiniMenu.anInt2878 = Mouse.clickY - local55;
+										MiniMenu.clickOffsetY = Mouse.clickY - local55;
 									}
 									continue;
 								}
