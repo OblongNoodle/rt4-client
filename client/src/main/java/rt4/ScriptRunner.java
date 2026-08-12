@@ -4526,8 +4526,8 @@ public final class ScriptRunner {
 														continue;
 													}
 													if (opcode == 5208) {
-														intStack[isp++] = WorldMap.anInt2387;
-														intStack[isp++] = WorldMap.anInt1176;
+														intStack[isp++] = WorldMap.viewportWidth;
+														intStack[isp++] = WorldMap.viewportHeight;
 														continue;
 													}
 													if (opcode == 5209) {

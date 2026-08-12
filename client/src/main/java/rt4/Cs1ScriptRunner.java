@@ -1269,14 +1269,14 @@ public class Cs1ScriptRunner {
 		if (WorldMap.loadPercentage < 100) {
 			return;
 		}
-		if (WorldMap.aClass3_Sub2_Sub1_2 == null || arg2 != WorldMap.aClass3_Sub2_Sub1_2.width || WorldMap.aClass3_Sub2_Sub1_2.height != arg1) {
+		if (WorldMap.overviewSprite == null || arg2 != WorldMap.overviewSprite.width || WorldMap.overviewSprite.height != arg1) {
 			@Pc(63) SoftwareSprite local63 = new SoftwareSprite(arg2, arg1);
 			SoftwareRaster.setSize(local63.pixels, arg2, arg1);
 			WorldMap.renderMapViewport(arg2, 0, WorldMap.width, 0, 0, WorldMap.length, arg1, 0);
 			if (GlRenderer.enabled) {
-				WorldMap.aClass3_Sub2_Sub1_2 = new GlSprite(local63);
+				WorldMap.overviewSprite = new GlSprite(local63);
 			} else {
-				WorldMap.aClass3_Sub2_Sub1_2 = local63;
+				WorldMap.overviewSprite = local63;
 			}
 			if (GlRenderer.enabled) {
 				SoftwareRaster.pixels = null;
@@ -1284,11 +1284,11 @@ public class Cs1ScriptRunner {
 				SoftwareRaster.frameBuffer.makeTarget();
 			}
 		}
-		WorldMap.aClass3_Sub2_Sub1_2.drawPixels(arg0, arg3);
+		WorldMap.overviewSprite.drawPixels(arg0, arg3);
 		@Pc(147) int local147 = arg1 * worldMapViewportY / WorldMap.length + arg3;
-		@Pc(153) int local153 = WorldMap.anInt1176 * arg1 / WorldMap.length;
+		@Pc(153) int local153 = WorldMap.viewportHeight * arg1 / WorldMap.length;
 		@Pc(161) int local161 = arg0 + arg2 * worldMapViewportX / WorldMap.width;
-		@Pc(167) int local167 = arg2 * WorldMap.anInt2387 / WorldMap.width;
+		@Pc(167) int local167 = arg2 * WorldMap.viewportWidth / WorldMap.width;
 		@Pc(169) int local169 = 16711680;
 		if (client.game == 1) {
 			local169 = 16777215;
@@ -1300,7 +1300,7 @@ public class Cs1ScriptRunner {
 			SoftwareRaster.fillRectAlpha(local161, local147, local167, local153, local169, 128);
 			SoftwareRaster.drawRect(local161, local147, local167, local153, local169);
 		}
-		if (WorldMap.anInt1864 <= 0) {
+		if (WorldMap.highlightPulseCount <= 0) {
 			return;
 		}
 		@Pc(225) int local225;
@@ -1310,7 +1310,7 @@ public class Cs1ScriptRunner {
 			local225 = mapHighlightPulseCounter * 25;
 		}
 		for (@Pc(238) MapElement local238 = (MapElement) WorldMap.mapElements.head(); local238 != null; local238 = (MapElement) WorldMap.mapElements.next()) {
-			if (local238.id == WorldMap.anInt172) {
+			if (local238.id == WorldMap.highlightedMapFunction) {
 				@Pc(258) int local258 = arg3 + local238.mapY * arg1 / WorldMap.length;
 				@Pc(267) int local267 = arg2 * local238.mapX / WorldMap.width + arg0;
 				if (GlRenderer.enabled) {

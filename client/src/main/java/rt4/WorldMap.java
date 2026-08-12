@@ -17,21 +17,21 @@ public class WorldMap {
 	@OriginalMember(owner = "client!df", name = "c", descriptor = "Lclient!na;")
 	public static final JagString LOC = JagString.parse("loc");
 	@OriginalMember(owner = "client!vk", name = "h", descriptor = "I")
-	public static final int anInt5338 = (int) (Math.random() * 33.0D) - 16;
+	public static final int randomLightOffset = (int) (Math.random() * 33.0D) - 16;
 	@OriginalMember(owner = "client!kd", name = "rb", descriptor = "I")
-	public static final int anInt3254 = (int) (Math.random() * 17.0D) - 8;
+	public static final int randomHueOffset = (int) (Math.random() * 17.0D) - 8;
 	@OriginalMember(owner = "client!lf", name = "c", descriptor = "Lclient!ih;")
 	public static final LinkedList mapElements = new LinkedList();
 	@OriginalMember(owner = "client!he", name = "db", descriptor = "Lclient!na;")
-	public static final JagString aClass100_517 = JagString.parse("");
+	public static final JagString EMPTY_STRING = JagString.parse("");
 	@OriginalMember(owner = "client!hm", name = "T", descriptor = "Lclient!na;")
-	public static final JagString aClass100_538 = JagString.parse(" ");
+	public static final JagString SPACE = JagString.parse(" ");
 	@OriginalMember(owner = "client!pm", name = "Y", descriptor = "Lclient!na;")
-	public static final JagString aClass100_872 = JagString.parse("<br>");
+	public static final JagString LINE_BREAK = JagString.parse("<br>");
 	@OriginalMember(owner = "client!nj", name = "h", descriptor = "Lclient!ih;")
-	public static final LinkedList aClass69_97 = new LinkedList();
+	public static final LinkedList highlightedElements = new LinkedList();
 	@OriginalMember(owner = "client!di", name = "q", descriptor = "[Lclient!na;")
-	public static final JagString[] aClass100Array53 = new JagString[5];
+	public static final JagString[] labelLines = new JagString[5];
 	@OriginalMember(owner = "client!wa", name = "ub", descriptor = "Lclient!bn;")
 	public static Map currentMap;
 	@OriginalMember(owner = "client!dc", name = "O", descriptor = "I")
@@ -69,9 +69,9 @@ public class WorldMap {
 	@OriginalMember(owner = "client!bc", name = "W", descriptor = "I")
 	public static int viewX;
 	@OriginalMember(owner = "client!rj", name = "P", descriptor = "I")
-	public static int anInt4901 = -1;
+	public static int panTargetY = -1;
 	@OriginalMember(owner = "client!lc", name = "l", descriptor = "I")
-	public static int anInt3482 = -1;
+	public static int panTargetX = -1;
 	@OriginalMember(owner = "client!cd", name = "u", descriptor = "I")
 	public static int viewY;
 	@OriginalMember(owner = "client!qh", name = "a", descriptor = "Lclient!se;")
@@ -95,21 +95,21 @@ public class WorldMap {
 	@OriginalMember(owner = "client!bn", name = "N", descriptor = "Lclient!be;")
 	public static Component component;
 	@OriginalMember(owner = "client!mc", name = "Q", descriptor = "Lclient!na;")
-	public static JagString aClass100_724;
+	public static JagString previousMapName;
 	@OriginalMember(owner = "client!fi", name = "j", descriptor = "Lclient!qf;")
-	public static Sprite aClass3_Sub2_Sub1_2;
+	public static Sprite overviewSprite;
 	@OriginalMember(owner = "client!mc", name = "S", descriptor = "Lclient!mm;")
-	public static SoftwareSprite aClass3_Sub2_Sub1_Sub1_2;
+	public static SoftwareSprite renderBuffer;
 	@OriginalMember(owner = "client!ha", name = "o", descriptor = "I")
-	public static int anInt2387;
+	public static int viewportWidth;
 	@OriginalMember(owner = "client!cm", name = "c", descriptor = "I")
-	public static int anInt1176;
+	public static int viewportHeight;
 	@OriginalMember(owner = "client!sm", name = "m", descriptor = "I")
-	public static int anInt5212;
+	public static int labelIterIndex;
 	@OriginalMember(owner = "client!qf", name = "S", descriptor = "I")
-	public static int anInt1864;
+	public static int highlightPulseCount;
 	@OriginalMember(owner = "client!al", name = "e", descriptor = "I")
-	public static int anInt172;
+	public static int highlightedMapFunction;
 
 	@OriginalMember(owner = "client!pa", name = "d", descriptor = "(I)V")
 	public static void load() {
@@ -256,31 +256,31 @@ public class WorldMap {
 	@OriginalMember(owner = "client!cn", name = "e", descriptor = "(B)V")
 	public static void clampViewPosition() {
 		if (viewX < 0) {
-			anInt4901 = -1;
+			panTargetY = -1;
 			viewX = 0;
-			anInt3482 = -1;
+			panTargetX = -1;
 		}
 		if (viewX > width) {
-			anInt4901 = -1;
+			panTargetY = -1;
 			viewX = width;
-			anInt3482 = -1;
+			panTargetX = -1;
 		}
 		if (viewY < 0) {
-			anInt3482 = -1;
-			anInt4901 = -1;
+			panTargetX = -1;
+			panTargetY = -1;
 			viewY = 0;
 		}
 		if (length < viewY) {
 			viewY = length;
-			anInt4901 = -1;
-			anInt3482 = -1;
+			panTargetY = -1;
+			panTargetX = -1;
 		}
 	}
 
 	@OriginalMember(owner = "client!cj", name = "a", descriptor = "(BLclient!wa;)V")
 	public static void readUnderlay(@OriginalArg(1) Buffer data) {
-		@Pc(13) int local13 = anInt5338 >> 1;
-		@Pc(19) int local19 = anInt3254 >> 2 << 10;
+		@Pc(13) int local13 = randomLightOffset >> 1;
+		@Pc(19) int local19 = randomHueOffset >> 2 << 10;
 		@Pc(23) byte[][] underlays = new byte[width][length];
 		@Pc(33) int local33;
 		@Pc(102) int local102;
@@ -874,9 +874,9 @@ public class WorldMap {
 		overlayColors = null;
 		aByteArrayArrayArray10 = null;
 		if (arg0 && currentMap != null) {
-			aClass100_724 = currentMap.group;
+			previousMapName = currentMap.group;
 		} else {
-			aClass100_724 = null;
+			previousMapName = null;
 		}
 		aByteArrayArrayArray7 = null;
 		aByteArrayArrayArray12 = null;
@@ -886,7 +886,7 @@ public class WorldMap {
 		currentMap = null;
 		mapElements.clear();
 		labels = null;
-		anInt4901 = -1;
+		panTargetY = -1;
 		font22 = null;
 		font30 = null;
 		font12 = null;
@@ -895,32 +895,32 @@ public class WorldMap {
 		font14 = null;
 		font17 = null;
 		font19 = null;
-		aClass3_Sub2_Sub1_2 = null;
-		anInt3482 = -1;
-		aClass3_Sub2_Sub1_Sub1_2 = null;
+		overviewSprite = null;
+		panTargetX = -1;
+		renderBuffer = null;
 	}
 
 	@OriginalMember(owner = "client!je", name = "a", descriptor = "(IIIII)V")
 	public static void setViewFromMousePosition(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
 		viewX = width * arg2 / arg0;
 		viewY = length * arg1 / arg3;
-		anInt3482 = -1;
-		anInt4901 = -1;
+		panTargetX = -1;
+		panTargetY = -1;
 		clampViewPosition();
 	}
 
 	@OriginalMember(owner = "client!wi", name = "d", descriptor = "(II)V")
 	public static void setViewY(@OriginalArg(1) int arg0) {
-		anInt4901 = -1;
-		anInt4901 = -1;
+		panTargetY = -1;
+		panTargetY = -1;
 		viewY = arg0;
 		clampViewPosition();
 	}
 
 	@OriginalMember(owner = "client!hj", name = "a", descriptor = "(II)V")
 	public static void setViewX(@OriginalArg(0) int arg0) {
-		anInt4901 = -1;
-		anInt3482 = -1;
+		panTargetY = -1;
+		panTargetX = -1;
 		viewX = arg0;
 		clampViewPosition();
 	}
@@ -958,7 +958,7 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(IB)V")
 	public static void setTargetZoom(@OriginalArg(0) int arg0) {
-		anInt4901 = -1;
+		panTargetY = -1;
 		if (arg0 == 37) {
 			targetZoom = 3.0F;
 		} else if (arg0 == 50) {
@@ -970,7 +970,7 @@ public class WorldMap {
 		} else if (arg0 == 200) {
 			targetZoom = 16.0F;
 		}
-		anInt4901 = -1;
+		panTargetY = -1;
 	}
 
 	@OriginalMember(owner = "client!af", name = "b", descriptor = "(B)V")
@@ -995,39 +995,39 @@ public class WorldMap {
 			}
 			clampViewPosition();
 		}
-		if (anInt3482 == -1 || anInt4901 == -1) {
+		if (panTargetX == -1 || panTargetY == -1) {
 			return;
 		}
-		@Pc(60) int local60 = anInt3482 - viewX;
+		@Pc(60) int local60 = panTargetX - viewX;
 		if (local60 < 2 || local60 > 2) {
 			local60 >>= 0x4;
 		}
-		@Pc(78) int local78 = anInt4901 - viewY;
+		@Pc(78) int local78 = panTargetY - viewY;
 		if (local78 < 2 || local78 > 2) {
 			local78 >>= 0x4;
 		}
 		viewY -= -local78;
 		viewX += local60;
 		if (local60 == 0 && local78 == 0) {
-			anInt3482 = -1;
-			anInt4901 = -1;
+			panTargetX = -1;
+			panTargetY = -1;
 		}
 		clampViewPosition();
 	}
 
 	@OriginalMember(owner = "client!lb", name = "d", descriptor = "(B)V")
 	public static void restorePreviousMap() {
-		if (aClass100_724 != null) {
-			switchMap(aClass100_724);
-			aClass100_724 = null;
+		if (previousMapName != null) {
+			switchMap(previousMapName);
+			previousMapName = null;
 		}
 	}
 
 	@OriginalMember(owner = "client!va", name = "c", descriptor = "(BI)V")
 	public static void highlightMapElement(@OriginalArg(1) int arg0) {
-		anInt172 = arg0;
+		highlightedMapFunction = arg0;
 		Cs1ScriptRunner.mapHighlightPulseCounter = 20;
-		anInt1864 = 3;
+		highlightPulseCount = 3;
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(Lclient!na;I)V")
@@ -1041,7 +1041,7 @@ public class WorldMap {
 	@OriginalMember(owner = "client!rc", name = "a", descriptor = "(Lclient!na;Z)Lclient!na;")
 	public static JagString getLabelTextByPrefix(@OriginalArg(0) JagString arg0) {
 		@Pc(12) int local12 = findLabelByPrefix(arg0);
-		return local12 == -1 ? aClass100_517 : labels.names[local12].replaceAll(aClass100_538, aClass100_872);
+		return local12 == -1 ? EMPTY_STRING : labels.names[local12].replaceAll(SPACE, LINE_BREAK);
 	}
 
 	@OriginalMember(owner = "client!rg", name = "d", descriptor = "(B)Lclient!bn;")
@@ -1051,7 +1051,7 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!jd", name = "a", descriptor = "(B)I")
 	public static int getFirstVisibleLabel() {
-		anInt5212 = 0;
+		labelIterIndex = 0;
 		return getNextVisibleLabel();
 	}
 
@@ -1060,34 +1060,34 @@ public class WorldMap {
 		if (labels == null) {
 			return -1;
 		}
-		while (anInt5212 < labels.count) {
-			if (labels.isVisible(anInt5212)) {
-				return anInt5212++;
+		while (labelIterIndex < labels.count) {
+			if (labels.isVisible(labelIterIndex)) {
+				return labelIterIndex++;
 			}
-			anInt5212++;
+			labelIterIndex++;
 		}
 		return -1;
 	}
 
 	@OriginalMember(owner = "client!gf", name = "a", descriptor = "(BII)V")
 	public static void panToCoords(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		anInt3482 = arg0 - originX;
-		@Pc(24) int local24 = anInt3482 - (int) ((float) component.width / zoom);
-		@Pc(33) int local33 = anInt3482 + (int) ((float) component.width / zoom);
+		panTargetX = arg0 - originX;
+		@Pc(24) int local24 = panTargetX - (int) ((float) component.width / zoom);
+		@Pc(33) int local33 = panTargetX + (int) ((float) component.width / zoom);
 		if (local24 < 0) {
-			anInt3482 = (int) ((float) component.width / zoom);
+			panTargetX = (int) ((float) component.width / zoom);
 		}
-		anInt4901 = length + originY - arg1 - 1;
-		@Pc(61) int local61 = (int) ((float) component.height / zoom) + anInt4901;
-		@Pc(70) int local70 = anInt4901 - (int) ((float) component.height / zoom);
+		panTargetY = length + originY - arg1 - 1;
+		@Pc(61) int local61 = (int) ((float) component.height / zoom) + panTargetY;
+		@Pc(70) int local70 = panTargetY - (int) ((float) component.height / zoom);
 		if (local33 > width) {
-			anInt3482 = width - (int) ((float) component.width / zoom);
+			panTargetX = width - (int) ((float) component.width / zoom);
 		}
 		if (local70 < 0) {
-			anInt4901 = (int) ((float) component.height / zoom);
+			panTargetY = (int) ((float) component.height / zoom);
 		}
 		if (length < local61) {
-			anInt4901 = length - (int) ((float) component.height / zoom);
+			panTargetY = length - (int) ((float) component.height / zoom);
 		}
 	}
 
@@ -1105,7 +1105,7 @@ public class WorldMap {
 			return -1;
 		}
 		for (@Pc(20) int local20 = 0; local20 < labels.count; local20++) {
-			if (labels.names[local20].replaceAll(aClass100_538, aClass100_872).strEquals(arg0)) {
+			if (labels.names[local20].replaceAll(SPACE, LINE_BREAK).strEquals(arg0)) {
 				return local20;
 			}
 		}
@@ -1636,35 +1636,35 @@ public class WorldMap {
 			Fonts.b12Full.renderCenter(LocalizedText.LOADINGDOTDOTDOT, local50, local61 + 20, 16777215, -1);
 			return;
 		}
-		anInt1176 = (int) ((float) (arg2 * 2) / zoom);
+		viewportHeight = (int) ((float) (arg2 * 2) / zoom);
 		Cs1ScriptRunner.worldMapViewportX = viewX - (int) ((float) arg3 / zoom);
 		@Pc(211) int local211 = viewX - (int) ((float) arg3 / zoom);
 		local50 = viewY - (int) ((float) arg2 / zoom);
 		Cs1ScriptRunner.worldMapViewportY = viewY - (int) ((float) arg2 / zoom);
 		@Pc(236) int local236 = viewY + (int) ((float) arg2 / zoom);
 		local61 = (int) ((float) arg3 / zoom) + viewX;
-		anInt2387 = (int) ((float) (arg3 * 2) / zoom);
+		viewportWidth = (int) ((float) (arg3 * 2) / zoom);
 		if (GlRenderer.enabled) {
-			if (aClass3_Sub2_Sub1_Sub1_2 == null || aClass3_Sub2_Sub1_Sub1_2.width != arg3 || aClass3_Sub2_Sub1_Sub1_2.height != arg2) {
-				aClass3_Sub2_Sub1_Sub1_2 = null;
-				aClass3_Sub2_Sub1_Sub1_2 = new SoftwareSprite(arg3, arg2);
+			if (renderBuffer == null || renderBuffer.width != arg3 || renderBuffer.height != arg2) {
+				renderBuffer = null;
+				renderBuffer = new SoftwareSprite(arg3, arg2);
 			}
-			SoftwareRaster.setSize(aClass3_Sub2_Sub1_Sub1_2.pixels, arg3, arg2);
+			SoftwareRaster.setSize(renderBuffer.pixels, arg3, arg2);
 			renderMapViewport(arg3, 0, local61, local50, 0, local236, arg2, local211);
 			renderMapIcons(arg3, 0, local61, local236, arg2, 0, local211, local50);
 			renderMapLabels(0, 0, local211, arg3, local236, local50, local61, arg2);
-			GlRaster.drawPixels(aClass3_Sub2_Sub1_Sub1_2.pixels, arg0, arg1, arg3, arg2);
+			GlRaster.drawPixels(renderBuffer.pixels, arg0, arg1, arg3, arg2);
 			SoftwareRaster.pixels = null;
 		} else {
 			renderMapViewport(arg3 + arg0, arg1, local61, local50, arg0, local236, arg1 + arg2, local211);
 			renderMapIcons(arg0 + arg3, arg0, local61, local236, arg2 + arg1, arg1, local211, local50);
 			renderMapLabels(arg0, arg1, local211, arg0 + arg3, local236, local50, local61, arg2 + arg1);
 		}
-		if (anInt1864 > 0) {
+		if (highlightPulseCount > 0) {
 			Cs1ScriptRunner.mapHighlightPulseCounter--;
 			if (Cs1ScriptRunner.mapHighlightPulseCounter == 0) {
 				Cs1ScriptRunner.mapHighlightPulseCounter = 20;
-				anInt1864--;
+				highlightPulseCount--;
 			}
 		}
 
@@ -1697,7 +1697,7 @@ public class WorldMap {
 	public static void renderMapIconSprites(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(8) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7) {
 		@Pc(9) int local9 = arg2 - arg4;
 		@Pc(11) int local11 = -1;
-		if (anInt1864 > 0) {
+		if (highlightPulseCount > 0) {
 			if (Cs1ScriptRunner.mapHighlightPulseCounter <= 10) {
 				local11 = Cs1ScriptRunner.mapHighlightPulseCounter * 5;
 			} else {
@@ -1729,12 +1729,12 @@ public class WorldMap {
 								if (local209 != 0) {
 									@Pc(222) LocType local222 = LocTypeList.get(local209 - 1);
 									if (!MapList.visibility[local222.mapfunction]) {
-										if (local11 != -1 && local222.mapfunction == anInt172) {
+										if (local11 != -1 && local222.mapfunction == highlightedMapFunction) {
 											@Pc(243) MapElement local243 = new MapElement();
 											local243.mapX = local65;
 											local243.mapY = local144;
 											local243.id = local222.mapfunction;
-											aClass69_97.addTail(local243);
+											highlightedElements.addTail(local243);
 										} else {
 											MapList.sprites[local222.mapfunction].render(local65 - 7, local144 + -7);
 										}
@@ -1746,14 +1746,14 @@ public class WorldMap {
 				}
 			}
 		}
-		for (@Pc(285) MapElement local285 = (MapElement) aClass69_97.head(); local285 != null; local285 = (MapElement) aClass69_97.next()) {
+		for (@Pc(285) MapElement local285 = (MapElement) highlightedElements.head(); local285 != null; local285 = (MapElement) highlightedElements.next()) {
 			SoftwareRaster.fillCircleAlpha(local285.mapX, local285.mapY, 15, local11);
 			SoftwareRaster.fillCircleAlpha(local285.mapX, local285.mapY, 13, local11);
 			SoftwareRaster.fillCircleAlpha(local285.mapX, local285.mapY, 11, local11);
 			SoftwareRaster.fillCircleAlpha(local285.mapX, local285.mapY, 9, local11);
 			MapList.sprites[local285.id].render(local285.mapX - 7, local285.mapY + -7);
 		}
-		aClass69_97.clear();
+		highlightedElements.clear();
 	}
 
 	@OriginalMember(owner = "client!fi", name = "a", descriptor = "(III)V")
@@ -1805,7 +1805,7 @@ public class WorldMap {
 			return -1;
 		}
 		for (@Pc(20) int local20 = 0; local20 < labels.count; local20++) {
-			if (labels.names[local20].replaceAll(aClass100_538, aClass100_872).startsWithIgnoreCase(arg0)) {
+			if (labels.names[local20].replaceAll(SPACE, LINE_BREAK).startsWithIgnoreCase(arg0)) {
 				return local20;
 			}
 		}
@@ -1870,11 +1870,11 @@ public class WorldMap {
 					local82 = labels.colors[local11];
 				}
 				if (local84 != null) {
-					@Pc(211) int local211 = Fonts.p11Full.splitParagraph(labels.names[local11], null, aClass100Array53);
+					@Pc(211) int local211 = Fonts.p11Full.splitParagraph(labels.names[local11], null, labelLines);
 					local80 -= local84.getLineHeight() * (local211 - 1) / 2;
 					local80 += local84.getAscent() / 2;
 					for (@Pc(231) int local231 = 0; local231 < local211; local231++) {
-						@Pc(242) JagString local242 = aClass100Array53[local231];
+						@Pc(242) JagString local242 = labelLines[local231];
 						if (local211 - 1 > local231) {
 							local242.setLength(local242.length() - 4);
 						}
