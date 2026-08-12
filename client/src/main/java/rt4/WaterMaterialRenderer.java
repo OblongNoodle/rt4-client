@@ -36,16 +36,16 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!jj", name = "a", descriptor = "(B)[F")
 	public static float[] getWaterFogColor() {
-		@Pc(3) float local3 = FogManager.getLightingModelAmbient() + FogManager.getLight0Diffuse();
-		@Pc(9) int local9 = FogManager.getLightColor();
-		@Pc(18) float local18 = (float) (local9 >> 16 & 0xFF) / 255.0F;
+		@Pc(3) float ambient = FogManager.getLightingModelAmbient() + FogManager.getLight0Diffuse();
+		@Pc(9) int lightColor = FogManager.getLightColor();
+		@Pc(18) float r = (float) (lightColor >> 16 & 0xFF) / 255.0F;
 		ColorUtils.rgbaBuffer[3] = 1.0F;
-		@Pc(37) float local37 = (float) (local9 >> 8 & 0xFF) / 255.0F;
-		@Pc(39) float local39 = 0.58823526F;
-		@Pc(46) float local46 = (float) (local9 & 0xFF) / 255.0F;
-		ColorUtils.rgbaBuffer[2] = waterColor[2] * local46 * local39 * local3;
-		ColorUtils.rgbaBuffer[0] = waterColor[0] * local18 * local39 * local3;
-		ColorUtils.rgbaBuffer[1] = local3 * local39 * local37 * waterColor[1];
+		@Pc(37) float g = (float) (lightColor >> 8 & 0xFF) / 255.0F;
+		@Pc(39) float scale = 0.58823526F;
+		@Pc(46) float b = (float) (lightColor & 0xFF) / 255.0F;
+		ColorUtils.rgbaBuffer[2] = waterColor[2] * b * scale * ambient;
+		ColorUtils.rgbaBuffer[0] = waterColor[0] * r * scale * ambient;
+		ColorUtils.rgbaBuffer[1] = ambient * scale * g * waterColor[1];
 		return ColorUtils.rgbaBuffer;
 	}
 
@@ -60,16 +60,16 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!pd", name = "d", descriptor = "()V")
 	private void createAlphaTexture() {
-		@Pc(2) byte[] local2 = new byte[]{0, -1};
+		@Pc(2) byte[] alphaData = new byte[]{0, -1};
 		@Pc(12) GL2 gl = GlRenderer.gl;
-		@Pc(15) int[] local15 = new int[1];
-		gl.glGenTextures(1, local15, 0);
-		gl.glBindTexture(GL2.GL_TEXTURE_1D, local15[0]);
-		gl.glTexImage1D(GL2.GL_TEXTURE_1D, 0, GL2.GL_ALPHA, 2, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local2));
+		@Pc(15) int[] texIds = new int[1];
+		gl.glGenTextures(1, texIds, 0);
+		gl.glBindTexture(GL2.GL_TEXTURE_1D, texIds[0]);
+		gl.glTexImage1D(GL2.GL_TEXTURE_1D, 0, GL2.GL_ALPHA, 2, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(alphaData));
 		gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 		gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 		gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
-		this.alphaTextureId = local15[0];
+		this.alphaTextureId = texIds[0];
 	}
 
 	@OriginalMember(owner = "client!pd", name = "f", descriptor = "()V")
@@ -143,12 +143,12 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!pd", name = "a", descriptor = "(I)V")
 	@Override
-	public final void setArgument(@OriginalArg(0) int arg0) {
+	public final void setArgument(@OriginalArg(0) int flags) {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, waterColor, 0);
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
-		if ((arg0 & 0x1) == 1) {
+		if ((flags & 0x1) == 1) {
 			if (!MaterialManager.allows3DTextureMapping) {
 				GlRenderer.setTextureId(MaterialManager.noise2DTextures[GlRenderer.animationClock * 64 / 100 % 64]);
 			} else if (this.lastAnimationClock != GlRenderer.animationClock) {
@@ -178,16 +178,16 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 		GlRenderer.setTextureCombineAlphaMode(2);
 		GlRenderer.resetTextureMatrix();
 		gl.glCallList(this.displayListId);
-		@Pc(12) float local12 = 2662.4001F;
-		local12 += (float) (MaterialManager.cameraPitch - 128) * 0.5F;
+		@Pc(12) float nearDist = 2662.4001F;
+		nearDist += (float) (MaterialManager.cameraPitch - 128) * 0.5F;
 		float max = (float) GlobalConfig.VIEW_DISTANCE - GlobalConfig.VIEW_FADE_DISTANCE;
-		if (local12 >= max) {
-			local12 = max - 1.0f;
+		if (nearDist >= max) {
+			nearDist = max - 1.0f;
 		}
 		this.texGenParams[0] = 0.0F;
 		this.texGenParams[1] = 0.0F;
-		this.texGenParams[2] = 1.0F / (local12 - max);
-		this.texGenParams[3] = local12 / (local12 - max);
+		this.texGenParams[2] = 1.0F / (nearDist - max);
+		this.texGenParams[3] = nearDist / (nearDist - max);
 		gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.texGenParams, 0);
 		gl.glPopMatrix();
 		gl.glActiveTexture(GL2.GL_TEXTURE0);

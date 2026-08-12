@@ -35,16 +35,16 @@ public class RidgedNoiseGenerator extends PerlinNoiseGenerator {
 	private int currentWeight;
 
 	@OriginalMember(owner = "client!we", name = "<init>", descriptor = "(IIIIIFFF)V")
-	protected RidgedNoiseGenerator(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) float arg5, @OriginalArg(6) float arg6, @OriginalArg(7) float arg7) {
-		super(arg0, arg1, arg2, arg3, arg4);
-		this.decay = (int) (arg7 * 4096.0F);
-		this.threshold = (int) (arg6 * 4096.0F);
-		this.currentWeight = this.initialWeight = (int) (Math.pow(0.5D, -arg5) * 4096.0D);
+	protected RidgedNoiseGenerator(@OriginalArg(0) int seed, @OriginalArg(1) int octaves, @OriginalArg(2) int freqX, @OriginalArg(3) int freqY, @OriginalArg(4) int freqZ, @OriginalArg(5) float gain, @OriginalArg(6) float threshold, @OriginalArg(7) float decay) {
+		super(seed, octaves, freqX, freqY, freqZ);
+		this.decay = (int) (decay * 4096.0F);
+		this.threshold = (int) (threshold * 4096.0F);
+		this.currentWeight = this.initialWeight = (int) (Math.pow(0.5D, -gain) * 4096.0D);
 	}
 
 	@OriginalMember(owner = "client!we", name = "a", descriptor = "(IB)V")
-	protected void writeSample(@OriginalArg(0) int arg0, @OriginalArg(1) byte arg1) {
-		this.output[arg0] = arg1;
+	protected void writeSample(@OriginalArg(0) int index, @OriginalArg(1) byte value) {
+		this.output[index] = value;
 	}
 
 	@OriginalMember(owner = "client!we", name = "a", descriptor = "(B)V")
@@ -63,10 +63,10 @@ public class RidgedNoiseGenerator extends PerlinNoiseGenerator {
 
 	@OriginalMember(owner = "client!we", name = "a", descriptor = "(III)V")
 	@Override
-	protected final void accumulate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		if (arg1 == 0) {
+	protected final void accumulate(@OriginalArg(0) int noise, @OriginalArg(1) int octave) {
+		if (octave == 0) {
 			this.weight = 4096;
-			this.signal = this.threshold - (arg0 >= 0 ? arg0 : -arg0);
+			this.signal = this.threshold - (noise >= 0 ? noise : -noise);
 			this.signal = this.signal * this.signal >> 12;
 			this.accumulator = this.signal;
 			return;
@@ -77,7 +77,7 @@ public class RidgedNoiseGenerator extends PerlinNoiseGenerator {
 		} else if (this.weight > 4096) {
 			this.weight = 4096;
 		}
-		this.signal = this.threshold - (arg0 >= 0 ? arg0 : -arg0);
+		this.signal = this.threshold - (noise >= 0 ? noise : -noise);
 		this.signal = this.signal * this.signal >> 12;
 		this.signal = this.signal * this.weight >> 12;
 		this.accumulator += this.currentWeight * this.signal >> 12;

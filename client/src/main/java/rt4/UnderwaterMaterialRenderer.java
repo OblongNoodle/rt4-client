@@ -27,20 +27,20 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!wg", name = "<init>", descriptor = "()V")
 	public UnderwaterMaterialRenderer() {
 		if (GlRenderer.maxTextureUnits >= 2) {
-			@Pc(17) int[] local17 = new int[1];
-			@Pc(20) byte[] local20 = new byte[8];
-			@Pc(22) int local22 = 0;
-			while (local22 < 8) {
-				local20[local22++] = (byte) (local22 * 159 / 8 + 96);
+			@Pc(17) int[] texIds = new int[1];
+			@Pc(20) byte[] alphaData = new byte[8];
+			@Pc(22) int i = 0;
+			while (i < 8) {
+				alphaData[i++] = (byte) (i * 159 / 8 + 96);
 			}
 			@Pc(40) GL2 gl = GlRenderer.gl;
-			gl.glGenTextures(1, local17, 0);
-			gl.glBindTexture(GL2.GL_TEXTURE_1D, local17[0]);
-			gl.glTexImage1D(GL2.GL_TEXTURE_1D, 0, GL2.GL_ALPHA, 8, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local20));
+			gl.glGenTextures(1, texIds, 0);
+			gl.glBindTexture(GL2.GL_TEXTURE_1D, texIds[0]);
+			gl.glTexImage1D(GL2.GL_TEXTURE_1D, 0, GL2.GL_ALPHA, 8, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(alphaData));
 			gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
-			this.alphaGradientTextureId = local17[0];
+			this.alphaGradientTextureId = texIds[0];
 			use3DTexture = GlRenderer.maxTextureUnits > 2 && GlRenderer.extTexture3dSupported;
 			this.initDisplayLists();
 		}
@@ -179,10 +179,10 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!wg", name = "a", descriptor = "(I)V")
 	@Override
-	public final void setArgument(@OriginalArg(0) int arg0) {
+	public final void setArgument(@OriginalArg(0) int waterHeight) {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
-		if (use3DTexture || arg0 >= 0) {
+		if (use3DTexture || waterHeight >= 0) {
 			gl.glPushMatrix();
 			gl.glLoadIdentity();
 			gl.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
@@ -208,11 +208,11 @@ public final class UnderwaterMaterialRenderer implements MaterialRenderer {
 				gl.glActiveTexture(GL2.GL_TEXTURE2);
 			}
 			gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, WaterMaterialRenderer.getWaterFogColor(), 0);
-			if (arg0 >= 0) {
+			if (waterHeight >= 0) {
 				this.texGenParams[0] = 0.0F;
 				this.texGenParams[1] = 1.0F / (float) underwaterDepthRange;
 				this.texGenParams[2] = 0.0F;
-				this.texGenParams[3] = (float) arg0 * 1.0F / (float) underwaterDepthRange;
+				this.texGenParams[3] = (float) waterHeight * 1.0F / (float) underwaterDepthRange;
 				gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.texGenParams, 0);
 				gl.glEnable(GL2.GL_TEXTURE_GEN_S);
 			} else {

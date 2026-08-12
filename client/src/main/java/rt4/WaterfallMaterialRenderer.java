@@ -28,19 +28,19 @@ public final class WaterfallMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(I)V")
 	@Override
-	public final void setArgument(@OriginalArg(0) int arg0) {
+	public final void setArgument(@OriginalArg(0) int flags) {
 		@Pc(7) GL2 gl = GlRenderer.gl;
-		@Pc(18) float local18 = (float) ((arg0 >> 3 & 0x3) + 1) * 0.01F;
-		@Pc(27) float local27 = -0.01F * (float) ((arg0 & 0x3) + 1);
-		@Pc(36) float local36 = (arg0 & 0x40) == 0 ? 4.8828125E-4F : 9.765625E-4F;
-		@Pc(47) boolean local47 = (arg0 & 0x80) != 0;
-		if (local47) {
-			this.texGenParams[0] = local36;
+		@Pc(18) float animSpeed = (float) ((flags >> 3 & 0x3) + 1) * 0.01F;
+		@Pc(27) float scrollSpeed = -0.01F * (float) ((flags & 0x3) + 1);
+		@Pc(36) float texScale = (flags & 0x40) == 0 ? 4.8828125E-4F : 9.765625E-4F;
+		@Pc(47) boolean horizontal = (flags & 0x80) != 0;
+		if (horizontal) {
+			this.texGenParams[0] = texScale;
 			this.texGenParams[1] = 0.0F;
 			this.texGenParams[2] = 0.0F;
 			this.texGenParams[3] = 0.0F;
 		} else {
-			this.texGenParams[2] = local36;
+			this.texGenParams[2] = texScale;
 			this.texGenParams[1] = 0.0F;
 			this.texGenParams[3] = 0.0F;
 			this.texGenParams[0] = 0.0F;
@@ -54,21 +54,21 @@ public final class WaterfallMaterialRenderer implements MaterialRenderer {
 		gl.glRotatef((float) MaterialManager.cameraYaw * 360.0F / 2048.0F, 0.0F, 1.0F, 0.0F);
 		gl.glTranslatef((float) -MaterialManager.cameraRenderX, (float) -MaterialManager.cameraRenderZ, (float) -MaterialManager.cameraRenderY);
 		gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.texGenParams, 0);
-		this.texGenParams[3] = local27 * (float) GlRenderer.animationClock;
+		this.texGenParams[3] = scrollSpeed * (float) GlRenderer.animationClock;
 		this.texGenParams[0] = 0.0F;
 		this.texGenParams[2] = 0.0F;
-		this.texGenParams[1] = local36;
+		this.texGenParams[1] = texScale;
 		gl.glTexGenfv(GL2.GL_T, GL2.GL_EYE_PLANE, this.texGenParams, 0);
 		gl.glPopMatrix();
 		if (MaterialManager.allows3DTextureMapping) {
-			this.texGenParams[3] = (float) GlRenderer.animationClock * local18;
+			this.texGenParams[3] = (float) GlRenderer.animationClock * animSpeed;
 			this.texGenParams[1] = 0.0F;
 			this.texGenParams[0] = 0.0F;
 			this.texGenParams[2] = 0.0F;
 			gl.glTexGenfv(GL2.GL_R, GL2.GL_OBJECT_PLANE, this.texGenParams, 0);
 		} else {
-			@Pc(189) int local189 = (int) ((float) GlRenderer.animationClock * local18 * 64.0F);
-			gl.glBindTexture(GL2.GL_TEXTURE_2D, MaterialManager.waterfallTextures[local189 % 64]);
+			@Pc(189) int frameIndex = (int) ((float) GlRenderer.animationClock * animSpeed * 64.0F);
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, MaterialManager.waterfallTextures[frameIndex % 64]);
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
 	}
