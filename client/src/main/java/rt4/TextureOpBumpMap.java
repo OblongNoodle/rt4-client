@@ -27,13 +27,13 @@ public final class TextureOpBumpMap extends TextureOp {
 
 	@OriginalMember(owner = "client!pk", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.bumpStrength = arg1.g2();
-		} else if (arg0 == 1) {
-			this.lightAzimuth = arg1.g2();
-		} else if (arg0 == 2) {
-			this.lightElevation = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.bumpStrength = buf.g2();
+		} else if (opcode == 1) {
+			this.lightAzimuth = buf.g2();
+		} else if (opcode == 2) {
+			this.lightElevation = buf.g2();
 		}
 	}
 
@@ -45,57 +45,57 @@ public final class TextureOpBumpMap extends TextureOp {
 
 	@OriginalMember(owner = "client!pk", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(30) int local30 = Texture.widthScale * this.bumpStrength >> 12;
-			@Pc(40) int[] local40 = this.getChildMonochromeOutput(0, Texture.heightMask & arg0 - 1);
-			@Pc(46) int[] local46 = this.getChildMonochromeOutput(0, arg0);
-			@Pc(56) int[] local56 = this.getChildMonochromeOutput(0, arg0 + 1 & Texture.heightMask);
-			for (@Pc(58) int local58 = 0; local58 < Texture.width; local58++) {
-				@Pc(81) int local81 = (local46[Texture.widthMask & local58 - 1] - local46[local58 + 1 & Texture.widthMask]) * local30 >> 12;
-				@Pc(94) int local94 = local30 * (local56[local58] - local40[local58]) >> 12;
-				@Pc(98) int local98 = local81 >> 4;
-				if (local98 < 0) {
-					local98 = -local98;
+			@Pc(30) int bumpScale = Texture.widthScale * this.bumpStrength >> 12;
+			@Pc(40) int[] prevRow = this.getChildMonochromeOutput(0, Texture.heightMask & row - 1);
+			@Pc(46) int[] curRow = this.getChildMonochromeOutput(0, row);
+			@Pc(56) int[] nextRow = this.getChildMonochromeOutput(0, row + 1 & Texture.heightMask);
+			for (@Pc(58) int i = 0; i < Texture.width; i++) {
+				@Pc(81) int dx = (curRow[Texture.widthMask & i - 1] - curRow[i + 1 & Texture.widthMask]) * bumpScale >> 12;
+				@Pc(94) int dy = bumpScale * (nextRow[i] - prevRow[i]) >> 12;
+				@Pc(98) int absDx = dx >> 4;
+				if (absDx < 0) {
+					absDx = -absDx;
 				}
-				if (local98 > 255) {
-					local98 = 255;
+				if (absDx > 255) {
+					absDx = 255;
 				}
-				@Pc(113) int local113 = local94 >> 4;
-				if (local113 < 0) {
-					local113 = -local113;
+				@Pc(113) int absDy = dy >> 4;
+				if (absDy < 0) {
+					absDy = -absDy;
 				}
-				if (local113 > 255) {
-					local113 = 255;
+				if (absDy > 255) {
+					absDy = 255;
 				}
-				@Pc(142) int local142 = MonochromeImageCache.normalBrightnessLookup[(local113 * (local113 + 1) >> 1) + local98] & 0xFF;
-				@Pc(148) int local148 = local94 * local142 >> 8;
-				@Pc(154) int local154 = local142 * local81 >> 8;
-				@Pc(163) int local163 = local148 * this.lightDirection[1] >> 12;
-				@Pc(172) int local172 = this.lightDirection[0] * local154 >> 12;
-				@Pc(178) int local178 = local142 * 4096 >> 8;
-				@Pc(187) int local187 = local178 * this.lightDirection[2] >> 12;
-				local19[local58] = local187 + local163 + local172;
+				@Pc(142) int normalZ = MonochromeImageCache.normalBrightnessLookup[(absDy * (absDy + 1) >> 1) + absDx] & 0xFF;
+				@Pc(148) int normalY = dy * normalZ >> 8;
+				@Pc(154) int normalX = normalZ * dx >> 8;
+				@Pc(163) int dotY = normalY * this.lightDirection[1] >> 12;
+				@Pc(172) int dotX = this.lightDirection[0] * normalX >> 12;
+				@Pc(178) int scaledZ = normalZ * 4096 >> 8;
+				@Pc(187) int dotZ = scaledZ * this.lightDirection[2] >> 12;
+				output[i] = dotZ + dotY + dotX;
 			}
 		}
-		return local19;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!pk", name = "g", descriptor = "(B)V")
 	private void computeDirectionVector() {
-		@Pc(7) double local7 = Math.cos((float) this.lightElevation / 4096.0F);
-		this.lightDirection[0] = (int) (local7 * 4096.0D * Math.sin((float) this.lightAzimuth / 4096.0F));
-		this.lightDirection[1] = (int) (Math.cos((float) this.lightAzimuth / 4096.0F) * local7 * 4096.0D);
+		@Pc(7) double cosElev = Math.cos((float) this.lightElevation / 4096.0F);
+		this.lightDirection[0] = (int) (cosElev * 4096.0D * Math.sin((float) this.lightAzimuth / 4096.0F));
+		this.lightDirection[1] = (int) (Math.cos((float) this.lightAzimuth / 4096.0F) * cosElev * 4096.0D);
 		this.lightDirection[2] = (int) (Math.sin((float) this.lightElevation / 4096.0F) * 4096.0D);
-		@Pc(73) int local73 = this.lightDirection[2] * this.lightDirection[2] >> 12;
-		@Pc(85) int local85 = this.lightDirection[1] * this.lightDirection[1] >> 12;
-		@Pc(97) int local97 = this.lightDirection[0] * this.lightDirection[0] >> 12;
-		@Pc(111) int local111 = (int) (Math.sqrt(local97 + local85 + local73 >> 12) * 4096.0D);
-		if (local111 != 0) {
-			this.lightDirection[2] = (this.lightDirection[2] << 12) / local111;
-			this.lightDirection[0] = (this.lightDirection[0] << 12) / local111;
-			this.lightDirection[1] = (this.lightDirection[1] << 12) / local111;
+		@Pc(73) int zSq = this.lightDirection[2] * this.lightDirection[2] >> 12;
+		@Pc(85) int ySq = this.lightDirection[1] * this.lightDirection[1] >> 12;
+		@Pc(97) int xSq = this.lightDirection[0] * this.lightDirection[0] >> 12;
+		@Pc(111) int magnitude = (int) (Math.sqrt(xSq + ySq + zSq >> 12) * 4096.0D);
+		if (magnitude != 0) {
+			this.lightDirection[2] = (this.lightDirection[2] << 12) / magnitude;
+			this.lightDirection[0] = (this.lightDirection[0] << 12) / magnitude;
+			this.lightDirection[1] = (this.lightDirection[1] << 12) / magnitude;
 		}
 	}
 }

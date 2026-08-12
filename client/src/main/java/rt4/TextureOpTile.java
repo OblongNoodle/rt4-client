@@ -21,74 +21,74 @@ public final class TextureOpTile extends TextureOp {
 
 	@OriginalMember(owner = "client!gg", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.horizontalTiles = arg1.g1();
-		} else if (arg0 == 1) {
-			this.verticalTiles = arg1.g1();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.horizontalTiles = buf.g1();
+		} else if (opcode == 1) {
+			this.verticalTiles = buf.g1();
 		}
 	}
 
 	@OriginalMember(owner = "client!gg", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(28) int local28 = Texture.width / this.horizontalTiles;
-			@Pc(33) int local33 = Texture.height / this.verticalTiles;
-			@Pc(44) int[] local44;
-			@Pc(50) int local50;
-			if (local33 <= 0) {
-				local44 = this.getChildMonochromeOutput(0, 0);
+			@Pc(28) int tileWidth = Texture.width / this.horizontalTiles;
+			@Pc(33) int tileHeight = Texture.height / this.verticalTiles;
+			@Pc(44) int[] input;
+			@Pc(50) int i;
+			if (tileHeight <= 0) {
+				input = this.getChildMonochromeOutput(0, 0);
 			} else {
-				local50 = arg0 % local33;
-				local44 = this.getChildMonochromeOutput(0, Texture.height * local50 / local33);
+				i = row % tileHeight;
+				input = this.getChildMonochromeOutput(0, Texture.height * i / tileHeight);
 			}
-			for (local50 = 0; local50 < Texture.width; local50++) {
-				if (local28 <= 0) {
-					local19[local50] = local44[0];
+			for (i = 0; i < Texture.width; i++) {
+				if (tileWidth <= 0) {
+					output[i] = input[0];
 				} else {
-					@Pc(80) int local80 = local50 % local28;
-					local19[local50] = local44[Texture.width * local80 / local28];
+					@Pc(80) int tileCol = i % tileWidth;
+					output[i] = input[Texture.width * tileCol / tileWidth];
 				}
 			}
 		}
-		return local19;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!gg", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(18) int[][] local18 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(18) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(28) int local28 = Texture.width / this.horizontalTiles;
-			@Pc(33) int local33 = Texture.height / this.verticalTiles;
-			@Pc(49) int[][] local49;
-			if (local33 > 0) {
-				@Pc(39) int local39 = arg0 % local33;
-				local49 = this.getChildColorOutput(local39 * Texture.height / local33, 0);
+			@Pc(28) int tileWidth = Texture.width / this.horizontalTiles;
+			@Pc(33) int tileHeight = Texture.height / this.verticalTiles;
+			@Pc(49) int[][] input;
+			if (tileHeight > 0) {
+				@Pc(39) int tileRow = row % tileHeight;
+				input = this.getChildColorOutput(tileRow * Texture.height / tileHeight, 0);
 			} else {
-				local49 = this.getChildColorOutput(0, 0);
+				input = this.getChildColorOutput(0, 0);
 			}
-			@Pc(61) int[] local61 = local49[0];
-			@Pc(65) int[] local65 = local49[2];
-			@Pc(69) int[] local69 = local18[0];
-			@Pc(73) int[] local73 = local49[1];
-			@Pc(77) int[] local77 = local18[1];
-			@Pc(81) int[] local81 = local18[2];
-			for (@Pc(83) int local83 = 0; local83 < Texture.width; local83++) {
-				@Pc(94) int local94;
-				if (local28 <= 0) {
-					local94 = 0;
+			@Pc(61) int[] srcR = input[0];
+			@Pc(65) int[] srcB = input[2];
+			@Pc(69) int[] destR = output[0];
+			@Pc(73) int[] srcG = input[1];
+			@Pc(77) int[] destG = output[1];
+			@Pc(81) int[] destB = output[2];
+			for (@Pc(83) int i = 0; i < Texture.width; i++) {
+				@Pc(94) int srcIdx;
+				if (tileWidth <= 0) {
+					srcIdx = 0;
 				} else {
-					@Pc(100) int local100 = local83 % local28;
-					local94 = local100 * Texture.width / local28;
+					@Pc(100) int tileCol = i % tileWidth;
+					srcIdx = tileCol * Texture.width / tileWidth;
 				}
-				local69[local83] = local61[local94];
-				local77[local83] = local73[local94];
-				local81[local83] = local65[local94];
+				destR[i] = srcR[srcIdx];
+				destG[i] = srcG[srcIdx];
+				destB[i] = srcB[srcIdx];
 			}
 		}
-		return local18;
+		return output;
 	}
 }

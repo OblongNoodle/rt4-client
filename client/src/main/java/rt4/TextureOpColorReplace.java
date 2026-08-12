@@ -30,74 +30,74 @@ public final class TextureOpColorReplace extends TextureOp {
 
 	@OriginalMember(owner = "client!sk", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.tolerance = arg1.g2();
-		} else if (arg0 == 1) {
-			this.blueMultiplier = arg1.g2();
-		} else if (arg0 == 2) {
-			this.greenMultiplier = arg1.g2();
-		} else if (arg0 == 3) {
-			this.redMultiplier = arg1.g2();
-		} else if (arg0 == 4) {
-			@Pc(65) int local65 = arg1.g3();
-			this.targetColor[2] = local65 >> 12 & 0x0;
-			this.targetColor[1] = local65 >> 4 & 0xFF0;
-			this.targetColor[0] = (local65 & 0xFF0000) << 4;
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.tolerance = buf.g2();
+		} else if (opcode == 1) {
+			this.blueMultiplier = buf.g2();
+		} else if (opcode == 2) {
+			this.greenMultiplier = buf.g2();
+		} else if (opcode == 3) {
+			this.redMultiplier = buf.g2();
+		} else if (opcode == 4) {
+			@Pc(65) int packed = buf.g3();
+			this.targetColor[2] = packed >> 12 & 0x0;
+			this.targetColor[1] = packed >> 4 & 0xFF0;
+			this.targetColor[0] = (packed & 0xFF0000) << 4;
 		}
 	}
 
 	@OriginalMember(owner = "client!sk", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(15) int[][] local15 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(15) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(25) int[][] local25 = this.getChildColorOutput(arg0, 0);
-			@Pc(29) int[] local29 = local25[0];
-			@Pc(33) int[] local33 = local25[1];
-			@Pc(37) int[] local37 = local25[2];
-			@Pc(41) int[] local41 = local15[0];
-			@Pc(45) int[] local45 = local15[1];
-			@Pc(49) int[] local49 = local15[2];
-			for (@Pc(51) int local51 = 0; local51 < Texture.width; local51++) {
-				@Pc(58) int local58 = local29[local51];
-				@Pc(66) int local66 = local58 - this.targetColor[0];
-				if (local66 < 0) {
-					local66 = -local66;
+			@Pc(25) int[][] input = this.getChildColorOutput(row, 0);
+			@Pc(29) int[] srcR = input[0];
+			@Pc(33) int[] srcG = input[1];
+			@Pc(37) int[] srcB = input[2];
+			@Pc(41) int[] destR = output[0];
+			@Pc(45) int[] destG = output[1];
+			@Pc(49) int[] destB = output[2];
+			for (@Pc(51) int i = 0; i < Texture.width; i++) {
+				@Pc(58) int r = srcR[i];
+				@Pc(66) int diff = r - this.targetColor[0];
+				if (diff < 0) {
+					diff = -diff;
 				}
-				if (this.tolerance < local66) {
-					local41[local51] = local58;
-					local45[local51] = local33[local51];
-					local49[local51] = local37[local51];
+				if (this.tolerance < diff) {
+					destR[i] = r;
+					destG[i] = srcG[i];
+					destB[i] = srcB[i];
 				} else {
-					@Pc(100) int local100 = local33[local51];
-					local66 = local100 - this.targetColor[1];
-					if (local66 < 0) {
-						local66 = -local66;
+					@Pc(100) int g = srcG[i];
+					diff = g - this.targetColor[1];
+					if (diff < 0) {
+						diff = -diff;
 					}
-					if (local66 > this.tolerance) {
-						local41[local51] = local58;
-						local45[local51] = local100;
-						local49[local51] = local37[local51];
+					if (diff > this.tolerance) {
+						destR[i] = r;
+						destG[i] = g;
+						destB[i] = srcB[i];
 					} else {
-						@Pc(141) int local141 = local37[local51];
-						local66 = local141 - this.targetColor[2];
-						if (local66 < 0) {
-							local66 = -local66;
+						@Pc(141) int b = srcB[i];
+						diff = b - this.targetColor[2];
+						if (diff < 0) {
+							diff = -diff;
 						}
-						if (local66 <= this.tolerance) {
-							local41[local51] = this.redMultiplier * local58 >> 12;
-							local45[local51] = this.greenMultiplier * local100 >> 12;
-							local49[local51] = this.blueMultiplier * local141 >> 12;
+						if (diff <= this.tolerance) {
+							destR[i] = this.redMultiplier * r >> 12;
+							destG[i] = this.greenMultiplier * g >> 12;
+							destB[i] = this.blueMultiplier * b >> 12;
 						} else {
-							local41[local51] = local58;
-							local45[local51] = local100;
-							local49[local51] = local141;
+							destR[i] = r;
+							destG[i] = g;
+							destB[i] = b;
 						}
 					}
 				}
 			}
 		}
-		return local15;
+		return output;
 	}
 }
