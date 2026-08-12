@@ -21,45 +21,45 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!vl", name = "e", descriptor = "[I")
 	public static final int[] WALL_ROTATION_TYPE1 = new int[]{1, 2, 4, 8};
 	@OriginalMember(owner = "client!pg", name = "T", descriptor = "[I")
-	public static final int[] anIntArray386 = new int[]{76, 8, 137, 4, 0, 1, 38, 2, 19};
+	public static final int[] WALL_DRAW_FLAGS = new int[]{76, 8, 137, 4, 0, 1, 38, 2, 19};
 	@OriginalMember(owner = "client!rj", name = "U", descriptor = "Lclient!ih;")
 	public static final LinkedList projectiles = new LinkedList();
 	@OriginalMember(owner = "client!hk", name = "W", descriptor = "Lclient!ih;")
 	public static final LinkedList spotanims = new LinkedList();
 	@OriginalMember(owner = "client!ec", name = "B", descriptor = "[[I")
-	public static final int[][] anIntArrayArray8 = new int[][]{new int[0], {128, 0, 128, 128, 0, 128}, {0, 0, 128, 0, 128, 128, 64, 128}, {0, 128, 0, 0, 128, 0, 64, 128}, {0, 0, 64, 128, 0, 128}, {128, 128, 64, 128, 128, 0}, {64, 0, 128, 0, 128, 128, 64, 128}, {128, 0, 128, 128, 0, 128, 0, 64, 64, 0}, {0, 0, 64, 0, 0, 64}, {0, 0, 128, 0, 128, 128, 64, 96, 32, 64}, {0, 128, 0, 0, 32, 64, 64, 96, 128, 128}, {0, 128, 0, 0, 32, 32, 96, 32, 128, 0, 128, 128}};
+	public static final int[][] OVERLAY_SHAPE_VERTICES = new int[][]{new int[0], {128, 0, 128, 128, 0, 128}, {0, 0, 128, 0, 128, 128, 64, 128}, {0, 128, 0, 0, 128, 0, 64, 128}, {0, 0, 64, 128, 0, 128}, {128, 128, 64, 128, 128, 0}, {64, 0, 128, 0, 128, 128, 64, 128}, {128, 0, 128, 128, 0, 128, 0, 64, 64, 0}, {0, 0, 64, 0, 0, 64}, {0, 0, 128, 0, 128, 128, 64, 96, 32, 64}, {0, 128, 0, 0, 32, 64, 64, 96, 128, 128}, {0, 128, 0, 0, 32, 32, 96, 32, 128, 0, 128, 128}};
 	@OriginalMember(owner = "client!ck", name = "d", descriptor = "[I")
 	public static final int[] WALL_DECO_ROT_SIZE_X_DIR = new int[]{1, 0, -1, 0};
 	@OriginalMember(owner = "client!ka", name = "t", descriptor = "[I")
-	public static final int[] anIntArray294 = new int[]{0, 0, 2, 0, 0, 2, 1, 1, 0};
+	public static final int[] WALL_SCENERY_DIR_TYPE1 = new int[]{0, 0, 2, 0, 0, 2, 1, 1, 0};
 	@OriginalMember(owner = "client!uj", name = "A", descriptor = "[I")
-	public static final int[] anIntArray489 = new int[]{2, 0, 0, 2, 0, 0, 0, 4, 4};
+	public static final int[] WALL_SCENERY_DIR_TYPE2 = new int[]{2, 0, 0, 2, 0, 0, 0, 4, 4};
 	@OriginalMember(owner = "client!gm", name = "gb", descriptor = "[I")
-	public static final int[] anIntArray211 = new int[]{0, 4, 4, 8, 0, 0, 8, 0, 0};
+	public static final int[] WALL_SCENERY_DIR_TYPE3 = new int[]{0, 4, 4, 8, 0, 0, 8, 0, 0};
 	@OriginalMember(owner = "client!kd", name = "sb", descriptor = "[I")
-	public static final int[] anIntArray307 = new int[]{1, 1, 0, 0, 0, 8, 0, 0, 8};
+	public static final int[] WALL_SCENERY_DIR_TYPE4 = new int[]{1, 1, 0, 0, 0, 8, 0, 0, 8};
 	@OriginalMember(owner = "client!hb", name = "t", descriptor = "[I")
-	public static final int[] anIntArray215 = new int[]{160, 192, 80, 96, 0, 144, 80, 48, 160};
+	public static final int[] WALL_UNCULL_FLAGS = new int[]{160, 192, 80, 96, 0, 144, 80, 48, 160};
 	@OriginalMember(owner = "client!km", name = "Rc", descriptor = "[I")
-	public static final int[] anIntArray324 = new int[]{19, 55, 38, 155, 255, 110, 137, 205, 76};
+	public static final int[] WALL_VISIBILITY_FLAGS = new int[]{19, 55, 38, 155, 255, 110, 137, 205, 76};
 	@OriginalMember(owner = "client!fh", name = "U", descriptor = "[[Z")
-	public static final boolean[][] aBooleanArrayArray2 = new boolean[][]{new boolean[0], {true, false, true}, {true, false, false, true}, {false, false, true, true}, {true, true, false}, {false, true, true}, {true, false, false, true}, {false, false, false, true, true}, {false, true, true}, {true, false, true, true, true}, {false, true, true, true, true}, {false, true, true, true, true, false}};
+	public static final boolean[][] OVERLAY_TRIANGLE_FLAGS = new boolean[][]{new boolean[0], {true, false, true}, {true, false, false, true}, {false, false, true, true}, {true, true, false}, {false, true, true}, {true, false, false, true}, {false, false, false, true, true}, {false, true, true}, {true, false, true, true, true}, {false, true, true, true, true}, {false, true, true, true, true, false}};
 	@OriginalMember(owner = "client!fg", name = "d", descriptor = "[I")
-	public static final int[] anIntArray159 = new int[6];
+	public static final int[] projectedX = new int[6];
 	@OriginalMember(owner = "client!fg", name = "l", descriptor = "[I")
-	public static final int[] anIntArray164 = new int[6];
+	public static final int[] screenY = new int[6];
 	@OriginalMember(owner = "client!fg", name = "m", descriptor = "[I")
-	public static final int[] anIntArray165 = new int[6];
+	public static final int[] screenX = new int[6];
 	@OriginalMember(owner = "client!fg", name = "r", descriptor = "[I")
-	public static final int[] anIntArray169 = new int[6];
+	public static final int[] projectedZ = new int[6];
 	@OriginalMember(owner = "client!fg", name = "t", descriptor = "[I")
-	public static final int[] anIntArray170 = new int[6];
+	public static final int[] projectedY = new int[6];
 	@OriginalMember(owner = "client!ah", name = "p", descriptor = "Lclient!ih;")
 	public static final LinkedList tileQueue = new LinkedList();
 	@OriginalMember(owner = "client!sh", name = "i", descriptor = "[[I")
-	public static final int[][] anIntArrayArray35 = new int[][]{{0, 128, 0, 0, 128, 0, 128, 128}, {0, 128, 0, 0, 128, 0}, {0, 0, 64, 128, 0, 128}, {128, 128, 64, 128, 128, 0}, {0, 0, 128, 0, 128, 128, 64, 128}, {0, 128, 0, 0, 128, 0, 64, 128}, {64, 128, 0, 128, 0, 0, 64, 0}, {0, 0, 64, 0, 0, 64}, {128, 0, 128, 128, 0, 128, 0, 64, 64, 0}, {0, 128, 0, 0, 32, 64, 64, 96, 128, 128}, {0, 0, 128, 0, 128, 128, 64, 96, 32, 64}, {0, 0, 128, 0, 96, 32, 32, 32}};
+	public static final int[][] UNDERLAY_SHAPE_VERTICES = new int[][]{{0, 128, 0, 0, 128, 0, 128, 128}, {0, 128, 0, 0, 128, 0}, {0, 0, 64, 128, 0, 128}, {128, 128, 64, 128, 128, 0}, {0, 0, 128, 0, 128, 128, 64, 128}, {0, 128, 0, 0, 128, 0, 64, 128}, {64, 128, 0, 128, 0, 0, 64, 0}, {0, 0, 64, 0, 0, 64}, {128, 0, 128, 128, 0, 128, 0, 64, 64, 0}, {0, 128, 0, 0, 32, 64, 64, 96, 128, 128}, {0, 0, 128, 0, 128, 128, 64, 96, 32, 64}, {0, 0, 128, 0, 96, 32, 32, 32}};
 	@OriginalMember(owner = "client!gf", name = "S", descriptor = "[I")
-	public static final int[] anIntArray419 = new int[]{0, 2, 2, 2, 1, 1, 2, 2, 1, 3, 1, 1};
+	public static final int[] SHAPE_BLEND_VERTEX_COUNT = new int[]{0, 2, 2, 2, 1, 1, 2, 2, 1, 3, 1, 1};
 	@OriginalMember(owner = "client!kc", name = "s", descriptor = "[I")
 	public static final int[] overlayEdgeLookup = new int[]{1, 1, 1, 1, 4, 1, 1, 5, 6, 1, 5, 0, 7, 0, 4, 1, 7, 2, 1, 1, 6, 1, 1, 3, 6, 1, 7, 0, 0, 6, 7, 0, 1, 7, 6, 1, 1, 1, 5, 4, 3, 2, 1, 1, 0, 4, 1, 5};
 	@OriginalMember(owner = "client!wi", name = "hb", descriptor = "[[Z")
@@ -156,7 +156,7 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!bl", name = "X", descriptor = "I")
 	public static int lastUnderwaterFogRange = -1;
 	@OriginalMember(owner = "client!aj", name = "Z", descriptor = "[I")
-	public static int[] anIntArray8;
+	public static int[] roofGroupMaxHeight;
 	@OriginalMember(owner = "client!jg", name = "a", descriptor = "I")
 	public static int cosPitch;
 	@OriginalMember(owner = "client!ma", name = "z", descriptor = "I")
@@ -164,13 +164,13 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!ig", name = "i", descriptor = "I")
 	public static int sinPitch;
 	@OriginalMember(owner = "client!k", name = "l", descriptor = "[I")
-	public static int[] anIntArray292;
+	public static int[] roofGroupMinX;
 	@OriginalMember(owner = "client!ta", name = "o", descriptor = "[I")
-	public static int[] anIntArray454;
+	public static int[] roofGroupMaxZ;
 	@OriginalMember(owner = "client!qk", name = "c", descriptor = "[I")
-	public static int[] anIntArray427;
+	public static int[] roofGroupMinZ;
 	@OriginalMember(owner = "client!hh", name = "p", descriptor = "[I")
-	public static int[] anIntArray234;
+	public static int[] roofGroupMaxX;
 	@OriginalMember(owner = "client!ml", name = "K", descriptor = "I")
 	public static int cameraZ;
 	@OriginalMember(owner = "client!nd", name = "s", descriptor = "I")
@@ -1821,27 +1821,27 @@ public class SceneGraph {
 												} else if (cameraTileY > local21) {
 													var10 += 6;
 												}
-												local65 = anIntArray324[var10];
-												local8.wallDrawFlags = anIntArray386[var10];
+												local65 = WALL_VISIBILITY_FLAGS[var10];
+												local8.wallDrawFlags = WALL_DRAW_FLAGS[var10];
 											}
 											if (local616 != null) {
-												if ((local616.primaryFlags & anIntArray215[var10]) == 0) {
+												if ((local616.primaryFlags & WALL_UNCULL_FLAGS[var10]) == 0) {
 													local8.sceneryDrawFlags = 0;
 												} else if (local616.primaryFlags == 16) {
 													local8.sceneryDrawFlags = 3;
-													local8.sceneryDrawnDirFlags = anIntArray294[var10];
+													local8.sceneryDrawnDirFlags = WALL_SCENERY_DIR_TYPE1[var10];
 													local8.scenerySkipDirFlags = 3 - local8.sceneryDrawnDirFlags;
 												} else if (local616.primaryFlags == 32) {
 													local8.sceneryDrawFlags = 6;
-													local8.sceneryDrawnDirFlags = anIntArray489[var10];
+													local8.sceneryDrawnDirFlags = WALL_SCENERY_DIR_TYPE2[var10];
 													local8.scenerySkipDirFlags = 6 - local8.sceneryDrawnDirFlags;
 												} else if (local616.primaryFlags == 64) {
 													local8.sceneryDrawFlags = 12;
-													local8.sceneryDrawnDirFlags = anIntArray211[var10];
+													local8.sceneryDrawnDirFlags = WALL_SCENERY_DIR_TYPE3[var10];
 													local8.scenerySkipDirFlags = 12 - local8.sceneryDrawnDirFlags;
 												} else {
 													local8.sceneryDrawFlags = 9;
-													local8.sceneryDrawnDirFlags = anIntArray307[var10];
+													local8.sceneryDrawnDirFlags = WALL_SCENERY_DIR_TYPE4[var10];
 													local8.scenerySkipDirFlags = 9 - local8.sceneryDrawnDirFlags;
 												}
 												if ((local616.primaryFlags & local65) != 0 && !isWallVisible(local27, local18, local21, local616.primaryFlags)) {
@@ -2963,11 +2963,11 @@ public class SceneGraph {
 				visibleTiles[local104][local113] = visibilityPoints[local104][local113] || visibilityPoints[local104 + 1][local113] || visibilityPoints[local104][local113 + 1] || visibilityPoints[local104 + 1][local113 + 1];
 			}
 		}
-		anIntArray8 = arg6;
-		anIntArray292 = arg7;
-		anIntArray234 = arg8;
-		anIntArray454 = arg9;
-		anIntArray427 = arg10;
+		roofGroupMaxHeight = arg6;
+		roofGroupMinX = arg7;
+		roofGroupMaxX = arg8;
+		roofGroupMaxZ = arg9;
+		roofGroupMinZ = arg10;
 		buildActiveOccluders();
 		if (underWaterGroundTiles != null) {
 			setUnderwater(true);
@@ -3341,7 +3341,7 @@ public class SceneGraph {
 								continue;
 							}
 							if (arg7[local114][local72] != 0) {
-								local176 = anIntArrayArray35[arg7[local114][local72]];
+								local176 = UNDERLAY_SHAPE_VERTICES[arg7[local114][local72]];
 								local28.indexCapacity += ((local176.length >> 1) - 2) * 3;
 								local28.vertexCapacity += local176.length >> 1;
 								continue;
@@ -3352,7 +3352,7 @@ public class SceneGraph {
 							if (local151.baseColor == -1) {
 								local224 = arg7[local114][local72];
 								if (local224 != 0) {
-									local234 = anIntArrayArray8[local224];
+									local234 = OVERLAY_SHAPE_VERTICES[local224];
 									local28.indexCapacity += ((local234.length >> 1) - 2) * 3;
 									local28.vertexCapacity += local234.length >> 1;
 								}
@@ -3388,11 +3388,11 @@ public class SceneGraph {
 										local328 = local114 > local349 && local114 < local355;
 									}
 									if (local315 && local328) {
-										local234 = anIntArrayArray35[0];
+										local234 = UNDERLAY_SHAPE_VERTICES[0];
 									} else if (local315) {
-										local234 = anIntArrayArray35[1];
+										local234 = UNDERLAY_SHAPE_VERTICES[1];
 									} else if (local328) {
-										local234 = anIntArrayArray35[1];
+										local234 = UNDERLAY_SHAPE_VERTICES[1];
 									}
 								} else {
 									local315 = local90 <= local114 - 1;
@@ -3410,11 +3410,11 @@ public class SceneGraph {
 										local328 = local349 < local114 && local355 > local114;
 									}
 									if (local315 && local328) {
-										local234 = anIntArrayArray35[0];
+										local234 = UNDERLAY_SHAPE_VERTICES[0];
 									} else if (local315) {
-										local234 = anIntArrayArray35[1];
+										local234 = UNDERLAY_SHAPE_VERTICES[1];
 									} else if (local328) {
-										local234 = anIntArrayArray35[1];
+										local234 = UNDERLAY_SHAPE_VERTICES[1];
 									}
 								}
 								if (local234 != null) {
@@ -3425,14 +3425,14 @@ public class SceneGraph {
 							}
 						}
 						if (local135) {
-							local234 = anIntArrayArray8[arg7[local114][local72]];
-							local176 = anIntArrayArray35[arg7[local114][local72]];
+							local234 = OVERLAY_SHAPE_VERTICES[arg7[local114][local72]];
+							local176 = UNDERLAY_SHAPE_VERTICES[arg7[local114][local72]];
 							local28.indexCapacity += ((local176.length >> 1) - 2) * 3;
 							local28.indexCapacity += ((local234.length >> 1) - 2) * 3;
 							local28.vertexCapacity += local176.length >> 1;
 							local28.vertexCapacity += local234.length >> 1;
 						} else {
-							local176 = anIntArrayArray35[0];
+							local176 = UNDERLAY_SHAPE_VERTICES[0];
 							local28.indexCapacity += ((local176.length >> 1) - 2) * 3;
 							local28.vertexCapacity += local176.length >> 1;
 						}
@@ -3469,13 +3469,13 @@ public class SceneGraph {
 								continue;
 							}
 							if (arg7[local114][local72] != 0) {
-								applyLightToTile(arg0, arg9, local114, arg6, local72, anIntArrayArray35[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
+								applyLightToTile(arg0, arg9, local114, arg6, local72, UNDERLAY_SHAPE_VERTICES[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
 								continue;
 							}
 						} else if (local775 != 0) {
 							local805 = FloTypeList.get(local775 - 1);
 							if (local805.baseColor == -1) {
-								applyLightToTile(arg0, arg9, local114, arg6, local72, anIntArrayArray8[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
+								applyLightToTile(arg0, arg9, local114, arg6, local72, OVERLAY_SHAPE_VERTICES[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
 								continue;
 							}
 							@Pc(815) byte local815 = arg7[local114][local72];
@@ -3508,12 +3508,12 @@ public class SceneGraph {
 										local947 = local355 < local114 && local973 > local114;
 									}
 									if (local328 && local947) {
-										local917 = anIntArrayArray35[0];
+										local917 = UNDERLAY_SHAPE_VERTICES[0];
 									} else if (local328) {
-										local917 = anIntArrayArray35[1];
+										local917 = UNDERLAY_SHAPE_VERTICES[1];
 										local789 = 1;
 									} else if (local947) {
-										local917 = anIntArrayArray35[1];
+										local917 = UNDERLAY_SHAPE_VERTICES[1];
 										local789 = 3;
 									}
 								} else {
@@ -3532,12 +3532,12 @@ public class SceneGraph {
 										local947 = local114 > local355 && local973 > local114;
 									}
 									if (local328 && local947) {
-										local917 = anIntArrayArray35[0];
+										local917 = UNDERLAY_SHAPE_VERTICES[0];
 									} else if (local328) {
 										local789 = 0;
-										local917 = anIntArrayArray35[1];
+										local917 = UNDERLAY_SHAPE_VERTICES[1];
 									} else if (local947) {
-										local917 = anIntArrayArray35[1];
+										local917 = UNDERLAY_SHAPE_VERTICES[1];
 										local789 = 2;
 									}
 								}
@@ -3548,10 +3548,10 @@ public class SceneGraph {
 							}
 						}
 						if (local791) {
-							applyLightToTile(arg0, arg9, local114, arg6, local72, anIntArrayArray8[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
-							applyLightToTile(arg0, arg9, local114, arg6, local72, anIntArrayArray35[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
+							applyLightToTile(arg0, arg9, local114, arg6, local72, OVERLAY_SHAPE_VERTICES[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
+							applyLightToTile(arg0, arg9, local114, arg6, local72, UNDERLAY_SHAPE_VERTICES[arg7[local114][local72]], local28, local18, arg10, arg2[local114][local72]);
 						} else {
-							applyLightToTile(arg0, arg9, local114, arg6, local72, anIntArrayArray35[0], local28, local18, arg10, local789);
+							applyLightToTile(arg0, arg9, local114, arg6, local72, UNDERLAY_SHAPE_VERTICES[0], local28, local18, arg10, local789);
 						}
 					}
 					local24++;
@@ -3596,9 +3596,9 @@ public class SceneGraph {
 				if (arg2[local16][local112] != 0) {
 					@Pc(135) int[] local135;
 					if (arg6[local16][local112] == 0) {
-						local135 = anIntArrayArray35[0];
+						local135 = UNDERLAY_SHAPE_VERTICES[0];
 					} else {
-						local135 = anIntArrayArray8[arg1[local16][local112]];
+						local135 = OVERLAY_SHAPE_VERTICES[arg1[local16][local112]];
 						if (local135.length == 0) {
 							continue;
 						}
@@ -3683,7 +3683,7 @@ public class SceneGraph {
 					@Pc(754) int local754;
 					if (arg6[local16][local112] == 0) {
 						local655 = local524 == arg2[local16 - 1][local112 - 1] ? 1 : -1;
-						local614 = anIntArrayArray35[0];
+						local614 = UNDERLAY_SHAPE_VERTICES[0];
 						local678 = local524 == arg2[local16 + 1][local112 - 1] ? 1 : -1;
 						if (arg2[local16][local112 - 1] == local524) {
 							local678++;
@@ -3726,8 +3726,8 @@ public class SceneGraph {
 						local628 = (byte) (local794 <= local789 ? 0 : 1);
 						arg7[local16][local112] = local628;
 					} else {
-						local614 = anIntArrayArray8[arg1[local16][local112]];
-						local574 = aBooleanArrayArray2[arg1[local16][local112]];
+						local614 = OVERLAY_SHAPE_VERTICES[arg1[local16][local112]];
+						local574 = OVERLAY_TRIANGLE_FLAGS[arg1[local16][local112]];
 						local628 = arg7[local16][local112];
 						if (local614.length == 0) {
 							continue;
@@ -4086,9 +4086,9 @@ public class SceneGraph {
 		for (@Pc(3) int local3 = 0; local3 < occluderCount; local3++) {
 			@Pc(10) Occluder local10 = occluders[local3];
 			@Pc(14) int local14;
-			if (anIntArray8 != null) {
-				for (local14 = 0; local14 < anIntArray8.length; local14++) {
-					if (anIntArray8[local14] != -1000000 && (local10.minZ <= anIntArray8[local14] || local10.maxZ <= anIntArray8[local14]) && (local10.minX <= anIntArray234[local14] || local10.maxX <= anIntArray234[local14]) && (local10.minX >= anIntArray292[local14] || local10.maxX >= anIntArray292[local14]) && (local10.minY <= anIntArray454[local14] || local10.maxY <= anIntArray454[local14]) && (local10.minY >= anIntArray427[local14] || local10.maxY >= anIntArray427[local14])) {
+			if (roofGroupMaxHeight != null) {
+				for (local14 = 0; local14 < roofGroupMaxHeight.length; local14++) {
+					if (roofGroupMaxHeight[local14] != -1000000 && (local10.minZ <= roofGroupMaxHeight[local14] || local10.maxZ <= roofGroupMaxHeight[local14]) && (local10.minX <= roofGroupMaxX[local14] || local10.maxX <= roofGroupMaxX[local14]) && (local10.minX >= roofGroupMinX[local14] || local10.maxX >= roofGroupMinX[local14]) && (local10.minY <= roofGroupMaxZ[local14] || local10.maxY <= roofGroupMaxZ[local14]) && (local10.minY >= roofGroupMinZ[local14] || local10.maxY >= roofGroupMinZ[local14])) {
 						continue label194;
 					}
 				}
@@ -4251,12 +4251,12 @@ public class SceneGraph {
 				return;
 			}
 			if (arg0.triangleTextureId != null) {
-				anIntArray159[local5] = local39;
-				anIntArray170[local5] = local61;
-				anIntArray169[local5] = local71;
+				projectedX[local5] = local39;
+				projectedY[local5] = local61;
+				projectedZ[local5] = local71;
 			}
-			anIntArray165[local5] = Rasteriser.centerX + (local39 << 9) / local71;
-			anIntArray164[local5] = Rasteriser.centerY + (local61 << 9) / local71;
+			screenX[local5] = Rasteriser.centerX + (local39 << 9) / local71;
+			screenY[local5] = Rasteriser.centerY + (local61 << 9) / local71;
 		}
 		Rasteriser.alpha = 0;
 		local3 = arg0.triangleVertexA.length;
@@ -4264,12 +4264,12 @@ public class SceneGraph {
 			local15 = arg0.triangleVertexA[local5];
 			local22 = arg0.triangleVertexB[local5];
 			local29 = arg0.triangleVertexC[local5];
-			local39 = anIntArray165[local15];
-			@Pc(148) int local148 = anIntArray165[local22];
-			@Pc(152) int local152 = anIntArray165[local29];
-			@Pc(156) int local156 = anIntArray164[local15];
-			@Pc(160) int local160 = anIntArray164[local22];
-			@Pc(164) int local164 = anIntArray164[local29];
+			local39 = screenX[local15];
+			@Pc(148) int local148 = screenX[local22];
+			@Pc(152) int local152 = screenX[local29];
+			@Pc(156) int local156 = screenY[local15];
+			@Pc(160) int local160 = screenY[local22];
+			@Pc(164) int local164 = screenY[local29];
 			if ((local39 - local148) * (local164 - local160) - (local156 - local160) * (local152 - local148) > 0) {
 				if (MiniMenu.walkPending && isRectVisible(MiniMenu.walkDestTileX + Rasteriser.centerX, MiniMenu.walkDestTileY + Rasteriser.centerY, local156, local160, local164, local39, local148, local152)) {
 					MiniMenu.clickTileX = arg5;
@@ -4288,9 +4288,9 @@ public class SceneGraph {
 						@Pc(373) int local373 = Rasteriser.textureProvider.getAverageColor(arg0.triangleTextureId[local5]);
 						Rasteriser.fillGouraudTriangle(local156, local160, local164, local39, local148, local152, ColorUtils.multiplyLightness3(local373, arg0.triangleColorA[local5]), ColorUtils.multiplyLightness3(local373, arg0.triangleColorB[local5]), ColorUtils.multiplyLightness3(local373, arg0.triangleColorC[local5]));
 					} else if (arg0.flat) {
-						Rasteriser.fillTexturedTriangle(local156, local160, local164, local39, local148, local152, arg0.triangleColorA[local5], arg0.triangleColorB[local5], arg0.triangleColorC[local5], anIntArray159[0], anIntArray159[1], anIntArray159[3], anIntArray170[0], anIntArray170[1], anIntArray170[3], anIntArray169[0], anIntArray169[1], anIntArray169[3], arg0.triangleTextureId[local5]);
+						Rasteriser.fillTexturedTriangle(local156, local160, local164, local39, local148, local152, arg0.triangleColorA[local5], arg0.triangleColorB[local5], arg0.triangleColorC[local5], projectedX[0], projectedX[1], projectedX[3], projectedY[0], projectedY[1], projectedY[3], projectedZ[0], projectedZ[1], projectedZ[3], arg0.triangleTextureId[local5]);
 					} else {
-						Rasteriser.fillTexturedTriangle(local156, local160, local164, local39, local148, local152, arg0.triangleColorA[local5], arg0.triangleColorB[local5], arg0.triangleColorC[local5], anIntArray159[local15], anIntArray159[local22], anIntArray159[local29], anIntArray170[local15], anIntArray170[local22], anIntArray170[local29], anIntArray169[local15], anIntArray169[local22], anIntArray169[local29], arg0.triangleTextureId[local5]);
+						Rasteriser.fillTexturedTriangle(local156, local160, local164, local39, local148, local152, arg0.triangleColorA[local5], arg0.triangleColorB[local5], arg0.triangleColorC[local5], projectedX[local15], projectedX[local22], projectedX[local29], projectedY[local15], projectedY[local22], projectedY[local29], projectedZ[local15], projectedZ[local22], projectedZ[local29], arg0.triangleTextureId[local5]);
 					}
 				}
 			}
@@ -4335,11 +4335,11 @@ public class SceneGraph {
 					}
 					@Pc(61) GlTile local61 = getOrCreateGlTile(local10, local50);
 					@Pc(67) byte local67 = arg7[local12][local17];
-					@Pc(71) int[] local71 = anIntArrayArray35[local67];
+					@Pc(71) int[] local71 = UNDERLAY_SHAPE_VERTICES[local67];
 					local61.vertexCapacity += local71.length / 2;
 					local61.faceCapacity++;
 					if (local50.blendTexture && local30 != 0) {
-						local61.vertexCapacity += anIntArray419[local67];
+						local61.vertexCapacity += SHAPE_BLEND_VERTEX_COUNT[local67];
 					}
 				}
 				if ((arg8[local12][local17] & 0xFF) != 0 || local38 != 0 && arg7[local12][local17] == 0) {
@@ -4863,7 +4863,7 @@ public class SceneGraph {
 		@Pc(17) int local17 = (arg5 << 8) + 255;
 		@Pc(23) int local23 = (arg8 << 8) + 255;
 		@Pc(29) int local29 = (arg13 << 8) + 255;
-		@Pc(33) int[] local33 = anIntArrayArray35[arg10];
+		@Pc(33) int[] local33 = UNDERLAY_SHAPE_VERTICES[arg10];
 		@Pc(39) int[] local39 = new int[local33.length >> 1];
 		@Pc(41) int local41;
 		for (local41 = 0; local41 < local39.length; local41++) {
