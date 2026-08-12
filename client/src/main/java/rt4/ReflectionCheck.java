@@ -41,184 +41,184 @@ public final class ReflectionCheck extends Node {
 	public int id;
 
 	@OriginalMember(owner = "client!t", name = "a", descriptor = "(Lclient!i;II)V")
-	public static void loop(@OriginalArg(0) Packet arg0) {
+	public static void loop(@OriginalArg(0) Packet out) {
 		while (true) {
-			@Pc(18) ReflectionCheck local18 = (ReflectionCheck) queue.head();
-			if (local18 == null) {
+			@Pc(18) ReflectionCheck check = (ReflectionCheck) queue.head();
+			if (check == null) {
 				return;
 			}
-			@Pc(23) boolean local23 = false;
-			@Pc(25) int local25;
-			for (local25 = 0; local25 < local18.size; local25++) {
-				if (local18.fieldRequests[local25] != null) {
-					if (local18.fieldRequests[local25].status == 2) {
-						local18.errors[local25] = -5;
+			@Pc(23) boolean pending = false;
+			@Pc(25) int i;
+			for (i = 0; i < check.size; i++) {
+				if (check.fieldRequests[i] != null) {
+					if (check.fieldRequests[i].status == 2) {
+						check.errors[i] = -5;
 					}
-					if (local18.fieldRequests[local25].status == 0) {
-						local23 = true;
+					if (check.fieldRequests[i].status == 0) {
+						pending = true;
 					}
 				}
-				if (local18.methodRequests[local25] != null) {
-					if (local18.methodRequests[local25].status == 2) {
-						local18.errors[local25] = -6;
+				if (check.methodRequests[i] != null) {
+					if (check.methodRequests[i].status == 2) {
+						check.errors[i] = -6;
 					}
-					if (local18.methodRequests[local25].status == 0) {
-						local23 = true;
+					if (check.methodRequests[i].status == 0) {
+						pending = true;
 					}
 				}
 			}
-			if (local23) {
+			if (pending) {
 				return;
 			}
-			arg0.p1isaac(163);
-			arg0.p1(0);
-			local25 = arg0.offset;
-			arg0.p4(local18.id);
-			for (@Pc(121) int local121 = 0; local121 < local18.size; local121++) {
-				if (local18.errors[local121] == 0) {
+			out.p1isaac(163);
+			out.p1(0);
+			i = out.offset;
+			out.p4(check.id);
+			for (@Pc(121) int j = 0; j < check.size; j++) {
+				if (check.errors[j] == 0) {
 					try {
-						@Pc(151) int local151 = local18.types[local121];
-						@Pc(168) Field local168;
-						@Pc(195) int local195;
-						if (local151 == 0) {
-							local168 = (Field) local18.fieldRequests[local121].result;
-							local195 = local168.getInt(null);
-							arg0.p1(0);
-							arg0.p4(local195);
-						} else if (local151 == 1) {
-							local168 = (Field) local18.fieldRequests[local121].result;
-							local168.setInt(null, local18.fieldValues[local121]);
-							arg0.p1(0);
-						} else if (local151 == 2) {
-							local168 = (Field) local18.fieldRequests[local121].result;
-							local195 = local168.getModifiers();
-							arg0.p1(0);
-							arg0.p4(local195);
+						@Pc(151) int type = check.types[j];
+						@Pc(168) Field field;
+						@Pc(195) int value;
+						if (type == 0) {
+							field = (Field) check.fieldRequests[j].result;
+							value = field.getInt(null);
+							out.p1(0);
+							out.p4(value);
+						} else if (type == 1) {
+							field = (Field) check.fieldRequests[j].result;
+							field.setInt(null, check.fieldValues[j]);
+							out.p1(0);
+						} else if (type == 2) {
+							field = (Field) check.fieldRequests[j].result;
+							value = field.getModifiers();
+							out.p1(0);
+							out.p4(value);
 						}
-						@Pc(234) Method local234;
-						if (local151 == 3) {
-							local234 = (Method) local18.methodRequests[local121].result;
-							@Pc(239) byte[][] local239 = local18.methodArguments[local121];
-							@Pc(243) Object[] local243 = new Object[local239.length];
-							for (@Pc(245) int local245 = 0; local245 < local239.length; local245++) {
-								@Pc(259) ObjectInputStream local259 = new ObjectInputStream(new ByteArrayInputStream(local239[local245]));
-								local243[local245] = local259.readObject();
+						@Pc(234) Method method;
+						if (type == 3) {
+							method = (Method) check.methodRequests[j].result;
+							@Pc(239) byte[][] args = check.methodArguments[j];
+							@Pc(243) Object[] params = new Object[args.length];
+							for (@Pc(245) int k = 0; k < args.length; k++) {
+								@Pc(259) ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(args[k]));
+								params[k] = stream.readObject();
 							}
-							@Pc(272) Object local272 = local234.invoke(null, local243);
-							if (local272 == null) {
-								arg0.p1(0);
-							} else if (local272 instanceof Number) {
-								arg0.p1(1);
-								arg0.p8(((Number) local272).longValue());
-							} else if (local272 instanceof JagString) {
-								arg0.p1(2);
-								arg0.pjstr((JagString) local272);
+							@Pc(272) Object result = method.invoke(null, params);
+							if (result == null) {
+								out.p1(0);
+							} else if (result instanceof Number) {
+								out.p1(1);
+								out.p8(((Number) result).longValue());
+							} else if (result instanceof JagString) {
+								out.p1(2);
+								out.pjstr((JagString) result);
 							} else {
-								arg0.p1(4);
+								out.p1(4);
 							}
-						} else if (local151 == 4) {
-							local234 = (Method) local18.methodRequests[local121].result;
-							local195 = local234.getModifiers();
-							arg0.p1(0);
-							arg0.p4(local195);
+						} else if (type == 4) {
+							method = (Method) check.methodRequests[j].result;
+							value = method.getModifiers();
+							out.p1(0);
+							out.p4(value);
 						}
-					} catch (@Pc(338) ClassNotFoundException local338) {
-						arg0.p1(-10);
-					} catch (@Pc(344) InvalidClassException local344) {
-						arg0.p1(-11);
-					} catch (@Pc(350) StreamCorruptedException local350) {
-						arg0.p1(-12);
-					} catch (@Pc(356) OptionalDataException local356) {
-						arg0.p1(-13);
-					} catch (@Pc(362) IllegalAccessException local362) {
-						arg0.p1(-14);
-					} catch (@Pc(368) IllegalArgumentException local368) {
-						arg0.p1(-15);
-					} catch (@Pc(374) InvocationTargetException local374) {
-						arg0.p1(-16);
-					} catch (@Pc(380) SecurityException local380) {
-						arg0.p1(-17);
-					} catch (@Pc(386) IOException local386) {
-						arg0.p1(-18);
-					} catch (@Pc(392) NullPointerException local392) {
-						arg0.p1(-19);
-					} catch (@Pc(398) Exception local398) {
-						arg0.p1(-20);
-					} catch (@Pc(404) Throwable local404) {
-						arg0.p1(-21);
+					} catch (@Pc(338) ClassNotFoundException ex) {
+						out.p1(-10);
+					} catch (@Pc(344) InvalidClassException ex) {
+						out.p1(-11);
+					} catch (@Pc(350) StreamCorruptedException ex) {
+						out.p1(-12);
+					} catch (@Pc(356) OptionalDataException ex) {
+						out.p1(-13);
+					} catch (@Pc(362) IllegalAccessException ex) {
+						out.p1(-14);
+					} catch (@Pc(368) IllegalArgumentException ex) {
+						out.p1(-15);
+					} catch (@Pc(374) InvocationTargetException ex) {
+						out.p1(-16);
+					} catch (@Pc(380) SecurityException ex) {
+						out.p1(-17);
+					} catch (@Pc(386) IOException ex) {
+						out.p1(-18);
+					} catch (@Pc(392) NullPointerException ex) {
+						out.p1(-19);
+					} catch (@Pc(398) Exception ex) {
+						out.p1(-20);
+					} catch (@Pc(404) Throwable ex) {
+						out.p1(-21);
 					}
 				} else {
-					arg0.p1(local18.errors[local121]);
+					out.p1(check.errors[j]);
 				}
 			}
-			arg0.addcrc(local25);
-			arg0.psize1(arg0.offset - local25);
-			local18.unlink();
+			out.addcrc(i);
+			out.psize1(out.offset - i);
+			check.unlink();
 		}
 	}
 
 	@OriginalMember(owner = "client!qg", name = "a", descriptor = "(Lsignlink!ll;Lclient!wa;IB)V")
-	public static void push(@OriginalArg(0) SignLink arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
+	public static void push(@OriginalArg(0) SignLink signLink, @OriginalArg(1) Buffer buf, @OriginalArg(2) int id) {
 		@Pc(17) ReflectionCheck check = new ReflectionCheck();
-		check.size = arg1.g1();
-		check.id = arg1.g4();
+		check.size = buf.g1();
+		check.id = buf.g4();
 		check.methodRequests = new PrivilegedRequest[check.size];
 		check.errors = new int[check.size];
 		check.methodArguments = new byte[check.size][][];
 		check.fieldRequests = new PrivilegedRequest[check.size];
 		check.types = new int[check.size];
 		check.fieldValues = new int[check.size];
-		for (@Pc(59) int local59 = 0; local59 < check.size; local59++) {
+		for (@Pc(59) int i = 0; i < check.size; i++) {
 			try {
-				@Pc(71) int local71 = arg1.g1();
-				@Pc(93) String local93;
-				@Pc(104) String local104;
-				@Pc(95) int local95;
-				if (local71 == 0 || local71 == 1 || local71 == 2) {
-					local93 = new String(arg1.gjstr().toByteArray());
-					local95 = 0;
-					local104 = new String(arg1.gjstr().toByteArray());
-					if (local71 == 1) {
-						local95 = arg1.g4();
+				@Pc(71) int type = buf.g1();
+				@Pc(93) String className;
+				@Pc(104) String memberName;
+				@Pc(95) int fieldValue;
+				if (type == 0 || type == 1 || type == 2) {
+					className = new String(buf.gjstr().toByteArray());
+					fieldValue = 0;
+					memberName = new String(buf.gjstr().toByteArray());
+					if (type == 1) {
+						fieldValue = buf.g4();
 					}
-					check.types[local59] = local71;
-					check.fieldValues[local59] = local95;
-					check.fieldRequests[local59] = arg0.getDeclaredField(local104, classForName(local93));
-				} else if (local71 == 3 || local71 == 4) {
-					local93 = new String(arg1.gjstr().toByteArray());
-					local104 = new String(arg1.gjstr().toByteArray());
-					local95 = arg1.g1();
-					@Pc(171) String[] local171 = new String[local95];
-					for (@Pc(173) int local173 = 0; local173 < local95; local173++) {
-						local171[local173] = new String(arg1.gjstr().toByteArray());
+					check.types[i] = type;
+					check.fieldValues[i] = fieldValue;
+					check.fieldRequests[i] = signLink.getDeclaredField(memberName, classForName(className));
+				} else if (type == 3 || type == 4) {
+					className = new String(buf.gjstr().toByteArray());
+					memberName = new String(buf.gjstr().toByteArray());
+					fieldValue = buf.g1();
+					@Pc(171) String[] argClassNames = new String[fieldValue];
+					for (@Pc(173) int j = 0; j < fieldValue; j++) {
+						argClassNames[j] = new String(buf.gjstr().toByteArray());
 					}
-					@Pc(193) byte[][] local193 = new byte[local95][];
-					@Pc(210) int local210;
-					if (local71 == 3) {
-						for (@Pc(199) int local199 = 0; local199 < local95; local199++) {
-							local210 = arg1.g4();
-							local193[local199] = new byte[local210];
-							arg1.gdata(local210, local193[local199]);
+					@Pc(193) byte[][] argData = new byte[fieldValue][];
+					@Pc(210) int k;
+					if (type == 3) {
+						for (@Pc(199) int m = 0; m < fieldValue; m++) {
+							k = buf.g4();
+							argData[m] = new byte[k];
+							buf.gdata(k, argData[m]);
 						}
 					}
-					check.types[local59] = local71;
-					@Pc(234) Class<?>[] local234 = new Class[local95];
-					for (local210 = 0; local210 < local95; local210++) {
-						local234[local210] = classForName(local171[local210]);
+					check.types[i] = type;
+					@Pc(234) Class<?>[] argClasses = new Class[fieldValue];
+					for (k = 0; k < fieldValue; k++) {
+						argClasses[k] = classForName(argClassNames[k]);
 					}
-					check.methodRequests[local59] = arg0.getDeclaredMethod(classForName(local93), local234, local104);
-					check.methodArguments[local59] = local193;
+					check.methodRequests[i] = signLink.getDeclaredMethod(classForName(className), argClasses, memberName);
+					check.methodArguments[i] = argData;
 				}
-			} catch (@Pc(269) ClassNotFoundException local269) {
-				check.errors[local59] = -1;
-			} catch (@Pc(276) SecurityException local276) {
-				check.errors[local59] = -2;
-			} catch (@Pc(283) NullPointerException local283) {
-				check.errors[local59] = -3;
-			} catch (@Pc(290) Exception local290) {
-				check.errors[local59] = -4;
-			} catch (@Pc(297) Throwable local297) {
-				check.errors[local59] = -5;
+			} catch (@Pc(269) ClassNotFoundException ex) {
+				check.errors[i] = -1;
+			} catch (@Pc(276) SecurityException ex) {
+				check.errors[i] = -2;
+			} catch (@Pc(283) NullPointerException ex) {
+				check.errors[i] = -3;
+			} catch (@Pc(290) Exception ex) {
+				check.errors[i] = -4;
+			} catch (@Pc(297) Throwable ex) {
+				check.errors[i] = -5;
 			}
 		}
 		queue.addTail(check);
