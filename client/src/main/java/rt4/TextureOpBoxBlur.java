@@ -21,121 +21,121 @@ public final class TextureOpBoxBlur extends TextureOp {
 
 	@OriginalMember(owner = "client!nm", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(31) int local31 = this.radiusY + this.radiusY + 1;
-			@Pc(35) int local35 = 65536 / local31;
-			@Pc(43) int local43 = this.radiusX + this.radiusX + 1;
-			@Pc(47) int local47 = 65536 / local43;
-			@Pc(50) int[][] local50 = new int[local31][];
-			@Pc(56) int local56;
-			for (local56 = arg0 - this.radiusY; local56 <= arg0 + this.radiusY; local56++) {
-				@Pc(75) int[] local75 = this.getChildMonochromeOutput(0, local56 & Texture.heightMask);
-				@Pc(78) int[] local78 = new int[Texture.width];
-				@Pc(80) int local80 = 0;
-				@Pc(84) int local84;
-				for (local84 = -this.radiusX; local84 <= this.radiusX; local84++) {
-					local80 += local75[local84 & Texture.widthMask];
+			@Pc(31) int kernelH = this.radiusY + this.radiusY + 1;
+			@Pc(35) int invKernelH = 65536 / kernelH;
+			@Pc(43) int kernelW = this.radiusX + this.radiusX + 1;
+			@Pc(47) int invKernelW = 65536 / kernelW;
+			@Pc(50) int[][] blurredRows = new int[kernelH][];
+			@Pc(56) int y;
+			for (y = row - this.radiusY; y <= row + this.radiusY; y++) {
+				@Pc(75) int[] srcRow = this.getChildMonochromeOutput(0, y & Texture.heightMask);
+				@Pc(78) int[] destRow = new int[Texture.width];
+				@Pc(80) int acc = 0;
+				@Pc(84) int x;
+				for (x = -this.radiusX; x <= this.radiusX; x++) {
+					acc += srcRow[x & Texture.widthMask];
 				}
-				local84 = 0;
-				while (Texture.width > local84) {
-					local78[local84] = local47 * local80 >> 16;
-					local80 -= local75[Texture.widthMask & local84 - this.radiusX];
-					local84++;
-					local80 += local75[Texture.widthMask & this.radiusX + local84];
+				x = 0;
+				while (Texture.width > x) {
+					destRow[x] = invKernelW * acc >> 16;
+					acc -= srcRow[Texture.widthMask & x - this.radiusX];
+					x++;
+					acc += srcRow[Texture.widthMask & this.radiusX + x];
 				}
-				local50[this.radiusY + local56 - arg0] = local78;
+				blurredRows[this.radiusY + y - row] = destRow;
 			}
-			for (local56 = 0; local56 < Texture.width; local56++) {
-				@Pc(169) int local169 = 0;
-				for (@Pc(171) int local171 = 0; local171 < local31; local171++) {
-					local169 += local50[local171][local56];
+			for (y = 0; y < Texture.width; y++) {
+				@Pc(169) int sum = 0;
+				for (@Pc(171) int j = 0; j < kernelH; j++) {
+					sum += blurredRows[j][y];
 				}
-				local19[local56] = local35 * local169 >> 16;
+				output[y] = invKernelH * sum >> 16;
 			}
 		}
-		return local19;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!nm", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(13) int[][] local13 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(13) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(30) int local30 = this.radiusX + this.radiusX + 1;
-			@Pc(34) int local34 = 65536 / local30;
-			@Pc(42) int local42 = this.radiusY + this.radiusY + 1;
-			@Pc(46) int local46 = 65536 / local42;
-			@Pc(49) int[][][] local49 = new int[local42][][];
-			@Pc(70) int local70;
-			@Pc(72) int local72;
-			@Pc(78) int local78;
-			for (@Pc(54) int local54 = arg0 - this.radiusY; local54 <= this.radiusY + arg0; local54++) {
-				@Pc(68) int[][] local68 = this.getChildColorOutput(Texture.heightMask & local54, 0);
-				local70 = 0;
-				local72 = 0;
-				@Pc(76) int[][] local76 = new int[3][Texture.width];
-				local78 = 0;
-				@Pc(82) int[] local82 = local68[0];
-				@Pc(86) int[] local86 = local68[1];
-				@Pc(90) int[] local90 = local68[2];
-				for (@Pc(94) int local94 = -this.radiusX; local94 <= this.radiusX; local94++) {
-					@Pc(102) int local102 = local94 & Texture.widthMask;
-					local72 += local86[local102];
-					local70 += local82[local102];
-					local78 += local90[local102];
+			@Pc(30) int kernelW = this.radiusX + this.radiusX + 1;
+			@Pc(34) int invKernelW = 65536 / kernelW;
+			@Pc(42) int kernelH = this.radiusY + this.radiusY + 1;
+			@Pc(46) int invKernelH = 65536 / kernelH;
+			@Pc(49) int[][][] blurredRows = new int[kernelH][][];
+			@Pc(70) int accR;
+			@Pc(72) int accG;
+			@Pc(78) int accB;
+			for (@Pc(54) int y = row - this.radiusY; y <= this.radiusY + row; y++) {
+				@Pc(68) int[][] srcRow = this.getChildColorOutput(Texture.heightMask & y, 0);
+				accR = 0;
+				accG = 0;
+				@Pc(76) int[][] destRow = new int[3][Texture.width];
+				accB = 0;
+				@Pc(82) int[] srcR = srcRow[0];
+				@Pc(86) int[] srcG = srcRow[1];
+				@Pc(90) int[] srcB = srcRow[2];
+				for (@Pc(94) int k = -this.radiusX; k <= this.radiusX; k++) {
+					@Pc(102) int idx = k & Texture.widthMask;
+					accG += srcG[idx];
+					accR += srcR[idx];
+					accB += srcB[idx];
 				}
-				@Pc(127) int[] local127 = local76[2];
-				@Pc(131) int[] local131 = local76[0];
-				@Pc(135) int[] local135 = local76[1];
-				@Pc(137) int local137 = 0;
-				while (Texture.width > local137) {
-					local131[local137] = local70 * local34 >> 16;
-					local135[local137] = local72 * local34 >> 16;
-					local127[local137] = local34 * local78 >> 16;
-					@Pc(172) int local172 = Texture.widthMask & local137 - this.radiusX;
-					local78 -= local90[local172];
-					local137++;
-					local70 -= local82[local172];
-					local72 -= local86[local172];
-					@Pc(198) int local198 = this.radiusX + local137 & Texture.widthMask;
-					local78 += local90[local198];
-					local72 += local86[local198];
-					local70 += local82[local198];
+				@Pc(127) int[] rowB = destRow[2];
+				@Pc(131) int[] rowR = destRow[0];
+				@Pc(135) int[] rowG = destRow[1];
+				@Pc(137) int x = 0;
+				while (Texture.width > x) {
+					rowR[x] = accR * invKernelW >> 16;
+					rowG[x] = accG * invKernelW >> 16;
+					rowB[x] = invKernelW * accB >> 16;
+					@Pc(172) int trailIdx = Texture.widthMask & x - this.radiusX;
+					accB -= srcB[trailIdx];
+					x++;
+					accR -= srcR[trailIdx];
+					accG -= srcG[trailIdx];
+					@Pc(198) int leadIdx = this.radiusX + x & Texture.widthMask;
+					accB += srcB[leadIdx];
+					accG += srcG[leadIdx];
+					accR += srcR[leadIdx];
 				}
-				local49[this.radiusY + local54 - arg0] = local76;
+				blurredRows[this.radiusY + y - row] = destRow;
 			}
-			@Pc(235) int[] local235 = local13[0];
-			@Pc(239) int[] local239 = local13[1];
-			@Pc(243) int[] local243 = local13[2];
-			for (local70 = 0; local70 < Texture.width; local70++) {
-				local78 = 0;
-				local72 = 0;
-				@Pc(258) int local258 = 0;
-				for (@Pc(260) int local260 = 0; local260 < local42; local260++) {
-					@Pc(271) int[][] local271 = local49[local260];
-					local258 += local271[2][local70];
-					local78 += local271[1][local70];
-					local72 += local271[0][local70];
+			@Pc(235) int[] outR = output[0];
+			@Pc(239) int[] outG = output[1];
+			@Pc(243) int[] outB = output[2];
+			for (accR = 0; accR < Texture.width; accR++) {
+				accB = 0;
+				accG = 0;
+				@Pc(258) int sumB = 0;
+				for (@Pc(260) int j = 0; j < kernelH; j++) {
+					@Pc(271) int[][] blurRow = blurredRows[j];
+					sumB += blurRow[2][accR];
+					accB += blurRow[1][accR];
+					accG += blurRow[0][accR];
 				}
-				local235[local70] = local46 * local72 >> 16;
-				local239[local70] = local46 * local78 >> 16;
-				local243[local70] = local258 * local46 >> 16;
+				outR[accR] = invKernelH * accG >> 16;
+				outG[accR] = invKernelH * accB >> 16;
+				outB[accR] = sumB * invKernelH >> 16;
 			}
 		}
-		return local13;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!nm", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.radiusX = arg1.g1();
-		} else if (arg0 == 1) {
-			this.radiusY = arg1.g1();
-		} else if (arg0 == 2) {
-			this.monochrome = arg1.g1() == 1;
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.radiusX = buf.g1();
+		} else if (opcode == 1) {
+			this.radiusY = buf.g1();
+		} else if (opcode == 2) {
+			this.monochrome = buf.g1() == 1;
 		}
 	}
 }
