@@ -25,7 +25,7 @@ public final class HookRequest extends Node {
 	public int op;
 
 	@OriginalMember(owner = "client!jl", name = "C", descriptor = "Z")
-	public boolean aBoolean158;
+	public boolean cancelOnMouseExit;
 
 	@OriginalMember(owner = "client!jl", name = "D", descriptor = "I")
 	public int mouseX;

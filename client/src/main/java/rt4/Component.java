@@ -540,7 +540,7 @@ public final class Component {
 		if (this.clickMaskStart != null) {
 			return true;
 		}
-		@Pc(18) SoftwareIndexedSprite local18 = SpriteLoader.loadSoftwareIndexedSprite(this.spriteId, InterfaceList.aClass153_12);
+		@Pc(18) SoftwareIndexedSprite local18 = SpriteLoader.loadSoftwareIndexedSprite(this.spriteId, InterfaceList.spriteProvider);
 		if (local18 == null) {
 			return false;
 		}
@@ -818,7 +818,7 @@ public final class Component {
 		if (local43 != null) {
 			return local43;
 		}
-		local43 = SpriteLoader.loadSprites(local29, InterfaceList.aClass153_12);
+		local43 = SpriteLoader.loadSprites(local29, InterfaceList.spriteProvider);
 		if (local43 == null) {
 			loadFailed = true;
 		} else {
@@ -891,7 +891,7 @@ public final class Component {
 			if (local10 == 1) {
 				local61 = (Model) models.get((local10 << 16) + local13);
 				if (local61 == null) {
-					@Pc(69) RawModel local69 = RawModel.create(InterfaceList.aClass153_85, local13);
+					@Pc(69) RawModel local69 = RawModel.create(InterfaceList.modelProvider, local13);
 					if (local69 == null) {
 						loadFailed = true;
 						return null;
@@ -977,9 +977,9 @@ public final class Component {
 		}
 		@Pc(85) SoftwareSprite local85;
 		if (this.hasAlpha) {
-			local85 = SoftwareSprite.loadSoftwareAlphaSprite(InterfaceList.aClass153_12, local12);
+			local85 = SoftwareSprite.loadSoftwareAlphaSprite(InterfaceList.spriteProvider, local12);
 		} else {
-			local85 = SpriteLoader.loadSoftwareSprite(0, InterfaceList.aClass153_12, local12);
+			local85 = SpriteLoader.loadSoftwareSprite(0, InterfaceList.spriteProvider, local12);
 		}
 		if (local85 == null) {
 			loadFailed = true;
@@ -1207,7 +1207,7 @@ public final class Component {
 		if (local21 != null) {
 			return local21;
 		}
-		local21 = Font.load(this.font, InterfaceList.aClass153_12, InterfaceList.aClass153_64);
+		local21 = Font.load(this.font, InterfaceList.spriteProvider, InterfaceList.fontProvider);
 		if (local21 == null) {
 			loadFailed = true;
 		} else {

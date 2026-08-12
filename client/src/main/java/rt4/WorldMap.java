@@ -67,13 +67,13 @@ public class WorldMap {
 	@OriginalMember(owner = "client!we", name = "v", descriptor = "Lclient!fd;")
 	public static WorldMapFont font11;
 	@OriginalMember(owner = "client!bc", name = "W", descriptor = "I")
-	public static int anInt435;
+	public static int viewX;
 	@OriginalMember(owner = "client!rj", name = "P", descriptor = "I")
 	public static int anInt4901 = -1;
 	@OriginalMember(owner = "client!lc", name = "l", descriptor = "I")
 	public static int anInt3482 = -1;
 	@OriginalMember(owner = "client!cd", name = "u", descriptor = "I")
-	public static int anInt919;
+	public static int viewY;
 	@OriginalMember(owner = "client!qh", name = "a", descriptor = "Lclient!se;")
 	public static MapElementList labels;
 	@OriginalMember(owner = "client!ck", name = "J", descriptor = "[[[B")
@@ -157,11 +157,11 @@ public class WorldMap {
 			@Pc(168) int local168 = originY + length - Camera.originY - (PlayerList.self.yFine >> 7) - 1;
 			@Pc(177) int local177 = local168 + (int) (Math.random() * 10.0D) - 5;
 			if (local153 >= 0 && width > local153 && local177 >= 0 && local177 < length) {
-				anInt435 = local153;
-				anInt919 = local177;
+				viewX = local153;
+				viewY = local177;
 			} else {
-				anInt919 = originY + length - currentMap.originY * 64 - 1;
-				anInt435 = currentMap.originX * 64 - originX;
+				viewY = originY + length - currentMap.originY * 64 - 1;
+				viewX = currentMap.originX * 64 - originX;
 			}
 
 			clampViewPosition();
@@ -255,23 +255,23 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!cn", name = "e", descriptor = "(B)V")
 	public static void clampViewPosition() {
-		if (anInt435 < 0) {
+		if (viewX < 0) {
 			anInt4901 = -1;
-			anInt435 = 0;
+			viewX = 0;
 			anInt3482 = -1;
 		}
-		if (anInt435 > width) {
+		if (viewX > width) {
 			anInt4901 = -1;
-			anInt435 = width;
+			viewX = width;
 			anInt3482 = -1;
 		}
-		if (anInt919 < 0) {
+		if (viewY < 0) {
 			anInt3482 = -1;
 			anInt4901 = -1;
-			anInt919 = 0;
+			viewY = 0;
 		}
-		if (length < anInt919) {
-			anInt919 = length;
+		if (length < viewY) {
+			viewY = length;
 			anInt4901 = -1;
 			anInt3482 = -1;
 		}
@@ -902,8 +902,8 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!je", name = "a", descriptor = "(IIIII)V")
 	public static void setViewFromMousePosition(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		anInt435 = width * arg2 / arg0;
-		anInt919 = length * arg1 / arg3;
+		viewX = width * arg2 / arg0;
+		viewY = length * arg1 / arg3;
 		anInt3482 = -1;
 		anInt4901 = -1;
 		clampViewPosition();
@@ -913,7 +913,7 @@ public class WorldMap {
 	public static void setViewY(@OriginalArg(1) int arg0) {
 		anInt4901 = -1;
 		anInt4901 = -1;
-		anInt919 = arg0;
+		viewY = arg0;
 		clampViewPosition();
 	}
 
@@ -921,7 +921,7 @@ public class WorldMap {
 	public static void setViewX(@OriginalArg(0) int arg0) {
 		anInt4901 = -1;
 		anInt3482 = -1;
-		anInt435 = arg0;
+		viewX = arg0;
 		clampViewPosition();
 	}
 
@@ -998,16 +998,16 @@ public class WorldMap {
 		if (anInt3482 == -1 || anInt4901 == -1) {
 			return;
 		}
-		@Pc(60) int local60 = anInt3482 - anInt435;
+		@Pc(60) int local60 = anInt3482 - viewX;
 		if (local60 < 2 || local60 > 2) {
 			local60 >>= 0x4;
 		}
-		@Pc(78) int local78 = anInt4901 - anInt919;
+		@Pc(78) int local78 = anInt4901 - viewY;
 		if (local78 < 2 || local78 > 2) {
 			local78 >>= 0x4;
 		}
-		anInt919 -= -local78;
-		anInt435 += local60;
+		viewY -= -local78;
+		viewX += local60;
 		if (local60 == 0 && local78 == 0) {
 			anInt3482 = -1;
 			anInt4901 = -1;
@@ -1637,12 +1637,12 @@ public class WorldMap {
 			return;
 		}
 		anInt1176 = (int) ((float) (arg2 * 2) / zoom);
-		Cs1ScriptRunner.worldMapViewportX = anInt435 - (int) ((float) arg3 / zoom);
-		@Pc(211) int local211 = anInt435 - (int) ((float) arg3 / zoom);
-		local50 = anInt919 - (int) ((float) arg2 / zoom);
-		Cs1ScriptRunner.worldMapViewportY = anInt919 - (int) ((float) arg2 / zoom);
-		@Pc(236) int local236 = anInt919 + (int) ((float) arg2 / zoom);
-		local61 = (int) ((float) arg3 / zoom) + anInt435;
+		Cs1ScriptRunner.worldMapViewportX = viewX - (int) ((float) arg3 / zoom);
+		@Pc(211) int local211 = viewX - (int) ((float) arg3 / zoom);
+		local50 = viewY - (int) ((float) arg2 / zoom);
+		Cs1ScriptRunner.worldMapViewportY = viewY - (int) ((float) arg2 / zoom);
+		@Pc(236) int local236 = viewY + (int) ((float) arg2 / zoom);
+		local61 = (int) ((float) arg3 / zoom) + viewX;
 		anInt2387 = (int) ((float) (arg3 * 2) / zoom);
 		if (GlRenderer.enabled) {
 			if (aClass3_Sub2_Sub1_Sub1_2 == null || aClass3_Sub2_Sub1_Sub1_2.width != arg3 || aClass3_Sub2_Sub1_Sub1_2.height != arg2) {

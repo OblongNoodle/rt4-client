@@ -1699,10 +1699,10 @@ public class MiniMenu {
 
 	@OriginalMember(owner = "client!lf", name = "b", descriptor = "(I)V")
 	public static void drawA() {
-		@Pc(3) int local3 = InterfaceList.anInt5138;
-		@Pc(9) int local9 = InterfaceList.anInt761;
-		@Pc(11) int local11 = InterfaceList.anInt4271;
-		@Pc(15) int local15 = InterfaceList.anInt436;
+		@Pc(3) int local3 = InterfaceList.menuY;
+		@Pc(9) int local9 = InterfaceList.menuWidth;
+		@Pc(11) int local11 = InterfaceList.menuX;
+		@Pc(15) int local15 = InterfaceList.menuHeight;
 		if (GlRenderer.enabled) {
 			GlRaster.fillRect(local11, local3, local9, local15, 6116423);
 			GlRaster.fillRect(local11 + 1, local3 + 1, local9 - 2, 16, 0);
@@ -1723,15 +1723,15 @@ public class MiniMenu {
 			}
 			Fonts.b12Full.renderLeft(getOp(local107), local11 + 3, local127, color, 0);
 		}
-		InterfaceList.forceRedrawScreen(InterfaceList.anInt4271, InterfaceList.anInt5138, InterfaceList.anInt436, InterfaceList.anInt761);
+		InterfaceList.forceRedrawScreen(InterfaceList.menuX, InterfaceList.menuY, InterfaceList.menuHeight, InterfaceList.menuWidth);
 	}
 
 	@OriginalMember(owner = "client!ij", name = "a", descriptor = "(B)V")
 	public static void drawB() {
-		@Pc(3) int local3 = InterfaceList.anInt4271;
-		@Pc(9) int local9 = InterfaceList.anInt5138;
-		@Pc(11) int local11 = InterfaceList.anInt436;
-		@Pc(13) int local13 = InterfaceList.anInt761;
+		@Pc(3) int local3 = InterfaceList.menuX;
+		@Pc(9) int local9 = InterfaceList.menuY;
+		@Pc(11) int local11 = InterfaceList.menuHeight;
+		@Pc(13) int local13 = InterfaceList.menuWidth;
 		if (LoginManager.menuHeaderFillSprite == null || LoginManager.menuHeaderEdgeSprite == null) {
 			if (client.js5Archive8.isFileReady(LoginManager.menuHeaderFillSpriteId) && client.js5Archive8.isFileReady(LoginManager.menuHeaderEdgeSpriteId)) {
 				LoginManager.menuHeaderFillSprite = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.menuHeaderFillSpriteId);
@@ -1828,6 +1828,6 @@ public class MiniMenu {
 			}
 			Fonts.b12Full.renderLeft(getOp(local203), local3 + 3, local219, local418, 0);
 		}
-		InterfaceList.forceRedrawScreen(InterfaceList.anInt4271, InterfaceList.anInt5138, InterfaceList.anInt436, InterfaceList.anInt761);
+		InterfaceList.forceRedrawScreen(InterfaceList.menuX, InterfaceList.menuY, InterfaceList.menuHeight, InterfaceList.menuWidth);
 	}
 }

@@ -1495,19 +1495,19 @@ public final class ScriptRunner {
 		}
 		if (MiniMenu.clickProcessingState == 1) {
 			if (interfaceMouseX == Mouse.lastHandledClickX && Mouse.lastHandledClickY == interfaceMouseY) {
-				InterfaceList.anInt436 = MiniMenu.size * 15 + (InterfaceList.useStyledMenu ? 26 : 22);
+				InterfaceList.menuHeight = MiniMenu.size * 15 + (InterfaceList.useStyledMenu ? 26 : 22);
 				MiniMenu.clickProcessingState = 0;
-				InterfaceList.anInt5138 = local43;
-				InterfaceList.anInt4271 = local27;
+				InterfaceList.menuY = local43;
+				InterfaceList.menuX = local27;
 				Cs1ScriptRunner.isMenuOpen = true;
-				InterfaceList.anInt761 = local16;
+				InterfaceList.menuWidth = local16;
 			}
 		} else if (interfaceMouseX == Mouse.clickX && interfaceMouseY == Mouse.clickY) {
-			InterfaceList.anInt4271 = local27;
+			InterfaceList.menuX = local27;
 			MiniMenu.clickProcessingState = 0;
-			InterfaceList.anInt761 = local16;
-			InterfaceList.anInt5138 = local43;
-			InterfaceList.anInt436 = (InterfaceList.useStyledMenu ? 26 : 22) + MiniMenu.size * 15;
+			InterfaceList.menuWidth = local16;
+			InterfaceList.menuY = local43;
+			InterfaceList.menuHeight = (InterfaceList.useStyledMenu ? 26 : 22) + MiniMenu.size * 15;
 			Cs1ScriptRunner.isMenuOpen = true;
 		} else {
 			Mouse.lastHandledClickY = Mouse.clickY;
@@ -4531,8 +4531,8 @@ public final class ScriptRunner {
 														continue;
 													}
 													if (opcode == 5209) {
-														intStack[isp++] = WorldMap.originX + WorldMap.anInt435;
-														intStack[isp++] = WorldMap.originY + WorldMap.length - WorldMap.anInt919 - 1;
+														intStack[isp++] = WorldMap.originX + WorldMap.viewX;
+														intStack[isp++] = WorldMap.originY + WorldMap.length - WorldMap.viewY - 1;
 														continue;
 													}
 													if (opcode == Cs2Opcodes.getDungeonmapCenter) {

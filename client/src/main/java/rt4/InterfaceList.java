@@ -28,7 +28,7 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!pa", name = "R", descriptor = "[Z")
 	public static final boolean[] rectangleDirty = new boolean[100];
 	@OriginalMember(owner = "client!ql", name = "h", descriptor = "Lclient!na;")
-	public static final JagString aClass100_903 = JagString.parse("Hidden)2");
+	public static final JagString HIDDEN_OPTION_PREFIX = JagString.parse("Hidden)2");
 	@OriginalMember(owner = "client!ja", name = "f", descriptor = "Lclient!ih;")
 	public static final LinkedList mediumPriorityRequests = new LinkedList();
 	@OriginalMember(owner = "client!ac", name = "i", descriptor = "Lclient!ih;")
@@ -40,17 +40,17 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!md", name = "W", descriptor = "I")
 	public static int topLevelInterface = -1;
 	@OriginalMember(owner = "client!bm", name = "f", descriptor = "Lclient!ve;")
-	public static Js5 aClass153_12;
+	public static Js5 spriteProvider;
 	@OriginalMember(owner = "client!nd", name = "v", descriptor = "Lclient!ve;")
-	public static Js5 aClass153_64;
+	public static Js5 fontProvider;
 	@OriginalMember(owner = "client!qg", name = "ab", descriptor = "Lclient!ve;")
-	public static Js5 aClass153_84;
+	public static Js5 interfaceProvider;
 	@OriginalMember(owner = "client!qh", name = "g", descriptor = "Lclient!ve;")
-	public static Js5 aClass153_85;
+	public static Js5 modelProvider;
 	@OriginalMember(owner = "client!th", name = "j", descriptor = "[[Lclient!be;")
 	public static Component[][] components;
 	@OriginalMember(owner = "client!sc", name = "m", descriptor = "[Z")
-	public static boolean[] aBooleanArray115;
+	public static boolean[] interfaceLoaded;
 	@OriginalMember(owner = "client!oj", name = "y", descriptor = "I")
 	public static int keyQueueSize = 0;
 	@OriginalMember(owner = "client!je", name = "fb", descriptor = "I")
@@ -70,11 +70,11 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!ef", name = "r", descriptor = "Lclient!be;")
 	public static Component dragTargetComponent = null;
 	@OriginalMember(owner = "client!bn", name = "O", descriptor = "I")
-	public static int anInt761;
+	public static int menuWidth;
 	@OriginalMember(owner = "client!bc", name = "X", descriptor = "I")
-	public static int anInt436;
+	public static int menuHeight;
 	@OriginalMember(owner = "client!si", name = "ab", descriptor = "I")
-	public static int anInt5138;
+	public static int menuY;
 	@OriginalMember(owner = "client!sh", name = "f", descriptor = "I")
 	public static int dragParentY = -1;
 	@OriginalMember(owner = "client!gd", name = "j", descriptor = "I")
@@ -84,7 +84,7 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!og", name = "e", descriptor = "Lclient!be;")
 	public static Component hoveredComponent;
 	@OriginalMember(owner = "client!ok", name = "b", descriptor = "I")
-	public static int anInt4271;
+	public static int menuX;
 	@OriginalMember(owner = "client!lg", name = "b", descriptor = "Z")
 	public static boolean dragParentFound = false;
 	@OriginalMember(owner = "client!ac", name = "n", descriptor = "I")
@@ -96,23 +96,23 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!oj", name = "v", descriptor = "I")
 	public static int currentRenderLoop = -2;
 	@OriginalMember(owner = "client!pm", name = "hb", descriptor = "I")
-	public static int anInt4620;
+	public static int worldMapDragStartX;
 	@OriginalMember(owner = "client!fk", name = "e", descriptor = "I")
-	public static int anInt1885;
+	public static int worldMapDragStartY;
 	@OriginalMember(owner = "client!bj", name = "s", descriptor = "I")
 	public static int dragSourceY = -1;
 	@OriginalMember(owner = "client!kl", name = "s", descriptor = "I")
-	public static int anInt3337 = 0;
+	public static int worldMapDragState = 0;
 	@OriginalMember(owner = "client!jk", name = "p", descriptor = "I")
 	public static int dragSourceX = -1;
 	@OriginalMember(owner = "client!df", name = "n", descriptor = "I")
-	public static int anInt1396 = 0;
+	public static int scrollbarDragMargin = 0;
 	@OriginalMember(owner = "client!di", name = "H", descriptor = "Z")
-	public static boolean aBoolean84 = false;
+	public static boolean scrollbarDragging = false;
 	@OriginalMember(owner = "client!dh", name = "a", descriptor = "Z")
 	public static boolean dragSourceFound = false;
 	@OriginalMember(owner = "client!ja", name = "r", descriptor = "I")
-	public static int anInt2941 = -1;
+	public static int currentCursorId = -1;
 	@OriginalMember(owner = "client!a", name = "h", descriptor = "I")
 	public static int clickOffsetX;
 	@OriginalMember(owner = "client!ve", name = "w", descriptor = "Z")
@@ -120,20 +120,20 @@ public class InterfaceList {
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(ZLclient!ve;Lclient!ve;Lclient!ve;Lclient!ve;)V")
 	public static void init(@OriginalArg(1) Js5 arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) Js5 arg2, @OriginalArg(4) Js5 arg3) {
-		aClass153_12 = arg1;
-		aClass153_64 = arg0;
-		aClass153_84 = arg2;
-		aClass153_85 = arg3;
-		components = new Component[aClass153_84.capacity()][];
-		aBooleanArray115 = new boolean[aClass153_84.capacity()];
+		spriteProvider = arg1;
+		fontProvider = arg0;
+		interfaceProvider = arg2;
+		modelProvider = arg3;
+		components = new Component[interfaceProvider.capacity()][];
+		interfaceLoaded = new boolean[interfaceProvider.capacity()];
 	}
 
 	@OriginalMember(owner = "client!ig", name = "a", descriptor = "(BI)V")
 	public static void unload(@OriginalArg(1) int arg0) {
-		if (arg0 == -1 || !aBooleanArray115[arg0]) {
+		if (arg0 == -1 || !interfaceLoaded[arg0]) {
 			return;
 		}
-		aClass153_84.discardUnpacked(arg0);
+		interfaceProvider.discardUnpacked(arg0);
 		if (components[arg0] == null) {
 			return;
 		}
@@ -150,19 +150,19 @@ public class InterfaceList {
 		if (local27) {
 			components[arg0] = null;
 		}
-		aBooleanArray115[arg0] = false;
+		interfaceLoaded[arg0] = false;
 	}
 
 	@OriginalMember(owner = "client!tm", name = "b", descriptor = "(II)Z")
 	public static boolean load(@OriginalArg(0) int arg0) {
-		if (aBooleanArray115[arg0]) {
+		if (interfaceLoaded[arg0]) {
 			return true;
 		}
 
-		if (aClass153_84.isGroupReady(arg0)) {
-			@Pc(25) int local25 = aClass153_84.getGroupCapacity(arg0);
+		if (interfaceProvider.isGroupReady(arg0)) {
+			@Pc(25) int local25 = interfaceProvider.getGroupCapacity(arg0);
 			if (local25 == 0) {
-				aBooleanArray115[arg0] = true;
+				interfaceLoaded[arg0] = true;
 				return true;
 			}
 			if (components[arg0] == null) {
@@ -170,7 +170,7 @@ public class InterfaceList {
 			}
 			for (@Pc(46) int local46 = 0; local46 < local25; local46++) {
 				if (components[arg0][local46] == null) {
-					@Pc(62) byte[] local62 = aClass153_84.fetchFile(arg0, local46);
+					@Pc(62) byte[] local62 = interfaceProvider.fetchFile(arg0, local46);
 					if (local62 != null) {
 						@Pc(74) Component local74 = components[arg0][local46] = new Component();
 						local74.id = local46 + (arg0 << 16);
@@ -182,7 +182,7 @@ public class InterfaceList {
 					}
 				}
 			}
-			aBooleanArray115[arg0] = true;
+			interfaceLoaded[arg0] = true;
 			return true;
 		} else {
 			return false;
@@ -191,8 +191,8 @@ public class InterfaceList {
 
 	@OriginalMember(owner = "client!eb", name = "d", descriptor = "(I)V")
 	public static void reset() {
-		components = new Component[aClass153_84.capacity()][];
-		aBooleanArray115 = new boolean[aClass153_84.capacity()];
+		components = new Component[interfaceProvider.capacity()][];
+		interfaceLoaded = new boolean[interfaceProvider.capacity()];
 	}
 
 	@OriginalMember(owner = "client!i", name = "i", descriptor = "(Z)V")
@@ -279,7 +279,7 @@ public class InterfaceList {
 		if (!getServerActiveProperties(arg0).isButtonEnabled(arg1) && arg0.onOptionClick == null) {
 			return null;
 		} else if (arg0.ops == null || arg0.ops.length <= arg1 || arg0.ops[arg1] == null || arg0.ops[arg1].trim().length() == 0) {
-			return Cheat.qaOpTest ? JagString.concatenate(new JagString[]{aClass100_903, JagString.parseInt(arg1)}) : null;
+			return Cheat.qaOpTest ? JagString.concatenate(new JagString[]{HIDDEN_OPTION_PREFIX, JagString.parseInt(arg1)}) : null;
 		} else {
 			return arg0.ops[arg1];
 		}
@@ -404,9 +404,9 @@ public class InterfaceList {
 		}
 		if (MiniMenu.size == 1) {
 			Cs1ScriptRunner.isMenuOpen = false;
-			redrawScreen(anInt4271, anInt761, anInt5138, anInt436);
+			redrawScreen(menuX, menuWidth, menuY, menuHeight);
 		} else {
-			redrawScreen(anInt4271, anInt761, anInt5138, anInt436);
+			redrawScreen(menuX, menuWidth, menuY, menuHeight);
 			local43 = Fonts.b12Full.getStringWidth(LocalizedText.CHOOSE_OPTION);
 			for (@Pc(75) int local75 = 0; local75 < MiniMenu.size; local75++) {
 				@Pc(88) int local88 = Fonts.b12Full.getStringWidth(MiniMenu.getOp(local75));
@@ -414,8 +414,8 @@ public class InterfaceList {
 					local43 = local88;
 				}
 			}
-			anInt436 = MiniMenu.size * 15 + (useStyledMenu ? 26 : 22);
-			anInt761 = local43 + 8;
+			menuHeight = MiniMenu.size * 15 + (useStyledMenu ? 26 : 22);
+			menuWidth = local43 + 8;
 		}
 		if (topLevelInterface != -1) {
 			runScripts(1, topLevelInterface);
@@ -665,7 +665,7 @@ public class InterfaceList {
 						}
 						if (component.noClickThrough && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
 							for (@Pc(164) HookRequest local164 = (HookRequest) lowPriorityRequests.head(); local164 != null; local164 = (HookRequest) lowPriorityRequests.next()) {
-								if (local164.aBoolean158) {
+								if (local164.cancelOnMouseExit) {
 									local164.unlink();
 									local164.source.mouseOver = false;
 								}
@@ -674,7 +674,7 @@ public class InterfaceList {
 								Cs1ScriptRunner.draggedComponent = null;
 								Cs1ScriptRunner.dragParentComponent = null;
 							}
-							anInt3337 = 0;
+							worldMapDragState = 0;
 						}
 					}
 					if (component.if3) {
@@ -722,13 +722,13 @@ public class InterfaceList {
 							@Pc(399) HookRequest request;
 							if (local207 && MouseWheel.wheelRotation != 0 && component.onScroll != null) {
 								request = new HookRequest();
-								request.aBoolean158 = true;
+								request.cancelOnMouseExit = true;
 								request.source = component;
 								request.mouseY = MouseWheel.wheelRotation;
 								request.arguments = component.onScroll;
 								lowPriorityRequests.addTail(request);
 							}
-							if (Cs1ScriptRunner.draggedComponent != null || clickedInventoryComponent != null || Cs1ScriptRunner.isMenuOpen || component.clientCode != 1400 && anInt3337 > 0) {
+							if (Cs1ScriptRunner.draggedComponent != null || clickedInventoryComponent != null || Cs1ScriptRunner.isMenuOpen || component.clientCode != 1400 && worldMapDragState > 0) {
 								local221 = false;
 								local212 = false;
 								local207 = false;
@@ -753,32 +753,32 @@ public class InterfaceList {
 										if (Keyboard.pressedKeys[Keyboard.KEY_CTRL] && LoginManager.staffModLevel > 0) {
 											i = (int) ((double) (Mouse.clickX - local50 - component.width / 2) * 2.0D / (double) WorldMap.zoom);
 											skill = (int) ((double) (Mouse.clickY - local55 - component.height / 2) * 2.0D / (double) WorldMap.zoom);
-											k = WorldMap.anInt435 + i;
-											@Pc(516) int local516 = WorldMap.anInt919 + skill;
+											k = WorldMap.viewX + i;
+											@Pc(516) int local516 = WorldMap.viewY + skill;
 											@Pc(520) int local520 = k + WorldMap.originX;
 											@Pc(528) int local528 = WorldMap.length + WorldMap.originY - local516 - 1;
 											Cheat.teleport(local520, local528, 0);
 											ClientProt.closeWidget();
 											continue;
 										}
-										anInt3337 = 1;
+										worldMapDragState = 1;
 										Cs1ScriptRunner.dragStartMouseX = Mouse.lastMouseX;
 										Cs1ScriptRunner.dragStartMouseY = Mouse.lastMouseY;
 										continue;
 									}
-									if (local212 && anInt3337 > 0) {
-										if (anInt3337 == 1 && (Cs1ScriptRunner.dragStartMouseX != Mouse.lastMouseX || Cs1ScriptRunner.dragStartMouseY != Mouse.lastMouseY)) {
-											anInt4620 = WorldMap.anInt435;
-											anInt1885 = WorldMap.anInt919;
-											anInt3337 = 2;
+									if (local212 && worldMapDragState > 0) {
+										if (worldMapDragState == 1 && (Cs1ScriptRunner.dragStartMouseX != Mouse.lastMouseX || Cs1ScriptRunner.dragStartMouseY != Mouse.lastMouseY)) {
+											worldMapDragStartX = WorldMap.viewX;
+											worldMapDragStartY = WorldMap.viewY;
+											worldMapDragState = 2;
 										}
-										if (anInt3337 == 2) {
-											WorldMap.setViewX(anInt4620 + (int) ((double) (Cs1ScriptRunner.dragStartMouseX - Mouse.lastMouseX) * 2.0D / (double) WorldMap.targetZoom));
-											WorldMap.setViewY(anInt1885 + (int) ((double) (Cs1ScriptRunner.dragStartMouseY - Mouse.lastMouseY) * 2.0D / (double) WorldMap.targetZoom));
+										if (worldMapDragState == 2) {
+											WorldMap.setViewX(worldMapDragStartX + (int) ((double) (Cs1ScriptRunner.dragStartMouseX - Mouse.lastMouseX) * 2.0D / (double) WorldMap.targetZoom));
+											WorldMap.setViewY(worldMapDragStartY + (int) ((double) (Cs1ScriptRunner.dragStartMouseY - Mouse.lastMouseY) * 2.0D / (double) WorldMap.targetZoom));
 										}
 										continue;
 									}
-									anInt3337 = 0;
+									worldMapDragState = 0;
 									continue;
 								}
 								if (component.clientCode == 1401) {
@@ -798,7 +798,7 @@ public class InterfaceList {
 								component.dragging = true;
 								if (component.onClickRepeat != null) {
 									request = new HookRequest();
-									request.aBoolean158 = true;
+									request.cancelOnMouseExit = true;
 									request.source = component;
 									request.mouseX = Mouse.clickX - local50;
 									request.mouseY = Mouse.clickY - local55;
@@ -808,7 +808,7 @@ public class InterfaceList {
 							}
 							if (component.dragging && local212 && component.onDrag != null) {
 								request = new HookRequest();
-								request.aBoolean158 = true;
+								request.cancelOnMouseExit = true;
 								request.source = component;
 								request.mouseX = Mouse.lastMouseX - local50;
 								request.mouseY = Mouse.lastMouseY - local55;
@@ -819,7 +819,7 @@ public class InterfaceList {
 								component.dragging = false;
 								if (component.onRelease != null) {
 									request = new HookRequest();
-									request.aBoolean158 = true;
+									request.cancelOnMouseExit = true;
 									request.source = component;
 									request.mouseX = Mouse.lastMouseX - local50;
 									request.mouseY = Mouse.lastMouseY - local55;
@@ -829,7 +829,7 @@ public class InterfaceList {
 							}
 							if (local212 && component.onHold != null) {
 								request = new HookRequest();
-								request.aBoolean158 = true;
+								request.cancelOnMouseExit = true;
 								request.source = component;
 								request.mouseX = Mouse.lastMouseX - local50;
 								request.mouseY = Mouse.lastMouseY - local55;
@@ -840,7 +840,7 @@ public class InterfaceList {
 								component.mouseOver = true;
 								if (component.onMouseOver != null) {
 									request = new HookRequest();
-									request.aBoolean158 = true;
+									request.cancelOnMouseExit = true;
 									request.source = component;
 									request.mouseX = Mouse.lastMouseX - local50;
 									request.mouseY = Mouse.lastMouseY - local55;
@@ -850,7 +850,7 @@ public class InterfaceList {
 							}
 							if (component.mouseOver && local207 && component.onMouseRepeat != null) {
 								request = new HookRequest();
-								request.aBoolean158 = true;
+								request.cancelOnMouseExit = true;
 								request.source = component;
 								request.mouseX = Mouse.lastMouseX - local50;
 								request.mouseY = Mouse.lastMouseY - local55;
@@ -861,7 +861,7 @@ public class InterfaceList {
 								component.mouseOver = false;
 								if (component.onMouseLeave != null) {
 									request = new HookRequest();
-									request.aBoolean158 = true;
+									request.cancelOnMouseExit = true;
 									request.source = component;
 									request.mouseX = Mouse.lastMouseX - local50;
 									request.mouseY = Mouse.lastMouseY - local55;
@@ -1191,12 +1191,12 @@ public class InterfaceList {
 
 	@OriginalMember(owner = "client!tc", name = "a", descriptor = "(IILclient!be;BIIII)V")
 	public static void handleScrollbar(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Component arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		if (aBoolean84) {
-			anInt1396 = 32;
+		if (scrollbarDragging) {
+			scrollbarDragMargin = 32;
 		} else {
-			anInt1396 = 0;
+			scrollbarDragMargin = 0;
 		}
-		aBoolean84 = false;
+		scrollbarDragging = false;
 		@Pc(139) int local139;
 		if (Mouse.pressedButton != 0) {
 			if (arg4 <= arg3 && arg4 + 16 > arg3 && arg0 >= arg5 && arg5 + 16 > arg0) {
@@ -1205,7 +1205,7 @@ public class InterfaceList {
 			} else if (arg3 >= arg4 && arg3 < arg4 + 16 && arg0 >= arg1 + arg5 - 16 && arg1 + arg5 > arg0) {
 				arg2.scrollY += 4;
 				redraw(arg2);
-			} else if (arg3 >= arg4 - anInt1396 && arg3 < arg4 + anInt1396 + 16 && arg0 >= arg5 + 16 && arg1 + arg5 - 16 > arg0) {
+			} else if (arg3 >= arg4 - scrollbarDragMargin && arg3 < arg4 + scrollbarDragMargin + 16 && arg0 >= arg5 + 16 && arg1 + arg5 - 16 > arg0) {
 				local139 = arg1 * (arg1 - 32) / arg6;
 				if (local139 < 8) {
 					local139 = 8;
@@ -1214,7 +1214,7 @@ public class InterfaceList {
 				@Pc(162) int local162 = arg0 - local139 / 2 - arg5 - 16;
 				arg2.scrollY = (arg6 - arg1) * local162 / local150;
 				redraw(arg2);
-				aBoolean84 = true;
+				scrollbarDragging = true;
 			}
 		}
 		if (MouseWheel.wheelRotation == 0) {
@@ -1305,7 +1305,7 @@ public class InterfaceList {
 		if (!Preferences.cursorsEnabled) {
 			arg0 = -1;
 		}
-		if (arg0 == anInt2941) {
+		if (arg0 == currentCursorId) {
 			return;
 		}
 		if (arg0 != -1) {
@@ -1315,12 +1315,12 @@ public class InterfaceList {
 				arg0 = -1;
 			} else {
 				GameShell.signLink.setCursor(local28.toFullImage(), local28.innerWidth, GameShell.canvas, new Point(local24.hotSpotX, local24.hotSpotY), local28.innerHeight);
-				anInt2941 = arg0;
+				currentCursorId = arg0;
 			}
 		}
-		if (arg0 == -1 && anInt2941 != -1) {
+		if (arg0 == -1 && currentCursorId != -1) {
 			GameShell.signLink.setCursor(null, -1, GameShell.canvas, new Point(), -1);
-			anInt2941 = -1;
+			currentCursorId = -1;
 		}
 	}
 }
