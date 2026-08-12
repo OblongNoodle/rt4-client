@@ -51,10 +51,10 @@ public final class MidiNoteStream extends PcmStream {
 	@OriginalMember(owner = "client!te", name = "a", descriptor = "(Lclient!mf;II)V")
 	private void skip(@OriginalArg(0) MidiNote instrument, @OriginalArg(2) int len) {
 		if ((this.parent.channelFlags[instrument.channel] & 0x4) != 0 && instrument.releaseTimer < 0) {
-			@Pc(27) int local27 = this.parent.channelDetuneRatio[instrument.channel] / AudioChannel.sampleRate;
-			@Pc(37) int local37 = (local27 + 1048575 - instrument.portamentoPos) / local27;
-			instrument.portamentoPos = local27 * len + instrument.portamentoPos & 0xFFFFF;
-			if (len >= local37) {
+			@Pc(27) int detuneStep = this.parent.channelDetuneRatio[instrument.channel] / AudioChannel.sampleRate;
+			@Pc(37) int samplesUntilRetrigger = (detuneStep + 1048575 - instrument.portamentoPos) / detuneStep;
+			instrument.portamentoPos = detuneStep * len + instrument.portamentoPos & 0xFFFFF;
+			if (len >= samplesUntilRetrigger) {
 				if (this.parent.channelSampleOffset[instrument.channel] == 0) {
 					instrument.stream = SoundPcmStream.create(instrument.sound, instrument.stream.getAbsoluteRate(), instrument.stream.getVolume(), instrument.stream.getPan());
 				} else {
@@ -64,7 +64,7 @@ public final class MidiNoteStream extends PcmStream {
 				if (instrument.instrument.notePitchOffset[instrument.noteKey] < 0) {
 					instrument.stream.setLoops(-1);
 				}
-				len = instrument.portamentoPos / local27;
+				len = instrument.portamentoPos / detuneStep;
 			}
 		}
 		instrument.stream.skip(len);
@@ -98,63 +98,63 @@ public final class MidiNoteStream extends PcmStream {
 
 	@OriginalMember(owner = "client!te", name = "b", descriptor = "([III)V")
 	@Override
-	public final void read(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		this.mixer.read(arg0, arg1, arg2);
-		for (@Pc(17) MidiNote local17 = (MidiNote) this.notes.head(); local17 != null; local17 = (MidiNote) this.notes.next()) {
-			if (!this.parent.isNoteFinished(local17)) {
-				@Pc(29) int local29 = arg2;
-				@Pc(31) int local31 = arg1;
+	public final void read(@OriginalArg(0) int[] buf, @OriginalArg(1) int offset, @OriginalArg(2) int len) {
+		this.mixer.read(buf, offset, len);
+		for (@Pc(17) MidiNote note = (MidiNote) this.notes.head(); note != null; note = (MidiNote) this.notes.next()) {
+			if (!this.parent.isNoteFinished(note)) {
+				@Pc(29) int remaining = len;
+				@Pc(31) int pos = offset;
 				do {
-					if (local29 <= local17.retriggerDelay) {
-						this.readNoteWithRetrigger(arg0, local17, local31, local29, local31 + local29);
-						local17.retriggerDelay -= local29;
+					if (remaining <= note.retriggerDelay) {
+						this.readNoteWithRetrigger(buf, note, pos, remaining, pos + remaining);
+						note.retriggerDelay -= remaining;
 						break;
 					}
-					this.readNoteWithRetrigger(arg0, local17, local31, local17.retriggerDelay, local29 + local31);
-					local29 -= local17.retriggerDelay;
-					local31 += local17.retriggerDelay;
-				} while (!this.parent.advanceNoteEnvelope(local29, local31, local17, arg0));
+					this.readNoteWithRetrigger(buf, note, pos, note.retriggerDelay, remaining + pos);
+					remaining -= note.retriggerDelay;
+					pos += note.retriggerDelay;
+				} while (!this.parent.advanceNoteEnvelope(remaining, pos, note, buf));
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!te", name = "a", descriptor = "([ILclient!mf;IIIB)V")
-	private void readNoteWithRetrigger(@OriginalArg(0) int[] arg0, @OriginalArg(1) MidiNote arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if ((this.parent.channelFlags[arg1.channel] & 0x4) != 0 && arg1.releaseTimer < 0) {
-			@Pc(26) int local26 = this.parent.channelDetuneRatio[arg1.channel] / AudioChannel.sampleRate;
+	private void readNoteWithRetrigger(@OriginalArg(0) int[] buf, @OriginalArg(1) MidiNote note, @OriginalArg(2) int offset, @OriginalArg(3) int len, @OriginalArg(4) int end) {
+		if ((this.parent.channelFlags[note.channel] & 0x4) != 0 && note.releaseTimer < 0) {
+			@Pc(26) int detuneStep = this.parent.channelDetuneRatio[note.channel] / AudioChannel.sampleRate;
 			while (true) {
-				@Pc(36) int local36 = (local26 + 1048575 - arg1.portamentoPos) / local26;
-				if (arg3 < local36) {
-					arg1.portamentoPos += arg3 * local26;
+				@Pc(36) int samplesUntilRetrigger = (detuneStep + 1048575 - note.portamentoPos) / detuneStep;
+				if (len < samplesUntilRetrigger) {
+					note.portamentoPos += len * detuneStep;
 					break;
 				}
-				arg3 -= local36;
-				arg1.stream.read(arg0, arg2, local36);
-				@Pc(55) int local55 = AudioChannel.sampleRate / 100;
-				@Pc(58) SoundPcmStream local58 = arg1.stream;
-				@Pc(62) int local62 = 262144 / local26;
-				if (local62 < local55) {
-					local55 = local62;
+				len -= samplesUntilRetrigger;
+				note.stream.read(buf, offset, samplesUntilRetrigger);
+				@Pc(55) int fadeLen = AudioChannel.sampleRate / 100;
+				@Pc(58) SoundPcmStream prevStream = note.stream;
+				@Pc(62) int maxFadeLen = 262144 / detuneStep;
+				if (maxFadeLen < fadeLen) {
+					fadeLen = maxFadeLen;
 				}
-				arg1.portamentoPos += local26 * local36 - 1048576;
-				if (this.parent.channelSampleOffset[arg1.channel] == 0) {
-					arg1.stream = SoundPcmStream.create(arg1.sound, local58.getAbsoluteRate(), local58.getVolume(), local58.getPan());
+				note.portamentoPos += detuneStep * samplesUntilRetrigger - 1048576;
+				if (this.parent.channelSampleOffset[note.channel] == 0) {
+					note.stream = SoundPcmStream.create(note.sound, prevStream.getAbsoluteRate(), prevStream.getVolume(), prevStream.getPan());
 				} else {
-					arg1.stream = SoundPcmStream.create(arg1.sound, local58.getAbsoluteRate(), 0, local58.getPan());
-					this.parent.applyLoopStartOffset(arg1, arg1.instrument.notePitchOffset[arg1.noteKey] < 0);
-					arg1.stream.fadeToVolume(local55, local58.getVolume());
+					note.stream = SoundPcmStream.create(note.sound, prevStream.getAbsoluteRate(), 0, prevStream.getPan());
+					this.parent.applyLoopStartOffset(note, note.instrument.notePitchOffset[note.noteKey] < 0);
+					note.stream.fadeToVolume(fadeLen, prevStream.getVolume());
 				}
-				if (arg1.instrument.notePitchOffset[arg1.noteKey] < 0) {
-					arg1.stream.setLoops(-1);
+				if (note.instrument.notePitchOffset[note.noteKey] < 0) {
+					note.stream.setLoops(-1);
 				}
-				arg2 += local36;
-				local58.fadeOutAndRelease(local55);
-				local58.read(arg0, arg2, arg4 - arg2);
-				if (local58.isTransitioning()) {
-					this.mixer.addSubStream(local58);
+				offset += samplesUntilRetrigger;
+				prevStream.fadeOutAndRelease(fadeLen);
+				prevStream.read(buf, offset, end - offset);
+				if (prevStream.isTransitioning()) {
+					this.mixer.addSubStream(prevStream);
 				}
 			}
 		}
-		arg1.stream.read(arg0, arg2, arg3);
+		note.stream.read(buf, offset, len);
 	}
 }

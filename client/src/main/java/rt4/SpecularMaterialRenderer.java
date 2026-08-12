@@ -156,11 +156,11 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!vm", name = "a", descriptor = "(I)V")
 	@Override
-	public final void setArgument(@OriginalArg(0) int arg0) {
+	public final void setArgument(@OriginalArg(0) int level) {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		if (Preferences.highDetailLighting && this.cubeMapTextureIds != null) {
 			gl.glActiveTexture(GL2.GL_TEXTURE1);
-			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[arg0 - 1]);
+			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[level - 1]);
 			gl.glActiveTexture(GL2.GL_TEXTURE0);
 		}
 	}
@@ -172,65 +172,65 @@ public final class SpecularMaterialRenderer implements MaterialRenderer {
 			this.cubeMapTextureIds = new int[3];
 			gl.glGenTextures(3, this.cubeMapTextureIds, 0);
 		}
-		@Pc(19) byte[] local19 = new byte[4096];
-		@Pc(22) byte[] local22 = new byte[4096];
-		@Pc(25) byte[] local25 = new byte[4096];
-		for (@Pc(27) int local27 = 0; local27 < 6; local27++) {
-			@Pc(32) int local32 = 0;
-			for (@Pc(34) int local34 = 0; local34 < 64; local34++) {
-				for (@Pc(39) int local39 = 0; local39 < 64; local39++) {
-					@Pc(51) float local51 = (float) local39 * 2.0F / 64.0F - 1.0F;
-					@Pc(60) float local60 = (float) local34 * 2.0F / 64.0F - 1.0F;
-					@Pc(75) float local75 = (float) (1.0D / Math.sqrt(local51 * local51 + local60 * local60 + 1.0F));
-					@Pc(79) float local79 = local51 * local75;
-					@Pc(83) float local83 = local60 * local75;
-					@Pc(88) float local88;
-					if (local27 == 0) {
-						local88 = -local79;
-					} else if (local27 == 1) {
-						local88 = local79;
-					} else if (local27 == 2) {
-						local88 = local83;
-					} else if (local27 == 3) {
-						local88 = -local83;
-					} else if (local27 == 4) {
-						local88 = local75;
+		@Pc(19) byte[] lowSpecular = new byte[4096];
+		@Pc(22) byte[] highSpecular = new byte[4096];
+		@Pc(25) byte[] medSpecular = new byte[4096];
+		for (@Pc(27) int face = 0; face < 6; face++) {
+			@Pc(32) int pixelIdx = 0;
+			for (@Pc(34) int row = 0; row < 64; row++) {
+				for (@Pc(39) int col = 0; col < 64; col++) {
+					@Pc(51) float u = (float) col * 2.0F / 64.0F - 1.0F;
+					@Pc(60) float v = (float) row * 2.0F / 64.0F - 1.0F;
+					@Pc(75) float invLen = (float) (1.0D / Math.sqrt(u * u + v * v + 1.0F));
+					@Pc(79) float normalU = u * invLen;
+					@Pc(83) float normalV = v * invLen;
+					@Pc(88) float specular;
+					if (face == 0) {
+						specular = -normalU;
+					} else if (face == 1) {
+						specular = normalU;
+					} else if (face == 2) {
+						specular = normalV;
+					} else if (face == 3) {
+						specular = -normalV;
+					} else if (face == 4) {
+						specular = invLen;
 					} else {
-						local88 = -local75;
+						specular = -invLen;
 					}
-					@Pc(129) int local129;
-					@Pc(137) int local137;
-					@Pc(145) int local145;
-					if (local88 > 0.0F) {
-						local129 = (int) (Math.pow(local88, 96.0D) * 255.0D);
-						local137 = (int) (Math.pow(local88, 36.0D) * 255.0D);
-						local145 = (int) (Math.pow(local88, 12.0D) * 255.0D);
+					@Pc(129) int highVal;
+					@Pc(137) int medVal;
+					@Pc(145) int lowVal;
+					if (specular > 0.0F) {
+						highVal = (int) (Math.pow(specular, 96.0D) * 255.0D);
+						medVal = (int) (Math.pow(specular, 36.0D) * 255.0D);
+						lowVal = (int) (Math.pow(specular, 12.0D) * 255.0D);
 					} else {
-						local145 = 0;
-						local137 = 0;
-						local129 = 0;
+						lowVal = 0;
+						medVal = 0;
+						highVal = 0;
 					}
 					if (GlRenderer.maxTextureUnits < 3) {
-						local129 /= 5;
-						local137 /= 5;
-						local145 /= 5;
+						highVal /= 5;
+						medVal /= 5;
+						lowVal /= 5;
 					} else {
-						local129 /= 2;
-						local137 /= 2;
-						local145 /= 2;
+						highVal /= 2;
+						medVal /= 2;
+						lowVal /= 2;
 					}
-					local22[local32] = (byte) local129;
-					local25[local32] = (byte) local137;
-					local19[local32] = (byte) local145;
-					local32++;
+					highSpecular[pixelIdx] = (byte) highVal;
+					medSpecular[pixelIdx] = (byte) medVal;
+					lowSpecular[pixelIdx] = (byte) lowVal;
+					pixelIdx++;
 				}
 			}
 			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[0]);
-			gl.glTexImage2D(local27 + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local22));
+			gl.glTexImage2D(face + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(highSpecular));
 			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[1]);
-			gl.glTexImage2D(local27 + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local25));
+			gl.glTexImage2D(face + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(medSpecular));
 			gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, this.cubeMapTextureIds[2]);
-			gl.glTexImage2D(local27 + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local19));
+			gl.glTexImage2D(face + GL2.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL2.GL_ALPHA, 64, 64, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(lowSpecular));
 			GlCleaner.onCardTexture += 12288;
 		}
 	}

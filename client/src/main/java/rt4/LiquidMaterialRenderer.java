@@ -30,54 +30,54 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!rd", name = "<init>", descriptor = "()V")
 	public LiquidMaterialRenderer() {
 		if (this.displayListId < 0 && (GlRenderer.arbVertexProgramSupported && GlRenderer.maxTextureUnits >= 2)) {
-			@Pc(19) int[] local19 = new int[1];
+			@Pc(19) int[] programIds = new int[1];
 			@Pc(21) GL2 gl = GlRenderer.gl;
-			gl.glGenProgramsARB(1, local19, 0);
-			this.vertexProgramId = local19[0];
-			@Pc(42) int[][] local42 = generateNoiseTable(0.4F);
-			@Pc(53) int[][] local53 = generateNoiseTable(0.4F);
-			@Pc(58) Buffer local58 = new Buffer(262144);
-			for (@Pc(60) int local60 = 0; local60 < 256; local60++) {
-				@Pc(67) int[] local67 = local42[local60];
-				@Pc(71) int[] local71 = local53[local60];
-				for (@Pc(73) int local73 = 0; local73 < 64; local73++) {
+			gl.glGenProgramsARB(1, programIds, 0);
+			this.vertexProgramId = programIds[0];
+			@Pc(42) int[][] noiseTableX = generateNoiseTable(0.4F);
+			@Pc(53) int[][] noiseTableY = generateNoiseTable(0.4F);
+			@Pc(58) Buffer buf = new Buffer(262144);
+			for (@Pc(60) int row = 0; row < 256; row++) {
+				@Pc(67) int[] rowX = noiseTableX[row];
+				@Pc(71) int[] rowY = noiseTableY[row];
+				for (@Pc(73) int col = 0; col < 64; col++) {
 					if (GlRenderer.bigEndian) {
-						local58.pFloat((float) local67[local73] / 4096.0F);
-						local58.pFloat((float) local71[local73] / 4096.0F);
-						local58.pFloat(1.0F);
-						local58.pFloat(1.0F);
+						buf.pFloat((float) rowX[col] / 4096.0F);
+						buf.pFloat((float) rowY[col] / 4096.0F);
+						buf.pFloat(1.0F);
+						buf.pFloat(1.0F);
 					} else {
-						local58.gFloat((float) local67[local73] / 4096.0F);
-						local58.gFloat((float) local71[local73] / 4096.0F);
-						local58.gFloat(1.0F);
-						local58.gFloat(1.0F);
+						buf.gFloat((float) rowX[col] / 4096.0F);
+						buf.gFloat((float) rowY[col] / 4096.0F);
+						buf.gFloat(1.0F);
+						buf.gFloat(1.0F);
 					}
 				}
 			}
-			@Pc(141) ByteBuffer local141 = ByteBuffer.allocateDirect(local58.offset).order(ByteOrder.nativeOrder());
-			local141.put(local58.data, 0, local58.offset);
-			local141.flip();
-			this.noiseBuffer = local141.asFloatBuffer().asReadOnlyBuffer();
+			@Pc(141) ByteBuffer byteBuf = ByteBuffer.allocateDirect(buf.offset).order(ByteOrder.nativeOrder());
+			byteBuf.put(buf.data, 0, buf.offset);
+			byteBuf.flip();
+			this.noiseBuffer = byteBuf.asFloatBuffer().asReadOnlyBuffer();
 			this.initDisplayLists();
 			this.uploadVertexProgram();
 		}
 	}
 
 	@OriginalMember(owner = "client!cj", name = "a", descriptor = "(ZIIIIIIFB)[[I")
-	public static int[][] generateNoiseTable(@OriginalArg(7) float arg0) {
-		@Pc(15) int[][] local15 = new int[256][64];
-		@Pc(19) TextureOpPerlinNoise local19 = new TextureOpPerlinNoise();
-		local19.persistence = (int) (arg0 * 4096.0F);
-		local19.octaveCount = 3;
-		local19.frequencyY = 4;
-		local19.normalizeOutput = false;
-		local19.frequencyX = 8;
-		local19.postDecode();
+	public static int[][] generateNoiseTable(@OriginalArg(7) float persistence) {
+		@Pc(15) int[][] table = new int[256][64];
+		@Pc(19) TextureOpPerlinNoise perlinNoise = new TextureOpPerlinNoise();
+		perlinNoise.persistence = (int) (persistence * 4096.0F);
+		perlinNoise.octaveCount = 3;
+		perlinNoise.frequencyY = 4;
+		perlinNoise.normalizeOutput = false;
+		perlinNoise.frequencyX = 8;
+		perlinNoise.postDecode();
 		Texture.setSize(256, 64);
-		for (@Pc(46) int local46 = 0; local46 < 256; local46++) {
-			local19.getNoiseRow(local46, local15[local46]);
+		for (@Pc(46) int row = 0; row < 256; row++) {
+			perlinNoise.getNoiseRow(row, table[row]);
 		}
-		return local15;
+		return table;
 	}
 
 	@OriginalMember(owner = "client!rd", name = "a", descriptor = "()V")
@@ -117,11 +117,11 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 		if (this.lastNoiseUpdateClock == GlRenderer.animationClock) {
 			return;
 		}
-		@Pc(85) int local85 = (GlRenderer.animationClock & 0xFF) * 256;
-		for (@Pc(87) int local87 = 0; local87 < 64; local87++) {
-			this.noiseBuffer.position(local85);
-			gl.glProgramLocalParameter4fvARB(GL2.GL_VERTEX_PROGRAM_ARB, local87, this.noiseBuffer);
-			local85 += 4;
+		@Pc(85) int bufOffset = (GlRenderer.animationClock & 0xFF) * 256;
+		for (@Pc(87) int i = 0; i < 64; i++) {
+			this.noiseBuffer.position(bufOffset);
+			gl.glProgramLocalParameter4fvARB(GL2.GL_VERTEX_PROGRAM_ARB, i, this.noiseBuffer);
+			bufOffset += 4;
 		}
 		if (MaterialManager.allows3DTextureMapping) {
 			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 65, (float) GlRenderer.animationClock * 0.005F, 0.0F, 0.0F, 1.0F);
@@ -169,39 +169,39 @@ public final class LiquidMaterialRenderer implements MaterialRenderer {
 			return;
 		}
 		@Pc(4) GL2 gl = GlRenderer.gl;
-		@Pc(7) int[] local7 = new int[1];
+		@Pc(7) int[] errorPos = new int[1];
 		gl.glBindProgramARB(GL2.GL_VERTEX_PROGRAM_ARB, this.vertexProgramId);
 		gl.glProgramStringARB(GL2.GL_VERTEX_PROGRAM_ARB, GL2.GL_PROGRAM_FORMAT_ASCII_ARB, "!!ARBvp1.0\nATTRIB  iPos         = vertex.position;\nATTRIB  iColour      = vertex.color;\nOUTPUT  oPos         = result.position;\nOUTPUT  oColour      = result.color;\nOUTPUT  oTexCoord0   = result.texcoord[0];\nOUTPUT  oTexCoord1   = result.texcoord[1];\nOUTPUT  oFogCoord    = result.fogcoord;\nPARAM   time         = program.local[65];\nPARAM   turbulence   = program.local[64];\nPARAM   lightAmbient = program.local[66]; \nPARAM   pMatrix[4]   = { state.matrix.projection };\nPARAM   mvMatrix[4]  = { state.matrix.modelview };\nPARAM   ivMatrix[4]  = { state.matrix.texture[1] };\nPARAM   fNoise[64]   = { program.local[0..63] };\nTEMP    noise, clipPos, viewPos, worldPos;\nADDRESS noiseAddr;\nDP4   viewPos.x, mvMatrix[0], iPos;\nDP4   viewPos.y, mvMatrix[1], iPos;\nDP4   viewPos.z, mvMatrix[2], iPos;\nDP4   viewPos.w, mvMatrix[3], iPos;\nDP4   worldPos.x, ivMatrix[0], viewPos;\nDP4   worldPos.y, ivMatrix[1], viewPos;\nDP4   worldPos.z, ivMatrix[2], viewPos;\nDP4   worldPos.w, ivMatrix[3], viewPos;\nADD   noise.x, worldPos.x, worldPos.z;SUB   noise.y, worldPos.z, worldPos.x;MUL   noise, noise, 0.0001220703125;\nFRC   noise, noise;\nMUL   noise, noise, 64;\nARL   noiseAddr.x, noise.x;\nMOV   noise.x, fNoise[noiseAddr.x].x;\nARL   noiseAddr.x, noise.y;\nMOV   noise.y, fNoise[noiseAddr.x].y;\nMUL   noise, noise, turbulence.x;\nMAD   oTexCoord0, worldPos.xzww, 0.0078125, noise;\nMOV   oTexCoord0.w, 1;\nMUL   oTexCoord1.xy, worldPos.xzww, 0.0009765625;\nMOV   oTexCoord1.zw, time.xxxw;\nDP4   clipPos.x, pMatrix[0], viewPos;\nDP4   clipPos.y, pMatrix[1], viewPos;\nDP4   clipPos.z, pMatrix[2], viewPos;\nDP4   clipPos.w, pMatrix[3], viewPos;\nMUL   oColour.xyz, iColour, lightAmbient;\nMOV   oColour.w, 1;\nMOV   oFogCoord.x, clipPos.z;\nMOV   oPos, clipPos; \nEND".length(), "!!ARBvp1.0\nATTRIB  iPos         = vertex.position;\nATTRIB  iColour      = vertex.color;\nOUTPUT  oPos         = result.position;\nOUTPUT  oColour      = result.color;\nOUTPUT  oTexCoord0   = result.texcoord[0];\nOUTPUT  oTexCoord1   = result.texcoord[1];\nOUTPUT  oFogCoord    = result.fogcoord;\nPARAM   time         = program.local[65];\nPARAM   turbulence   = program.local[64];\nPARAM   lightAmbient = program.local[66]; \nPARAM   pMatrix[4]   = { state.matrix.projection };\nPARAM   mvMatrix[4]  = { state.matrix.modelview };\nPARAM   ivMatrix[4]  = { state.matrix.texture[1] };\nPARAM   fNoise[64]   = { program.local[0..63] };\nTEMP    noise, clipPos, viewPos, worldPos;\nADDRESS noiseAddr;\nDP4   viewPos.x, mvMatrix[0], iPos;\nDP4   viewPos.y, mvMatrix[1], iPos;\nDP4   viewPos.z, mvMatrix[2], iPos;\nDP4   viewPos.w, mvMatrix[3], iPos;\nDP4   worldPos.x, ivMatrix[0], viewPos;\nDP4   worldPos.y, ivMatrix[1], viewPos;\nDP4   worldPos.z, ivMatrix[2], viewPos;\nDP4   worldPos.w, ivMatrix[3], viewPos;\nADD   noise.x, worldPos.x, worldPos.z;SUB   noise.y, worldPos.z, worldPos.x;MUL   noise, noise, 0.0001220703125;\nFRC   noise, noise;\nMUL   noise, noise, 64;\nARL   noiseAddr.x, noise.x;\nMOV   noise.x, fNoise[noiseAddr.x].x;\nARL   noiseAddr.x, noise.y;\nMOV   noise.y, fNoise[noiseAddr.x].y;\nMUL   noise, noise, turbulence.x;\nMAD   oTexCoord0, worldPos.xzww, 0.0078125, noise;\nMOV   oTexCoord0.w, 1;\nMUL   oTexCoord1.xy, worldPos.xzww, 0.0009765625;\nMOV   oTexCoord1.zw, time.xxxw;\nDP4   clipPos.x, pMatrix[0], viewPos;\nDP4   clipPos.y, pMatrix[1], viewPos;\nDP4   clipPos.z, pMatrix[2], viewPos;\nDP4   clipPos.w, pMatrix[3], viewPos;\nMUL   oColour.xyz, iColour, lightAmbient;\nMOV   oColour.w, 1;\nMOV   oFogCoord.x, clipPos.z;\nMOV   oPos, clipPos; \nEND");
-		gl.glGetIntegerv(GL2.GL_PROGRAM_ERROR_POSITION_ARB, local7, 0);
-		if (local7[0] != -1) {
+		gl.glGetIntegerv(GL2.GL_PROGRAM_ERROR_POSITION_ARB, errorPos, 0);
+		if (errorPos[0] != -1) {
 			return;
 		}
 	}
 
 	@OriginalMember(owner = "client!rd", name = "a", descriptor = "(I)V")
 	@Override
-	public final void setArgument(@OriginalArg(0) int arg0) {
+	public final void setArgument(@OriginalArg(0) int flags) {
 		if (this.displayListId < 0) {
 			return;
 		}
 		@Pc(5) GL2 gl = GlRenderer.gl;
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
-		if ((arg0 & 0x80) == 0) {
+		if ((flags & 0x80) == 0) {
 			gl.glEnable(MaterialManager.allows3DTextureMapping ? GL2.GL_TEXTURE_3D : GL2.GL_TEXTURE_2D);
 		} else {
 			gl.glDisable(MaterialManager.allows3DTextureMapping ? GL2.GL_TEXTURE_3D : GL2.GL_TEXTURE_2D);
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
-		if ((arg0 & 0x40) == 0) {
+		if ((flags & 0x40) == 0) {
 			gl.glGetFloatv(GL2.GL_LIGHT_MODEL_AMBIENT, ambientLightTemp, 0);
 			gl.glProgramLocalParameter4fvARB(GL2.GL_VERTEX_PROGRAM_ARB, 66, ambientLightTemp, 0);
 		} else {
 			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 66, 1.0F, 1.0F, 1.0F, 1.0F);
 		}
-		@Pc(58) int local58 = arg0 & 0x3;
-		if (local58 == 2) {
+		@Pc(58) int turbulence = flags & 0x3;
+		if (turbulence == 2) {
 			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 64, 0.05F, 1.0F, 1.0F, 1.0F);
-		} else if (local58 == 3) {
+		} else if (turbulence == 3) {
 			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 64, 0.1F, 1.0F, 1.0F, 1.0F);
 		} else {
 			gl.glProgramLocalParameter4fARB(GL2.GL_VERTEX_PROGRAM_ARB, 64, 0.025F, 1.0F, 1.0F, 1.0F);
