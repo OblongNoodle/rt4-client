@@ -698,9 +698,9 @@ public final class RawModel extends Entity {
 				}
 
 				@Pc(317) TriangleNormal n = this.triangleNormals[local10] = new TriangleNormal();
-				n.anInt4769 = local112;
-				n.anInt4770 = local120;
-				n.anInt4767 = local128;
+				n.x = local112;
+				n.y = local120;
+				n.z = local128;
 			}
 		}
 	}

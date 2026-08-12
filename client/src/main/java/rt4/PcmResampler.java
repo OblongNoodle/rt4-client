@@ -12,7 +12,7 @@ public final class PcmResampler {
 	private int outputRate;
 
 	@OriginalMember(owner = "client!vj", name = "i", descriptor = "[[I")
-	private int[][] anIntArrayArray40;
+	private int[][] filterCoefficients;
 
 	@OriginalMember(owner = "client!vj", name = "e", descriptor = "I")
 	private int inputRate;
@@ -24,10 +24,10 @@ public final class PcmResampler {
 			@Pc(16) int local16 = arg1 / local12;
 			this.outputRate = local16;
 			@Pc(23) int local23 = arg0 / local12;
-			this.anIntArrayArray40 = new int[local23][14];
+			this.filterCoefficients = new int[local23][14];
 			this.inputRate = local23;
 			for (@Pc(33) int local33 = 0; local33 < local23; local33++) {
-				@Pc(41) int[] local41 = this.anIntArrayArray40[local33];
+				@Pc(41) int[] local41 = this.filterCoefficients[local33];
 				@Pc(49) double local49 = (double) local33 / (double) local23 + 6.0D;
 				@Pc(55) double local55 = (double) local16 / (double) local23;
 				@Pc(63) int local63 = (int) Math.floor(local49 + 1.0D - 7.0D);
@@ -68,14 +68,14 @@ public final class PcmResampler {
 
 	@OriginalMember(owner = "client!vj", name = "a", descriptor = "([BB)[B")
 	public final byte[] resample(@OriginalArg(0) byte[] arg0) {
-		if (this.anIntArrayArray40 != null) {
+		if (this.filterCoefficients != null) {
 			@Pc(31) int local31 = (int) ((long) arg0.length * (long) this.outputRate / (long) this.inputRate) + 14;
 			@Pc(34) int[] local34 = new int[local31];
 			@Pc(36) int local36 = 0;
 			@Pc(38) int local38 = 0;
 			@Pc(40) int local40;
 			for (local40 = 0; local40 < arg0.length; local40++) {
-				@Pc(53) int[] local53 = this.anIntArrayArray40[local38];
+				@Pc(53) int[] local53 = this.filterCoefficients[local38];
 				@Pc(57) byte local57 = arg0[local40];
 				@Pc(59) int local59;
 				for (local59 = 0; local59 < 14; local59++) {
@@ -103,7 +103,7 @@ public final class PcmResampler {
 
 	@OriginalMember(owner = "client!vj", name = "a", descriptor = "(IB)I")
 	public final int scaleRate(@OriginalArg(0) int arg0) {
-		if (this.anIntArrayArray40 != null) {
+		if (this.filterCoefficients != null) {
 			arg0 = (int) ((long) this.outputRate * (long) arg0 / (long) this.inputRate);
 		}
 		return arg0;
@@ -111,7 +111,7 @@ public final class PcmResampler {
 
 	@OriginalMember(owner = "client!vj", name = "a", descriptor = "(ZI)I")
 	public final int scalePosition(@OriginalArg(1) int arg0) {
-		if (this.anIntArrayArray40 != null) {
+		if (this.filterCoefficients != null) {
 			arg0 = (int) ((long) this.outputRate * (long) arg0 / (long) this.inputRate) + 6;
 		}
 		return arg0;

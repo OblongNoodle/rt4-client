@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 public final class LruHashTable {
 
 	@OriginalMember(owner = "client!gn", name = "l", descriptor = "Lclient!rg;")
-	private SecondaryNode aClass3_Sub2_37 = new SecondaryNode();
+	private SecondaryNode sentinel = new SecondaryNode();
 
 	@OriginalMember(owner = "client!gn", name = "s", descriptor = "Lclient!ce;")
 	private final SecondaryLinkedList queue = new SecondaryLinkedList();
@@ -54,7 +54,7 @@ public final class LruHashTable {
 			@Pc(14) SecondaryNode local14 = this.queue.removeHead();
 			local14.unlink();
 			local14.unlinkSecondary();
-			if (this.aClass3_Sub2_37 == local14) {
+			if (this.sentinel == local14) {
 				local14 = this.queue.removeHead();
 				local14.unlink();
 				local14.unlinkSecondary();
@@ -75,7 +75,7 @@ public final class LruHashTable {
 	public final void clear() {
 		this.queue.clear();
 		this.table.clear();
-		this.aClass3_Sub2_37 = new SecondaryNode();
+		this.sentinel = new SecondaryNode();
 		this.available = this.capacity;
 	}
 }

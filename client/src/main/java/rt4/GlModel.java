@@ -638,10 +638,10 @@ public final class GlModel extends Model {
 				this.aShortArray83[local439] = this.findOrCreateVertex(model, local2060, local1994 + (long) local868, local2065.x, local2065.y, local2065.z, local2065.magnitude, local714, local685);
 			} else if (local902 == 1) {
 				@Pc(2096) TriangleNormal local2096 = model.triangleNormals[local810];
-				@Pc(2137) long local2137 = (long) ((local833 << 2) + (local2096.anInt4769 > 0 ? 1024 : 2048) + (local2096.anInt4770 + 256 << 12) + (local2096.anInt4767 + 256 << 22)) + ((long) (local553 << 24) + (long) (local817 << 8) + (long) local844 << 32);
-				this.aShortArray77[local439] = this.findOrCreateVertex(model, model.triangleVertexA[local810], local2137, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local854, local856);
-				this.aShortArray82[local439] = this.findOrCreateVertex(model, model.triangleVertexB[local810], local2137 + (long) local866, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local858, local683);
-				this.aShortArray83[local439] = this.findOrCreateVertex(model, model.triangleVertexC[local810], local2137 + (long) local868, local2096.anInt4769, local2096.anInt4770, local2096.anInt4767, 0, local714, local685);
+				@Pc(2137) long local2137 = (long) ((local833 << 2) + (local2096.x > 0 ? 1024 : 2048) + (local2096.y + 256 << 12) + (local2096.z + 256 << 22)) + ((long) (local553 << 24) + (long) (local817 << 8) + (long) local844 << 32);
+				this.aShortArray77[local439] = this.findOrCreateVertex(model, model.triangleVertexA[local810], local2137, local2096.x, local2096.y, local2096.z, 0, local854, local856);
+				this.aShortArray82[local439] = this.findOrCreateVertex(model, model.triangleVertexB[local810], local2137 + (long) local866, local2096.x, local2096.y, local2096.z, 0, local858, local683);
+				this.aShortArray83[local439] = this.findOrCreateVertex(model, model.triangleVertexC[local810], local2137 + (long) local868, local2096.x, local2096.y, local2096.z, 0, local714, local685);
 			}
 			if (model.triangleTextures == null) {
 				this.triangleTextures[local439] = -1;

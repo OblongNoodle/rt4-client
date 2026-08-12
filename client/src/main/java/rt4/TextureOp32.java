@@ -69,7 +69,7 @@ public final class TextureOp32 extends TextureOp {
 				if (local113 > 255) {
 					local113 = 255;
 				}
-				@Pc(142) int local142 = MonochromeImageCache.aByteArray53[(local113 * (local113 + 1) >> 1) + local98] & 0xFF;
+				@Pc(142) int local142 = MonochromeImageCache.normalBrightnessLookup[(local113 * (local113 + 1) >> 1) + local98] & 0xFF;
 				@Pc(148) int local148 = local94 * local142 >> 8;
 				@Pc(154) int local154 = local142 * local81 >> 8;
 				@Pc(163) int local163 = local148 * this.anIntArray406[1] >> 12;

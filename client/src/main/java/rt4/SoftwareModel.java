@@ -405,7 +405,7 @@ public final class SoftwareModel extends Model {
 					this.triangleInfo[i] = local468 | ColorUtils.multiplyLightness2(local416, local468 >> 17);
 				} else if (local366 == 1) {
 					local614 = model.triangleNormals[i];
-					local468 = arg1 + (arg3 * local614.anInt4769 + arg4 * local614.anInt4770 + arg5 * local614.anInt4767) / (local108 + local108 / 2) << 17;
+					local468 = arg1 + (arg3 * local614.x + arg4 * local614.y + arg5 * local614.z) / (local108 + local108 / 2) << 17;
 					this.anIntArray533[i] = local468 | ColorUtils.multiplyLightness2(model.triangleColors[i] & 0xFFFF, local468 >> 17);
 					this.triangleInfo[i] = -1;
 				} else if (local366 == 3) {
@@ -438,7 +438,7 @@ public final class SoftwareModel extends Model {
 				this.triangleInfo[i] = ColorUtils.clampLightness(local468);
 			} else if (local366 == 1) {
 				local614 = model.triangleNormals[i];
-				local468 = arg1 + (arg3 * local614.anInt4769 + arg4 * local614.anInt4770 + arg5 * local614.anInt4767) / (local108 + local108 / 2);
+				local468 = arg1 + (arg3 * local614.x + arg4 * local614.y + arg5 * local614.z) / (local108 + local108 / 2);
 				this.anIntArray533[i] = ColorUtils.clampLightness(local468);
 				this.triangleInfo[i] = -1;
 			} else {

@@ -8,12 +8,12 @@ import org.openrs2.deob.annotation.Pc;
 public final class TriangleNormal {
 
 	@OriginalMember(owner = "client!qj", name = "c", descriptor = "I")
-	public int anInt4767;
+	public int z;
 
 	@OriginalMember(owner = "client!qj", name = "e", descriptor = "I")
-	public int anInt4769;
+	public int x;
 
 	@OriginalMember(owner = "client!qj", name = "f", descriptor = "I")
-	public int anInt4770;
+	public int y;
 
 }
