@@ -33,118 +33,118 @@ public final class TextureOpShapeBezier extends TextureOpShape {
 	private final int controlX1;
 
 	@OriginalMember(owner = "client!re", name = "<init>", descriptor = "(IIIIIIIIII)V")
-	public TextureOpShapeBezier(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
-		super(-1, arg8, arg9);
-		this.startY = arg1;
-		this.endX = arg6;
-		this.controlX2 = arg4;
-		this.startX = arg0;
-		this.endY = arg7;
-		this.controlY1 = arg5;
-		this.controlY2 = arg3;
-		this.controlX1 = arg2;
+	public TextureOpShapeBezier(@OriginalArg(0) int startX, @OriginalArg(1) int startY, @OriginalArg(2) int controlX1, @OriginalArg(3) int controlY2, @OriginalArg(4) int controlX2, @OriginalArg(5) int controlY1, @OriginalArg(6) int endX, @OriginalArg(7) int endY, @OriginalArg(8) int outlineColor, @OriginalArg(9) int lineWidth) {
+		super(-1, outlineColor, lineWidth);
+		this.startY = startY;
+		this.endX = endX;
+		this.controlX2 = controlX2;
+		this.startX = startX;
+		this.endY = endY;
+		this.controlY1 = controlY1;
+		this.controlY2 = controlY2;
+		this.controlX1 = controlX1;
 	}
 
 	@OriginalMember(owner = "client!bk", name = "a", descriptor = "(BLclient!wa;)Lclient!re;")
-	public static TextureOpShapeBezier create(@OriginalArg(1) Buffer arg0) {
-		return new TextureOpShapeBezier(arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g3(), arg0.g1());
+	public static TextureOpShapeBezier create(@OriginalArg(1) Buffer buf) {
+		return new TextureOpShapeBezier(buf.g2b(), buf.g2b(), buf.g2b(), buf.g2b(), buf.g2b(), buf.g2b(), buf.g2b(), buf.g2b(), buf.g3(), buf.g1());
 	}
 
 	@OriginalMember(owner = "client!oi", name = "a", descriptor = "(IIIIIIIIII)V")
-	public static void drawCurve(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
-		if (arg5 >= TextureOpShapeRasterizer.clipLeft && arg5 <= TextureOpShapeRasterizer.clipRight && arg0 >= TextureOpShapeRasterizer.clipLeft && arg0 <= TextureOpShapeRasterizer.clipRight && arg6 >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= arg6 && TextureOpShapeRasterizer.clipLeft <= arg1 && arg1 <= TextureOpShapeRasterizer.clipRight && TextureOpShapeRasterizer.clipTop <= arg4 && arg4 <= TextureOpShapeRasterizer.clipBottom && arg7 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= arg7 && arg2 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= arg2 && arg3 >= TextureOpShapeRasterizer.clipTop && arg3 <= TextureOpShapeRasterizer.clipBottom) {
-			drawCurveFast(arg2, arg8, arg7, arg6, arg1, arg3, arg4, arg0, arg5);
+	public static void drawCurve(@OriginalArg(0) int cx1, @OriginalArg(1) int ex, @OriginalArg(2) int cy1, @OriginalArg(3) int ey, @OriginalArg(4) int sy, @OriginalArg(5) int sx, @OriginalArg(6) int cx2, @OriginalArg(7) int cy2, @OriginalArg(8) int color) {
+		if (sx >= TextureOpShapeRasterizer.clipLeft && sx <= TextureOpShapeRasterizer.clipRight && cx1 >= TextureOpShapeRasterizer.clipLeft && cx1 <= TextureOpShapeRasterizer.clipRight && cx2 >= TextureOpShapeRasterizer.clipLeft && TextureOpShapeRasterizer.clipRight >= cx2 && TextureOpShapeRasterizer.clipLeft <= ex && ex <= TextureOpShapeRasterizer.clipRight && TextureOpShapeRasterizer.clipTop <= sy && sy <= TextureOpShapeRasterizer.clipBottom && cy2 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= cy2 && cy1 >= TextureOpShapeRasterizer.clipTop && TextureOpShapeRasterizer.clipBottom >= cy1 && ey >= TextureOpShapeRasterizer.clipTop && ey <= TextureOpShapeRasterizer.clipBottom) {
+			drawCurveFast(cy1, color, cy2, cx2, ex, ey, sy, cx1, sx);
 		} else {
-			drawCurveClipped(arg5, arg0, arg7, arg8, arg3, arg2, arg1, arg6, arg4);
+			drawCurveClipped(sx, cx1, cy2, color, ey, cy1, ex, cx2, sy);
 		}
 	}
 
 	@OriginalMember(owner = "client!cn", name = "a", descriptor = "(IIIIIIIIII)V")
-	public static void drawCurveFast(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
-		if (arg8 == arg7 && arg2 == arg6 && arg4 == arg3 && arg0 == arg5) {
-			TextureOpShapeLine.plotLine(arg1, arg5, arg6, arg4, arg8);
+	public static void drawCurveFast(@OriginalArg(1) int cy1, @OriginalArg(2) int color, @OriginalArg(3) int cy2, @OriginalArg(4) int cx2, @OriginalArg(5) int ex, @OriginalArg(6) int ey, @OriginalArg(7) int sy, @OriginalArg(8) int cx1, @OriginalArg(9) int sx) {
+		if (sx == cx1 && cy2 == sy && ex == cx2 && cy1 == ey) {
+			TextureOpShapeLine.plotLine(color, ey, sy, ex, sx);
 			return;
 		}
-		@Pc(37) int local37 = arg6;
-		@Pc(39) int local39 = arg8;
-		@Pc(43) int local43 = arg8 * 3;
-		@Pc(47) int local47 = arg6 * 3;
-		@Pc(51) int local51 = arg7 * 3;
-		@Pc(55) int local55 = arg2 * 3;
-		@Pc(59) int local59 = arg3 * 3;
-		@Pc(63) int local63 = arg0 * 3;
-		@Pc(73) int local73 = arg4 + local51 - local59 - arg8;
-		@Pc(83) int local83 = arg5 + local55 - arg6 - local63;
-		@Pc(93) int local93 = local43 + local59 - local51 - local51;
-		@Pc(103) int local103 = local47 + local63 - local55 - local55;
-		@Pc(108) int local108 = local51 - local43;
-		@Pc(113) int local113 = local55 - local47;
-		for (@Pc(115) int local115 = 128; local115 <= 4096; local115 += 128) {
-			@Pc(126) int local126 = local115 * local115 >> 12;
-			@Pc(132) int local132 = local115 * local126 >> 12;
-			@Pc(136) int local136 = local83 * local132;
-			@Pc(140) int local140 = local126 * local93;
-			@Pc(144) int local144 = local73 * local132;
-			@Pc(148) int local148 = local126 * local103;
-			@Pc(152) int local152 = local108 * local115;
-			@Pc(156) int local156 = local113 * local115;
-			@Pc(167) int local167 = (local152 + local144 + local140 >> 12) + arg8;
-			@Pc(177) int local177 = arg6 + (local156 + local136 + local148 >> 12);
-			TextureOpShapeLine.plotLine(arg1, local177, local37, local167, local39);
-			local39 = local167;
-			local37 = local177;
+		@Pc(37) int prevY = sy;
+		@Pc(39) int prevX = sx;
+		@Pc(43) int sx3 = sx * 3;
+		@Pc(47) int sy3 = sy * 3;
+		@Pc(51) int cx1_3 = cx1 * 3;
+		@Pc(55) int cy2_3 = cy2 * 3;
+		@Pc(59) int cx2_3 = cx2 * 3;
+		@Pc(63) int cy1_3 = cy1 * 3;
+		@Pc(73) int aX = ex + cx1_3 - cx2_3 - sx;
+		@Pc(83) int aY = ey + cy2_3 - sy - cy1_3;
+		@Pc(93) int bX = sx3 + cx2_3 - cx1_3 - cx1_3;
+		@Pc(103) int bY = sy3 + cy1_3 - cy2_3 - cy2_3;
+		@Pc(108) int cX = cx1_3 - sx3;
+		@Pc(113) int cY = cy2_3 - sy3;
+		for (@Pc(115) int t = 128; t <= 4096; t += 128) {
+			@Pc(126) int tSq = t * t >> 12;
+			@Pc(132) int tCube = t * tSq >> 12;
+			@Pc(136) int aYtCube = aY * tCube;
+			@Pc(140) int bXtSq = tSq * bX;
+			@Pc(144) int aXtCube = aX * tCube;
+			@Pc(148) int bYtSq = tSq * bY;
+			@Pc(152) int cXt = cX * t;
+			@Pc(156) int cYt = cY * t;
+			@Pc(167) int curX = (cXt + aXtCube + bXtSq >> 12) + sx;
+			@Pc(177) int curY = sy + (cYt + aYtCube + bYtSq >> 12);
+			TextureOpShapeLine.plotLine(color, curY, prevY, curX, prevX);
+			prevX = curX;
+			prevY = curY;
 		}
 	}
 
 	@OriginalMember(owner = "client!nb", name = "a", descriptor = "(IIIIIIIIII)V")
-	public static void drawCurveClipped(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
-		if (arg0 == arg1 && arg8 == arg2 && arg7 == arg6 && arg4 == arg5) {
-			TextureOpShapeRasterizer.drawLine(arg3, arg4, arg0, arg8, arg6);
+	public static void drawCurveClipped(@OriginalArg(0) int sx, @OriginalArg(1) int cx1, @OriginalArg(2) int cy2, @OriginalArg(4) int color, @OriginalArg(5) int ey, @OriginalArg(6) int cy1, @OriginalArg(7) int ex, @OriginalArg(8) int cx2, @OriginalArg(9) int sy) {
+		if (sx == cx1 && sy == cy2 && cx2 == ex && ey == cy1) {
+			TextureOpShapeRasterizer.drawLine(color, ey, sx, sy, ex);
 			return;
 		}
-		@Pc(32) int local32 = arg0;
-		@Pc(36) int local36 = arg8 * 3;
-		@Pc(40) int local40 = arg0 * 3;
-		@Pc(42) int local42 = arg8;
-		@Pc(46) int local46 = arg1 * 3;
-		@Pc(50) int local50 = arg2 * 3;
-		@Pc(54) int local54 = arg7 * 3;
-		@Pc(58) int local58 = arg5 * 3;
-		@Pc(66) int local66 = local46 + arg6 - local54 - arg0;
-		@Pc(76) int local76 = local54 + local40 - local46 - local46;
-		@Pc(85) int local85 = local50 + arg4 - local58 - arg8;
-		@Pc(95) int local95 = local36 + local58 - local50 - local50;
-		@Pc(100) int local100 = local46 - local40;
-		@Pc(105) int local105 = local50 - local36;
-		for (@Pc(107) int local107 = 128; local107 <= 4096; local107 += 128) {
-			@Pc(118) int local118 = local107 * local107 >> 12;
-			@Pc(124) int local124 = local107 * local118 >> 12;
-			@Pc(128) int local128 = local95 * local118;
-			@Pc(132) int local132 = local124 * local85;
-			@Pc(136) int local136 = local118 * local76;
-			@Pc(140) int local140 = local66 * local124;
-			@Pc(144) int local144 = local100 * local107;
-			@Pc(156) int local156 = arg0 + (local136 + local140 + local144 >> 12);
-			@Pc(160) int local160 = local107 * local105;
-			@Pc(172) int local172 = arg8 + (local160 + local132 + local128 >> 12);
-			TextureOpShapeRasterizer.drawLine(arg3, local172, local32, local42, local156);
-			local32 = local156;
-			local42 = local172;
+		@Pc(32) int prevX = sx;
+		@Pc(36) int sy3 = sy * 3;
+		@Pc(40) int sx3 = sx * 3;
+		@Pc(42) int prevY = sy;
+		@Pc(46) int cx1_3 = cx1 * 3;
+		@Pc(50) int cy2_3 = cy2 * 3;
+		@Pc(54) int cx2_3 = cx2 * 3;
+		@Pc(58) int cy1_3 = cy1 * 3;
+		@Pc(66) int aX = cx1_3 + ex - cx2_3 - sx;
+		@Pc(76) int bX = cx2_3 + sx3 - cx1_3 - cx1_3;
+		@Pc(85) int aY = cy2_3 + ey - cy1_3 - sy;
+		@Pc(95) int bY = sy3 + cy1_3 - cy2_3 - cy2_3;
+		@Pc(100) int cX = cx1_3 - sx3;
+		@Pc(105) int cY = cy2_3 - sy3;
+		for (@Pc(107) int t = 128; t <= 4096; t += 128) {
+			@Pc(118) int tSq = t * t >> 12;
+			@Pc(124) int tCube = t * tSq >> 12;
+			@Pc(128) int bYtSq = bY * tSq;
+			@Pc(132) int aYtCube = tCube * aY;
+			@Pc(136) int bXtSq = tSq * bX;
+			@Pc(140) int aXtCube = aX * tCube;
+			@Pc(144) int cXt = cX * t;
+			@Pc(156) int curX = sx + (bXtSq + aXtCube + cXt >> 12);
+			@Pc(160) int cYt = t * cY;
+			@Pc(172) int curY = sy + (cYt + aYtCube + bYtSq >> 12);
+			TextureOpShapeRasterizer.drawLine(color, curY, prevX, prevY, curX);
+			prevX = curX;
+			prevY = curY;
 		}
 	}
 
 	@OriginalMember(owner = "client!re", name = "a", descriptor = "(IZI)V")
 	@Override
-	public final void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(6) int local6 = arg1 * this.startX >> 12;
-		@Pc(17) int local17 = arg1 * this.controlX1 >> 12;
-		@Pc(24) int local24 = this.controlY2 * arg0 >> 12;
-		@Pc(31) int local31 = this.startY * arg0 >> 12;
-		@Pc(38) int local38 = this.controlX2 * arg1 >> 12;
-		@Pc(45) int local45 = arg0 * this.controlY1 >> 12;
-		@Pc(52) int local52 = this.endX * arg1 >> 12;
-		@Pc(65) int local65 = arg0 * this.endY >> 12;
-		drawCurve(local17, local52, local45, local65, local31, local6, local38, local24, this.outlineColor);
+	public final void renderOutlinedShape(@OriginalArg(0) int h, @OriginalArg(2) int w) {
+		@Pc(6) int sx = w * this.startX >> 12;
+		@Pc(17) int cx1 = w * this.controlX1 >> 12;
+		@Pc(24) int cy2 = this.controlY2 * h >> 12;
+		@Pc(31) int sy = this.startY * h >> 12;
+		@Pc(38) int cx2 = this.controlX2 * w >> 12;
+		@Pc(45) int cy1 = h * this.controlY1 >> 12;
+		@Pc(52) int ex = this.endX * w >> 12;
+		@Pc(65) int ey = h * this.endY >> 12;
+		drawCurve(cx1, ex, cy1, ey, sy, sx, cx2, cy2, this.outlineColor);
 	}
 
 	@OriginalMember(owner = "client!re", name = "c", descriptor = "(III)V")

@@ -24,12 +24,12 @@ public final class TextureOpShapeLine extends TextureOpShape {
 	private final int bottom;
 
 	@OriginalMember(owner = "client!ta", name = "<init>", descriptor = "(IIIIIII)V")
-	public TextureOpShapeLine(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		super(arg4, arg5, arg6);
-		this.top = arg1;
-		this.right = arg2;
-		this.left = arg0;
-		this.bottom = arg3;
+	public TextureOpShapeLine(@OriginalArg(0) int left, @OriginalArg(1) int top, @OriginalArg(2) int right, @OriginalArg(3) int bottom, @OriginalArg(4) int fillColor, @OriginalArg(5) int outlineColor, @OriginalArg(6) int lineWidth) {
+		super(fillColor, outlineColor, lineWidth);
+		this.top = top;
+		this.right = right;
+		this.left = left;
+		this.bottom = bottom;
 	}
 
 	@OriginalMember(owner = "client!bl", name = "a", descriptor = "(IIIIIIII)V")
@@ -115,124 +115,124 @@ public final class TextureOpShapeLine extends TextureOpShape {
 	}
 
 	@OriginalMember(owner = "client!mf", name = "a", descriptor = "(BLclient!wa;)Lclient!ta;")
-	public static TextureOpShapeLine create(@OriginalArg(1) Buffer arg0) {
-		return new TextureOpShapeLine(arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g2b(), arg0.g3(), arg0.g3(), arg0.g1());
+	public static TextureOpShapeLine create(@OriginalArg(1) Buffer buf) {
+		return new TextureOpShapeLine(buf.g2b(), buf.g2b(), buf.g2b(), buf.g2b(), buf.g3(), buf.g3(), buf.g1());
 	}
 
 	@OriginalMember(owner = "client!dm", name = "a", descriptor = "(IBIII)V")
-	public static void fillCircle(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		@Pc(15) int local15 = 0;
-		ArrayUtils.fillRange(canvas[arg3], arg0 - arg1, arg0 - -arg1, arg2);
-		@Pc(32) int local32 = -arg1;
-		@Pc(34) int local34 = arg1;
-		@Pc(36) int local36 = -1;
-		while (local15 < local34) {
-			local15++;
-			local36 += 2;
-			local32 += local36;
-			if (local32 >= 0) {
-				local34--;
-				local32 -= local34 << 1;
-				@Pc(65) int[] local65 = canvas[arg3 + local34];
-				@Pc(71) int[] local71 = canvas[arg3 - local34];
-				@Pc(76) int local76 = arg0 + local15;
-				@Pc(81) int local81 = arg0 - local15;
-				ArrayUtils.fillRange(local65, local81, local76, arg2);
-				ArrayUtils.fillRange(local71, local81, local76, arg2);
+	public static void fillCircle(@OriginalArg(0) int cx, @OriginalArg(2) int radius, @OriginalArg(3) int color, @OriginalArg(4) int cy) {
+		@Pc(15) int x = 0;
+		ArrayUtils.fillRange(canvas[cy], cx - radius, cx - -radius, color);
+		@Pc(32) int err = -radius;
+		@Pc(34) int y = radius;
+		@Pc(36) int delta = -1;
+		while (x < y) {
+			x++;
+			delta += 2;
+			err += delta;
+			if (err >= 0) {
+				y--;
+				err -= y << 1;
+				@Pc(65) int[] rowTop = canvas[cy + y];
+				@Pc(71) int[] rowBottom = canvas[cy - y];
+				@Pc(76) int xRight = cx + x;
+				@Pc(81) int xLeft = cx - x;
+				ArrayUtils.fillRange(rowTop, xLeft, xRight, color);
+				ArrayUtils.fillRange(rowBottom, xLeft, xRight, color);
 			}
-			@Pc(97) int local97 = local34 + arg0;
-			@Pc(102) int local102 = arg0 - local34;
-			@Pc(109) int[] local109 = canvas[arg3 + local15];
-			@Pc(116) int[] local116 = canvas[arg3 - local15];
-			ArrayUtils.fillRange(local109, local102, local97, arg2);
-			ArrayUtils.fillRange(local116, local102, local97, arg2);
+			@Pc(97) int yRight = y + cx;
+			@Pc(102) int yLeft = cx - y;
+			@Pc(109) int[] rowPlus = canvas[cy + x];
+			@Pc(116) int[] rowMinus = canvas[cy - x];
+			ArrayUtils.fillRange(rowPlus, yLeft, yRight, color);
+			ArrayUtils.fillRange(rowMinus, yLeft, yRight, color);
 		}
 	}
 
 	@OriginalMember(owner = "client!sa", name = "a", descriptor = "(IIIBI)V")
-	public static void fillRange(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
-		if (arg3 <= arg2) {
-			ArrayUtils.fillRange(canvas[arg1], arg3, arg2, arg0);
+	public static void fillRange(@OriginalArg(0) int color, @OriginalArg(1) int row, @OriginalArg(2) int x2, @OriginalArg(4) int x1) {
+		if (x1 <= x2) {
+			ArrayUtils.fillRange(canvas[row], x1, x2, color);
 		} else {
-			ArrayUtils.fillRange(canvas[arg1], arg2, arg3, arg0);
+			ArrayUtils.fillRange(canvas[row], x2, x1, color);
 		}
 	}
 
 	@OriginalMember(owner = "client!hm", name = "a", descriptor = "(IIIII)V")
-	public static void fillVerticalLine(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		@Pc(8) int local8;
-		if (arg0 <= arg2) {
-			for (local8 = arg0; local8 < arg2; local8++) {
-				canvas[local8][arg1] = arg3;
+	public static void fillVerticalLine(@OriginalArg(1) int y1, @OriginalArg(2) int x, @OriginalArg(3) int y2, @OriginalArg(4) int color) {
+		@Pc(8) int y;
+		if (y1 <= y2) {
+			for (y = y1; y < y2; y++) {
+				canvas[y][x] = color;
 			}
 		} else {
-			for (local8 = arg2; local8 < arg0; local8++) {
-				canvas[local8][arg1] = arg3;
+			for (y = y2; y < y1; y++) {
+				canvas[y][x] = color;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(BIIIII)V")
-	public static void plotLine(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		@Pc(9) int local9 = arg1 - arg2;
-		@Pc(14) int local14 = arg3 - arg4;
-		if (local14 == 0) {
-			if (local9 != 0) {
-				fillVerticalLine(arg2, arg4, arg1, arg0);
+	public static void plotLine(@OriginalArg(1) int color, @OriginalArg(2) int y2, @OriginalArg(3) int y1, @OriginalArg(4) int x2, @OriginalArg(5) int x1) {
+		@Pc(9) int dy = y2 - y1;
+		@Pc(14) int dx = x2 - x1;
+		if (dx == 0) {
+			if (dy != 0) {
+				fillVerticalLine(y1, x1, y2, color);
 			}
-		} else if (local9 == 0) {
-			fillRange(arg0, arg2, arg3, arg4);
+		} else if (dy == 0) {
+			fillRange(color, y1, x2, x1);
 		} else {
-			if (local9 < 0) {
-				local9 = -local9;
+			if (dy < 0) {
+				dy = -dy;
 			}
-			if (local14 < 0) {
-				local14 = -local14;
+			if (dx < 0) {
+				dx = -dx;
 			}
-			@Pc(70) boolean local70 = local14 < local9;
-			@Pc(74) int local74;
-			@Pc(78) int local78;
-			if (local70) {
-				local74 = arg4;
-				arg4 = arg2;
-				local78 = arg3;
-				arg2 = local74;
-				arg3 = arg1;
-				arg1 = local78;
+			@Pc(70) boolean steep = dx < dy;
+			@Pc(74) int tmp;
+			@Pc(78) int tmp2;
+			if (steep) {
+				tmp = x1;
+				x1 = y1;
+				tmp2 = x2;
+				y1 = tmp;
+				x2 = y2;
+				y2 = tmp2;
 			}
-			if (arg3 < arg4) {
-				local74 = arg4;
-				arg4 = arg3;
-				arg3 = local74;
-				local78 = arg2;
-				arg2 = arg1;
-				arg1 = local78;
+			if (x2 < x1) {
+				tmp = x1;
+				x1 = x2;
+				x2 = tmp;
+				tmp2 = y1;
+				y1 = y2;
+				y2 = tmp2;
 			}
-			local74 = arg2;
-			local78 = arg3 - arg4;
-			@Pc(111) int local111 = arg1 - arg2;
-			@Pc(116) int local116 = -(local78 >> 1);
-			@Pc(123) int local123 = arg1 <= arg2 ? -1 : 1;
-			if (local111 < 0) {
-				local111 = -local111;
+			tmp = y1;
+			tmp2 = x2 - x1;
+			@Pc(111) int deltaY = y2 - y1;
+			@Pc(116) int error = -(tmp2 >> 1);
+			@Pc(123) int yStep = y2 <= y1 ? -1 : 1;
+			if (deltaY < 0) {
+				deltaY = -deltaY;
 			}
-			@Pc(136) int local136;
-			if (local70) {
-				for (local136 = arg4; local136 <= arg3; local136++) {
-					canvas[local136][local74] = arg0;
-					local116 += local111;
-					if (local116 > 0) {
-						local74 += local123;
-						local116 -= local78;
+			@Pc(136) int i;
+			if (steep) {
+				for (i = x1; i <= x2; i++) {
+					canvas[i][tmp] = color;
+					error += deltaY;
+					if (error > 0) {
+						tmp += yStep;
+						error -= tmp2;
 					}
 				}
 			} else {
-				for (local136 = arg4; local136 <= arg3; local136++) {
-					local116 += local111;
-					canvas[local74][local136] = arg0;
-					if (local116 > 0) {
-						local74 += local123;
-						local116 -= local78;
+				for (i = x1; i <= x2; i++) {
+					error += deltaY;
+					canvas[tmp][i] = color;
+					if (error > 0) {
+						tmp += yStep;
+						error -= tmp2;
 					}
 				}
 			}
@@ -363,37 +363,37 @@ public final class TextureOpShapeLine extends TextureOpShape {
 	}
 
 	@OriginalMember(owner = "client!gg", name = "a", descriptor = "([[IZ)V")
-	public static void setCanvas(@OriginalArg(0) int[][] arg0) {
-		canvas = arg0;
+	public static void setCanvas(@OriginalArg(0) int[][] data) {
+		canvas = data;
 	}
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(IZI)V")
 	@Override
-	public final void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(10) int local10 = arg1 * this.right >> 12;
-		@Pc(17) int local17 = this.bottom * arg0 >> 12;
-		@Pc(24) int local24 = this.left * arg1 >> 12;
-		@Pc(31) int local31 = this.top * arg0 >> 12;
-		drawRectOutline(this.outlineColor, local24, local31, local10, local17, this.lineWidth);
+	public final void renderOutlinedShape(@OriginalArg(0) int h, @OriginalArg(2) int w) {
+		@Pc(10) int r = w * this.right >> 12;
+		@Pc(17) int b = this.bottom * h >> 12;
+		@Pc(24) int l = this.left * w >> 12;
+		@Pc(31) int t = this.top * h >> 12;
+		drawRectOutline(this.outlineColor, l, t, r, b, this.lineWidth);
 	}
 
 	@OriginalMember(owner = "client!ta", name = "c", descriptor = "(III)V")
 	@Override
-	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(10) int local10 = this.left * arg0 >> 12;
-		@Pc(17) int local17 = arg0 * this.right >> 12;
-		@Pc(24) int local24 = arg1 * this.top >> 12;
-		@Pc(31) int local31 = arg1 * this.bottom >> 12;
-		fillSolidRect(local10, this.fillColor, local31, local17, local24);
+	public final void renderFilledShape(@OriginalArg(1) int w, @OriginalArg(2) int h) {
+		@Pc(10) int l = this.left * w >> 12;
+		@Pc(17) int r = w * this.right >> 12;
+		@Pc(24) int t = h * this.top >> 12;
+		@Pc(31) int b = h * this.bottom >> 12;
+		fillSolidRect(l, this.fillColor, b, r, t);
 	}
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(III)V")
 	@Override
-	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(14) int local14 = arg1 * this.left >> 12;
-		@Pc(21) int local21 = this.top * arg0 >> 12;
-		@Pc(28) int local28 = arg1 * this.right >> 12;
-		@Pc(35) int local35 = this.bottom * arg0 >> 12;
-		drawFramedRect(this.lineWidth, local35, this.fillColor, this.outlineColor, local21, local28, local14);
+	public final void renderBorderedShape(@OriginalArg(0) int h, @OriginalArg(1) int w) {
+		@Pc(14) int l = w * this.left >> 12;
+		@Pc(21) int t = this.top * h >> 12;
+		@Pc(28) int r = w * this.right >> 12;
+		@Pc(35) int b = this.bottom * h >> 12;
+		drawFramedRect(this.lineWidth, b, this.fillColor, this.outlineColor, t, r, l);
 	}
 }
