@@ -58,7 +58,7 @@ public final class SoundPcmStream extends PcmStream {
 		this.sound = sound;
 		this.start = sound.start;
 		this.end = sound.end;
-		this.pingPongLoop = sound.aBoolean165;
+		this.pingPongLoop = sound.pingPongLoop;
 		this.sampleRate = arg1;
 		this.volume = volume;
 		this.pan = 8192;
@@ -71,7 +71,7 @@ public final class SoundPcmStream extends PcmStream {
 		this.sound = sound;
 		this.start = sound.start;
 		this.end = sound.end;
-		this.pingPongLoop = sound.aBoolean165;
+		this.pingPongLoop = sound.pingPongLoop;
 		this.sampleRate = arg1;
 		this.volume = volume;
 		this.pan = pan;

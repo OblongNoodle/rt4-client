@@ -568,7 +568,7 @@ public class Cs1ScriptRunner {
 							}
 							@Pc(1186) ComponentPointer local1186 = (ComponentPointer) InterfaceList.openInterfaces.get(component.id);
 							if (local1186 != null) {
-								if (local1186.anInt5879 == 0 && !isMenuOpen && ScriptRunner.interfaceMouseX >= local166 && local164 <= ScriptRunner.interfaceMouseY && local302 > ScriptRunner.interfaceMouseX && ScriptRunner.interfaceMouseY < local291 && !Cheat.qaOpTest) {
+								if (local1186.type == 0 && !isMenuOpen && ScriptRunner.interfaceMouseX >= local166 && local164 <= ScriptRunner.interfaceMouseY && local302 > ScriptRunner.interfaceMouseX && ScriptRunner.interfaceMouseY < local291 && !Cheat.qaOpTest) {
 									MiniMenu.ops[0] = LocalizedText.CANCEL;
 									MiniMenu.size = 1;
 									MiniMenu.cursors[0] = MiniMenu.defaultCursorId;
@@ -1311,8 +1311,8 @@ public class Cs1ScriptRunner {
 		}
 		for (@Pc(238) MapElement local238 = (MapElement) WorldMap.mapElements.head(); local238 != null; local238 = (MapElement) WorldMap.mapElements.next()) {
 			if (local238.id == WorldMap.anInt172) {
-				@Pc(258) int local258 = arg3 + local238.anInt4314 * arg1 / WorldMap.length;
-				@Pc(267) int local267 = arg2 * local238.anInt4307 / WorldMap.width + arg0;
+				@Pc(258) int local258 = arg3 + local238.mapY * arg1 / WorldMap.length;
+				@Pc(267) int local267 = arg2 * local238.mapX / WorldMap.width + arg0;
 				if (GlRenderer.enabled) {
 					GlRaster.fillRectAlpha(local267 - 2, local258 + -2, 4, 4, 16776960, local225);
 				} else {

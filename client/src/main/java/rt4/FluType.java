@@ -27,7 +27,7 @@ public final class FluType {
 	public int texture = -1;
 
 	@OriginalMember(owner = "client!ni", name = "o", descriptor = "I")
-	public int anInt4156 = 128;
+	public int textureScale = 128;
 
 	@OriginalMember(owner = "client!ni", name = "l", descriptor = "Z")
 	public boolean blockShadow = true;
@@ -115,7 +115,7 @@ public final class FluType {
 				this.texture = -1;
 			}
 		} else if (opcode == 3) {
-			this.anInt4156 = buffer.g2();
+			this.textureScale = buffer.g2();
 		} else if (opcode == 4) {
 			this.blockShadow = false;
 		}

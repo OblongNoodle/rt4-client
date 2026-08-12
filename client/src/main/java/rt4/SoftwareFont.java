@@ -216,10 +216,10 @@ public final class SoftwareFont extends Font {
 		if (arg3 <= 0 || arg4 <= 0) {
 			return;
 		}
-		if (SoftwareRaster.anIntArray295 == null) {
+		if (SoftwareRaster.lineMaskStarts == null) {
 			blit(SoftwareRaster.pixels, this.pixels[arg0], arg5, local13, local5, arg3, arg4, local9, local11);
 		} else {
-			blitMasked(SoftwareRaster.pixels, this.pixels[arg0], arg1, arg2, arg3, arg4, arg5, local13, local5, local9, local11, SoftwareRaster.anIntArray295, SoftwareRaster.anIntArray296);
+			blitMasked(SoftwareRaster.pixels, this.pixels[arg0], arg1, arg2, arg3, arg4, arg5, local13, local5, local9, local11, SoftwareRaster.lineMaskStarts, SoftwareRaster.lineMaskWidths);
 		}
 	}
 }

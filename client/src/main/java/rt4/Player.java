@@ -485,7 +485,7 @@ public final class Player extends PathingEntity {
 			local184 = local471.constructModel(this.spotAnimNextFrame, this.spotAnimFrame, this.spotAnimDelayClock);
 			if (local184 != null) {
 				local184.translate(0, -this.spotAnimY, 0);
-				if (local471.aBoolean100) {
+				if (local471.alignToTerrain) {
 					if (PathingEntity.terrainPitchAngle != 0) {
 						local184.rotateX(PathingEntity.terrainPitchAngle);
 					}

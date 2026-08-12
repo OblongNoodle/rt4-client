@@ -89,7 +89,7 @@ public final class Npc extends PathingEntity {
 			if (model != null) {
 				model.translate(0, -this.spotAnimY, 0);
 
-				if (spotAnimType.aBoolean100) {
+				if (spotAnimType.alignToTerrain) {
 					if (PathingEntity.terrainPitchAngle != 0) {
 						model.rotateX(PathingEntity.terrainPitchAngle);
 					}

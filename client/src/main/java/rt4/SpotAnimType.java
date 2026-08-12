@@ -27,7 +27,7 @@ public final class SpotAnimType {
 	private short[] recol_d;
 
 	@OriginalMember(owner = "client!eg", name = "i", descriptor = "Z")
-	public boolean aBoolean100 = false;
+	public boolean alignToTerrain = false;
 
 	@OriginalMember(owner = "client!eg", name = "j", descriptor = "I")
 	private int contrast = 0;
@@ -75,7 +75,7 @@ public final class SpotAnimType {
 		} else if (opcode == 8) {
 			this.contrast = buffer.g1();
 		} else if (opcode == 9) {
-			this.aBoolean100 = true;
+			this.alignToTerrain = true;
 		} else {
 			@Pc(78) int size;
 			@Pc(88) int count;

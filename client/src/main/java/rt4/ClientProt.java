@@ -143,7 +143,7 @@ public class ClientProt {
 	public static void closeWidget() {
 		Protocol.outboundBuffer.p1isaac(ClientProt.CLOSE_MODAL);
 		for (@Pc(18) ComponentPointer local18 = (ComponentPointer) InterfaceList.openInterfaces.head(); local18 != null; local18 = (ComponentPointer) InterfaceList.openInterfaces.next()) {
-			if (local18.anInt5879 == 0) {
+			if (local18.type == 0) {
 				InterfaceList.closeInterface(true, local18);
 			}
 		}

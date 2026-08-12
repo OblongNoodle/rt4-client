@@ -13,10 +13,10 @@ public final class SoftwareRaster {
 	public static int height;
 
 	@OriginalMember(owner = "client!kb", name = "f", descriptor = "[I")
-	public static int[] anIntArray295;
+	public static int[] lineMaskStarts;
 
 	@OriginalMember(owner = "client!kb", name = "g", descriptor = "[I")
-	public static int[] anIntArray296;
+	public static int[] lineMaskWidths;
 
 	@OriginalMember(owner = "client!kb", name = "i", descriptor = "[I")
 	public static int[] pixels;
@@ -38,8 +38,8 @@ public final class SoftwareRaster {
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "()V")
 	public static void clearLineMasks() {
-		anIntArray295 = null;
-		anIntArray296 = null;
+		lineMaskStarts = null;
+		lineMaskWidths = null;
 	}
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(IIIII)V")
@@ -92,8 +92,8 @@ public final class SoftwareRaster {
 		if (arg0.length != clipBottom - clipTop || arg1.length != clipBottom - clipTop) {
 			throw new IllegalArgumentException();
 		}
-		anIntArray295 = arg0;
-		anIntArray296 = arg1;
+		lineMaskStarts = arg0;
+		lineMaskWidths = arg1;
 	}
 
 	@OriginalMember(owner = "client!kb", name = "b", descriptor = "(IIIIII)V")

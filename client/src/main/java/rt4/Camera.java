@@ -123,7 +123,7 @@ public class Camera {
 					if (local80 < 3 && (SceneGraph.renderFlags[1][local64][local73] & 0x2) == 2) {
 						local80++;
 					}
-					@Pc(117) int local117 = (SceneGraph.aByteArrayArrayArray13[local80][local64][local73] & 0xFF) * 8 + local43 - SceneGraph.tileHeights[local80][local64][local73];
+					@Pc(117) int local117 = (SceneGraph.occlusionHeights[local80][local64][local73] & 0xFF) * 8 + local43 - SceneGraph.tileHeights[local80][local64][local73];
 					if (local117 > local45) {
 						local45 = local117;
 					}

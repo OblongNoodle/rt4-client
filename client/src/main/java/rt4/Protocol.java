@@ -3474,7 +3474,7 @@ public class Protocol {
 	@OriginalMember(owner = "client!dh", name = "a", descriptor = "(IIII)Lclient!wk;")
 	public static ComponentPointer openTopLevelInterface(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
 		@Pc(9) ComponentPointer local9 = new ComponentPointer();
-		local9.anInt5879 = arg2;
+		local9.type = arg2;
 		local9.interfaceId = arg0;
 		InterfaceList.openInterfaces.put(local9, arg1);
 		InterfaceList.resetAnimations(arg0);

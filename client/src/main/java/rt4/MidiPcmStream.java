@@ -763,7 +763,7 @@ public final class MidiPcmStream extends PcmStream {
 	public final void applyLoopStartOffset(@OriginalArg(0) MidiNote arg0, @OriginalArg(1) boolean arg1) {
 		@Pc(8) int local8 = arg0.sound.samples.length;
 		@Pc(27) int local27;
-		if (arg1 && arg0.sound.aBoolean165) {
+		if (arg1 && arg0.sound.pingPongLoop) {
 			@Pc(37) int local37 = local8 + local8 - arg0.sound.start;
 			local8 <<= 0x8;
 			local27 = (int) ((long) local37 * (long) this.anIntArray509[arg0.channel] >> 6);

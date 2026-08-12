@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class PcmSound extends Sound {
 
 	@OriginalMember(owner = "client!kj", name = "r", descriptor = "Z")
-	public boolean aBoolean165;
+	public boolean pingPongLoop;
 
 	@OriginalMember(owner = "client!kj", name = "u", descriptor = "I")
 	public int rate;
@@ -36,7 +36,7 @@ public final class PcmSound extends Sound {
 		this.samples = arg1;
 		this.start = arg2;
 		this.end = arg3;
-		this.aBoolean165 = arg4;
+		this.pingPongLoop = arg4;
 	}
 
 	@OriginalMember(owner = "client!kj", name = "a", descriptor = "(Lclient!vj;)Lclient!kj;")
