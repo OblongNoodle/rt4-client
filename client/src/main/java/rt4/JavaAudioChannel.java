@@ -16,26 +16,26 @@ import java.awt.Component;
 public final class JavaAudioChannel extends AudioChannel {
 
 	@OriginalMember(owner = "client!qa", name = "L", descriptor = "I")
-	private int anInt4645;
+	private int bufferSize;
 
 	@OriginalMember(owner = "client!qa", name = "M", descriptor = "Ljavax/sound/sampled/SourceDataLine;")
-	private SourceDataLine aSourceDataLine1;
+	private SourceDataLine dataLine;
 
 	@OriginalMember(owner = "client!qa", name = "O", descriptor = "Ljavax/sound/sampled/AudioFormat;")
-	private AudioFormat anAudioFormat1;
+	private AudioFormat audioFormat;
 
 	@OriginalMember(owner = "client!qa", name = "P", descriptor = "[B")
-	private byte[] aByteArray64;
+	private byte[] outputBuffer;
 
 	@OriginalMember(owner = "client!qa", name = "N", descriptor = "Z")
-	private boolean aBoolean230 = false;
+	private boolean isSoundMax = false;
 
 	@OriginalMember(owner = "client!qa", name = "d", descriptor = "()V")
 	@Override
 	protected final void flush() {
-		if (this.aSourceDataLine1 != null) {
-			this.aSourceDataLine1.close();
-			this.aSourceDataLine1 = null;
+		if (this.dataLine != null) {
+			this.dataLine.close();
+			this.dataLine = null;
 		}
 	}
 
@@ -49,27 +49,27 @@ public final class JavaAudioChannel extends AudioChannel {
 				if (local21 != null) {
 					@Pc(28) String local28 = local21.getName();
 					if (local28 != null && local28.toLowerCase().indexOf("soundmax") >= 0) {
-						this.aBoolean230 = true;
+						this.isSoundMax = true;
 					}
 				}
 			}
 		}
-		this.anAudioFormat1 = new AudioFormat((float) AudioChannel.sampleRate, 16, AudioChannel.stereo ? 2 : 1, true, false);
-		this.aByteArray64 = new byte[0x100 << (AudioChannel.stereo ? 2 : 1)];
+		this.audioFormat = new AudioFormat((float) AudioChannel.sampleRate, 16, AudioChannel.stereo ? 2 : 1, true, false);
+		this.outputBuffer = new byte[0x100 << (AudioChannel.stereo ? 2 : 1)];
 	}
 
 	@OriginalMember(owner = "client!qa", name = "a", descriptor = "(I)V")
 	@Override
 	public final void open(@OriginalArg(0) int arg0) throws LineUnavailableException {
 		try {
-			@Pc(20) javax.sound.sampled.DataLine.Info local20 = new javax.sound.sampled.DataLine.Info(SourceDataLine.class, this.anAudioFormat1, arg0 << (AudioChannel.stereo ? 2 : 1));
-			this.aSourceDataLine1 = (SourceDataLine) AudioSystem.getLine(local20);
-			this.aSourceDataLine1.open();
-			this.aSourceDataLine1.start();
-			this.anInt4645 = arg0;
+			@Pc(20) javax.sound.sampled.DataLine.Info local20 = new javax.sound.sampled.DataLine.Info(SourceDataLine.class, this.audioFormat, arg0 << (AudioChannel.stereo ? 2 : 1));
+			this.dataLine = (SourceDataLine) AudioSystem.getLine(local20);
+			this.dataLine.open();
+			this.dataLine.start();
+			this.bufferSize = arg0;
 		} catch (@Pc(36) LineUnavailableException local36) {
 			if (IntUtils.bitCountFast(arg0) == 1) {
-				this.aSourceDataLine1 = null;
+				this.dataLine = null;
 				throw local36;
 			} else {
 				this.open(IntUtils.clp2(arg0));
@@ -80,22 +80,22 @@ public final class JavaAudioChannel extends AudioChannel {
 	@OriginalMember(owner = "client!qa", name = "b", descriptor = "()V")
 	@Override
 	protected final void close() throws LineUnavailableException {
-		this.aSourceDataLine1.flush();
-		if (!this.aBoolean230) {
+		this.dataLine.flush();
+		if (!this.isSoundMax) {
 			return;
 		}
-		this.aSourceDataLine1.close();
-		this.aSourceDataLine1 = null;
-		@Pc(34) javax.sound.sampled.DataLine.Info local34 = new javax.sound.sampled.DataLine.Info(SourceDataLine.class, this.anAudioFormat1, this.anInt4645 << (AudioChannel.stereo ? 2 : 1));
-		this.aSourceDataLine1 = (SourceDataLine) AudioSystem.getLine(local34);
-		this.aSourceDataLine1.open();
-		this.aSourceDataLine1.start();
+		this.dataLine.close();
+		this.dataLine = null;
+		@Pc(34) javax.sound.sampled.DataLine.Info local34 = new javax.sound.sampled.DataLine.Info(SourceDataLine.class, this.audioFormat, this.bufferSize << (AudioChannel.stereo ? 2 : 1));
+		this.dataLine = (SourceDataLine) AudioSystem.getLine(local34);
+		this.dataLine.open();
+		this.dataLine.start();
 	}
 
 	@OriginalMember(owner = "client!qa", name = "c", descriptor = "()I")
 	@Override
 	protected final int getBufferSize() {
-		return this.anInt4645 - (this.aSourceDataLine1.available() >> (AudioChannel.stereo ? 2 : 1));
+		return this.bufferSize - (this.dataLine.available() >> (AudioChannel.stereo ? 2 : 1));
 	}
 
 	@OriginalMember(owner = "client!qa", name = "a", descriptor = "()V")
@@ -110,9 +110,9 @@ public final class JavaAudioChannel extends AudioChannel {
 			if ((local17 + 8388608 & 0xFF000000) != 0) {
 				local17 = local17 >> 31 ^ 0x7FFFFF;
 			}
-			this.aByteArray64[local9 * 2] = (byte) (local17 >> 8);
-			this.aByteArray64[local9 * 2 + 1] = (byte) (local17 >> 16);
+			this.outputBuffer[local9 * 2] = (byte) (local17 >> 8);
+			this.outputBuffer[local9 * 2 + 1] = (byte) (local17 >> 16);
 		}
-		this.aSourceDataLine1.write(this.aByteArray64, 0, local1 << 1);
+		this.dataLine.write(this.outputBuffer, 0, local1 << 1);
 	}
 }
