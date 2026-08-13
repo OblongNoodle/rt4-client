@@ -50,35 +50,35 @@ public class LightingManager {
 	private static int width;
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIIII)V")
-	public static void updateLightsForWallPiece(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	public static void updateLightsForWallPiece(@OriginalArg(0) int wallFlags, @OriginalArg(1) int cameraX, @OriginalArg(2) int cameraY, @OriginalArg(3) int cameraZ, @OriginalArg(4) int plane, @OriginalArg(5) int tileX, @OriginalArg(6) int tileY) {
 		if (!Preferences.highDetailLighting) {
 			return;
 		}
-		if (arg0 == 1 && arg5 > 0) {
-			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 - 1, arg6);
-		} else if (arg0 == 4 && arg5 < width - 1) {
-			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 + 1, arg6);
-		} else if (arg0 == 8 && arg6 > 0) {
-			updateLightsForTile(arg1, arg2, arg3, arg4, arg5, arg6 - 1);
-		} else if (arg0 == 2 && arg6 < length - 1) {
-			updateLightsForTile(arg1, arg2, arg3, arg4, arg5, arg6 + 1);
-		} else if (arg0 == 16 && arg5 > 0 && arg6 < length - 1) {
-			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 - 1, arg6 + 1);
-		} else if (arg0 == 32 && arg5 < width - 1 && arg6 < length - 1) {
-			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 + 1, arg6 + 1);
-		} else if (arg0 == 128 && arg5 > 0 && arg6 > 0) {
-			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 - 1, arg6 - 1);
-		} else if (arg0 == 64 && arg5 < width - 1 && arg6 > 0) {
-			updateLightsForTile(arg1, arg2, arg3, arg4, arg5 + 1, arg6 - 1);
+		if (wallFlags == 1 && tileX > 0) {
+			updateLightsForTile(cameraX, cameraY, cameraZ, plane, tileX - 1, tileY);
+		} else if (wallFlags == 4 && tileX < width - 1) {
+			updateLightsForTile(cameraX, cameraY, cameraZ, plane, tileX + 1, tileY);
+		} else if (wallFlags == 8 && tileY > 0) {
+			updateLightsForTile(cameraX, cameraY, cameraZ, plane, tileX, tileY - 1);
+		} else if (wallFlags == 2 && tileY < length - 1) {
+			updateLightsForTile(cameraX, cameraY, cameraZ, plane, tileX, tileY + 1);
+		} else if (wallFlags == 16 && tileX > 0 && tileY < length - 1) {
+			updateLightsForTile(cameraX, cameraY, cameraZ, plane, tileX - 1, tileY + 1);
+		} else if (wallFlags == 32 && tileX < width - 1 && tileY < length - 1) {
+			updateLightsForTile(cameraX, cameraY, cameraZ, plane, tileX + 1, tileY + 1);
+		} else if (wallFlags == 128 && tileX > 0 && tileY > 0) {
+			updateLightsForTile(cameraX, cameraY, cameraZ, plane, tileX - 1, tileY - 1);
+		} else if (wallFlags == 64 && tileX < width - 1 && tileY > 0) {
+			updateLightsForTile(cameraX, cameraY, cameraZ, plane, tileX + 1, tileY - 1);
 		}
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(Lclient!gi;)V")
-	public static void addLight(@OriginalArg(0) Light arg0) {
+	public static void addLight(@OriginalArg(0) Light light) {
 		if (lightCount >= 255) {
 			System.out.println("Number of lights added exceeds maximum!");
 		} else {
-			lights[lightCount++] = arg0;
+			lights[lightCount++] = light;
 		}
 	}
 
@@ -100,60 +100,60 @@ public class LightingManager {
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "()V")
 	public static void resetActiveLights() {
-		for (@Pc(1) int local1 = 0; local1 < 4; local1++) {
-			activeLightIndices[local1] = -1;
-			disableLight(local1);
+		for (@Pc(1) int i = 0; i < 4; i++) {
+			activeLightIndices[i] = -1;
+			disableLight(i);
 		}
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIIIII)V")
-	public static void updateLightsForRegion(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		if (!Preferences.highDetailLighting || cachedPlane == arg3 && cachedStartTileX == arg4 && cachedStartTileY == arg5 && cachedEndTileX == arg6 && cachedEndTileY == arg7) {
+	public static void updateLightsForRegion(@OriginalArg(0) int cameraX, @OriginalArg(1) int cameraY, @OriginalArg(2) int cameraZ, @OriginalArg(3) int plane, @OriginalArg(4) int startTileX, @OriginalArg(5) int startTileY, @OriginalArg(6) int endTileX, @OriginalArg(7) int endTileY) {
+		if (!Preferences.highDetailLighting || cachedPlane == plane && cachedStartTileX == startTileX && cachedStartTileY == startTileY && cachedEndTileX == endTileX && cachedEndTileY == endTileY) {
 			return;
 		}
-		@Pc(20) int local20;
-		for (local20 = 0; local20 < 4; local20++) {
-			lightSlotRetained[local20] = false;
+		@Pc(20) int matchCount;
+		for (matchCount = 0; matchCount < 4; matchCount++) {
+			lightSlotRetained[matchCount] = false;
 		}
-		local20 = 0;
-		@Pc(33) int local33 = 0;
-		@Pc(35) int local35;
-		@Pc(40) int local40;
+		matchCount = 0;
+		@Pc(33) int candidateCount = 0;
+		@Pc(35) int tileX;
+		@Pc(40) int tileY;
 		label112:
-		for (local35 = arg4; local35 <= arg6; local35++) {
+		for (tileX = startTileX; tileX <= endTileX; tileX++) {
 			label110:
-			for (local40 = arg5; local40 <= arg7; local40++) {
-				@Pc(51) int local51 = lightGrid[arg3][local35][local40];
+			for (tileY = startTileY; tileY <= endTileY; tileY++) {
+				@Pc(51) int packed = lightGrid[plane][tileX][tileY];
 				while (true) {
 					while (true) {
 						label96:
 						while (true) {
-							if (local51 == 0) {
+							if (packed == 0) {
 								continue label110;
 							}
-							@Pc(59) int local59 = (local51 & 0xFF) - 1;
-							local51 >>>= 0x8;
-							@Pc(65) int local65;
-							for (local65 = 0; local65 < local33; local65++) {
-								if (local59 == candidateLightIndices[local65]) {
+							@Pc(59) int lightIdx = (packed & 0xFF) - 1;
+							packed >>>= 0x8;
+							@Pc(65) int j;
+							for (j = 0; j < candidateCount; j++) {
+								if (lightIdx == candidateLightIndices[j]) {
 									continue label96;
 								}
 							}
-							for (local65 = 0; local65 < 4; local65++) {
-								if (local59 == activeLightIndices[local65]) {
-									if (!lightSlotRetained[local65]) {
-										lightSlotRetained[local65] = true;
-										local20++;
-										if (local20 == 4) {
+							for (j = 0; j < 4; j++) {
+								if (lightIdx == activeLightIndices[j]) {
+									if (!lightSlotRetained[j]) {
+										lightSlotRetained[j] = true;
+										matchCount++;
+										if (matchCount == 4) {
 											break label112;
 										}
 									}
 									continue label96;
 								}
 							}
-							candidateLightIndices[local33++] = local59;
-							local20++;
-							if (local20 == 4) {
+							candidateLightIndices[candidateCount++] = lightIdx;
+							matchCount++;
+							if (matchCount == 4) {
 								break label112;
 							}
 						}
@@ -161,27 +161,27 @@ public class LightingManager {
 				}
 			}
 		}
-		for (local35 = 0; local35 < local33; local35++) {
-			for (local40 = 0; local40 < 4; local40++) {
-				if (!lightSlotRetained[local40]) {
-					activeLightIndices[local40] = candidateLightIndices[local35];
-					lightSlotRetained[local40] = true;
-					enableGlLight(local40, lights[candidateLightIndices[local35]], arg0, arg1, arg2);
+		for (tileX = 0; tileX < candidateCount; tileX++) {
+			for (tileY = 0; tileY < 4; tileY++) {
+				if (!lightSlotRetained[tileY]) {
+					activeLightIndices[tileY] = candidateLightIndices[tileX];
+					lightSlotRetained[tileY] = true;
+					enableGlLight(tileY, lights[candidateLightIndices[tileX]], cameraX, cameraY, cameraZ);
 					break;
 				}
 			}
 		}
-		for (local35 = 0; local35 < 4; local35++) {
-			if (!lightSlotRetained[local35]) {
-				activeLightIndices[local35] = -1;
-				disableLight(local35);
+		for (tileX = 0; tileX < 4; tileX++) {
+			if (!lightSlotRetained[tileX]) {
+				activeLightIndices[tileX] = -1;
+				disableLight(tileX);
 			}
 		}
-		cachedPlane = arg3;
-		cachedStartTileX = arg4;
-		cachedStartTileY = arg5;
-		cachedEndTileX = arg6;
-		cachedEndTileY = arg7;
+		cachedPlane = plane;
+		cachedStartTileX = startTileX;
+		cachedStartTileY = startTileY;
+		cachedEndTileX = endTileX;
+		cachedEndTileY = endTileY;
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(III)V")
@@ -193,60 +193,60 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIII)V")
-	public static void updateLightsForTile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		if (!Preferences.highDetailLighting || cachedPlane == arg3 && cachedStartTileX == arg4 && cachedStartTileY == arg5 && cachedEndTileX == arg4 && cachedEndTileY == arg5) {
+	public static void updateLightsForTile(@OriginalArg(0) int cameraX, @OriginalArg(1) int cameraY, @OriginalArg(2) int cameraZ, @OriginalArg(3) int plane, @OriginalArg(4) int tileX, @OriginalArg(5) int tileY) {
+		if (!Preferences.highDetailLighting || cachedPlane == plane && cachedStartTileX == tileX && cachedStartTileY == tileY && cachedEndTileX == tileX && cachedEndTileY == tileY) {
 			return;
 		}
-		@Pc(20) int local20;
-		for (local20 = 0; local20 < 4; local20++) {
-			lightSlotRetained[local20] = false;
+		@Pc(20) int candidateCount;
+		for (candidateCount = 0; candidateCount < 4; candidateCount++) {
+			lightSlotRetained[candidateCount] = false;
 		}
-		local20 = 0;
-		@Pc(39) int local39 = lightGrid[arg3][arg4][arg5];
+		candidateCount = 0;
+		@Pc(39) int packed = lightGrid[plane][tileX][tileY];
 		while (true) {
-			@Pc(47) int local47;
-			@Pc(53) int local53;
+			@Pc(47) int lightIdx;
+			@Pc(53) int slot;
 			label72:
-			while (local39 != 0) {
-				local47 = (local39 & 0xFF) - 1;
-				local39 >>>= 0x8;
-				for (local53 = 0; local53 < 4; local53++) {
-					if (local47 == activeLightIndices[local53]) {
-						lightSlotRetained[local53] = true;
+			while (packed != 0) {
+				lightIdx = (packed & 0xFF) - 1;
+				packed >>>= 0x8;
+				for (slot = 0; slot < 4; slot++) {
+					if (lightIdx == activeLightIndices[slot]) {
+						lightSlotRetained[slot] = true;
 						continue label72;
 					}
 				}
-				candidateLightIndices[local20++] = local47;
+				candidateLightIndices[candidateCount++] = lightIdx;
 			}
-			for (local47 = 0; local47 < local20; local47++) {
-				for (local53 = 0; local53 < 4; local53++) {
-					if (!lightSlotRetained[local53]) {
-						activeLightIndices[local53] = candidateLightIndices[local47];
-						lightSlotRetained[local53] = true;
-						enableGlLight(local53, lights[candidateLightIndices[local47]], arg0, arg1, arg2);
+			for (lightIdx = 0; lightIdx < candidateCount; lightIdx++) {
+				for (slot = 0; slot < 4; slot++) {
+					if (!lightSlotRetained[slot]) {
+						activeLightIndices[slot] = candidateLightIndices[lightIdx];
+						lightSlotRetained[slot] = true;
+						enableGlLight(slot, lights[candidateLightIndices[lightIdx]], cameraX, cameraY, cameraZ);
 						break;
 					}
 				}
 			}
-			for (local47 = 0; local47 < 4; local47++) {
-				if (!lightSlotRetained[local47]) {
-					activeLightIndices[local47] = -1;
-					disableLight(local47);
+			for (lightIdx = 0; lightIdx < 4; lightIdx++) {
+				if (!lightSlotRetained[lightIdx]) {
+					activeLightIndices[lightIdx] = -1;
+					disableLight(lightIdx);
 				}
 			}
-			cachedPlane = arg3;
-			cachedStartTileX = arg4;
-			cachedStartTileY = arg5;
-			cachedEndTileX = arg4;
-			cachedEndTileY = arg5;
+			cachedPlane = plane;
+			cachedStartTileX = tileX;
+			cachedStartTileY = tileY;
+			cachedEndTileX = tileX;
+			cachedEndTileY = tileY;
 			return;
 		}
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IZ)V")
-	public static void updateAllLightAnimations(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1) {
-		for (@Pc(1) int local1 = 0; local1 < lightCount; local1++) {
-			lights[local1].updateAnimation(arg1, arg0);
+	public static void updateAllLightAnimations(@OriginalArg(0) int cycle, @OriginalArg(1) boolean reset) {
+		for (@Pc(1) int i = 0; i < lightCount; i++) {
+			lights[i].updateAnimation(reset, cycle);
 		}
 		cachedPlane = -1;
 		cachedStartTileX = -1;
@@ -257,47 +257,47 @@ public class LightingManager {
 
 	@OriginalMember(owner = "client!jf", name = "b", descriptor = "()V")
 	public static void buildLightGrid() {
-		for (@Pc(1) int local1 = 0; local1 < lightCount; local1++) {
-			@Pc(8) Light local8 = lights[local1];
-			@Pc(11) int local11 = local8.level;
-			if (local8.extendsDown) {
-				local11 = 0;
+		for (@Pc(1) int i = 0; i < lightCount; i++) {
+			@Pc(8) Light light = lights[i];
+			@Pc(11) int startLevel = light.level;
+			if (light.extendsDown) {
+				startLevel = 0;
 			}
-			@Pc(19) int local19 = local8.level;
-			if (local8.extendsUp) {
-				local19 = 3;
+			@Pc(19) int endLevel = light.level;
+			if (light.extendsUp) {
+				endLevel = 3;
 			}
-			for (@Pc(26) int local26 = local11; local26 <= local19; local26++) {
-				@Pc(31) int local31 = 0;
-				@Pc(39) int local39 = (local8.y >> 7) - local8.radius;
-				if (local39 < 0) {
-					local31 = -local39;
-					local39 = 0;
+			for (@Pc(26) int level = startLevel; level <= endLevel; level++) {
+				@Pc(31) int profileOffset = 0;
+				@Pc(39) int startRow = (light.y >> 7) - light.radius;
+				if (startRow < 0) {
+					profileOffset = -startRow;
+					startRow = 0;
 				}
-				@Pc(55) int local55 = (local8.y >> 7) + local8.radius;
-				if (local55 > length - 1) {
-					local55 = length - 1;
+				@Pc(55) int endRow = (light.y >> 7) + light.radius;
+				if (endRow > length - 1) {
+					endRow = length - 1;
 				}
-				for (@Pc(66) int local66 = local39; local66 <= local55; local66++) {
-					@Pc(75) short local75 = local8.spanProfile[local31++];
-					@Pc(87) int local87 = (local8.x >> 7) + (local75 >> 8) - local8.radius;
-					@Pc(95) int local95 = local87 + (local75 & 0xFF) - 1;
-					if (local87 < 0) {
-						local87 = 0;
+				for (@Pc(66) int row = startRow; row <= endRow; row++) {
+					@Pc(75) short span = light.spanProfile[profileOffset++];
+					@Pc(87) int startCol = (light.x >> 7) + (span >> 8) - light.radius;
+					@Pc(95) int endCol = startCol + (span & 0xFF) - 1;
+					if (startCol < 0) {
+						startCol = 0;
 					}
-					if (local95 > width - 1) {
-						local95 = width - 1;
+					if (endCol > width - 1) {
+						endCol = width - 1;
 					}
-					for (@Pc(110) int local110 = local87; local110 <= local95; local110++) {
-						@Pc(121) int local121 = lightGrid[local26][local110][local66];
-						if ((local121 & 0xFF) == 0) {
-							lightGrid[local26][local110][local66] = local121 | local1 + 1;
-						} else if ((local121 & 0xFF00) == 0) {
-							lightGrid[local26][local110][local66] = local121 | local1 + 1 << 8;
-						} else if ((local121 & 0xFF0000) == 0) {
-							lightGrid[local26][local110][local66] = local121 | local1 + 1 << 16;
-						} else if ((local121 & 0xFF000000) == 0) {
-							lightGrid[local26][local110][local66] = local121 | local1 + 1 << 24;
+					for (@Pc(110) int col = startCol; col <= endCol; col++) {
+						@Pc(121) int packed = lightGrid[level][col][row];
+						if ((packed & 0xFF) == 0) {
+							lightGrid[level][col][row] = packed | i + 1;
+						} else if ((packed & 0xFF00) == 0) {
+							lightGrid[level][col][row] = packed | i + 1 << 8;
+						} else if ((packed & 0xFF0000) == 0) {
+							lightGrid[level][col][row] = packed | i + 1 << 16;
+						} else if ((packed & 0xFF000000) == 0) {
+							lightGrid[level][col][row] = packed | i + 1 << 24;
 						}
 					}
 				}
@@ -316,33 +316,33 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIII)V")
-	public static void pruneInactiveLights(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public static void pruneInactiveLights(@OriginalArg(0) int plane, @OriginalArg(1) int tileX1, @OriginalArg(2) int tileY1, @OriginalArg(3) int tileX2, @OriginalArg(4) int tileY2) {
 		if (!Preferences.highDetailLighting) {
 			return;
 		}
 		label43:
-		for (@Pc(4) int local4 = 0; local4 < 4; local4++) {
-			if (activeLightIndices[local4] != -1) {
-				@Pc(20) int local20 = lightGrid[arg0][arg1][arg2];
-				@Pc(28) int local28;
-				while (local20 != 0) {
-					local28 = (local20 & 0xFF) - 1;
-					local20 >>>= 0x8;
-					if (local28 == activeLightIndices[local4]) {
+		for (@Pc(4) int slot = 0; slot < 4; slot++) {
+			if (activeLightIndices[slot] != -1) {
+				@Pc(20) int packed = lightGrid[plane][tileX1][tileY1];
+				@Pc(28) int lightIdx;
+				while (packed != 0) {
+					lightIdx = (packed & 0xFF) - 1;
+					packed >>>= 0x8;
+					if (lightIdx == activeLightIndices[slot]) {
 						continue label43;
 					}
 				}
-				local20 = lightGrid[arg0][arg3][arg4];
-				while (local20 != 0) {
-					local28 = (local20 & 0xFF) - 1;
-					local20 >>>= 0x8;
-					if (local28 == activeLightIndices[local4]) {
+				packed = lightGrid[plane][tileX2][tileY2];
+				while (packed != 0) {
+					lightIdx = (packed & 0xFF) - 1;
+					packed >>>= 0x8;
+					if (lightIdx == activeLightIndices[slot]) {
 						continue label43;
 					}
 				}
 			}
-			activeLightIndices[local4] = -1;
-			disableLight(local4);
+			activeLightIndices[slot] = -1;
+			disableLight(slot);
 		}
 	}
 
@@ -359,16 +359,16 @@ public class LightingManager {
 	@OriginalMember(owner = "client!jf", name = "e", descriptor = "()V")
 	public static void initGlLightParameters() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		@Pc(3) int local3;
-		for (local3 = 0; local3 < 4; local3++) {
-			@Pc(10) int local10 = local3 + 16388;
-			gl.glLightfv(local10, GL2.GL_AMBIENT, new float[]{0.0F, 0.0F, 0.0F, 1.0F}, 0);
-			gl.glLightf(local10, GL2.GL_LINEAR_ATTENUATION, 0.0F);
-			gl.glLightf(local10, GL2.GL_CONSTANT_ATTENUATION, 0.0F);
+		@Pc(3) int i;
+		for (i = 0; i < 4; i++) {
+			@Pc(10) int glLightId = i + 16388;
+			gl.glLightfv(glLightId, GL2.GL_AMBIENT, new float[]{0.0F, 0.0F, 0.0F, 1.0F}, 0);
+			gl.glLightf(glLightId, GL2.GL_LINEAR_ATTENUATION, 0.0F);
+			gl.glLightf(glLightId, GL2.GL_CONSTANT_ATTENUATION, 0.0F);
 		}
-		for (local3 = 0; local3 < 4; local3++) {
-			activeLightIndices[local3] = -1;
-			disableLight(local3);
+		for (i = 0; i < 4; i++) {
+			activeLightIndices[i] = -1;
+			disableLight(i);
 		}
 	}
 
@@ -383,7 +383,7 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(II[[[Lclient!bj;)V")
-	public static void renderLightMeshes(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Tile[][][] arg2) {
+	public static void renderLightMeshes(@OriginalArg(0) int plane, @OriginalArg(1) int cycle, @OriginalArg(2) Tile[][][] tiles) {
 		if (!Preferences.highDetailLighting) {
 			return;
 		}
@@ -399,42 +399,42 @@ public class LightingManager {
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_CONSTANT);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_ALPHA);
 		label71:
-		for (@Pc(56) int local56 = 0; local56 < lightCount; local56++) {
-			@Pc(63) Light local63 = lights[local56];
-			@Pc(66) int local66 = local63.level;
-			if (local63.onBridge) {
-				local66--;
+		for (@Pc(56) int i = 0; i < lightCount; i++) {
+			@Pc(63) Light light = lights[i];
+			@Pc(66) int effectiveLevel = light.level;
+			if (light.onBridge) {
+				effectiveLevel--;
 			}
-			if (local63.mesh != null) {
-				@Pc(76) int local76 = 0;
-				@Pc(84) int local84 = (local63.y >> 7) - local63.radius;
-				@Pc(92) int local92 = (local63.y >> 7) + local63.radius;
-				if (local92 >= visibleMaxY) {
-					local92 = visibleMaxY - 1;
+			if (light.mesh != null) {
+				@Pc(76) int profileOffset = 0;
+				@Pc(84) int startRow = (light.y >> 7) - light.radius;
+				@Pc(92) int endRow = (light.y >> 7) + light.radius;
+				if (endRow >= visibleMaxY) {
+					endRow = visibleMaxY - 1;
 				}
-				if (local84 < visibleMinY) {
-					local76 = visibleMinY - local84;
-					local84 = visibleMinY;
+				if (startRow < visibleMinY) {
+					profileOffset = visibleMinY - startRow;
+					startRow = visibleMinY;
 				}
-				for (@Pc(112) int local112 = local84; local112 <= local92; local112++) {
-					@Pc(121) short local121 = local63.spanProfile[local76++];
-					@Pc(133) int local133 = (local63.x >> 7) + (local121 >> 8) - local63.radius;
-					@Pc(141) int local141 = local133 + (local121 & 0xFF) - 1;
-					if (local133 < visibleMinX) {
-						local133 = visibleMinX;
+				for (@Pc(112) int row = startRow; row <= endRow; row++) {
+					@Pc(121) short span = light.spanProfile[profileOffset++];
+					@Pc(133) int startCol = (light.x >> 7) + (span >> 8) - light.radius;
+					@Pc(141) int endCol = startCol + (span & 0xFF) - 1;
+					if (startCol < visibleMinX) {
+						startCol = visibleMinX;
 					}
-					if (local141 >= visibleMaxX) {
-						local141 = visibleMaxX - 1;
+					if (endCol >= visibleMaxX) {
+						endCol = visibleMaxX - 1;
 					}
-					for (@Pc(155) int local155 = local133; local155 <= local141; local155++) {
-						@Pc(160) Tile local160 = null;
-						if (local66 >= 0) {
-							local160 = arg2[local66][local155][local112];
+					for (@Pc(155) int col = startCol; col <= endCol; col++) {
+						@Pc(160) Tile tile = null;
+						if (effectiveLevel >= 0) {
+							tile = tiles[effectiveLevel][col][row];
 						}
-						if (local66 < 0 || local160 != null && local160.visible) {
-							GlRenderer.setDepthLayer(201.5F - (float) local63.level * 50.0F - 1.5F);
-							gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, new float[]{0.0F, 0.0F, 0.0F, local63.alpha}, 0);
-							local63.mesh.draw();
+						if (effectiveLevel < 0 || tile != null && tile.visible) {
+							GlRenderer.setDepthLayer(201.5F - (float) light.level * 50.0F - 1.5F);
+							gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, new float[]{0.0F, 0.0F, 0.0F, light.alpha}, 0);
+							light.mesh.draw();
 							continue label71;
 						}
 					}
@@ -451,28 +451,28 @@ public class LightingManager {
 	}
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(ILclient!gi;III)V")
-	private static void enableGlLight(@OriginalArg(0) int arg0, @OriginalArg(1) Light arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(5) int local5 = arg0 + 16384 + 4;
+	private static void enableGlLight(@OriginalArg(0) int slot, @OriginalArg(1) Light light, @OriginalArg(2) int cameraX, @OriginalArg(3) int cameraY, @OriginalArg(4) int cameraZ) {
+		@Pc(5) int glLightId = slot + 16384 + 4;
 		@Pc(7) GL2 gl = GlRenderer.gl;
-		if (!enabledLights[arg0]) {
-			gl.glEnable(local5);
-			enabledLights[arg0] = true;
+		if (!enabledLights[slot]) {
+			gl.glEnable(glLightId);
+			enabledLights[slot] = true;
 		}
-		gl.glLightf(local5, GL2.GL_QUADRATIC_ATTENUATION, arg1.quadraticAttenuation);
-		gl.glLightfv(local5, GL2.GL_DIFFUSE, arg1.diffuse, 0);
-		lightPositionTemp[0] = arg1.x - arg2;
-		lightPositionTemp[1] = arg1.z - arg3;
-		lightPositionTemp[2] = arg1.y - arg4;
-		gl.glLightfv(local5, GL2.GL_POSITION, lightPositionTemp, 0);
+		gl.glLightf(glLightId, GL2.GL_QUADRATIC_ATTENUATION, light.quadraticAttenuation);
+		gl.glLightfv(glLightId, GL2.GL_DIFFUSE, light.diffuse, 0);
+		lightPositionTemp[0] = light.x - cameraX;
+		lightPositionTemp[1] = light.z - cameraY;
+		lightPositionTemp[2] = light.y - cameraZ;
+		gl.glLightfv(glLightId, GL2.GL_POSITION, lightPositionTemp, 0);
 	}
 
 	@OriginalMember(owner = "client!jf", name = "g", descriptor = "()V")
 	public static void clearLightGrid() {
 		lightCount = 0;
-		for (@Pc(3) int local3 = 0; local3 < planeCount; local3++) {
-			for (@Pc(8) int local8 = 0; local8 < width; local8++) {
-				for (@Pc(13) int local13 = 0; local13 < length; local13++) {
-					lightGrid[local3][local8][local13] = 0;
+		for (@Pc(3) int level = 0; level < planeCount; level++) {
+			for (@Pc(8) int x = 0; x < width; x++) {
+				for (@Pc(13) int y = 0; y < length; y++) {
+					lightGrid[level][x][y] = 0;
 				}
 			}
 		}

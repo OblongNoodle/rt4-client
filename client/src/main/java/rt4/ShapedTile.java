@@ -58,210 +58,210 @@ public final class ShapedTile {
 	public int[] triangleTextureId;
 
 	@OriginalMember(owner = "client!fg", name = "<init>", descriptor = "(IIIIIIIIIIIIIIIIIII)V")
-	public ShapedTile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12, @OriginalArg(13) int arg13, @OriginalArg(14) int arg14, @OriginalArg(15) int arg15, @OriginalArg(16) int arg16, @OriginalArg(17) int arg17, @OriginalArg(18) int arg18) {
-		if (arg5 != arg6 || arg5 != arg7 || arg5 != arg8) {
+	public ShapedTile(@OriginalArg(0) int shape, @OriginalArg(1) int rotation, @OriginalArg(2) int overlayTexture, @OriginalArg(3) int tileX, @OriginalArg(4) int tileY, @OriginalArg(5) int heightSW, @OriginalArg(6) int heightSE, @OriginalArg(7) int heightNE, @OriginalArg(8) int heightNW, @OriginalArg(9) int colorSW, @OriginalArg(10) int colorSE, @OriginalArg(11) int colorNE, @OriginalArg(12) int colorNW, @OriginalArg(13) int overlayColorSW, @OriginalArg(14) int overlayColorSE, @OriginalArg(15) int overlayColorNE, @OriginalArg(16) int overlayColorNW, @OriginalArg(17) int textureId, @OriginalArg(18) int flatColor) {
+		if (heightSW != heightSE || heightSW != heightNE || heightSW != heightNW) {
 			this.flat = false;
 		}
-		this.shape = arg0;
-		this.rotation = arg1;
-		this.textureId = arg17;
-		this.flatColor = arg18;
-		@Pc(30) short local30 = 128;
-		@Pc(34) int local34 = local30 / 2;
-		@Pc(38) int local38 = local30 / 4;
-		@Pc(44) int local44 = local30 * 3 / 4;
-		@Pc(48) int[] local48 = VERTEX_INDICES[arg0];
-		@Pc(51) int local51 = local48.length;
-		this.vertexX = new int[local51];
-		this.vertexY = new int[local51];
-		this.vertexZ = new int[local51];
-		@Pc(66) int[] local66 = new int[local51];
-		@Pc(69) int[] local69 = new int[local51];
-		@Pc(73) int local73 = arg3 * local30;
-		@Pc(77) int local77 = arg4 * local30;
-		@Pc(86) int local86;
-		@Pc(142) int local142;
-		@Pc(144) int local144;
-		@Pc(146) int local146;
-		@Pc(148) int local148;
-		@Pc(150) int local150;
-		for (@Pc(79) int local79 = 0; local79 < local51; local79++) {
-			local86 = local48[local79];
-			if ((local86 & 0x1) == 0 && local86 <= 8) {
-				local86 = (local86 - arg1 - arg1 - 1 & 0x7) + 1;
+		this.shape = shape;
+		this.rotation = rotation;
+		this.textureId = textureId;
+		this.flatColor = flatColor;
+		@Pc(30) short tileSize = 128;
+		@Pc(34) int halfTile = tileSize / 2;
+		@Pc(38) int quarterTile = tileSize / 4;
+		@Pc(44) int threeQuarterTile = tileSize * 3 / 4;
+		@Pc(48) int[] vertexIndexDef = VERTEX_INDICES[shape];
+		@Pc(51) int vertexCount = vertexIndexDef.length;
+		this.vertexX = new int[vertexCount];
+		this.vertexY = new int[vertexCount];
+		this.vertexZ = new int[vertexCount];
+		@Pc(66) int[] underlayVertexColors = new int[vertexCount];
+		@Pc(69) int[] overlayVertexColors = new int[vertexCount];
+		@Pc(73) int baseFineX = tileX * tileSize;
+		@Pc(77) int baseFineZ = tileY * tileSize;
+		@Pc(86) int vertexCode;
+		@Pc(142) int vx;
+		@Pc(144) int vz;
+		@Pc(146) int vy;
+		@Pc(148) int vColor;
+		@Pc(150) int vOverlayColor;
+		for (@Pc(79) int v = 0; v < vertexCount; v++) {
+			vertexCode = vertexIndexDef[v];
+			if ((vertexCode & 0x1) == 0 && vertexCode <= 8) {
+				vertexCode = (vertexCode - rotation - rotation - 1 & 0x7) + 1;
 			}
-			if (local86 > 8 && local86 <= 12) {
-				local86 = (local86 - arg1 - 9 & 0x3) + 9;
+			if (vertexCode > 8 && vertexCode <= 12) {
+				vertexCode = (vertexCode - rotation - 9 & 0x3) + 9;
 			}
-			if (local86 > 12 && local86 <= 16) {
-				local86 = (local86 - arg1 - 13 & 0x3) + 13;
+			if (vertexCode > 12 && vertexCode <= 16) {
+				vertexCode = (vertexCode - rotation - 13 & 0x3) + 13;
 			}
-			if (local86 == 1) {
-				local142 = local73;
-				local144 = local77;
-				local146 = arg5;
-				local148 = arg9;
-				local150 = arg13;
-			} else if (local86 == 2) {
-				local142 = local73 + local34;
-				local144 = local77;
-				local146 = arg5 + arg6 >> 1;
-				local148 = arg9 + arg10 >> 1;
-				local150 = arg13 + arg14 >> 1;
-			} else if (local86 == 3) {
-				local142 = local73 + local30;
-				local144 = local77;
-				local146 = arg6;
-				local148 = arg10;
-				local150 = arg14;
-			} else if (local86 == 4) {
-				local142 = local73 + local30;
-				local144 = local77 + local34;
-				local146 = arg6 + arg7 >> 1;
-				local148 = arg10 + arg11 >> 1;
-				local150 = arg14 + arg15 >> 1;
-			} else if (local86 == 5) {
-				local142 = local73 + local30;
-				local144 = local77 + local30;
-				local146 = arg7;
-				local148 = arg11;
-				local150 = arg15;
-			} else if (local86 == 6) {
-				local142 = local73 + local34;
-				local144 = local77 + local30;
-				local146 = arg7 + arg8 >> 1;
-				local148 = arg11 + arg12 >> 1;
-				local150 = arg15 + arg16 >> 1;
-			} else if (local86 == 7) {
-				local142 = local73;
-				local144 = local77 + local30;
-				local146 = arg8;
-				local148 = arg12;
-				local150 = arg16;
-			} else if (local86 == 8) {
-				local142 = local73;
-				local144 = local77 + local34;
-				local146 = arg8 + arg5 >> 1;
-				local148 = arg12 + arg9 >> 1;
-				local150 = arg16 + arg13 >> 1;
-			} else if (local86 == 9) {
-				local142 = local73 + local34;
-				local144 = local77 + local38;
-				local146 = arg5 + arg6 >> 1;
-				local148 = arg9 + arg10 >> 1;
-				local150 = arg13 + arg14 >> 1;
-			} else if (local86 == 10) {
-				local142 = local73 + local44;
-				local144 = local77 + local34;
-				local146 = arg6 + arg7 >> 1;
-				local148 = arg10 + arg11 >> 1;
-				local150 = arg14 + arg15 >> 1;
-			} else if (local86 == 11) {
-				local142 = local73 + local34;
-				local144 = local77 + local44;
-				local146 = arg7 + arg8 >> 1;
-				local148 = arg11 + arg12 >> 1;
-				local150 = arg15 + arg16 >> 1;
-			} else if (local86 == 12) {
-				local142 = local73 + local38;
-				local144 = local77 + local34;
-				local146 = arg8 + arg5 >> 1;
-				local148 = arg12 + arg9 >> 1;
-				local150 = arg16 + arg13 >> 1;
-			} else if (local86 == 13) {
-				local142 = local73 + local38;
-				local144 = local77 + local38;
-				local146 = arg5;
-				local148 = arg9;
-				local150 = arg13;
-			} else if (local86 == 14) {
-				local142 = local73 + local44;
-				local144 = local77 + local38;
-				local146 = arg6;
-				local148 = arg10;
-				local150 = arg14;
-			} else if (local86 == 15) {
-				local142 = local73 + local44;
-				local144 = local77 + local44;
-				local146 = arg7;
-				local148 = arg11;
-				local150 = arg15;
+			if (vertexCode == 1) {
+				vx = baseFineX;
+				vz = baseFineZ;
+				vy = heightSW;
+				vColor = colorSW;
+				vOverlayColor = overlayColorSW;
+			} else if (vertexCode == 2) {
+				vx = baseFineX + halfTile;
+				vz = baseFineZ;
+				vy = heightSW + heightSE >> 1;
+				vColor = colorSW + colorSE >> 1;
+				vOverlayColor = overlayColorSW + overlayColorSE >> 1;
+			} else if (vertexCode == 3) {
+				vx = baseFineX + tileSize;
+				vz = baseFineZ;
+				vy = heightSE;
+				vColor = colorSE;
+				vOverlayColor = overlayColorSE;
+			} else if (vertexCode == 4) {
+				vx = baseFineX + tileSize;
+				vz = baseFineZ + halfTile;
+				vy = heightSE + heightNE >> 1;
+				vColor = colorSE + colorNE >> 1;
+				vOverlayColor = overlayColorSE + overlayColorNE >> 1;
+			} else if (vertexCode == 5) {
+				vx = baseFineX + tileSize;
+				vz = baseFineZ + tileSize;
+				vy = heightNE;
+				vColor = colorNE;
+				vOverlayColor = overlayColorNE;
+			} else if (vertexCode == 6) {
+				vx = baseFineX + halfTile;
+				vz = baseFineZ + tileSize;
+				vy = heightNE + heightNW >> 1;
+				vColor = colorNE + colorNW >> 1;
+				vOverlayColor = overlayColorNE + overlayColorNW >> 1;
+			} else if (vertexCode == 7) {
+				vx = baseFineX;
+				vz = baseFineZ + tileSize;
+				vy = heightNW;
+				vColor = colorNW;
+				vOverlayColor = overlayColorNW;
+			} else if (vertexCode == 8) {
+				vx = baseFineX;
+				vz = baseFineZ + halfTile;
+				vy = heightNW + heightSW >> 1;
+				vColor = colorNW + colorSW >> 1;
+				vOverlayColor = overlayColorNW + overlayColorSW >> 1;
+			} else if (vertexCode == 9) {
+				vx = baseFineX + halfTile;
+				vz = baseFineZ + quarterTile;
+				vy = heightSW + heightSE >> 1;
+				vColor = colorSW + colorSE >> 1;
+				vOverlayColor = overlayColorSW + overlayColorSE >> 1;
+			} else if (vertexCode == 10) {
+				vx = baseFineX + threeQuarterTile;
+				vz = baseFineZ + halfTile;
+				vy = heightSE + heightNE >> 1;
+				vColor = colorSE + colorNE >> 1;
+				vOverlayColor = overlayColorSE + overlayColorNE >> 1;
+			} else if (vertexCode == 11) {
+				vx = baseFineX + halfTile;
+				vz = baseFineZ + threeQuarterTile;
+				vy = heightNE + heightNW >> 1;
+				vColor = colorNE + colorNW >> 1;
+				vOverlayColor = overlayColorNE + overlayColorNW >> 1;
+			} else if (vertexCode == 12) {
+				vx = baseFineX + quarterTile;
+				vz = baseFineZ + halfTile;
+				vy = heightNW + heightSW >> 1;
+				vColor = colorNW + colorSW >> 1;
+				vOverlayColor = overlayColorNW + overlayColorSW >> 1;
+			} else if (vertexCode == 13) {
+				vx = baseFineX + quarterTile;
+				vz = baseFineZ + quarterTile;
+				vy = heightSW;
+				vColor = colorSW;
+				vOverlayColor = overlayColorSW;
+			} else if (vertexCode == 14) {
+				vx = baseFineX + threeQuarterTile;
+				vz = baseFineZ + quarterTile;
+				vy = heightSE;
+				vColor = colorSE;
+				vOverlayColor = overlayColorSE;
+			} else if (vertexCode == 15) {
+				vx = baseFineX + threeQuarterTile;
+				vz = baseFineZ + threeQuarterTile;
+				vy = heightNE;
+				vColor = colorNE;
+				vOverlayColor = overlayColorNE;
 			} else {
-				local142 = local73 + local38;
-				local144 = local77 + local44;
-				local146 = arg8;
-				local148 = arg12;
-				local150 = arg16;
+				vx = baseFineX + quarterTile;
+				vz = baseFineZ + threeQuarterTile;
+				vy = heightNW;
+				vColor = colorNW;
+				vOverlayColor = overlayColorNW;
 			}
-			this.vertexX[local79] = local142;
-			this.vertexY[local79] = local146;
-			this.vertexZ[local79] = local144;
-			local66[local79] = local148;
-			local69[local79] = local150;
+			this.vertexX[v] = vx;
+			this.vertexY[v] = vy;
+			this.vertexZ[v] = vz;
+			underlayVertexColors[v] = vColor;
+			overlayVertexColors[v] = vOverlayColor;
 		}
-		@Pc(534) int[] local534 = TRIANGLE_INDICES[arg0];
-		local86 = local534.length / 4;
-		this.triangleVertexA = new int[local86];
-		this.triangleVertexB = new int[local86];
-		this.triangleVertexC = new int[local86];
-		this.triangleColorA = new int[local86];
-		this.triangleColorB = new int[local86];
-		this.triangleColorC = new int[local86];
-		if (arg2 != -1) {
-			this.triangleTextureId = new int[local86];
+		@Pc(534) int[] triangleIndexDef = TRIANGLE_INDICES[shape];
+		vertexCode = triangleIndexDef.length / 4;
+		this.triangleVertexA = new int[vertexCode];
+		this.triangleVertexB = new int[vertexCode];
+		this.triangleVertexC = new int[vertexCode];
+		this.triangleColorA = new int[vertexCode];
+		this.triangleColorB = new int[vertexCode];
+		this.triangleColorC = new int[vertexCode];
+		if (overlayTexture != -1) {
+			this.triangleTextureId = new int[vertexCode];
 		}
-		local142 = 0;
-		for (local144 = 0; local144 < local86; local144++) {
-			local146 = local534[local142];
-			local148 = local534[local142 + 1];
-			local150 = local534[local142 + 2];
-			@Pc(599) int local599 = local534[local142 + 3];
-			local142 += 4;
-			if (local148 < 4) {
-				local148 = local148 - arg1 & 0x3;
+		vx = 0;
+		for (vz = 0; vz < vertexCode; vz++) {
+			vy = triangleIndexDef[vx];
+			vColor = triangleIndexDef[vx + 1];
+			vOverlayColor = triangleIndexDef[vx + 2];
+			@Pc(599) int vertC = triangleIndexDef[vx + 3];
+			vx += 4;
+			if (vColor < 4) {
+				vColor = vColor - rotation & 0x3;
 			}
-			if (local150 < 4) {
-				local150 = local150 - arg1 & 0x3;
+			if (vOverlayColor < 4) {
+				vOverlayColor = vOverlayColor - rotation & 0x3;
 			}
-			if (local599 < 4) {
-				local599 = local599 - arg1 & 0x3;
+			if (vertC < 4) {
+				vertC = vertC - rotation & 0x3;
 			}
-			this.triangleVertexA[local144] = local148;
-			this.triangleVertexB[local144] = local150;
-			this.triangleVertexC[local144] = local599;
-			if (local146 == 0) {
-				this.triangleColorA[local144] = local66[local148];
-				this.triangleColorB[local144] = local66[local150];
-				this.triangleColorC[local144] = local66[local599];
+			this.triangleVertexA[vz] = vColor;
+			this.triangleVertexB[vz] = vOverlayColor;
+			this.triangleVertexC[vz] = vertC;
+			if (vy == 0) {
+				this.triangleColorA[vz] = underlayVertexColors[vColor];
+				this.triangleColorB[vz] = underlayVertexColors[vOverlayColor];
+				this.triangleColorC[vz] = underlayVertexColors[vertC];
 				if (this.triangleTextureId != null) {
-					this.triangleTextureId[local144] = -1;
+					this.triangleTextureId[vz] = -1;
 				}
 			} else {
-				this.triangleColorA[local144] = local69[local148];
-				this.triangleColorB[local144] = local69[local150];
-				this.triangleColorC[local144] = local69[local599];
+				this.triangleColorA[vz] = overlayVertexColors[vColor];
+				this.triangleColorB[vz] = overlayVertexColors[vOverlayColor];
+				this.triangleColorC[vz] = overlayVertexColors[vertC];
 				if (this.triangleTextureId != null) {
-					this.triangleTextureId[local144] = arg2;
+					this.triangleTextureId[vz] = overlayTexture;
 				}
 			}
 		}
-		local144 = arg5;
-		local146 = arg6;
-		if (arg6 < arg5) {
-			local144 = arg6;
+		vz = heightSW;
+		vy = heightSE;
+		if (heightSE < heightSW) {
+			vz = heightSE;
 		}
-		if (arg6 > arg6) {
-			local146 = arg6;
+		if (heightSE > heightSE) {
+			vy = heightSE;
 		}
-		if (arg7 < local144) {
-			local144 = arg7;
+		if (heightNE < vz) {
+			vz = heightNE;
 		}
-		if (arg7 > arg6) {
-			local146 = arg7;
+		if (heightNE > heightSE) {
+			vy = heightNE;
 		}
-		if (arg8 < local144) {
+		if (heightNW < vz) {
 		}
-		if (arg8 > local146) {
+		if (heightNW > vy) {
 		}
 	}
 }
