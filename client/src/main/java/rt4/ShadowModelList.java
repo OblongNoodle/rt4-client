@@ -19,131 +19,131 @@ public class ShadowModelList {
 	}
 
 	@OriginalMember(owner = "client!dc", name = "a", descriptor = "(IZLclient!tk;IIIIILclient!ak;IIIIB)Lclient!ak;")
-	public static Model getOrCreateShadow(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) SeqType arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) Model arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12) {
-		@Pc(23) long local23 = ((long) arg4 << 48) + (long) (arg7 + (arg0 << 16) + (arg12 << 24)) + ((long) arg6 << 32);
-		@Pc(33) Model local33 = (Model) SHADOWS.get(local23);
-		@Pc(109) int local109;
-		@Pc(115) int local115;
-		@Pc(126) int local126;
-		@Pc(130) int local130;
-		@Pc(162) int local162;
-		if (local33 == null) {
-			@Pc(41) byte local41;
-			if (arg7 == 1) {
-				local41 = 9;
-			} else if (arg7 == 2) {
-				local41 = 12;
-			} else if (arg7 == 3) {
-				local41 = 15;
-			} else if (arg7 == 4) {
-				local41 = 18;
+	public static Model getOrCreateShadow(@OriginalArg(0) int innerAlpha, @OriginalArg(1) boolean adjustForAngle, @OriginalArg(2) SeqType seq, @OriginalArg(3) int fineX, @OriginalArg(4) int innerColor, @OriginalArg(5) int fineZ, @OriginalArg(6) int outerColor, @OriginalArg(7) int radius, @OriginalArg(8) Model model, @OriginalArg(9) int angle, @OriginalArg(10) int frame, @OriginalArg(11) int centerHeight, @OriginalArg(12) int outerAlpha) {
+		@Pc(23) long hashKey = ((long) innerColor << 48) + (long) (radius + (innerAlpha << 16) + (outerAlpha << 24)) + ((long) outerColor << 32);
+		@Pc(33) Model shadowModel = (Model) SHADOWS.get(hashKey);
+		@Pc(109) int maxZ;
+		@Pc(115) int maxX;
+		@Pc(126) int minZ;
+		@Pc(130) int i;
+		@Pc(162) int v;
+		if (shadowModel == null) {
+			@Pc(41) byte segmentCount;
+			if (radius == 1) {
+				segmentCount = 9;
+			} else if (radius == 2) {
+				segmentCount = 12;
+			} else if (radius == 3) {
+				segmentCount = 15;
+			} else if (radius == 4) {
+				segmentCount = 18;
 			} else {
-				local41 = 21;
+				segmentCount = 21;
 			}
-			@Pc(83) int[] local83 = new int[]{64, 96, 128};
-			@Pc(103) RawModel local103 = new RawModel(local41 * 3 + 1, -local41 + local41 * 3 * 2, 0);
-			local109 = local103.addOrReuseGroundVertex(0, 0);
-			@Pc(113) int[][] local113 = new int[3][local41];
-			for (local115 = 0; local115 < 3; local115++) {
-				local126 = local83[local115];
-				local130 = local83[local115];
-				for (@Pc(132) int local132 = 0; local132 < local41; local132++) {
-					@Pc(141) int local141 = (local132 << 11) / local41;
-					@Pc(152) int local152 = arg5 + MathUtils.cos[local141] * local130 >> 16;
-					local162 = arg3 + MathUtils.sin[local141] * local126 >> 16;
-					local113[local115][local132] = local103.addOrReuseGroundVertex(local162, local152);
+			@Pc(83) int[] ringRadii = new int[]{64, 96, 128};
+			@Pc(103) RawModel rawModel = new RawModel(segmentCount * 3 + 1, -segmentCount + segmentCount * 3 * 2, 0);
+			maxZ = rawModel.addOrReuseGroundVertex(0, 0);
+			@Pc(113) int[][] ringVertices = new int[3][segmentCount];
+			for (maxX = 0; maxX < 3; maxX++) {
+				minZ = ringRadii[maxX];
+				i = ringRadii[maxX];
+				for (@Pc(132) int seg = 0; seg < segmentCount; seg++) {
+					@Pc(141) int segAngle = (seg << 11) / segmentCount;
+					@Pc(152) int z = fineZ + MathUtils.cos[segAngle] * i >> 16;
+					v = fineX + MathUtils.sin[segAngle] * minZ >> 16;
+					ringVertices[maxX][seg] = rawModel.addOrReuseGroundVertex(v, z);
 				}
 			}
-			for (local115 = 0; local115 < 3; local115++) {
-				local126 = (local115 * 256 + 128) / 3;
-				local130 = 256 - local126;
-				@Pc(207) byte local207 = (byte) (arg12 * local126 + arg0 * local130 >> 8);
-				@Pc(252) short local252 = (short) (((arg6 & 0x7F) * local130 + (arg4 & 0x7F) * local126 & 0x7F00) + (local130 * (arg6 & 0x380) + local126 * (arg4 & 0x380) & 0x38000) + (local126 * (arg4 & 0xFC00) + (arg6 & 0xFC00) * local130 & 0xFC0000) >> 8);
-				for (local162 = 0; local162 < local41; local162++) {
-					if (local115 == 0) {
-						local103.addTriangle(local109, local113[0][(local162 + 1) % local41], local113[0][local162], local252, local207);
+			for (maxX = 0; maxX < 3; maxX++) {
+				minZ = (maxX * 256 + 128) / 3;
+				i = 256 - minZ;
+				@Pc(207) byte alpha = (byte) (outerAlpha * minZ + innerAlpha * i >> 8);
+				@Pc(252) short color = (short) (((outerColor & 0x7F) * i + (innerColor & 0x7F) * minZ & 0x7F00) + (i * (outerColor & 0x380) + minZ * (innerColor & 0x380) & 0x38000) + (minZ * (innerColor & 0xFC00) + (outerColor & 0xFC00) * i & 0xFC0000) >> 8);
+				for (v = 0; v < segmentCount; v++) {
+					if (maxX == 0) {
+						rawModel.addTriangle(maxZ, ringVertices[0][(v + 1) % segmentCount], ringVertices[0][v], color, alpha);
 					} else {
-						local103.addTriangle(local113[local115 - 1][local162], local113[local115 - 1][(local162 + 1) % local41], local113[local115][(local162 + 1) % local41], local252, local207);
-						local103.addTriangle(local113[local115 - 1][local162], local113[local115][(local162 + 1) % local41], local113[local115][local162], local252, local207);
+						rawModel.addTriangle(ringVertices[maxX - 1][v], ringVertices[maxX - 1][(v + 1) % segmentCount], ringVertices[maxX][(v + 1) % segmentCount], color, alpha);
+						rawModel.addTriangle(ringVertices[maxX - 1][v], ringVertices[maxX][(v + 1) % segmentCount], ringVertices[maxX][v], color, alpha);
 					}
 				}
 			}
-			local33 = local103.createModel(64, 768, -50, -10, -50);
-			SHADOWS.put(local33, local23);
+			shadowModel = rawModel.createModel(64, 768, -50, -10, -50);
+			SHADOWS.put(shadowModel, hashKey);
 		}
-		@Pc(367) int local367 = arg7 * 64 - 1;
-		@Pc(376) int local376 = -local367;
-		@Pc(379) int local379 = -local367;
-		@Pc(381) int local381 = local367;
-		@Pc(384) int local384 = arg8.getMinX();
-		@Pc(386) AnimFrameset local386 = null;
-		local115 = arg8.getMaxX();
-		local126 = arg8.getMinZ();
-		local130 = arg8.getMaxZ();
-		if (arg2 != null) {
-			@Pc(403) int local403 = arg2.frames[arg10];
-			local386 = SeqTypeList.getAnimFrameset(local403 >> 16);
-			arg10 = local403 & 0xFFFF;
+		@Pc(367) int halfExtent = radius * 64 - 1;
+		@Pc(376) int minX = -halfExtent;
+		@Pc(379) int boundsMinZ = -halfExtent;
+		@Pc(381) int boundsMaxX = halfExtent;
+		@Pc(384) int modelMinX = model.getMinX();
+		@Pc(386) AnimFrameset animFrameset = null;
+		maxX = model.getMaxX();
+		minZ = model.getMinZ();
+		i = model.getMaxZ();
+		if (seq != null) {
+			@Pc(403) int frameId = seq.frames[frame];
+			animFrameset = SeqTypeList.getAnimFrameset(frameId >> 16);
+			frame = frameId & 0xFFFF;
 		}
-		local109 = local367;
-		if (arg1) {
-			if (arg9 > 1664 || arg9 < 384) {
-				local379 -= 128;
+		maxZ = halfExtent;
+		if (adjustForAngle) {
+			if (angle > 1664 || angle < 384) {
+				boundsMinZ -= 128;
 			}
-			if (arg9 > 1152 && arg9 < 1920) {
-				local381 = local367 + 128;
+			if (angle > 1152 && angle < 1920) {
+				boundsMaxX = halfExtent + 128;
 			}
-			if (arg9 > 640 && arg9 < 1408) {
-				local109 = local367 + 128;
+			if (angle > 640 && angle < 1408) {
+				maxZ = halfExtent + 128;
 			}
-			if (arg9 > 128 && arg9 < 896) {
-				local376 -= 128;
+			if (angle > 128 && angle < 896) {
+				minX -= 128;
 			}
 		}
-		if (local109 < local130) {
-			local130 = local109;
+		if (maxZ < i) {
+			i = maxZ;
 		}
-		if (local376 > local384) {
-			local384 = local376;
+		if (minX > modelMinX) {
+			modelMinX = minX;
 		}
-		if (local126 < local379) {
-			local126 = local379;
+		if (minZ < boundsMinZ) {
+			minZ = boundsMinZ;
 		}
-		if (local381 < local115) {
-			local115 = local381;
+		if (boundsMaxX < maxX) {
+			maxX = boundsMaxX;
 		}
-		if (local386 == null) {
-			local33 = local33.copyForAnimation(true, true, true);
-			local33.resize((local115 - local384) / 2, 128, (local130 - local126) / 2);
-			local33.translate((local384 + local115) / 2, 0, (local126 + local130) / 2);
+		if (animFrameset == null) {
+			shadowModel = shadowModel.copyForAnimation(true, true, true);
+			shadowModel.resize((maxX - modelMinX) / 2, 128, (i - minZ) / 2);
+			shadowModel.translate((modelMinX + maxX) / 2, 0, (minZ + i) / 2);
 		} else {
-			local33 = local33.copyForAnimation(!local386.isAlphaTransformed(arg10), !local386.isColorTransformed(arg10), true);
-			local33.resize((local115 - local384) / 2, 128, (local130 - local126) / 2);
-			local33.translate((local384 + local115) / 2, 0, (local126 + local130) / 2);
-			local33.applyShadowAnimation(local386, arg10);
+			shadowModel = shadowModel.copyForAnimation(!animFrameset.isAlphaTransformed(frame), !animFrameset.isColorTransformed(frame), true);
+			shadowModel.resize((maxX - modelMinX) / 2, 128, (i - minZ) / 2);
+			shadowModel.translate((modelMinX + maxX) / 2, 0, (minZ + i) / 2);
+			shadowModel.applyShadowAnimation(animFrameset, frame);
 		}
-		if (arg9 != 0) {
-			local33.rotateY(arg9);
+		if (angle != 0) {
+			shadowModel.rotateY(angle);
 		}
 		if (GlRenderer.enabled) {
-			@Pc(650) GlModel local650 = (GlModel) local33;
-			if (SceneGraph.getTileHeight(Player.plane, arg3 + local384, local126 + arg5) != arg11 || SceneGraph.getTileHeight(Player.plane, local115 + arg3, arg5 - -local130) != arg11) {
-				for (local162 = 0; local162 < local650.vertexCount; local162++) {
-					local650.vertexY[local162] += SceneGraph.getTileHeight(Player.plane, local650.vertexX[local162] + arg3, arg5 + local650.vertexZ[local162]) - arg11;
+			@Pc(650) GlModel glModel = (GlModel) shadowModel;
+			if (SceneGraph.getTileHeight(Player.plane, fineX + modelMinX, minZ + fineZ) != centerHeight || SceneGraph.getTileHeight(Player.plane, maxX + fineX, fineZ - -i) != centerHeight) {
+				for (v = 0; v < glModel.vertexCount; v++) {
+					glModel.vertexY[v] += SceneGraph.getTileHeight(Player.plane, glModel.vertexX[v] + fineX, fineZ + glModel.vertexZ[v]) - centerHeight;
 				}
-				local650.bounds.valid = false;
-				local650.vertexBuffer.valid = false;
+				glModel.bounds.valid = false;
+				glModel.vertexBuffer.valid = false;
 			}
 		} else {
-			@Pc(574) SoftwareModel local574 = (SoftwareModel) local33;
-			if (SceneGraph.getTileHeight(Player.plane, arg3 + local384, arg5 - -local126) != arg11 || arg11 != SceneGraph.getTileHeight(Player.plane, arg3 + local115, arg5 - -local130)) {
-				for (local162 = 0; local162 < local574.vertexCount; local162++) {
-					local574.vertexY[local162] += SceneGraph.getTileHeight(Player.plane, arg3 + local574.vertexX[local162], arg5 + local574.vertexZ[local162]) - arg11;
+			@Pc(574) SoftwareModel swModel = (SoftwareModel) shadowModel;
+			if (SceneGraph.getTileHeight(Player.plane, fineX + modelMinX, fineZ - -minZ) != centerHeight || centerHeight != SceneGraph.getTileHeight(Player.plane, fineX + maxX, fineZ - -i)) {
+				for (v = 0; v < swModel.vertexCount; v++) {
+					swModel.vertexY[v] += SceneGraph.getTileHeight(Player.plane, fineX + swModel.vertexX[v], fineZ + swModel.vertexZ[v]) - centerHeight;
 				}
-				local574.boundsValid = false;
+				swModel.boundsValid = false;
 			}
 		}
-		return local33;
+		return shadowModel;
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(Z)V")
