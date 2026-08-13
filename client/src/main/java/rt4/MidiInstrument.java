@@ -33,368 +33,368 @@ public final class MidiInstrument extends Node {
 	public final MidiTrackState[] trackStates = new MidiTrackState[128];
 
 	@OriginalMember(owner = "client!jk", name = "<init>", descriptor = "([B)V")
-	public MidiInstrument(@OriginalArg(0) byte[] arg0) {
-		@Pc(29) int local29 = 0;
+	public MidiInstrument(@OriginalArg(0) byte[] data) {
+		@Pc(29) int runLength = 0;
 		this.noteExclusiveGroup = new byte[128];
-		@Pc(38) Buffer local38 = new Buffer(arg0);
-		while (local38.data[local29 + local38.offset] != 0) {
-			local29++;
+		@Pc(38) Buffer buffer = new Buffer(data);
+		while (buffer.data[runLength + buffer.offset] != 0) {
+			runLength++;
 		}
-		@Pc(55) byte[] local55 = new byte[local29];
-		@Pc(57) int local57;
-		for (local57 = 0; local57 < local29; local57++) {
-			local55[local57] = local38.g1b();
+		@Pc(55) byte[] exclusiveGroupRuns = new byte[runLength];
+		@Pc(57) int i;
+		for (i = 0; i < runLength; i++) {
+			exclusiveGroupRuns[i] = buffer.g1b();
 		}
-		local38.offset++;
-		local29++;
-		local57 = local38.offset;
-		local38.offset += local29;
-		@Pc(91) int local91;
-		for (local91 = 0; local38.data[local38.offset + local91] != 0; local91++) {
+		buffer.offset++;
+		runLength++;
+		i = buffer.offset;
+		buffer.offset += runLength;
+		@Pc(91) int panRunLength;
+		for (panRunLength = 0; buffer.data[buffer.offset + panRunLength] != 0; panRunLength++) {
 		}
-		@Pc(106) byte[] local106 = new byte[local91];
-		@Pc(108) int local108;
-		for (local108 = 0; local108 < local91; local108++) {
-			local106[local108] = local38.g1b();
+		@Pc(106) byte[] panRuns = new byte[panRunLength];
+		@Pc(108) int j;
+		for (j = 0; j < panRunLength; j++) {
+			panRuns[j] = buffer.g1b();
 		}
-		local38.offset++;
-		local91++;
-		@Pc(133) int local133 = 0;
-		local108 = local38.offset;
-		local38.offset += local91;
-		while (local38.data[local133 + local38.offset] != 0) {
-			local133++;
+		buffer.offset++;
+		panRunLength++;
+		@Pc(133) int trackMapRunLength = 0;
+		j = buffer.offset;
+		buffer.offset += panRunLength;
+		while (buffer.data[trackMapRunLength + buffer.offset] != 0) {
+			trackMapRunLength++;
 		}
-		@Pc(159) byte[] local159 = new byte[local133];
-		for (@Pc(161) int local161 = 0; local161 < local133; local161++) {
-			local159[local161] = local38.g1b();
+		@Pc(159) byte[] trackMapRuns = new byte[trackMapRunLength];
+		for (@Pc(161) int k = 0; k < trackMapRunLength; k++) {
+			trackMapRuns[k] = buffer.g1b();
 		}
-		local38.offset++;
-		local133++;
-		@Pc(187) byte[] local187 = new byte[local133];
-		@Pc(194) int local194;
-		@Pc(206) int local206;
-		if (local133 <= 1) {
-			local194 = local133;
+		buffer.offset++;
+		trackMapRunLength++;
+		@Pc(187) byte[] trackMapping = new byte[trackMapRunLength];
+		@Pc(194) int trackStateCount;
+		@Pc(206) int n;
+		if (trackMapRunLength <= 1) {
+			trackStateCount = trackMapRunLength;
 		} else {
-			local194 = 2;
-			local187[1] = 1;
-			@Pc(204) int local204 = 1;
-			for (local206 = 2; local206 < local133; local206++) {
-				@Pc(217) int local217 = local38.g1();
-				if (local217 == 0) {
-					local204 = local194++;
+			trackStateCount = 2;
+			trackMapping[1] = 1;
+			@Pc(204) int groupId = 1;
+			for (n = 2; n < trackMapRunLength; n++) {
+				@Pc(217) int value = buffer.g1();
+				if (value == 0) {
+					groupId = trackStateCount++;
 				} else {
-					if (local217 <= local204) {
-						local217--;
+					if (value <= groupId) {
+						value--;
 					}
-					local204 = local217;
+					groupId = value;
 				}
-				local187[local206] = (byte) local204;
+				trackMapping[n] = (byte) groupId;
 			}
 		}
-		@Pc(242) MidiTrackState[] local242 = new MidiTrackState[local194];
-		for (local206 = 0; local206 < local242.length; local206++) {
-			@Pc(256) MidiTrackState local256 = local242[local206] = new MidiTrackState();
-			@Pc(260) int local260 = local38.g1();
-			if (local260 > 0) {
-				local256.attackEnvelope = new byte[local260 * 2];
+		@Pc(242) MidiTrackState[] states = new MidiTrackState[trackStateCount];
+		for (n = 0; n < states.length; n++) {
+			@Pc(256) MidiTrackState state = states[n] = new MidiTrackState();
+			@Pc(260) int size = buffer.g1();
+			if (size > 0) {
+				state.attackEnvelope = new byte[size * 2];
 			}
-			local260 = local38.g1();
-			if (local260 > 0) {
-				local256.releaseEnvelope = new byte[local260 * 2 + 2];
-				local256.releaseEnvelope[1] = 64;
+			size = buffer.g1();
+			if (size > 0) {
+				state.releaseEnvelope = new byte[size * 2 + 2];
+				state.releaseEnvelope[1] = 64;
 			}
 		}
-		local206 = local38.g1();
-		@Pc(311) byte[] local311 = local206 > 0 ? new byte[local206 * 2] : null;
-		local206 = local38.g1();
-		@Pc(327) byte[] local327 = local206 > 0 ? new byte[local206 * 2] : null;
-		@Pc(329) int local329;
-		for (local329 = 0; local38.data[local329 + local38.offset] != 0; local329++) {
+		n = buffer.g1();
+		@Pc(311) byte[] volumeModifiers = n > 0 ? new byte[n * 2] : null;
+		n = buffer.g1();
+		@Pc(327) byte[] panModifiers = n > 0 ? new byte[n * 2] : null;
+		@Pc(329) int volumeRunLength;
+		for (volumeRunLength = 0; buffer.data[volumeRunLength + buffer.offset] != 0; volumeRunLength++) {
 		}
-		@Pc(346) byte[] local346 = new byte[local329];
-		@Pc(348) int local348;
-		for (local348 = 0; local348 < local329; local348++) {
-			local346[local348] = local38.g1b();
+		@Pc(346) byte[] volumeRuns = new byte[volumeRunLength];
+		@Pc(348) int accumulator;
+		for (accumulator = 0; accumulator < volumeRunLength; accumulator++) {
+			volumeRuns[accumulator] = buffer.g1b();
 		}
-		local38.offset++;
-		local329++;
-		local348 = 0;
-		@Pc(375) int local375;
-		for (local375 = 0; local375 < 128; local375++) {
-			local348 += local38.g1();
-			this.notePitchOffset[local375] = (short) local348;
+		buffer.offset++;
+		volumeRunLength++;
+		accumulator = 0;
+		@Pc(375) int remaining;
+		for (remaining = 0; remaining < 128; remaining++) {
+			accumulator += buffer.g1();
+			this.notePitchOffset[remaining] = (short) accumulator;
 		}
-		local348 = 0;
-		for (local375 = 0; local375 < 128; local375++) {
-			local348 += local38.g1();
-			this.notePitchOffset[local375] = (short) (this.notePitchOffset[local375] + (local348 << 8));
+		accumulator = 0;
+		for (remaining = 0; remaining < 128; remaining++) {
+			accumulator += buffer.g1();
+			this.notePitchOffset[remaining] = (short) (this.notePitchOffset[remaining] + (accumulator << 8));
 		}
-		local375 = 0;
-		@Pc(428) int local428 = 0;
-		@Pc(430) int local430 = 0;
-		@Pc(432) int local432;
-		for (local432 = 0; local432 < 128; local432++) {
-			if (local375 == 0) {
-				if (local346.length > local428) {
-					local375 = local346[local428++];
+		remaining = 0;
+		@Pc(428) int runIndex = 0;
+		@Pc(430) int soundId = 0;
+		@Pc(432) int note;
+		for (note = 0; note < 128; note++) {
+			if (remaining == 0) {
+				if (volumeRuns.length > runIndex) {
+					remaining = volumeRuns[runIndex++];
 				} else {
-					local375 = -1;
+					remaining = -1;
 				}
-				local430 = local38.gVarInt();
+				soundId = buffer.gVarInt();
 			}
-			this.notePitchOffset[local432] = (short) (this.notePitchOffset[local432] + ((local430 - 1 & 0x2) << 14));
-			this.soundLookup[local432] = local430;
-			local375--;
+			this.notePitchOffset[note] = (short) (this.notePitchOffset[note] + ((soundId - 1 & 0x2) << 14));
+			this.soundLookup[note] = soundId;
+			remaining--;
 		}
-		local375 = 0;
-		local432 = 0;
-		local428 = 0;
-		@Pc(496) int local496;
-		for (local496 = 0; local496 < 128; local496++) {
-			if (this.soundLookup[local496] != 0) {
-				if (local375 == 0) {
-					local432 = local38.data[local57++] - 1;
-					if (local55.length > local428) {
-						local375 = local55[local428++];
+		remaining = 0;
+		note = 0;
+		runIndex = 0;
+		@Pc(496) int exclusiveGroup;
+		for (exclusiveGroup = 0; exclusiveGroup < 128; exclusiveGroup++) {
+			if (this.soundLookup[exclusiveGroup] != 0) {
+				if (remaining == 0) {
+					note = buffer.data[i++] - 1;
+					if (exclusiveGroupRuns.length > runIndex) {
+						remaining = exclusiveGroupRuns[runIndex++];
 					} else {
-						local375 = -1;
+						remaining = -1;
 					}
 				}
-				local375--;
-				this.noteExclusiveGroup[local496] = (byte) local432;
+				remaining--;
+				this.noteExclusiveGroup[exclusiveGroup] = (byte) note;
 			}
 		}
-		local375 = 0;
-		local428 = 0;
-		local496 = 0;
-		for (@Pc(550) int local550 = 0; local550 < 128; local550++) {
-			if (this.soundLookup[local550] != 0) {
-				if (local375 == 0) {
-					local496 = local38.data[local108++] + 16 << 2;
-					if (local428 < local106.length) {
-						local375 = local106[local428++];
+		remaining = 0;
+		runIndex = 0;
+		exclusiveGroup = 0;
+		for (@Pc(550) int noteIdx = 0; noteIdx < 128; noteIdx++) {
+			if (this.soundLookup[noteIdx] != 0) {
+				if (remaining == 0) {
+					exclusiveGroup = buffer.data[j++] + 16 << 2;
+					if (runIndex < panRuns.length) {
+						remaining = panRuns[runIndex++];
 					} else {
-						local375 = -1;
+						remaining = -1;
 					}
 				}
-				local375--;
-				this.notePan[local550] = (byte) local496;
+				remaining--;
+				this.notePan[noteIdx] = (byte) exclusiveGroup;
 			}
 		}
-		local428 = 0;
-		local375 = 0;
-		@Pc(609) MidiTrackState local609 = null;
-		@Pc(611) int local611;
-		for (local611 = 0; local611 < 128; local611++) {
-			if (this.soundLookup[local611] != 0) {
-				if (local375 == 0) {
-					local609 = local242[local187[local428]];
-					if (local428 >= local159.length) {
-						local375 = -1;
+		runIndex = 0;
+		remaining = 0;
+		@Pc(609) MidiTrackState currentState = null;
+		@Pc(611) int noteIdx2;
+		for (noteIdx2 = 0; noteIdx2 < 128; noteIdx2++) {
+			if (this.soundLookup[noteIdx2] != 0) {
+				if (remaining == 0) {
+					currentState = states[trackMapping[runIndex]];
+					if (runIndex >= trackMapRuns.length) {
+						remaining = -1;
 					} else {
-						local375 = local159[local428++];
+						remaining = trackMapRuns[runIndex++];
 					}
 				}
-				this.trackStates[local611] = local609;
-				local375--;
+				this.trackStates[noteIdx2] = currentState;
+				remaining--;
 			}
 		}
-		local375 = 0;
-		local428 = 0;
-		local611 = 0;
-		@Pc(664) int local664;
-		for (local664 = 0; local664 < 128; local664++) {
-			if (local375 == 0) {
-				if (local428 < local346.length) {
-					local375 = local346[local428++];
+		remaining = 0;
+		runIndex = 0;
+		noteIdx2 = 0;
+		@Pc(664) int noteIdx3;
+		for (noteIdx3 = 0; noteIdx3 < 128; noteIdx3++) {
+			if (remaining == 0) {
+				if (runIndex < volumeRuns.length) {
+					remaining = volumeRuns[runIndex++];
 				} else {
-					local375 = -1;
+					remaining = -1;
 				}
-				if (this.soundLookup[local664] > 0) {
-					local611 = local38.g1() + 1;
-				}
-			}
-			local375--;
-			this.noteVolume[local664] = (byte) local611;
-		}
-		this.volumeMultiplier = local38.g1() + 1;
-		@Pc(729) MidiTrackState local729;
-		@Pc(734) int local734;
-		for (local664 = 0; local664 < local194; local664++) {
-			local729 = local242[local664];
-			if (local729.attackEnvelope != null) {
-				for (local734 = 1; local734 < local729.attackEnvelope.length; local734 += 2) {
-					local729.attackEnvelope[local734] = local38.g1b();
+				if (this.soundLookup[noteIdx3] > 0) {
+					noteIdx2 = buffer.g1() + 1;
 				}
 			}
-			if (local729.releaseEnvelope != null) {
-				for (local734 = 3; local734 < local729.releaseEnvelope.length - 2; local734 += 2) {
-					local729.releaseEnvelope[local734] = local38.g1b();
+			remaining--;
+			this.noteVolume[noteIdx3] = (byte) noteIdx2;
+		}
+		this.volumeMultiplier = buffer.g1() + 1;
+		@Pc(729) MidiTrackState state;
+		@Pc(734) int envIdx;
+		for (noteIdx3 = 0; noteIdx3 < trackStateCount; noteIdx3++) {
+			state = states[noteIdx3];
+			if (state.attackEnvelope != null) {
+				for (envIdx = 1; envIdx < state.attackEnvelope.length; envIdx += 2) {
+					state.attackEnvelope[envIdx] = buffer.g1b();
 				}
 			}
-		}
-		if (local311 != null) {
-			for (local664 = 1; local664 < local311.length; local664 += 2) {
-				local311[local664] = local38.g1b();
-			}
-		}
-		if (local327 != null) {
-			for (local664 = 1; local664 < local327.length; local664 += 2) {
-				local327[local664] = local38.g1b();
-			}
-		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local729 = local242[local664];
-			if (local729.releaseEnvelope != null) {
-				local348 = 0;
-				for (local734 = 2; local734 < local729.releaseEnvelope.length; local734 += 2) {
-					local348 -= -local38.g1() - 1;
-					local729.releaseEnvelope[local734] = (byte) local348;
+			if (state.releaseEnvelope != null) {
+				for (envIdx = 3; envIdx < state.releaseEnvelope.length - 2; envIdx += 2) {
+					state.releaseEnvelope[envIdx] = buffer.g1b();
 				}
 			}
 		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local729 = local242[local664];
-			if (local729.attackEnvelope != null) {
-				local348 = 0;
-				for (local734 = 2; local734 < local729.attackEnvelope.length; local734 += 2) {
-					local348 = local348 + local38.g1() + 1;
-					local729.attackEnvelope[local734] = (byte) local348;
+		if (volumeModifiers != null) {
+			for (noteIdx3 = 1; noteIdx3 < volumeModifiers.length; noteIdx3 += 2) {
+				volumeModifiers[noteIdx3] = buffer.g1b();
+			}
+		}
+		if (panModifiers != null) {
+			for (noteIdx3 = 1; noteIdx3 < panModifiers.length; noteIdx3 += 2) {
+				panModifiers[noteIdx3] = buffer.g1b();
+			}
+		}
+		for (noteIdx3 = 0; noteIdx3 < trackStateCount; noteIdx3++) {
+			state = states[noteIdx3];
+			if (state.releaseEnvelope != null) {
+				accumulator = 0;
+				for (envIdx = 2; envIdx < state.releaseEnvelope.length; envIdx += 2) {
+					accumulator -= -buffer.g1() - 1;
+					state.releaseEnvelope[envIdx] = (byte) accumulator;
 				}
 			}
 		}
-		@Pc(995) byte local995;
-		@Pc(1014) int local1014;
-		@Pc(1016) int local1016;
-		@Pc(1031) int local1031;
-		@Pc(1066) int local1066;
-		@Pc(954) byte local954;
-		if (local311 != null) {
-			local348 = local38.g1();
-			local311[0] = (byte) local348;
-			for (local664 = 2; local664 < local311.length; local664 += 2) {
-				local348 = local348 + local38.g1() + 1;
-				local311[local664] = (byte) local348;
-			}
-			local954 = local311[0];
-			@Pc(958) byte local958 = local311[1];
-			for (local734 = 0; local734 < local954; local734++) {
-				this.noteVolume[local734] = (byte) (local958 * this.noteVolume[local734] + 32 >> 6);
-			}
-			local734 = 2;
-			while (local734 < local311.length) {
-				local995 = local311[local734];
-				@Pc(1001) byte local1001 = local311[local734 + 1];
-				local734 += 2;
-				local1014 = (local995 - local954) * local958 + (local995 - local954) / 2;
-				for (local1016 = local954; local1016 < local995; local1016++) {
-					local1031 = floorDiv(local1014, local995 - local954);
-					local1014 += local1001 - local958;
-					this.noteVolume[local1016] = (byte) (local1031 * this.noteVolume[local1016] + 32 >> 6);
+		for (noteIdx3 = 0; noteIdx3 < trackStateCount; noteIdx3++) {
+			state = states[noteIdx3];
+			if (state.attackEnvelope != null) {
+				accumulator = 0;
+				for (envIdx = 2; envIdx < state.attackEnvelope.length; envIdx += 2) {
+					accumulator = accumulator + buffer.g1() + 1;
+					state.attackEnvelope[envIdx] = (byte) accumulator;
 				}
-				local958 = local1001;
-				local954 = local995;
-			}
-			for (local1066 = local954; local1066 < 128; local1066++) {
-				this.noteVolume[local1066] = (byte) (this.noteVolume[local1066] * local958 + 32 >> 6);
 			}
 		}
-		if (local327 != null) {
-			local348 = local38.g1();
-			local327[0] = (byte) local348;
-			for (local664 = 2; local664 < local327.length; local664 += 2) {
-				local348 = local348 + local38.g1() + 1;
-				local327[local664] = (byte) local348;
+		@Pc(995) byte nextNote;
+		@Pc(1014) int interpolation;
+		@Pc(1016) int noteKey;
+		@Pc(1031) int scaledValue;
+		@Pc(1066) int noteKey2;
+		@Pc(954) byte prevNote;
+		if (volumeModifiers != null) {
+			accumulator = buffer.g1();
+			volumeModifiers[0] = (byte) accumulator;
+			for (noteIdx3 = 2; noteIdx3 < volumeModifiers.length; noteIdx3 += 2) {
+				accumulator = accumulator + buffer.g1() + 1;
+				volumeModifiers[noteIdx3] = (byte) accumulator;
 			}
-			local954 = local327[0];
-			@Pc(1133) int local1133 = local327[1] << 1;
-			for (local734 = 0; local734 < local954; local734++) {
-				local1066 = local1133 + (this.notePan[local734] & 0xFF);
-				if (local1066 < 0) {
-					local1066 = 0;
-				}
-				if (local1066 > 128) {
-					local1066 = 128;
-				}
-				this.notePan[local734] = (byte) local1066;
+			prevNote = volumeModifiers[0];
+			@Pc(958) byte prevValue = volumeModifiers[1];
+			for (envIdx = 0; envIdx < prevNote; envIdx++) {
+				this.noteVolume[envIdx] = (byte) (prevValue * this.noteVolume[envIdx] + 32 >> 6);
 			}
-			local734 = 2;
-			@Pc(1207) int local1207;
-			while (local734 < local327.length) {
-				local995 = local327[local734];
-				local1014 = (local995 - local954) * local1133 + (local995 - local954) / 2;
-				local1207 = local327[local734 + 1] << 1;
-				local734 += 2;
-				for (local1016 = local954; local1016 < local995; local1016++) {
-					local1031 = floorDiv(local1014, local995 - local954);
-					local1014 += local1207 - local1133;
-					@Pc(1237) int local1237 = local1031 + (this.notePan[local1016] & 0xFF);
-					if (local1237 < 0) {
-						local1237 = 0;
+			envIdx = 2;
+			while (envIdx < volumeModifiers.length) {
+				nextNote = volumeModifiers[envIdx];
+				@Pc(1001) byte nextValue = volumeModifiers[envIdx + 1];
+				envIdx += 2;
+				interpolation = (nextNote - prevNote) * prevValue + (nextNote - prevNote) / 2;
+				for (noteKey = prevNote; noteKey < nextNote; noteKey++) {
+					scaledValue = floorDiv(interpolation, nextNote - prevNote);
+					interpolation += nextValue - prevValue;
+					this.noteVolume[noteKey] = (byte) (scaledValue * this.noteVolume[noteKey] + 32 >> 6);
+				}
+				prevValue = nextValue;
+				prevNote = nextNote;
+			}
+			for (noteKey2 = prevNote; noteKey2 < 128; noteKey2++) {
+				this.noteVolume[noteKey2] = (byte) (this.noteVolume[noteKey2] * prevValue + 32 >> 6);
+			}
+		}
+		if (panModifiers != null) {
+			accumulator = buffer.g1();
+			panModifiers[0] = (byte) accumulator;
+			for (noteIdx3 = 2; noteIdx3 < panModifiers.length; noteIdx3 += 2) {
+				accumulator = accumulator + buffer.g1() + 1;
+				panModifiers[noteIdx3] = (byte) accumulator;
+			}
+			prevNote = panModifiers[0];
+			@Pc(1133) int prevPan = panModifiers[1] << 1;
+			for (envIdx = 0; envIdx < prevNote; envIdx++) {
+				noteKey2 = prevPan + (this.notePan[envIdx] & 0xFF);
+				if (noteKey2 < 0) {
+					noteKey2 = 0;
+				}
+				if (noteKey2 > 128) {
+					noteKey2 = 128;
+				}
+				this.notePan[envIdx] = (byte) noteKey2;
+			}
+			envIdx = 2;
+			@Pc(1207) int nextPan;
+			while (envIdx < panModifiers.length) {
+				nextNote = panModifiers[envIdx];
+				interpolation = (nextNote - prevNote) * prevPan + (nextNote - prevNote) / 2;
+				nextPan = panModifiers[envIdx + 1] << 1;
+				envIdx += 2;
+				for (noteKey = prevNote; noteKey < nextNote; noteKey++) {
+					scaledValue = floorDiv(interpolation, nextNote - prevNote);
+					interpolation += nextPan - prevPan;
+					@Pc(1237) int adjustedPan = scaledValue + (this.notePan[noteKey] & 0xFF);
+					if (adjustedPan < 0) {
+						adjustedPan = 0;
 					}
-					if (local1237 > 128) {
-						local1237 = 128;
+					if (adjustedPan > 128) {
+						adjustedPan = 128;
 					}
-					this.notePan[local1016] = (byte) local1237;
+					this.notePan[noteKey] = (byte) adjustedPan;
 				}
-				local954 = local995;
-				local1133 = local1207;
+				prevNote = nextNote;
+				prevPan = nextPan;
 			}
-			for (local1066 = local954; local1066 < 128; local1066++) {
-				local1207 = (this.notePan[local1066] & 0xFF) + local1133;
-				if (local1207 < 0) {
-					local1207 = 0;
+			for (noteKey2 = prevNote; noteKey2 < 128; noteKey2++) {
+				nextPan = (this.notePan[noteKey2] & 0xFF) + prevPan;
+				if (nextPan < 0) {
+					nextPan = 0;
 				}
-				if (local1207 > 128) {
-					local1207 = 128;
+				if (nextPan > 128) {
+					nextPan = 128;
 				}
-				this.notePan[local1066] = (byte) local1207;
+				this.notePan[noteKey2] = (byte) nextPan;
 			}
 		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local242[local664].decayRate = local38.g1();
+		for (noteIdx3 = 0; noteIdx3 < trackStateCount; noteIdx3++) {
+			states[noteIdx3].decayRate = buffer.g1();
 		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local729 = local242[local664];
-			if (local729.attackEnvelope != null) {
-				local729.attackRate = local38.g1();
+		for (noteIdx3 = 0; noteIdx3 < trackStateCount; noteIdx3++) {
+			state = states[noteIdx3];
+			if (state.attackEnvelope != null) {
+				state.attackRate = buffer.g1();
 			}
-			if (local729.releaseEnvelope != null) {
-				local729.releaseRate = local38.g1();
+			if (state.releaseEnvelope != null) {
+				state.releaseRate = buffer.g1();
 			}
-			if (local729.decayRate > 0) {
-				local729.sustainRate = local38.g1();
-			}
-		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local242[local664].vibratoSpeed = local38.g1();
-		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local729 = local242[local664];
-			if (local729.vibratoSpeed > 0) {
-				local729.vibratoDepth = local38.g1();
+			if (state.decayRate > 0) {
+				state.sustainRate = buffer.g1();
 			}
 		}
-		for (local664 = 0; local664 < local194; local664++) {
-			local729 = local242[local664];
-			if (local729.vibratoDepth > 0) {
-				local729.vibratoDelay = local38.g1();
+		for (noteIdx3 = 0; noteIdx3 < trackStateCount; noteIdx3++) {
+			states[noteIdx3].vibratoSpeed = buffer.g1();
+		}
+		for (noteIdx3 = 0; noteIdx3 < trackStateCount; noteIdx3++) {
+			state = states[noteIdx3];
+			if (state.vibratoSpeed > 0) {
+				state.vibratoDepth = buffer.g1();
+			}
+		}
+		for (noteIdx3 = 0; noteIdx3 < trackStateCount; noteIdx3++) {
+			state = states[noteIdx3];
+			if (state.vibratoDepth > 0) {
+				state.vibratoDelay = buffer.g1();
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!sa", name = "c", descriptor = "(III)I")
-	public static int floorDiv(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(12) int local12 = arg0 >>> 31;
-		return (arg0 + local12) / arg1 - local12;
+	public static int floorDiv(@OriginalArg(0) int numerator, @OriginalArg(2) int denominator) {
+		@Pc(12) int sign = numerator >>> 31;
+		return (numerator + sign) / denominator - sign;
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(ILclient!ve;I)Lclient!jk;")
-	public static MidiInstrument loadInstrument(@OriginalArg(1) Js5 arg0, @OriginalArg(2) int arg1) {
-		@Pc(9) byte[] local9 = arg0.fetchFile(arg1);
-		return local9 == null ? null : new MidiInstrument(local9);
+	public static MidiInstrument loadInstrument(@OriginalArg(1) Js5 js5, @OriginalArg(2) int fileId) {
+		@Pc(9) byte[] data = js5.fetchFile(fileId);
+		return data == null ? null : new MidiInstrument(data);
 	}
 
 	@OriginalMember(owner = "client!jk", name = "d", descriptor = "(B)V")
@@ -403,32 +403,32 @@ public final class MidiInstrument extends Node {
 	}
 
 	@OriginalMember(owner = "client!jk", name = "a", descriptor = "(I[ILclient!le;[B)Z")
-	public final boolean resolveSounds(@OriginalArg(1) int[] arg0, @OriginalArg(2) SoundBank arg1, @OriginalArg(3) byte[] arg2) {
-		@Pc(8) int local8 = 0;
-		@Pc(10) PcmSound local10 = null;
-		@Pc(16) boolean local16 = true;
-		for (@Pc(18) int local18 = 0; local18 < 128; local18++) {
-			if (arg2 == null || arg2[local18] != 0) {
-				@Pc(35) int local35 = this.soundLookup[local18];
-				if (local35 != 0) {
-					if (local8 != local35) {
-						local8 = local35--;
-						if ((local35 & 0x1) == 0) {
-							local10 = arg1.getSynthSound(local35 >> 2, arg0);
+	public final boolean resolveSounds(@OriginalArg(1) int[] pendingIds, @OriginalArg(2) SoundBank soundBank, @OriginalArg(3) byte[] filter) {
+		@Pc(8) int lastSoundId = 0;
+		@Pc(10) PcmSound sound = null;
+		@Pc(16) boolean allResolved = true;
+		for (@Pc(18) int note = 0; note < 128; note++) {
+			if (filter == null || filter[note] != 0) {
+				@Pc(35) int soundId = this.soundLookup[note];
+				if (soundId != 0) {
+					if (lastSoundId != soundId) {
+						lastSoundId = soundId--;
+						if ((soundId & 0x1) == 0) {
+							sound = soundBank.getSynthSound(soundId >> 2, pendingIds);
 						} else {
-							local10 = arg1.getVorbisSound(local35 >> 2, arg0);
+							sound = soundBank.getVorbisSound(soundId >> 2, pendingIds);
 						}
-						if (local10 == null) {
-							local16 = false;
+						if (sound == null) {
+							allResolved = false;
 						}
 					}
-					if (local10 != null) {
-						this.sounds[local18] = local10;
-						this.soundLookup[local18] = 0;
+					if (sound != null) {
+						this.sounds[note] = sound;
+						this.soundLookup[note] = 0;
 					}
 				}
 			}
 		}
-		return local16;
+		return allResolved;
 	}
 }
