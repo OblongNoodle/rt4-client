@@ -29,13 +29,13 @@ public final class PlainTile {
 	public final int textureId;
 
 	@OriginalMember(owner = "client!rh", name = "<init>", descriptor = "(IIIIIIZ)V")
-	public PlainTile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
-		this.colorSE = arg1;
-		this.colorNE = arg2;
-		this.colorSW = arg0;
-		this.flatColor = arg5;
-		this.flat = arg6;
-		this.colorNW = arg3;
-		this.textureId = arg4;
+	public PlainTile(@OriginalArg(0) int colorSW, @OriginalArg(1) int colorSE, @OriginalArg(2) int colorNE, @OriginalArg(3) int colorNW, @OriginalArg(4) int textureId, @OriginalArg(5) int flatColor, @OriginalArg(6) boolean flat) {
+		this.colorSE = colorSE;
+		this.colorNE = colorNE;
+		this.colorSW = colorSW;
+		this.flatColor = flatColor;
+		this.flat = flat;
+		this.colorNW = colorNW;
+		this.textureId = textureId;
 	}
 }

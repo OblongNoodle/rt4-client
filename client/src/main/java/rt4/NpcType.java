@@ -173,17 +173,17 @@ public final class NpcType {
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(B)Lclient!me;")
 	public final NpcType getMultiNpc() {
-		@Pc(5) int local5 = -1;
+		@Pc(5) int varpValue = -1;
 		if (this.multiNpcVarbit != -1) {
-			local5 = VarpDomain.getVarbit(this.multiNpcVarbit);
+			varpValue = VarpDomain.getVarbit(this.multiNpcVarbit);
 		} else if (this.multiNpcVarp != -1) {
-			local5 = VarpDomain.activeVarps[this.multiNpcVarp];
+			varpValue = VarpDomain.activeVarps[this.multiNpcVarp];
 		}
-		if (local5 < 0 || local5 >= this.multiNpcs.length - 1 || this.multiNpcs[local5] == -1) {
-			@Pc(55) int local55 = this.multiNpcs[this.multiNpcs.length - 1];
-			return local55 == -1 ? null : NpcTypeList.get(local55);
+		if (varpValue < 0 || varpValue >= this.multiNpcs.length - 1 || this.multiNpcs[varpValue] == -1) {
+			@Pc(55) int defaultNpcId = this.multiNpcs[this.multiNpcs.length - 1];
+			return defaultNpcId == -1 ? null : NpcTypeList.get(defaultNpcId);
 		} else {
-			return NpcTypeList.get(this.multiNpcs[local5]);
+			return NpcTypeList.get(this.multiNpcs[varpValue]);
 		}
 	}
 
@@ -192,15 +192,15 @@ public final class NpcType {
 		if (this.multiNpcs == null) {
 			return true;
 		}
-		@Pc(16) int local16 = -1;
+		@Pc(16) int varpValue = -1;
 		if (this.multiNpcVarbit != -1) {
-			local16 = VarpDomain.getVarbit(this.multiNpcVarbit);
+			varpValue = VarpDomain.getVarbit(this.multiNpcVarbit);
 		} else if (this.multiNpcVarp != -1) {
-			local16 = VarpDomain.activeVarps[this.multiNpcVarp];
+			varpValue = VarpDomain.activeVarps[this.multiNpcVarp];
 		}
-		if (local16 < 0 || local16 >= this.multiNpcs.length - 1 || this.multiNpcs[local16] == -1) {
-			@Pc(62) int local62 = this.multiNpcs[this.multiNpcs.length - 1];
-			return local62 != -1;
+		if (varpValue < 0 || varpValue >= this.multiNpcs.length - 1 || this.multiNpcs[varpValue] == -1) {
+			@Pc(62) int defaultNpcId = this.multiNpcs[this.multiNpcs.length - 1];
+			return defaultNpcId != -1;
 		} else {
 			return true;
 		}
@@ -211,10 +211,10 @@ public final class NpcType {
 		if (this.multiNpcs == null) {
 			return this.idleSound != -1 || this.walkSound != -1 || this.runSound != -1;
 		}
-		for (@Pc(35) int local35 = 0; local35 < this.multiNpcs.length; local35++) {
-			if (this.multiNpcs[local35] != -1) {
-				@Pc(60) NpcType local60 = NpcTypeList.get(this.multiNpcs[local35]);
-				if (local60.idleSound != -1 || local60.walkSound != -1 || local60.runSound != -1) {
+		for (@Pc(35) int i = 0; i < this.multiNpcs.length; i++) {
+			if (this.multiNpcs[i] != -1) {
+				@Pc(60) NpcType npcType = NpcTypeList.get(this.multiNpcs[i]);
+				if (npcType.idleSound != -1 || npcType.walkSound != -1 || npcType.runSound != -1) {
 					return true;
 				}
 			}
@@ -223,282 +223,282 @@ public final class NpcType {
 	}
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(III)I")
-	public final int getParam(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
+	public final int getParam(@OriginalArg(0) int paramId, @OriginalArg(2) int defaultValue) {
 		if (this.params == null) {
-			return arg1;
+			return defaultValue;
 		} else {
-			@Pc(18) IntNode local18 = (IntNode) this.params.get(arg0);
-			return local18 == null ? arg1 : local18.value;
+			@Pc(18) IntNode node = (IntNode) this.params.get(paramId);
+			return node == null ? defaultValue : node.value;
 		}
 	}
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "([Lclient!ub;IBIIIILclient!tk;ILclient!tk;)Lclient!ak;")
-	public final Model getBodyModel(@OriginalArg(0) SlotAnimation[] seqs, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) SeqType seqType1, @OriginalArg(8) int arg7, @OriginalArg(9) SeqType seqType2) {
+	public final Model getBodyModel(@OriginalArg(0) SlotAnimation[] seqs, @OriginalArg(1) int tweenFrame1, @OriginalArg(3) int currentFrame1, @OriginalArg(4) int tweenFrame2, @OriginalArg(5) int delayClock2, @OriginalArg(6) int currentFrame2, @OriginalArg(7) SeqType primarySeqType, @OriginalArg(8) int delayClock1, @OriginalArg(9) SeqType secondarySeqType) {
 		if (this.multiNpcs != null) {
-			@Pc(13) NpcType local13 = this.getMultiNpc();
-			return local13 == null ? null : local13.getBodyModel(seqs, arg1, arg2, arg3, arg4, arg5, seqType1, arg7, seqType2);
+			@Pc(13) NpcType multiNpc = this.getMultiNpc();
+			return multiNpc == null ? null : multiNpc.getBodyModel(seqs, tweenFrame1, currentFrame1, tweenFrame2, delayClock2, currentFrame2, primarySeqType, delayClock1, secondarySeqType);
 		}
-		@Pc(40) Model local40 = (Model) NpcTypeList.models.get(this.id);
-		@Pc(46) boolean local46;
-		@Pc(173) int local173;
-		@Pc(235) int local235;
-		@Pc(221) int local221;
-		@Pc(200) int local200;
-		@Pc(207) int local207;
-		@Pc(214) int local214;
-		@Pc(228) int local228;
-		@Pc(300) int local300;
-		@Pc(324) int local324;
-		@Pc(318) int local318;
-		@Pc(330) int local330;
-		if (local40 == null) {
-			local46 = false;
-			for (@Pc(48) int local48 = 0; local48 < this.modelIndices.length; local48++) {
-				if (this.modelIndices[local48] != -1 && !NpcTypeList.modelsArchive.isFileReady(0, this.modelIndices[local48])) {
-					local46 = true;
+		@Pc(40) Model model = (Model) NpcTypeList.models.get(this.id);
+		@Pc(46) boolean hasSlotAnim;
+		@Pc(173) int i;
+		@Pc(235) int frame;
+		@Pc(221) int tweenFrame;
+		@Pc(200) int translateZ;
+		@Pc(207) int rotateX;
+		@Pc(214) int rotateY;
+		@Pc(228) int frameGroupId;
+		@Pc(300) int frameDelay;
+		@Pc(324) int groupId;
+		@Pc(318) int slot;
+		@Pc(330) int slotMask;
+		if (model == null) {
+			hasSlotAnim = false;
+			for (@Pc(48) int j = 0; j < this.modelIndices.length; j++) {
+				if (this.modelIndices[j] != -1 && !NpcTypeList.modelsArchive.isFileReady(0, this.modelIndices[j])) {
+					hasSlotAnim = true;
 				}
 			}
-			if (local46) {
+			if (hasSlotAnim) {
 				return null;
 			}
-			@Pc(84) RawModel[] local84 = new RawModel[this.modelIndices.length];
-			for (@Pc(86) int local86 = 0; local86 < this.modelIndices.length; local86++) {
-				if (this.modelIndices[local86] != -1) {
-					local84[local86] = RawModel.create(NpcTypeList.modelsArchive, this.modelIndices[local86]);
-					if (this.modeloffsets != null && this.modeloffsets[local86] != null && local84[local86] != null) {
-						local84[local86].translate(this.modeloffsets[local86][0], this.modeloffsets[local86][1], this.modeloffsets[local86][2]);
+			@Pc(84) RawModel[] rawModels = new RawModel[this.modelIndices.length];
+			for (@Pc(86) int j = 0; j < this.modelIndices.length; j++) {
+				if (this.modelIndices[j] != -1) {
+					rawModels[j] = RawModel.create(NpcTypeList.modelsArchive, this.modelIndices[j]);
+					if (this.modeloffsets != null && this.modeloffsets[j] != null && rawModels[j] != null) {
+						rawModels[j].translate(this.modeloffsets[j][0], this.modeloffsets[j][1], this.modeloffsets[j][2]);
 					}
 				}
 			}
-			@Pc(156) BasType local156 = null;
+			@Pc(156) BasType basType = null;
 			if (this.bastypeid != -1) {
-				local156 = BasTypeList.get(this.bastypeid);
+				basType = BasTypeList.get(this.bastypeid);
 			}
-			if (local156 != null && local156.modelRotateTranslate != null) {
-				for (local173 = 0; local173 < local156.modelRotateTranslate.length; local173++) {
-					if (local156.modelRotateTranslate[local173] != null && local84.length > local173 && local84[local173] != null) {
-						local200 = local156.modelRotateTranslate[local173][2];
-						local207 = local156.modelRotateTranslate[local173][3];
-						local214 = local156.modelRotateTranslate[local173][4];
-						local221 = local156.modelRotateTranslate[local173][1];
-						local228 = local156.modelRotateTranslate[local173][5];
-						local235 = local156.modelRotateTranslate[local173][0];
+			if (basType != null && basType.modelRotateTranslate != null) {
+				for (i = 0; i < basType.modelRotateTranslate.length; i++) {
+					if (basType.modelRotateTranslate[i] != null && rawModels.length > i && rawModels[i] != null) {
+						translateZ = basType.modelRotateTranslate[i][2];
+						rotateX = basType.modelRotateTranslate[i][3];
+						rotateY = basType.modelRotateTranslate[i][4];
+						tweenFrame = basType.modelRotateTranslate[i][1];
+						frameGroupId = basType.modelRotateTranslate[i][5];
+						frame = basType.modelRotateTranslate[i][0];
 						if (this.modelTransformCache == null) {
-							this.modelTransformCache = new int[local156.modelRotateTranslate.length][];
+							this.modelTransformCache = new int[basType.modelRotateTranslate.length][];
 						}
-						if (this.modelTransformCache[local173] == null) {
-							@Pc(259) int[] local259 = this.modelTransformCache[local173] = new int[15];
-							if (local207 == 0 && local214 == 0 && local228 == 0) {
-								local259[13] = -local221;
-								local259[14] = -local200;
-								local259[0] = local259[4] = local259[8] = 32768;
-								local259[12] = -local235;
+						if (this.modelTransformCache[i] == null) {
+							@Pc(259) int[] matrix = this.modelTransformCache[i] = new int[15];
+							if (rotateX == 0 && rotateY == 0 && frameGroupId == 0) {
+								matrix[13] = -tweenFrame;
+								matrix[14] = -translateZ;
+								matrix[0] = matrix[4] = matrix[8] = 32768;
+								matrix[12] = -frame;
 							} else {
-								local300 = MathUtils.cos[local207] >> 1;
-								@Pc(306) int local306 = MathUtils.sin[local207] >> 1;
-								@Pc(312) int local312 = MathUtils.cos[local214] >> 1;
-								local318 = MathUtils.cos[local228] >> 1;
-								local324 = MathUtils.sin[local214] >> 1;
-								local330 = MathUtils.sin[local228] >> 1;
-								local259[3] = local300 * local330 + 16384 >> 15;
-								local259[8] = local300 * local312 + 16384 >> 15;
-								local259[5] = -local306;
-								@Pc(363) int local363 = local306 * local330 + 16384 >> 15;
-								@Pc(371) int local371 = local318 * local306 + 16384 >> 15;
-								local259[1] = -local330 * local312 + local371 * local324 + 16384 >> 15;
-								local259[2] = local324 * local300 + 16384 >> 15;
-								local259[6] = -local324 * local318 + local363 * local312 + 16384 >> 15;
-								local259[14] = local259[8] * -local200 + -local221 * local259[5] + local259[2] * -local235 + 16384 >> 15;
-								local259[4] = local300 * local318 + 16384 >> 15;
-								local259[7] = -local324 * -local330 + local371 * local312 + 16384 >> 15;
-								local259[0] = local324 * local363 + local312 * local318 + 16384 >> 15;
-								local259[12] = local259[6] * -local200 + local259[3] * -local221 + -local235 * local259[0] + 16384 >> 15;
-								local259[13] = -local200 * local259[7] + -local235 * local259[1] + -local221 * local259[4] + 16384 >> 15;
+								frameDelay = MathUtils.cos[rotateX] >> 1;
+								@Pc(306) int sinRX = MathUtils.sin[rotateX] >> 1;
+								@Pc(312) int cosRY = MathUtils.cos[rotateY] >> 1;
+								slot = MathUtils.cos[frameGroupId] >> 1;
+								groupId = MathUtils.sin[rotateY] >> 1;
+								slotMask = MathUtils.sin[frameGroupId] >> 1;
+								matrix[3] = frameDelay * slotMask + 16384 >> 15;
+								matrix[8] = frameDelay * cosRY + 16384 >> 15;
+								matrix[5] = -sinRX;
+								@Pc(363) int sinRXsinRZ = sinRX * slotMask + 16384 >> 15;
+								@Pc(371) int cosRZsinRX = slot * sinRX + 16384 >> 15;
+								matrix[1] = -slotMask * cosRY + cosRZsinRX * groupId + 16384 >> 15;
+								matrix[2] = groupId * frameDelay + 16384 >> 15;
+								matrix[6] = -groupId * slot + sinRXsinRZ * cosRY + 16384 >> 15;
+								matrix[14] = matrix[8] * -translateZ + -tweenFrame * matrix[5] + matrix[2] * -frame + 16384 >> 15;
+								matrix[4] = frameDelay * slot + 16384 >> 15;
+								matrix[7] = -groupId * -slotMask + cosRZsinRX * cosRY + 16384 >> 15;
+								matrix[0] = groupId * sinRXsinRZ + cosRY * slot + 16384 >> 15;
+								matrix[12] = matrix[6] * -translateZ + matrix[3] * -tweenFrame + -frame * matrix[0] + 16384 >> 15;
+								matrix[13] = -translateZ * matrix[7] + -frame * matrix[1] + -tweenFrame * matrix[4] + 16384 >> 15;
 							}
-							local259[10] = local221;
-							local259[9] = local235;
-							local259[11] = local200;
+							matrix[10] = tweenFrame;
+							matrix[9] = frame;
+							matrix[11] = translateZ;
 						}
-						if (local207 != 0 || local214 != 0 || local228 != 0) {
-							local84[local173].rotateXYZ(local207, local214, local228);
+						if (rotateX != 0 || rotateY != 0 || frameGroupId != 0) {
+							rawModels[i].rotateXYZ(rotateX, rotateY, frameGroupId);
 						}
-						if (local235 != 0 || local221 != 0 || local200 != 0) {
-							local84[local173].translate(local235, local221, local200);
+						if (frame != 0 || tweenFrame != 0 || translateZ != 0) {
+							rawModels[i].translate(frame, tweenFrame, translateZ);
 						}
 					}
 				}
 			}
-			@Pc(593) RawModel local593;
-			if (local84.length == 1) {
-				local593 = local84[0];
+			@Pc(593) RawModel rawModel;
+			if (rawModels.length == 1) {
+				rawModel = rawModels[0];
 			} else {
-				local593 = new RawModel(local84, local84.length);
+				rawModel = new RawModel(rawModels, rawModels.length);
 			}
 			if (this.recol_s != null) {
-				for (local173 = 0; local173 < this.recol_s.length; local173++) {
-					if (this.recol_p == null || this.recol_p.length <= local173) {
-						local593.recolor(this.recol_s[local173], this.recol_d[local173]);
+				for (i = 0; i < this.recol_s.length; i++) {
+					if (this.recol_p == null || this.recol_p.length <= i) {
+						rawModel.recolor(this.recol_s[i], this.recol_d[i]);
 					} else {
-						local593.recolor(this.recol_s[local173], client.npcRecolorPalette[this.recol_p[local173] & 0xFF]);
+						rawModel.recolor(this.recol_s[i], client.npcRecolorPalette[this.recol_p[i] & 0xFF]);
 					}
 				}
 			}
 			if (this.retex_s != null) {
-				for (local173 = 0; local173 < this.retex_s.length; local173++) {
-					local593.retexture(this.retex_s[local173], this.retex_d[local173]);
+				for (i = 0; i < this.retex_s.length; i++) {
+					rawModel.retexture(this.retex_s[i], this.retex_d[i]);
 				}
 			}
-			local40 = local593.createModel(this.ambient + 64, this.contrast + 850, -30, -50, -30);
+			model = rawModel.createModel(this.ambient + 64, this.contrast + 850, -30, -50, -30);
 			if (GlRenderer.enabled) {
-				((GlModel) local40).uploadBuffers(false, false, false, false, false, true);
+				((GlModel) model).uploadBuffers(false, false, false, false, false, true);
 			}
-			NpcTypeList.models.put(local40, this.id);
+			NpcTypeList.models.put(model, this.id);
 		}
-		local46 = false;
-		@Pc(721) boolean local721 = false;
-		@Pc(723) boolean local723 = false;
-		@Pc(725) boolean local725 = false;
-		local173 = seqs == null ? 0 : seqs.length;
-		for (local235 = 0; local235 < local173; local235++) {
-			if (seqs[local235] != null) {
-				@Pc(753) SeqType local753 = SeqTypeList.get(seqs[local235].seqId);
-				if (local753.frames != null) {
-					slotSeqTypes[local235] = local753;
-					local207 = seqs[local235].nextFrame;
-					local46 = true;
-					local200 = seqs[local235].currentFrame;
-					local214 = local753.frames[local200];
-					slotCurrentFramesets[local235] = SeqTypeList.getAnimFrameset(local214 >>> 16);
-					local214 &= 0xFFFF;
-					slotCurrentFrames[local235] = local214;
-					if (slotCurrentFramesets[local235] != null) {
-						local723 |= slotCurrentFramesets[local235].isColorTransformed(local214);
-						local721 |= slotCurrentFramesets[local235].isAlphaTransformed(local214);
-						local725 |= local753.hasModelTransforms;
+		hasSlotAnim = false;
+		@Pc(721) boolean hasAlphaTransform = false;
+		@Pc(723) boolean hasColorTransform = false;
+		@Pc(725) boolean hasModelTransform = false;
+		i = seqs == null ? 0 : seqs.length;
+		for (frame = 0; frame < i; frame++) {
+			if (seqs[frame] != null) {
+				@Pc(753) SeqType slotSeqType = SeqTypeList.get(seqs[frame].seqId);
+				if (slotSeqType.frames != null) {
+					slotSeqTypes[frame] = slotSeqType;
+					rotateX = seqs[frame].nextFrame;
+					hasSlotAnim = true;
+					translateZ = seqs[frame].currentFrame;
+					rotateY = slotSeqType.frames[translateZ];
+					slotCurrentFramesets[frame] = SeqTypeList.getAnimFrameset(rotateY >>> 16);
+					rotateY &= 0xFFFF;
+					slotCurrentFrames[frame] = rotateY;
+					if (slotCurrentFramesets[frame] != null) {
+						hasColorTransform |= slotCurrentFramesets[frame].isColorTransformed(rotateY);
+						hasAlphaTransform |= slotCurrentFramesets[frame].isAlphaTransformed(rotateY);
+						hasModelTransform |= slotSeqType.hasModelTransforms;
 					}
-					if ((local753.tween || SeqType.applyTweening) && local207 != -1 && local753.frames.length > local207) {
-						slotFrameDelays[local235] = local753.frameDelay[local200];
-						slotDelayClocks[local235] = seqs[local235].delayClock;
-						local228 = local753.frames[local207];
-						slotTweenFramesets[local235] = SeqTypeList.getAnimFrameset(local228 >>> 16);
-						local228 &= 0xFFFF;
-						slotTweenFrames[local235] = local228;
-						if (slotTweenFramesets[local235] != null) {
-							local723 |= slotTweenFramesets[local235].isColorTransformed(local228);
-							local721 |= slotTweenFramesets[local235].isAlphaTransformed(local228);
+					if ((slotSeqType.tween || SeqType.applyTweening) && rotateX != -1 && slotSeqType.frames.length > rotateX) {
+						slotFrameDelays[frame] = slotSeqType.frameDelay[translateZ];
+						slotDelayClocks[frame] = seqs[frame].delayClock;
+						frameGroupId = slotSeqType.frames[rotateX];
+						slotTweenFramesets[frame] = SeqTypeList.getAnimFrameset(frameGroupId >>> 16);
+						frameGroupId &= 0xFFFF;
+						slotTweenFrames[frame] = frameGroupId;
+						if (slotTweenFramesets[frame] != null) {
+							hasColorTransform |= slotTweenFramesets[frame].isColorTransformed(frameGroupId);
+							hasAlphaTransform |= slotTweenFramesets[frame].isAlphaTransformed(frameGroupId);
 						}
 					} else {
-						slotFrameDelays[local235] = 0;
-						slotDelayClocks[local235] = 0;
-						slotTweenFramesets[local235] = null;
-						slotTweenFrames[local235] = -1;
+						slotFrameDelays[frame] = 0;
+						slotDelayClocks[frame] = 0;
+						slotTweenFramesets[frame] = null;
+						slotTweenFrames[frame] = -1;
 					}
 				}
 			}
 		}
-		if (!local46 && seqType2 == null && seqType1 == null) {
-			@Pc(933) Model local933 = local40.copyForEntity(true, true, true);
+		if (!hasSlotAnim && secondarySeqType == null && primarySeqType == null) {
+			@Pc(933) Model copy = model.copyForEntity(true, true, true);
 			if (this.resizeX != 128 || this.resizeY != 128) {
-				local933.resize(this.resizeX, this.resizeY, this.resizeX);
+				copy.resize(this.resizeX, this.resizeY, this.resizeX);
 			}
-			return local933;
+			return copy;
 		}
-		local221 = -1;
-		local235 = -1;
-		local200 = 0;
-		@Pc(962) AnimFrameset local962 = null;
-		@Pc(964) AnimFrameset local964 = null;
-		@Pc(1040) int local1040;
-		if (seqType2 != null) {
-			local235 = seqType2.frames[arg5];
-			local228 = local235 >>> 16;
-			local235 &= 0xFFFF;
-			local962 = SeqTypeList.getAnimFrameset(local228);
-			if (local962 != null) {
-				local723 |= local962.isColorTransformed(local235);
-				local721 |= local962.isAlphaTransformed(local235);
-				local725 |= seqType2.hasModelTransforms;
+		tweenFrame = -1;
+		frame = -1;
+		translateZ = 0;
+		@Pc(962) AnimFrameset secondaryFrameset = null;
+		@Pc(964) AnimFrameset secondaryTweenFrameset = null;
+		@Pc(1040) int primaryFrame;
+		if (secondarySeqType != null) {
+			frame = secondarySeqType.frames[currentFrame2];
+			frameGroupId = frame >>> 16;
+			frame &= 0xFFFF;
+			secondaryFrameset = SeqTypeList.getAnimFrameset(frameGroupId);
+			if (secondaryFrameset != null) {
+				hasColorTransform |= secondaryFrameset.isColorTransformed(frame);
+				hasAlphaTransform |= secondaryFrameset.isAlphaTransformed(frame);
+				hasModelTransform |= secondarySeqType.hasModelTransforms;
 			}
-			if ((seqType2.tween || SeqType.applyTweening) && arg3 != -1 && seqType2.frames.length > arg3) {
-				local200 = seqType2.frameDelay[arg5];
-				local221 = seqType2.frames[arg3];
-				local1040 = local221 >>> 16;
-				local221 &= 0xFFFF;
-				if (local228 == local1040) {
-					local964 = local962;
+			if ((secondarySeqType.tween || SeqType.applyTweening) && tweenFrame2 != -1 && secondarySeqType.frames.length > tweenFrame2) {
+				translateZ = secondarySeqType.frameDelay[currentFrame2];
+				tweenFrame = secondarySeqType.frames[tweenFrame2];
+				primaryFrame = tweenFrame >>> 16;
+				tweenFrame &= 0xFFFF;
+				if (frameGroupId == primaryFrame) {
+					secondaryTweenFrameset = secondaryFrameset;
 				} else {
-					local964 = SeqTypeList.getAnimFrameset(local221 >>> 16);
+					secondaryTweenFrameset = SeqTypeList.getAnimFrameset(tweenFrame >>> 16);
 				}
-				if (local964 != null) {
-					local723 |= local964.isColorTransformed(local221);
-					local721 |= local964.isAlphaTransformed(local221);
+				if (secondaryTweenFrameset != null) {
+					hasColorTransform |= secondaryTweenFrameset.isColorTransformed(tweenFrame);
+					hasAlphaTransform |= secondaryTweenFrameset.isAlphaTransformed(tweenFrame);
 				}
 			}
 		}
-		local228 = -1;
-		local1040 = -1;
-		@Pc(1088) AnimFrameset local1088 = null;
-		local300 = 0;
-		@Pc(1092) AnimFrameset local1092 = null;
-		if (seqType1 != null) {
-			local228 = seqType1.frames[arg2];
-			local324 = local228 >>> 16;
-			local228 &= 0xFFFF;
-			local1088 = SeqTypeList.getAnimFrameset(local324);
-			if (local1088 != null) {
-				local723 |= local1088.isColorTransformed(local228);
-				local721 |= local1088.isAlphaTransformed(local228);
-				local725 |= seqType1.hasModelTransforms;
+		frameGroupId = -1;
+		primaryFrame = -1;
+		@Pc(1088) AnimFrameset primaryFrameset = null;
+		frameDelay = 0;
+		@Pc(1092) AnimFrameset primaryTweenFrameset = null;
+		if (primarySeqType != null) {
+			frameGroupId = primarySeqType.frames[currentFrame1];
+			groupId = frameGroupId >>> 16;
+			frameGroupId &= 0xFFFF;
+			primaryFrameset = SeqTypeList.getAnimFrameset(groupId);
+			if (primaryFrameset != null) {
+				hasColorTransform |= primaryFrameset.isColorTransformed(frameGroupId);
+				hasAlphaTransform |= primaryFrameset.isAlphaTransformed(frameGroupId);
+				hasModelTransform |= primarySeqType.hasModelTransforms;
 			}
-			if ((seqType1.tween || SeqType.applyTweening) && arg1 != -1 && arg1 < seqType1.frames.length) {
-				local300 = seqType1.frameDelay[arg2];
-				local1040 = seqType1.frames[arg1];
-				local318 = local1040 >>> 16;
-				local1040 &= 0xFFFF;
-				if (local318 == local324) {
-					local1092 = local1088;
+			if ((primarySeqType.tween || SeqType.applyTweening) && tweenFrame1 != -1 && tweenFrame1 < primarySeqType.frames.length) {
+				frameDelay = primarySeqType.frameDelay[currentFrame1];
+				primaryFrame = primarySeqType.frames[tweenFrame1];
+				slot = primaryFrame >>> 16;
+				primaryFrame &= 0xFFFF;
+				if (slot == groupId) {
+					primaryTweenFrameset = primaryFrameset;
 				} else {
-					local1092 = SeqTypeList.getAnimFrameset(local1040 >>> 16);
+					primaryTweenFrameset = SeqTypeList.getAnimFrameset(primaryFrame >>> 16);
 				}
-				if (local1092 != null) {
-					local723 |= local1092.isColorTransformed(local1040);
-					local721 |= local1092.isAlphaTransformed(local1040);
+				if (primaryTweenFrameset != null) {
+					hasColorTransform |= primaryTweenFrameset.isColorTransformed(primaryFrame);
+					hasAlphaTransform |= primaryTweenFrameset.isAlphaTransformed(primaryFrame);
 				}
 			}
 		}
-		@Pc(1218) Model local1218 = local40.copyForEntity(!local721, !local723, !local725);
-		local330 = 1;
-		for (local318 = 0; local318 < local173; local318++) {
-			if (slotCurrentFramesets[local318] != null) {
-				local1218.applyMaskedAnimation(slotCurrentFramesets[local318], slotCurrentFrames[local318], slotTweenFramesets[local318], slotTweenFrames[local318], slotDelayClocks[local318] - 1, slotFrameDelays[local318], local330, slotSeqTypes[local318].hasModelTransforms, this.modelTransformCache[local318]);
+		@Pc(1218) Model animated = model.copyForEntity(!hasAlphaTransform, !hasColorTransform, !hasModelTransform);
+		slotMask = 1;
+		for (slot = 0; slot < i; slot++) {
+			if (slotCurrentFramesets[slot] != null) {
+				animated.applyMaskedAnimation(slotCurrentFramesets[slot], slotCurrentFrames[slot], slotTweenFramesets[slot], slotTweenFrames[slot], slotDelayClocks[slot] - 1, slotFrameDelays[slot], slotMask, slotSeqTypes[slot].hasModelTransforms, this.modelTransformCache[slot]);
 			}
-			local330 <<= 0x1;
+			slotMask <<= 0x1;
 		}
-		if (local962 != null && local1088 != null) {
-			local1218.applyDualAnimation(local962, local235, local964, local221, arg4 - 1, local200, local1088, local228, local1092, local1040, arg7 - 1, local300, seqType2.framegroup, seqType2.hasModelTransforms | seqType1.hasModelTransforms);
-		} else if (local962 != null) {
-			local1218.applyAnimation(local962, local235, local964, local221, arg4 - 1, local200, seqType2.hasModelTransforms);
-		} else if (local1088 != null) {
-			local1218.applyAnimation(local1088, local228, local1092, local1040, arg7 - 1, local300, seqType1.hasModelTransforms);
+		if (secondaryFrameset != null && primaryFrameset != null) {
+			animated.applyDualAnimation(secondaryFrameset, frame, secondaryTweenFrameset, tweenFrame, delayClock2 - 1, translateZ, primaryFrameset, frameGroupId, primaryTweenFrameset, primaryFrame, delayClock1 - 1, frameDelay, secondarySeqType.framegroup, secondarySeqType.hasModelTransforms | primarySeqType.hasModelTransforms);
+		} else if (secondaryFrameset != null) {
+			animated.applyAnimation(secondaryFrameset, frame, secondaryTweenFrameset, tweenFrame, delayClock2 - 1, translateZ, secondarySeqType.hasModelTransforms);
+		} else if (primaryFrameset != null) {
+			animated.applyAnimation(primaryFrameset, frameGroupId, primaryTweenFrameset, primaryFrame, delayClock1 - 1, frameDelay, primarySeqType.hasModelTransforms);
 		}
-		for (local318 = 0; local318 < local173; local318++) {
-			slotCurrentFramesets[local318] = null;
-			slotTweenFramesets[local318] = null;
-			slotSeqTypes[local318] = null;
+		for (slot = 0; slot < i; slot++) {
+			slotCurrentFramesets[slot] = null;
+			slotTweenFramesets[slot] = null;
+			slotSeqTypes[slot] = null;
 		}
 		if (this.resizeX != 128 || this.resizeY != 128) {
-			local1218.resize(this.resizeX, this.resizeY, this.resizeX);
+			animated.resize(this.resizeX, this.resizeY, this.resizeX);
 		}
-		return local1218;
+		return animated;
 	}
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(ILclient!na;Z)Lclient!na;")
-	public final JagString getParam(@OriginalArg(0) int arg0, @OriginalArg(1) JagString arg1) {
+	public final JagString getParam(@OriginalArg(0) int paramId, @OriginalArg(1) JagString defaultValue) {
 		if (this.params == null) {
-			return arg1;
+			return defaultValue;
 		} else {
-			@Pc(18) StringNode local18 = (StringNode) this.params.get(arg0);
-			return local18 == null ? arg1 : local18.value;
+			@Pc(18) StringNode node = (StringNode) this.params.get(paramId);
+			return node == null ? defaultValue : node.value;
 		}
 	}
 
@@ -518,56 +518,56 @@ public final class NpcType {
 	}
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(Lclient!tk;IIII)Lclient!ak;")
-	public final Model getHeadModel(@OriginalArg(0) SeqType arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
+	public final Model getHeadModel(@OriginalArg(0) SeqType seqType, @OriginalArg(1) int tweenFrame, @OriginalArg(2) int currentFrame, @OriginalArg(4) int delayClock) {
 		if (this.multiNpcs != null) {
-			@Pc(13) NpcType local13 = this.getMultiNpc();
-			return local13 == null ? null : local13.getHeadModel(arg0, arg1, arg2, arg3);
+			@Pc(13) NpcType multiNpc = this.getMultiNpc();
+			return multiNpc == null ? null : multiNpc.getHeadModel(seqType, tweenFrame, currentFrame, delayClock);
 		} else if (this.headmodels == null) {
 			return null;
 		} else {
-			@Pc(41) Model local41 = (Model) NpcTypeList.headModels.get(this.id);
-			if (local41 == null) {
-				@Pc(46) boolean local46 = false;
-				for (@Pc(48) int local48 = 0; local48 < this.headmodels.length; local48++) {
-					if (!NpcTypeList.modelsArchive.isFileReady(0, this.headmodels[local48])) {
-						local46 = true;
+			@Pc(41) Model model = (Model) NpcTypeList.headModels.get(this.id);
+			if (model == null) {
+				@Pc(46) boolean notReady = false;
+				for (@Pc(48) int i = 0; i < this.headmodels.length; i++) {
+					if (!NpcTypeList.modelsArchive.isFileReady(0, this.headmodels[i])) {
+						notReady = true;
 					}
 				}
-				if (local46) {
+				if (notReady) {
 					return null;
 				}
-				@Pc(82) RawModel[] local82 = new RawModel[this.headmodels.length];
-				for (@Pc(84) int local84 = 0; local84 < this.headmodels.length; local84++) {
-					local82[local84] = RawModel.create(NpcTypeList.modelsArchive, this.headmodels[local84]);
+				@Pc(82) RawModel[] rawModels = new RawModel[this.headmodels.length];
+				for (@Pc(84) int i = 0; i < this.headmodels.length; i++) {
+					rawModels[i] = RawModel.create(NpcTypeList.modelsArchive, this.headmodels[i]);
 				}
-				@Pc(119) RawModel local119;
-				if (local82.length == 1) {
-					local119 = local82[0];
+				@Pc(119) RawModel rawModel;
+				if (rawModels.length == 1) {
+					rawModel = rawModels[0];
 				} else {
-					local119 = new RawModel(local82, local82.length);
+					rawModel = new RawModel(rawModels, rawModels.length);
 				}
-				@Pc(130) int local130;
+				@Pc(130) int i;
 				if (this.recol_s != null) {
-					for (local130 = 0; local130 < this.recol_s.length; local130++) {
-						if (this.recol_p == null || local130 >= this.recol_p.length) {
-							local119.recolor(this.recol_s[local130], this.recol_d[local130]);
+					for (i = 0; i < this.recol_s.length; i++) {
+						if (this.recol_p == null || i >= this.recol_p.length) {
+							rawModel.recolor(this.recol_s[i], this.recol_d[i]);
 						} else {
-							local119.recolor(this.recol_s[local130], client.npcRecolorPalette[this.recol_p[local130] & 0xFF]);
+							rawModel.recolor(this.recol_s[i], client.npcRecolorPalette[this.recol_p[i] & 0xFF]);
 						}
 					}
 				}
 				if (this.retex_s != null) {
-					for (local130 = 0; local130 < this.retex_s.length; local130++) {
-						local119.retexture(this.retex_s[local130], this.retex_d[local130]);
+					for (i = 0; i < this.retex_s.length; i++) {
+						rawModel.retexture(this.retex_s[i], this.retex_d[i]);
 					}
 				}
-				local41 = local119.createModel(64, 768, -50, -10, -50);
-				NpcTypeList.headModels.put(local41, this.id);
+				model = rawModel.createModel(64, 768, -50, -10, -50);
+				NpcTypeList.headModels.put(model, this.id);
 			}
-			if (arg0 != null) {
-				local41 = arg0.animateEntity(local41, arg2, arg1, arg3);
+			if (seqType != null) {
+				model = seqType.animateEntity(model, currentFrame, tweenFrame, delayClock);
 			}
-			return local41;
+			return model;
 		}
 	}
 
@@ -640,7 +640,7 @@ public final class NpcType {
 		} else if (opcode == 103) {
 			this.rotationspeed = buffer.g2();
 		} else {
-			@Pc(297) int local297;
+			@Pc(297) int j;
 			if (opcode == 106 || opcode == 118) {
 				this.multiNpcVarbit = buffer.g2();
 				count = -1;
@@ -659,10 +659,10 @@ public final class NpcType {
 				}
 				i = buffer.g1();
 				this.multiNpcs = new int[i + 2];
-				for (local297 = 0; local297 <= i; local297++) {
-					this.multiNpcs[local297] = buffer.g2();
-					if (this.multiNpcs[local297] == 65535) {
-						this.multiNpcs[local297] = -1;
+				for (j = 0; j <= i; j++) {
+					this.multiNpcs[j] = buffer.g2();
+					if (this.multiNpcs[j] == 65535) {
+						this.multiNpcs[j] = -1;
 					}
 				}
 				this.multiNpcs[i + 1] = count;
@@ -687,8 +687,8 @@ public final class NpcType {
 				this.modeloffsets = new int[this.modelIndices.length][];
 				count = buffer.g1();
 				for (i = 0; i < count; i++) {
-					local297 = buffer.g1();
-					@Pc(439) int[] tempArray = this.modeloffsets[local297] = new int[3];
+					j = buffer.g1();
+					@Pc(439) int[] tempArray = this.modeloffsets[j] = new int[3];
 					tempArray[0] = buffer.g1b();
 					tempArray[1] = buffer.g1b();
 					tempArray[2] = buffer.g1b();

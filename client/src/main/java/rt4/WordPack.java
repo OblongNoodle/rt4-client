@@ -11,16 +11,16 @@ public class WordPack {
 	public static HuffmanCodec codec;
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(Lclient!fi;I)V")
-	public static void init(@OriginalArg(0) HuffmanCodec arg0) {
-		codec = arg0;
+	public static void init(@OriginalArg(0) HuffmanCodec huffmanCodec) {
+		codec = huffmanCodec;
 	}
 
 	@OriginalMember(owner = "client!lg", name = "a", descriptor = "(ZLclient!wa;Lclient!na;)I")
-	public static int encode(@OriginalArg(1) Buffer arg0, @OriginalArg(2) JagString arg1) {
-		@Pc(6) int local6 = arg0.offset;
-		@Pc(14) byte[] local14 = arg1.toByteArray();
-		arg0.psmarts(local14.length);
-		arg0.offset += codec.encode(local14.length, arg0.data, local14, 0, arg0.offset);
-		return arg0.offset - local6;
+	public static int encode(@OriginalArg(1) Buffer buffer, @OriginalArg(2) JagString string) {
+		@Pc(6) int startOffset = buffer.offset;
+		@Pc(14) byte[] bytes = string.toByteArray();
+		buffer.psmarts(bytes.length);
+		buffer.offset += codec.encode(bytes.length, buffer.data, bytes, 0, buffer.offset);
+		return buffer.offset - startOffset;
 	}
 }

@@ -246,126 +246,126 @@ public final class LocType {
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(I)Lclient!pb;")
 	public LocType getMultiLoc() {
-		@Pc(26) int local26 = -1;
+		@Pc(26) int varpValue = -1;
 		if (this.multiLocVarbit != -1) {
-			local26 = VarpDomain.getVarbit(this.multiLocVarbit);
+			varpValue = VarpDomain.getVarbit(this.multiLocVarbit);
 		} else if (this.multiLocVarp != -1) {
-			local26 = VarpDomain.activeVarps[this.multiLocVarp];
+			varpValue = VarpDomain.activeVarps[this.multiLocVarp];
 		}
-		if (local26 < 0 || local26 >= this.multiLocs.length - 1 || this.multiLocs[local26] == -1) {
-			@Pc(84) int local84 = this.multiLocs[this.multiLocs.length - 1];
-			return local84 == -1 ? null : LocTypeList.get(local84);
+		if (varpValue < 0 || varpValue >= this.multiLocs.length - 1 || this.multiLocs[varpValue] == -1) {
+			@Pc(84) int defaultLocId = this.multiLocs[this.multiLocs.length - 1];
+			return defaultLocId == -1 ? null : LocTypeList.get(defaultLocId);
 		} else {
-			return LocTypeList.get(this.multiLocs[local26]);
+			return LocTypeList.get(this.multiLocs[varpValue]);
 		}
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(III)Lclient!gb;")
-	private RawModel getRawModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(7) RawModel local7 = null;
-		@Pc(10) boolean local10 = this.mirror;
-		if (arg1 == 2 && arg0 > 3) {
-			local10 = !local10;
+	private RawModel getRawModel(@OriginalArg(0) int rotation, @OriginalArg(1) int shape) {
+		@Pc(7) RawModel rawModel = null;
+		@Pc(10) boolean mirrored = this.mirror;
+		if (shape == 2 && rotation > 3) {
+			mirrored = !mirrored;
 		}
-		@Pc(46) int local46;
-		@Pc(48) int local48;
+		@Pc(46) int modelCount;
+		@Pc(48) int i;
 		if (this.shapes == null) {
-			if (arg1 != 10) {
+			if (shape != 10) {
 				return null;
 			}
 			if (this.models == null) {
 				return null;
 			}
-			local46 = this.models.length;
-			for (local48 = 0; local48 < local46; local48++) {
-				@Pc(60) int local60 = this.models[local48];
-				if (local10) {
-					local60 += 65536;
+			modelCount = this.models.length;
+			for (i = 0; i < modelCount; i++) {
+				@Pc(60) int modelId = this.models[i];
+				if (mirrored) {
+					modelId += 65536;
 				}
-				local7 = (RawModel) LocTypeList.rawModelCache.get(local60);
-				if (local7 == null) {
-					local7 = RawModel.create(LocTypeList.modelsArchive, local60 & 0xFFFF);
-					if (local7 == null) {
+				rawModel = (RawModel) LocTypeList.rawModelCache.get(modelId);
+				if (rawModel == null) {
+					rawModel = RawModel.create(LocTypeList.modelsArchive, modelId & 0xFFFF);
+					if (rawModel == null) {
 						return null;
 					}
-					if (local10) {
-						local7.negateZAndReverseFaces();
+					if (mirrored) {
+						rawModel.negateZAndReverseFaces();
 					}
-					LocTypeList.rawModelCache.put(local7, local60);
+					LocTypeList.rawModelCache.put(rawModel, modelId);
 				}
-				if (local46 > 1) {
-					tempModels[local48] = local7;
+				if (modelCount > 1) {
+					tempModels[i] = rawModel;
 				}
 			}
-			if (local46 > 1) {
-				local7 = new RawModel(tempModels, local46);
+			if (modelCount > 1) {
+				rawModel = new RawModel(tempModels, modelCount);
 			}
 		} else {
-			local46 = -1;
-			for (local48 = 0; local48 < this.shapes.length; local48++) {
-				if (arg1 == this.shapes[local48]) {
-					local46 = local48;
+			modelCount = -1;
+			for (i = 0; i < this.shapes.length; i++) {
+				if (shape == this.shapes[i]) {
+					modelCount = i;
 					break;
 				}
 			}
-			if (local46 == -1) {
+			if (modelCount == -1) {
 				return null;
 			}
-			local48 = this.models[local46];
-			if (local10) {
-				local48 += 65536;
+			i = this.models[modelCount];
+			if (mirrored) {
+				i += 65536;
 			}
-			local7 = (RawModel) LocTypeList.rawModelCache.get(local48);
-			if (local7 == null) {
-				local7 = RawModel.create(LocTypeList.modelsArchive, local48 & 0xFFFF);
-				if (local7 == null) {
+			rawModel = (RawModel) LocTypeList.rawModelCache.get(i);
+			if (rawModel == null) {
+				rawModel = RawModel.create(LocTypeList.modelsArchive, i & 0xFFFF);
+				if (rawModel == null) {
 					return null;
 				}
-				if (local10) {
-					local7.negateZAndReverseFaces();
+				if (mirrored) {
+					rawModel.negateZAndReverseFaces();
 				}
-				LocTypeList.rawModelCache.put(local7, local48);
+				LocTypeList.rawModelCache.put(rawModel, i);
 			}
 		}
-		@Pc(211) boolean local211;
-		local211 = this.resizex != 128 || this.resizey != 128 || this.resizez != 128;
-		@Pc(230) boolean local230;
-		local230 = this.xoff != 0 || this.yoff != 0 || this.zoff != 0;
-		@Pc(265) RawModel local265 = new RawModel(local7, arg0 == 0 && !local211 && !local230, this.recol_s == null, this.retex_s == null, true);
-		if (arg1 == 4 && arg0 > 3) {
-			local265.rotate256();
-			local265.translate(45, 0, -45);
+		@Pc(211) boolean resized;
+		resized = this.resizex != 128 || this.resizey != 128 || this.resizez != 128;
+		@Pc(230) boolean translated;
+		translated = this.xoff != 0 || this.yoff != 0 || this.zoff != 0;
+		@Pc(265) RawModel copy = new RawModel(rawModel, rotation == 0 && !resized && !translated, this.recol_s == null, this.retex_s == null, true);
+		if (shape == 4 && rotation > 3) {
+			copy.rotate256();
+			copy.translate(45, 0, -45);
 		}
-		@Pc(285) int local285 = arg0 & 0x3;
-		if (local285 == 1) {
-			local265.swapXz();
-		} else if (local285 == 2) {
-			local265.negateXz();
-		} else if (local285 == 3) {
-			local265.rotateCounterClockwiseXY();
+		@Pc(285) int rotationQuadrant = rotation & 0x3;
+		if (rotationQuadrant == 1) {
+			copy.swapXz();
+		} else if (rotationQuadrant == 2) {
+			copy.negateXz();
+		} else if (rotationQuadrant == 3) {
+			copy.rotateCounterClockwiseXY();
 		}
-		@Pc(315) int local315;
+		@Pc(315) int j;
 		if (this.recol_s != null) {
-			for (local315 = 0; local315 < this.recol_s.length; local315++) {
-				if (this.recol_p == null || this.recol_p.length <= local315) {
-					local265.recolor(this.recol_s[local315], this.recol_d[local315]);
+			for (j = 0; j < this.recol_s.length; j++) {
+				if (this.recol_p == null || this.recol_p.length <= j) {
+					copy.recolor(this.recol_s[j], this.recol_d[j]);
 				} else {
-					local265.recolor(this.recol_s[local315], client.locRecolorPalette[this.recol_p[local315] & 0xFF]);
+					copy.recolor(this.recol_s[j], client.locRecolorPalette[this.recol_p[j] & 0xFF]);
 				}
 			}
 		}
 		if (this.retex_s != null) {
-			for (local315 = 0; local315 < this.retex_s.length; local315++) {
-				local265.retexture(this.retex_s[local315], this.retex_d[local315]);
+			for (j = 0; j < this.retex_s.length; j++) {
+				copy.retexture(this.retex_s[j], this.retex_d[j]);
 			}
 		}
-		if (local211) {
-			local265.resize(this.resizex, this.resizey, this.resizez);
+		if (resized) {
+			copy.resize(this.resizex, this.resizey, this.resizez);
 		}
-		if (local230) {
-			local265.translate(this.xoff, this.yoff, this.zoff);
+		if (translated) {
+			copy.translate(this.xoff, this.yoff, this.zoff);
 		}
-		return local265;
+		return copy;
 	}
 
 	@OriginalMember(owner = "client!pb", name = "c", descriptor = "(I)V")
@@ -647,293 +647,293 @@ public final class LocType {
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(IZZI)Lclient!td;")
-	private GlModel getGlModel(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(3) int arg2) {
-		@Pc(10) int local10 = this.ambient + 64;
-		@Pc(17) int local17 = this.contrast * 5 + 768;
-		@Pc(79) GlModel local79;
-		@Pc(24) int local24;
-		@Pc(177) int local177;
+	private GlModel getGlModel(@OriginalArg(0) int rotation, @OriginalArg(1) boolean animated, @OriginalArg(3) int shape) {
+		@Pc(10) int ambientIntensity = this.ambient + 64;
+		@Pc(17) int diffuseIntensity = this.contrast * 5 + 768;
+		@Pc(79) GlModel glModel;
+		@Pc(24) int modelIndex;
+		@Pc(177) int i;
 		if (this.shapes == null) {
-			if (arg2 != 10) {
+			if (shape != 10) {
 				return null;
 			}
 			if (this.models == null) {
 				return null;
 			}
-			local24 = this.models.length;
-			if (local24 == 0) {
+			modelIndex = this.models.length;
+			if (modelIndex == 0) {
 				return null;
 			}
-			@Pc(135) long local135 = 0L;
-			for (@Pc(137) int local137 = 0; local137 < local24; local137++) {
-				local135 = (long) this.models[local137] + local135 * 67783L;
+			@Pc(135) long cacheKey = 0L;
+			for (@Pc(137) int j = 0; j < modelIndex; j++) {
+				cacheKey = (long) this.models[j] + cacheKey * 67783L;
 			}
-			if (arg1) {
-				local135 = ~local135;
+			if (animated) {
+				cacheKey = ~cacheKey;
 			}
-			local79 = (GlModel) LocTypeList.rawModelCache.get(local135);
-			if (local79 == null) {
-				@Pc(175) RawModel local175 = null;
-				for (local177 = 0; local177 < local24; local177++) {
-					local175 = RawModel.create(LocTypeList.modelsArchive, this.models[local177] & 0xFFFF);
-					if (local175 == null) {
+			glModel = (GlModel) LocTypeList.rawModelCache.get(cacheKey);
+			if (glModel == null) {
+				@Pc(175) RawModel rawModel = null;
+				for (i = 0; i < modelIndex; i++) {
+					rawModel = RawModel.create(LocTypeList.modelsArchive, this.models[i] & 0xFFFF);
+					if (rawModel == null) {
 						return null;
 					}
-					if (local24 > 1) {
-						tempModels[local177] = local175;
+					if (modelIndex > 1) {
+						tempModels[i] = rawModel;
 					}
 				}
-				if (local24 > 1) {
-					local175 = new RawModel(tempModels, local24);
+				if (modelIndex > 1) {
+					rawModel = new RawModel(tempModels, modelIndex);
 				}
-				local79 = new GlModel(local175, local10, local17, arg1);
-				LocTypeList.rawModelCache.put(local79, local135);
+				glModel = new GlModel(rawModel, ambientIntensity, diffuseIntensity, animated);
+				LocTypeList.rawModelCache.put(glModel, cacheKey);
 			}
 		} else {
-			local24 = -1;
-			@Pc(26) int local26;
-			for (local26 = 0; local26 < this.shapes.length; local26++) {
-				if (this.shapes[local26] == arg2) {
-					local24 = local26;
+			modelIndex = -1;
+			@Pc(26) int modelId;
+			for (modelId = 0; modelId < this.shapes.length; modelId++) {
+				if (this.shapes[modelId] == shape) {
+					modelIndex = modelId;
 					break;
 				}
 			}
-			if (local24 == -1) {
+			if (modelIndex == -1) {
 				return null;
 			}
-			local26 = this.models[local24];
-			if (arg1) {
-				local26 += 65536;
+			modelId = this.models[modelIndex];
+			if (animated) {
+				modelId += 65536;
 			}
-			local79 = (GlModel) LocTypeList.rawModelCache.get(local26);
-			if (local79 == null) {
-				@Pc(90) RawModel local90 = RawModel.create(LocTypeList.modelsArchive, local26 & 0xFFFF);
-				if (local90 == null) {
+			glModel = (GlModel) LocTypeList.rawModelCache.get(modelId);
+			if (glModel == null) {
+				@Pc(90) RawModel rawModel = RawModel.create(LocTypeList.modelsArchive, modelId & 0xFFFF);
+				if (rawModel == null) {
 					return null;
 				}
-				local79 = new GlModel(local90, local10, local17, arg1);
-				LocTypeList.rawModelCache.put(local79, local26);
+				glModel = new GlModel(rawModel, ambientIntensity, diffuseIntensity, animated);
+				LocTypeList.rawModelCache.put(glModel, modelId);
 			}
 		}
-		@Pc(236) boolean local236 = this.mirror;
-		if (arg2 == 2 && arg0 > 3) {
-			local236 = !local236;
+		@Pc(236) boolean mirrored = this.mirror;
+		if (shape == 2 && rotation > 3) {
+			mirrored = !mirrored;
 		}
-		@Pc(264) boolean local264 = this.resizey == 128 && this.yoff == 0;
-		@Pc(294) boolean local294 = arg0 == 0 && this.resizex == 128 && this.resizez == 128 && this.xoff == 0 && this.zoff == 0 && !local236;
-		@Pc(351) GlModel local351 = local79.deepCopy(local294, local264, this.recol_s == null, local79.getAmbientIntensity() == local10, arg0 == 0 && !local236, true, local17 == local79.getDiffuseIntensity(), !local236, this.retex_s == null);
-		if (local236) {
-			local351.mirrorZ();
+		@Pc(264) boolean noVerticalTransform = this.resizey == 128 && this.yoff == 0;
+		@Pc(294) boolean noTransform = rotation == 0 && this.resizex == 128 && this.resizez == 128 && this.xoff == 0 && this.zoff == 0 && !mirrored;
+		@Pc(351) GlModel copy = glModel.deepCopy(noTransform, noVerticalTransform, this.recol_s == null, glModel.getAmbientIntensity() == ambientIntensity, rotation == 0 && !mirrored, true, diffuseIntensity == glModel.getDiffuseIntensity(), !mirrored, this.retex_s == null);
+		if (mirrored) {
+			copy.mirrorZ();
 		}
-		if (arg2 == 4 && arg0 > 3) {
-			local351.rotate45Degrees();
-			local351.translate(45, 0, -45);
+		if (shape == 4 && rotation > 3) {
+			copy.rotate45Degrees();
+			copy.translate(45, 0, -45);
 		}
-		@Pc(374) int local374 = arg0 & 0x3;
-		if (local374 == 1) {
-			local351.rotateCounterClockwiseAll();
-		} else if (local374 == 2) {
-			local351.rotate180All();
-		} else if (local374 == 3) {
-			local351.rotateClockwiseAll();
+		@Pc(374) int rotationQuadrant = rotation & 0x3;
+		if (rotationQuadrant == 1) {
+			copy.rotateCounterClockwiseAll();
+		} else if (rotationQuadrant == 2) {
+			copy.rotate180All();
+		} else if (rotationQuadrant == 3) {
+			copy.rotateClockwiseAll();
 		}
 		if (this.recol_s != null) {
-			for (local177 = 0; local177 < this.recol_s.length; local177++) {
-				local351.recolor(this.recol_s[local177], this.recol_d[local177]);
+			for (i = 0; i < this.recol_s.length; i++) {
+				copy.recolor(this.recol_s[i], this.recol_d[i]);
 			}
 		}
 		if (this.retex_s != null) {
-			for (local177 = 0; local177 < this.retex_s.length; local177++) {
-				local351.retexture(this.retex_s[local177], this.retex_d[local177]);
+			for (i = 0; i < this.retex_s.length; i++) {
+				copy.retexture(this.retex_s[i], this.retex_d[i]);
 			}
 		}
 		if (this.resizex != 128 || this.resizey != 128 || this.resizez != 128) {
-			local351.resize(this.resizex, this.resizey, this.resizez);
+			copy.resize(this.resizex, this.resizey, this.resizez);
 		}
 		if (this.xoff != 0 || this.yoff != 0 || this.zoff != 0) {
-			local351.translate(this.xoff, this.yoff, this.zoff);
+			copy.translate(this.xoff, this.yoff, this.zoff);
 		}
-		if (local10 != local351.getAmbientIntensity()) {
-			local351.setAmbientIntensity(local10);
+		if (ambientIntensity != copy.getAmbientIntensity()) {
+			copy.setAmbientIntensity(ambientIntensity);
 		}
-		if (local351.getDiffuseIntensity() != local17) {
-			local351.setDiffuseIntensity(local17);
+		if (copy.getDiffuseIntensity() != diffuseIntensity) {
+			copy.setDiffuseIntensity(diffuseIntensity);
 		}
-		return local351;
+		return copy;
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(II[[III[[IZLclient!ek;BZI)Lclient!sm;")
-	public LocEntity getStaticEntity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[][] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[][] arg5, @OriginalArg(6) boolean arg6, @OriginalArg(7) SoftwareIndexedSprite arg7, @OriginalArg(9) boolean arg8, @OriginalArg(10) int arg9) {
-		@Pc(29) long local29;
+	public LocEntity getStaticEntity(@OriginalArg(0) int rotation, @OriginalArg(1) int tileX, @OriginalArg(2) int[][] heightmap, @OriginalArg(3) int shape, @OriginalArg(4) int tileY, @OriginalArg(5) int[][] overlayHeightmap, @OriginalArg(6) boolean shareLight, @OriginalArg(7) SoftwareIndexedSprite shadowSprite, @OriginalArg(9) boolean castShadow, @OriginalArg(10) int plane) {
+		@Pc(29) long cacheKey;
 		if (GlRenderer.enabled) {
 			if (this.shapes == null) {
-				local29 = (this.id << 10) + arg0;
+				cacheKey = (this.id << 10) + rotation;
 			} else {
-				local29 = arg0 + (this.id << 10) + (arg3 << 3);
+				cacheKey = rotation + (this.id << 10) + (shape << 3);
 			}
-			@Pc(225) LocEntity local225 = (LocEntity) LocTypeList.staticEntityCache.get(local29);
-			@Pc(235) GlModel local235;
-			@Pc(265) SoftwareIndexedSprite local265;
-			if (local225 == null) {
-				local235 = this.getGlModel(arg0, false, arg3);
-				if (local235 == null) {
+			@Pc(225) LocEntity entity = (LocEntity) LocTypeList.staticEntityCache.get(cacheKey);
+			@Pc(235) GlModel glModel;
+			@Pc(265) SoftwareIndexedSprite shadow;
+			if (entity == null) {
+				glModel = this.getGlModel(rotation, false, shape);
+				if (glModel == null) {
 					tempLocEntity.model = null;
 					tempLocEntity.sprite = null;
 					return tempLocEntity;
 				}
-				if (arg3 == 10 && arg0 > 3) {
-					local235.rotateY(256);
+				if (shape == 10 && rotation > 3) {
+					glModel.rotateY(256);
 				}
-				if (arg8) {
-					local265 = local235.projectShadow(arg7);
+				if (castShadow) {
+					shadow = glModel.projectShadow(shadowSprite);
 				} else {
-					local265 = null;
+					shadow = null;
 				}
-				local225 = new LocEntity();
-				local225.model = local235;
-				local225.sprite = local265;
-				LocTypeList.staticEntityCache.put(local225, local29);
+				entity = new LocEntity();
+				entity.model = glModel;
+				entity.sprite = shadow;
+				LocTypeList.staticEntityCache.put(entity, cacheKey);
 			} else {
-				local235 = (GlModel) local225.model;
-				local265 = local225.sprite;
+				glModel = (GlModel) entity.model;
+				shadow = entity.sprite;
 			}
-			@Pc(298) boolean local298 = this.computeVertexColors & arg6;
-			@Pc(330) GlModel local330 = local235.deepCopy(this.hillskewType != 3, this.hillskewType == 0, true, true, true, !local298, true, true, true);
+			@Pc(298) boolean mergeVertexColors = this.computeVertexColors & shareLight;
+			@Pc(330) GlModel copy = glModel.deepCopy(this.hillskewType != 3, this.hillskewType == 0, true, true, true, !mergeVertexColors, true, true, true);
 			if (this.hillskewType != 0) {
-				local330.alignToTerrain(this.hillskewType, this.hillskewAmount, local235, arg2, arg5, arg1, arg4, arg9);
+				copy.alignToTerrain(this.hillskewType, this.hillskewAmount, glModel, heightmap, overlayHeightmap, tileX, tileY, plane);
 			}
-			local330.uploadBuffers(this.interactable == 0 && !this.dynamic, true, true, this.interactable == 0, true, false);
-			tempLocEntity.model = local330;
-			local330.mergeable = local298;
-			tempLocEntity.sprite = local265;
+			copy.uploadBuffers(this.interactable == 0 && !this.dynamic, true, true, this.interactable == 0, true, false);
+			tempLocEntity.model = copy;
+			copy.mergeable = mergeVertexColors;
+			tempLocEntity.sprite = shadow;
 			return tempLocEntity;
 		}
 		if (this.shapes == null) {
-			local29 = (this.id << 10) + arg0;
+			cacheKey = (this.id << 10) + rotation;
 		} else {
-			local29 = (arg3 << 3) + ((this.id << 10) + arg0);
+			cacheKey = (shape << 3) + ((this.id << 10) + rotation);
 		}
-		@Pc(50) boolean local50;
-		if (arg6 && this.computeVertexColors) {
-			local29 |= Long.MIN_VALUE;
-			local50 = true;
+		@Pc(50) boolean sharedLight;
+		if (shareLight && this.computeVertexColors) {
+			cacheKey |= Long.MIN_VALUE;
+			sharedLight = true;
 		} else {
-			local50 = false;
+			sharedLight = false;
 		}
-		@Pc(60) Entity local60 = (Entity) LocTypeList.staticEntityCache.get(local29);
-		if (local60 == null) {
-			@Pc(69) RawModel local69 = this.getRawModel(arg0, arg3);
-			if (local69 == null) {
+		@Pc(60) Entity cachedEntity = (Entity) LocTypeList.staticEntityCache.get(cacheKey);
+		if (cachedEntity == null) {
+			@Pc(69) RawModel rawModel = this.getRawModel(rotation, shape);
+			if (rawModel == null) {
 				tempLocEntity.model = null;
 				return tempLocEntity;
 			}
-			local69.resetBones();
-			if (arg3 == 10 && arg0 > 3) {
-				local69.rotate256();
+			rawModel.resetBones();
+			if (shape == 10 && rotation > 3) {
+				rawModel.rotate256();
 			}
-			if (local50) {
-				local69.ambient = (short) (this.ambient + 64);
-				local60 = local69;
-				local69.contrast = (short) (this.contrast * 5 + 768);
-				local69.calculateNormals();
+			if (sharedLight) {
+				rawModel.ambient = (short) (this.ambient + 64);
+				cachedEntity = rawModel;
+				rawModel.contrast = (short) (this.contrast * 5 + 768);
+				rawModel.calculateNormals();
 			} else {
-				local60 = new SoftwareModel(local69, this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50);
+				cachedEntity = new SoftwareModel(rawModel, this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50);
 			}
-			LocTypeList.staticEntityCache.put(local60, local29);
+			LocTypeList.staticEntityCache.put(cachedEntity, cacheKey);
 		}
-		if (local50) {
-			local60 = ((RawModel) local60).shallowCopy();
+		if (sharedLight) {
+			cachedEntity = ((RawModel) cachedEntity).shallowCopy();
 		}
 		if (this.hillskewType != 0) {
-			if (local60 instanceof SoftwareModel) {
-				local60 = ((SoftwareModel) local60).alignToTerrain(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9, true);
-			} else if (local60 instanceof RawModel) {
-				local60 = ((RawModel) local60).placeOnTerrain(this.hillskewType, this.hillskewAmount, arg2, arg5, arg1, arg4, arg9);
+			if (cachedEntity instanceof SoftwareModel) {
+				cachedEntity = ((SoftwareModel) cachedEntity).alignToTerrain(this.hillskewType, this.hillskewAmount, heightmap, overlayHeightmap, tileX, tileY, plane, true);
+			} else if (cachedEntity instanceof RawModel) {
+				cachedEntity = ((RawModel) cachedEntity).placeOnTerrain(this.hillskewType, this.hillskewAmount, heightmap, overlayHeightmap, tileX, tileY, plane);
 			}
 		}
-		tempLocEntity.model = local60;
+		tempLocEntity.model = cachedEntity;
 		return tempLocEntity;
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(IILclient!ek;ILclient!tk;I[[IZII[[IIII)Lclient!sm;")
-	public LocEntity getAnimatedEntity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) SoftwareIndexedSprite arg2, @OriginalArg(3) int arg3, @OriginalArg(4) SeqType arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int[][] arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(10) int[][] arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11, @OriginalArg(13) int arg12) {
-		@Pc(30) long local30;
+	public LocEntity getAnimatedEntity(@OriginalArg(0) int plane, @OriginalArg(1) int tileX, @OriginalArg(2) SoftwareIndexedSprite shadowSprite, @OriginalArg(3) int tileY, @OriginalArg(4) SeqType seqType, @OriginalArg(5) int rotation, @OriginalArg(6) int[][] heightmap, @OriginalArg(7) boolean castShadow, @OriginalArg(8) int currentFrame, @OriginalArg(10) int[][] overlayHeightmap, @OriginalArg(11) int shape, @OriginalArg(12) int delayClock, @OriginalArg(13) int tweenFrame) {
+		@Pc(30) long cacheKey;
 		if (!GlRenderer.enabled) {
 			if (this.shapes == null) {
-				local30 = (this.id << 10) + arg5;
+				cacheKey = (this.id << 10) + rotation;
 			} else {
-				local30 = arg5 + (this.id << 10) + (arg11 << 3);
+				cacheKey = rotation + (this.id << 10) + (shape << 3);
 			}
-			@Pc(195) SoftwareModel local195 = (SoftwareModel) LocTypeList.animatedEntityCache.get(local30);
-			if (local195 == null) {
-				@Pc(204) RawModel local204 = this.getRawModel(arg5, arg11);
-				if (local204 == null) {
+			@Pc(195) SoftwareModel softModel = (SoftwareModel) LocTypeList.animatedEntityCache.get(cacheKey);
+			if (softModel == null) {
+				@Pc(204) RawModel rawModel = this.getRawModel(rotation, shape);
+				if (rawModel == null) {
 					return null;
 				}
-				local195 = new SoftwareModel(local204, this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50);
-				LocTypeList.animatedEntityCache.put(local195, local30);
+				softModel = new SoftwareModel(rawModel, this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50);
+				LocTypeList.animatedEntityCache.put(softModel, cacheKey);
 			}
-			@Pc(234) boolean local234 = false;
-			if (arg4 != null) {
-				local234 = true;
-				local195 = (SoftwareModel) arg4.animateLocSoftware(arg8, arg10, local195, arg5, arg12);
+			@Pc(234) boolean copied = false;
+			if (seqType != null) {
+				copied = true;
+				softModel = (SoftwareModel) seqType.animateLocSoftware(currentFrame, delayClock, softModel, rotation, tweenFrame);
 			}
-			if (arg11 == 10 && arg5 > 3) {
-				if (!local234) {
-					local234 = true;
-					local195 = (SoftwareModel) local195.copyForLoc(true, true, true);
+			if (shape == 10 && rotation > 3) {
+				if (!copied) {
+					copied = true;
+					softModel = (SoftwareModel) softModel.copyForLoc(true, true, true);
 				}
-				local195.rotateY(256);
+				softModel.rotateY(256);
 			}
 			if (this.hillskewType != 0) {
-				if (!local234) {
-					local195 = (SoftwareModel) local195.copyForLoc(true, true, true);
+				if (!copied) {
+					softModel = (SoftwareModel) softModel.copyForLoc(true, true, true);
 				}
-				local195 = local195.alignToTerrain(this.hillskewType, this.hillskewAmount, arg6, arg9, arg1, arg3, arg0, false);
+				softModel = softModel.alignToTerrain(this.hillskewType, this.hillskewAmount, heightmap, overlayHeightmap, tileX, tileY, plane, false);
 			}
-			tempLocEntity.model = local195;
+			tempLocEntity.model = softModel;
 			return tempLocEntity;
 		}
 		if (this.shapes == null) {
-			local30 = arg5 + (this.id << 10);
+			cacheKey = rotation + (this.id << 10);
 		} else {
-			local30 = (arg11 << 3) + ((this.id << 10) + arg5);
+			cacheKey = (shape << 3) + ((this.id << 10) + rotation);
 		}
-		@Pc(46) GlModel local46 = (GlModel) LocTypeList.animatedEntityCache.get(local30);
-		if (local46 == null) {
-			local46 = this.getGlModel(arg5, true, arg11);
-			if (local46 == null) {
+		@Pc(46) GlModel cachedModel = (GlModel) LocTypeList.animatedEntityCache.get(cacheKey);
+		if (cachedModel == null) {
+			cachedModel = this.getGlModel(rotation, true, shape);
+			if (cachedModel == null) {
 				return null;
 			}
-			local46.createBones();
-			local46.uploadBuffers(false, false, false, false, false, true);
-			LocTypeList.animatedEntityCache.put(local46, local30);
+			cachedModel.createBones();
+			cachedModel.uploadBuffers(false, false, false, false, false, true);
+			LocTypeList.animatedEntityCache.put(cachedModel, cacheKey);
 		}
-		@Pc(80) boolean local80 = false;
-		@Pc(82) GlModel local82 = local46;
-		if (arg4 != null) {
-			local82 = (GlModel) arg4.animateLocGl(arg10, arg8, arg12, arg5, local46);
-			local80 = true;
+		@Pc(80) boolean copied = false;
+		@Pc(82) GlModel glModel = cachedModel;
+		if (seqType != null) {
+			glModel = (GlModel) seqType.animateLocGl(delayClock, currentFrame, tweenFrame, rotation, cachedModel);
+			copied = true;
 		}
-		if (arg11 == 10 && arg5 > 3) {
-			if (!local80) {
-				local82 = (GlModel) local82.copyForLoc(true, true, true);
-				local80 = true;
+		if (shape == 10 && rotation > 3) {
+			if (!copied) {
+				glModel = (GlModel) glModel.copyForLoc(true, true, true);
+				copied = true;
 			}
-			local82.rotateY(256);
+			glModel.rotateY(256);
 		}
-		if (arg7) {
-			tempLocEntity.sprite = local82.projectShadow(arg2);
+		if (castShadow) {
+			tempLocEntity.sprite = glModel.projectShadow(shadowSprite);
 		} else {
 			tempLocEntity.sprite = null;
 		}
 		if (this.hillskewType != 0) {
-			if (!local80) {
-				local82 = (GlModel) local82.copyForLoc(true, true, true);
+			if (!copied) {
+				glModel = (GlModel) glModel.copyForLoc(true, true, true);
 			}
-			local82.alignToTerrain(this.hillskewType, this.hillskewAmount, local46, arg6, arg9, arg1, arg3, arg0);
+			glModel.alignToTerrain(this.hillskewType, this.hillskewAmount, cachedModel, heightmap, overlayHeightmap, tileX, tileY, plane);
 		}
-		tempLocEntity.model = local82;
+		tempLocEntity.model = glModel;
 		return tempLocEntity;
 	}
 

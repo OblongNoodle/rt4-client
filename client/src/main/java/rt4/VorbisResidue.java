@@ -31,78 +31,78 @@ public final class VorbisResidue {
 
 	@OriginalMember(owner = "client!vb", name = "<init>", descriptor = "()V")
 	public VorbisResidue() {
-		@Pc(33) int[] local33 = new int[this.classifications];
-		@Pc(35) int local35;
-		for (local35 = 0; local35 < this.classifications; local35++) {
-			@Pc(41) int local41 = 0;
-			@Pc(44) int local44 = VorbisSound.readBits(3);
-			@Pc(50) boolean local50 = VorbisSound.readBit() != 0;
-			if (local50) {
-				local41 = VorbisSound.readBits(5);
+		@Pc(33) int[] cascades = new int[this.classifications];
+		@Pc(35) int i;
+		for (i = 0; i < this.classifications; i++) {
+			@Pc(41) int highBits = 0;
+			@Pc(44) int lowBits = VorbisSound.readBits(3);
+			@Pc(50) boolean hasHighBits = VorbisSound.readBit() != 0;
+			if (hasHighBits) {
+				highBits = VorbisSound.readBits(5);
 			}
-			local33[local35] = local41 << 3 | local44;
+			cascades[i] = highBits << 3 | lowBits;
 		}
 		this.books = new int[this.classifications * 8];
-		for (local35 = 0; local35 < this.classifications * 8; local35++) {
-			this.books[local35] = (local33[local35 >> 3] & 0x1 << (local35 & 0x7)) == 0 ? -1 : VorbisSound.readBits(8);
+		for (i = 0; i < this.classifications * 8; i++) {
+			this.books[i] = (cascades[i >> 3] & 0x1 << (i & 0x7)) == 0 ? -1 : VorbisSound.readBits(8);
 		}
 	}
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "([FIZ)V")
-	public final void synthesize(@OriginalArg(0) float[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2) {
-		@Pc(1) int local1;
-		for (local1 = 0; local1 < arg1; local1++) {
-			arg0[local1] = 0.0F;
+	public final void synthesize(@OriginalArg(0) float[] output, @OriginalArg(1) int size, @OriginalArg(2) boolean doNotDecode) {
+		@Pc(1) int i;
+		for (i = 0; i < size; i++) {
+			output[i] = 0.0F;
 		}
-		if (arg2) {
+		if (doNotDecode) {
 			return;
 		}
-		local1 = VorbisSound.codebooks[this.classBook].dimensions;
-		@Pc(25) int local25 = this.end - this.begin;
-		@Pc(30) int local30 = local25 / this.partitionSize;
-		@Pc(33) int[] local33 = new int[local30];
-		for (@Pc(35) int local35 = 0; local35 < 8; local35++) {
-			@Pc(40) int local40 = 0;
-			while (local40 < local30) {
-				@Pc(51) int local51;
-				@Pc(55) int local55;
-				if (local35 == 0) {
-					local51 = VorbisSound.codebooks[this.classBook].decodeScalar();
-					for (local55 = local1 - 1; local55 >= 0; local55--) {
-						if (local40 + local55 < local30) {
-							local33[local40 + local55] = local51 % this.classifications;
+		i = VorbisSound.codebooks[this.classBook].dimensions;
+		@Pc(25) int residueSize = this.end - this.begin;
+		@Pc(30) int partitionCount = residueSize / this.partitionSize;
+		@Pc(33) int[] classificationData = new int[partitionCount];
+		for (@Pc(35) int pass = 0; pass < 8; pass++) {
+			@Pc(40) int partitionIdx = 0;
+			while (partitionIdx < partitionCount) {
+				@Pc(51) int codeword;
+				@Pc(55) int j;
+				if (pass == 0) {
+					codeword = VorbisSound.codebooks[this.classBook].decodeScalar();
+					for (j = i - 1; j >= 0; j--) {
+						if (partitionIdx + j < partitionCount) {
+							classificationData[partitionIdx + j] = codeword % this.classifications;
 						}
-						local51 /= this.classifications;
+						codeword /= this.classifications;
 					}
 				}
-				for (local51 = 0; local51 < local1; local51++) {
-					local55 = local33[local40];
-					@Pc(96) int local96 = this.books[local55 * 8 + local35];
-					if (local96 >= 0) {
-						@Pc(106) int local106 = this.begin + local40 * this.partitionSize;
-						@Pc(110) VorbisCodebook local110 = VorbisSound.codebooks[local96];
-						@Pc(119) int local119;
+				for (codeword = 0; codeword < i; codeword++) {
+					j = classificationData[partitionIdx];
+					@Pc(96) int bookId = this.books[j * 8 + pass];
+					if (bookId >= 0) {
+						@Pc(106) int offset = this.begin + partitionIdx * this.partitionSize;
+						@Pc(110) VorbisCodebook codebook = VorbisSound.codebooks[bookId];
+						@Pc(119) int k;
 						if (this.type == 0) {
-							local119 = this.partitionSize / local110.dimensions;
-							for (@Pc(121) int local121 = 0; local121 < local119; local121++) {
-								@Pc(127) float[] local127 = local110.decodeVq();
-								for (@Pc(129) int local129 = 0; local129 < local110.dimensions; local129++) {
-									arg0[local106 + local121 + local129 * local119] += local127[local129];
+							k = this.partitionSize / codebook.dimensions;
+							for (@Pc(121) int step = 0; step < k; step++) {
+								@Pc(127) float[] vector = codebook.decodeVq();
+								for (@Pc(129) int dim = 0; dim < codebook.dimensions; dim++) {
+									output[offset + step + dim * k] += vector[dim];
 								}
 							}
 						} else {
-							local119 = 0;
-							while (local119 < this.partitionSize) {
-								@Pc(162) float[] local162 = local110.decodeVq();
-								for (@Pc(164) int local164 = 0; local164 < local110.dimensions; local164++) {
-									arg0[local106 + local119] += local162[local164];
-									local119++;
+							k = 0;
+							while (k < this.partitionSize) {
+								@Pc(162) float[] vector = codebook.decodeVq();
+								for (@Pc(164) int dim = 0; dim < codebook.dimensions; dim++) {
+									output[offset + k] += vector[dim];
+									k++;
 								}
 							}
 						}
 					}
-					local40++;
-					if (local40 >= local30) {
+					partitionIdx++;
+					if (partitionIdx >= partitionCount) {
 						break;
 					}
 				}

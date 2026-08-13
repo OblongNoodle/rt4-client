@@ -25,16 +25,16 @@ public class PlayerList {
 
 	@OriginalMember(owner = "client!fk", name = "b", descriptor = "(I)V")
 	public static void processAllPlayers() {
-		for (@Pc(7) int local7 = -1; local7 < size; local7++) {
-			@Pc(21) int local21;
-			if (local7 == -1) {
-				local21 = 2047;
+		for (@Pc(7) int i = -1; i < size; i++) {
+			@Pc(21) int playerId;
+			if (i == -1) {
+				playerId = 2047;
 			} else {
-				local21 = ids[local7];
+				playerId = ids[i];
 			}
-			@Pc(31) Player local31 = players[local21];
-			if (local31 != null) {
-				NpcList.processEntity(local31.getSize(), local31);
+			@Pc(31) Player player = players[playerId];
+			if (player != null) {
+				NpcList.processEntity(player.getSize(), player);
 			}
 		}
 	}

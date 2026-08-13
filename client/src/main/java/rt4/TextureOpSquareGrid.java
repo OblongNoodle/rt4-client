@@ -24,57 +24,57 @@ public final class TextureOpSquareGrid extends TextureOp {
 
 	@OriginalMember(owner = "client!f", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.repeatX = arg1.g1();
-		} else if (arg0 == 1) {
-			this.repeatY = arg1.g1();
-		} else if (arg0 == 2) {
-			this.borderSize = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buffer) {
+		if (opcode == 0) {
+			this.repeatX = buffer.g1();
+		} else if (opcode == 1) {
+			this.repeatY = buffer.g1();
+		} else if (opcode == 2) {
+			this.borderSize = buffer.g2();
 		}
 	}
 
 	@OriginalMember(owner = "client!f", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			for (@Pc(25) int local25 = 0; local25 < Texture.width; local25++) {
-				@Pc(32) int local32 = Texture.widthFractions[local25];
-				@Pc(36) int local36 = Texture.heightFractions[arg0];
-				@Pc(43) int local43 = this.repeatX * local32 >> 12;
-				@Pc(50) int local50 = local36 * this.repeatY >> 12;
-				@Pc(60) int local60 = this.repeatX * (local32 % (4096 / this.repeatX));
-				@Pc(70) int local70 = local36 % (4096 / this.repeatY) * this.repeatY;
-				if (this.borderSize > local70) {
-					for (local43 -= local50; local43 < 0; local43 += 4) {
+			for (@Pc(25) int i = 0; i < Texture.width; i++) {
+				@Pc(32) int colFraction = Texture.widthFractions[i];
+				@Pc(36) int rowFraction = Texture.heightFractions[row];
+				@Pc(43) int cellX = this.repeatX * colFraction >> 12;
+				@Pc(50) int cellY = rowFraction * this.repeatY >> 12;
+				@Pc(60) int fracX = this.repeatX * (colFraction % (4096 / this.repeatX));
+				@Pc(70) int fracY = rowFraction % (4096 / this.repeatY) * this.repeatY;
+				if (this.borderSize > fracY) {
+					for (cellX -= cellY; cellX < 0; cellX += 4) {
 					}
-					while (local43 > 3) {
-						local43 -= 4;
+					while (cellX > 3) {
+						cellX -= 4;
 					}
-					if (local43 != 1) {
-						local19[local25] = 0;
+					if (cellX != 1) {
+						output[i] = 0;
 						continue;
 					}
-					if (this.borderSize > local60) {
-						local19[local25] = 0;
-						continue;
-					}
-				}
-				if (local60 < this.borderSize) {
-					for (local43 -= local50; local43 < 0; local43 += 4) {
-					}
-					while (local43 > 3) {
-						local43 -= 4;
-					}
-					if (local43 > 0) {
-						local19[local25] = 0;
+					if (this.borderSize > fracX) {
+						output[i] = 0;
 						continue;
 					}
 				}
-				local19[local25] = 4096;
+				if (fracX < this.borderSize) {
+					for (cellX -= cellY; cellX < 0; cellX += 4) {
+					}
+					while (cellX > 3) {
+						cellX -= 4;
+					}
+					if (cellX > 0) {
+						output[i] = 0;
+						continue;
+					}
+				}
+				output[i] = 4096;
 			}
 		}
-		return local19;
+		return output;
 	}
 }

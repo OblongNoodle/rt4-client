@@ -287,13 +287,13 @@ public class WorldList {
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(IB)Z")
 	public static boolean hopWorld(@OriginalArg(0) int worldId) {
-		@Pc(3) World local3 = ScriptRunner.getWorld(worldId);
-		if (local3 == null) {
+		@Pc(3) World world = ScriptRunner.getWorld(worldId);
+		if (world == null) {
 			return false;
 		} else if (SignLink.clientMode == 1 || SignLink.clientMode == 2 || client.modeWhere == 2) {
-			@Pc(31) byte[] local31 = local3.hostname.toByteArray();
-			client.hostname = new String(local31, 0, local31.length);
-			Player.worldId = local3.id;
+			@Pc(31) byte[] hostnameBytes = world.hostname.toByteArray();
+			client.hostname = new String(hostnameBytes, 0, hostnameBytes.length);
+			Player.worldId = world.id;
 			if (client.modeWhere != 0) {
 				client.defaultPort = Player.worldId + 43594; // 40000;
 				client.port = client.defaultPort;
@@ -303,13 +303,13 @@ public class WorldList {
 		} else {
 			@Pc(62) JagString portStr = EMPTY_STRING;
 			if (client.modeWhere != 0) {
-				portStr = JagString.concatenate(new JagString[]{PORT_SEPARATOR, JagString.parseInt(local3.id + 7000)});
+				portStr = JagString.concatenate(new JagString[]{PORT_SEPARATOR, JagString.parseInt(world.id + 7000)});
 			}
 			@Pc(89) JagString settingsStr = EMPTY_STRING;
 			if (client.settings != null) {
 				settingsStr = JagString.concatenate(new JagString[]{URL_PARAM_SETTINGS, client.settings});
 			}
-			@Pc(182) JagString url = JagString.concatenate(new JagString[]{HTTP_PROTOCOL, local3.hostname, portStr, URL_PARAM_LANGUAGE, JagString.parseInt(client.language), URL_PARAM_AFFILIATE, JagString.parseInt(client.affiliate), settingsStr, URL_PARAM_JAVA_FLAG, client.objectTag ? TRUE_STRING : FALSE_STRING, URL_PARAM_JAVASCRIPT, client.javaScript ? TRUE_STRING : FALSE_STRING, URL_PARAM_ADVERT, client.advertSuppressed ? TRUE_STRING : FALSE_STRING});
+			@Pc(182) JagString url = JagString.concatenate(new JagString[]{HTTP_PROTOCOL, world.hostname, portStr, URL_PARAM_LANGUAGE, JagString.parseInt(client.language), URL_PARAM_AFFILIATE, JagString.parseInt(client.affiliate), settingsStr, URL_PARAM_JAVA_FLAG, client.objectTag ? TRUE_STRING : FALSE_STRING, URL_PARAM_JAVASCRIPT, client.javaScript ? TRUE_STRING : FALSE_STRING, URL_PARAM_ADVERT, client.advertSuppressed ? TRUE_STRING : FALSE_STRING});
 			try {
 				client.instance.getAppletContext().showDocument(url.toUrl(), "_self");
 				return true;

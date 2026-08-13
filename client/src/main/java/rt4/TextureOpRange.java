@@ -24,48 +24,48 @@ public final class TextureOpRange extends TextureOp {
 
 	@OriginalMember(owner = "client!fh", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.rangeMin = arg1.g2();
-		} else if (arg0 == 1) {
-			this.rangeMax = arg1.g2();
-		} else if (arg0 == 2) {
-			this.monochrome = arg1.g1() == 1;
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buffer) {
+		if (opcode == 0) {
+			this.rangeMin = buffer.g2();
+		} else if (opcode == 1) {
+			this.rangeMax = buffer.g2();
+		} else if (opcode == 2) {
+			this.monochrome = buffer.g1() == 1;
 		}
 	}
 
 	@OriginalMember(owner = "client!fh", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(30) int[] local30 = this.getChildMonochromeOutput(0, arg0);
-			for (@Pc(32) int local32 = 0; local32 < Texture.width; local32++) {
-				local19[local32] = this.rangeMin + (local30[local32] * this.rangeSpan >> 12);
+			@Pc(30) int[] childOutput = this.getChildMonochromeOutput(0, row);
+			for (@Pc(32) int i = 0; i < Texture.width; i++) {
+				output[i] = this.rangeMin + (childOutput[i] * this.rangeSpan >> 12);
 			}
 		}
-		return local19;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!fh", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(7) int[][] local7 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(7) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(17) int[][] local17 = this.getChildColorOutput(arg0, 0);
-			@Pc(21) int[] local21 = local17[1];
-			@Pc(25) int[] local25 = local17[2];
-			@Pc(29) int[] local29 = local17[0];
-			@Pc(33) int[] local33 = local7[0];
-			@Pc(37) int[] local37 = local7[1];
-			@Pc(41) int[] local41 = local7[2];
-			for (@Pc(43) int local43 = 0; local43 < Texture.width; local43++) {
-				local33[local43] = this.rangeMin + (this.rangeSpan * local29[local43] >> 12);
-				local37[local43] = (this.rangeSpan * local21[local43] >> 12) + this.rangeMin;
-				local41[local43] = this.rangeMin + (this.rangeSpan * local25[local43] >> 12);
+			@Pc(17) int[][] childOutput = this.getChildColorOutput(row, 0);
+			@Pc(21) int[] srcGreen = childOutput[1];
+			@Pc(25) int[] srcBlue = childOutput[2];
+			@Pc(29) int[] srcRed = childOutput[0];
+			@Pc(33) int[] dstRed = output[0];
+			@Pc(37) int[] dstGreen = output[1];
+			@Pc(41) int[] dstBlue = output[2];
+			for (@Pc(43) int i = 0; i < Texture.width; i++) {
+				dstRed[i] = this.rangeMin + (this.rangeSpan * srcRed[i] >> 12);
+				dstGreen[i] = (this.rangeSpan * srcGreen[i] >> 12) + this.rangeMin;
+				dstBlue[i] = this.rangeMin + (this.rangeSpan * srcBlue[i] >> 12);
 			}
 		}
-		return local7;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!fh", name = "e", descriptor = "(I)V")

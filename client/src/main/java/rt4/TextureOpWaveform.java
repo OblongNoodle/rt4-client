@@ -24,36 +24,36 @@ public final class TextureOpWaveform extends TextureOp {
 
 	@OriginalMember(owner = "client!ag", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(11) int[] local11 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(11) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(20) int local20 = Texture.heightFractions[arg0];
-			@Pc(26) int local26 = local20 - 2048 >> 1;
-			for (@Pc(28) int local28 = 0; local28 < Texture.width; local28++) {
-				@Pc(35) int local35 = Texture.widthFractions[local28];
-				@Pc(41) int local41 = local35 - 2048 >> 1;
-				@Pc(68) int local68;
+			@Pc(20) int rowFraction = Texture.heightFractions[row];
+			@Pc(26) int halfRow = rowFraction - 2048 >> 1;
+			for (@Pc(28) int i = 0; i < Texture.width; i++) {
+				@Pc(35) int colFraction = Texture.widthFractions[i];
+				@Pc(41) int halfCol = colFraction - 2048 >> 1;
+				@Pc(68) int value;
 				if (this.shape == 0) {
-					local68 = (local35 - local20) * this.frequency;
+					value = (colFraction - rowFraction) * this.frequency;
 				} else {
-					@Pc(58) int local58 = local41 * local41 + local26 * local26 >> 12;
-					local68 = (int) (Math.sqrt((float) local58 / 4096.0F) * 4096.0D);
-					local68 = (int) ((double) (local68 * this.frequency) * 3.141592653589793D);
+					@Pc(58) int distSq = halfCol * halfCol + halfRow * halfRow >> 12;
+					value = (int) (Math.sqrt((float) distSq / 4096.0F) * 4096.0D);
+					value = (int) ((double) (value * this.frequency) * 3.141592653589793D);
 				}
-				local68 -= local68 & 0xFFFFF000;
+				value -= value & 0xFFFFF000;
 				if (this.waveform == 0) {
-					local68 = TextureOp.SINE[local68 >> 4 & 0xFF] + 4096 >> 1;
+					value = TextureOp.SINE[value >> 4 & 0xFF] + 4096 >> 1;
 				} else if (this.waveform == 2) {
-					local68 -= 2048;
-					if (local68 < 0) {
-						local68 = -local68;
+					value -= 2048;
+					if (value < 0) {
+						value = -value;
 					}
-					local68 = 2048 - local68 << 1;
+					value = 2048 - value << 1;
 				}
-				local11[local28] = local68;
+				output[i] = value;
 			}
 		}
-		return local11;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!ag", name = "e", descriptor = "(I)V")
@@ -64,13 +64,13 @@ public final class TextureOpWaveform extends TextureOp {
 
 	@OriginalMember(owner = "client!ag", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.shape = arg1.g1();
-		} else if (arg0 == 1) {
-			this.waveform = arg1.g1();
-		} else if (arg0 == 3) {
-			this.frequency = arg1.g1();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buffer) {
+		if (opcode == 0) {
+			this.shape = buffer.g1();
+		} else if (opcode == 1) {
+			this.waveform = buffer.g1();
+		} else if (opcode == 3) {
+			this.frequency = buffer.g1();
 		}
 	}
 }

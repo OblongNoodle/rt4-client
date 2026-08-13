@@ -12,10 +12,10 @@ public final class TextureOpMonochromeFill extends TextureOp {
 	private int fillValue;
 
 	@OriginalMember(owner = "client!mi", name = "<init>", descriptor = "(I)V")
-	private TextureOpMonochromeFill(@OriginalArg(0) int arg0) {
+	private TextureOpMonochromeFill(@OriginalArg(0) int value) {
 		super(0, true);
 		this.fillValue = 4096;
-		this.fillValue = arg0;
+		this.fillValue = value;
 	}
 
 	@OriginalMember(owner = "client!mi", name = "<init>", descriptor = "()V")
@@ -25,19 +25,19 @@ public final class TextureOpMonochromeFill extends TextureOp {
 
 	@OriginalMember(owner = "client!mi", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.fillValue = (arg1.g1() << 12) / 255;
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buffer) {
+		if (opcode == 0) {
+			this.fillValue = (buffer.g1() << 12) / 255;
 		}
 	}
 
 	@OriginalMember(owner = "client!mi", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(17) int[] local17 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(17) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			ArrayUtils.fill(local17, 0, Texture.width, this.fillValue);
+			ArrayUtils.fill(output, 0, Texture.width, this.fillValue);
 		}
-		return local17;
+		return output;
 	}
 }

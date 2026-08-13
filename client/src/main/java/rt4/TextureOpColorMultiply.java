@@ -24,43 +24,43 @@ public final class TextureOpColorMultiply extends TextureOp {
 
 	@OriginalMember(owner = "client!mg", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.redMultiplier = arg1.g2();
-		} else if (arg0 == 1) {
-			this.greenMultiplier = arg1.g2();
-		} else if (arg0 == 2) {
-			this.blueMultiplier = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buffer) {
+		if (opcode == 0) {
+			this.redMultiplier = buffer.g2();
+		} else if (opcode == 1) {
+			this.greenMultiplier = buffer.g2();
+		} else if (opcode == 2) {
+			this.blueMultiplier = buffer.g2();
 		}
 	}
 
 	@OriginalMember(owner = "client!mg", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(16) int[][] local16 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(16) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(27) int[][] local27 = this.getChildColorOutput(arg0, 0);
-			@Pc(31) int[] local31 = local27[0];
-			@Pc(35) int[] local35 = local27[1];
-			@Pc(39) int[] local39 = local27[2];
-			@Pc(43) int[] local43 = local16[1];
-			@Pc(47) int[] local47 = local16[0];
-			@Pc(51) int[] local51 = local16[2];
-			for (@Pc(53) int local53 = 0; local53 < Texture.width; local53++) {
-				@Pc(64) int local64 = local31[local53];
-				@Pc(68) int local68 = local35[local53];
-				@Pc(72) int local72 = local39[local53];
-				if (local64 == local72 && local68 == local72) {
-					local47[local53] = this.redMultiplier * local64 >> 12;
-					local43[local53] = local72 * this.greenMultiplier >> 12;
-					local51[local53] = local68 * this.blueMultiplier >> 12;
+			@Pc(27) int[][] childOutput = this.getChildColorOutput(row, 0);
+			@Pc(31) int[] srcRed = childOutput[0];
+			@Pc(35) int[] srcGreen = childOutput[1];
+			@Pc(39) int[] srcBlue = childOutput[2];
+			@Pc(43) int[] dstGreen = output[1];
+			@Pc(47) int[] dstRed = output[0];
+			@Pc(51) int[] dstBlue = output[2];
+			for (@Pc(53) int i = 0; i < Texture.width; i++) {
+				@Pc(64) int red = srcRed[i];
+				@Pc(68) int green = srcGreen[i];
+				@Pc(72) int blue = srcBlue[i];
+				if (red == blue && green == blue) {
+					dstRed[i] = this.redMultiplier * red >> 12;
+					dstGreen[i] = blue * this.greenMultiplier >> 12;
+					dstBlue[i] = green * this.blueMultiplier >> 12;
 				} else {
-					local47[local53] = this.redMultiplier;
-					local43[local53] = this.greenMultiplier;
-					local51[local53] = this.blueMultiplier;
+					dstRed[i] = this.redMultiplier;
+					dstGreen[i] = this.greenMultiplier;
+					dstBlue[i] = this.blueMultiplier;
 				}
 			}
 		}
-		return local16;
+		return output;
 	}
 }

@@ -17,18 +17,18 @@ public abstract class TextureOpShape {
 	public final int fillColor;
 
 	@OriginalMember(owner = "client!kf", name = "<init>", descriptor = "(III)V")
-	protected TextureOpShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		this.outlineColor = arg1;
-		this.lineWidth = arg2;
-		this.fillColor = arg0;
+	protected TextureOpShape(@OriginalArg(0) int fillColor, @OriginalArg(1) int outlineColor, @OriginalArg(2) int lineWidth) {
+		this.outlineColor = outlineColor;
+		this.lineWidth = lineWidth;
+		this.fillColor = fillColor;
 	}
 
 	@OriginalMember(owner = "client!kf", name = "a", descriptor = "(III)V")
-	public abstract void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1);
+	public abstract void renderBorderedShape(@OriginalArg(0) int x, @OriginalArg(1) int y);
 
 	@OriginalMember(owner = "client!kf", name = "a", descriptor = "(IZI)V")
-	public abstract void renderOutlinedShape(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1);
+	public abstract void renderOutlinedShape(@OriginalArg(0) int x, @OriginalArg(2) int y);
 
 	@OriginalMember(owner = "client!kf", name = "c", descriptor = "(III)V")
-	public abstract void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1);
+	public abstract void renderFilledShape(@OriginalArg(1) int x, @OriginalArg(2) int y);
 }

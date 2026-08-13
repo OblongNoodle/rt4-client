@@ -39,20 +39,20 @@ public class SeqTypeList {
 	}
 
 	@OriginalMember(owner = "client!s", name = "a", descriptor = "(II)I")
-	public static int getGroupId(@OriginalArg(0) int arg0) {
-		return arg0 >>> 7;
+	public static int getGroupId(@OriginalArg(0) int id) {
+		return id >>> 7;
 	}
 
 	@OriginalMember(owner = "client!jd", name = "a", descriptor = "(II)I")
-	public static int getFileId(@OriginalArg(1) int arg0) {
-		return arg0 & 0x7F;
+	public static int getFileId(@OriginalArg(1) int id) {
+		return id & 0x7F;
 	}
 
 	@OriginalMember(owner = "client!lb", name = "a", descriptor = "(Lclient!ve;Lclient!ve;ILclient!ve;)V")
-	public static void init(@OriginalArg(0) Js5 arg0, @OriginalArg(1) Js5 arg1, @OriginalArg(3) Js5 arg2) {
-		archive = arg1;
-		basesArchive = arg0;
-		animsArchive = arg2;
+	public static void init(@OriginalArg(0) Js5 basesJs5, @OriginalArg(1) Js5 seqJs5, @OriginalArg(3) Js5 animsJs5) {
+		archive = seqJs5;
+		basesArchive = basesJs5;
+		animsArchive = animsJs5;
 	}
 
 	@OriginalMember(owner = "client!an", name = "a", descriptor = "(Z)V")
