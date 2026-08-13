@@ -23,11 +23,11 @@ public abstract class PcmStream extends Node {
 	public abstract int getActiveChannelCount();
 
 	@OriginalMember(owner = "client!qb", name = "a", descriptor = "([III)V")
-	protected final void readIfActive(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	protected final void readIfActive(@OriginalArg(0) int[] buffer, @OriginalArg(1) int offset, @OriginalArg(2) int length) {
 		if (this.active) {
-			this.read(arg0, arg1, arg2);
+			this.read(buffer, offset, length);
 		} else {
-			this.skip(arg2);
+			this.skip(length);
 		}
 	}
 
@@ -40,11 +40,11 @@ public abstract class PcmStream extends Node {
 	}
 
 	@OriginalMember(owner = "client!qb", name = "b", descriptor = "([III)V")
-	public abstract void read(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2);
+	public abstract void read(@OriginalArg(0) int[] buffer, @OriginalArg(1) int offset, @OriginalArg(2) int length);
 
 	@OriginalMember(owner = "client!qb", name = "d", descriptor = "()Lclient!qb;")
 	public abstract PcmStream nextSubStream();
 
 	@OriginalMember(owner = "client!qb", name = "c", descriptor = "(I)V")
-	public abstract void skip(@OriginalArg(0) int arg0);
+	public abstract void skip(@OriginalArg(0) int length);
 }

@@ -81,14 +81,14 @@ public class MidiPlayer {
 	}
 
 	@OriginalMember(owner = "client!v", name = "a", descriptor = "(ZIILclient!ve;ZII)V")
-	public static void playFadeOut(@OriginalArg(1) int group, @OriginalArg(3) Js5 archive, @OriginalArg(5) int arg2) {
+	public static void playFadeOut(@OriginalArg(1) int group, @OriginalArg(3) Js5 archive, @OriginalArg(5) int vol) {
 		songArchive = archive;
 		songFileId = 0;
 		songGroupId = group;
 		songLoop = false;
 		state = 1;
 		volumeFadeRate = 2;
-		volume = arg2;
+		volume = vol;
 	}
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "(ILclient!va;Lclient!ve;Lclient!ve;Lclient!ve;)Z")
@@ -157,11 +157,11 @@ public class MidiPlayer {
 	}
 
 	@OriginalMember(owner = "client!sj", name = "c", descriptor = "(II)V")
-	public static void setVolume(@OriginalArg(0) int arg0) {
+	public static void setVolume(@OriginalArg(0) int vol) {
 		if (state == 0) {
-			stream.setVolume(arg0);
+			stream.setVolume(vol);
 		} else {
-			volume = arg0;
+			volume = vol;
 		}
 	}
 }

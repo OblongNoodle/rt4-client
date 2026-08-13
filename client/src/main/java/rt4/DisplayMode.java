@@ -182,7 +182,7 @@ public final class DisplayMode {
 				try {
 					@Pc(269) Graphics graphics = GameShell.canvas.getGraphics();
 					SoftwareRaster.frameBuffer.draw(graphics);
-				} catch (@Pc(277) Exception local277) {
+				} catch (@Pc(277) Exception ignored) {
 				}
 				GameShell.paintFrameLetterbox(); // Creates a black background for SD Mode window, gameplay frame will render on top of.
 				if (currentMode == 0) {

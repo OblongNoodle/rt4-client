@@ -30,13 +30,13 @@ public final class StockMarketOffer {
 	}
 
 	@OriginalMember(owner = "client!sg", name = "<init>", descriptor = "(Lclient!wa;)V")
-	public StockMarketOffer(@OriginalArg(0) Buffer arg0) {
-		this.statusAndType = arg0.g1b();
-		this.item = arg0.g2();
-		this.price = arg0.g4();
-		this.count = arg0.g4();
-		this.completedCount = arg0.g4();
-		this.completedGold = arg0.g4();
+	public StockMarketOffer(@OriginalArg(0) Buffer buffer) {
+		this.statusAndType = buffer.g1b();
+		this.item = buffer.g2();
+		this.price = buffer.g4();
+		this.count = buffer.g4();
+		this.completedCount = buffer.g4();
+		this.completedGold = buffer.g4();
 	}
 
 	@OriginalMember(owner = "client!sg", name = "a", descriptor = "(Z)I")

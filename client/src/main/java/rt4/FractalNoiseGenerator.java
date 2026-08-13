@@ -21,17 +21,17 @@ public class FractalNoiseGenerator extends PerlinNoiseGenerator {
 	private final int[] octaveWeights = new int[this.octaveCount];
 
 	@OriginalMember(owner = "client!vd", name = "<init>", descriptor = "(IIIIIF)V")
-	protected FractalNoiseGenerator(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) float arg5) {
-		super(arg0, arg1, arg2, arg3, arg4);
-		for (@Pc(15) int local15 = 0; local15 < this.octaveCount; local15++) {
-			this.octaveWeights[local15] = (short) (Math.pow(arg5, local15) * 4096.0D);
+	protected FractalNoiseGenerator(@OriginalArg(0) int seed, @OriginalArg(1) int width, @OriginalArg(2) int height, @OriginalArg(3) int octaves, @OriginalArg(4) int amplitude, @OriginalArg(5) float persistence) {
+		super(seed, width, height, octaves, amplitude);
+		for (@Pc(15) int i = 0; i < this.octaveCount; i++) {
+			this.octaveWeights[i] = (short) (Math.pow(persistence, i) * 4096.0D);
 		}
 	}
 
 	@OriginalMember(owner = "client!vd", name = "a", descriptor = "(III)V")
 	@Override
-	protected final void accumulate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		this.accumulator += arg0 * this.octaveWeights[arg1] >> 12;
+	protected final void accumulate(@OriginalArg(0) int sample, @OriginalArg(1) int octave) {
+		this.accumulator += sample * this.octaveWeights[octave] >> 12;
 	}
 
 	@OriginalMember(owner = "client!vd", name = "a", descriptor = "(I)V")
@@ -42,8 +42,8 @@ public class FractalNoiseGenerator extends PerlinNoiseGenerator {
 	}
 
 	@OriginalMember(owner = "client!vd", name = "a", descriptor = "(IB)V")
-	protected void writeSample(@OriginalArg(0) int arg0, @OriginalArg(1) byte arg1) {
-		this.output[this.writePos++] = (byte) ((arg1 >> 1 & 0x7F) + 127);
+	protected void writeSample(@OriginalArg(0) int index, @OriginalArg(1) byte value) {
+		this.output[this.writePos++] = (byte) ((value >> 1 & 0x7F) + 127);
 	}
 
 	@OriginalMember(owner = "client!vd", name = "a", descriptor = "(B)V")

@@ -27,15 +27,15 @@ public class ObjTypeList {
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(ZBLclient!ve;Lclient!dd;Lclient!ve;)V")
-	public static void init(@OriginalArg(2) Js5 arg0, @OriginalArg(3) SoftwareFont arg1, @OriginalArg(4) Js5 arg2) {
+	public static void init(@OriginalArg(2) Js5 objArchive, @OriginalArg(3) SoftwareFont softwareFont, @OriginalArg(4) Js5 modelsJs5) {
 		allowMembers = true;
-		modelsArchive = arg2;
-		archive = arg0;
-		@Pc(23) int local23 = archive.capacity() - 1;
-		capacity = archive.getGroupCapacity(local23) + local23 * 256;
+		modelsArchive = modelsJs5;
+		archive = objArchive;
+		@Pc(23) int lastGroup = archive.capacity() - 1;
+		capacity = archive.getGroupCapacity(lastGroup) + lastGroup * 256;
 		defaultIops = new JagString[]{null, null, null, null, LocalizedText.DROP};
 		defaultOps = new JagString[]{null, null, LocalizedText.TAKE, null, null};
-		font = arg1;
+		font = softwareFont;
 	}
 
 	@OriginalMember(owner = "client!fk", name = "a", descriptor = "(IB)Lclient!h;")
@@ -90,9 +90,9 @@ public class ObjTypeList {
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(ZI)V")
-	public static void setAllowMembers(@OriginalArg(0) boolean arg0) {
-		if (arg0 != allowMembers) {
-			allowMembers = arg0;
+	public static void setAllowMembers(@OriginalArg(0) boolean allow) {
+		if (allow != allowMembers) {
+			allowMembers = allow;
 			clear();
 		}
 	}

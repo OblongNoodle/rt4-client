@@ -55,10 +55,10 @@ public class LocTypeList {
 	}
 
 	@OriginalMember(owner = "client!oi", name = "a", descriptor = "(ILclient!ve;Lclient!ve;Z)V")
-	public static void init(@OriginalArg(1) Js5 arg0, @OriginalArg(2) Js5 arg1) {
+	public static void init(@OriginalArg(1) Js5 locsJs5, @OriginalArg(2) Js5 modelsJs5) {
 		allowMembers = true;
-		modelsArchive = arg1;
-		locsArchive = arg0;
+		modelsArchive = modelsJs5;
+		locsArchive = locsJs5;
 	}
 
 	@OriginalMember(owner = "client!oe", name = "b", descriptor = "(I)V")
@@ -86,9 +86,9 @@ public class LocTypeList {
 	}
 
 	@OriginalMember(owner = "client!pe", name = "a", descriptor = "(BZ)V")
-	public static void setAllowMembers(@OriginalArg(1) boolean arg0) {
-		if (arg0 != allowMembers) {
-			allowMembers = arg0;
+	public static void setAllowMembers(@OriginalArg(1) boolean allow) {
+		if (allow != allowMembers) {
+			allowMembers = allow;
 			clear();
 		}
 	}

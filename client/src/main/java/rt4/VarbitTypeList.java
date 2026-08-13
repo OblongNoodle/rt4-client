@@ -11,8 +11,8 @@ public class VarbitTypeList {
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!og", name = "a", descriptor = "(Lclient!ve;I)V")
-	public static void init(@OriginalArg(0) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(0) Js5 varbitArchive) {
+		archive = varbitArchive;
 	}
 
 	@OriginalMember(owner = "client!jl", name = "a", descriptor = "(IB)Lclient!kk;")
@@ -46,12 +46,12 @@ public class VarbitTypeList {
 	}
 
 	@OriginalMember(owner = "client!wf", name = "a", descriptor = "(II)I")
-	public static int getFileId(@OriginalArg(0) int arg0) {
-		return arg0 & 0x3FF;
+	public static int getFileId(@OriginalArg(0) int id) {
+		return id & 0x3FF;
 	}
 
 	@OriginalMember(owner = "client!uj", name = "a", descriptor = "(II)I")
-	public static int getGroupId(@OriginalArg(0) int arg0) {
-		return arg0 >>> 10;
+	public static int getGroupId(@OriginalArg(0) int id) {
+		return id >>> 10;
 	}
 }

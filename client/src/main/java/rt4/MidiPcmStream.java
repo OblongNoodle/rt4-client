@@ -493,24 +493,24 @@ public final class MidiPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "([III)V")
 	@Override
-	public final synchronized void read(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final synchronized void read(@OriginalArg(0) int[] buffer, @OriginalArg(1) int offset, @OriginalArg(2) int length) {
 		if (this.midiDecoder.isValid()) {
 			@Pc(18) int local18 = this.midiDecoder.division * this.TEMPO_SCALE / AudioChannel.sampleRate;
 			do {
-				@Pc(28) long local28 = this.elapsedTimeMicros + (long) arg2 * (long) local18;
+				@Pc(28) long local28 = this.elapsedTimeMicros + (long) length * (long) local18;
 				if (this.currentTimeMicros - local28 >= 0L) {
 					this.elapsedTimeMicros = local28;
 					break;
 				}
 				@Pc(59) int local59 = (int) ((this.currentTimeMicros + (long) local18 - this.elapsedTimeMicros - 1L) / (long) local18);
 				this.elapsedTimeMicros += (long) local18 * (long) local59;
-				this.noteStream.read(arg0, arg1, local59);
-				arg2 -= local59;
-				arg1 += local59;
+				this.noteStream.read(buffer, offset, local59);
+				length -= local59;
+				offset += local59;
 				this.advanceSequencer();
 			} while (this.midiDecoder.isValid());
 		}
-		this.noteStream.read(arg0, arg1, arg2);
+		this.noteStream.read(buffer, offset, length);
 	}
 
 	@OriginalMember(owner = "client!va", name = "a", descriptor = "(IILclient!mf;B[I)Z")
@@ -686,23 +686,23 @@ public final class MidiPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!va", name = "c", descriptor = "(I)V")
 	@Override
-	public final synchronized void skip(@OriginalArg(0) int arg0) {
+	public final synchronized void skip(@OriginalArg(0) int length) {
 		if (this.midiDecoder.isValid()) {
 			@Pc(15) int local15 = this.midiDecoder.division * this.TEMPO_SCALE / AudioChannel.sampleRate;
 			do {
-				@Pc(25) long local25 = this.elapsedTimeMicros + (long) arg0 * (long) local15;
+				@Pc(25) long local25 = this.elapsedTimeMicros + (long) length * (long) local15;
 				if (this.currentTimeMicros - local25 >= 0L) {
 					this.elapsedTimeMicros = local25;
 					break;
 				}
 				@Pc(57) int local57 = (int) (((long) local15 + this.currentTimeMicros - this.elapsedTimeMicros - 1L) / (long) local15);
-				arg0 -= local57;
+				length -= local57;
 				this.elapsedTimeMicros += (long) local57 * (long) local15;
 				this.noteStream.skip(local57);
 				this.advanceSequencer();
 			} while (this.midiDecoder.isValid());
 		}
-		this.noteStream.skip(arg0);
+		this.noteStream.skip(length);
 	}
 
 	@OriginalMember(owner = "client!va", name = "e", descriptor = "(II)V")

@@ -54,12 +54,12 @@ public final class SoundPcmStream extends PcmStream {
 	public int samplePosition;
 
 	@OriginalMember(owner = "client!b", name = "<init>", descriptor = "(Lclient!kj;II)V")
-	public SoundPcmStream(@OriginalArg(0) PcmSound sound, @OriginalArg(1) int arg1, @OriginalArg(2) int volume) {
+	public SoundPcmStream(@OriginalArg(0) PcmSound sound, @OriginalArg(1) int sampleRate, @OriginalArg(2) int volume) {
 		this.sound = sound;
 		this.start = sound.start;
 		this.end = sound.end;
 		this.pingPongLoop = sound.pingPongLoop;
-		this.sampleRate = arg1;
+		this.sampleRate = sampleRate;
 		this.volume = volume;
 		this.pan = 8192;
 		this.samplePosition = 0;
@@ -67,12 +67,12 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "<init>", descriptor = "(Lclient!kj;III)V")
-	public SoundPcmStream(@OriginalArg(0) PcmSound sound, @OriginalArg(1) int arg1, @OriginalArg(2) int volume, @OriginalArg(3) int pan) {
+	public SoundPcmStream(@OriginalArg(0) PcmSound sound, @OriginalArg(1) int sampleRate, @OriginalArg(2) int volume, @OriginalArg(3) int pan) {
 		this.sound = sound;
 		this.start = sound.start;
 		this.end = sound.end;
 		this.pingPongLoop = sound.pingPongLoop;
-		this.sampleRate = arg1;
+		this.sampleRate = sampleRate;
 		this.volume = volume;
 		this.pan = pan;
 		this.samplePosition = 0;
@@ -821,9 +821,9 @@ public final class SoundPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([III)V")
 	@Override
-	public final synchronized void read(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public final synchronized void read(@OriginalArg(0) int[] buffer, @OriginalArg(1) int offset, @OriginalArg(2) int length) {
 		if (this.volume == 0 && this.fadeRemaining == 0) {
-			this.skip(arg2);
+			this.skip(length);
 			return;
 		}
 		@Pc(13) PcmSound local13 = (PcmSound) this.sound;
@@ -834,8 +834,8 @@ public final class SoundPcmStream extends PcmStream {
 		if (local33 <= 0) {
 			this.loopCount = 0;
 		}
-		@Pc(40) int local40 = arg1;
-		@Pc(44) int local44 = arg2 + arg1;
+		@Pc(40) int local40 = offset;
+		@Pc(44) int local44 = length + offset;
 		if (this.samplePosition < 0) {
 			if (this.sampleRate <= 0) {
 				this.cancelTransition();
@@ -858,7 +858,7 @@ public final class SoundPcmStream extends PcmStream {
 					label131:
 					{
 						if (this.sampleRate < 0) {
-							local40 = this.readBackward(arg0, arg1, local18, local44, local13.samples[this.start]);
+							local40 = this.readBackward(buffer, offset, local18, local44, local13.samples[this.start]);
 							if (this.samplePosition >= local18) {
 								return;
 							}
@@ -869,7 +869,7 @@ public final class SoundPcmStream extends PcmStream {
 							}
 						}
 						do {
-							local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.end - 1]);
+							local40 = this.readForward(buffer, local40, local23, local44, local13.samples[this.end - 1]);
 							if (this.samplePosition < local23) {
 								return;
 							}
@@ -878,7 +878,7 @@ public final class SoundPcmStream extends PcmStream {
 							if (--this.loopCount == 0) {
 								break;
 							}
-							local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.start]);
+							local40 = this.readBackward(buffer, local40, local18, local44, local13.samples[this.start]);
 							if (this.samplePosition >= local18) {
 								return;
 							}
@@ -890,7 +890,7 @@ public final class SoundPcmStream extends PcmStream {
 					@Pc(417) int local417;
 					if (this.sampleRate < 0) {
 						while (true) {
-							local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.end - 1]);
+							local40 = this.readBackward(buffer, local40, local18, local44, local13.samples[this.end - 1]);
 							if (this.samplePosition >= local18) {
 								return;
 							}
@@ -905,7 +905,7 @@ public final class SoundPcmStream extends PcmStream {
 						}
 					} else {
 						while (true) {
-							local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.start]);
+							local40 = this.readForward(buffer, local40, local23, local44, local13.samples[this.start]);
 							if (this.samplePosition < local23) {
 								return;
 							}
@@ -922,14 +922,14 @@ public final class SoundPcmStream extends PcmStream {
 				}
 			}
 			if (this.sampleRate < 0) {
-				this.readBackward(arg0, local40, 0, local44, 0);
+				this.readBackward(buffer, local40, 0, local44, 0);
 				if (this.samplePosition < 0) {
 					this.samplePosition = -1;
 					this.cancelTransition();
 					this.unlink();
 				}
 			} else {
-				this.readForward(arg0, local40, local29, local44, 0);
+				this.readForward(buffer, local40, local29, local44, 0);
 				if (this.samplePosition >= local29) {
 					this.samplePosition = local29;
 					this.cancelTransition();
@@ -938,7 +938,7 @@ public final class SoundPcmStream extends PcmStream {
 			}
 		} else if (this.pingPongLoop) {
 			if (this.sampleRate < 0) {
-				local40 = this.readBackward(arg0, arg1, local18, local44, local13.samples[this.start]);
+				local40 = this.readBackward(buffer, offset, local18, local44, local13.samples[this.start]);
 				if (this.samplePosition >= local18) {
 					return;
 				}
@@ -946,13 +946,13 @@ public final class SoundPcmStream extends PcmStream {
 				this.sampleRate = -this.sampleRate;
 			}
 			while (true) {
-				local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.end - 1]);
+				local40 = this.readForward(buffer, local40, local23, local44, local13.samples[this.end - 1]);
 				if (this.samplePosition < local23) {
 					return;
 				}
 				this.samplePosition = local23 + local23 - this.samplePosition - 1;
 				this.sampleRate = -this.sampleRate;
-				local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.start]);
+				local40 = this.readBackward(buffer, local40, local18, local44, local13.samples[this.start]);
 				if (this.samplePosition >= local18) {
 					return;
 				}
@@ -961,7 +961,7 @@ public final class SoundPcmStream extends PcmStream {
 			}
 		} else if (this.sampleRate < 0) {
 			while (true) {
-				local40 = this.readBackward(arg0, local40, local18, local44, local13.samples[this.end - 1]);
+				local40 = this.readBackward(buffer, local40, local18, local44, local13.samples[this.end - 1]);
 				if (this.samplePosition >= local18) {
 					return;
 				}
@@ -969,7 +969,7 @@ public final class SoundPcmStream extends PcmStream {
 			}
 		} else {
 			while (true) {
-				local40 = this.readForward(arg0, local40, local23, local44, local13.samples[this.start]);
+				local40 = this.readForward(buffer, local40, local23, local44, local13.samples[this.start]);
 				if (this.samplePosition < local23) {
 					return;
 				}
@@ -1150,22 +1150,22 @@ public final class SoundPcmStream extends PcmStream {
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "(I)V")
 	@Override
-	public final synchronized void skip(@OriginalArg(0) int arg0) {
+	public final synchronized void skip(@OriginalArg(0) int length) {
 		if (this.fadeRemaining > 0) {
-			if (arg0 >= this.fadeRemaining) {
+			if (length >= this.fadeRemaining) {
 				if (this.volume == Integer.MIN_VALUE) {
 					this.volume = 0;
 					this.currentVolume = this.leftVolume = this.rightVolume = 0;
 					this.unlink();
-					arg0 = this.fadeRemaining;
+					length = this.fadeRemaining;
 				}
 				this.fadeRemaining = 0;
 				this.recalculateChannelVolumes();
 			} else {
-				this.currentVolume += this.volumeDelta * arg0;
-				this.leftVolume += this.leftVolumeDelta * arg0;
-				this.rightVolume += this.rightVolumeDelta * arg0;
-				this.fadeRemaining -= arg0;
+				this.currentVolume += this.volumeDelta * length;
+				this.leftVolume += this.leftVolumeDelta * length;
+				this.rightVolume += this.rightVolumeDelta * length;
+				this.fadeRemaining -= length;
 			}
 		}
 		@Pc(71) PcmSound local71 = (PcmSound) this.sound;
@@ -1192,7 +1192,7 @@ public final class SoundPcmStream extends PcmStream {
 			}
 			this.samplePosition = local87 - 1;
 		}
-		this.samplePosition += this.sampleRate * arg0;
+		this.samplePosition += this.sampleRate * length;
 		if (this.loopCount >= 0) {
 			if (this.loopCount > 0) {
 				if (this.pingPongLoop) {
