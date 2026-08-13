@@ -13,8 +13,8 @@ public class VarpTypeList {
 	public static int count;
 
 	@OriginalMember(owner = "client!sj", name = "a", descriptor = "(Lclient!ve;B)V")
-	public static void init(@OriginalArg(0) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(0) Js5 varpArchive) {
+		archive = varpArchive;
 		count = archive.getGroupCapacity(16);
 	}
 

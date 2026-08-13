@@ -12,7 +12,7 @@ public final class BrokenOutputStream extends OutputStream {
 
 	@OriginalMember(owner = "client!vg", name = "write", descriptor = "(I)V")
 	@Override
-	public final void write(@OriginalArg(0) int arg0) throws IOException {
+	public final void write(@OriginalArg(0) int b) throws IOException {
 		throw new IOException();
 	}
 }

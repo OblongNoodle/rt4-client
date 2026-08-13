@@ -13,8 +13,8 @@ public final class SoftReferenceNode extends ReferenceNode {
 	private final SoftReference reference;
 
 	@OriginalMember(owner = "client!qd", name = "<init>", descriptor = "(Ljava/lang/Object;)V")
-	public SoftReferenceNode(@OriginalArg(0) Object arg0) {
-		this.reference = new SoftReference(arg0);
+	public SoftReferenceNode(@OriginalArg(0) Object referent) {
+		this.reference = new SoftReference(referent);
 	}
 
 	@OriginalMember(owner = "client!qd", name = "a", descriptor = "(Z)Ljava/lang/Object;")

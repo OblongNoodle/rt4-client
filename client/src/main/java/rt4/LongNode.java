@@ -11,7 +11,7 @@ public final class LongNode extends Node {
 	public long value;
 
 	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(J)V")
-	public LongNode(@OriginalArg(0) long arg0) {
-		this.value = arg0;
+	public LongNode(@OriginalArg(0) long value) {
+		this.value = value;
 	}
 }

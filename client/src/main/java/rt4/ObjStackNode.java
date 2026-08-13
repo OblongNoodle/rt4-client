@@ -11,7 +11,7 @@ public final class ObjStackNode extends SecondaryNode {
 	public final ObjStack value;
 
 	@OriginalMember(owner = "client!pa", name = "<init>", descriptor = "(Lclient!uj;)V")
-	public ObjStackNode(@OriginalArg(0) ObjStack arg0) {
-		this.value = arg0;
+	public ObjStackNode(@OriginalArg(0) ObjStack objStack) {
+		this.value = objStack;
 	}
 }

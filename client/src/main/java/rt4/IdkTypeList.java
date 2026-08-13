@@ -19,9 +19,9 @@ public class IdkTypeList {
 	public static int count;
 
 	@OriginalMember(owner = "client!jl", name = "a", descriptor = "(ILclient!ve;Lclient!ve;)V")
-	public static void init(@OriginalArg(1) Js5 arg0, @OriginalArg(2) Js5 arg1) {
-		modelsArchive = arg0;
-		archive = arg1;
+	public static void init(@OriginalArg(1) Js5 modelsJs5, @OriginalArg(2) Js5 idkJs5) {
+		modelsArchive = modelsJs5;
+		archive = idkJs5;
 		count = archive.getGroupCapacity(3);
 	}
 

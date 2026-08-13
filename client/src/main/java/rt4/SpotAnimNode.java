@@ -11,7 +11,7 @@ public final class SpotAnimNode extends SecondaryNode {
 	public final SpotAnim spotAnim;
 
 	@OriginalMember(owner = "client!bk", name = "<init>", descriptor = "(Lclient!bh;)V")
-	public SpotAnimNode(@OriginalArg(0) SpotAnim arg0) {
-		this.spotAnim = arg0;
+	public SpotAnimNode(@OriginalArg(0) SpotAnim spotAnim) {
+		this.spotAnim = spotAnim;
 	}
 }

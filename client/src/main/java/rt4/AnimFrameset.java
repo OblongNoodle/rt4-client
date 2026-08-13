@@ -12,7 +12,7 @@ public final class AnimFrameset extends SecondaryNode {
 	public final AnimFrame[] frames;
 
 	@OriginalMember(owner = "client!cl", name = "<init>", descriptor = "(Lclient!ve;Lclient!ve;IZ)V")
-	public AnimFrameset(@OriginalArg(0) Js5 animsArchive, @OriginalArg(1) Js5 basesArchive, @OriginalArg(2) int id, @OriginalArg(3) boolean arg3) {
+	public AnimFrameset(@OriginalArg(0) Js5 animsArchive, @OriginalArg(1) Js5 basesArchive, @OriginalArg(2) int id, @OriginalArg(3) boolean unused) {
 		@Pc(5) LinkedList bases = new LinkedList();
 		@Pc(10) int capacity = animsArchive.getGroupCapacity(id);
 		this.frames = new AnimFrame[capacity];

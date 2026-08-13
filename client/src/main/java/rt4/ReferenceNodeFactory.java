@@ -21,5 +21,5 @@ public abstract class ReferenceNodeFactory {
 	}
 
 	@OriginalMember(owner = "client!q", name = "a", descriptor = "(Lclient!gf;I)Lclient!gf;")
-	public abstract ReferenceNode create(@OriginalArg(0) ReferenceNode arg0);
+	public abstract ReferenceNode create(@OriginalArg(0) ReferenceNode node);
 }

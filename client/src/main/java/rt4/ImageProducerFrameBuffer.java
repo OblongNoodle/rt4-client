@@ -100,7 +100,7 @@ public final class ImageProducerFrameBuffer extends FrameBuffer implements Image
 
 	@OriginalMember(owner = "client!di", name = "imageUpdate", descriptor = "(Ljava/awt/Image;IIIII)Z")
 	@Override
-	public final boolean imageUpdate(@OriginalArg(0) Image image, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	public final boolean imageUpdate(@OriginalArg(0) Image image, @OriginalArg(1) int flags, @OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(4) int width, @OriginalArg(5) int height) {
 		return true;
 	}
 

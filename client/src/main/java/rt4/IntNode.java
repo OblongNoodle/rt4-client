@@ -15,7 +15,7 @@ public final class IntNode extends Node {
 	}
 
 	@OriginalMember(owner = "client!ka", name = "<init>", descriptor = "(I)V")
-	public IntNode(@OriginalArg(0) int arg0) {
-		this.value = arg0;
+	public IntNode(@OriginalArg(0) int value) {
+		this.value = value;
 	}
 }

@@ -11,7 +11,7 @@ public final class EnumStringEntry extends Node {
 	public final JagString value;
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "(Lclient!na;I)V")
-	public EnumStringEntry(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1) {
-		this.value = arg0;
+	public EnumStringEntry(@OriginalArg(0) JagString value, @OriginalArg(1) int unused) {
+		this.value = value;
 	}
 }
