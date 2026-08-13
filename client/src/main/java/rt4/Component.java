@@ -518,21 +518,21 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(IIB)V")
-	public final void setDragTarget(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		if (this.dragTargets == null || this.dragTargets.length <= arg0) {
-			@Pc(18) int[] local18 = new int[arg0 + 1];
+	public final void setDragTarget(@OriginalArg(0) int index, @OriginalArg(1) int target) {
+		if (this.dragTargets == null || this.dragTargets.length <= index) {
+			@Pc(18) int[] newTargets = new int[index + 1];
 			if (this.dragTargets != null) {
-				@Pc(24) int local24;
-				for (local24 = 0; local24 < this.dragTargets.length; local24++) {
-					local18[local24] = this.dragTargets[local24];
+				@Pc(24) int i;
+				for (i = 0; i < this.dragTargets.length; i++) {
+					newTargets[i] = this.dragTargets[i];
 				}
-				for (local24 = this.dragTargets.length; local24 < arg0; local24++) {
-					local18[local24] = -1;
+				for (i = this.dragTargets.length; i < index; i++) {
+					newTargets[i] = -1;
 				}
 			}
-			this.dragTargets = local18;
+			this.dragTargets = newTargets;
 		}
-		this.dragTargets[arg0] = arg1;
+		this.dragTargets[index] = target;
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(I)Z")
@@ -540,47 +540,47 @@ public final class Component {
 		if (this.clickMaskStart != null) {
 			return true;
 		}
-		@Pc(18) SoftwareIndexedSprite local18 = SpriteLoader.loadSoftwareIndexedSprite(this.spriteId, InterfaceList.spriteProvider);
-		if (local18 == null) {
+		@Pc(18) SoftwareIndexedSprite sprite = SpriteLoader.loadSoftwareIndexedSprite(this.spriteId, InterfaceList.spriteProvider);
+		if (sprite == null) {
 			return false;
 		}
-		local18.trim();
-		this.clickMaskStart = new int[local18.height];
-		this.clickMaskWidth = new int[local18.height];
-		for (@Pc(37) int local37 = 0; local37 < local18.height; local37++) {
-			@Pc(47) int local47 = 0;
-			@Pc(50) int local50 = local18.width;
-			@Pc(52) int local52;
-			for (local52 = 0; local52 < local18.width; local52++) {
-				if (local18.pixels[local18.width * local37 + local52] != 0) {
-					local47 = local52;
+		sprite.trim();
+		this.clickMaskStart = new int[sprite.height];
+		this.clickMaskWidth = new int[sprite.height];
+		for (@Pc(37) int y = 0; y < sprite.height; y++) {
+			@Pc(47) int startX = 0;
+			@Pc(50) int endX = sprite.width;
+			@Pc(52) int x;
+			for (x = 0; x < sprite.width; x++) {
+				if (sprite.pixels[sprite.width * y + x] != 0) {
+					startX = x;
 					break;
 				}
 			}
-			for (local52 = local47; local52 < local18.width; local52++) {
-				if (local18.pixels[local37 * local18.width + local52] == 0) {
-					local50 = local52;
+			for (x = startX; x < sprite.width; x++) {
+				if (sprite.pixels[y * sprite.width + x] == 0) {
+					endX = x;
 					break;
 				}
 			}
-			this.clickMaskStart[local37] = local47;
-			this.clickMaskWidth[local37] = local50 - local47;
+			this.clickMaskStart[y] = startX;
+			this.clickMaskWidth[y] = endX - startX;
 		}
 		return true;
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(BLclient!na;I)V")
-	public final void setOp(@OriginalArg(1) JagString arg0, @OriginalArg(2) int arg1) {
-		if (this.ops == null || this.ops.length <= arg1) {
-			@Pc(23) JagString[] local23 = new JagString[arg1 + 1];
+	public final void setOp(@OriginalArg(1) JagString op, @OriginalArg(2) int index) {
+		if (this.ops == null || this.ops.length <= index) {
+			@Pc(23) JagString[] newOps = new JagString[index + 1];
 			if (this.ops != null) {
-				for (@Pc(30) int local30 = 0; local30 < this.ops.length; local30++) {
-					local23[local30] = this.ops[local30];
+				for (@Pc(30) int i = 0; i < this.ops.length; i++) {
+					newOps[i] = this.ops[i];
 				}
 			}
-			this.ops = local23;
+			this.ops = newOps;
 		}
-		this.ops[arg1] = arg0;
+		this.ops[index] = op;
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(ILclient!wa;)V")
@@ -608,29 +608,29 @@ public final class Component {
 		if (this.hoverOverlayer == 65535) {
 			this.hoverOverlayer = -1;
 		}
-		@Pc(109) int local109 = buffer.g1();
-		@Pc(125) int local125;
-		if (local109 > 0) {
-			this.cs1ComparisonOperands = new int[local109];
-			this.cs1ComparisonOpcodes = new int[local109];
-			for (local125 = 0; local125 < local109; local125++) {
-				this.cs1ComparisonOpcodes[local125] = buffer.g1();
-				this.cs1ComparisonOperands[local125] = buffer.g2();
+		@Pc(109) int numComparisons = buffer.g1();
+		@Pc(125) int numScripts;
+		if (numComparisons > 0) {
+			this.cs1ComparisonOperands = new int[numComparisons];
+			this.cs1ComparisonOpcodes = new int[numComparisons];
+			for (numScripts = 0; numScripts < numComparisons; numScripts++) {
+				this.cs1ComparisonOpcodes[numScripts] = buffer.g1();
+				this.cs1ComparisonOperands[numScripts] = buffer.g2();
 			}
 		}
-		local125 = buffer.g1();
-		@Pc(164) int local164;
-		@Pc(175) int local175;
-		@Pc(183) int local183;
-		if (local125 > 0) {
-			this.cs1Scripts = new int[local125][];
-			for (local164 = 0; local164 < local125; local164++) {
-				local175 = buffer.g2();
-				this.cs1Scripts[local164] = new int[local175];
-				for (local183 = 0; local183 < local175; local183++) {
-					this.cs1Scripts[local164][local183] = buffer.g2();
-					if (this.cs1Scripts[local164][local183] == 65535) {
-						this.cs1Scripts[local164][local183] = -1;
+		numScripts = buffer.g1();
+		@Pc(164) int scriptIdx;
+		@Pc(175) int scriptLen;
+		@Pc(183) int j;
+		if (numScripts > 0) {
+			this.cs1Scripts = new int[numScripts][];
+			for (scriptIdx = 0; scriptIdx < numScripts; scriptIdx++) {
+				scriptLen = buffer.g2();
+				this.cs1Scripts[scriptIdx] = new int[scriptLen];
+				for (j = 0; j < scriptLen; j++) {
+					this.cs1Scripts[scriptIdx][j] = buffer.g2();
+					if (this.cs1Scripts[scriptIdx][j] == 65535) {
+						this.cs1Scripts[scriptIdx][j] = -1;
 					}
 				}
 			}
@@ -643,27 +643,27 @@ public final class Component {
 			buffer.g2();
 			buffer.g1();
 		}
-		local164 = 0;
+		scriptIdx = 0;
 		if (this.type == 2) {
 			this.dynamicHeightValue = 3;
 			this.objCounts = new int[this.baseWidth * this.baseHeight];
 			this.objTypes = new int[this.baseHeight * this.baseWidth];
 			this.dynamicWidthValue = 3;
-			local175 = buffer.g1();
-			local183 = buffer.g1();
-			if (local175 == 1) {
-				local164 = 268435456;
+			scriptLen = buffer.g1();
+			j = buffer.g1();
+			if (scriptLen == 1) {
+				scriptIdx = 268435456;
 			}
-			@Pc(312) int local312 = buffer.g1();
-			if (local183 == 1) {
-				local164 |= 0x40000000;
+			@Pc(312) int usable = buffer.g1();
+			if (j == 1) {
+				scriptIdx |= 0x40000000;
 			}
-			if (local312 == 1) {
-				local164 |= Integer.MIN_VALUE;
+			if (usable == 1) {
+				scriptIdx |= Integer.MIN_VALUE;
 			}
-			@Pc(333) int local333 = buffer.g1();
-			if (local333 == 1) {
-				local164 |= 0x20000000;
+			@Pc(333) int usableOnSelf = buffer.g1();
+			if (usableOnSelf == 1) {
+				scriptIdx |= 0x20000000;
 			}
 			this.invMarginX = buffer.g1();
 			this.invMarginY = buffer.g1();
@@ -683,10 +683,10 @@ public final class Component {
 			}
 			this.invOptions = new JagString[5];
 			for (i = 0; i < 5; i++) {
-				@Pc(418) JagString option = buffer.gjstr();
-				if (option.length() > 0) {
-					this.invOptions[i] = option;
-					local164 |= 0x1 << i + 23;
+				@Pc(418) JagString invOption = buffer.gjstr();
+				if (invOption.length() > 0) {
+					this.invOptions[i] = invOption;
+					scriptIdx |= 0x1 << i + 23;
 				}
 			}
 		}
@@ -758,14 +758,14 @@ public final class Component {
 			this.invMarginY = buffer.g2b();
 			int invHasOptions = buffer.g1();
 			if (invHasOptions == 1) {
-				local164 |= 0x40000000;
+				scriptIdx |= 0x40000000;
 			}
 			this.invOptions = new JagString[5];
 			for (int i = 0; i < 5; i++) {
-				@Pc(756) JagString option = buffer.gjstr();
-				if (option.length() > 0) {
-					this.invOptions[i] = option;
-					local164 |= 0x1 << i + 23;
+				@Pc(756) JagString invOption = buffer.gjstr();
+				if (invOption.length() > 0) {
+					this.invOptions[i] = invOption;
+					scriptIdx |= 0x1 << i + 23;
 				}
 			}
 		}
@@ -775,8 +775,8 @@ public final class Component {
 		if (this.buttonType == 2 || this.type == 2) {
 			this.optionCircumfix = buffer.gjstr();
 			this.optionSuffix = buffer.gjstr();
-			local175 = buffer.g2() & 0x3F;
-			local164 |= local175 << 11;
+			scriptLen = buffer.g2() & 0x3F;
+			scriptIdx |= scriptLen << 11;
 		}
 		if (this.buttonType == 1 || this.buttonType == 4 || this.buttonType == 5 || this.buttonType == 6) {
 			this.option = buffer.gjstr();
@@ -796,67 +796,67 @@ public final class Component {
 			}
 		}
 		if (this.buttonType == 1 || this.buttonType == 4 || this.buttonType == 5) {
-			local164 |= 0x400000;
+			scriptIdx |= 0x400000;
 		}
 		if (this.buttonType == 6) {
-			local164 |= 0x1;
+			scriptIdx |= 0x1;
 		}
-		this.properties = new ServerActiveProperties(local164, -1);
+		this.properties = new ServerActiveProperties(scriptIdx, -1);
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(ZI)Lclient!qf;")
-	public final Sprite getInvSprite(@OriginalArg(1) int arg0) {
+	public final Sprite getInvSprite(@OriginalArg(1) int index) {
 		loadFailed = false;
-		if (arg0 < 0 || arg0 >= this.invSprite.length) {
+		if (index < 0 || index >= this.invSprite.length) {
 			return null;
 		}
-		@Pc(29) int local29 = this.invSprite[arg0];
-		if (local29 == -1) {
+		@Pc(29) int spriteId = this.invSprite[index];
+		if (spriteId == -1) {
 			return null;
 		}
-		@Pc(43) Sprite local43 = (Sprite) sprites.get(local29);
-		if (local43 != null) {
-			return local43;
+		@Pc(43) Sprite sprite = (Sprite) sprites.get(spriteId);
+		if (sprite != null) {
+			return sprite;
 		}
-		local43 = SpriteLoader.loadSprites(local29, InterfaceList.spriteProvider);
-		if (local43 == null) {
+		sprite = SpriteLoader.loadSprites(spriteId, InterfaceList.spriteProvider);
+		if (sprite == null) {
 			loadFailed = true;
 		} else {
-			sprites.put(local43, local29);
+			sprites.put(sprite, spriteId);
 		}
-		return local43;
+		return sprite;
 	}
 
 	@OriginalMember(owner = "client!be", name = "b", descriptor = "(ILclient!wa;)[Ljava/lang/Object;")
-	private Object[] decodeEventHandler(@OriginalArg(1) Buffer arg0) {
-		@Pc(11) int local11 = arg0.g1();
-		if (local11 == 0) {
+	private Object[] decodeEventHandler(@OriginalArg(1) Buffer buffer) {
+		@Pc(11) int count = buffer.g1();
+		if (count == 0) {
 			return null;
 		}
-		@Pc(26) Object[] local26 = new Object[local11];
-		for (@Pc(28) int local28 = 0; local28 < local11; local28++) {
-			@Pc(35) int local35 = arg0.g1();
-			if (local35 == 0) {
-				local26[local28] = Integer.valueOf(arg0.g4());
-			} else if (local35 == 1) {
-				local26[local28] = arg0.gjstr();
+		@Pc(26) Object[] result = new Object[count];
+		for (@Pc(28) int i = 0; i < count; i++) {
+			@Pc(35) int valueType = buffer.g1();
+			if (valueType == 0) {
+				result[i] = Integer.valueOf(buffer.g4());
+			} else if (valueType == 1) {
+				result[i] = buffer.gjstr();
 			}
 		}
 		this.hasEventHandlers = true;
-		return local26;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(Lclient!wa;Z)[I")
-	private int[] decodeTriggers(@OriginalArg(0) Buffer arg0) {
-		@Pc(9) int local9 = arg0.g1();
-		if (local9 == 0) {
+	private int[] decodeTriggers(@OriginalArg(0) Buffer buffer) {
+		@Pc(9) int count = buffer.g1();
+		if (count == 0) {
 			return null;
 		}
-		@Pc(19) int[] local19 = new int[local9];
-		for (@Pc(26) int local26 = 0; local26 < local9; local26++) {
-			local19[local26] = arg0.g4();
+		@Pc(19) int[] triggers = new int[count];
+		for (@Pc(26) int i = 0; i < count; i++) {
+			triggers[i] = buffer.g4();
 		}
-		return local19;
+		return triggers;
 	}
 
 	@OriginalMember(owner = "client!be", name = "b", descriptor = "(III)V")
@@ -870,148 +870,148 @@ public final class Component {
 		this.objCounts[oldIndex] = tmpCount;
 	}
 
-	@OriginalMember(owner = "client!be", name = "a", descriptor = "(ILclient!tk;IIIZLclient!hh;)Lclient!ak;")
-	public final Model getModel(@OriginalArg(0) int arg0, @OriginalArg(1) SeqType arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) PlayerAppearance arg5) {
+	@OriginalMember(owner = "client!be", name = "a", descriptor = "(IIB)V")
+	public final Model getModel(@OriginalArg(0) int frame, @OriginalArg(1) SeqType seq, @OriginalArg(2) int nextFrame, @OriginalArg(4) int tweenDelta, @OriginalArg(5) boolean active, @OriginalArg(6) PlayerAppearance appearance) {
 		loadFailed = false;
-		@Pc(10) int local10;
-		@Pc(13) int local13;
-		if (arg4) {
-			local10 = this.activeModelType;
-			local13 = this.activeModelId;
+		@Pc(10) int mType;
+		@Pc(13) int mId;
+		if (active) {
+			mType = this.activeModelType;
+			mId = this.activeModelId;
 		} else {
-			local13 = this.modelId;
-			local10 = this.modelType;
+			mId = this.modelId;
+			mType = this.modelType;
 		}
-		if (local10 == 0) {
+		if (mType == 0) {
 			return null;
-		} else if (local10 == 1 && local13 == -1) {
+		} else if (mType == 1 && mId == -1) {
 			return null;
 		} else {
-			@Pc(61) Model local61;
-			if (local10 == 1) {
-				local61 = (Model) models.get((local10 << 16) + local13);
-				if (local61 == null) {
-					@Pc(69) RawModel local69 = RawModel.create(InterfaceList.modelProvider, local13);
-					if (local69 == null) {
+			@Pc(61) Model model;
+			if (mType == 1) {
+				model = (Model) models.get((mType << 16) + mId);
+				if (model == null) {
+					@Pc(69) RawModel rawModel = RawModel.create(InterfaceList.modelProvider, mId);
+					if (rawModel == null) {
 						loadFailed = true;
 						return null;
 					}
-					local61 = local69.createModel(64, 768, -50, -10, -50);
-					models.put(local61, local13 + (local10 << 16));
+					model = rawModel.createModel(64, 768, -50, -10, -50);
+					models.put(model, mId + (mType << 16));
 				}
-				if (arg1 != null) {
-					local61 = arg1.animateEntity(local61, arg0, arg3, arg2);
+				if (seq != null) {
+					model = seq.animateEntity(model, frame, tweenDelta, nextFrame);
 				}
-				return local61;
-			} else if (local10 == 2) {
-				local61 = NpcTypeList.get(local13).getHeadModel(arg1, arg3, arg0, arg2);
-				if (local61 == null) {
+				return model;
+			} else if (mType == 2) {
+				model = NpcTypeList.get(mId).getHeadModel(seq, tweenDelta, frame, nextFrame);
+				if (model == null) {
 					loadFailed = true;
 					return null;
 				} else {
-					return local61;
+					return model;
 				}
-			} else if (local10 == 3) {
-				if (arg5 == null) {
+			} else if (mType == 3) {
+				if (appearance == null) {
 					return null;
 				}
-				local61 = arg5.getHeadModel(arg3, arg1, arg2, arg0);
-				if (local61 == null) {
+				model = appearance.getHeadModel(tweenDelta, seq, nextFrame, frame);
+				if (model == null) {
 					loadFailed = true;
 					return null;
 				} else {
-					return local61;
+					return model;
 				}
-			} else if (local10 == 4) {
-				@Pc(164) ObjType local164 = ObjTypeList.get(local13);
-				@Pc(173) Model local173 = local164.getModel(arg0, arg3, arg1, 10, arg2);
-				if (local173 == null) {
+			} else if (mType == 4) {
+				@Pc(164) ObjType objType = ObjTypeList.get(mId);
+				@Pc(173) Model objModel = objType.getModel(frame, tweenDelta, seq, 10, nextFrame);
+				if (objModel == null) {
 					loadFailed = true;
 					return null;
 				} else {
-					return local173;
+					return objModel;
 				}
-			} else if (local10 == 6) {
-				local61 = NpcTypeList.get(local13).getBodyModel(null, 0, 0, arg0, arg3, arg2, null, 0, arg1);
-				if (local61 == null) {
+			} else if (mType == 6) {
+				model = NpcTypeList.get(mId).getBodyModel(null, 0, 0, frame, tweenDelta, nextFrame, null, 0, seq);
+				if (model == null) {
 					loadFailed = true;
 					return null;
 				} else {
-					return local61;
+					return model;
 				}
-			} else if (local10 != 7) {
+			} else if (mType != 7) {
 				return null;
-			} else if (arg5 == null) {
+			} else if (appearance == null) {
 				return null;
 			} else {
-				@Pc(227) int local227 = this.modelId >>> 16;
-				@Pc(232) int local232 = this.modelId & 0xFFFF;
-				@Pc(235) int local235 = this.modelFrameCycle;
-				@Pc(246) Model local246 = arg5.getPartialHeadModel(arg0, local235, local227, arg3, arg1, arg2, local232);
-				if (local246 == null) {
+				@Pc(227) int upper = this.modelId >>> 16;
+				@Pc(232) int lower = this.modelId & 0xFFFF;
+				@Pc(235) int frameCycle = this.modelFrameCycle;
+				@Pc(246) Model partialModel = appearance.getPartialHeadModel(frame, frameCycle, upper, tweenDelta, seq, nextFrame, lower);
+				if (partialModel == null) {
 					loadFailed = true;
 					return null;
 				} else {
-					return local246;
+					return partialModel;
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "(BZ)Lclient!qf;")
-	public final Sprite getSprite(@OriginalArg(1) boolean arg0) {
+	public final Sprite getSprite(@OriginalArg(1) boolean active) {
 		loadFailed = false;
-		@Pc(12) int local12;
-		if (arg0) {
-			local12 = this.activeSpriteId;
+		@Pc(12) int spriteId;
+		if (active) {
+			spriteId = this.activeSpriteId;
 		} else {
-			local12 = this.spriteId;
+			spriteId = this.spriteId;
 		}
-		if (local12 == -1) {
+		if (spriteId == -1) {
 			return null;
 		}
-		@Pc(66) long local66 = ((this.vFlip ? 1L : 0L) << 38) + ((this.hasAlpha ? 1L : 0L) << 35) + (long) local12 + ((long) this.outlineThickness << 36) + ((this.hFlip ? 1L : 0L) << 39) + ((long) this.shadowColor << 40);
-		@Pc(72) Sprite local72 = (Sprite) sprites.get(local66);
-		if (local72 != null) {
-			return local72;
+		@Pc(66) long hash = ((this.vFlip ? 1L : 0L) << 38) + ((this.hasAlpha ? 1L : 0L) << 35) + (long) spriteId + ((long) this.outlineThickness << 36) + ((this.hFlip ? 1L : 0L) << 39) + ((long) this.shadowColor << 40);
+		@Pc(72) Sprite sprite = (Sprite) sprites.get(hash);
+		if (sprite != null) {
+			return sprite;
 		}
-		@Pc(85) SoftwareSprite local85;
+		@Pc(85) SoftwareSprite swSprite;
 		if (this.hasAlpha) {
-			local85 = SoftwareSprite.loadSoftwareAlphaSprite(InterfaceList.spriteProvider, local12);
+			swSprite = SoftwareSprite.loadSoftwareAlphaSprite(InterfaceList.spriteProvider, spriteId);
 		} else {
-			local85 = SpriteLoader.loadSoftwareSprite(0, InterfaceList.spriteProvider, local12);
+			swSprite = SpriteLoader.loadSoftwareSprite(0, InterfaceList.spriteProvider, spriteId);
 		}
-		if (local85 == null) {
+		if (swSprite == null) {
 			loadFailed = true;
 			return null;
 		}
 		if (this.vFlip) {
-			local85.flipVertical();
+			swSprite.flipVertical();
 		}
 		if (this.hFlip) {
-			local85.flipHorizontal();
+			swSprite.flipHorizontal();
 		}
 		if (this.outlineThickness > 0) {
-			local85.pad(this.outlineThickness);
+			swSprite.pad(this.outlineThickness);
 		}
 		if (this.outlineThickness >= 1) {
-			local85.drawOutline(1);
+			swSprite.drawOutline(1);
 		}
 		if (this.outlineThickness >= 2) {
-			local85.drawOutline(16777215);
+			swSprite.drawOutline(16777215);
 		}
 		if (this.shadowColor != 0) {
-			local85.drawShadow(this.shadowColor);
+			swSprite.drawShadow(this.shadowColor);
 		}
 		if (!GlRenderer.enabled) {
-			local72 = local85;
-		} else if (local85 instanceof SoftwareAlphaSprite) {
-			local72 = new GlAlphaSprite(local85);
+			sprite = swSprite;
+		} else if (swSprite instanceof SoftwareAlphaSprite) {
+			sprite = new GlAlphaSprite(swSprite);
 		} else {
-			local72 = new GlSprite(local85);
+			sprite = new GlSprite(swSprite);
 		}
-		sprites.put(local72, local66);
-		return local72;
+		sprites.put(sprite, hash);
+		return sprite;
 	}
 
 	@OriginalMember(owner = "client!be", name = "c", descriptor = "(ILclient!wa;)V")
@@ -1044,13 +1044,13 @@ public final class Component {
 			this.scrollMaxV = buffer.g2();
 			this.noClickThrough = buffer.g1() == 1;
 		}
-		@Pc(175) int local175;
+		@Pc(175) int flags;
 		if (this.type == 5) {
 			this.spriteId = buffer.g4();
 			this.angle2d = buffer.g2();
-			local175 = buffer.g1();
-			this.hasAlpha = (local175 & 0x2) != 0;
-			this.spriteTiling = (local175 & 0x1) != 0;
+			flags = buffer.g1();
+			this.hasAlpha = (flags & 0x2) != 0;
+			this.spriteTiling = (flags & 0x1) != 0;
 			this.alpha = buffer.g1();
 			this.outlineThickness = buffer.g1();
 			this.shadowColor = buffer.g4();
@@ -1106,60 +1106,60 @@ public final class Component {
 			this.color = buffer.g4();
 			this.lineFlipped = buffer.g1() == 1;
 		}
-		local175 = buffer.g3();
-		@Pc(471) int local471 = buffer.g1();
-		@Pc(497) int local497;
-		if (local471 != 0) {
+		flags = buffer.g3();
+		@Pc(471) int keyData = buffer.g1();
+		@Pc(497) int opFlags;
+		if (keyData != 0) {
 			this.keyRepeatDelays = new int[10];
 			this.keyCodes = new byte[10];
 			this.keyModifiers = new byte[10];
-			while (local471 != 0) {
-				local497 = (local471 >> 4) - 1;
-				local471 = buffer.g1() | local471 << 8;
-				local471 &= 0xFFF;
-				if (local471 == 4095) {
-					this.keyRepeatDelays[local497] = -1;
+			while (keyData != 0) {
+				opFlags = (keyData >> 4) - 1;
+				keyData = buffer.g1() | keyData << 8;
+				keyData &= 0xFFF;
+				if (keyData == 4095) {
+					this.keyRepeatDelays[opFlags] = -1;
 				} else {
-					this.keyRepeatDelays[local497] = local471;
+					this.keyRepeatDelays[opFlags] = keyData;
 				}
-				this.keyCodes[local497] = buffer.g1b();
-				this.keyModifiers[local497] = buffer.g1b();
-				local471 = buffer.g1();
+				this.keyCodes[opFlags] = buffer.g1b();
+				this.keyModifiers[opFlags] = buffer.g1b();
+				keyData = buffer.g1();
 			}
 		}
 		this.optionBase = buffer.gjstr();
-		local497 = buffer.g1();
-		@Pc(557) int local557 = local497 & 0xF;
-		@Pc(567) int local567;
-		if (local557 > 0) {
-			this.ops = new JagString[local557];
-			for (local567 = 0; local567 < local557; local567++) {
-				this.ops[local567] = buffer.gjstr();
+		opFlags = buffer.g1();
+		@Pc(557) int opCount = opFlags & 0xF;
+		@Pc(567) int targetOverride;
+		if (opCount > 0) {
+			this.ops = new JagString[opCount];
+			for (targetOverride = 0; targetOverride < opCount; targetOverride++) {
+				this.ops[targetOverride] = buffer.gjstr();
 			}
 		}
-		@Pc(584) int local584 = local497 >> 4;
-		if (local584 > 0) {
-			local567 = buffer.g1();
-			this.dragTargets = new int[local567 + 1];
-			for (@Pc(599) int local599 = 0; local599 < this.dragTargets.length; local599++) {
-				this.dragTargets[local599] = -1;
+		@Pc(584) int dragOpCount = opFlags >> 4;
+		if (dragOpCount > 0) {
+			targetOverride = buffer.g1();
+			this.dragTargets = new int[targetOverride + 1];
+			for (@Pc(599) int i = 0; i < this.dragTargets.length; i++) {
+				this.dragTargets[i] = -1;
 			}
-			this.dragTargets[local567] = buffer.g2();
+			this.dragTargets[targetOverride] = buffer.g2();
 		}
-		if (local584 > 1) {
-			local567 = buffer.g1();
-			this.dragTargets[local567] = buffer.g2();
+		if (dragOpCount > 1) {
+			targetOverride = buffer.g1();
+			this.dragTargets[targetOverride] = buffer.g2();
 		}
 		this.dragDeadzone = buffer.g1();
 		this.dragDeadtime = buffer.g1();
 		this.dragRenderBehavior = buffer.g1() == 1;
-		local567 = -1;
+		targetOverride = -1;
 		this.optionCircumfix = buffer.gjstr();
-		if (ServerActiveProperties.getTargetMask(local175) != 0) {
-			local567 = buffer.g2();
+		if (ServerActiveProperties.getTargetMask(flags) != 0) {
+			targetOverride = buffer.g2();
 			this.targetCursor = buffer.g2();
-			if (local567 == 65535) {
-				local567 = -1;
+			if (targetOverride == 65535) {
+				targetOverride = -1;
 			}
 			if (this.targetCursor == 65535) {
 				this.targetCursor = -1;
@@ -1169,7 +1169,7 @@ public final class Component {
 				this.defaultTargetCursor = -1;
 			}
 		}
-		this.properties = new ServerActiveProperties(local175, local567);
+		this.properties = new ServerActiveProperties(flags, targetOverride);
 		this.onLoad = this.decodeEventHandler(buffer);
 		this.onMouseOver = this.decodeEventHandler(buffer);
 		this.onMouseLeave = this.decodeEventHandler(buffer);
@@ -1198,22 +1198,22 @@ public final class Component {
 	}
 
 	@OriginalMember(owner = "client!be", name = "a", descriptor = "([Lclient!ok;I)Lclient!rk;")
-	public final Font getFont(@OriginalArg(0) IndexedSprite[] arg0) {
+	public final Font getFont(@OriginalArg(0) IndexedSprite[] nameIcons) {
 		loadFailed = false;
 		if (this.font == -1) {
 			return null;
 		}
-		@Pc(21) Font local21 = (Font) fonts.get(this.font);
-		if (local21 != null) {
-			return local21;
+		@Pc(21) Font cachedFont = (Font) fonts.get(this.font);
+		if (cachedFont != null) {
+			return cachedFont;
 		}
-		local21 = Font.load(this.font, InterfaceList.spriteProvider, InterfaceList.fontProvider);
-		if (local21 == null) {
+		cachedFont = Font.load(this.font, InterfaceList.spriteProvider, InterfaceList.fontProvider);
+		if (cachedFont == null) {
 			loadFailed = true;
 		} else {
-			local21.setNameIcons(arg0, null);
-			fonts.put(local21, this.font);
+			cachedFont.setNameIcons(nameIcons, null);
+			fonts.put(cachedFont, this.font);
 		}
-		return local21;
+		return cachedFont;
 	}
 }
