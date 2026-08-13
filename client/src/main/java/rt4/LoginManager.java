@@ -247,7 +247,7 @@ public class LoginManager {
 				Protocol.socket = null;
 				clear();
 			}
-		} catch (@Pc(210) IOException local210) {
+		} catch (@Pc(210) IOException ex) {
 			if (Protocol.socket != null) {
 				Protocol.socket.close();
 				Protocol.socket = null;
@@ -950,26 +950,26 @@ public class LoginManager {
 		@Pc(320) int chunkX;
 		@Pc(309) int chunkY;
 		for (id = 0; id < mapFilesBuffer.length; id++) {
-			@Pc(294) byte[] local294 = locationMapFilesBuffer[id];
-			if (local294 != null) {
+			@Pc(294) byte[] locData = locationMapFilesBuffer[id];
+			if (locData != null) {
 				chunkY = (regionBitPacked[id] & 0xFF) * 64 - Camera.originY;
 				chunkX = (regionBitPacked[id] >> 8) * 64 - Camera.originX;
 				if (SceneGraph.dynamicMapRegion) {
 					chunkY = 10;
 					chunkX = 10;
 				}
-				fileExists &= areLocModelsReady(chunkX, chunkY, local294);
+				fileExists &= areLocModelsReady(chunkX, chunkY, locData);
 			}
 			if (GlRenderer.enabled) {
-				local294 = underWaterLocationsMapFilesBuffer[id];
-				if (local294 != null) {
+				locData = underWaterLocationsMapFilesBuffer[id];
+				if (locData != null) {
 					chunkX = (regionBitPacked[id] >> 8) * 64 - Camera.originX;
 					chunkY = (regionBitPacked[id] & 0xFF) * 64 - Camera.originY;
 					if (SceneGraph.dynamicMapRegion) {
 						chunkY = 10;
 						chunkX = 10;
 					}
-					fileExists &= areLocModelsReady(chunkX, chunkY, local294);
+					fileExists &= areLocModelsReady(chunkX, chunkY, locData);
 				}
 			}
 		}
@@ -1108,15 +1108,15 @@ public class LoginManager {
 			Protocol.outboundBuffer.p4(1057001181);
 		}
 		if (!SceneGraph.dynamicMapRegion) {
-			@Pc(815) int local815 = (SceneGraph.centralZoneY + 6) / 8;
-			@Pc(821) int local821 = (SceneGraph.centralZoneY - 6) / 8;
+			@Pc(815) int maxRegionY = (SceneGraph.centralZoneY + 6) / 8;
+			@Pc(821) int minRegionY = (SceneGraph.centralZoneY - 6) / 8;
 			chunkX = (SceneGraph.centralZoneX - 6) / 8;
 			chunkY = (SceneGraph.centralZoneX + 6) / 8;
-			for (@Pc(837) int local837 = chunkX - 1; local837 <= chunkY + 1; local837++) {
-				for (@Pc(850) int local850 = local821 - 1; local850 <= local815 + 1; local850++) {
-					if (local837 < chunkX || local837 > chunkY || local850 < local821 || local850 > local815) {
-						client.js5Archive5.prefetchGroup(JagString.concatenate(new JagString[]{MAP_PREFIX, JagString.parseInt(local837), UNDERSCORE, JagString.parseInt(local850)}));
-						client.js5Archive5.prefetchGroup(JagString.concatenate(new JagString[]{LOC_PREFIX, JagString.parseInt(local837), UNDERSCORE, JagString.parseInt(local850)}));
+			for (@Pc(837) int prefetchX = chunkX - 1; prefetchX <= chunkY + 1; prefetchX++) {
+				for (@Pc(850) int prefetchY = minRegionY - 1; prefetchY <= maxRegionY + 1; prefetchY++) {
+					if (prefetchX < chunkX || prefetchX > chunkY || prefetchY < minRegionY || prefetchY > maxRegionY) {
+						client.js5Archive5.prefetchGroup(JagString.concatenate(new JagString[]{MAP_PREFIX, JagString.parseInt(prefetchX), UNDERSCORE, JagString.parseInt(prefetchY)}));
+						client.js5Archive5.prefetchGroup(JagString.concatenate(new JagString[]{LOC_PREFIX, JagString.parseInt(prefetchX), UNDERSCORE, JagString.parseInt(prefetchY)}));
 					}
 				}
 			}
@@ -1192,31 +1192,31 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!t", name = "a", descriptor = "(ZB)V")
-	public static void readDynamicLocs(@OriginalArg(0) boolean arg0) {
-		@Pc(19) byte local19;
-		@Pc(21) byte[][] local21;
-		if (GlRenderer.enabled && arg0) {
-			local21 = underWaterLocationsMapFilesBuffer;
-			local19 = 1;
+	public static void readDynamicLocs(@OriginalArg(0) boolean underwater) {
+		@Pc(19) byte levelCount;
+		@Pc(21) byte[][] locFiles;
+		if (GlRenderer.enabled && underwater) {
+			locFiles = underWaterLocationsMapFilesBuffer;
+			levelCount = 1;
 		} else {
-			local19 = 4;
-			local21 = locationMapFilesBuffer;
+			levelCount = 4;
+			locFiles = locationMapFilesBuffer;
 		}
-		for (@Pc(29) int local29 = 0; local29 < local19; local29++) {
+		for (@Pc(29) int level = 0; level < levelCount; level++) {
 			client.audioLoop();
-			for (@Pc(36) int local36 = 0; local36 < 13; local36++) {
-				for (@Pc(43) int local43 = 0; local43 < 13; local43++) {
-					@Pc(56) int local56 = Protocol.buildAreaChunks[local29][local36][local43];
-					if (local56 != -1) {
-						@Pc(67) int local67 = local56 >> 24 & 0x3;
-						if (!arg0 || local67 == 0) {
-							@Pc(77) int local77 = local56 >> 1 & 0x3;
-							@Pc(83) int local83 = local56 >> 14 & 0x3FF;
-							@Pc(89) int local89 = local56 >> 3 & 0x7FF;
-							@Pc(99) int local99 = local89 / 8 + (local83 / 8 << 8);
-							for (@Pc(101) int local101 = 0; local101 < regionBitPacked.length; local101++) {
-								if (regionBitPacked[local101] == local99 && local21[local101] != null) {
-									readDynamicRegionLocs(PathFinder.collisionMaps, local29, local21[local101], local67, local77, local36 * 8, local43 * 8, arg0, (local83 & 0x7) * 8, (local89 & 0x7) * 8);
+			for (@Pc(36) int chunkX = 0; chunkX < 13; chunkX++) {
+				for (@Pc(43) int chunkY = 0; chunkY < 13; chunkY++) {
+					@Pc(56) int chunkData = Protocol.buildAreaChunks[level][chunkX][chunkY];
+					if (chunkData != -1) {
+						@Pc(67) int srcLevel = chunkData >> 24 & 0x3;
+						if (!underwater || srcLevel == 0) {
+							@Pc(77) int rotation = chunkData >> 1 & 0x3;
+							@Pc(83) int srcChunkX = chunkData >> 14 & 0x3FF;
+							@Pc(89) int srcChunkY = chunkData >> 3 & 0x7FF;
+							@Pc(99) int packedRegion = srcChunkY / 8 + (srcChunkX / 8 << 8);
+							for (@Pc(101) int regionIdx = 0; regionIdx < regionBitPacked.length; regionIdx++) {
+								if (regionBitPacked[regionIdx] == packedRegion && locFiles[regionIdx] != null) {
+									readDynamicRegionLocs(PathFinder.collisionMaps, level, locFiles[regionIdx], srcLevel, rotation, chunkX * 8, chunkY * 8, underwater, (srcChunkX & 0x7) * 8, (srcChunkY & 0x7) * 8);
 									break;
 								}
 							}
@@ -1228,44 +1228,44 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!rj", name = "a", descriptor = "([Lclient!mj;I[BIIIIZIIB)V")
-	public static void readDynamicRegionLocs(@OriginalArg(0) CollisionMap[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
-		@Pc(7) int local7 = -1;
-		@Pc(12) Buffer local12 = new Buffer(arg2);
+	public static void readDynamicRegionLocs(@OriginalArg(0) CollisionMap[] collisionMaps, @OriginalArg(1) int destLevel, @OriginalArg(2) byte[] data, @OriginalArg(3) int srcLevel, @OriginalArg(4) int chunkRotation, @OriginalArg(5) int destBaseX, @OriginalArg(6) int destBaseY, @OriginalArg(7) boolean underwater, @OriginalArg(8) int srcBaseX, @OriginalArg(9) int srcBaseY) {
+		@Pc(7) int locId = -1;
+		@Pc(12) Buffer buf = new Buffer(data);
 		while (true) {
-			@Pc(20) int local20 = local12.gVarSmart();
-			if (local20 == 0) {
+			@Pc(20) int locIdDelta = buf.gVarSmart();
+			if (locIdDelta == 0) {
 				return;
 			}
-			local7 += local20;
-			@Pc(31) int local31 = 0;
+			locId += locIdDelta;
+			@Pc(31) int packedPos = 0;
 			while (true) {
-				@Pc(35) int local35 = local12.gsmarts();
-				if (local35 == 0) {
+				@Pc(35) int posDelta = buf.gsmarts();
+				if (posDelta == 0) {
 					break;
 				}
-				local31 += local35 - 1;
-				@Pc(50) int local50 = local31 & 0x3F;
-				@Pc(56) int local56 = local31 >> 6 & 0x3F;
-				@Pc(60) int local60 = local31 >> 12;
-				@Pc(64) int local64 = local12.g1();
-				@Pc(68) int local68 = local64 >> 2;
-				@Pc(72) int local72 = local64 & 0x3;
-				if (arg3 == local60 && local56 >= arg8 && local56 < arg8 + 8 && arg9 <= local50 && arg9 + 8 > local50) {
-					@Pc(103) LocType local103 = LocTypeList.get(local7);
-					@Pc(120) int local120 = rotateLocX(local50 & 0x7, arg4, local72, local103.length, local103.width, local56 & 0x7) + arg5;
-					@Pc(137) int local137 = rotateLocY(local103.width, arg4, local103.length, local56 & 0x7, local72, local50 & 0x7) + arg6;
-					if (local120 > 0 && local137 > 0 && local120 < 103 && local137 < 103) {
-						@Pc(154) CollisionMap local154 = null;
-						if (!arg7) {
-							@Pc(159) int local159 = arg1;
-							if ((SceneGraph.renderFlags[1][local120][local137] & 0x2) == 2) {
-								local159 = arg1 - 1;
+				packedPos += posDelta - 1;
+				@Pc(50) int localY = packedPos & 0x3F;
+				@Pc(56) int localX = packedPos >> 6 & 0x3F;
+				@Pc(60) int level = packedPos >> 12;
+				@Pc(64) int attributes = buf.g1();
+				@Pc(68) int locShape = attributes >> 2;
+				@Pc(72) int locRotation = attributes & 0x3;
+				if (srcLevel == level && localX >= srcBaseX && localX < srcBaseX + 8 && srcBaseY <= localY && srcBaseY + 8 > localY) {
+					@Pc(103) LocType locType = LocTypeList.get(locId);
+					@Pc(120) int destX = rotateLocX(localY & 0x7, chunkRotation, locRotation, locType.length, locType.width, localX & 0x7) + destBaseX;
+					@Pc(137) int destY = rotateLocY(locType.width, chunkRotation, locType.length, localX & 0x7, locRotation, localY & 0x7) + destBaseY;
+					if (destX > 0 && destY > 0 && destX < 103 && destY < 103) {
+						@Pc(154) CollisionMap collisionMap = null;
+						if (!underwater) {
+							@Pc(159) int collisionLevel = destLevel;
+							if ((SceneGraph.renderFlags[1][destX][destY] & 0x2) == 2) {
+								collisionLevel = destLevel - 1;
 							}
-							if (local159 >= 0) {
-								local154 = arg0[local159];
+							if (collisionLevel >= 0) {
+								collisionMap = collisionMaps[collisionLevel];
 							}
 						}
-						SceneGraph.addLoc(arg1, !arg7, arg1, arg7, local154, local7, local68, local120, local137, local72 + arg4 & 0x3);
+						SceneGraph.addLoc(destLevel, !underwater, destLevel, underwater, collisionMap, locId, locShape, destX, destY, locRotation + chunkRotation & 0x3);
 					}
 				}
 			}
@@ -1273,40 +1273,40 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(IIIIIII)I")
-	public static int rotateLocX(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5) {
-		if ((arg2 & 0x1) == 1) {
-			@Pc(10) int local10 = arg4;
-			arg4 = arg3;
-			arg3 = local10;
+	public static int rotateLocX(@OriginalArg(0) int srcY, @OriginalArg(1) int chunkRotation, @OriginalArg(2) int locRotation, @OriginalArg(3) int locLength, @OriginalArg(4) int locWidth, @OriginalArg(6) int srcX) {
+		if ((locRotation & 0x1) == 1) {
+			@Pc(10) int temp = locWidth;
+			locWidth = locLength;
+			locLength = temp;
 		}
-		@Pc(18) int local18 = arg1 & 0x3;
-		if (local18 == 0) {
-			return arg5;
-		} else if (local18 == 1) {
-			return arg0;
-		} else if (local18 == 2) {
-			return 7 + 1 - arg5 - arg4;
+		@Pc(18) int rotation = chunkRotation & 0x3;
+		if (rotation == 0) {
+			return srcX;
+		} else if (rotation == 1) {
+			return srcY;
+		} else if (rotation == 2) {
+			return 7 + 1 - srcX - locWidth;
 		} else {
-			return 7 + 1 - arg0 - arg3;
+			return 7 + 1 - srcY - locLength;
 		}
 	}
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(IIBIIII)I")
-	public static int rotateLocY(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		if ((arg4 & 0x1) == 1) {
-			@Pc(9) int local9 = arg0;
-			arg0 = arg2;
-			arg2 = local9;
+	public static int rotateLocY(@OriginalArg(0) int locWidth, @OriginalArg(1) int chunkRotation, @OriginalArg(3) int locLength, @OriginalArg(4) int srcX, @OriginalArg(5) int locRotation, @OriginalArg(6) int srcY) {
+		if ((locRotation & 0x1) == 1) {
+			@Pc(9) int temp = locWidth;
+			locWidth = locLength;
+			locLength = temp;
 		}
-		@Pc(29) int local29 = arg1 & 0x3;
-		if (local29 == 0) {
-			return arg5;
-		} else if (local29 == 1) {
-			return 7 + 1 - arg3 - arg0;
-		} else if (local29 == 2) {
-			return 1 + 7 - arg2 - arg5;
+		@Pc(29) int rotation = chunkRotation & 0x3;
+		if (rotation == 0) {
+			return srcY;
+		} else if (rotation == 1) {
+			return 7 + 1 - srcX - locWidth;
+		} else if (rotation == 2) {
+			return 1 + 7 - locLength - srcY;
 		} else {
-			return arg3;
+			return srcX;
 		}
 	}
 
@@ -1358,40 +1358,40 @@ public class LoginManager {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "(ZB)V")
-	public static void readDynamicTerrain(@OriginalArg(0) boolean arg0) {
-		@Pc(11) byte local11;
-		@Pc(13) byte[][] local13;
-		if (GlRenderer.enabled && arg0) {
-			local11 = 1;
-			local13 = underWaterMapFilesBuffer;
+	public static void readDynamicTerrain(@OriginalArg(0) boolean underwater) {
+		@Pc(11) byte levelCount;
+		@Pc(13) byte[][] terrainFiles;
+		if (GlRenderer.enabled && underwater) {
+			levelCount = 1;
+			terrainFiles = underWaterMapFilesBuffer;
 		} else {
-			local13 = mapFilesBuffer;
-			local11 = 4;
+			terrainFiles = mapFilesBuffer;
+			levelCount = 4;
 		}
-		for (@Pc(21) int local21 = 0; local21 < local11; local21++) {
+		for (@Pc(21) int level = 0; level < levelCount; level++) {
 			client.audioLoop();
-			for (@Pc(32) int local32 = 0; local32 < 13; local32++) {
-				for (@Pc(39) int local39 = 0; local39 < 13; local39++) {
-					@Pc(52) int local52 = Protocol.buildAreaChunks[local21][local32][local39];
-					@Pc(54) boolean local54 = false;
-					if (local52 != -1) {
-						@Pc(65) int local65 = local52 >> 24 & 0x3;
-						if (!arg0 || local65 == 0) {
-							@Pc(76) int local76 = local52 >> 3 & 0x7FF;
-							@Pc(82) int local82 = local52 >> 1 & 0x3;
-							@Pc(88) int local88 = local52 >> 14 & 0x3FF;
-							@Pc(98) int local98 = (local88 / 8 << 8) + local76 / 8;
-							for (@Pc(100) int local100 = 0; local100 < regionBitPacked.length; local100++) {
-								if (regionBitPacked[local100] == local98 && local13[local100] != null) {
-									SceneGraph.readDynamicTerrain(local82, local32 * 8, local21, PathFinder.collisionMaps, local39 * 8, local13[local100], local65, (local76 & 0x7) * 8, (local88 & 0x7) * 8, arg0);
-									local54 = true;
+			for (@Pc(32) int chunkX = 0; chunkX < 13; chunkX++) {
+				for (@Pc(39) int chunkY = 0; chunkY < 13; chunkY++) {
+					@Pc(52) int chunkData = Protocol.buildAreaChunks[level][chunkX][chunkY];
+					@Pc(54) boolean found = false;
+					if (chunkData != -1) {
+						@Pc(65) int srcLevel = chunkData >> 24 & 0x3;
+						if (!underwater || srcLevel == 0) {
+							@Pc(76) int srcChunkY = chunkData >> 3 & 0x7FF;
+							@Pc(82) int rotation = chunkData >> 1 & 0x3;
+							@Pc(88) int srcChunkX = chunkData >> 14 & 0x3FF;
+							@Pc(98) int packedRegion = (srcChunkX / 8 << 8) + srcChunkY / 8;
+							for (@Pc(100) int regionIdx = 0; regionIdx < regionBitPacked.length; regionIdx++) {
+								if (regionBitPacked[regionIdx] == packedRegion && terrainFiles[regionIdx] != null) {
+									SceneGraph.readDynamicTerrain(rotation, chunkX * 8, level, PathFinder.collisionMaps, chunkY * 8, terrainFiles[regionIdx], srcLevel, (srcChunkY & 0x7) * 8, (srcChunkX & 0x7) * 8, underwater);
+									found = true;
 									break;
 								}
 							}
 						}
 					}
-					if (!local54) {
-						SceneGraph.clearTerrainRegion(local21, local39 * 8, local32 * 8, 8, 8);
+					if (!found) {
+						SceneGraph.clearTerrainRegion(level, chunkY * 8, chunkX * 8, 8, 8);
 					}
 				}
 			}
@@ -1420,13 +1420,13 @@ public class LoginManager {
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.updateAnimations(InterfaceList.topLevelInterface);
 		}
-		@Pc(60) int local60;
-		for (local60 = 0; local60 < InterfaceList.rectangles; local60++) {
-			if (InterfaceList.rectangleDirty[local60]) {
-				InterfaceList.rectangleRedraw[local60] = true;
+		@Pc(60) int i;
+		for (i = 0; i < InterfaceList.rectangles; i++) {
+			if (InterfaceList.rectangleDirty[i]) {
+				InterfaceList.rectangleRedraw[i] = true;
 			}
-			InterfaceList.rectangleDirtySnapshot[local60] = InterfaceList.rectangleDirty[local60];
-			InterfaceList.rectangleDirty[local60] = false;
+			InterfaceList.rectangleDirtySnapshot[i] = InterfaceList.rectangleDirty[i];
+			InterfaceList.rectangleDirty[i] = false;
 		}
 		tooltipComponent = null;
 		Cs1ScriptRunner.gameSceneTooltipX = -1;
@@ -1460,11 +1460,11 @@ public class LoginManager {
 		} else if (Cs1ScriptRunner.gameSceneTooltipX != -1) {
 			MiniMenu.renderTooltip(null, InterfaceList.viewportX, Cs1ScriptRunner.gameSceneTooltipX);
 		}
-		local60 = Cs1ScriptRunner.isMenuOpen ? -1 : getActiveCursorId();
-		if (local60 == -1) {
-			local60 = ScriptRunner.scriptCursorId;
+		i = Cs1ScriptRunner.isMenuOpen ? -1 : getActiveCursorId();
+		if (i == -1) {
+			i = ScriptRunner.scriptCursorId;
 		}
-		InterfaceList.setCursor(local60);
+		InterfaceList.setCursor(i);
 		if (MiniMenu.minimapWalkState == 1) {
 			MiniMenu.minimapWalkState = 2;
 		}
@@ -1472,18 +1472,18 @@ public class LoginManager {
 			Protocol.viewportWalkState = 2;
 		}
 		if (Cheat.rectDebug == 3) {
-			for (@Pc(189) int local189 = 0; local189 < InterfaceList.rectangles; local189++) {
-				if (InterfaceList.rectangleDirtySnapshot[local189]) {
+			for (@Pc(189) int j = 0; j < InterfaceList.rectangles; j++) {
+				if (InterfaceList.rectangleDirtySnapshot[j]) {
 					if (GlRenderer.enabled) {
-						GlRaster.fillRectAlpha(InterfaceList.rectangleX[local189], InterfaceList.rectangleY[local189], InterfaceList.rectangleWidth[local189], InterfaceList.rectangleHeight[local189], 16711935, 128);
+						GlRaster.fillRectAlpha(InterfaceList.rectangleX[j], InterfaceList.rectangleY[j], InterfaceList.rectangleWidth[j], InterfaceList.rectangleHeight[j], 16711935, 128);
 					} else {
-						SoftwareRaster.fillRectAlpha(InterfaceList.rectangleX[local189], InterfaceList.rectangleY[local189], InterfaceList.rectangleWidth[local189], InterfaceList.rectangleHeight[local189], 16711935, 128);
+						SoftwareRaster.fillRectAlpha(InterfaceList.rectangleX[j], InterfaceList.rectangleY[j], InterfaceList.rectangleWidth[j], InterfaceList.rectangleHeight[j], 16711935, 128);
 					}
-				} else if (InterfaceList.rectangleRedraw[local189]) {
+				} else if (InterfaceList.rectangleRedraw[j]) {
 					if (GlRenderer.enabled) {
-						GlRaster.fillRectAlpha(InterfaceList.rectangleX[local189], InterfaceList.rectangleY[local189], InterfaceList.rectangleWidth[local189], InterfaceList.rectangleHeight[local189], 16711680, 128);
+						GlRaster.fillRectAlpha(InterfaceList.rectangleX[j], InterfaceList.rectangleY[j], InterfaceList.rectangleWidth[j], InterfaceList.rectangleHeight[j], 16711680, 128);
 					} else {
-						SoftwareRaster.fillRectAlpha(InterfaceList.rectangleX[local189], InterfaceList.rectangleY[local189], InterfaceList.rectangleWidth[local189], InterfaceList.rectangleHeight[local189], 16711680, 128);
+						SoftwareRaster.fillRectAlpha(InterfaceList.rectangleX[j], InterfaceList.rectangleY[j], InterfaceList.rectangleWidth[j], InterfaceList.rectangleHeight[j], 16711680, 128);
 					}
 				}
 			}

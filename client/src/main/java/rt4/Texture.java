@@ -48,81 +48,81 @@ public final class Texture {
 	private final TextureOp[] operations;
 
 	@OriginalMember(owner = "client!lc", name = "<init>", descriptor = "(Lclient!wa;)V")
-	public Texture(@OriginalArg(0) Buffer arg0) {
-		@Pc(7) int local7 = arg0.g1();
-		this.operations = new TextureOp[local7];
-		@Pc(14) int[][] local14 = new int[local7][];
-		@Pc(16) int local16 = 0;
-		@Pc(18) int local18 = 0;
-		@Pc(20) int local20;
-		@Pc(27) TextureOp local27;
-		@Pc(45) int local45;
-		@Pc(52) int local52;
-		for (local20 = 0; local20 < local7; local20++) {
-			local27 = decodeTextureOp(arg0);
-			if (local27.getRequiredSpriteId() >= 0) {
-				local18++;
+	public Texture(@OriginalArg(0) Buffer buf) {
+		@Pc(7) int opCount = buf.g1();
+		this.operations = new TextureOp[opCount];
+		@Pc(14) int[][] inputIndices = new int[opCount][];
+		@Pc(16) int textureCount = 0;
+		@Pc(18) int spriteCount = 0;
+		@Pc(20) int i;
+		@Pc(27) TextureOp op;
+		@Pc(45) int inputCount;
+		@Pc(52) int j;
+		for (i = 0; i < opCount; i++) {
+			op = decodeTextureOp(buf);
+			if (op.getRequiredSpriteId() >= 0) {
+				spriteCount++;
 			}
-			if (local27.getRequiredTextureId() >= 0) {
-				local16++;
+			if (op.getRequiredTextureId() >= 0) {
+				textureCount++;
 			}
-			local45 = local27.inputs.length;
-			local14[local20] = new int[local45];
-			for (local52 = 0; local52 < local45; local52++) {
-				local14[local20][local52] = arg0.g1();
+			inputCount = op.inputs.length;
+			inputIndices[i] = new int[inputCount];
+			for (j = 0; j < inputCount; j++) {
+				inputIndices[i][j] = buf.g1();
 			}
-			this.operations[local20] = local27;
+			this.operations[i] = op;
 		}
-		this.requiredSpriteIds = new int[local18];
-		this.requiredTextureIds = new int[local16];
-		local18 = 0;
-		local16 = 0;
-		for (local20 = 0; local20 < local7; local20++) {
-			local27 = this.operations[local20];
-			local45 = local27.inputs.length;
-			for (local52 = 0; local52 < local45; local52++) {
-				local27.inputs[local52] = this.operations[local14[local20][local52]];
+		this.requiredSpriteIds = new int[spriteCount];
+		this.requiredTextureIds = new int[textureCount];
+		spriteCount = 0;
+		textureCount = 0;
+		for (i = 0; i < opCount; i++) {
+			op = this.operations[i];
+			inputCount = op.inputs.length;
+			for (j = 0; j < inputCount; j++) {
+				op.inputs[j] = this.operations[inputIndices[i][j]];
 			}
-			local52 = local27.getRequiredSpriteId();
-			@Pc(136) int local136 = local27.getRequiredTextureId();
-			if (local52 > 0) {
-				this.requiredSpriteIds[local18++] = local52;
+			j = op.getRequiredSpriteId();
+			@Pc(136) int requiredTextureId = op.getRequiredTextureId();
+			if (j > 0) {
+				this.requiredSpriteIds[spriteCount++] = j;
 			}
-			if (local136 > 0) {
-				this.requiredTextureIds[local16++] = local136;
+			if (requiredTextureId > 0) {
+				this.requiredTextureIds[textureCount++] = requiredTextureId;
 			}
-			local14[local20] = null;
+			inputIndices[i] = null;
 		}
-		this.colorOp = this.operations[arg0.g1()];
-		local14 = null;
-		this.alphaOp = this.operations[arg0.g1()];
+		this.colorOp = this.operations[buf.g1()];
+		inputIndices = null;
+		this.alphaOp = this.operations[buf.g1()];
 	}
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(DI)V")
-	public static void setBrightness(@OriginalArg(0) double arg0) {
-		if (brightness == arg0) {
+	public static void setBrightness(@OriginalArg(0) double value) {
+		if (brightness == value) {
 			return;
 		}
-		for (@Pc(12) int local12 = 0; local12 < 256; local12++) {
-			@Pc(25) int local25 = (int) (Math.pow((double) local12 / 255.0D, arg0) * 255.0D);
-			brightnessMap[local12] = local25 > 255 ? 255 : local25;
+		for (@Pc(12) int i = 0; i < 256; i++) {
+			@Pc(25) int mapped = (int) (Math.pow((double) i / 255.0D, value) * 255.0D);
+			brightnessMap[i] = mapped > 255 ? 255 : mapped;
 		}
-		brightness = arg0;
+		brightness = value;
 	}
 
 	@OriginalMember(owner = "client!qk", name = "a", descriptor = "(BLclient!wa;)Lclient!j;")
-	public static TextureOp decodeTextureOp(@OriginalArg(1) Buffer arg0) {
-		arg0.g1();
-		@Pc(13) int local13 = arg0.g1();
-		@Pc(17) TextureOp local17 = create(local13);
-		local17.cacheHeight = arg0.g1();
-		@Pc(26) int local26 = arg0.g1();
-		for (@Pc(34) int local34 = 0; local34 < local26; local34++) {
-			@Pc(41) int local41 = arg0.g1();
-			local17.decode(local41, arg0);
+	public static TextureOp decodeTextureOp(@OriginalArg(1) Buffer buf) {
+		buf.g1();
+		@Pc(13) int type = buf.g1();
+		@Pc(17) TextureOp op = create(type);
+		op.cacheHeight = buf.g1();
+		@Pc(26) int opcodeCount = buf.g1();
+		for (@Pc(34) int i = 0; i < opcodeCount; i++) {
+			@Pc(41) int opcode = buf.g1();
+			op.decode(opcode, buf);
 		}
-		local17.postDecode();
-		return local17;
+		op.postDecode();
+		return op;
 	}
 
 	@OriginalMember(owner = "client!sc", name = "a", descriptor = "(IZ)Lclient!j;")
@@ -213,15 +213,15 @@ public final class Texture {
 	}
 
 	@OriginalMember(owner = "client!an", name = "c", descriptor = "(III)V")
-	public static void setSize(@OriginalArg(1) int height, @OriginalArg(2) int arg1) {
-		if (width != arg1) {
-			widthFractions = new int[arg1];
-			for (@Pc(10) int x = 0; x < arg1; x++) {
-				widthFractions[x] = (x << 12) / arg1;
+	public static void setSize(@OriginalArg(1) int height, @OriginalArg(2) int newWidth) {
+		if (width != newWidth) {
+			widthFractions = new int[newWidth];
+			for (@Pc(10) int x = 0; x < newWidth; x++) {
+				widthFractions[x] = (x << 12) / newWidth;
 			}
-			widthScale = arg1 == 64 ? 2048 : 4096;
-			widthMask = arg1 - 1;
-			width = arg1;
+			widthScale = newWidth == 64 ? 2048 : 4096;
+			widthMask = newWidth - 1;
+			width = newWidth;
 		}
 		if (Texture.height == height) {
 			return;
@@ -239,191 +239,191 @@ public final class Texture {
 	}
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(IZIDILclient!ve;Lclient!m;Z)[I")
-	public final int[] generateArgbPixels(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) double arg3, @OriginalArg(5) Js5 arg4, @OriginalArg(6) TextureProvider arg5, @OriginalArg(7) boolean arg6) {
-		setBrightness(arg3);
-		provider = arg5;
-		spritesArchive = arg4;
-		setSize(arg0, arg2);
-		@Pc(20) int local20;
-		for (local20 = 0; local20 < this.operations.length; local20++) {
-			this.operations[local20].allocateImageCache(arg0, arg2);
+	public final int[] generateArgbPixels(@OriginalArg(0) int texHeight, @OriginalArg(1) boolean transpose, @OriginalArg(2) int texWidth, @OriginalArg(3) double brightnessValue, @OriginalArg(5) Js5 sprites, @OriginalArg(6) TextureProvider texProvider, @OriginalArg(7) boolean flipX) {
+		setBrightness(brightnessValue);
+		provider = texProvider;
+		spritesArchive = sprites;
+		setSize(texHeight, texWidth);
+		@Pc(20) int i;
+		for (i = 0; i < this.operations.length; i++) {
+			this.operations[i].allocateImageCache(texHeight, texWidth);
 		}
-		@Pc(56) int[] local56 = new int[arg0 * arg2];
-		@Pc(64) int local64;
-		@Pc(60) byte local60;
-		if (arg6) {
-			local60 = -1;
-			local64 = -1;
-			local20 = arg2 - 1;
+		@Pc(56) int[] pixels = new int[texHeight * texWidth];
+		@Pc(64) int xEnd;
+		@Pc(60) byte xStep;
+		if (flipX) {
+			xStep = -1;
+			xEnd = -1;
+			i = texWidth - 1;
 		} else {
-			local60 = 1;
-			local20 = 0;
-			local64 = arg2;
+			xStep = 1;
+			i = 0;
+			xEnd = texWidth;
 		}
-		@Pc(76) int local76 = 0;
-		@Pc(78) int local78;
-		for (local78 = 0; local78 < arg0; local78++) {
-			if (arg1) {
-				local76 = local78;
+		@Pc(76) int destOff = 0;
+		@Pc(78) int y;
+		for (y = 0; y < texHeight; y++) {
+			if (transpose) {
+				destOff = y;
 			}
-			@Pc(101) int[] local101;
-			@Pc(103) int[] local103;
-			@Pc(105) int[] local105;
+			@Pc(101) int[] red;
+			@Pc(103) int[] green;
+			@Pc(105) int[] blue;
 			if (this.colorOp.monochrome) {
-				@Pc(99) int[] local99 = this.colorOp.getMonochromeOutput(local78);
-				local101 = local99;
-				local103 = local99;
-				local105 = local99;
+				@Pc(99) int[] mono = this.colorOp.getMonochromeOutput(y);
+				red = mono;
+				green = mono;
+				blue = mono;
 			} else {
-				@Pc(113) int[][] local113 = this.colorOp.getColorOutput(local78);
-				local101 = local113[0];
-				local105 = local113[2];
-				local103 = local113[1];
+				@Pc(113) int[][] colorOutput = this.colorOp.getColorOutput(y);
+				red = colorOutput[0];
+				blue = colorOutput[2];
+				green = colorOutput[1];
 			}
-			for (@Pc(127) int local127 = local20; local127 != local64; local127 += local60) {
-				@Pc(136) int local136 = local101[local127] >> 4;
-				if (local136 > 255) {
-					local136 = 255;
+			for (@Pc(127) int x = i; x != xEnd; x += xStep) {
+				@Pc(136) int r = red[x] >> 4;
+				if (r > 255) {
+					r = 255;
 				}
-				if (local136 < 0) {
-					local136 = 0;
+				if (r < 0) {
+					r = 0;
 				}
-				local136 = brightnessMap[local136];
-				@Pc(159) int local159 = local105[local127] >> 4;
-				@Pc(165) int local165 = local103[local127] >> 4;
-				if (local165 > 255) {
-					local165 = 255;
+				r = brightnessMap[r];
+				@Pc(159) int b = blue[x] >> 4;
+				@Pc(165) int g = green[x] >> 4;
+				if (g > 255) {
+					g = 255;
 				}
-				if (local165 < 0) {
-					local165 = 0;
+				if (g < 0) {
+					g = 0;
 				}
-				if (local159 > 255) {
-					local159 = 255;
+				if (b > 255) {
+					b = 255;
 				}
-				local165 = brightnessMap[local165];
-				if (local159 < 0) {
-					local159 = 0;
+				g = brightnessMap[g];
+				if (b < 0) {
+					b = 0;
 				}
-				local159 = brightnessMap[local159];
-				local56[local76++] = (local136 << 16) + (local165 << 8) + local159;
-				if (arg1) {
-					local76 += arg2 - 1;
+				b = brightnessMap[b];
+				pixels[destOff++] = (r << 16) + (g << 8) + b;
+				if (transpose) {
+					destOff += texWidth - 1;
 				}
 			}
 		}
-		for (local78 = 0; local78 < this.operations.length; local78++) {
-			this.operations[local78].clearImageCache();
+		for (y = 0; y < this.operations.length; y++) {
+			this.operations[y].clearImageCache();
 		}
-		return local56;
+		return pixels;
 	}
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(IIZLclient!m;DILclient!ve;)[B")
-	public final byte[] generateRgbaBytes(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) TextureProvider arg3, @OriginalArg(4) double arg4, @OriginalArg(6) Js5 arg5) {
-		@Pc(8) byte[] local8 = new byte[arg1 * 4 * arg0];
-		setBrightness(arg4);
-		spritesArchive = arg5;
-		provider = arg3;
-		setSize(arg0, arg1);
-		@Pc(31) int local31;
-		for (local31 = 0; local31 < this.operations.length; local31++) {
-			this.operations[local31].allocateImageCache(arg0, arg1);
+	public final byte[] generateRgbaBytes(@OriginalArg(0) int texHeight, @OriginalArg(1) int texWidth, @OriginalArg(2) boolean transpose, @OriginalArg(3) TextureProvider texProvider, @OriginalArg(4) double brightnessValue, @OriginalArg(6) Js5 sprites) {
+		@Pc(8) byte[] bytes = new byte[texWidth * 4 * texHeight];
+		setBrightness(brightnessValue);
+		spritesArchive = sprites;
+		provider = texProvider;
+		setSize(texHeight, texWidth);
+		@Pc(31) int i;
+		for (i = 0; i < this.operations.length; i++) {
+			this.operations[i].allocateImageCache(texHeight, texWidth);
 		}
-		local31 = 0;
-		@Pc(53) int local53;
-		for (local53 = 0; local53 < arg0; local53++) {
-			if (arg2) {
-				local31 = local53 << 2;
+		i = 0;
+		@Pc(53) int y;
+		for (y = 0; y < texHeight; y++) {
+			if (transpose) {
+				i = y << 2;
 			}
-			@Pc(79) int[] local79;
-			@Pc(81) int[] local81;
-			@Pc(83) int[] local83;
-			@Pc(77) int[] local77;
+			@Pc(79) int[] red;
+			@Pc(81) int[] green;
+			@Pc(83) int[] blue;
+			@Pc(77) int[] alpha;
 			if (this.colorOp.monochrome) {
-				local77 = this.colorOp.getMonochromeOutput(local53);
-				local79 = local77;
-				local81 = local77;
-				local83 = local77;
+				alpha = this.colorOp.getMonochromeOutput(y);
+				red = alpha;
+				green = alpha;
+				blue = alpha;
 			} else {
-				@Pc(91) int[][] local91 = this.colorOp.getColorOutput(local53);
-				local79 = local91[0];
-				local81 = local91[1];
-				local83 = local91[2];
+				@Pc(91) int[][] colorOutput = this.colorOp.getColorOutput(y);
+				red = colorOutput[0];
+				green = colorOutput[1];
+				blue = colorOutput[2];
 			}
 			if (this.alphaOp.monochrome) {
-				local77 = this.alphaOp.getMonochromeOutput(local53);
+				alpha = this.alphaOp.getMonochromeOutput(y);
 			} else {
-				local77 = this.alphaOp.getColorOutput(local53)[0];
+				alpha = this.alphaOp.getColorOutput(y)[0];
 			}
-			for (@Pc(127) int local127 = arg1 - 1; local127 >= 0; local127--) {
-				@Pc(138) int local138 = local79[local127] >> 4;
-				if (local138 > 255) {
-					local138 = 255;
+			for (@Pc(127) int x = texWidth - 1; x >= 0; x--) {
+				@Pc(138) int r = red[x] >> 4;
+				if (r > 255) {
+					r = 255;
 				}
-				if (local138 < 0) {
-					local138 = 0;
+				if (r < 0) {
+					r = 0;
 				}
-				@Pc(154) int local154 = local81[local127] >> 4;
-				if (local154 > 255) {
-					local154 = 255;
+				@Pc(154) int g = green[x] >> 4;
+				if (g > 255) {
+					g = 255;
 				}
-				@Pc(167) int local167 = local83[local127] >> 4;
-				if (local167 > 255) {
-					local167 = 255;
+				@Pc(167) int b = blue[x] >> 4;
+				if (b > 255) {
+					b = 255;
 				}
-				local138 = brightnessMap[local138];
-				if (local167 < 0) {
-					local167 = 0;
+				r = brightnessMap[r];
+				if (b < 0) {
+					b = 0;
 				}
-				if (local154 < 0) {
-					local154 = 0;
+				if (g < 0) {
+					g = 0;
 				}
-				local154 = brightnessMap[local154];
-				local167 = brightnessMap[local167];
-				@Pc(220) int local220;
-				if (local138 == 0 && local154 == 0 && local167 == 0) {
-					local220 = 0;
+				g = brightnessMap[g];
+				b = brightnessMap[b];
+				@Pc(220) int a;
+				if (r == 0 && g == 0 && b == 0) {
+					a = 0;
 				} else {
-					local220 = local77[local127] >> 4;
-					if (local220 > 255) {
-						local220 = 255;
+					a = alpha[x] >> 4;
+					if (a > 255) {
+						a = 255;
 					}
-					if (local220 < 0) {
-						local220 = 0;
+					if (a < 0) {
+						a = 0;
 					}
 				}
-				local8[local31++] = (byte) local138;
-				local8[local31++] = (byte) local154;
-				local8[local31++] = (byte) local167;
-				local8[local31++] = (byte) local220;
-				if (arg2) {
-					local31 += (arg1 << 2) - 4;
+				bytes[i++] = (byte) r;
+				bytes[i++] = (byte) g;
+				bytes[i++] = (byte) b;
+				bytes[i++] = (byte) a;
+				if (transpose) {
+					i += (texWidth << 2) - 4;
 				}
 			}
 		}
-		for (local53 = 0; local53 < this.operations.length; local53++) {
-			this.operations[local53].clearImageCache();
+		for (y = 0; y < this.operations.length; y++) {
+			this.operations[y].clearImageCache();
 		}
-		return local8;
+		return bytes;
 	}
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(ZLclient!m;Lclient!ve;)Z")
-	public final boolean isReady(@OriginalArg(1) TextureProvider arg0, @OriginalArg(2) Js5 arg1) {
-		@Pc(10) int local10;
+	public final boolean isReady(@OriginalArg(1) TextureProvider texProvider, @OriginalArg(2) Js5 sprites) {
+		@Pc(10) int i;
 		if (spriteGroupId > 0) {
-			for (local10 = 0; local10 < this.requiredSpriteIds.length; local10++) {
-				if (!arg1.isFileReady(this.requiredSpriteIds[local10], spriteGroupId)) {
+			for (i = 0; i < this.requiredSpriteIds.length; i++) {
+				if (!sprites.isFileReady(this.requiredSpriteIds[i], spriteGroupId)) {
 					return false;
 				}
 			}
 		} else {
-			for (local10 = 0; local10 < this.requiredSpriteIds.length; local10++) {
-				if (!arg1.isFileReady(this.requiredSpriteIds[local10])) {
+			for (i = 0; i < this.requiredSpriteIds.length; i++) {
+				if (!sprites.isFileReady(this.requiredSpriteIds[i])) {
 					return false;
 				}
 			}
 		}
-		for (local10 = 0; local10 < this.requiredTextureIds.length; local10++) {
-			if (!arg0.isTextureLoaded(this.requiredTextureIds[local10])) {
+		for (i = 0; i < this.requiredTextureIds.length; i++) {
+			if (!texProvider.isTextureLoaded(this.requiredTextureIds[i])) {
 				return false;
 			}
 		}
