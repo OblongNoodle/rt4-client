@@ -32,108 +32,108 @@ public abstract class PerlinNoiseGenerator {
 	protected int octaveCount = 4;
 
 	@OriginalMember(owner = "client!wf", name = "<init>", descriptor = "(IIIII)V")
-	protected PerlinNoiseGenerator(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		this.scaleY = arg3;
-		this.octaveCount = arg1;
-		this.seed = arg0;
-		this.scaleZ = arg4;
-		this.scaleX = arg2;
+	protected PerlinNoiseGenerator(@OriginalArg(0) int seed, @OriginalArg(1) int octaveCount, @OriginalArg(2) int scaleX, @OriginalArg(3) int scaleY, @OriginalArg(4) int scaleZ) {
+		this.scaleY = scaleY;
+		this.octaveCount = octaveCount;
+		this.seed = seed;
+		this.scaleZ = scaleZ;
+		this.scaleX = scaleX;
 		this.initAmplitudes();
 		this.initPermutations();
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(IIIIZ)I")
-	public static int gradient(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(8) int local8 = arg3 & 0xF;
-		@Pc(29) int local29 = local8 >= 4 ? (local8 == 12 || local8 == 14 ? arg0 : arg1) : arg2;
-		@Pc(42) int local42 = local8 < 8 ? arg0 : arg2;
-		return ((local8 & 0x1) == 0 ? local42 : -local42) + ((local8 & 0x2) == 0 ? local29 : -local29);
+	public static int gradient(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int z, @OriginalArg(3) int hash) {
+		@Pc(8) int h = hash & 0xF;
+		@Pc(29) int v = h >= 4 ? (h == 12 || h == 14 ? x : y) : z;
+		@Pc(42) int u = h < 8 ? x : z;
+		return ((h & 0x1) == 0 ? u : -u) + ((h & 0x2) == 0 ? v : -v);
 	}
 
 	@OriginalMember(owner = "client!wf", name = "a", descriptor = "(IIII)V")
 	protected final void generate() {
-		@Pc(8) int[] local8 = new int[64];
-		@Pc(11) int[] local11 = new int[64];
-		@Pc(14) int[] local14 = new int[64];
-		@Pc(16) int local16;
-		for (local16 = 0; local16 < 64; local16++) {
-			local8[local16] = (local16 << 12) / 64;
+		@Pc(8) int[] xCoords = new int[64];
+		@Pc(11) int[] yCoords = new int[64];
+		@Pc(14) int[] zCoords = new int[64];
+		@Pc(16) int i;
+		for (i = 0; i < 64; i++) {
+			xCoords[i] = (i << 12) / 64;
 		}
-		for (local16 = 0; local16 < 64; local16++) {
-			local11[local16] = (local16 << 12) / 64;
+		for (i = 0; i < 64; i++) {
+			yCoords[i] = (i << 12) / 64;
 		}
-		for (local16 = 0; local16 < 64; local16++) {
-			local14[local16] = (local16 << 12) / 64;
+		for (i = 0; i < 64; i++) {
+			zCoords[i] = (i << 12) / 64;
 		}
 		this.resetState();
-		for (@Pc(77) int local77 = 0; local77 < 64; local77++) {
-			for (@Pc(82) int local82 = 0; local82 < 64; local82++) {
-				for (@Pc(91) int local91 = 0; local91 < 64; local91++) {
-					for (@Pc(96) int local96 = 0; local96 < this.octaveCount; local96++) {
-						local16 = this.amplitudes[local96] << 12;
-						@Pc(118) int local118 = this.scaleX * local16 >> 12;
-						@Pc(126) int local126 = local16 * local14[local77] >> 12;
-						@Pc(133) int local133 = local16 * this.scaleY >> 12;
-						@Pc(138) int local138 = local126 * this.scaleZ;
-						@Pc(145) int local145 = local16 * this.scaleZ >> 12;
-						@Pc(153) int local153 = local8[local91] * local16 >> 12;
-						@Pc(158) int local158 = local153 * this.scaleX;
-						@Pc(162) int local162 = local158 >> 12;
-						@Pc(166) int local166 = local158 & 0xFFF;
-						@Pc(170) int local170 = local138 >> 12;
-						@Pc(174) int local174 = local166 - 4096;
-						@Pc(178) int local178 = local162 + 1;
-						@Pc(182) int local182 = local170 + 1;
-						@Pc(190) int local190 = local11[local82] * local16 >> 12;
-						@Pc(194) int local194 = MonochromeImageCache.smoothstepLookup[local166];
-						@Pc(199) int local199 = local190 * this.scaleY;
-						@Pc(203) int local203 = local170 & 0xFF;
-						@Pc(207) int local207 = local162 & 0xFF;
-						if (local145 <= local182) {
-							local182 = 0;
+		for (@Pc(77) int iz = 0; iz < 64; iz++) {
+			for (@Pc(82) int iy = 0; iy < 64; iy++) {
+				for (@Pc(91) int ix = 0; ix < 64; ix++) {
+					for (@Pc(96) int octave = 0; octave < this.octaveCount; octave++) {
+						i = this.amplitudes[octave] << 12;
+						@Pc(118) int xBound = this.scaleX * i >> 12;
+						@Pc(126) int scaledZ = i * zCoords[iz] >> 12;
+						@Pc(133) int yBound = i * this.scaleY >> 12;
+						@Pc(138) int zProduct = scaledZ * this.scaleZ;
+						@Pc(145) int zBound = i * this.scaleZ >> 12;
+						@Pc(153) int scaledX = xCoords[ix] * i >> 12;
+						@Pc(158) int xProduct = scaledX * this.scaleX;
+						@Pc(162) int gridX = xProduct >> 12;
+						@Pc(166) int fracX = xProduct & 0xFFF;
+						@Pc(170) int gridZ = zProduct >> 12;
+						@Pc(174) int fracXm = fracX - 4096;
+						@Pc(178) int gridX1 = gridX + 1;
+						@Pc(182) int gridZ1 = gridZ + 1;
+						@Pc(190) int scaledY = yCoords[iy] * i >> 12;
+						@Pc(194) int smoothX = MonochromeImageCache.smoothstepLookup[fracX];
+						@Pc(199) int yProduct = scaledY * this.scaleY;
+						@Pc(203) int permZ = gridZ & 0xFF;
+						@Pc(207) int permX = gridX & 0xFF;
+						if (zBound <= gridZ1) {
+							gridZ1 = 0;
 						} else {
-							local182 &= 0xFF;
+							gridZ1 &= 0xFF;
 						}
-						@Pc(222) int local222 = local199 >> 12;
-						@Pc(227) short local227 = this.permutations[local203];
-						@Pc(232) short local232 = this.permutations[local182];
-						@Pc(236) int local236 = local222 + 1;
-						if (local133 > local236) {
-							local236 &= 0xFF;
+						@Pc(222) int gridY = yProduct >> 12;
+						@Pc(227) short permPZ = this.permutations[permZ];
+						@Pc(232) short permPZ1 = this.permutations[gridZ1];
+						@Pc(236) int gridY1 = gridY + 1;
+						if (yBound > gridY1) {
+							gridY1 &= 0xFF;
 						} else {
-							local236 = 0;
+							gridY1 = 0;
 						}
-						local190 = local199 & 0xFFF;
-						@Pc(259) short local259 = this.permutations[local236 + local232];
-						local126 = local138 & 0xFFF;
-						local222 &= 0xFF;
-						@Pc(271) int local271 = MonochromeImageCache.smoothstepLookup[local126];
-						@Pc(278) short local278 = this.permutations[local222 + local232];
-						@Pc(285) short local285 = this.permutations[local227 + local222];
-						if (local118 <= local178) {
-							local178 = 0;
+						scaledY = yProduct & 0xFFF;
+						@Pc(259) short permPZ1Y1 = this.permutations[gridY1 + permPZ1];
+						scaledZ = zProduct & 0xFFF;
+						gridY &= 0xFF;
+						@Pc(271) int smoothZ = MonochromeImageCache.smoothstepLookup[scaledZ];
+						@Pc(278) short permPZ1Y = this.permutations[gridY + permPZ1];
+						@Pc(285) short permPZY = this.permutations[permPZ + gridY];
+						if (xBound <= gridX1) {
+							gridX1 = 0;
 						} else {
-							local178 &= 0xFF;
+							gridX1 &= 0xFF;
 						}
-						@Pc(300) int local300 = local190 - 4096;
-						@Pc(304) int local304 = MonochromeImageCache.smoothstepLookup[local190];
-						@Pc(308) int local308 = local126 - 4096;
-						@Pc(315) short local315 = this.permutations[local227 + local236];
-						@Pc(327) int local327 = gradient(local166, local126, local190, this.permutations[local285 + local207]);
-						@Pc(340) int local340 = gradient(local174, local126, local190, this.permutations[local178 + local285]);
-						@Pc(351) int local351 = local327 + (local194 * (local340 - local327) >> 12);
-						@Pc(363) int local363 = gradient(local166, local126, local300, this.permutations[local315 + local207]);
-						@Pc(375) int local375 = gradient(local174, local126, local300, this.permutations[local178 + local315]);
-						@Pc(386) int local386 = local363 + (local194 * (local375 - local363) >> 12);
-						@Pc(397) int local397 = ((local386 - local351) * local304 >> 12) + local351;
-						@Pc(409) int local409 = gradient(local166, local308, local190, this.permutations[local207 + local278]);
-						@Pc(421) int local421 = gradient(local174, local308, local190, this.permutations[local178 + local278]);
-						@Pc(432) int local432 = (local194 * (local421 - local409) >> 12) + local409;
-						@Pc(445) int local445 = gradient(local166, local308, local300, this.permutations[local207 + local259]);
-						@Pc(457) int local457 = gradient(local174, local308, local300, this.permutations[local178 + local259]);
-						@Pc(468) int local468 = local445 + ((local457 - local445) * local194 >> 12);
-						@Pc(480) int local480 = local432 + ((local468 - local432) * local304 >> 12);
-						this.accumulate(((local480 - local397) * local271 >> 12) + local397, local96);
+						@Pc(300) int fracYm = scaledY - 4096;
+						@Pc(304) int smoothY = MonochromeImageCache.smoothstepLookup[scaledY];
+						@Pc(308) int fracZm = scaledZ - 4096;
+						@Pc(315) short permPZY1 = this.permutations[permPZ + gridY1];
+						@Pc(327) int g000 = gradient(fracX, scaledZ, scaledY, this.permutations[permPZY + permX]);
+						@Pc(340) int g100 = gradient(fracXm, scaledZ, scaledY, this.permutations[gridX1 + permPZY]);
+						@Pc(351) int interpX0 = g000 + (smoothX * (g100 - g000) >> 12);
+						@Pc(363) int g010 = gradient(fracX, scaledZ, fracYm, this.permutations[permPZY1 + permX]);
+						@Pc(375) int g110 = gradient(fracXm, scaledZ, fracYm, this.permutations[gridX1 + permPZY1]);
+						@Pc(386) int interpX1 = g010 + (smoothX * (g110 - g010) >> 12);
+						@Pc(397) int interpXY0 = ((interpX1 - interpX0) * smoothY >> 12) + interpX0;
+						@Pc(409) int g001 = gradient(fracX, fracZm, scaledY, this.permutations[permX + permPZ1Y]);
+						@Pc(421) int g101 = gradient(fracXm, fracZm, scaledY, this.permutations[gridX1 + permPZ1Y]);
+						@Pc(432) int interpX2 = (smoothX * (g101 - g001) >> 12) + g001;
+						@Pc(445) int g011 = gradient(fracX, fracZm, fracYm, this.permutations[permX + permPZ1Y1]);
+						@Pc(457) int g111 = gradient(fracXm, fracZm, fracYm, this.permutations[gridX1 + permPZ1Y1]);
+						@Pc(468) int interpX3 = g011 + ((g111 - g011) * smoothX >> 12);
+						@Pc(480) int interpXY1 = interpX2 + ((interpX3 - interpX2) * smoothY >> 12);
+						this.accumulate(((interpXY1 - interpXY0) * smoothZ >> 12) + interpXY0, octave);
 					}
 					this.finishSample();
 				}
@@ -147,8 +147,8 @@ public abstract class PerlinNoiseGenerator {
 	@OriginalMember(owner = "client!wf", name = "b", descriptor = "(B)V")
 	private void initAmplitudes() {
 		this.amplitudes = new short[this.octaveCount];
-		for (@Pc(12) int local12 = 0; local12 < this.octaveCount; local12++) {
-			this.amplitudes[local12] = (short) Math.pow(2.0D, local12);
+		for (@Pc(12) int i = 0; i < this.octaveCount; i++) {
+			this.amplitudes[i] = (short) Math.pow(2.0D, i);
 		}
 	}
 
@@ -157,20 +157,20 @@ public abstract class PerlinNoiseGenerator {
 
 	@OriginalMember(owner = "client!wf", name = "c", descriptor = "(I)V")
 	private void initPermutations() {
-		@Pc(12) Random local12 = new Random(this.seed);
-		@Pc(14) int local14;
-		for (local14 = 0; local14 < 255; local14++) {
-			this.permutations[local14] = (short) local14;
+		@Pc(12) Random rng = new Random(this.seed);
+		@Pc(14) int i;
+		for (i = 0; i < 255; i++) {
+			this.permutations[i] = (short) i;
 		}
-		for (local14 = 0; local14 < 255; local14++) {
-			@Pc(41) int local41 = 255 - local14;
-			@Pc(46) int local46 = RandomUtils.nextInt(local41, local12);
-			@Pc(51) short local51 = this.permutations[local46];
-			this.permutations[local46] = this.permutations[local41];
-			this.permutations[local41] = this.permutations[local41 + 256] = local51;
+		for (i = 0; i < 255; i++) {
+			@Pc(41) int remaining = 255 - i;
+			@Pc(46) int swapIdx = RandomUtils.nextInt(remaining, rng);
+			@Pc(51) short temp = this.permutations[swapIdx];
+			this.permutations[swapIdx] = this.permutations[remaining];
+			this.permutations[remaining] = this.permutations[remaining + 256] = temp;
 		}
 	}
 
 	@OriginalMember(owner = "client!wf", name = "a", descriptor = "(III)V")
-	protected abstract void accumulate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1);
+	protected abstract void accumulate(@OriginalArg(0) int value, @OriginalArg(1) int octave);
 }
