@@ -8,7 +8,7 @@ public class ThreadUtils {
 	/**
 	 * Sleeps the current thread for a set amount of milliseconds.
 	 *
-	 * @param millis. Time in milliseconds to sleep for.
+	 * @param millis Time in milliseconds to sleep for.
 	*/
 	@OriginalMember(owner = "client!sk", name = "a", descriptor = "(JI)V")
 	public static void sleep(@OriginalArg(0) long millis) {
