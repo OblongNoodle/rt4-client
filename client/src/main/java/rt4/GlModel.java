@@ -1066,13 +1066,13 @@ public final class GlModel extends Model {
 								pickVertexScreenY = new int[this.uniqueVertexCount];
 							}
 							local362 = 0;
-							label118:
+							processRoofCheck:
 							while (true) {
 								if (local362 >= this.vertexCount) {
 									local362 = 0;
 									while (true) {
 										if (local362 >= this.triangleCount) {
-											break label118;
+											break processRoofCheck;
 										}
 										@Pc(698) short local698 = this.triangleVertexA[local362];
 										@Pc(703) short local703 = this.triangleVertexB[local362];
@@ -1084,7 +1084,7 @@ public final class GlModel extends Model {
 											if (roofVisibilityLocPick) {
 												API.ReportRoofVisibilityLoc(arg8, arg9);
 											}
-											break label118;
+											break processRoofCheck;
 										}
 										local362++;
 									}

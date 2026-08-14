@@ -65,7 +65,7 @@ public class SoundPlayer {
 	@OriginalMember(owner = "client!ed", name = "d", descriptor = "(B)V")
 	public static void loop() {
 		for (@Pc(5) int i = 0; i < size; i++) {
-			@Pc(12) int local12 = delays[i]--;
+			@Pc(12) int prevDelay = delays[i]--;
 			if (delays[i] >= -10) {
 				@Pc(79) SynthSound sound = sounds[i];
 				if (sound == null) {

@@ -181,7 +181,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "<init>", descriptor = "(III)V")
-	public RawModel(@OriginalArg(0) int vertexCount, @OriginalArg(1) int triangleCount, @OriginalArg(2) int arg2) {
+	public RawModel(@OriginalArg(0) int vertexCount, @OriginalArg(1) int triangleCount, @OriginalArg(2) int texturedTriangleCount) {
 		this.vertexX = new int[vertexCount];
 		this.vertexY = new int[vertexCount];
 		this.vertexZ = new int[vertexCount];

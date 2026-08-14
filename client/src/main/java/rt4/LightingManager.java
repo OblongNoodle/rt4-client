@@ -119,24 +119,24 @@ public class LightingManager {
 		@Pc(33) int candidateCount = 0;
 		@Pc(35) int tileX;
 		@Pc(40) int tileY;
-		label112:
+		scanTiles:
 		for (tileX = startTileX; tileX <= endTileX; tileX++) {
-			label110:
+			nextTileY:
 			for (tileY = startTileY; tileY <= endTileY; tileY++) {
 				@Pc(51) int packed = lightGrid[plane][tileX][tileY];
 				while (true) {
 					while (true) {
-						label96:
+						checkCandidate:
 						while (true) {
 							if (packed == 0) {
-								continue label110;
+								continue nextTileY;
 							}
 							@Pc(59) int lightIdx = (packed & 0xFF) - 1;
 							packed >>>= 0x8;
 							@Pc(65) int j;
 							for (j = 0; j < candidateCount; j++) {
 								if (lightIdx == candidateLightIndices[j]) {
-									continue label96;
+									continue checkCandidate;
 								}
 							}
 							for (j = 0; j < 4; j++) {
@@ -145,16 +145,16 @@ public class LightingManager {
 										lightSlotRetained[j] = true;
 										matchCount++;
 										if (matchCount == 4) {
-											break label112;
+											break scanTiles;
 										}
 									}
-									continue label96;
+									continue checkCandidate;
 								}
 							}
 							candidateLightIndices[candidateCount++] = lightIdx;
 							matchCount++;
 							if (matchCount == 4) {
-								break label112;
+								break scanTiles;
 							}
 						}
 					}
@@ -206,14 +206,14 @@ public class LightingManager {
 		while (true) {
 			@Pc(47) int lightIdx;
 			@Pc(53) int slot;
-			label72:
+			checkLight:
 			while (packed != 0) {
 				lightIdx = (packed & 0xFF) - 1;
 				packed >>>= 0x8;
 				for (slot = 0; slot < 4; slot++) {
 					if (lightIdx == activeLightIndices[slot]) {
 						lightSlotRetained[slot] = true;
-						continue label72;
+						continue checkLight;
 					}
 				}
 				candidateLightIndices[candidateCount++] = lightIdx;
@@ -320,7 +320,7 @@ public class LightingManager {
 		if (!Preferences.highDetailLighting) {
 			return;
 		}
-		label43:
+		nextSlot:
 		for (@Pc(4) int slot = 0; slot < 4; slot++) {
 			if (activeLightIndices[slot] != -1) {
 				@Pc(20) int packed = lightGrid[plane][tileX1][tileY1];
@@ -329,7 +329,7 @@ public class LightingManager {
 					lightIdx = (packed & 0xFF) - 1;
 					packed >>>= 0x8;
 					if (lightIdx == activeLightIndices[slot]) {
-						continue label43;
+						continue nextSlot;
 					}
 				}
 				packed = lightGrid[plane][tileX2][tileY2];
@@ -337,7 +337,7 @@ public class LightingManager {
 					lightIdx = (packed & 0xFF) - 1;
 					packed >>>= 0x8;
 					if (lightIdx == activeLightIndices[slot]) {
-						continue label43;
+						continue nextSlot;
 					}
 				}
 			}
@@ -398,7 +398,7 @@ public class LightingManager {
 		gl.glFogfv(GL2.GL_FOG_COLOR, new float[]{0.0F, 0.0F, 0.0F, 0.0F}, 0);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_CONSTANT);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_ALPHA);
-		label71:
+		nextLight:
 		for (@Pc(56) int i = 0; i < lightCount; i++) {
 			@Pc(63) Light light = lights[i];
 			@Pc(66) int effectiveLevel = light.level;
@@ -435,7 +435,7 @@ public class LightingManager {
 							GlRenderer.setDepthLayer(201.5F - (float) light.level * 50.0F - 1.5F);
 							gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, new float[]{0.0F, 0.0F, 0.0F, light.alpha}, 0);
 							light.mesh.draw();
-							continue label71;
+							continue nextLight;
 						}
 					}
 				}

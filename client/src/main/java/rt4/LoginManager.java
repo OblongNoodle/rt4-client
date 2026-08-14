@@ -1139,7 +1139,7 @@ public class LoginManager {
 		@Pc(15) boolean allReady = true;
 		@Pc(17) int locId = -1;
 		@Pc(22) Buffer buf = new Buffer(data);
-		label70:
+		nextLoc:
 		while (true) {
 			@Pc(26) int locIdDelta = buf.gVarSmart();
 			if (locIdDelta == 0) {
@@ -1162,13 +1162,13 @@ public class LoginManager {
 									while (locFound) {
 										posDelta = buf.gsmarts();
 										if (posDelta == 0) {
-											continue label70;
+											continue nextLoc;
 										}
 										buf.g1();
 									}
 									posDelta = buf.gsmarts();
 									if (posDelta == 0) {
-										continue label70;
+										continue nextLoc;
 									}
 									packedPos += posDelta - 1;
 									@Pc(58) int localY = packedPos & 0x3F;

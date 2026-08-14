@@ -144,7 +144,7 @@ public final class Cache {
 				this.index.write(buffer, 0, 6);
 				while (true) {
 					if (bytesWritten < len) {
-						label134:
+						readChunk:
 						{
 							@Pc(189) int nextSector = 0;
 							@Pc(248) int chunkLen;
@@ -153,7 +153,7 @@ public final class Cache {
 								try {
 									this.data.read(0, buffer, 8);
 								} catch (@Pc(209) EOFException eof) {
-									break label134;
+									break readChunk;
 								}
 								nextSector = ((buffer[4] & 0xFF) << 16) + ((buffer[5] & 0xFF) << 8) + (buffer[6] & 0xFF);
 								chunkLen = (buffer[1] & 0xFF) + ((buffer[0] & 0xFF) << 8);

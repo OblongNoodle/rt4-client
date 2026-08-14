@@ -15,7 +15,7 @@ public abstract class ReferenceNodeFactory {
 	public static ReferenceNodeFactory createSoftReferenceNodeFactory() {
 		try {
 			return new SoftReferenceNodeFactory();
-		} catch (@Pc(15) Throwable local15) {
+		} catch (@Pc(15) Throwable ignored) {
 			return null;
 		}
 	}

@@ -19,18 +19,18 @@ public class PathFinder {
 	public static int approximateDestination = 0;
 
 	@OriginalMember(owner = "client!hn", name = "a", descriptor = "(IIIZIIIIIIII)Z")
-	public static boolean findPath(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10) {
+	public static boolean findPath(@OriginalArg(0) int srcY, @OriginalArg(1) int locAngle, @OriginalArg(2) int locSizeY, @OriginalArg(3) boolean approx, @OriginalArg(4) int blockAccessFlags, @OriginalArg(6) int destX, @OriginalArg(7) int locSizeX, @OriginalArg(8) int locShape, @OriginalArg(9) int moveType, @OriginalArg(10) int destY, @OriginalArg(11) int srcX) {
 		if (PlayerList.self.getSize() == 2) {
-			return findPath2(arg6, arg7, arg4, arg0, arg9, arg3, arg2, arg1, arg5, arg8, arg10);
+			return findPath2(locSizeX, locShape, blockAccessFlags, srcY, destY, approx, locSizeY, locAngle, destX, moveType, srcX);
 		} else if (PlayerList.self.getSize() <= 2) {
-			return findPathN(arg5, arg4, arg10, arg9, arg8, arg2, arg1, arg3, arg7, arg0, arg6);
+			return findPathN(destX, blockAccessFlags, srcX, destY, moveType, locSizeY, locAngle, approx, locShape, srcY, locSizeX);
 		} else {
-			return findPath1(arg9, arg6, arg8, arg1, PlayerList.self.getSize(), arg5, arg7, arg4, arg10, arg2, arg3, arg0);
+			return findPath1(destY, locSizeX, moveType, locAngle, PlayerList.self.getSize(), destX, locShape, blockAccessFlags, srcX, locSizeY, approx, srcY);
 		}
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(IIIIIZIIIIII)Z")
-	public static boolean findPath2(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(11) int arg10) {
+	public static boolean findPath2(@OriginalArg(0) int locSizeX, @OriginalArg(1) int locShape, @OriginalArg(2) int blockAccessFlags, @OriginalArg(3) int srcY, @OriginalArg(4) int destY, @OriginalArg(5) boolean approx, @OriginalArg(6) int locSizeY, @OriginalArg(7) int locAngle, @OriginalArg(8) int destX, @OriginalArg(9) int moveType, @OriginalArg(11) int srcX) {
 		@Pc(3) int x;
 		@Pc(8) int y;
 		for (x = 0; x < 104; x++) {
@@ -39,38 +39,38 @@ public class PathFinder {
 				costs[x][y] = 99999999;
 			}
 		}
-		parents[arg10][arg3] = 99;
-		costs[arg10][arg3] = 0;
-		y = arg3;
-		x = arg10;
-		@Pc(53) byte local53 = 0;
-		queueX[0] = arg10;
-		@Pc(59) boolean local59 = false;
-		@Pc(61) int local61 = 0;
-		@Pc(64) int queueWriterIndex = local53 + 1;
-		queueY[0] = arg3;
+		parents[srcX][srcY] = 99;
+		costs[srcX][srcY] = 0;
+		y = srcY;
+		x = srcX;
+		@Pc(53) byte initialIndex = 0;
+		queueX[0] = srcX;
+		@Pc(59) boolean reachedDest = false;
+		@Pc(61) int queueReaderIndex = 0;
+		@Pc(64) int queueWriterIndex = initialIndex + 1;
+		queueY[0] = srcY;
 		@Pc(71) int[][] flags = collisionMaps[Player.plane].flags;
 		@Pc(193) int cost;
-		while (local61 != queueWriterIndex) {
-			x = queueX[local61];
-			y = queueY[local61];
-			local61 = local61 + 1 & 0xFFF;
-			if (arg8 == x && arg4 == y) {
-				local59 = true;
+		while (queueReaderIndex != queueWriterIndex) {
+			x = queueX[queueReaderIndex];
+			y = queueY[queueReaderIndex];
+			queueReaderIndex = queueReaderIndex + 1 & 0xFFF;
+			if (destX == x && destY == y) {
+				reachedDest = true;
 				break;
 			}
-			if (arg1 != 0) {
-				if ((arg1 < 5 || arg1 == 10) && collisionMaps[Player.plane].isAtWall(arg4, x, y, arg8, arg1 - 1, 2, arg7)) {
-					local59 = true;
+			if (locShape != 0) {
+				if ((locShape < 5 || locShape == 10) && collisionMaps[Player.plane].isAtWall(destY, x, y, destX, locShape - 1, 2, locAngle)) {
+					reachedDest = true;
 					break;
 				}
-				if (arg1 < 10 && collisionMaps[Player.plane].isAtWallDecor(arg4, arg1 - 1, arg8, y, 2, arg7, x)) {
-					local59 = true;
+				if (locShape < 10 && collisionMaps[Player.plane].isAtWallDecor(destY, locShape - 1, destX, y, 2, locAngle, x)) {
+					reachedDest = true;
 					break;
 				}
 			}
-			if (arg0 != 0 && arg6 != 0 && collisionMaps[Player.plane].isInsideOrOutsideRect(arg8, y, x, 2, arg0, arg2, arg4, arg6)) {
-				local59 = true;
+			if (locSizeX != 0 && locSizeY != 0 && collisionMaps[Player.plane].isInsideOrOutsideRect(destX, y, x, 2, locSizeX, blockAccessFlags, destY, locSizeY)) {
+				reachedDest = true;
 				break;
 			}
 			cost = costs[x][y] + 1;
@@ -132,34 +132,34 @@ public class PathFinder {
 			}
 		}
 		approximateDestination = 0;
-		@Pc(921) int local921;
-		if (!local59) {
-			if (!arg5) {
+		@Pc(921) int bestCost;
+		if (!reachedDest) {
+			if (!approx) {
 				return false;
 			}
 			cost = 1000;
-			local921 = 100;
-			for (@Pc(928) int local928 = arg8 - 10; local928 <= arg8 + 10; local928++) {
-				for (@Pc(942) int local942 = arg4 - 10; local942 <= arg4 + 10; local942++) {
-					if (local928 >= 0 && local942 >= 0 && local928 < 104 && local942 < 104 && costs[local928][local942] < 100) {
-						@Pc(978) int local978 = 0;
-						@Pc(980) int local980 = 0;
-						if (local928 < arg8) {
-							local978 = arg8 - local928;
-						} else if (local928 > arg0 + arg8 - 1) {
-							local978 = local928 + 1 - arg0 - arg8;
+			bestCost = 100;
+			for (@Pc(928) int scanX = destX - 10; scanX <= destX + 10; scanX++) {
+				for (@Pc(942) int scanY = destY - 10; scanY <= destY + 10; scanY++) {
+					if (scanX >= 0 && scanY >= 0 && scanX < 104 && scanY < 104 && costs[scanX][scanY] < 100) {
+						@Pc(978) int dx = 0;
+						@Pc(980) int dy = 0;
+						if (scanX < destX) {
+							dx = destX - scanX;
+						} else if (scanX > locSizeX + destX - 1) {
+							dx = scanX + 1 - locSizeX - destX;
 						}
-						if (arg4 > local942) {
-							local980 = arg4 - local942;
-						} else if (local942 > arg4 + arg6 - 1) {
-							local980 = local942 + 1 - arg4 - arg6;
+						if (destY > scanY) {
+							dy = destY - scanY;
+						} else if (scanY > destY + locSizeY - 1) {
+							dy = scanY + 1 - destY - locSizeY;
 						}
-						@Pc(1057) int local1057 = local978 * local978 + local980 * local980;
-						if (local1057 < cost || cost == local1057 && costs[local928][local942] < local921) {
-							y = local942;
-							local921 = costs[local928][local942];
-							cost = local1057;
-							x = local928;
+						@Pc(1057) int distSq = dx * dx + dy * dy;
+						if (distSq < cost || cost == distSq && costs[scanX][scanY] < bestCost) {
+							y = scanY;
+							bestCost = costs[scanX][scanY];
+							cost = distSq;
+							x = scanX;
 						}
 					}
 				}
@@ -167,21 +167,21 @@ public class PathFinder {
 			if (cost == 1000) {
 				return false;
 			}
-			if (arg10 == x && y == arg3) {
+			if (srcX == x && y == srcY) {
 				return false;
 			}
 			approximateDestination = 1;
 		}
-		@Pc(1121) byte local1121 = 0;
+		@Pc(1121) byte initialBacktrackIndex = 0;
 		queueX[0] = x;
-		local61 = local1121 + 1;
+		queueReaderIndex = initialBacktrackIndex + 1;
 		queueY[0] = y;
-		cost = local921 = parents[x][y];
-		while (arg10 != x || arg3 != y) {
-			if (local921 != cost) {
-				queueX[local61] = x;
-				queueY[local61++] = y;
-				local921 = cost;
+		cost = bestCost = parents[x][y];
+		while (srcX != x || srcY != y) {
+			if (bestCost != cost) {
+				queueX[queueReaderIndex] = x;
+				queueY[queueReaderIndex++] = y;
+				bestCost = cost;
 			}
 			if ((cost & 0x2) != 0) {
 				x++;
@@ -195,455 +195,455 @@ public class PathFinder {
 			}
 			cost = parents[x][y];
 		}
-		if (local61 > 0) {
-			ClientProt.sendMovePacket(local61, arg9);
+		if (queueReaderIndex > 0) {
+			ClientProt.sendMovePacket(queueReaderIndex, moveType);
 			return true;
-		} else return arg9 != 1;
+		} else return moveType != 1;
 	}
 
 	@OriginalMember(owner = "client!di", name = "a", descriptor = "(IIIIIIIIZIII)Z")
-	public static boolean findPathN(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) boolean arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10) {
-		@Pc(3) int local3;
-		@Pc(10) int local10;
-		for (local3 = 0; local3 < 104; local3++) {
-			for (local10 = 0; local10 < 104; local10++) {
-				parents[local3][local10] = 0;
-				costs[local3][local10] = 99999999;
+	public static boolean findPathN(@OriginalArg(0) int destX, @OriginalArg(1) int blockAccessFlags, @OriginalArg(2) int srcX, @OriginalArg(4) int destY, @OriginalArg(5) int moveType, @OriginalArg(6) int locSizeY, @OriginalArg(7) int locAngle, @OriginalArg(8) boolean approx, @OriginalArg(9) int locShape, @OriginalArg(10) int srcY, @OriginalArg(11) int locSizeX) {
+		@Pc(3) int x;
+		@Pc(10) int y;
+		for (x = 0; x < 104; x++) {
+			for (y = 0; y < 104; y++) {
+				parents[x][y] = 0;
+				costs[x][y] = 99999999;
 			}
 		}
-		local3 = arg2;
-		parents[arg2][arg9] = 99;
-		local10 = arg9;
-		costs[arg2][arg9] = 0;
-		@Pc(51) byte local51 = 0;
-		@Pc(53) boolean local53 = false;
-		@Pc(64) int local64 = 0;
-		queueX[0] = arg2;
-		@Pc(71) int local71 = local51 + 1;
-		queueY[0] = arg9;
-		@Pc(78) int[][] local78 = collisionMaps[Player.plane].flags;
-		@Pc(198) int local198;
-		while (local71 != local64) {
-			local10 = queueY[local64];
-			local3 = queueX[local64];
-			local64 = local64 + 1 & 0xFFF;
-			if (local3 == arg0 && local10 == arg3) {
-				local53 = true;
+		x = srcX;
+		parents[srcX][srcY] = 99;
+		y = srcY;
+		costs[srcX][srcY] = 0;
+		@Pc(51) byte initialIndex = 0;
+		@Pc(53) boolean reachedDest = false;
+		@Pc(64) int queueReaderIndex = 0;
+		queueX[0] = srcX;
+		@Pc(71) int queueWriterIndex = initialIndex + 1;
+		queueY[0] = srcY;
+		@Pc(78) int[][] flags = collisionMaps[Player.plane].flags;
+		@Pc(198) int cost;
+		while (queueWriterIndex != queueReaderIndex) {
+			y = queueY[queueReaderIndex];
+			x = queueX[queueReaderIndex];
+			queueReaderIndex = queueReaderIndex + 1 & 0xFFF;
+			if (x == destX && y == destY) {
+				reachedDest = true;
 				break;
 			}
-			if (arg8 != 0) {
-				if ((arg8 < 5 || arg8 == 10) && collisionMaps[Player.plane].isAtWall(arg3, local3, local10, arg0, arg8 - 1, 1, arg6)) {
-					local53 = true;
+			if (locShape != 0) {
+				if ((locShape < 5 || locShape == 10) && collisionMaps[Player.plane].isAtWall(destY, x, y, destX, locShape - 1, 1, locAngle)) {
+					reachedDest = true;
 					break;
 				}
-				if (arg8 < 10 && collisionMaps[Player.plane].isAtWallDecor(arg3, arg8 - 1, arg0, local10, 1, arg6, local3)) {
-					local53 = true;
+				if (locShape < 10 && collisionMaps[Player.plane].isAtWallDecor(destY, locShape - 1, destX, y, 1, locAngle, x)) {
+					reachedDest = true;
 					break;
 				}
 			}
-			if (arg10 != 0 && arg5 != 0 && collisionMaps[Player.plane].isInsideOrOutsideRect(arg0, local10, local3, 1, arg10, arg1, arg3, arg5)) {
-				local53 = true;
+			if (locSizeX != 0 && locSizeY != 0 && collisionMaps[Player.plane].isInsideOrOutsideRect(destX, y, x, 1, locSizeX, blockAccessFlags, destY, locSizeY)) {
+				reachedDest = true;
 				break;
 			}
-			local198 = costs[local3][local10] + 1;
-			if (local3 > 0 && parents[local3 - 1][local10] == 0 && (local78[local3 - 1][local10] & 0x12C0108) == 0) {
-				queueX[local71] = local3 - 1;
-				queueY[local71] = local10;
-				local71 = local71 + 1 & 0xFFF;
-				parents[local3 - 1][local10] = 2;
-				costs[local3 - 1][local10] = local198;
+			cost = costs[x][y] + 1;
+			if (x > 0 && parents[x - 1][y] == 0 && (flags[x - 1][y] & 0x12C0108) == 0) {
+				queueX[queueWriterIndex] = x - 1;
+				queueY[queueWriterIndex] = y;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+				parents[x - 1][y] = 2;
+				costs[x - 1][y] = cost;
 			}
-			if (local3 < 103 && parents[local3 + 1][local10] == 0 && (local78[local3 + 1][local10] & 0x12C0180) == 0) {
-				queueX[local71] = local3 + 1;
-				queueY[local71] = local10;
-				local71 = local71 + 1 & 0xFFF;
-				parents[local3 + 1][local10] = 8;
-				costs[local3 + 1][local10] = local198;
+			if (x < 103 && parents[x + 1][y] == 0 && (flags[x + 1][y] & 0x12C0180) == 0) {
+				queueX[queueWriterIndex] = x + 1;
+				queueY[queueWriterIndex] = y;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+				parents[x + 1][y] = 8;
+				costs[x + 1][y] = cost;
 			}
-			if (local10 > 0 && parents[local3][local10 - 1] == 0 && (local78[local3][local10 - 1] & 0x12C0102) == 0) {
-				queueX[local71] = local3;
-				queueY[local71] = local10 - 1;
-				parents[local3][local10 - 1] = 1;
-				local71 = local71 + 1 & 0xFFF;
-				costs[local3][local10 - 1] = local198;
+			if (y > 0 && parents[x][y - 1] == 0 && (flags[x][y - 1] & 0x12C0102) == 0) {
+				queueX[queueWriterIndex] = x;
+				queueY[queueWriterIndex] = y - 1;
+				parents[x][y - 1] = 1;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+				costs[x][y - 1] = cost;
 			}
-			if (local10 < 103 && parents[local3][local10 + 1] == 0 && (local78[local3][local10 + 1] & 0x12C0120) == 0) {
-				queueX[local71] = local3;
-				queueY[local71] = local10 + 1;
-				local71 = local71 + 1 & 0xFFF;
-				parents[local3][local10 + 1] = 4;
-				costs[local3][local10 + 1] = local198;
+			if (y < 103 && parents[x][y + 1] == 0 && (flags[x][y + 1] & 0x12C0120) == 0) {
+				queueX[queueWriterIndex] = x;
+				queueY[queueWriterIndex] = y + 1;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+				parents[x][y + 1] = 4;
+				costs[x][y + 1] = cost;
 			}
-			if (local3 > 0 && local10 > 0 && parents[local3 - 1][local10 - 1] == 0 && (local78[local3 - 1][local10 - 1] & 0x12C010E) == 0 && (local78[local3 - 1][local10] & 0x12C0108) == 0 && (local78[local3][local10 - 1] & 0x12C0102) == 0) {
-				queueX[local71] = local3 - 1;
-				queueY[local71] = local10 - 1;
-				local71 = local71 + 1 & 0xFFF;
-				parents[local3 - 1][local10 - 1] = 3;
-				costs[local3 - 1][local10 - 1] = local198;
+			if (x > 0 && y > 0 && parents[x - 1][y - 1] == 0 && (flags[x - 1][y - 1] & 0x12C010E) == 0 && (flags[x - 1][y] & 0x12C0108) == 0 && (flags[x][y - 1] & 0x12C0102) == 0) {
+				queueX[queueWriterIndex] = x - 1;
+				queueY[queueWriterIndex] = y - 1;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+				parents[x - 1][y - 1] = 3;
+				costs[x - 1][y - 1] = cost;
 			}
-			if (local3 < 103 && local10 > 0 && parents[local3 + 1][local10 - 1] == 0 && (local78[local3 + 1][local10 - 1] & 0x12C0183) == 0 && (local78[local3 + 1][local10] & 0x12C0180) == 0 && (local78[local3][local10 - 1] & 0x12C0102) == 0) {
-				queueX[local71] = local3 + 1;
-				queueY[local71] = local10 - 1;
-				local71 = local71 + 1 & 0xFFF;
-				parents[local3 + 1][local10 - 1] = 9;
-				costs[local3 + 1][local10 - 1] = local198;
+			if (x < 103 && y > 0 && parents[x + 1][y - 1] == 0 && (flags[x + 1][y - 1] & 0x12C0183) == 0 && (flags[x + 1][y] & 0x12C0180) == 0 && (flags[x][y - 1] & 0x12C0102) == 0) {
+				queueX[queueWriterIndex] = x + 1;
+				queueY[queueWriterIndex] = y - 1;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+				parents[x + 1][y - 1] = 9;
+				costs[x + 1][y - 1] = cost;
 			}
-			if (local3 > 0 && local10 < 103 && parents[local3 - 1][local10 + 1] == 0 && (local78[local3 - 1][local10 + 1] & 0x12C0138) == 0 && (local78[local3 - 1][local10] & 0x12C0108) == 0 && (local78[local3][local10 + 1] & 0x12C0120) == 0) {
-				queueX[local71] = local3 - 1;
-				queueY[local71] = local10 + 1;
-				parents[local3 - 1][local10 + 1] = 6;
-				local71 = local71 + 1 & 0xFFF;
-				costs[local3 - 1][local10 + 1] = local198;
+			if (x > 0 && y < 103 && parents[x - 1][y + 1] == 0 && (flags[x - 1][y + 1] & 0x12C0138) == 0 && (flags[x - 1][y] & 0x12C0108) == 0 && (flags[x][y + 1] & 0x12C0120) == 0) {
+				queueX[queueWriterIndex] = x - 1;
+				queueY[queueWriterIndex] = y + 1;
+				parents[x - 1][y + 1] = 6;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+				costs[x - 1][y + 1] = cost;
 			}
-			if (local3 < 103 && local10 < 103 && parents[local3 + 1][local10 + 1] == 0 && (local78[local3 + 1][local10 + 1] & 0x12C01E0) == 0 && (local78[local3 + 1][local10] & 0x12C0180) == 0 && (local78[local3][local10 + 1] & 0x12C0120) == 0) {
-				queueX[local71] = local3 + 1;
-				queueY[local71] = local10 + 1;
-				parents[local3 + 1][local10 + 1] = 12;
-				local71 = local71 + 1 & 0xFFF;
-				costs[local3 + 1][local10 + 1] = local198;
+			if (x < 103 && y < 103 && parents[x + 1][y + 1] == 0 && (flags[x + 1][y + 1] & 0x12C01E0) == 0 && (flags[x + 1][y] & 0x12C0180) == 0 && (flags[x][y + 1] & 0x12C0120) == 0) {
+				queueX[queueWriterIndex] = x + 1;
+				queueY[queueWriterIndex] = y + 1;
+				parents[x + 1][y + 1] = 12;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+				costs[x + 1][y + 1] = cost;
 			}
 		}
 		approximateDestination = 0;
-		@Pc(839) int local839;
-		if (!local53) {
-			if (!arg7) {
+		@Pc(839) int bestCost;
+		if (!reachedDest) {
+			if (!approx) {
 				return false;
 			}
-			local198 = 1000;
-			local839 = 100;
-			for (@Pc(846) int local846 = arg0 - 10; local846 <= arg0 + 10; local846++) {
-				for (@Pc(856) int local856 = arg3 - 10; local856 <= arg3 + 10; local856++) {
-					if (local846 >= 0 && local856 >= 0 && local846 < 104 && local856 < 104 && costs[local846][local856] < 100) {
-						@Pc(894) int local894 = 0;
-						if (local856 < arg3) {
-							local894 = arg3 - local856;
-						} else if (arg5 + arg3 - 1 < local856) {
-							local894 = local856 + 1 - arg3 - arg5;
+			cost = 1000;
+			bestCost = 100;
+			for (@Pc(846) int scanX = destX - 10; scanX <= destX + 10; scanX++) {
+				for (@Pc(856) int scanY = destY - 10; scanY <= destY + 10; scanY++) {
+					if (scanX >= 0 && scanY >= 0 && scanX < 104 && scanY < 104 && costs[scanX][scanY] < 100) {
+						@Pc(894) int dy = 0;
+						if (scanY < destY) {
+							dy = destY - scanY;
+						} else if (locSizeY + destY - 1 < scanY) {
+							dy = scanY + 1 - destY - locSizeY;
 						}
-						@Pc(927) int local927 = 0;
-						if (local846 < arg0) {
-							local927 = arg0 - local846;
-						} else if (local846 > arg10 + arg0 - 1) {
-							local927 = local846 + 1 - arg10 - arg0;
+						@Pc(927) int dx = 0;
+						if (scanX < destX) {
+							dx = destX - scanX;
+						} else if (scanX > locSizeX + destX - 1) {
+							dx = scanX + 1 - locSizeX - destX;
 						}
-						@Pc(968) int local968 = local894 * local894 + local927 * local927;
-						if (local968 < local198 || local968 == local198 && costs[local846][local856] < local839) {
-							local10 = local856;
-							local198 = local968;
-							local3 = local846;
-							local839 = costs[local846][local856];
+						@Pc(968) int distSq = dy * dy + dx * dx;
+						if (distSq < cost || distSq == cost && costs[scanX][scanY] < bestCost) {
+							y = scanY;
+							cost = distSq;
+							x = scanX;
+							bestCost = costs[scanX][scanY];
 						}
 					}
 				}
 			}
-			if (local198 == 1000) {
+			if (cost == 1000) {
 				return false;
 			}
-			if (arg2 == local3 && local10 == arg9) {
+			if (srcX == x && y == srcY) {
 				return false;
 			}
 			approximateDestination = 1;
 		}
-		@Pc(1032) byte local1032 = 0;
-		queueX[0] = local3;
-		local64 = local1032 + 1;
-		queueY[0] = local10;
-		local198 = local839 = parents[local3][local10];
-		while (arg2 != local3 || local10 != arg9) {
-			if (local839 != local198) {
-				local839 = local198;
-				queueX[local64] = local3;
-				queueY[local64++] = local10;
+		@Pc(1032) byte initialBacktrackIndex = 0;
+		queueX[0] = x;
+		queueReaderIndex = initialBacktrackIndex + 1;
+		queueY[0] = y;
+		cost = bestCost = parents[x][y];
+		while (srcX != x || y != srcY) {
+			if (bestCost != cost) {
+				bestCost = cost;
+				queueX[queueReaderIndex] = x;
+				queueY[queueReaderIndex++] = y;
 			}
-			if ((local198 & 0x2) != 0) {
-				local3++;
-			} else if ((local198 & 0x8) != 0) {
-				local3--;
+			if ((cost & 0x2) != 0) {
+				x++;
+			} else if ((cost & 0x8) != 0) {
+				x--;
 			}
-			if ((local198 & 0x1) != 0) {
-				local10++;
-			} else if ((local198 & 0x4) != 0) {
-				local10--;
+			if ((cost & 0x1) != 0) {
+				y++;
+			} else if ((cost & 0x4) != 0) {
+				y--;
 			}
-			local198 = parents[local3][local10];
+			cost = parents[x][y];
 		}
-		if (local64 > 0) {
-			ClientProt.sendMovePacket(local64, arg4);
+		if (queueReaderIndex > 0) {
+			ClientProt.sendMovePacket(queueReaderIndex, moveType);
 			return true;
-		} else return arg4 != 1;
+		} else return moveType != 1;
 	}
 
 	@OriginalMember(owner = "client!hh", name = "a", descriptor = "(IBIIIIIIIIIZI)Z")
-	public static boolean findPath1(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) boolean arg10, @OriginalArg(12) int arg11) {
-		@Pc(3) int local3;
-		@Pc(10) int local10;
-		for (local3 = 0; local3 < 104; local3++) {
-			for (local10 = 0; local10 < 104; local10++) {
-				parents[local3][local10] = 0;
-				costs[local3][local10] = 99999999;
+	public static boolean findPath1(@OriginalArg(0) int destY, @OriginalArg(2) int locSizeX, @OriginalArg(3) int moveType, @OriginalArg(4) int locAngle, @OriginalArg(5) int entitySize, @OriginalArg(6) int destX, @OriginalArg(7) int locShape, @OriginalArg(8) int blockAccessFlags, @OriginalArg(9) int srcX, @OriginalArg(10) int locSizeY, @OriginalArg(11) boolean approx, @OriginalArg(12) int srcY) {
+		@Pc(3) int x;
+		@Pc(10) int y;
+		for (x = 0; x < 104; x++) {
+			for (y = 0; y < 104; y++) {
+				parents[x][y] = 0;
+				costs[x][y] = 99999999;
 			}
 		}
-		local3 = arg8;
-		local10 = arg11;
-		parents[arg8][arg11] = 99;
-		costs[arg8][arg11] = 0;
-		@Pc(53) byte local53 = 0;
-		queueX[0] = arg8;
-		@Pc(65) int local65 = local53 + 1;
-		queueY[0] = arg11;
-		@Pc(69) int local69 = 0;
-		@Pc(71) boolean local71 = false;
-		@Pc(76) int[][] local76 = collisionMaps[Player.plane].flags;
-		@Pc(201) int local201;
-		@Pc(242) int local242;
-		label397:
-		while (local69 != local65) {
-			local3 = queueX[local69];
-			local10 = queueY[local69];
-			local69 = local69 + 1 & 0xFFF;
-			if (arg5 == local3 && local10 == arg0) {
-				local71 = true;
+		x = srcX;
+		y = srcY;
+		parents[srcX][srcY] = 99;
+		costs[srcX][srcY] = 0;
+		@Pc(53) byte initialIndex = 0;
+		queueX[0] = srcX;
+		@Pc(65) int queueWriterIndex = initialIndex + 1;
+		queueY[0] = srcY;
+		@Pc(69) int queueReaderIndex = 0;
+		@Pc(71) boolean reachedDest = false;
+		@Pc(76) int[][] flags = collisionMaps[Player.plane].flags;
+		@Pc(201) int cost;
+		@Pc(242) int i;
+		nextTile:
+		while (queueReaderIndex != queueWriterIndex) {
+			x = queueX[queueReaderIndex];
+			y = queueY[queueReaderIndex];
+			queueReaderIndex = queueReaderIndex + 1 & 0xFFF;
+			if (destX == x && y == destY) {
+				reachedDest = true;
 				break;
 			}
-			if (arg6 != 0) {
-				if ((arg6 < 5 || arg6 == 10) && collisionMaps[Player.plane].isAtWall(arg0, local3, local10, arg5, arg6 - 1, arg4, arg3)) {
-					local71 = true;
+			if (locShape != 0) {
+				if ((locShape < 5 || locShape == 10) && collisionMaps[Player.plane].isAtWall(destY, x, y, destX, locShape - 1, entitySize, locAngle)) {
+					reachedDest = true;
 					break;
 				}
-				if (arg6 < 10 && collisionMaps[Player.plane].isAtWallDecor(arg0, arg6 - 1, arg5, local10, arg4, arg3, local3)) {
-					local71 = true;
+				if (locShape < 10 && collisionMaps[Player.plane].isAtWallDecor(destY, locShape - 1, destX, y, entitySize, locAngle, x)) {
+					reachedDest = true;
 					break;
 				}
 			}
-			if (arg1 != 0 && arg9 != 0 && collisionMaps[Player.plane].isInsideOrOutsideRect(arg5, local10, local3, arg4, arg1, arg7, arg0, arg9)) {
-				local71 = true;
+			if (locSizeX != 0 && locSizeY != 0 && collisionMaps[Player.plane].isInsideOrOutsideRect(destX, y, x, entitySize, locSizeX, blockAccessFlags, destY, locSizeY)) {
+				reachedDest = true;
 				break;
 			}
-			local201 = costs[local3][local10] + 1;
-			if (local3 > 0 && parents[local3 - 1][local10] == 0 && (local76[local3 - 1][local10] & 0x12C010E) == 0 && (local76[local3 - 1][arg4 + local10 - 1] & 0x12C0138) == 0) {
-				local242 = 1;
+			cost = costs[x][y] + 1;
+			if (x > 0 && parents[x - 1][y] == 0 && (flags[x - 1][y] & 0x12C010E) == 0 && (flags[x - 1][entitySize + y - 1] & 0x12C0138) == 0) {
+				i = 1;
 				while (true) {
-					if (arg4 - 1 <= local242) {
-						queueX[local65] = local3 - 1;
-						queueY[local65] = local10;
-						parents[local3 - 1][local10] = 2;
-						local65 = local65 + 1 & 0xFFF;
-						costs[local3 - 1][local10] = local201;
+					if (entitySize - 1 <= i) {
+						queueX[queueWriterIndex] = x - 1;
+						queueY[queueWriterIndex] = y;
+						parents[x - 1][y] = 2;
+						queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+						costs[x - 1][y] = cost;
 						break;
 					}
-					if ((local76[local3 - 1][local10 + local242] & 0x12C013E) != 0) {
+					if ((flags[x - 1][y + i] & 0x12C013E) != 0) {
 						break;
 					}
-					local242++;
+					i++;
 				}
 			}
-			if (local3 < 102 && parents[local3 + 1][local10] == 0 && (local76[local3 + arg4][local10] & 0x12C0183) == 0 && (local76[arg4 + local3][local10 + arg4 - 1] & 0x12C01E0) == 0) {
-				local242 = 1;
+			if (x < 102 && parents[x + 1][y] == 0 && (flags[x + entitySize][y] & 0x12C0183) == 0 && (flags[entitySize + x][y + entitySize - 1] & 0x12C01E0) == 0) {
+				i = 1;
 				while (true) {
-					if (local242 >= arg4 - 1) {
-						queueX[local65] = local3 + 1;
-						queueY[local65] = local10;
-						parents[local3 + 1][local10] = 8;
-						costs[local3 + 1][local10] = local201;
-						local65 = local65 + 1 & 0xFFF;
+					if (i >= entitySize - 1) {
+						queueX[queueWriterIndex] = x + 1;
+						queueY[queueWriterIndex] = y;
+						parents[x + 1][y] = 8;
+						costs[x + 1][y] = cost;
+						queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 						break;
 					}
-					if ((local76[arg4 + local3][local10 + local242] & 0x12C01E3) != 0) {
+					if ((flags[entitySize + x][y + i] & 0x12C01E3) != 0) {
 						break;
 					}
-					local242++;
+					i++;
 				}
 			}
-			if (local10 > 0 && parents[local3][local10 - 1] == 0 && (local76[local3][local10 - 1] & 0x12C010E) == 0 && (local76[arg4 + local3 - 1][local10 - 1] & 0x12C0183) == 0) {
-				local242 = 1;
+			if (y > 0 && parents[x][y - 1] == 0 && (flags[x][y - 1] & 0x12C010E) == 0 && (flags[entitySize + x - 1][y - 1] & 0x12C0183) == 0) {
+				i = 1;
 				while (true) {
-					if (arg4 - 1 <= local242) {
-						queueX[local65] = local3;
-						queueY[local65] = local10 - 1;
-						parents[local3][local10 - 1] = 1;
-						local65 = local65 + 1 & 0xFFF;
-						costs[local3][local10 - 1] = local201;
+					if (entitySize - 1 <= i) {
+						queueX[queueWriterIndex] = x;
+						queueY[queueWriterIndex] = y - 1;
+						parents[x][y - 1] = 1;
+						queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+						costs[x][y - 1] = cost;
 						break;
 					}
-					if ((local76[local3 + local242][local10 - 1] & 0x12C018F) != 0) {
+					if ((flags[x + i][y - 1] & 0x12C018F) != 0) {
 						break;
 					}
-					local242++;
+					i++;
 				}
 			}
-			if (local10 < 102 && parents[local3][local10 + 1] == 0 && (local76[local3][local10 + arg4] & 0x12C0138) == 0 && (local76[local3 + arg4 - 1][arg4 + local10] & 0x12C01E0) == 0) {
-				local242 = 1;
+			if (y < 102 && parents[x][y + 1] == 0 && (flags[x][y + entitySize] & 0x12C0138) == 0 && (flags[x + entitySize - 1][entitySize + y] & 0x12C01E0) == 0) {
+				i = 1;
 				while (true) {
-					if (local242 >= arg4 - 1) {
-						queueX[local65] = local3;
-						queueY[local65] = local10 + 1;
-						parents[local3][local10 + 1] = 4;
-						costs[local3][local10 + 1] = local201;
-						local65 = local65 + 1 & 0xFFF;
+					if (i >= entitySize - 1) {
+						queueX[queueWriterIndex] = x;
+						queueY[queueWriterIndex] = y + 1;
+						parents[x][y + 1] = 4;
+						costs[x][y + 1] = cost;
+						queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 						break;
 					}
-					if ((local76[local3 + local242][arg4 + local10] & 0x12C01F8) != 0) {
+					if ((flags[x + i][entitySize + y] & 0x12C01F8) != 0) {
 						break;
 					}
-					local242++;
+					i++;
 				}
 			}
-			if (local3 > 0 && local10 > 0 && parents[local3 - 1][local10 - 1] == 0 && (local76[local3 - 1][arg4 + local10 - 1 - 1] & 0x12C0138) == 0 && (local76[local3 - 1][local10 - 1] & 0x12C010E) == 0 && (local76[arg4 + local3 - 1 - 1][local10 - 1] & 0x12C0183) == 0) {
-				local242 = 1;
+			if (x > 0 && y > 0 && parents[x - 1][y - 1] == 0 && (flags[x - 1][entitySize + y - 1 - 1] & 0x12C0138) == 0 && (flags[x - 1][y - 1] & 0x12C010E) == 0 && (flags[entitySize + x - 1 - 1][y - 1] & 0x12C0183) == 0) {
+				i = 1;
 				while (true) {
-					if (arg4 - 1 <= local242) {
-						queueX[local65] = local3 - 1;
-						queueY[local65] = local10 - 1;
-						local65 = local65 + 1 & 0xFFF;
-						parents[local3 - 1][local10 - 1] = 3;
-						costs[local3 - 1][local10 - 1] = local201;
+					if (entitySize - 1 <= i) {
+						queueX[queueWriterIndex] = x - 1;
+						queueY[queueWriterIndex] = y - 1;
+						queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+						parents[x - 1][y - 1] = 3;
+						costs[x - 1][y - 1] = cost;
 						break;
 					}
-					if ((local76[local3 - 1][local10 + local242 - 1] & 0x12C013E) != 0 || (local76[local242 + local3 - 1][local10 - 1] & 0x12C018F) != 0) {
+					if ((flags[x - 1][y + i - 1] & 0x12C013E) != 0 || (flags[i + x - 1][y - 1] & 0x12C018F) != 0) {
 						break;
 					}
-					local242++;
+					i++;
 				}
 			}
-			if (local3 < 102 && local10 > 0 && parents[local3 + 1][local10 - 1] == 0 && (local76[local3 + 1][local10 - 1] & 0x12C010E) == 0 && (local76[arg4 + local3][local10 - 1] & 0x12C0183) == 0 && (local76[local3 + arg4][local10 + arg4 - 1 - 1] & 0x12C01E0) == 0) {
-				local242 = 1;
+			if (x < 102 && y > 0 && parents[x + 1][y - 1] == 0 && (flags[x + 1][y - 1] & 0x12C010E) == 0 && (flags[entitySize + x][y - 1] & 0x12C0183) == 0 && (flags[x + entitySize][y + entitySize - 1 - 1] & 0x12C01E0) == 0) {
+				i = 1;
 				while (true) {
-					if (local242 >= arg4 - 1) {
-						queueX[local65] = local3 + 1;
-						queueY[local65] = local10 - 1;
-						local65 = local65 + 1 & 0xFFF;
-						parents[local3 + 1][local10 - 1] = 9;
-						costs[local3 + 1][local10 - 1] = local201;
+					if (i >= entitySize - 1) {
+						queueX[queueWriterIndex] = x + 1;
+						queueY[queueWriterIndex] = y - 1;
+						queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+						parents[x + 1][y - 1] = 9;
+						costs[x + 1][y - 1] = cost;
 						break;
 					}
-					if ((local76[local3 + arg4][local10 + local242 - 1] & 0x12C01E3) != 0 || (local76[local242 + local3 + 1][local10 - 1] & 0x12C018F) != 0) {
+					if ((flags[x + entitySize][y + i - 1] & 0x12C01E3) != 0 || (flags[i + x + 1][y - 1] & 0x12C018F) != 0) {
 						break;
 					}
-					local242++;
+					i++;
 				}
 			}
-			if (local3 > 0 && local10 < 102 && parents[local3 - 1][local10 + 1] == 0 && (local76[local3 - 1][local10 + 1] & 0x12C010E) == 0 && (local76[local3 - 1][local10 + arg4] & 0x12C0138) == 0 && (local76[local3][local10 + arg4] & 0x12C01E0) == 0) {
-				local242 = 1;
+			if (x > 0 && y < 102 && parents[x - 1][y + 1] == 0 && (flags[x - 1][y + 1] & 0x12C010E) == 0 && (flags[x - 1][y + entitySize] & 0x12C0138) == 0 && (flags[x][y + entitySize] & 0x12C01E0) == 0) {
+				i = 1;
 				while (true) {
-					if (arg4 - 1 <= local242) {
-						queueX[local65] = local3 - 1;
-						queueY[local65] = local10 + 1;
-						local65 = local65 + 1 & 0xFFF;
-						parents[local3 - 1][local10 + 1] = 6;
-						costs[local3 - 1][local10 + 1] = local201;
+					if (entitySize - 1 <= i) {
+						queueX[queueWriterIndex] = x - 1;
+						queueY[queueWriterIndex] = y + 1;
+						queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
+						parents[x - 1][y + 1] = 6;
+						costs[x - 1][y + 1] = cost;
 						break;
 					}
-					if ((local76[local3 - 1][local10 + local242 + 1] & 0x12C013E) != 0 || (local76[local242 + local3 - 1][arg4 + local10] & 0x12C01F8) != 0) {
+					if ((flags[x - 1][y + i + 1] & 0x12C013E) != 0 || (flags[i + x - 1][entitySize + y] & 0x12C01F8) != 0) {
 						break;
 					}
-					local242++;
+					i++;
 				}
 			}
-			if (local3 < 102 && local10 < 102 && parents[local3 + 1][local10 + 1] == 0 && (local76[local3 + 1][local10 + arg4] & 0x12C0138) == 0 && (local76[local3 + arg4][local10 + arg4] & 0x12C01E0) == 0 && (local76[arg4 + local3][local10 + 1] & 0x12C0183) == 0) {
-				for (local242 = 1; local242 < arg4 - 1; local242++) {
-					if ((local76[local242 + local3 + 1][local10 + arg4] & 0x12C01F8) != 0 || (local76[arg4 + local3][local242 + local10 + 1] & 0x12C01E3) != 0) {
-						continue label397;
+			if (x < 102 && y < 102 && parents[x + 1][y + 1] == 0 && (flags[x + 1][y + entitySize] & 0x12C0138) == 0 && (flags[x + entitySize][y + entitySize] & 0x12C01E0) == 0 && (flags[entitySize + x][y + 1] & 0x12C0183) == 0) {
+				for (i = 1; i < entitySize - 1; i++) {
+					if ((flags[i + x + 1][y + entitySize] & 0x12C01F8) != 0 || (flags[entitySize + x][i + y + 1] & 0x12C01E3) != 0) {
+						continue nextTile;
 					}
 				}
-				queueX[local65] = local3 + 1;
-				queueY[local65] = local10 + 1;
-				parents[local3 + 1][local10 + 1] = 12;
-				costs[local3 + 1][local10 + 1] = local201;
-				local65 = local65 + 1 & 0xFFF;
+				queueX[queueWriterIndex] = x + 1;
+				queueY[queueWriterIndex] = y + 1;
+				parents[x + 1][y + 1] = 12;
+				costs[x + 1][y + 1] = cost;
+				queueWriterIndex = queueWriterIndex + 1 & 0xFFF;
 			}
 		}
 		approximateDestination = 0;
-		if (!local71) {
-			if (!arg10) {
+		if (!reachedDest) {
+			if (!approx) {
 				return false;
 			}
-			local201 = 1000;
-			local242 = 100;
-			for (@Pc(1247) int local1247 = arg5 - 10; local1247 <= arg5 + 10; local1247++) {
-				for (@Pc(1257) int local1257 = arg0 - 10; local1257 <= arg0 + 10; local1257++) {
-					if (local1247 >= 0 && local1257 >= 0 && local1247 < 104 && local1257 < 104 && costs[local1247][local1257] < 100) {
-						@Pc(1295) int local1295 = 0;
-						if (arg5 > local1247) {
-							local1295 = arg5 - local1247;
-						} else if (arg5 + arg1 - 1 < local1247) {
-							local1295 = local1247 + 1 - arg1 - arg5;
+			cost = 1000;
+			i = 100;
+			for (@Pc(1247) int scanX = destX - 10; scanX <= destX + 10; scanX++) {
+				for (@Pc(1257) int scanY = destY - 10; scanY <= destY + 10; scanY++) {
+					if (scanX >= 0 && scanY >= 0 && scanX < 104 && scanY < 104 && costs[scanX][scanY] < 100) {
+						@Pc(1295) int dx = 0;
+						if (destX > scanX) {
+							dx = destX - scanX;
+						} else if (destX + locSizeX - 1 < scanX) {
+							dx = scanX + 1 - locSizeX - destX;
 						}
-						@Pc(1334) int local1334 = 0;
-						if (local1257 < arg0) {
-							local1334 = arg0 - local1257;
-						} else if (arg0 + arg9 - 1 < local1257) {
-							local1334 = local1257 + 1 - arg0 - arg9;
+						@Pc(1334) int dy = 0;
+						if (scanY < destY) {
+							dy = destY - scanY;
+						} else if (destY + locSizeY - 1 < scanY) {
+							dy = scanY + 1 - destY - locSizeY;
 						}
-						@Pc(1377) int local1377 = local1295 * local1295 + local1334 * local1334;
-						if (local1377 < local201 || local1377 == local201 && local242 > costs[local1247][local1257]) {
-							local242 = costs[local1247][local1257];
-							local3 = local1247;
-							local201 = local1377;
-							local10 = local1257;
+						@Pc(1377) int distSq = dx * dx + dy * dy;
+						if (distSq < cost || distSq == cost && i > costs[scanX][scanY]) {
+							i = costs[scanX][scanY];
+							x = scanX;
+							cost = distSq;
+							y = scanY;
 						}
 					}
 				}
 			}
-			if (local201 == 1000) {
+			if (cost == 1000) {
 				return false;
 			}
-			if (local3 == arg8 && arg11 == local10) {
+			if (x == srcX && srcY == y) {
 				return false;
 			}
 			approximateDestination = 1;
 		}
-		@Pc(1438) byte local1438 = 0;
-		queueX[0] = local3;
-		local69 = local1438 + 1;
-		queueY[0] = local10;
-		local201 = local242 = parents[local3][local10];
-		while (local3 != arg8 || arg11 != local10) {
-			if (local242 != local201) {
-				queueX[local69] = local3;
-				local242 = local201;
-				queueY[local69++] = local10;
+		@Pc(1438) byte initialBacktrackIndex = 0;
+		queueX[0] = x;
+		queueReaderIndex = initialBacktrackIndex + 1;
+		queueY[0] = y;
+		cost = i = parents[x][y];
+		while (x != srcX || srcY != y) {
+			if (i != cost) {
+				queueX[queueReaderIndex] = x;
+				i = cost;
+				queueY[queueReaderIndex++] = y;
 			}
-			if ((local201 & 0x2) != 0) {
-				local3++;
-			} else if ((local201 & 0x8) != 0) {
-				local3--;
+			if ((cost & 0x2) != 0) {
+				x++;
+			} else if ((cost & 0x8) != 0) {
+				x--;
 			}
-			if ((local201 & 0x1) != 0) {
-				local10++;
-			} else if ((local201 & 0x4) != 0) {
-				local10--;
+			if ((cost & 0x1) != 0) {
+				y++;
+			} else if ((cost & 0x4) != 0) {
+				y--;
 			}
-			local201 = parents[local3][local10];
+			cost = parents[x][y];
 		}
-		if (local69 > 0) {
-			ClientProt.sendMovePacket(local69, arg2);
+		if (queueReaderIndex > 0) {
+			ClientProt.sendMovePacket(queueReaderIndex, moveType);
 			return true;
-		} else return arg2 != 1;
+		} else return moveType != 1;
 	}
 
 	@OriginalMember(owner = "client!t", name = "a", descriptor = "(BJII)Z")
-	public static boolean findPathToLoc(@OriginalArg(1) long key, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	public static boolean findPathToLoc(@OriginalArg(1) long key, @OriginalArg(2) int destY, @OriginalArg(3) int destX) {
 		@Pc(12) int shape = (int) key >> 14 & 0x1F;
 		@Pc(24) int angle = (int) key >> 20 & 0x3;
 		@Pc(31) int id = (int) (key >>> 32) & Integer.MAX_VALUE;
 		if (shape == 10 || shape == 11 || shape == 22) {
-			@Pc(46) LocType local46 = LocTypeList.get(id);
-			@Pc(62) int local62;
-			@Pc(59) int local59;
+			@Pc(46) LocType locType = LocTypeList.get(id);
+			@Pc(62) int sizeX;
+			@Pc(59) int sizeY;
 			if (angle == 0 || angle == 2) {
-				local59 = local46.length;
-				local62 = local46.width;
+				sizeY = locType.length;
+				sizeX = locType.width;
 			} else {
-				local59 = local46.width;
-				local62 = local46.length;
+				sizeY = locType.width;
+				sizeX = locType.length;
 			}
-			@Pc(73) int local73 = local46.blocksides;
+			@Pc(73) int blockFlags = locType.blocksides;
 			if (angle != 0) {
-				local73 = (local73 << angle & 0xF) + (local73 >> 4 - angle);
+				blockFlags = (blockFlags << angle & 0xF) + (blockFlags >> 4 - angle);
 			}
-			findPath(PlayerList.self.movementQueueY[0], 0, local59, true, local73, arg2, local62, 0, 2, arg1, PlayerList.self.movementQueueX[0]);
+			findPath(PlayerList.self.movementQueueY[0], 0, sizeY, true, blockFlags, destX, sizeX, 0, 2, destY, PlayerList.self.movementQueueX[0]);
 		} else {
-			findPath(PlayerList.self.movementQueueY[0], angle, 0, true, 0, arg2, 0, shape + 1, 2, arg1, PlayerList.self.movementQueueX[0]);
+			findPath(PlayerList.self.movementQueueY[0], angle, 0, true, 0, destX, 0, shape + 1, 2, destY, PlayerList.self.movementQueueX[0]);
 		}
 		Cross.y = Mouse.clickY;
 		Cross.milliseconds = 0;

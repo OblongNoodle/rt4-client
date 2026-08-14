@@ -14,7 +14,7 @@ public final class TextureOpHorizontalGradient extends TextureOp {
 
 	@OriginalMember(owner = "client!rl", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
+	public final int[] getMonochromeOutput(@OriginalArg(0) int y) {
 		return Texture.widthFractions;
 	}
 }

@@ -405,8 +405,8 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "(IZ)V")
-	public static void readRebuildPacket(@OriginalArg(1) boolean arg0) {
-		SceneGraph.dynamicMapRegion = arg0;
+	public static void readRebuildPacket(@OriginalArg(1) boolean dynamic) {
+		SceneGraph.dynamicMapRegion = dynamic;
 		@Pc(13) int local13;
 		@Pc(20) int local20;
 		@Pc(26) int local26;
@@ -3274,8 +3274,8 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!uc", name = "a", descriptor = "(IB)Z")
-	public static boolean setVerifyId(@OriginalArg(0) int arg0) {
-		verifyId = arg0 + 1 & 0xFFFF;
+	public static boolean setVerifyId(@OriginalArg(0) int id) {
+		verifyId = id + 1 & 0xFFFF;
 		verifyIdChanged = true;
 		return true;
 	}
@@ -3310,19 +3310,19 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!fc", name = "a", descriptor = "(Lclient!wa;I)Lclient!na;")
-	public static JagString formatChatMessage(@OriginalArg(0) Buffer arg0) {
-		return decodeHuffmanMessage(arg0);
+	public static JagString formatChatMessage(@OriginalArg(0) Buffer buffer) {
+		return decodeHuffmanMessage(buffer);
 	}
 
 	@OriginalMember(owner = "client!uj", name = "a", descriptor = "(Lclient!wa;II)Lclient!na;")
-	public static JagString decodeHuffmanMessage(@OriginalArg(0) Buffer arg0) {
+	public static JagString decodeHuffmanMessage(@OriginalArg(0) Buffer buffer) {
 		try {
-			@Pc(7) int local7 = arg0.gsmarts();
+			@Pc(7) int local7 = buffer.gsmarts();
 			if (local7 > 32767) {
 				local7 = 32767;
 			}
 			@Pc(15) byte[] local15 = new byte[local7];
-			arg0.offset += WordPack.codec.decode(0, local7, local15, arg0.data, arg0.offset);
+			buffer.offset += WordPack.codec.decode(0, local7, local15, buffer.data, buffer.offset);
 			return JagString.decodeString(local15, local7, 0);
 		} catch (@Pc(47) Exception local47) {
 			return WordPack.CABBAGE;
@@ -3330,46 +3330,46 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!mi", name = "a", descriptor = "([IBLclient!km;[I[I)V")
-	public static void updateNpcSlotAnimations(@OriginalArg(0) int[] arg0, @OriginalArg(2) Npc arg1, @OriginalArg(3) int[] arg2, @OriginalArg(4) int[] arg3) {
-		for (@Pc(3) int local3 = 0; local3 < arg3.length; local3++) {
-			@Pc(15) int local15 = arg3[local3];
-			@Pc(19) int local19 = arg0[local3];
-			@Pc(23) int local23 = arg2[local3];
-			for (@Pc(25) int local25 = 0; local19 != 0 && arg1.slotAnimations.length > local25; local25++) {
+	public static void updateNpcSlotAnimations(@OriginalArg(0) int[] seqIds, @OriginalArg(2) Npc npc, @OriginalArg(3) int[] delays, @OriginalArg(4) int[] masks) {
+		for (@Pc(3) int local3 = 0; local3 < masks.length; local3++) {
+			@Pc(15) int local15 = masks[local3];
+			@Pc(19) int local19 = seqIds[local3];
+			@Pc(23) int local23 = delays[local3];
+			for (@Pc(25) int local25 = 0; local19 != 0 && npc.slotAnimations.length > local25; local25++) {
 				if ((local19 & 0x1) != 0) {
 					if (local15 == -1) {
-						arg1.slotAnimations[local25] = null;
+						npc.slotAnimations[local25] = null;
 					} else {
 						@Pc(60) SeqType local60 = SeqTypeList.get(local15);
-						@Pc(65) SlotAnimation local65 = arg1.slotAnimations[local25];
+						@Pc(65) SlotAnimation local65 = npc.slotAnimations[local25];
 						@Pc(68) int local68 = local60.exactmove;
 						if (local65 != null) {
 							if (local15 == local65.seqId) {
 								if (local68 == 0) {
-									local65 = arg1.slotAnimations[local25] = null;
+									local65 = npc.slotAnimations[local25] = null;
 								} else if (local68 == 1) {
 									local65.currentFrame = 0;
 									local65.replayCount = 0;
 									local65.nextFrame = 1;
 									local65.delayClock = 0;
 									local65.startDelay = local23;
-									SoundPlayer.playSeqSound(arg1.yFine, local60, arg1.xFine, false, 0);
+									SoundPlayer.playSeqSound(npc.yFine, local60, npc.xFine, false, 0);
 								} else if (local68 == 2) {
 									local65.replayCount = 0;
 								}
 							} else if (local60.priority >= SeqTypeList.get(local65.seqId).priority) {
-								local65 = arg1.slotAnimations[local25] = null;
+								local65 = npc.slotAnimations[local25] = null;
 							}
 						}
 						if (local65 == null) {
-							local65 = arg1.slotAnimations[local25] = new SlotAnimation();
+							local65 = npc.slotAnimations[local25] = new SlotAnimation();
 							local65.nextFrame = 1;
 							local65.delayClock = 0;
 							local65.startDelay = local23;
 							local65.seqId = local15;
 							local65.replayCount = 0;
 							local65.currentFrame = 0;
-							SoundPlayer.playSeqSound(arg1.yFine, local60, arg1.xFine, false, 0);
+							SoundPlayer.playSeqSound(npc.yFine, local60, npc.xFine, false, 0);
 						}
 					}
 				}
@@ -3379,7 +3379,7 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!sc", name = "a", descriptor = "(IIILclient!km;)V")
-	public static void animateNpc(@OriginalArg(0) int arg0, @OriginalArg(1) int animationId, @OriginalArg(3) Npc npc) {
+	public static void animateNpc(@OriginalArg(0) int delay, @OriginalArg(1) int animationId, @OriginalArg(3) Npc npc) {
 		if (npc.seqId == animationId && animationId != -1) {
 			@Pc(10) SeqType seqType = SeqTypeList.get(animationId);
 			@Pc(13) int local13 = seqType.exactmove;
@@ -3388,7 +3388,7 @@ public class Protocol {
 				npc.seqFrame = 0;
 				npc.seqDelayClock = 0;
 				npc.seqReplayCount = 0;
-				npc.seqDelay = arg0;
+				npc.seqDelay = delay;
 				SoundPlayer.playSeqSound(npc.yFine, seqType, npc.xFine, false, npc.seqFrame);
 			}
 			if (local13 == 2) {
@@ -3399,7 +3399,7 @@ public class Protocol {
 			npc.seqId = animationId;
 			npc.seqNextFrame = 1;
 			npc.seqReplayCount = 0;
-			npc.seqDelay = arg0;
+			npc.seqDelay = delay;
 			npc.seqMovementSteps = npc.movementQueueSize;
 			npc.seqFrame = 0;
 			if (npc.seqId != -1) {
@@ -3409,16 +3409,16 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!sj", name = "a", descriptor = "(ILclient!na;)V")
-	public static void saveSettingsCookie(@OriginalArg(1) JagString arg0) {
-		client.settings = arg0;
+	public static void saveSettingsCookie(@OriginalArg(1) JagString value) {
+		client.settings = value;
 		if (GameShell.signLink.applet == null) {
 			return;
 		}
 		try {
 			@Pc(17) JagString local17 = COOKIE_PREFIX_KEY.fromParameters(GameShell.signLink.applet);
 			@Pc(23) JagString local23 = COOKIE_HOST_KEY.fromParameters(GameShell.signLink.applet);
-			@Pc(48) JagString local48 = JagString.concatenate(new JagString[]{local17, COOKIE_SETTINGS_PREFIX, arg0, COOKIE_PATH_DOMAIN, local23});
-			if (arg0.length() == 0) {
+			@Pc(48) JagString local48 = JagString.concatenate(new JagString[]{local17, COOKIE_SETTINGS_PREFIX, value, COOKIE_PATH_DOMAIN, local23});
+			if (value.length() == 0) {
 				local48 = JagString.concatenate(new JagString[]{local48, COOKIE_EXPIRE_IMMEDIATELY});
 			} else {
 				local48 = JagString.concatenate(new JagString[]{local48, COOKIE_EXPIRES_PREFIX, DateUtil.getDateString(MonotonicClock.currentTimeMillis() + 94608000000L), COOKIE_MAX_AGE_PREFIX, JagString.parseLong(94608000L)});
@@ -3429,10 +3429,10 @@ public class Protocol {
 	}
 
 	@OriginalMember(owner = "client!rm", name = "a", descriptor = "(IBI)V")
-	public static void spawnGroundObject(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(9) LinkedList local9 = SceneGraph.objStacks[Player.plane][arg1][arg0];
+	public static void spawnGroundObject(@OriginalArg(0) int tileX, @OriginalArg(2) int tileY) {
+		@Pc(9) LinkedList local9 = SceneGraph.objStacks[Player.plane][tileY][tileX];
 		if (local9 == null) {
-			SceneGraph.removeObjStack(Player.plane, arg1, arg0);
+			SceneGraph.removeObjStack(Player.plane, tileY, tileX);
 			return;
 		}
 		@Pc(28) int local28 = -99999999;
@@ -3450,7 +3450,7 @@ public class Protocol {
 			}
 		}
 		if (local30 == null) {
-			SceneGraph.removeObjStack(Player.plane, arg1, arg0);
+			SceneGraph.removeObjStack(Player.plane, tileY, tileX);
 			return;
 		}
 		local9.addHead(local30);
@@ -3467,18 +3467,18 @@ public class Protocol {
 				}
 			}
 		}
-		@Pc(152) long local152 = (arg0 << 7) + arg1 + 1610612736;
-		SceneGraph.setObjStack(Player.plane, arg1, arg0, SceneGraph.getTileHeight(Player.plane, arg1 * 128 + 64, arg0 * 128 + 64), local30.value, local152, local89, local91);
+		@Pc(152) long local152 = (tileX << 7) + tileY + 1610612736;
+		SceneGraph.setObjStack(Player.plane, tileY, tileX, SceneGraph.getTileHeight(Player.plane, tileY * 128 + 64, tileX * 128 + 64), local30.value, local152, local89, local91);
 	}
 
 	@OriginalMember(owner = "client!dh", name = "a", descriptor = "(IIII)Lclient!wk;")
-	public static ComponentPointer openTopLevelInterface(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
+	public static ComponentPointer openTopLevelInterface(@OriginalArg(1) int interfaceId, @OriginalArg(2) int parentComponentId, @OriginalArg(3) int type) {
 		@Pc(9) ComponentPointer local9 = new ComponentPointer();
-		local9.type = arg2;
-		local9.interfaceId = arg0;
-		InterfaceList.openInterfaces.put(local9, arg1);
-		InterfaceList.resetAnimations(arg0);
-		@Pc(28) Component local28 = InterfaceList.getComponent(arg1);
+		local9.type = type;
+		local9.interfaceId = interfaceId;
+		InterfaceList.openInterfaces.put(local9, parentComponentId);
+		InterfaceList.resetAnimations(interfaceId);
+		@Pc(28) Component local28 = InterfaceList.getComponent(parentComponentId);
 		if (local28 != null) {
 			InterfaceList.redraw(local28);
 		}
@@ -3511,7 +3511,7 @@ public class Protocol {
 		if (local28 != null) {
 			InterfaceList.layoutComponent(local28, false);
 		}
-		InterfaceList.runOnLoadScripts(arg0);
+		InterfaceList.runOnLoadScripts(interfaceId);
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.runScripts(1, InterfaceList.topLevelInterface);
 		}

@@ -286,7 +286,7 @@ public final class DisplayMode {
 			@Pc(16) DisplayMode[] available = getAvailableDisplayModes(GameShell.signLink);
 			@Pc(20) DisplayMode[] filtered = new DisplayMode[available.length];
 			@Pc(22) int count = 0;
-			label52:
+			nextMode:
 			for (@Pc(24) int i = 0; i < available.length; i++) {
 				@Pc(32) DisplayMode mode = available[i];
 				if ((mode.bitDepth <= 0 || mode.bitDepth >= 24) && mode.width >= 800 && mode.height >= 600) {
@@ -296,7 +296,7 @@ public final class DisplayMode {
 							if (mode.bitDepth > existing.bitDepth) {
 								filtered[j] = mode;
 							}
-							continue label52;
+							continue nextMode;
 						}
 					}
 					filtered[count] = mode;

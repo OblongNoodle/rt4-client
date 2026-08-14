@@ -115,7 +115,7 @@ public class SpriteLoader {
 				}
 			} else {
 				j = 0;
-				label88:
+				readColumns:
 				while (true) {
 					@Pc(241) int k;
 					if (j >= innerWidth) {
@@ -125,7 +125,7 @@ public class SpriteLoader {
 						j = 0;
 						while (true) {
 							if (j >= innerWidth) {
-								break label88;
+								break readColumns;
 							}
 							for (k = 0; k < innerHeight; k++) {
 								@Pc(291) byte a = frameAlpha[innerWidth * k + j] = buffer.g1b();

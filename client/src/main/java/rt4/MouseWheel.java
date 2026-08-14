@@ -17,7 +17,7 @@ public abstract class MouseWheel {
 	public static MouseWheel create() {
 		try {
 			return new JavaMouseWheel();
-		} catch (@Pc(15) Throwable local15) {
+		} catch (@Pc(15) Throwable ignored) {
 			return null;
 		}
 	}

@@ -251,43 +251,43 @@ public final class WorldMapFont {
 		@Pc(142) int row;
 		@Pc(147) int col;
 		@Pc(158) int pixel;
-		label135:
+		findMinY:
 		for (row = 0; row < totalHeight; row++) {
 			for (col = 0; col < charWidth; col++) {
 				pixel = pixels[col + row * charWidth];
 				if ((pixel & 0xFFFFFF) != 0) {
 					minY = row;
-					break label135;
+					break findMinY;
 				}
 			}
 		}
-		label123:
+		findMinX:
 		for (row = 0; row < charWidth; row++) {
 			for (col = 0; col < totalHeight; col++) {
 				pixel = pixels[row + col * charWidth];
 				if ((pixel & 0xFFFFFF) != 0) {
 					minX = row;
-					break label123;
+					break findMinX;
 				}
 			}
 		}
-		label111:
+		findMaxY:
 		for (row = totalHeight - 1; row >= 0; row--) {
 			for (col = 0; col < charWidth; col++) {
 				pixel = pixels[col + row * charWidth];
 				if ((pixel & 0xFFFFFF) != 0) {
 					maxY = row + 1;
-					break label111;
+					break findMaxY;
 				}
 			}
 		}
-		label99:
+		findMaxX:
 		for (row = charWidth - 1; row >= 0; row--) {
 			for (col = 0; col < totalHeight; col++) {
 				pixel = pixels[row + col * charWidth];
 				if ((pixel & 0xFFFFFF) != 0) {
 					maxX = row + 1;
-					break label99;
+					break findMaxX;
 				}
 			}
 		}

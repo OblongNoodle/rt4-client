@@ -32,10 +32,10 @@ public final class VorbisMapping {
 		}
 		this.submapFloor = new int[this.submaps];
 		this.submapResidue = new int[this.submaps];
-		for (@Pc(42) int local42 = 0; local42 < this.submaps; local42++) {
+		for (@Pc(42) int i = 0; i < this.submaps; i++) {
 			VorbisSound.readBits(8);
-			this.submapFloor[local42] = VorbisSound.readBits(8);
-			this.submapResidue[local42] = VorbisSound.readBits(8);
+			this.submapFloor[i] = VorbisSound.readBits(8);
+			this.submapResidue[i] = VorbisSound.readBits(8);
 		}
 	}
 }

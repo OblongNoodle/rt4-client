@@ -855,7 +855,7 @@ public final class SoundPcmStream extends PcmStream {
 		if (this.loopCount >= 0) {
 			if (this.loopCount > 0) {
 				if (this.pingPongLoop) {
-					label131:
+					loopDone:
 					{
 						if (this.sampleRate < 0) {
 							local40 = this.readBackward(buffer, offset, local18, local44, local13.samples[this.start]);
@@ -865,7 +865,7 @@ public final class SoundPcmStream extends PcmStream {
 							this.samplePosition = local18 + local18 - this.samplePosition - 1;
 							this.sampleRate = -this.sampleRate;
 							if (--this.loopCount == 0) {
-								break label131;
+								break loopDone;
 							}
 						}
 						do {
@@ -1196,7 +1196,7 @@ public final class SoundPcmStream extends PcmStream {
 		if (this.loopCount >= 0) {
 			if (this.loopCount > 0) {
 				if (this.pingPongLoop) {
-					label121:
+					loopDone:
 					{
 						if (this.sampleRate < 0) {
 							if (this.samplePosition >= local76) {
@@ -1205,7 +1205,7 @@ public final class SoundPcmStream extends PcmStream {
 							this.samplePosition = local76 + local76 - this.samplePosition - 1;
 							this.sampleRate = -this.sampleRate;
 							if (--this.loopCount == 0) {
-								break label121;
+								break loopDone;
 							}
 						}
 						do {
@@ -1225,7 +1225,7 @@ public final class SoundPcmStream extends PcmStream {
 						} while (--this.loopCount != 0);
 					}
 				} else {
-					label153:
+					loopDone:
 					{
 						@Pc(362) int local362;
 						if (this.sampleRate < 0) {
@@ -1236,7 +1236,7 @@ public final class SoundPcmStream extends PcmStream {
 							if (local362 >= this.loopCount) {
 								this.samplePosition += local91 * this.loopCount;
 								this.loopCount = 0;
-								break label153;
+								break loopDone;
 							}
 							this.samplePosition += local91 * local362;
 							this.loopCount -= local362;
@@ -1245,7 +1245,7 @@ public final class SoundPcmStream extends PcmStream {
 							if (local362 >= this.loopCount) {
 								this.samplePosition -= local91 * this.loopCount;
 								this.loopCount = 0;
-								break label153;
+								break loopDone;
 							}
 							this.samplePosition -= local91 * local362;
 							this.loopCount -= local362;

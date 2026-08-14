@@ -15,17 +15,17 @@ public abstract class Model extends Entity {
 	public boolean pickable = false;
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "([[III)I")
-	public static int interpolateHeight(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(3) int local3 = arg1 >> 7;
-		@Pc(7) int local7 = arg2 >> 7;
-		if (local3 < 0 || local7 < 0 || local3 >= arg0.length || local7 >= arg0[0].length) {
+	public static int interpolateHeight(@OriginalArg(0) int[][] heightMap, @OriginalArg(1) int xFine, @OriginalArg(2) int yFine) {
+		@Pc(3) int tileX = xFine >> 7;
+		@Pc(7) int tileY = yFine >> 7;
+		if (tileX < 0 || tileY < 0 || tileX >= heightMap.length || tileY >= heightMap[0].length) {
 			return 0;
 		}
-		@Pc(27) int local27 = arg1 & 0x7F;
-		@Pc(31) int local31 = arg2 & 0x7F;
-		@Pc(53) int local53 = arg0[local3][local7] * (128 - local27) + arg0[local3 + 1][local7] * local27 >> 7;
-		@Pc(79) int local79 = arg0[local3][local7 + 1] * (128 - local27) + arg0[local3 + 1][local7 + 1] * local27 >> 7;
-		return local53 * (128 - local31) + local79 * local31 >> 7;
+		@Pc(27) int xFrac = xFine & 0x7F;
+		@Pc(31) int yFrac = yFine & 0x7F;
+		@Pc(53) int nearHeight = heightMap[tileX][tileY] * (128 - xFrac) + heightMap[tileX + 1][tileY] * xFrac >> 7;
+		@Pc(79) int farHeight = heightMap[tileX][tileY + 1] * (128 - xFrac) + heightMap[tileX + 1][tileY + 1] * xFrac >> 7;
+		return nearHeight * (128 - yFrac) + farHeight * yFrac >> 7;
 	}
 
 	@OriginalMember(owner = "client!ak", name = "c", descriptor = "()I")
@@ -41,146 +41,146 @@ public abstract class Model extends Entity {
 	public abstract void rotate180();
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!jm;Lclient!ne;Lclient!ne;II[ZZZI[I)V")
-	private void applyAnimationBlend(@OriginalArg(0) AnimBase arg0, @OriginalArg(1) AnimFrame arg1, @OriginalArg(2) AnimFrame arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean[] arg5, @OriginalArg(6) boolean arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int[] arg9) {
-		@Pc(5) int local5;
-		if (arg2 == null || arg3 == 0) {
-			for (local5 = 0; local5 < arg1.length; local5++) {
-				@Pc(14) short local14 = arg1.indices[local5];
-				if (arg5 == null || arg5[local14] == arg6 || arg0.types[local14] == 0) {
-					@Pc(32) short local32 = arg1.prevOriginIndices[local5];
-					@Pc(42) int local42;
-					if (local32 != -1) {
-						local42 = arg8 & arg0.parts[local32];
-						if (local42 == 65535) {
-							this.transformBone(0, arg0.bones[local32], 0, 0, 0, arg7);
+	private void applyAnimationBlend(@OriginalArg(0) AnimBase base, @OriginalArg(1) AnimFrame frame1, @OriginalArg(2) AnimFrame frame2, @OriginalArg(3) int tweenDelta, @OriginalArg(4) int tweenLength, @OriginalArg(5) boolean[] mask, @OriginalArg(6) boolean maskValue, @OriginalArg(7) boolean applyVertices, @OriginalArg(8) int partMask, @OriginalArg(9) int[] partLabels) {
+		@Pc(5) int idx1;
+		if (frame2 == null || tweenDelta == 0) {
+			for (idx1 = 0; idx1 < frame1.length; idx1++) {
+				@Pc(14) short transformIndex = frame1.indices[idx1];
+				if (mask == null || mask[transformIndex] == maskValue || base.types[transformIndex] == 0) {
+					@Pc(32) short prevOriginIndex = frame1.prevOriginIndices[idx1];
+					@Pc(42) int partBits;
+					if (prevOriginIndex != -1) {
+						partBits = partMask & base.parts[prevOriginIndex];
+						if (partBits == 65535) {
+							this.transformBone(0, base.bones[prevOriginIndex], 0, 0, 0, applyVertices);
 						} else {
-							this.transformMaskedBone(0, arg0.bones[local32], 0, 0, 0, arg7, local42, arg9);
+							this.transformMaskedBone(0, base.bones[prevOriginIndex], 0, 0, 0, applyVertices, partBits, partLabels);
 						}
 					}
-					local42 = arg8 & arg0.parts[local14];
-					if (local42 == 65535) {
-						this.transformBone(arg0.types[local14], arg0.bones[local14], arg1.x[local5], arg1.y[local5], arg1.z[local5], arg7);
+					partBits = partMask & base.parts[transformIndex];
+					if (partBits == 65535) {
+						this.transformBone(base.types[transformIndex], base.bones[transformIndex], frame1.x[idx1], frame1.y[idx1], frame1.z[idx1], applyVertices);
 					} else {
-						this.transformMaskedBone(arg0.types[local14], arg0.bones[local14], arg1.x[local5], arg1.y[local5], arg1.z[local5], arg7, local42, arg9);
+						this.transformMaskedBone(base.types[transformIndex], base.bones[transformIndex], frame1.x[idx1], frame1.y[idx1], frame1.z[idx1], applyVertices, partBits, partLabels);
 					}
 				}
 			}
 			return;
 		}
-		local5 = 0;
-		@Pc(136) int local136 = 0;
-		for (@Pc(138) int local138 = 0; local138 < arg0.transforms; local138++) {
-			@Pc(144) boolean local144 = local5 < arg1.length && arg1.indices[local5] == local138;
-			@Pc(158) boolean local158 = local136 < arg2.length && arg2.indices[local136] == local138;
-			if (local144 || local158) {
-				if (arg5 == null || arg5[local138] == arg6 || arg0.types[local138] == 0) {
-					@Pc(196) short local196 = 0;
-					@Pc(201) int local201 = arg0.types[local138];
-					if (local201 == 3) {
-						local196 = 128;
+		idx1 = 0;
+		@Pc(136) int idx2 = 0;
+		for (@Pc(138) int i = 0; i < base.transforms; i++) {
+			@Pc(144) boolean inFrame1 = idx1 < frame1.length && frame1.indices[idx1] == i;
+			@Pc(158) boolean inFrame2 = idx2 < frame2.length && frame2.indices[idx2] == i;
+			if (inFrame1 || inFrame2) {
+				if (mask == null || mask[i] == maskValue || base.types[i] == 0) {
+					@Pc(196) short defaultVal = 0;
+					@Pc(201) int transformType = base.types[i];
+					if (transformType == 3) {
+						defaultVal = 128;
 					}
-					@Pc(213) short local213;
-					@Pc(218) short local218;
-					@Pc(223) short local223;
-					@Pc(228) short local228;
-					@Pc(233) byte local233;
-					if (local144) {
-						local213 = arg1.x[local5];
-						local218 = arg1.y[local5];
-						local223 = arg1.z[local5];
-						local228 = arg1.prevOriginIndices[local5];
-						local233 = arg1.flags[local5];
-						local5++;
+					@Pc(213) short x1;
+					@Pc(218) short y1;
+					@Pc(223) short z1;
+					@Pc(228) short prevOrigin1;
+					@Pc(233) byte flags1;
+					if (inFrame1) {
+						x1 = frame1.x[idx1];
+						y1 = frame1.y[idx1];
+						z1 = frame1.z[idx1];
+						prevOrigin1 = frame1.prevOriginIndices[idx1];
+						flags1 = frame1.flags[idx1];
+						idx1++;
 					} else {
-						local213 = local196;
-						local218 = local196;
-						local223 = local196;
-						local228 = -1;
-						local233 = 0;
+						x1 = defaultVal;
+						y1 = defaultVal;
+						z1 = defaultVal;
+						prevOrigin1 = -1;
+						flags1 = 0;
 					}
-					@Pc(252) short local252;
-					@Pc(257) short local257;
-					@Pc(262) short local262;
-					@Pc(267) short local267;
-					@Pc(272) byte local272;
-					if (local158) {
-						local252 = arg2.x[local136];
-						local257 = arg2.y[local136];
-						local262 = arg2.z[local136];
-						local267 = arg2.prevOriginIndices[local136];
-						local272 = arg2.flags[local136];
-						local136++;
+					@Pc(252) short x2;
+					@Pc(257) short y2;
+					@Pc(262) short z2;
+					@Pc(267) short prevOrigin2;
+					@Pc(272) byte flags2;
+					if (inFrame2) {
+						x2 = frame2.x[idx2];
+						y2 = frame2.y[idx2];
+						z2 = frame2.z[idx2];
+						prevOrigin2 = frame2.prevOriginIndices[idx2];
+						flags2 = frame2.flags[idx2];
+						idx2++;
 					} else {
-						local252 = local196;
-						local257 = local196;
-						local262 = local196;
-						local267 = -1;
-						local272 = 0;
+						x2 = defaultVal;
+						y2 = defaultVal;
+						z2 = defaultVal;
+						prevOrigin2 = -1;
+						flags2 = 0;
 					}
-					@Pc(294) int local294;
-					@Pc(296) int local296;
-					@Pc(298) int local298;
-					@Pc(308) int local308;
-					if ((local233 & 0x2) != 0 || (local272 & 0x1) != 0) {
-						local294 = local213;
-						local296 = local218;
-						local298 = local223;
-					} else if (local201 == 2) {
-						local308 = local252 - local213 & 0x7FF;
-						@Pc(314) int local314 = local257 - local218 & 0x7FF;
-						@Pc(320) int local320 = local262 - local223 & 0x7FF;
-						if (local308 >= 1024) {
-							local308 -= 2048;
+					@Pc(294) int blendX;
+					@Pc(296) int blendY;
+					@Pc(298) int blendZ;
+					@Pc(308) int partBits;
+					if ((flags1 & 0x2) != 0 || (flags2 & 0x1) != 0) {
+						blendX = x1;
+						blendY = y1;
+						blendZ = z1;
+					} else if (transformType == 2) {
+						partBits = x2 - x1 & 0x7FF;
+						@Pc(314) int deltaY = y2 - y1 & 0x7FF;
+						@Pc(320) int deltaZ = z2 - z1 & 0x7FF;
+						if (partBits >= 1024) {
+							partBits -= 2048;
 						}
-						if (local314 >= 1024) {
-							local314 -= 2048;
+						if (deltaY >= 1024) {
+							deltaY -= 2048;
 						}
-						if (local320 >= 1024) {
-							local320 -= 2048;
+						if (deltaZ >= 1024) {
+							deltaZ -= 2048;
 						}
-						local294 = local213 + local308 * arg3 / arg4 & 0x7FF;
-						local296 = local218 + local314 * arg3 / arg4 & 0x7FF;
-						local298 = local223 + local320 * arg3 / arg4 & 0x7FF;
-					} else if (local201 == 7) {
-						local308 = local252 - local213 & 0x3F;
-						if (local308 >= 32) {
-							local308 -= 64;
+						blendX = x1 + partBits * tweenDelta / tweenLength & 0x7FF;
+						blendY = y1 + deltaY * tweenDelta / tweenLength & 0x7FF;
+						blendZ = z1 + deltaZ * tweenDelta / tweenLength & 0x7FF;
+					} else if (transformType == 7) {
+						partBits = x2 - x1 & 0x3F;
+						if (partBits >= 32) {
+							partBits -= 64;
 						}
-						local294 = local213 + local308 * arg3 / arg4 & 0x3F;
-						local296 = local218 + (local257 - local218) * arg3 / arg4;
-						local298 = local223 + (local262 - local223) * arg3 / arg4;
+						blendX = x1 + partBits * tweenDelta / tweenLength & 0x3F;
+						blendY = y1 + (y2 - y1) * tweenDelta / tweenLength;
+						blendZ = z1 + (z2 - z1) * tweenDelta / tweenLength;
 					} else {
-						local294 = local213 + (local252 - local213) * arg3 / arg4;
-						local296 = local218 + (local257 - local218) * arg3 / arg4;
-						local298 = local223 + (local262 - local223) * arg3 / arg4;
+						blendX = x1 + (x2 - x1) * tweenDelta / tweenLength;
+						blendY = y1 + (y2 - y1) * tweenDelta / tweenLength;
+						blendZ = z1 + (z2 - z1) * tweenDelta / tweenLength;
 					}
-					if (local228 != -1) {
-						local308 = arg8 & arg0.parts[local228];
-						if (local308 == 65535) {
-							this.transformBone(0, arg0.bones[local228], 0, 0, 0, arg7);
+					if (prevOrigin1 != -1) {
+						partBits = partMask & base.parts[prevOrigin1];
+						if (partBits == 65535) {
+							this.transformBone(0, base.bones[prevOrigin1], 0, 0, 0, applyVertices);
 						} else {
-							this.transformMaskedBone(0, arg0.bones[local228], 0, 0, 0, arg7, local308, arg9);
+							this.transformMaskedBone(0, base.bones[prevOrigin1], 0, 0, 0, applyVertices, partBits, partLabels);
 						}
-					} else if (local267 != -1) {
-						local308 = arg8 & arg0.parts[local267];
-						if (local308 == 65535) {
-							this.transformBone(0, arg0.bones[local267], 0, 0, 0, arg7);
+					} else if (prevOrigin2 != -1) {
+						partBits = partMask & base.parts[prevOrigin2];
+						if (partBits == 65535) {
+							this.transformBone(0, base.bones[prevOrigin2], 0, 0, 0, applyVertices);
 						} else {
-							this.transformMaskedBone(0, arg0.bones[local267], 0, 0, 0, arg7, local308, arg9);
+							this.transformMaskedBone(0, base.bones[prevOrigin2], 0, 0, 0, applyVertices, partBits, partLabels);
 						}
 					}
-					local308 = arg8 & arg0.parts[local138];
-					if (local308 == 65535) {
-						this.transformBone(local201, arg0.bones[local138], local294, local296, local298, arg7);
+					partBits = partMask & base.parts[i];
+					if (partBits == 65535) {
+						this.transformBone(transformType, base.bones[i], blendX, blendY, blendZ, applyVertices);
 					} else {
-						this.transformMaskedBone(local201, arg0.bones[local138], local294, local296, local298, arg7, local308, arg9);
+						this.transformMaskedBone(transformType, base.bones[i], blendX, blendY, blendZ, applyVertices, partBits, partLabels);
 					}
 				} else {
-					if (local144) {
-						local5++;
+					if (inFrame1) {
+						idx1++;
 					}
-					if (local158) {
-						local136++;
+					if (inFrame2) {
+						idx2++;
 					}
 				}
 			}
@@ -191,19 +191,19 @@ public abstract class Model extends Entity {
 	public abstract void rotateY(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;I)V")
-	public final void applyShadowAnimation(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1) {
-		if (arg1 == -1 || !this.hasAnimationBones()) {
+	public final void applyShadowAnimation(@OriginalArg(0) AnimFrameset frameset, @OriginalArg(1) int frameIndex) {
+		if (frameIndex == -1 || !this.hasAnimationBones()) {
 			return;
 		}
-		@Pc(12) AnimFrame local12 = arg0.frames[arg1];
-		@Pc(15) AnimBase local15 = local12.base;
-		for (@Pc(17) int local17 = 0; local17 < local12.length; local17++) {
-			@Pc(26) short local26 = local12.indices[local17];
-			if (local15.shadow[local26]) {
-				if (local12.prevOriginIndices[local17] != -1) {
+		@Pc(12) AnimFrame frame = frameset.frames[frameIndex];
+		@Pc(15) AnimBase base = frame.base;
+		for (@Pc(17) int i = 0; i < frame.length; i++) {
+			@Pc(26) short transformIndex = frame.indices[i];
+			if (base.shadow[transformIndex]) {
+				if (frame.prevOriginIndices[i] != -1) {
 					this.transformShadowBone(0, 0, 0, 0);
 				}
-				this.transformShadowBone(local15.types[local26], local12.x[local17], local12.y[local17], local12.z[local17]);
+				this.transformShadowBone(base.types[transformIndex], frame.x[i], frame.y[i], frame.z[i]);
 			}
 		}
 		this.resetAfterAnimation();
@@ -213,20 +213,20 @@ public abstract class Model extends Entity {
 	protected abstract void resetAfterAnimation();
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;ILclient!cl;IIIZ)V")
-	public final void applyAnimation(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
-		if (arg1 == -1 || !this.hasAnimationBones()) {
+	public final void applyAnimation(@OriginalArg(0) AnimFrameset frameset1, @OriginalArg(1) int frameIndex1, @OriginalArg(2) AnimFrameset frameset2, @OriginalArg(3) int frameIndex2, @OriginalArg(4) int tweenDelta, @OriginalArg(5) int tweenLength, @OriginalArg(6) boolean applyVertices) {
+		if (frameIndex1 == -1 || !this.hasAnimationBones()) {
 			return;
 		}
-		@Pc(12) AnimFrame local12 = arg0.frames[arg1];
-		@Pc(15) AnimBase local15 = local12.base;
-		@Pc(17) AnimFrame local17 = null;
-		if (arg2 != null) {
-			local17 = arg2.frames[arg3];
-			if (local17.base != local15) {
-				local17 = null;
+		@Pc(12) AnimFrame frame1 = frameset1.frames[frameIndex1];
+		@Pc(15) AnimBase base = frame1.base;
+		@Pc(17) AnimFrame frame2 = null;
+		if (frameset2 != null) {
+			frame2 = frameset2.frames[frameIndex2];
+			if (frame2.base != base) {
+				frame2 = null;
 			}
 		}
-		this.applyAnimationBlend(local15, local12, local17, arg4, arg5, null, false, arg6, 65535, null);
+		this.applyAnimationBlend(base, frame1, frame2, tweenDelta, tweenLength, null, false, applyVertices, 65535, null);
 		this.resetAfterAnimation();
 	}
 
@@ -249,20 +249,20 @@ public abstract class Model extends Entity {
 	public abstract void rotateZ(@OriginalArg(0) int arg0);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;ILclient!cl;IIIIZ[I)V")
-	public final void applyMaskedAnimation(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7, @OriginalArg(8) int[] arg8) {
-		if (arg1 == -1 || !this.hasAnimationBones()) {
+	public final void applyMaskedAnimation(@OriginalArg(0) AnimFrameset frameset1, @OriginalArg(1) int frameIndex1, @OriginalArg(2) AnimFrameset frameset2, @OriginalArg(3) int frameIndex2, @OriginalArg(4) int tweenDelta, @OriginalArg(5) int tweenLength, @OriginalArg(6) int partMask, @OriginalArg(7) boolean applyVertices, @OriginalArg(8) int[] partLabels) {
+		if (frameIndex1 == -1 || !this.hasAnimationBones()) {
 			return;
 		}
-		@Pc(12) AnimFrame local12 = arg0.frames[arg1];
-		@Pc(15) AnimBase local15 = local12.base;
-		@Pc(17) AnimFrame local17 = null;
-		if (arg2 != null) {
-			local17 = arg2.frames[arg3];
-			if (local17.base != local15) {
-				local17 = null;
+		@Pc(12) AnimFrame frame1 = frameset1.frames[frameIndex1];
+		@Pc(15) AnimBase base = frame1.base;
+		@Pc(17) AnimFrame frame2 = null;
+		if (frameset2 != null) {
+			frame2 = frameset2.frames[frameIndex2];
+			if (frame2.base != base) {
+				frame2 = null;
 			}
 		}
-		this.applyAnimationBlend(local15, local12, local17, arg4, arg5, null, false, arg7, arg6, arg8);
+		this.applyAnimationBlend(base, frame1, frame2, tweenDelta, tweenLength, null, false, applyVertices, partMask, partLabels);
 		this.resetAfterAnimation();
 	}
 
@@ -279,33 +279,33 @@ public abstract class Model extends Entity {
 	protected abstract void transformBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;ILclient!cl;IIILclient!cl;ILclient!cl;III[ZZ)V")
-	public final void applyDualAnimation(@OriginalArg(0) AnimFrameset arg0, @OriginalArg(1) int arg1, @OriginalArg(2) AnimFrameset arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) AnimFrameset arg6, @OriginalArg(7) int arg7, @OriginalArg(8) AnimFrameset arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) boolean[] arg12, @OriginalArg(13) boolean arg13) {
-		if (arg1 == -1) {
+	public final void applyDualAnimation(@OriginalArg(0) AnimFrameset frameset1, @OriginalArg(1) int frameIndex1, @OriginalArg(2) AnimFrameset tweenFrameset1, @OriginalArg(3) int tweenIndex1, @OriginalArg(4) int tweenDelta1, @OriginalArg(5) int tweenLength1, @OriginalArg(6) AnimFrameset frameset2, @OriginalArg(7) int frameIndex2, @OriginalArg(8) AnimFrameset tweenFrameset2, @OriginalArg(9) int tweenIndex2, @OriginalArg(10) int tweenDelta2, @OriginalArg(11) int tweenLength2, @OriginalArg(12) boolean[] mask, @OriginalArg(13) boolean applyVertices) {
+		if (frameIndex1 == -1) {
 			return;
 		}
-		if (arg12 == null || arg7 == -1) {
-			this.applyAnimation(arg0, arg1, arg2, arg3, arg4, arg5, arg13);
+		if (mask == null || frameIndex2 == -1) {
+			this.applyAnimation(frameset1, frameIndex1, tweenFrameset1, tweenIndex1, tweenDelta1, tweenLength1, applyVertices);
 		} else if (this.hasAnimationBones()) {
-			@Pc(27) AnimFrame local27 = arg0.frames[arg1];
-			@Pc(30) AnimBase local30 = local27.base;
-			@Pc(32) AnimFrame local32 = null;
-			if (arg2 != null) {
-				local32 = arg2.frames[arg3];
-				if (local32.base != local30) {
-					local32 = null;
+			@Pc(27) AnimFrame frame1 = frameset1.frames[frameIndex1];
+			@Pc(30) AnimBase base = frame1.base;
+			@Pc(32) AnimFrame tweenFrame1 = null;
+			if (tweenFrameset1 != null) {
+				tweenFrame1 = tweenFrameset1.frames[tweenIndex1];
+				if (tweenFrame1.base != base) {
+					tweenFrame1 = null;
 				}
 			}
-			@Pc(50) AnimFrame local50 = arg6.frames[arg7];
-			@Pc(52) AnimFrame local52 = null;
-			if (arg8 != null) {
-				local52 = arg8.frames[arg9];
-				if (local52.base != local30) {
-					local52 = null;
+			@Pc(50) AnimFrame frame2 = frameset2.frames[frameIndex2];
+			@Pc(52) AnimFrame tweenFrame2 = null;
+			if (tweenFrameset2 != null) {
+				tweenFrame2 = tweenFrameset2.frames[tweenIndex2];
+				if (tweenFrame2.base != base) {
+					tweenFrame2 = null;
 				}
 			}
-			this.applyAnimationBlend(local30, local27, local32, arg4, arg5, arg12, false, arg13, 65535, null);
-			this.transformBone(0, new int[0], 0, 0, 0, arg13);
-			this.applyAnimationBlend(local30, local50, local52, arg10, arg11, arg12, true, arg13, 65535, null);
+			this.applyAnimationBlend(base, frame1, tweenFrame1, tweenDelta1, tweenLength1, mask, false, applyVertices, 65535, null);
+			this.transformBone(0, new int[0], 0, 0, 0, applyVertices);
+			this.applyAnimationBlend(base, frame2, tweenFrame2, tweenDelta2, tweenLength2, mask, true, applyVertices, 65535, null);
 			this.resetAfterAnimation();
 		}
 	}
@@ -317,42 +317,42 @@ public abstract class Model extends Entity {
 	public abstract Model copyForEntity(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "([[IIIIII)V")
-	protected final void alignToTerrain(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		@Pc(10) int local10 = -arg4 / 2;
-		@Pc(15) int local15 = -arg5 / 2;
-		@Pc(24) int local24 = interpolateHeight(arg0, arg1 + local10, arg3 + local15);
-		@Pc(28) int local28 = arg4 / 2;
-		@Pc(33) int local33 = -arg5 / 2;
-		@Pc(42) int local42 = interpolateHeight(arg0, arg1 + local28, arg3 + local33);
-		@Pc(47) int local47 = -arg4 / 2;
-		@Pc(51) int local51 = arg5 / 2;
-		@Pc(60) int local60 = interpolateHeight(arg0, arg1 + local47, arg3 + local51);
-		@Pc(64) int local64 = arg4 / 2;
-		@Pc(68) int local68 = arg5 / 2;
-		@Pc(77) int local77 = interpolateHeight(arg0, arg1 + local64, arg3 + local68);
-		@Pc(84) int local84 = local24 < local42 ? local24 : local42;
-		@Pc(91) int local91 = local60 < local77 ? local60 : local77;
-		@Pc(98) int local98 = local42 < local77 ? local42 : local77;
-		@Pc(105) int local105 = local24 < local60 ? local24 : local60;
-		if (arg5 != 0) {
-			@Pc(120) int local120 = (int) (Math.atan2(local84 - local91, arg5) * 325.95D) & 0x7FF;
-			if (local120 != 0) {
-				this.rotateX(local120);
+	protected final void alignToTerrain(@OriginalArg(0) int[][] heightMap, @OriginalArg(1) int xFine, @OriginalArg(2) int height, @OriginalArg(3) int yFine, @OriginalArg(4) int sizeX, @OriginalArg(5) int sizeY) {
+		@Pc(10) int halfNegX = -sizeX / 2;
+		@Pc(15) int halfNegY = -sizeY / 2;
+		@Pc(24) int heightSW = interpolateHeight(heightMap, xFine + halfNegX, yFine + halfNegY);
+		@Pc(28) int halfPosX = sizeX / 2;
+		@Pc(33) int halfNegY2 = -sizeY / 2;
+		@Pc(42) int heightSE = interpolateHeight(heightMap, xFine + halfPosX, yFine + halfNegY2);
+		@Pc(47) int halfNegX2 = -sizeX / 2;
+		@Pc(51) int halfPosY = sizeY / 2;
+		@Pc(60) int heightNW = interpolateHeight(heightMap, xFine + halfNegX2, yFine + halfPosY);
+		@Pc(64) int halfPosX2 = sizeX / 2;
+		@Pc(68) int halfPosY2 = sizeY / 2;
+		@Pc(77) int heightNE = interpolateHeight(heightMap, xFine + halfPosX2, yFine + halfPosY2);
+		@Pc(84) int minSouth = heightSW < heightSE ? heightSW : heightSE;
+		@Pc(91) int minNorth = heightNW < heightNE ? heightNW : heightNE;
+		@Pc(98) int minEast = heightSE < heightNE ? heightSE : heightNE;
+		@Pc(105) int minWest = heightSW < heightNW ? heightSW : heightNW;
+		if (sizeY != 0) {
+			@Pc(120) int pitchAngle = (int) (Math.atan2(minSouth - minNorth, sizeY) * 325.95D) & 0x7FF;
+			if (pitchAngle != 0) {
+				this.rotateX(pitchAngle);
 			}
 		}
-		if (arg4 != 0) {
-			@Pc(140) int local140 = (int) (Math.atan2(local105 - local98, arg4) * 325.95D) & 0x7FF;
-			if (local140 != 0) {
-				this.rotateZ(local140);
+		if (sizeX != 0) {
+			@Pc(140) int rollAngle = (int) (Math.atan2(minWest - minEast, sizeX) * 325.95D) & 0x7FF;
+			if (rollAngle != 0) {
+				this.rotateZ(rollAngle);
 			}
 		}
-		@Pc(149) int local149 = local24 + local77;
-		if (local42 + local60 < local149) {
-			local149 = local42 + local60;
+		@Pc(149) int avgHeight = heightSW + heightNE;
+		if (heightSE + heightNW < avgHeight) {
+			avgHeight = heightSE + heightNW;
 		}
-		local149 = (local149 >> 1) - arg2;
-		if (local149 != 0) {
-			this.translate(0, local149, 0);
+		avgHeight = (avgHeight >> 1) - height;
+		if (avgHeight != 0) {
+			this.translate(0, avgHeight, 0);
 		}
 	}
 

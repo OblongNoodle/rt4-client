@@ -167,7 +167,7 @@ public class AudioChannel {
 			@Pc(45) int activeCount = 0;
 			@Pc(47) int bucketMask = 255;
 			@Pc(49) int priority = 7;
-			label106:
+			fillChannels:
 			while (bucketMask != 0) {
 				@Pc(57) int bucketIdx;
 				@Pc(62) int positionThreshold;
@@ -183,11 +183,11 @@ public class AudioChannel {
 						bucketMask &= ~(0x1 << bucketIdx);
 						@Pc(91) PcmStream prev = null;
 						@Pc(96) PcmStream current = this.priorityBucketHeads[bucketIdx];
-						label100:
+						processStream:
 						while (true) {
 							while (true) {
 								if (current == null) {
-									break label100;
+									break processStream;
 								}
 								@Pc(101) Sound sound = current.sound;
 								if (sound == null || sound.position <= positionThreshold) {
@@ -198,7 +198,7 @@ public class AudioChannel {
 										sound.position += channelCount;
 									}
 									if (activeCount >= this.maxActiveChannels) {
-										break label106;
+										break fillChannels;
 									}
 									@Pc(145) PcmStream subStream = current.firstSubStream();
 									if (subStream != null) {

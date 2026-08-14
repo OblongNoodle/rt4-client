@@ -400,7 +400,7 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!dk", name = "a", descriptor = "(Lclient!wa;Z)V")
 	public static void readOverlay(@OriginalArg(0) Buffer arg0) {
-		label87:
+		nextChunk:
 		while (true) {
 			if (arg0.offset < arg0.data.length) {
 				@Pc(22) int local22 = 0;
@@ -423,7 +423,7 @@ public class WorldMap {
 					@Pc(97) int local97 = 0;
 					while (true) {
 						if (local97 >= 64) {
-							continue label87;
+							continue nextChunk;
 						}
 						for (@Pc(104) int local104 = 0; local104 < 64; local104++) {
 							if (!local24 || local97 >= local22 * 8 && local97 < local22 * 8 + 8 && local104 >= local26 * 8 && local104 < local26 * 8 + 8) {
@@ -447,7 +447,7 @@ public class WorldMap {
 				local91 = 0;
 				while (true) {
 					if ((local24 ? 64 : 4096) <= local91) {
-						continue label87;
+						continue nextChunk;
 					}
 					local147 = arg0.g1b();
 					if (local147 != 0) {
@@ -462,7 +462,7 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!sk", name = "a", descriptor = "(ILclient!wa;)V")
 	public static void readOverlay2(@OriginalArg(1) Buffer arg0) {
-		label83:
+		nextChunk:
 		while (true) {
 			if (arg0.offset < arg0.data.length) {
 				@Pc(23) int local23 = 0;
@@ -485,7 +485,7 @@ public class WorldMap {
 					@Pc(102) int local102 = 0;
 					while (true) {
 						if (local102 >= 64) {
-							continue label83;
+							continue nextChunk;
 						}
 						for (@Pc(107) int local107 = 0; local107 < 64; local107++) {
 							if (!local25 || local23 * 8 <= local102 && local23 * 8 + 8 > local102 && local107 >= local27 * 8 && local27 * 8 + 8 > local107) {
@@ -509,7 +509,7 @@ public class WorldMap {
 				local96 = 0;
 				while (true) {
 					if (local96 >= (local25 ? 64 : 4096)) {
-						continue label83;
+						continue nextChunk;
 					}
 					local146 = arg0.g1b();
 					if (local146 != 0) {
@@ -524,7 +524,7 @@ public class WorldMap {
 
 	@OriginalMember(owner = "client!nc", name = "a", descriptor = "(BLclient!wa;)V")
 	public static void readLocs(@OriginalArg(1) Buffer arg0) {
-		label123:
+		nextChunk:
 		while (true) {
 			if (arg0.data.length > arg0.offset) {
 				@Pc(17) boolean local17 = false;
@@ -547,7 +547,7 @@ public class WorldMap {
 					@Pc(150) int local150 = 0;
 					while (true) {
 						if (local150 >= 64) {
-							continue label123;
+							continue nextChunk;
 						}
 						for (@Pc(155) int local155 = 0; local155 < 64; local155++) {
 							if (!local17 || local19 * 8 <= local150 && local150 < local19 * 8 + 8 && local155 >= local21 * 8 && local155 < local21 * 8 + 8) {
@@ -597,7 +597,7 @@ public class WorldMap {
 				local84 = 0;
 				while (true) {
 					if (local84 >= (local17 ? 64 : 4096)) {
-						continue label123;
+						continue nextChunk;
 					}
 					local95 = arg0.g1();
 					if (local95 != 0) {

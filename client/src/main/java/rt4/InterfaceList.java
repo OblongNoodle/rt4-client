@@ -883,7 +883,7 @@ public class InterfaceList {
 									request.arguments = component.onVarcTransmit;
 									lowPriorityRequests.addTail(request);
 								} else {
-									label563:
+									checkVarcs:
 									for (i = component.updatedVarcsReaderIndex; i < VarcDomain.updatedVarcsWriterIndex; i++) {
 										skill = VarcDomain.updatedVarcs[i & 0x1F];
 										for (k = 0; k < component.varcTriggers.length; k++) {
@@ -892,7 +892,7 @@ public class InterfaceList {
 												request2.source = component;
 												request2.arguments = component.onVarcTransmit;
 												lowPriorityRequests.addTail(request2);
-												break label563;
+												break checkVarcs;
 											}
 										}
 									}
@@ -906,7 +906,7 @@ public class InterfaceList {
 									request.arguments = component.onVarcstrTransmit;
 									lowPriorityRequests.addTail(request);
 								} else {
-									label539:
+									checkVarcstrs:
 									for (i = component.updatedVarcstrsReaderIndex; i < VarcDomain.updatedVarcstrsWriterIndex; i++) {
 										skill = VarcDomain.updatedVarcstrs[i & 0x1F];
 										for (k = 0; k < component.varcstrTriggers.length; k++) {
@@ -915,7 +915,7 @@ public class InterfaceList {
 												request2.source = component;
 												request2.arguments = component.onVarcstrTransmit;
 												lowPriorityRequests.addTail(request2);
-												break label539;
+												break checkVarcstrs;
 											}
 										}
 									}
@@ -929,7 +929,7 @@ public class InterfaceList {
 									request.arguments = component.onVarpTransmit;
 									lowPriorityRequests.addTail(request);
 								} else {
-									label515:
+									checkVarps:
 									for (i = component.updatedVarpsReaderIndex; i < VarpDomain.updatedVarpsWriterIndex; i++) {
 										skill = VarpDomain.updatedVarps[i & 0x1F];
 										for (k = 0; k < component.varpTriggers.length; k++) {
@@ -938,7 +938,7 @@ public class InterfaceList {
 												request2.source = component;
 												request2.arguments = component.onVarpTransmit;
 												lowPriorityRequests.addTail(request2);
-												break label515;
+												break checkVarps;
 											}
 										}
 									}

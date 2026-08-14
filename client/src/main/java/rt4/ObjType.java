@@ -483,8 +483,8 @@ public final class ObjType {
 		this.members = link.members;
 		this.womanwear3 = link.womanwear3;
 		if (link.iops != null) {
-			for (@Pc(157) int local157 = 0; local157 < 4; local157++) {
-				this.iops[local157] = link.iops[local157];
+			for (@Pc(157) int i = 0; i < 4; i++) {
+				this.iops[i] = link.iops[i];
 			}
 		}
 		this.iops[4] = LocalizedText.LENT_ITEM_RETURN;
@@ -532,7 +532,7 @@ public final class ObjType {
 	}
 
 	@OriginalMember(owner = "client!h", name = "a", descriptor = "(IIILclient!tk;II)Lclient!ak;")
-	public final Model getModel(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) SeqType seqType, @OriginalArg(4) int count, @OriginalArg(5) int arg4) {
+	public final Model getModel(@OriginalArg(1) int nextFrame, @OriginalArg(2) int tweenDelta, @OriginalArg(3) SeqType seqType, @OriginalArg(4) int count, @OriginalArg(5) int frame) {
 		if (this.countobj != null && count > 1) {
 			@Pc(22) int countId = -1;
 			for (@Pc(24) int i = 0; i < 10; i++) {
@@ -541,7 +541,7 @@ public final class ObjType {
 				}
 			}
 			if (countId != -1) {
-				return ObjTypeList.get(countId).getModel(arg0, arg1, seqType, 1, arg4);
+				return ObjTypeList.get(countId).getModel(nextFrame, tweenDelta, seqType, 1, frame);
 			}
 		}
 		@Pc(76) Model model = (Model) ObjTypeList.models.get(this.id);
@@ -576,7 +576,7 @@ public final class ObjType {
 			ObjTypeList.models.put(model, this.id);
 		}
 		if (seqType != null) {
-			model = seqType.animateEntity(model, arg0, arg1, arg4);
+			model = seqType.animateEntity(model, nextFrame, tweenDelta, frame);
 		}
 		return model;
 	}

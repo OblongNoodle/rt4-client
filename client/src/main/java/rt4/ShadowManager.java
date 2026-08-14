@@ -128,7 +128,7 @@ public final class ShadowManager {
 		MaterialManager.setMaterial(0, 0);
 		gl.glDepthMask(false);
 		for (@Pc(17) int col = 0; col < gridColumns; col++) {
-			label52:
+			nextRow:
 			for (@Pc(22) int row = 0; row < gridRows; row++) {
 				for (@Pc(29) int tileX = col * 8; tileX < col * 8 + 8; tileX++) {
 					if (tileX - centerX >= -radius && tileX - centerX <= radius) {
@@ -143,7 +143,7 @@ public final class ShadowManager {
 								gl.glTranslatef((float) (col * 1024), 0.0F, (float) (row * 1024));
 								shadow.renderShadow();
 								gl.glPopMatrix();
-								continue label52;
+								continue nextRow;
 							}
 						}
 					}

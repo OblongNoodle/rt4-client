@@ -723,7 +723,7 @@ public final class ScriptRunner {
 				}
 			}
 		}
-		label220:
+		nextPlayer:
 		for (local28 = 0; local28 < local3; local28++) {
 			@Pc(272) long local272;
 			if (arg0) {
@@ -780,7 +780,7 @@ public final class ScriptRunner {
 						local476 = local182;
 						while (true) {
 							if (local476 >= local214) {
-								continue label220;
+								continue nextPlayer;
 							}
 							for (local485 = local200; local485 < local223; local485++) {
 								local106 = tileEntityCounts[local476][local485]--;
@@ -849,7 +849,7 @@ public final class ScriptRunner {
 				}
 			}
 		}
-		label200:
+		nextNpc:
 		for (local7 = 0; local7 < NpcList.size; local7++) {
 			local16 = NpcList.npcs[NpcList.ids[local7]];
 			@Pc(262) long local262 = (long) NpcList.ids[local7] << 32 | 0x20000000L;
@@ -899,7 +899,7 @@ public final class ScriptRunner {
 						local396 = local113;
 						while (true) {
 							if (local396 >= local149) {
-								continue label200;
+								continue nextNpc;
 							}
 							for (local401 = local133; local401 < local158; local401++) {
 								local171 = tileEntityCounts[local396][local401]--;
@@ -1091,7 +1091,7 @@ public final class ScriptRunner {
 				}
 				@Pc(150) int local150;
 				@Pc(191) int local191;
-				label238:
+				nextPlane:
 				for (local150 = plane + 1; local150 <= 3; local150++) {
 					if ((SceneGraph.renderFlags[local150][local108][local122] & 0x8) == 0) {
 						@Pc(227) int local227;
@@ -1124,7 +1124,7 @@ public final class ScriptRunner {
 									@Pc(352) int local352 = (int) (arg3[local150][local108][local122].scenery[local191].key >> 20 & 0x3L);
 									local358 = local227 | local352 << 6;
 									if (local358 == local94 || local102 != 0 && local358 == local102 || local116 != 0 && local116 == local358) {
-										continue label238;
+										continue nextPlane;
 									}
 								}
 							}

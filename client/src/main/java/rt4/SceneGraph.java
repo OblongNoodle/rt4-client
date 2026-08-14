@@ -947,7 +947,7 @@ public class SceneGraph {
 				}
 			}
 			for (i = 1; i < 103; i++) {
-				label771:
+				tileLoop:
 				for (j = 1; j < 103; j++) {
 					if (underwater || allLevelsAreVisible() || (renderFlags[0][i][j] & 0x2) != 0 || (renderFlags[currentLevel][i][j] & 0x10) == 0 && getRenderLevel(j, i, currentLevel) == centralPlane) {
 						if (firstVisibleLevel > currentLevel) {
@@ -1001,7 +1001,7 @@ public class SceneGraph {
 													@Pc(1842) FloType adjFloType = FloTypeList.get(adjOverlay - 1);
 													if (adjFloType.texture != -1 && Rasteriser.textureProvider.getMaterialType(adjFloType.texture) == MaterialManager.WATER) {
 														tileWaterData[i][j] = adjFloType.waterColor + (adjFloType.waterOpacity << 24);
-														continue label771;
+														continue tileLoop;
 													}
 												}
 											}
@@ -1019,7 +1019,7 @@ public class SceneGraph {
 									if (overlayType.texture != -1 && Rasteriser.textureProvider.getMaterialType(overlayType.texture) == MaterialManager.WATER) {
 										tileWaterData[i][j] = (overlayType.waterOpacity << 24) + overlayType.waterColor;
 									} else {
-										label737:
+										adjacentWaterSearch:
 										for (texture = i - 1; texture <= i + 1; texture++) {
 											for (overlayBaseColor = j - 1; overlayBaseColor <= j + 1; overlayBaseColor++) {
 												if ((i != texture || overlayBaseColor != j) && texture >= 0 && texture < 104 && overlayBaseColor >= 0 && overlayBaseColor < 104) {
@@ -1028,7 +1028,7 @@ public class SceneGraph {
 														@Pc(1366) FloType adjFloType2 = FloTypeList.get(overlayRgb - 1);
 														if (adjFloType2.texture != -1 && Rasteriser.textureProvider.getMaterialType(adjFloType2.texture) == MaterialManager.WATER) {
 															tileWaterData[i][j] = adjFloType2.waterColor + (adjFloType2.waterOpacity << 24);
-															break label737;
+															break adjacentWaterSearch;
 														}
 													}
 												}
@@ -1145,20 +1145,20 @@ public class SceneGraph {
 						overlay = currentLevel;
 						for (k = col; k < 104 && (occludeFlags[currentLevel][i][k + 1] & 0x1) != 0; k++) {
 						}
-						label454:
+						expandLevelDown:
 						while (overlay > 0) {
 							for (n = j; n <= k; n++) {
 								if ((occludeFlags[overlay - 1][i][n] & 0x1) == 0) {
-									break label454;
+									break expandLevelDown;
 								}
 							}
 							overlay--;
 						}
-						label443:
+						expandLevelUp:
 						while (m < 3) {
 							for (n = j; n <= k; n++) {
 								if ((occludeFlags[m + 1][i][n] & 0x1) == 0) {
-									break label443;
+									break expandLevelUp;
 								}
 							}
 							m++;
@@ -1182,20 +1182,20 @@ public class SceneGraph {
 						overlay = currentLevel;
 						for (k = i; k < 104 && (occludeFlags[currentLevel][k + 1][col] & 0x2) != 0; k++) {
 						}
-						label508:
+						expandLevelDown:
 						while (overlay > 0) {
 							for (n = j; n <= k; n++) {
 								if ((occludeFlags[overlay - 1][n][col] & 0x2) == 0) {
-									break label508;
+									break expandLevelDown;
 								}
 							}
 							overlay--;
 						}
-						label497:
+						expandLevelUp:
 						while (m < 3) {
 							for (n = j; n <= k; n++) {
 								if ((occludeFlags[m + 1][n][col] & 0x2) == 0) {
-									break label497;
+									break expandLevelUp;
 								}
 							}
 							m++;
@@ -1219,20 +1219,20 @@ public class SceneGraph {
 						}
 						for (m = col; m < 104 && (occludeFlags[currentLevel][i][m + 1] & 0x4) != 0; m++) {
 						}
-						label562:
+						expandMinX:
 						while (j > 0) {
 							for (n = overlay; n <= m; n++) {
 								if ((occludeFlags[currentLevel][j - 1][n] & 0x4) == 0) {
-									break label562;
+									break expandMinX;
 								}
 							}
 							j--;
 						}
-						label551:
+						expandMaxX:
 						while (k < 104) {
 							for (n = overlay; n <= m; n++) {
 								if ((occludeFlags[currentLevel][k + 1][n] & 0x4) == 0) {
-									break label551;
+									break expandMaxX;
 								}
 							}
 							k++;
@@ -1969,7 +1969,7 @@ public class SceneGraph {
 												var22 = tile.wall;
 												if (!isWallVisible(level, tileX, tileY, var22.primaryFlags)) {
 													if (GlRenderer.enabled) {
-														label882:
+														wallLighting:
 														{
 															if ((var22.key & 0xFC000L) == 16384L) {
 																i = var22.xFine - cameraX;
@@ -1980,28 +1980,28 @@ public class SceneGraph {
 																	bestIndex += 64;
 																	if (bestIndex < i && tileX > 0 && tileY < length - 1) {
 																		LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, drawLevel, tileX - 1, tileY + 1);
-																		break label882;
+																		break wallLighting;
 																	}
 																} else if (k == 1) {
 																	i += 64;
 																	bestIndex += 64;
 																	if (bestIndex < -i && tileX < width - 1 && tileY < length - 1) {
 																		LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, drawLevel, tileX + 1, tileY + 1);
-																		break label882;
+																		break wallLighting;
 																	}
 																} else if (k == 2) {
 																	i += 64;
 																	bestIndex -= 64;
 																	if (bestIndex > i && tileX < width - 1 && tileY > 0) {
 																		LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, drawLevel, tileX + 1, tileY - 1);
-																		break label882;
+																		break wallLighting;
 																	}
 																} else if (k == 3) {
 																	i -= 64;
 																	bestIndex -= 64;
 																	if (bestIndex > -i && tileX > 0 && tileY > 0) {
 																		LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, drawLevel, tileX - 1, tileY - 1);
-																		break label882;
+																		break wallLighting;
 																	}
 																}
 															}
@@ -2020,7 +2020,7 @@ public class SceneGraph {
 											var9 = tile.sceneryLen;
 											tile.hasUpdated = false;
 											var10 = 0;
-											label767:
+											sceneryLoop:
 											for (i = 0; i < var9; i++) {
 												var25 = tile.scenery[i];
 												if (var25.drawCycle != drawCycle) {
@@ -2029,7 +2029,7 @@ public class SceneGraph {
 															var32 = levelTiles[k][flags];
 															if (var32.visible) {
 																tile.hasUpdated = true;
-																continue label767;
+																continue sceneryLoop;
 															}
 															if (var32.sceneryDrawFlags != 0) {
 																distMax = 0;
@@ -2047,7 +2047,7 @@ public class SceneGraph {
 																}
 																if ((distMax & var32.sceneryDrawFlags) == tile.scenerySkipDirFlags) {
 																	tile.hasUpdated = true;
-																	continue label767;
+																	continue sceneryLoop;
 																}
 															}
 														}
@@ -4082,14 +4082,14 @@ public class SceneGraph {
 	@OriginalMember(owner = "client!jj", name = "a", descriptor = "()V")
 	public static void buildActiveOccluders() {
 		activeOccluderCount = 0;
-		label194:
+		occluderLoop:
 		for (@Pc(3) int i = 0; i < occluderCount; i++) {
 			@Pc(10) Occluder occluder = occluders[i];
 			@Pc(14) int offset;
 			if (roofGroupMaxHeight != null) {
 				for (offset = 0; offset < roofGroupMaxHeight.length; offset++) {
 					if (roofGroupMaxHeight[offset] != -1000000 && (occluder.minZ <= roofGroupMaxHeight[offset] || occluder.maxZ <= roofGroupMaxHeight[offset]) && (occluder.minX <= roofGroupMaxX[offset] || occluder.maxX <= roofGroupMaxX[offset]) && (occluder.minX >= roofGroupMinX[offset] || occluder.maxX >= roofGroupMinX[offset]) && (occluder.minY <= roofGroupMaxZ[offset] || occluder.maxY <= roofGroupMaxZ[offset]) && (occluder.minY >= roofGroupMinZ[offset] || occluder.maxY >= roofGroupMinZ[offset])) {
-						continue label194;
+						continue occluderLoop;
 					}
 				}
 			}
@@ -4190,12 +4190,12 @@ public class SceneGraph {
 							distance = visibility + visibility;
 						}
 						@Pc(430) boolean found = false;
-						label166:
+						visibilitySearch:
 						for (@Pc(432) int col = colMin; col <= distance; col++) {
 							for (@Pc(437) int row = rangeMin; row <= rangeMax; row++) {
 								if (visibleTiles[col][row]) {
 									found = true;
-									break label166;
+									break visibilitySearch;
 								}
 							}
 						}
@@ -5237,9 +5237,9 @@ public class SceneGraph {
 		@Pc(515) int count;
 		if (GlRenderer.enabled && !underwater) {
 			@Pc(490) Environment environment = null;
-			label270:
+			parseEnvironment:
 			while (true) {
-				label263:
+				readEntry:
 				do {
 					while (buffer.offset < buffer.data.length) {
 						z = buffer.g1();
@@ -5248,7 +5248,7 @@ public class SceneGraph {
 								throw new IllegalStateException();
 							}
 							count = buffer.g1();
-							continue label263;
+							continue readEntry;
 						}
 						environment = new Environment(buffer);
 					}
@@ -5264,7 +5264,7 @@ public class SceneGraph {
 							}
 						}
 					}
-					break label270;
+					break parseEnvironment;
 				} while (count <= 0);
 				int regionX = (tileX + Camera.originX) >> 6;
 				int regionY = (baseY + Camera.originY) >> 6;
@@ -5410,9 +5410,9 @@ public class SceneGraph {
 		@Pc(497) int lightCount;
 		if (GlRenderer.enabled && !underwater) {
 			@Pc(472) Environment environment = null;
-			label207:
+			parseEnvironment:
 			while (true) {
-				label200:
+				readEntry:
 				do {
 					while (buffer.data.length > buffer.offset) {
 						l = buffer.g1();
@@ -5421,7 +5421,7 @@ public class SceneGraph {
 								throw new IllegalStateException();
 							}
 							lightCount = buffer.g1();
-							continue label200;
+							continue readEntry;
 						}
 						environment = new Environment(buffer);
 					}
@@ -5429,7 +5429,7 @@ public class SceneGraph {
 						environment = new Environment();
 					}
 					FogManager.chunksAtmosphere[tileX >> 3][tileY >> 3] = environment;
-					break label207;
+					break parseEnvironment;
 				} while (lightCount <= 0);
 				for (ix = 0; ix < lightCount; ix++) {
 					@Pc(517) Light lightObj = new Light(buffer);

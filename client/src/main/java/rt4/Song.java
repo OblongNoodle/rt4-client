@@ -328,7 +328,7 @@ public final class Song extends Node {
 			song.addDeltaTime(track);
 			song.saveTrackPosition(track);
 		}
-		label53:
+		nextTrack:
 		do {
 			while (true) {
 				track = song.getNextTrack();
@@ -339,7 +339,7 @@ public final class Song extends Node {
 					if (event == 1) {
 						song.loadEndOfTrackPosition();
 						song.saveTrackPosition(track);
-						continue label53;
+						continue nextTrack;
 					}
 					@Pc(85) int eventType = event & 0xF0;
 					@Pc(92) int controller;
