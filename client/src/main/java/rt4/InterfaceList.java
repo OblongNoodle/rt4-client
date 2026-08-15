@@ -119,70 +119,70 @@ public class InterfaceList {
 	public static boolean useStyledMenu = false;
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(ZLclient!ve;Lclient!ve;Lclient!ve;Lclient!ve;)V")
-	public static void init(@OriginalArg(1) Js5 arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) Js5 arg2, @OriginalArg(4) Js5 arg3) {
-		spriteProvider = arg1;
-		fontProvider = arg0;
-		interfaceProvider = arg2;
-		modelProvider = arg3;
+	public static void init(@OriginalArg(1) Js5 fontProvider, @OriginalArg(2) Js5 spriteProvider, @OriginalArg(3) Js5 interfaceProvider, @OriginalArg(4) Js5 modelProvider) {
+		spriteProvider = spriteProvider;
+		fontProvider = fontProvider;
+		interfaceProvider = interfaceProvider;
+		modelProvider = modelProvider;
 		components = new Component[interfaceProvider.capacity()][];
 		interfaceLoaded = new boolean[interfaceProvider.capacity()];
 	}
 
 	@OriginalMember(owner = "client!ig", name = "a", descriptor = "(BI)V")
-	public static void unload(@OriginalArg(1) int arg0) {
-		if (arg0 == -1 || !interfaceLoaded[arg0]) {
+	public static void unload(@OriginalArg(1) int interfaceId) {
+		if (interfaceId == -1 || !interfaceLoaded[interfaceId]) {
 			return;
 		}
-		interfaceProvider.discardUnpacked(arg0);
-		if (components[arg0] == null) {
+		interfaceProvider.discardUnpacked(interfaceId);
+		if (components[interfaceId] == null) {
 			return;
 		}
-		@Pc(27) boolean local27 = true;
-		for (@Pc(29) int local29 = 0; local29 < components[arg0].length; local29++) {
-			if (components[arg0][local29] != null) {
-				if (components[arg0][local29].type == 2) {
-					local27 = false;
+		@Pc(27) boolean canUnload = true;
+		for (@Pc(29) int i = 0; i < components[interfaceId].length; i++) {
+			if (components[interfaceId][i] != null) {
+				if (components[interfaceId][i].type == 2) {
+					canUnload = false;
 				} else {
-					components[arg0][local29] = null;
+					components[interfaceId][i] = null;
 				}
 			}
 		}
-		if (local27) {
-			components[arg0] = null;
+		if (canUnload) {
+			components[interfaceId] = null;
 		}
-		interfaceLoaded[arg0] = false;
+		interfaceLoaded[interfaceId] = false;
 	}
 
 	@OriginalMember(owner = "client!tm", name = "b", descriptor = "(II)Z")
-	public static boolean load(@OriginalArg(0) int arg0) {
-		if (interfaceLoaded[arg0]) {
+	public static boolean load(@OriginalArg(0) int interfaceId) {
+		if (interfaceLoaded[interfaceId]) {
 			return true;
 		}
 
-		if (interfaceProvider.isGroupReady(arg0)) {
-			@Pc(25) int local25 = interfaceProvider.getGroupCapacity(arg0);
-			if (local25 == 0) {
-				interfaceLoaded[arg0] = true;
+		if (interfaceProvider.isGroupReady(interfaceId)) {
+			@Pc(25) int fileCount = interfaceProvider.getGroupCapacity(interfaceId);
+			if (fileCount == 0) {
+				interfaceLoaded[interfaceId] = true;
 				return true;
 			}
-			if (components[arg0] == null) {
-				components[arg0] = new Component[local25];
+			if (components[interfaceId] == null) {
+				components[interfaceId] = new Component[fileCount];
 			}
-			for (@Pc(46) int local46 = 0; local46 < local25; local46++) {
-				if (components[arg0][local46] == null) {
-					@Pc(62) byte[] local62 = interfaceProvider.fetchFile(arg0, local46);
-					if (local62 != null) {
-						@Pc(74) Component local74 = components[arg0][local46] = new Component();
-						local74.id = local46 + (arg0 << 16);
-						if (local62[0] == -1) {
-							local74.decodeIf3(new Buffer(local62));
+			for (@Pc(46) int i = 0; i < fileCount; i++) {
+				if (components[interfaceId][i] == null) {
+					@Pc(62) byte[] data = interfaceProvider.fetchFile(interfaceId, i);
+					if (data != null) {
+						@Pc(74) Component component = components[interfaceId][i] = new Component();
+						component.id = i + (interfaceId << 16);
+						if (data[0] == -1) {
+							component.decodeIf3(new Buffer(data));
 						} else {
-							local74.decodeIf1(new Buffer(local62));
+							component.decodeIf1(new Buffer(data));
 						}
 					}
 				}
 			}
-			interfaceLoaded[arg0] = true;
+			interfaceLoaded[interfaceId] = true;
 			return true;
 		} else {
 			return false;
@@ -197,8 +197,8 @@ public class InterfaceList {
 
 	@OriginalMember(owner = "client!i", name = "i", descriptor = "(Z)V")
 	public static void redrawActiveInterfaces() {
-		for (@Pc(6) ComponentPointer local6 = (ComponentPointer) openInterfaces.head(); local6 != null; local6 = (ComponentPointer) openInterfaces.next()) {
-			@Pc(14) int local14 = local6.interfaceId;
+		for (@Pc(6) ComponentPointer ptr = (ComponentPointer) openInterfaces.head(); ptr != null; ptr = (ComponentPointer) openInterfaces.next()) {
+			@Pc(14) int local14 = ptr.interfaceId;
 			if (load(local14)) {
 				@Pc(21) boolean local21 = true;
 				@Pc(25) Component[] local25 = components[local14];
@@ -210,7 +210,7 @@ public class InterfaceList {
 					}
 				}
 				if (!local21) {
-					local27 = (int) local6.key;
+					local27 = (int) ptr.key;
 					@Pc(60) Component local60 = getComponent(local27);
 					if (local60 != null) {
 						redraw(local60);
@@ -262,144 +262,144 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(Lclient!be;)Lclient!bf;")
-	public static ServerActiveProperties getServerActiveProperties(@OriginalArg(0) Component arg0) {
-		@Pc(13) ServerActiveProperties local13 = (ServerActiveProperties) properties.get(((long) arg0.id << 32) + (long) arg0.createdComponentId);
-		return local13 == null ? arg0.properties : local13;
+	public static ServerActiveProperties getServerActiveProperties(@OriginalArg(0) Component component) {
+		@Pc(13) ServerActiveProperties props = (ServerActiveProperties) properties.get(((long) component.id << 32) + (long) component.createdComponentId);
+		return props == null ? component.properties : props;
 	}
 
 	@OriginalMember(owner = "client!dg", name = "a", descriptor = "(ILclient!be;)V")
-	public static void redraw(@OriginalArg(1) Component arg0) {
-		if (currentRenderLoop == arg0.rectangleLoop) {
-			rectangleDirty[arg0.rectangle] = true;
+	public static void redraw(@OriginalArg(1) Component component) {
+		if (currentRenderLoop == component.rectangleLoop) {
+			rectangleDirty[component.rectangle] = true;
 		}
 	}
 
 	@OriginalMember(owner = "client!qj", name = "a", descriptor = "(Lclient!be;BI)Lclient!na;")
-	public static JagString getOp(@OriginalArg(0) Component arg0, @OriginalArg(2) int arg1) {
-		if (!getServerActiveProperties(arg0).isButtonEnabled(arg1) && arg0.onOptionClick == null) {
+	public static JagString getOp(@OriginalArg(0) Component component, @OriginalArg(2) int opIndex) {
+		if (!getServerActiveProperties(component).isButtonEnabled(opIndex) && component.onOptionClick == null) {
 			return null;
-		} else if (arg0.ops == null || arg0.ops.length <= arg1 || arg0.ops[arg1] == null || arg0.ops[arg1].trim().length() == 0) {
-			return Cheat.qaOpTest ? JagString.concatenate(new JagString[]{HIDDEN_OPTION_PREFIX, JagString.parseInt(arg1)}) : null;
+		} else if (component.ops == null || component.ops.length <= opIndex || component.ops[opIndex] == null || component.ops[opIndex].trim().length() == 0) {
+			return Cheat.qaOpTest ? JagString.concatenate(new JagString[]{HIDDEN_OPTION_PREFIX, JagString.parseInt(opIndex)}) : null;
 		} else {
-			return arg0.ops[arg1];
+			return component.ops[opIndex];
 		}
 	}
 
 	@OriginalMember(owner = "client!qf", name = "a", descriptor = "(BII)Lclient!be;")
-	public static Component getComponent(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(7) Component local7 = getComponent(arg0);
-		if (arg1 == -1) {
-			return local7;
-		} else if (local7 == null || local7.createdComponents == null || local7.createdComponents.length <= arg1) {
+	public static Component getComponent(@OriginalArg(1) int parentId, @OriginalArg(2) int childId) {
+		@Pc(7) Component parent = getComponent(parentId);
+		if (childId == -1) {
+			return parent;
+		} else if (parent == null || parent.createdComponents == null || parent.createdComponents.length <= childId) {
 			return null;
 		} else {
-			return local7.createdComponents[arg1];
+			return parent.createdComponents[childId];
 		}
 	}
 
 	@OriginalMember(owner = "client!gg", name = "e", descriptor = "(II)V")
-	public static void resetAnimations(@OriginalArg(0) int arg0) {
-		if (!load(arg0)) {
+	public static void resetAnimations(@OriginalArg(0) int interfaceId) {
+		if (!load(interfaceId)) {
 			return;
 		}
-		@Pc(15) Component[] local15 = components[arg0];
-		for (@Pc(17) int local17 = 0; local17 < local15.length; local17++) {
-			@Pc(29) Component local29 = local15[local17];
-			if (local29 != null) {
-				local29.seqNextFrame = 1;
-				local29.seqFrame = 0;
-				local29.seqCycle = 0;
+		@Pc(15) Component[] children = components[interfaceId];
+		for (@Pc(17) int i = 0; i < children.length; i++) {
+			@Pc(29) Component child = children[i];
+			if (child != null) {
+				child.seqNextFrame = 1;
+				child.seqFrame = 0;
+				child.seqCycle = 0;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!rb", name = "a", descriptor = "(ZB)V")
-	public static void layoutTopLevel(@OriginalArg(0) boolean arg0) {
-		layoutInterface(GameShell.canvasHeight, arg0, topLevelInterface, GameShell.canvasWidth);
+	public static void layoutTopLevel(@OriginalArg(0) boolean forceResize) {
+		layoutInterface(GameShell.canvasHeight, forceResize, topLevelInterface, GameShell.canvasWidth);
 	}
 
 	@OriginalMember(owner = "client!ta", name = "a", descriptor = "(IZIII)V")
-	public static void layoutInterface(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		if (load(arg2)) {
-			layoutComponents(-1, arg1, arg3, arg0, components[arg2]);
+	public static void layoutInterface(@OriginalArg(0) int height, @OriginalArg(1) boolean forceResize, @OriginalArg(3) int interfaceId, @OriginalArg(4) int width) {
+		if (load(interfaceId)) {
+			layoutComponents(-1, forceResize, width, height, components[interfaceId]);
 		}
 	}
 
 	@OriginalMember(owner = "client!bg", name = "a", descriptor = "(Lclient!be;ZI)V")
-	public static void layoutComponent(@OriginalArg(0) Component arg0, @OriginalArg(1) boolean arg1) {
-		@Pc(20) int local20 = arg0.scrollMaxH == 0 ? arg0.width : arg0.scrollMaxH;
-		@Pc(32) int local32 = arg0.scrollMaxV == 0 ? arg0.height : arg0.scrollMaxV;
-		layoutComponents(arg0.id, arg1, local20, local32, components[arg0.id >> 16]);
-		if (arg0.createdComponents != null) {
-			layoutComponents(arg0.id, arg1, local20, local32, arg0.createdComponents);
+	public static void layoutComponent(@OriginalArg(0) Component component, @OriginalArg(1) boolean forceResize) {
+		@Pc(20) int scrollW = component.scrollMaxH == 0 ? component.width : component.scrollMaxH;
+		@Pc(32) int scrollH = component.scrollMaxV == 0 ? component.height : component.scrollMaxV;
+		layoutComponents(component.id, forceResize, scrollW, scrollH, components[component.id >> 16]);
+		if (component.createdComponents != null) {
+			layoutComponents(component.id, forceResize, scrollW, scrollH, component.createdComponents);
 		}
-		@Pc(66) ComponentPointer local66 = (ComponentPointer) openInterfaces.get(arg0.id);
-		if (local66 != null) {
-			layoutInterface(local32, arg1, local66.interfaceId, local20);
+		@Pc(66) ComponentPointer ptr = (ComponentPointer) openInterfaces.get(component.id);
+		if (ptr != null) {
+			layoutInterface(scrollH, forceResize, ptr.interfaceId, scrollW);
 		}
 	}
 
 	@OriginalMember(owner = "client!vk", name = "a", descriptor = "(IZIII[Lclient!be;)V")
-	public static void layoutComponents(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) Component[] arg4) {
-		for (@Pc(3) int local3 = 0; local3 < arg4.length; local3++) {
-			@Pc(19) Component local19 = arg4[local3];
-			if (local19 != null && local19.overlayer == arg0) {
-				calculateSize(arg3, arg2, local19, arg1);
-				calculatePosition(local19, arg3, arg2);
-				if (local19.scrollMaxH - local19.width < local19.scrollX) {
-					local19.scrollX = local19.scrollMaxH - local19.width;
+	public static void layoutComponents(@OriginalArg(0) int overlayerId, @OriginalArg(1) boolean forceResize, @OriginalArg(2) int width, @OriginalArg(4) int height, @OriginalArg(5) Component[] children) {
+		for (@Pc(3) int i = 0; i < children.length; i++) {
+			@Pc(19) Component child = children[i];
+			if (child != null && child.overlayer == overlayerId) {
+				calculateSize(height, width, child, forceResize);
+				calculatePosition(child, height, width);
+				if (child.scrollMaxH - child.width < child.scrollX) {
+					child.scrollX = child.scrollMaxH - child.width;
 				}
-				if (local19.scrollY > local19.scrollMaxV - local19.height) {
-					local19.scrollY = local19.scrollMaxV - local19.height;
+				if (child.scrollY > child.scrollMaxV - child.height) {
+					child.scrollY = child.scrollMaxV - child.height;
 				}
-				if (local19.scrollY < 0) {
-					local19.scrollY = 0;
+				if (child.scrollY < 0) {
+					child.scrollY = 0;
 				}
-				if (local19.scrollX < 0) {
-					local19.scrollX = 0;
+				if (child.scrollX < 0) {
+					child.scrollX = 0;
 				}
-				if (local19.type == 0) {
-					layoutComponent(local19, arg1);
+				if (child.type == 0) {
+					layoutComponent(child, forceResize);
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!fn", name = "c", descriptor = "(II)V")
-	public static void runOnLoadScripts(@OriginalArg(0) int arg0) {
-		if (arg0 == -1 || !load(arg0)) {
+	public static void runOnLoadScripts(@OriginalArg(0) int interfaceId) {
+		if (interfaceId == -1 || !load(interfaceId)) {
 			return;
 		}
-		@Pc(31) Component[] local31 = components[arg0];
-		for (@Pc(33) int local33 = 0; local33 < local31.length; local33++) {
-			@Pc(41) Component local41 = local31[local33];
-			if (local41.onLoad != null) {
-				@Pc(50) HookRequest local50 = new HookRequest();
-				local50.arguments = local41.onLoad;
-				local50.source = local41;
-				ScriptRunner.run(2000000, local50);
+		@Pc(31) Component[] children = components[interfaceId];
+		for (@Pc(33) int i = 0; i < children.length; i++) {
+			@Pc(41) Component child = children[i];
+			if (child.onLoad != null) {
+				@Pc(50) HookRequest hookRequest = new HookRequest();
+				hookRequest.arguments = child.onLoad;
+				hookRequest.source = child;
+				ScriptRunner.run(2000000, hookRequest);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ke", name = "a", descriptor = "(ZLclient!wk;Z)V")
-	public static void closeInterface(@OriginalArg(0) boolean arg0, @OriginalArg(1) ComponentPointer arg1) {
-		@Pc(9) int local9 = (int) arg1.key;
-		@Pc(16) int local16 = arg1.interfaceId;
-		arg1.unlink();
-		if (arg0) {
-			unload(local16);
+	public static void closeInterface(@OriginalArg(0) boolean shouldUnload, @OriginalArg(1) ComponentPointer pointer) {
+		@Pc(9) int componentId = (int) pointer.key;
+		@Pc(16) int interfaceId = pointer.interfaceId;
+		pointer.unlink();
+		if (shouldUnload) {
+			unload(interfaceId);
 		}
-		removeProperties(local16);
-		@Pc(32) Component local32 = getComponent(local9);
-		if (local32 != null) {
-			redraw(local32);
+		removeProperties(interfaceId);
+		@Pc(32) Component component = getComponent(componentId);
+		if (component != null) {
+			redraw(component);
 		}
-		@Pc(41) int local41 = MiniMenu.size;
-		@Pc(43) int local43;
-		for (local43 = 0; local43 < local41; local43++) {
-			if (isInterfaceAction(MiniMenu.actions[local43])) {
-				MiniMenu.remove(local43);
+		@Pc(41) int menuSize = MiniMenu.size;
+		@Pc(43) int maxWidth;
+		for (maxWidth = 0; maxWidth < menuSize; maxWidth++) {
+			if (isInterfaceAction(MiniMenu.actions[maxWidth])) {
+				MiniMenu.remove(maxWidth);
 			}
 		}
 		if (MiniMenu.size == 1) {
@@ -407,15 +407,15 @@ public class InterfaceList {
 			redrawScreen(menuX, menuWidth, menuY, menuHeight);
 		} else {
 			redrawScreen(menuX, menuWidth, menuY, menuHeight);
-			local43 = Fonts.b12Full.getStringWidth(LocalizedText.CHOOSE_OPTION);
-			for (@Pc(75) int local75 = 0; local75 < MiniMenu.size; local75++) {
-				@Pc(88) int local88 = Fonts.b12Full.getStringWidth(MiniMenu.getOp(local75));
-				if (local43 < local88) {
-					local43 = local88;
+			maxWidth = Fonts.b12Full.getStringWidth(LocalizedText.CHOOSE_OPTION);
+			for (@Pc(75) int i = 0; i < MiniMenu.size; i++) {
+				@Pc(88) int opWidth = Fonts.b12Full.getStringWidth(MiniMenu.getOp(i));
+				if (maxWidth < opWidth) {
+					maxWidth = opWidth;
 				}
 			}
 			menuHeight = MiniMenu.size * 15 + (useStyledMenu ? 26 : 22);
-			menuWidth = local43 + 8;
+			menuWidth = maxWidth + 8;
 		}
 		if (topLevelInterface != -1) {
 			runScripts(1, topLevelInterface);
@@ -423,251 +423,251 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!ii", name = "a", descriptor = "(Lclient!be;III)V")
-	public static void calculatePosition(@OriginalArg(0) Component arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
-		if (arg0.xMode == 0) {
-			arg0.y = arg0.baseY;
-		} else if (arg0.xMode == 1) {
-			arg0.y = (arg1 - arg0.height) / 2 + arg0.baseY;
-		} else if (arg0.xMode == 2) {
-			arg0.y = arg1 - arg0.height - arg0.baseY;
-		} else if (arg0.xMode == 3) {
-			arg0.y = arg0.baseY * arg1 >> 14;
-		} else if (arg0.xMode == 4) {
-			arg0.y = (arg1 * arg0.baseY >> 14) + (arg1 - arg0.height) / 2;
+	public static void calculatePosition(@OriginalArg(0) Component component, @OriginalArg(2) int parentH, @OriginalArg(3) int parentW) {
+		if (component.xMode == 0) {
+			component.y = component.baseY;
+		} else if (component.xMode == 1) {
+			component.y = (parentH - component.height) / 2 + component.baseY;
+		} else if (component.xMode == 2) {
+			component.y = parentH - component.height - component.baseY;
+		} else if (component.xMode == 3) {
+			component.y = component.baseY * parentH >> 14;
+		} else if (component.xMode == 4) {
+			component.y = (parentH * component.baseY >> 14) + (parentH - component.height) / 2;
 		} else {
-			arg0.y = arg1 - (arg1 * arg0.baseY >> 14) - arg0.height;
+			component.y = parentH - (parentH * component.baseY >> 14) - component.height;
 		}
-		if (arg0.yMode == 0) {
-			arg0.x = arg0.baseX;
-		} else if (arg0.yMode == 1) {
-			arg0.x = arg0.baseX + (arg2 - arg0.width) / 2;
-		} else if (arg0.yMode == 2) {
-			arg0.x = arg2 - arg0.baseX - arg0.width;
-		} else if (arg0.yMode == 3) {
-			arg0.x = arg0.baseX * arg2 >> 14;
-		} else if (arg0.yMode == 4) {
-			arg0.x = (arg0.baseX * arg2 >> 14) + (arg2 - arg0.width) / 2;
+		if (component.yMode == 0) {
+			component.x = component.baseX;
+		} else if (component.yMode == 1) {
+			component.x = component.baseX + (parentW - component.width) / 2;
+		} else if (component.yMode == 2) {
+			component.x = parentW - component.baseX - component.width;
+		} else if (component.yMode == 3) {
+			component.x = component.baseX * parentW >> 14;
+		} else if (component.yMode == 4) {
+			component.x = (component.baseX * parentW >> 14) + (parentW - component.width) / 2;
 		} else {
-			arg0.x = arg2 - (arg2 * arg0.baseX >> 14) - arg0.width;
+			component.x = parentW - (parentW * component.baseX >> 14) - component.width;
 		}
-		if (!Cheat.qaOpTest || getServerActiveProperties(arg0).events == 0 && arg0.type != 0) {
+		if (!Cheat.qaOpTest || getServerActiveProperties(component).events == 0 && component.type != 0) {
 			return;
 		}
-		if (arg0.y < 0) {
-			arg0.y = 0;
-		} else if (arg0.height + arg0.y > arg1) {
-			arg0.y = arg1 - arg0.height;
+		if (component.y < 0) {
+			component.y = 0;
+		} else if (component.height + component.y > parentH) {
+			component.y = parentH - component.height;
 		}
-		if (arg0.x < 0) {
-			arg0.x = 0;
-		} else if (arg2 < arg0.x + arg0.width) {
-			arg0.x = arg2 - arg0.width;
+		if (component.x < 0) {
+			component.x = 0;
+		} else if (parentW < component.x + component.width) {
+			component.x = parentW - component.width;
 		}
 	}
 
 	@OriginalMember(owner = "client!fn", name = "a", descriptor = "(ILclient!be;)V")
-	public static void update(@OriginalArg(1) Component arg0) {
-		@Pc(7) Component local7 = getParent(arg0);
-		@Pc(19) int local19;
-		@Pc(17) int local17;
-		if (local7 == null) {
-			local17 = GameShell.canvasHeight;
-			local19 = GameShell.canvasWidth;
+	public static void update(@OriginalArg(1) Component component) {
+		@Pc(7) Component parent = getParent(component);
+		@Pc(19) int parentW;
+		@Pc(17) int parentH;
+		if (parent == null) {
+			parentH = GameShell.canvasHeight;
+			parentW = GameShell.canvasWidth;
 		} else {
-			local17 = local7.height;
-			local19 = local7.width;
+			parentH = parent.height;
+			parentW = parent.width;
 		}
-		calculateSize(local17, local19, arg0, false);
-		calculatePosition(arg0, local17, local19);
+		calculateSize(parentH, parentW, component, false);
+		calculatePosition(component, parentH, parentW);
 	}
 
 	@OriginalMember(owner = "client!lk", name = "a", descriptor = "(IIILclient!be;Z)V")
-	public static void calculateSize(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) Component arg2, @OriginalArg(4) boolean arg3) {
-		@Pc(4) int local4 = arg2.width;
-		@Pc(7) int local7 = arg2.height;
-		if (arg2.dynamicWidthValue == 0) {
-			arg2.width = arg2.baseWidth;
-		} else if (arg2.dynamicWidthValue == 1) {
-			arg2.width = arg1 - arg2.baseWidth;
-		} else if (arg2.dynamicWidthValue == 2) {
-			arg2.width = arg2.baseWidth * arg1 >> 14;
-		} else if (arg2.dynamicWidthValue == 3) {
-			if (arg2.type == 2) {
-				arg2.width = arg2.baseWidth * 32 + (arg2.baseWidth - 1) * arg2.invMarginX;
-			} else if (arg2.type == 7) {
-				arg2.width = arg2.baseWidth * 115 + arg2.invMarginX * (arg2.baseWidth - 1);
+	public static void calculateSize(@OriginalArg(0) int parentH, @OriginalArg(2) int parentW, @OriginalArg(3) Component component, @OriginalArg(4) boolean triggerResize) {
+		@Pc(4) int oldW = component.width;
+		@Pc(7) int oldH = component.height;
+		if (component.dynamicWidthValue == 0) {
+			component.width = component.baseWidth;
+		} else if (component.dynamicWidthValue == 1) {
+			component.width = parentW - component.baseWidth;
+		} else if (component.dynamicWidthValue == 2) {
+			component.width = component.baseWidth * parentW >> 14;
+		} else if (component.dynamicWidthValue == 3) {
+			if (component.type == 2) {
+				component.width = component.baseWidth * 32 + (component.baseWidth - 1) * component.invMarginX;
+			} else if (component.type == 7) {
+				component.width = component.baseWidth * 115 + component.invMarginX * (component.baseWidth - 1);
 			}
 		}
-		if (arg2.dynamicHeightValue == 0) {
-			arg2.height = arg2.baseHeight;
-		} else if (arg2.dynamicHeightValue == 1) {
-			arg2.height = arg0 - arg2.baseHeight;
-		} else if (arg2.dynamicHeightValue == 2) {
-			arg2.height = arg0 * arg2.baseHeight >> 14;
-		} else if (arg2.dynamicHeightValue == 3) {
-			if (arg2.type == 2) {
-				arg2.height = (arg2.baseHeight - 1) * arg2.invMarginY + arg2.baseHeight * 32;
-			} else if (arg2.type == 7) {
-				arg2.height = arg2.baseHeight * 12 + (arg2.baseHeight - 1) * arg2.invMarginY;
+		if (component.dynamicHeightValue == 0) {
+			component.height = component.baseHeight;
+		} else if (component.dynamicHeightValue == 1) {
+			component.height = parentH - component.baseHeight;
+		} else if (component.dynamicHeightValue == 2) {
+			component.height = parentH * component.baseHeight >> 14;
+		} else if (component.dynamicHeightValue == 3) {
+			if (component.type == 2) {
+				component.height = (component.baseHeight - 1) * component.invMarginY + component.baseHeight * 32;
+			} else if (component.type == 7) {
+				component.height = component.baseHeight * 12 + (component.baseHeight - 1) * component.invMarginY;
 			}
 		}
-		if (arg2.dynamicWidthValue == 4) {
-			arg2.width = arg2.aspectWidth * arg2.height / arg2.aspectHeight;
+		if (component.dynamicWidthValue == 4) {
+			component.width = component.aspectWidth * component.height / component.aspectHeight;
 		}
-		if (arg2.dynamicHeightValue == 4) {
-			arg2.height = arg2.aspectHeight * arg2.width / arg2.aspectWidth;
+		if (component.dynamicHeightValue == 4) {
+			component.height = component.aspectHeight * component.width / component.aspectWidth;
 		}
-		if (Cheat.qaOpTest && (getServerActiveProperties(arg2).events != 0 || arg2.type == 0)) {
-			if (arg2.height < 5 && arg2.width < 5) {
-				arg2.height = 5;
-				arg2.width = 5;
+		if (Cheat.qaOpTest && (getServerActiveProperties(component).events != 0 || component.type == 0)) {
+			if (component.height < 5 && component.width < 5) {
+				component.height = 5;
+				component.width = 5;
 			} else {
-				if (arg2.width <= 0) {
-					arg2.width = 5;
+				if (component.width <= 0) {
+					component.width = 5;
 				}
-				if (arg2.height <= 0) {
-					arg2.height = 5;
+				if (component.height <= 0) {
+					component.height = 5;
 				}
 			}
 		}
-		if (arg2.clientCode == 1337) {
-			gameViewportComponent = arg2;
+		if (component.clientCode == 1337) {
+			gameViewportComponent = component;
 		}
-		if (arg3 && arg2.onResize != null && (local4 != arg2.width || arg2.height != local7)) {
-			@Pc(305) HookRequest local305 = new HookRequest();
-			local305.arguments = arg2.onResize;
-			local305.source = arg2;
-			lowPriorityRequests.addTail(local305);
+		if (triggerResize && component.onResize != null && (oldW != component.width || component.height != oldH)) {
+			@Pc(305) HookRequest hookRequest = new HookRequest();
+			hookRequest.arguments = component.onResize;
+			hookRequest.source = component;
+			lowPriorityRequests.addTail(hookRequest);
 		}
 	}
 
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(Lclient!be;I)Lclient!be;")
-	public static Component getParent(@OriginalArg(0) Component arg0) {
-		if (arg0.overlayer != -1) {
-			return getComponent(arg0.overlayer);
+	public static Component getParent(@OriginalArg(0) Component component) {
+		if (component.overlayer != -1) {
+			return getComponent(component.overlayer);
 		}
-		@Pc(28) int local28 = arg0.id >>> 16;
-		@Pc(33) HashTableIterator local33 = new HashTableIterator(openInterfaces);
-		for (@Pc(38) ComponentPointer local38 = (ComponentPointer) local33.first(); local38 != null; local38 = (ComponentPointer) local33.next()) {
-			if (local28 == local38.interfaceId) {
-				return getComponent((int) local38.key);
+		@Pc(28) int interfaceId = component.id >>> 16;
+		@Pc(33) HashTableIterator iter = new HashTableIterator(openInterfaces);
+		for (@Pc(38) ComponentPointer ptr = (ComponentPointer) iter.first(); ptr != null; ptr = (ComponentPointer) iter.next()) {
+			if (interfaceId == ptr.interfaceId) {
+				return getComponent((int) ptr.key);
 			}
 		}
 		return null;
 	}
 
 	@OriginalMember(owner = "client!kf", name = "a", descriptor = "(IIBII)V")
-	public static void redrawScreen(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		for (@Pc(12) int local12 = 0; local12 < rectangles; local12++) {
-			if (rectangleWidth[local12] + rectangleX[local12] > arg0 && arg1 + arg0 > rectangleX[local12] && arg2 < rectangleHeight[local12] + rectangleY[local12] && rectangleY[local12] < arg2 + arg3) {
-				rectangleDirty[local12] = true;
+	public static void redrawScreen(@OriginalArg(0) int x, @OriginalArg(1) int w, @OriginalArg(3) int y, @OriginalArg(4) int h) {
+		for (@Pc(12) int i = 0; i < rectangles; i++) {
+			if (rectangleWidth[i] + rectangleX[i] > x && w + x > rectangleX[i] && y < rectangleHeight[i] + rectangleY[i] && rectangleY[i] < y + h) {
+				rectangleDirty[i] = true;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!we", name = "b", descriptor = "(BI)V")
-	public static void removeProperties(@OriginalArg(1) int arg0) {
-		for (@Pc(11) Node local11 = properties.head(); local11 != null; local11 = properties.next()) {
-			if ((local11.key >> 48 & 0xFFFFL) == (long) arg0) {
-				local11.unlink();
+	public static void removeProperties(@OriginalArg(1) int interfaceId) {
+		for (@Pc(11) Node node = properties.head(); node != null; node = properties.next()) {
+			if ((node.key >> 48 & 0xFFFFL) == (long) interfaceId) {
+				node.unlink();
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ed", name = "a", descriptor = "(III)V")
-	public static void runScripts(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		if (load(arg1)) {
-			runScriptsRecursive(components[arg1], arg0);
+	public static void runScripts(@OriginalArg(1) int scriptId, @OriginalArg(2) int interfaceId) {
+		if (load(interfaceId)) {
+			runScriptsRecursive(components[interfaceId], scriptId);
 		}
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "([Lclient!be;ZI)V")
-	public static void runScriptsRecursive(@OriginalArg(0) Component[] arg0, @OriginalArg(2) int arg1) {
-		for (@Pc(11) int local11 = 0; local11 < arg0.length; local11++) {
-			@Pc(23) Component local23 = arg0[local11];
-			if (local23 != null) {
-				if (local23.type == 0) {
-					if (local23.createdComponents != null) {
-						runScriptsRecursive(local23.createdComponents, arg1);
+	public static void runScriptsRecursive(@OriginalArg(0) Component[] children, @OriginalArg(2) int scriptId) {
+		for (@Pc(11) int i = 0; i < children.length; i++) {
+			@Pc(23) Component child = children[i];
+			if (child != null) {
+				if (child.type == 0) {
+					if (child.createdComponents != null) {
+						runScriptsRecursive(child.createdComponents, scriptId);
 					}
-					@Pc(49) ComponentPointer local49 = (ComponentPointer) openInterfaces.get(local23.id);
-					if (local49 != null) {
-						runScripts(arg1, local49.interfaceId);
+					@Pc(49) ComponentPointer ptr = (ComponentPointer) openInterfaces.get(child.id);
+					if (ptr != null) {
+						runScripts(scriptId, ptr.interfaceId);
 					}
 				}
-				@Pc(72) HookRequest local72;
-				if (arg1 == 0 && local23.onDialogAbort != null) {
-					local72 = new HookRequest();
-					local72.arguments = local23.onDialogAbort;
-					local72.source = local23;
-					ScriptRunner.run(local72);
+				@Pc(72) HookRequest hookRequest;
+				if (scriptId == 0 && child.onDialogAbort != null) {
+					hookRequest = new HookRequest();
+					hookRequest.arguments = child.onDialogAbort;
+					hookRequest.source = child;
+					ScriptRunner.run(hookRequest);
 				}
-				if (arg1 == 1 && local23.onWidgetsOpenClose != null) {
-					if (local23.createdComponentId >= 0) {
-						@Pc(103) Component local103 = getComponent(local23.id);
-						if (local103 == null || local103.createdComponents == null || local23.createdComponentId >= local103.createdComponents.length || local103.createdComponents[local23.createdComponentId] != local23) {
+				if (scriptId == 1 && child.onWidgetsOpenClose != null) {
+					if (child.createdComponentId >= 0) {
+						@Pc(103) Component parent = getComponent(child.id);
+						if (parent == null || parent.createdComponents == null || child.createdComponentId >= parent.createdComponents.length || parent.createdComponents[child.createdComponentId] != child) {
 							continue;
 						}
 					}
-					local72 = new HookRequest();
-					local72.arguments = local23.onWidgetsOpenClose;
-					local72.source = local23;
-					ScriptRunner.run(local72);
+					hookRequest = new HookRequest();
+					hookRequest.arguments = child.onWidgetsOpenClose;
+					hookRequest.source = child;
+					ScriptRunner.run(hookRequest);
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!eg", name = "a", descriptor = "(IIIIIIII)V")
-	public static void processSubInterface(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		if (load(arg4)) {
-			processComponents(components[arg4], -1, arg5, arg1, arg3, arg6, arg0, arg2);
+	public static void processSubInterface(@OriginalArg(0) int scrollY, @OriginalArg(1) int y, @OriginalArg(3) int scrollX, @OriginalArg(4) int h, @OriginalArg(5) int interfaceId, @OriginalArg(6) int x, @OriginalArg(7) int w) {
+		if (load(interfaceId)) {
+			processComponents(components[interfaceId], -1, x, y, h, w, scrollY, scrollX);
 		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "([Lclient!be;IIIIIII)V")
-	public static void processComponents(@OriginalArg(0) Component[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		for (@Pc(1) int local1 = 0; local1 < arg0.length; local1++) {
-			@Pc(9) Component component = arg0[local1];
-			if (component != null && component.overlayer == arg1 && (!component.if3 || component.type == 0 || component.hasEventHandlers || getServerActiveProperties(component).events != 0 || component == Cs1ScriptRunner.dragParentComponent || component.clientCode == 1338) && (!component.if3 || !isHidden(component))) {
-				@Pc(50) int local50 = component.x + arg6;
-				@Pc(55) int local55 = component.y + arg7;
-				@Pc(61) int local61;
-				@Pc(63) int local63;
-				@Pc(65) int local65;
-				@Pc(67) int local67;
+	public static void processComponents(@OriginalArg(0) Component[] children, @OriginalArg(1) int overlayerId, @OriginalArg(2) int clipLeft, @OriginalArg(3) int clipTop, @OriginalArg(4) int clipRight, @OriginalArg(5) int clipBottom, @OriginalArg(6) int parentX, @OriginalArg(7) int parentY) {
+		for (@Pc(1) int i = 0; i < children.length; i++) {
+			@Pc(9) Component component = children[i];
+			if (component != null && component.overlayer == overlayerId && (!component.if3 || component.type == 0 || component.hasEventHandlers || getServerActiveProperties(component).events != 0 || component == Cs1ScriptRunner.dragParentComponent || component.clientCode == 1338) && (!component.if3 || !isHidden(component))) {
+				@Pc(50) int absX = component.x + parentX;
+				@Pc(55) int absY = component.y + parentY;
+				@Pc(61) int left;
+				@Pc(63) int top;
+				@Pc(65) int right;
+				@Pc(67) int bottom;
 				if (component.type == 2) {
-					local61 = arg2;
-					local63 = arg3;
-					local65 = arg4;
-					local67 = arg5;
+					left = clipLeft;
+					top = clipTop;
+					right = clipRight;
+					bottom = clipBottom;
 				} else {
-					@Pc(73) int local73 = local50 + component.width;
-					@Pc(78) int local78 = local55 + component.height;
+					@Pc(73) int compRight = absX + component.width;
+					@Pc(78) int compBottom = absY + component.height;
 					if (component.type == 9) {
-						local73++;
-						local78++;
+						compRight++;
+						compBottom++;
 					}
-					local61 = local50 > arg2 ? local50 : arg2;
-					local63 = local55 > arg3 ? local55 : arg3;
-					local65 = local73 < arg4 ? local73 : arg4;
-					local67 = local78 < arg5 ? local78 : arg5;
+					left = absX > clipLeft ? absX : clipLeft;
+					top = absY > clipTop ? absY : clipTop;
+					right = compRight < clipRight ? compRight : clipRight;
+					bottom = compBottom < clipBottom ? compBottom : clipBottom;
 				}
 				if (component == Cs1ScriptRunner.draggedComponent) {
 					dragSourceFound = true;
-					dragSourceX = local50;
-					dragSourceY = local55;
+					dragSourceX = absX;
+					dragSourceY = absY;
 				}
-				if (!component.if3 || local61 < local65 && local63 < local67) {
+				if (!component.if3 || left < right && top < bottom) {
 					if (component.type == 0) {
 						if (!component.if3 && isHidden(component) && hoveredComponent != component) {
 							continue;
 						}
-						if (component.noClickThrough && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
-							for (@Pc(164) HookRequest local164 = (HookRequest) lowPriorityRequests.head(); local164 != null; local164 = (HookRequest) lowPriorityRequests.next()) {
-								if (local164.cancelOnMouseExit) {
-									local164.unlink();
-									local164.source.mouseOver = false;
+						if (component.noClickThrough && Mouse.lastMouseX >= left && Mouse.lastMouseY >= top && Mouse.lastMouseX < right && Mouse.lastMouseY < bottom) {
+							for (@Pc(164) HookRequest req = (HookRequest) lowPriorityRequests.head(); req != null; req = (HookRequest) lowPriorityRequests.next()) {
+								if (req.cancelOnMouseExit) {
+									req.unlink();
+									req.source.mouseOver = false;
 								}
 							}
 							if (Cs1ScriptRunner.dragElapsedTicks == 0) {
@@ -678,49 +678,49 @@ public class InterfaceList {
 						}
 					}
 					if (component.if3) {
-						@Pc(207) boolean local207;
-						local207 = Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67;
-						@Pc(212) boolean local212 = Mouse.pressedButton == 1 && local207;
-						@Pc(221) boolean local221 = Mouse.clickButton == 1 && Mouse.clickX >= local61 && Mouse.clickY >= local63 && Mouse.clickX < local65 && Mouse.clickY < local67;
-						@Pc(243) int i;
+						@Pc(207) boolean isHovered;
+						isHovered = Mouse.lastMouseX >= left && Mouse.lastMouseY >= top && Mouse.lastMouseX < right && Mouse.lastMouseY < bottom;
+						@Pc(212) boolean isPressed = Mouse.pressedButton == 1 && isHovered;
+						@Pc(221) boolean isClicked = Mouse.clickButton == 1 && Mouse.clickX >= left && Mouse.clickY >= top && Mouse.clickX < right && Mouse.clickY < bottom;
+						@Pc(243) int j;
 						@Pc(322) int k;
 						if (component.keyCodes != null) {
-							for (i = 0; i < component.keyCodes.length; i++) {
-								if (Keyboard.pressedKeys[component.keyCodes[i]]) {
-									if (component.keyRepeatTimers == null || client.loop >= component.keyRepeatTimers[i]) {
-										@Pc(279) byte local279 = component.keyModifiers[i];
-										if (local279 == 0 || ((local279 & 0x2) == 0 || Keyboard.pressedKeys[Keyboard.KEY_ALT]) && ((local279 & 0x1) == 0 || Keyboard.pressedKeys[Keyboard.KEY_CTRL]) && ((local279 & 0x4) == 0 || Keyboard.pressedKeys[Keyboard.KEY_SHIFT])) {
-											ClientProt.sendButtonClick(JagString.EMPTY, -1, i + 1, component.id);
-											k = component.keyRepeatDelays[i];
+							for (j = 0; j < component.keyCodes.length; j++) {
+								if (Keyboard.pressedKeys[component.keyCodes[j]]) {
+									if (component.keyRepeatTimers == null || client.loop >= component.keyRepeatTimers[j]) {
+										@Pc(279) byte modifier = component.keyModifiers[j];
+										if (modifier == 0 || ((modifier & 0x2) == 0 || Keyboard.pressedKeys[Keyboard.KEY_ALT]) && ((modifier & 0x1) == 0 || Keyboard.pressedKeys[Keyboard.KEY_CTRL]) && ((modifier & 0x4) == 0 || Keyboard.pressedKeys[Keyboard.KEY_SHIFT])) {
+											ClientProt.sendButtonClick(JagString.EMPTY, -1, j + 1, component.id);
+											k = component.keyRepeatDelays[j];
 											if (component.keyRepeatTimers == null) {
 												component.keyRepeatTimers = new int[component.keyCodes.length];
 											}
 											if (k == 0) {
-												component.keyRepeatTimers[i] = Integer.MAX_VALUE;
+												component.keyRepeatTimers[j] = Integer.MAX_VALUE;
 											} else {
-												component.keyRepeatTimers[i] = client.loop + k;
+												component.keyRepeatTimers[j] = client.loop + k;
 											}
 										}
 									}
 								} else if (component.keyRepeatTimers != null) {
-									component.keyRepeatTimers[i] = 0;
+									component.keyRepeatTimers[j] = 0;
 								}
 							}
 						}
-						if (local221) {
-							Cs1ScriptRunner.startComponentDrag(Mouse.clickY - local55, Mouse.clickX - local50, component);
+						if (isClicked) {
+							Cs1ScriptRunner.startComponentDrag(Mouse.clickY - absY, Mouse.clickX - absX, component);
 						}
-						if (Cs1ScriptRunner.draggedComponent != null && Cs1ScriptRunner.draggedComponent != component && local207 && getServerActiveProperties(component).isDragTarget()) {
+						if (Cs1ScriptRunner.draggedComponent != null && Cs1ScriptRunner.draggedComponent != component && isHovered && getServerActiveProperties(component).isDragTarget()) {
 							dragTargetComponent = component;
 						}
 						if (component == Cs1ScriptRunner.dragParentComponent) {
 							dragParentFound = true;
-							Cs1ScriptRunner.dragBoundsMinX = local50;
-							dragParentY = local55;
+							Cs1ScriptRunner.dragBoundsMinX = absX;
+							dragParentY = absY;
 						}
 						if (component.hasEventHandlers || component.clientCode != 0) {
 							@Pc(399) HookRequest request;
-							if (local207 && MouseWheel.wheelRotation != 0 && component.onScroll != null) {
+							if (isHovered && MouseWheel.wheelRotation != 0 && component.onScroll != null) {
 								request = new HookRequest();
 								request.cancelOnMouseExit = true;
 								request.source = component;
@@ -729,9 +729,9 @@ public class InterfaceList {
 								lowPriorityRequests.addTail(request);
 							}
 							if (Cs1ScriptRunner.draggedComponent != null || clickedInventoryComponent != null || Cs1ScriptRunner.isMenuOpen || component.clientCode != 1400 && worldMapDragState > 0) {
-								local221 = false;
-								local212 = false;
-								local207 = false;
+								isClicked = false;
+								isPressed = false;
+								isHovered = false;
 							}
 							@Pc(508) int skill;
 							if (component.clientCode != 0) {
@@ -741,18 +741,18 @@ public class InterfaceList {
 									continue;
 								}
 								if (component.clientCode == 1338) {
-									if (local221) {
-										clickOffsetX = Mouse.clickX - local50;
-										MiniMenu.clickOffsetY = Mouse.clickY - local55;
+									if (isClicked) {
+										clickOffsetX = Mouse.clickX - absX;
+										MiniMenu.clickOffsetY = Mouse.clickY - absY;
 									}
 									continue;
 								}
 								if (component.clientCode == 1400) {
 									WorldMap.component = component;
-									if (local221) {
+									if (isClicked) {
 										if (Keyboard.pressedKeys[Keyboard.KEY_CTRL] && LoginManager.staffModLevel > 0) {
-											i = (int) ((double) (Mouse.clickX - local50 - component.width / 2) * 2.0D / (double) WorldMap.zoom);
-											skill = (int) ((double) (Mouse.clickY - local55 - component.height / 2) * 2.0D / (double) WorldMap.zoom);
+											j = (int) ((double) (Mouse.clickX - absX - component.width / 2) * 2.0D / (double) WorldMap.zoom);
+											skill = (int) ((double) (Mouse.clickY - absY - component.height / 2) * 2.0D / (double) WorldMap.zoom);
 											k = WorldMap.viewX + i;
 											@Pc(516) int local516 = WorldMap.viewY + skill;
 											@Pc(520) int local520 = k + WorldMap.originX;
@@ -766,7 +766,7 @@ public class InterfaceList {
 										Cs1ScriptRunner.dragStartMouseY = Mouse.lastMouseY;
 										continue;
 									}
-									if (local212 && worldMapDragState > 0) {
+									if (isPressed && worldMapDragState > 0) {
 										if (worldMapDragState == 1 && (Cs1ScriptRunner.dragStartMouseX != Mouse.lastMouseX || Cs1ScriptRunner.dragStartMouseY != Mouse.lastMouseY)) {
 											worldMapDragStartX = WorldMap.viewX;
 											worldMapDragStartY = WorldMap.viewY;
@@ -782,8 +782,8 @@ public class InterfaceList {
 									continue;
 								}
 								if (component.clientCode == 1401) {
-									if (local212) {
-										WorldMap.setViewFromMousePosition(component.width, Mouse.lastMouseY - local55, Mouse.lastMouseX - local50, component.height);
+									if (isPressed) {
+										WorldMap.setViewFromMousePosition(component.width, Mouse.lastMouseY - absY, Mouse.lastMouseX - absX, component.height);
 									}
 									continue;
 								}
@@ -794,77 +794,77 @@ public class InterfaceList {
 									continue;
 								}
 							}
-							if (!component.dragging && local221) {
+							if (!component.dragging && isClicked) {
 								component.dragging = true;
 								if (component.onClickRepeat != null) {
 									request = new HookRequest();
 									request.cancelOnMouseExit = true;
 									request.source = component;
-									request.mouseX = Mouse.clickX - local50;
-									request.mouseY = Mouse.clickY - local55;
+									request.mouseX = Mouse.clickX - absX;
+									request.mouseY = Mouse.clickY - absY;
 									request.arguments = component.onClickRepeat;
 									lowPriorityRequests.addTail(request);
 								}
 							}
-							if (component.dragging && local212 && component.onDrag != null) {
+							if (component.dragging && isPressed && component.onDrag != null) {
 								request = new HookRequest();
 								request.cancelOnMouseExit = true;
 								request.source = component;
-								request.mouseX = Mouse.lastMouseX - local50;
-								request.mouseY = Mouse.lastMouseY - local55;
+								request.mouseX = Mouse.lastMouseX - absX;
+								request.mouseY = Mouse.lastMouseY - absY;
 								request.arguments = component.onDrag;
 								lowPriorityRequests.addTail(request);
 							}
-							if (component.dragging && !local212) {
+							if (component.dragging && !isPressed) {
 								component.dragging = false;
 								if (component.onRelease != null) {
 									request = new HookRequest();
 									request.cancelOnMouseExit = true;
 									request.source = component;
-									request.mouseX = Mouse.lastMouseX - local50;
-									request.mouseY = Mouse.lastMouseY - local55;
+									request.mouseX = Mouse.lastMouseX - absX;
+									request.mouseY = Mouse.lastMouseY - absY;
 									request.arguments = component.onRelease;
 									mediumPriorityRequests.addTail(request);
 								}
 							}
-							if (local212 && component.onHold != null) {
+							if (isPressed && component.onHold != null) {
 								request = new HookRequest();
 								request.cancelOnMouseExit = true;
 								request.source = component;
-								request.mouseX = Mouse.lastMouseX - local50;
-								request.mouseY = Mouse.lastMouseY - local55;
+								request.mouseX = Mouse.lastMouseX - absX;
+								request.mouseY = Mouse.lastMouseY - absY;
 								request.arguments = component.onHold;
 								lowPriorityRequests.addTail(request);
 							}
-							if (!component.mouseOver && local207) {
+							if (!component.mouseOver && isHovered) {
 								component.mouseOver = true;
 								if (component.onMouseOver != null) {
 									request = new HookRequest();
 									request.cancelOnMouseExit = true;
 									request.source = component;
-									request.mouseX = Mouse.lastMouseX - local50;
-									request.mouseY = Mouse.lastMouseY - local55;
+									request.mouseX = Mouse.lastMouseX - absX;
+									request.mouseY = Mouse.lastMouseY - absY;
 									request.arguments = component.onMouseOver;
 									lowPriorityRequests.addTail(request);
 								}
 							}
-							if (component.mouseOver && local207 && component.onMouseRepeat != null) {
+							if (component.mouseOver && isHovered && component.onMouseRepeat != null) {
 								request = new HookRequest();
 								request.cancelOnMouseExit = true;
 								request.source = component;
-								request.mouseX = Mouse.lastMouseX - local50;
-								request.mouseY = Mouse.lastMouseY - local55;
+								request.mouseX = Mouse.lastMouseX - absX;
+								request.mouseY = Mouse.lastMouseY - absY;
 								request.arguments = component.onMouseRepeat;
 								lowPriorityRequests.addTail(request);
 							}
-							if (component.mouseOver && !local207) {
+							if (component.mouseOver && !isHovered) {
 								component.mouseOver = false;
 								if (component.onMouseLeave != null) {
 									request = new HookRequest();
 									request.cancelOnMouseExit = true;
 									request.source = component;
-									request.mouseX = Mouse.lastMouseX - local50;
-									request.mouseY = Mouse.lastMouseY - local55;
+									request.mouseX = Mouse.lastMouseX - absX;
+									request.mouseY = Mouse.lastMouseY - absY;
 									request.arguments = component.onMouseLeave;
 									mediumPriorityRequests.addTail(request);
 								}
@@ -1041,28 +1041,28 @@ public class InterfaceList {
 						}
 					}
 					if (!component.if3 && Cs1ScriptRunner.draggedComponent == null && clickedInventoryComponent == null && !Cs1ScriptRunner.isMenuOpen) {
-						if ((component.hoverOverlayer >= 0 || component.overColor != 0) && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
+						if ((component.hoverOverlayer >= 0 || component.overColor != 0) && Mouse.lastMouseX >= left && Mouse.lastMouseY >= top && Mouse.lastMouseX < right && Mouse.lastMouseY < bottom) {
 							if (component.hoverOverlayer >= 0) {
-								hoveredComponent = arg0[component.hoverOverlayer];
+								hoveredComponent = children[component.hoverOverlayer];
 							} else {
 								hoveredComponent = component;
 							}
 						}
-						if (component.type == 8 && Mouse.lastMouseX >= local61 && Mouse.lastMouseY >= local63 && Mouse.lastMouseX < local65 && Mouse.lastMouseY < local67) {
+						if (component.type == 8 && Mouse.lastMouseX >= left && Mouse.lastMouseY >= top && Mouse.lastMouseX < right && Mouse.lastMouseY < bottom) {
 							Protocol.tooltipComponent = component;
 						}
 						if (component.scrollMaxV > component.height) {
-							handleScrollbar(Mouse.lastMouseY, component.height, component, Mouse.lastMouseX, local50 + component.width, local55, component.scrollMaxV);
+							handleScrollbar(Mouse.lastMouseY, component.height, component, Mouse.lastMouseX, absX + component.width, absY, component.scrollMaxV);
 						}
 					}
 					if (component.type == 0) {
-						processComponents(arg0, component.id, local61, local63, local65, local67, local50 - component.scrollX, local55 - component.scrollY);
+						processComponents(children, component.id, left, top, right, bottom, absX - component.scrollX, absY - component.scrollY);
 						if (component.createdComponents != null) {
-							processComponents(component.createdComponents, component.id, local61, local63, local65, local67, local50 - component.scrollX, local55 - component.scrollY);
+							processComponents(component.createdComponents, component.id, left, top, right, bottom, absX - component.scrollX, absY - component.scrollY);
 						}
 						@Pc(1595) ComponentPointer local1595 = (ComponentPointer) openInterfaces.get(component.id);
 						if (local1595 != null) {
-							processSubInterface(local50, local63, local55, local65, local1595.interfaceId, local61, local67);
+							processSubInterface(absX, top, absY, right, local1595.interfaceId, left, bottom);
 						}
 					}
 				}
@@ -1071,26 +1071,26 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(SI)Z")
-	public static boolean isInterfaceAction(@OriginalArg(0) short arg0) {
-		if (arg0 == 47 || arg0 == 5 || arg0 == 43 || arg0 == 35 || arg0 == 58 || arg0 == 22 || arg0 == 40 || arg0 == 3) {
+	public static boolean isInterfaceAction(@OriginalArg(0) short actionCode) {
+		if (actionCode == 47 || actionCode == 5 || actionCode == 43 || actionCode == 35 || actionCode == 58 || actionCode == 22 || actionCode == 40 || actionCode == 3) {
 			return true;
-		} else if (arg0 == 9 || arg0 == 12 || arg0 == 1006 || arg0 == 1003) {
+		} else if (actionCode == 9 || actionCode == 12 || actionCode == 1006 || actionCode == 1003) {
 			return true;
-		} else if (arg0 == 25 || arg0 == 23 || arg0 == 48 || arg0 == 7 || arg0 == 13) {
+		} else if (actionCode == 25 || actionCode == 23 || actionCode == 48 || actionCode == 7 || actionCode == 13) {
 			return true;
 		} else {
-			return arg0 == 8 || arg0 == 32 || arg0 == 28 || arg0 == 59 || arg0 == 51 || arg0 == 41;
+			return actionCode == 8 || actionCode == 32 || actionCode == 28 || actionCode == 59 || actionCode == 51 || actionCode == 41;
 		}
 	}
 
 	@OriginalMember(owner = "client!fm", name = "a", descriptor = "(ZI)V")
-	public static void resetToLoginScreen(@OriginalArg(0) boolean arg0) {
-		if (arg0) {
+	public static void resetToLoginScreen(@OriginalArg(0) boolean fullReset) {
+		if (fullReset) {
 			if (topLevelInterface != -1) {
 				unload(topLevelInterface);
 			}
-			for (@Pc(18) ComponentPointer local18 = (ComponentPointer) openInterfaces.head(); local18 != null; local18 = (ComponentPointer) openInterfaces.next()) {
-				closeInterface(true, local18);
+			for (@Pc(18) ComponentPointer ptr = (ComponentPointer) openInterfaces.head(); ptr != null; ptr = (ComponentPointer) openInterfaces.next()) {
+				closeInterface(true, ptr);
 			}
 			topLevelInterface = -1;
 			openInterfaces = new HashTable(8);
@@ -1122,10 +1122,10 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!jg", name = "a", descriptor = "(IBIII)V")
-	public static void forceRedrawScreen(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		for (@Pc(3) int local3 = 0; local3 < rectangles; local3++) {
-			if (arg0 < rectangleX[local3] + rectangleWidth[local3] && arg0 + arg3 > rectangleX[local3] && rectangleY[local3] + rectangleHeight[local3] > arg1 && rectangleY[local3] < arg2 + arg1) {
-				rectangleRedraw[local3] = true;
+	public static void forceRedrawScreen(@OriginalArg(0) int x, @OriginalArg(2) int y, @OriginalArg(3) int h, @OriginalArg(4) int w) {
+		for (@Pc(3) int i = 0; i < rectangles; i++) {
+			if (x < rectangleX[i] + rectangleWidth[i] && x + w > rectangleX[i] && rectangleY[i] + rectangleHeight[i] > y && rectangleY[i] < h + y) {
+				rectangleRedraw[i] = true;
 			}
 		}
 	}
@@ -1135,12 +1135,12 @@ public class InterfaceList {
 		if (topLevelInterface != -1) {
 			updateAnimations(topLevelInterface);
 		}
-		for (@Pc(15) int local15 = 0; local15 < rectangles; local15++) {
-			if (rectangleDirty[local15]) {
-				rectangleRedraw[local15] = true;
+		for (@Pc(15) int i = 0; i < rectangles; i++) {
+			if (rectangleDirty[i]) {
+				rectangleRedraw[i] = true;
 			}
-			rectangleDirtySnapshot[local15] = rectangleDirty[local15];
-			rectangleDirty[local15] = false;
+			rectangleDirtySnapshot[i] = rectangleDirty[i];
+			rectangleDirty[i] = false;
 		}
 		Cs1ScriptRunner.gameSceneTooltipX = -1;
 		mouseOverInventoryInterface = null;
@@ -1162,138 +1162,138 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!be;)Lclient!be;")
-	public static Component getDragRenderParent(@OriginalArg(0) Component arg0) {
-		@Pc(4) int local4 = getServerActiveProperties(arg0).getDragDepth();
-		if (local4 == 0) {
+	public static Component getDragRenderParent(@OriginalArg(0) Component component) {
+		@Pc(4) int depth = getServerActiveProperties(component).getDragDepth();
+		if (depth == 0) {
 			return null;
 		}
-		for (@Pc(10) int local10 = 0; local10 < local4; local10++) {
-			arg0 = getComponent(arg0.overlayer);
-			if (arg0 == null) {
+		for (@Pc(10) int i = 0; i < depth; i++) {
+			component = getComponent(component.overlayer);
+			if (component == null) {
 				return null;
 			}
 		}
-		return arg0;
+		return component;
 	}
 
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(Lclient!be;)Z")
-	public static boolean isHidden(@OriginalArg(0) Component arg0) {
+	public static boolean isHidden(@OriginalArg(0) Component component) {
 		if (Cheat.qaOpTest) {
-			if (getServerActiveProperties(arg0).events != 0) {
+			if (getServerActiveProperties(component).events != 0) {
 				return false;
 			}
-			if (arg0.type == 0) {
+			if (component.type == 0) {
 				return false;
 			}
 		}
-		return arg0.hidden;
+		return component.hidden;
 	}
 
 	@OriginalMember(owner = "client!tc", name = "a", descriptor = "(IILclient!be;BIIII)V")
-	public static void handleScrollbar(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Component arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
+	public static void handleScrollbar(@OriginalArg(0) int mouseY, @OriginalArg(1) int scrollbarH, @OriginalArg(2) Component component, @OriginalArg(4) int mouseX, @OriginalArg(5) int barX, @OriginalArg(6) int barY, @OriginalArg(7) int scrollRange) {
 		if (scrollbarDragging) {
 			scrollbarDragMargin = 32;
 		} else {
 			scrollbarDragMargin = 0;
 		}
 		scrollbarDragging = false;
-		@Pc(139) int local139;
+		@Pc(139) int thumbSize;
 		if (Mouse.pressedButton != 0) {
-			if (arg4 <= arg3 && arg4 + 16 > arg3 && arg0 >= arg5 && arg5 + 16 > arg0) {
-				arg2.scrollY -= 4;
-				redraw(arg2);
-			} else if (arg3 >= arg4 && arg3 < arg4 + 16 && arg0 >= arg1 + arg5 - 16 && arg1 + arg5 > arg0) {
-				arg2.scrollY += 4;
-				redraw(arg2);
-			} else if (arg3 >= arg4 - scrollbarDragMargin && arg3 < arg4 + scrollbarDragMargin + 16 && arg0 >= arg5 + 16 && arg1 + arg5 - 16 > arg0) {
-				local139 = arg1 * (arg1 - 32) / arg6;
-				if (local139 < 8) {
-					local139 = 8;
+			if (barX <= mouseX && barX + 16 > mouseX && mouseY >= barY && barY + 16 > mouseY) {
+				component.scrollY -= 4;
+				redraw(component);
+			} else if (mouseX >= barX && mouseX < barX + 16 && mouseY >= scrollbarH + barY - 16 && scrollbarH + barY > mouseY) {
+				component.scrollY += 4;
+				redraw(component);
+			} else if (mouseX >= barX - scrollbarDragMargin && mouseX < barX + scrollbarDragMargin + 16 && mouseY >= barY + 16 && scrollbarH + barY - 16 > mouseY) {
+				thumbSize = scrollbarH * (scrollbarH - 32) / scrollRange;
+				if (thumbSize < 8) {
+					thumbSize = 8;
 				}
-				@Pc(150) int local150 = arg1 - local139 - 32;
-				@Pc(162) int local162 = arg0 - local139 / 2 - arg5 - 16;
-				arg2.scrollY = (arg6 - arg1) * local162 / local150;
-				redraw(arg2);
+				@Pc(150) int trackRange = scrollbarH - thumbSize - 32;
+				@Pc(162) int thumbPos = mouseY - thumbSize / 2 - barY - 16;
+				component.scrollY = (scrollRange - scrollbarH) * thumbPos / trackRange;
+				redraw(component);
 				scrollbarDragging = true;
 			}
 		}
 		if (MouseWheel.wheelRotation == 0) {
 			return;
 		}
-		local139 = arg2.width;
-		if (arg4 - local139 <= arg3 && arg5 <= arg0 && arg3 < arg4 + 16 && arg1 + arg5 >= arg0) {
-			arg2.scrollY += MouseWheel.wheelRotation * 45;
-			redraw(arg2);
+		thumbSize = component.width;
+		if (barX - thumbSize <= mouseX && barY <= mouseY && mouseX < barX + 16 && scrollbarH + barY >= mouseY) {
+			component.scrollY += MouseWheel.wheelRotation * 45;
+			redraw(component);
 		}
 	}
 
 	@OriginalMember(owner = "client!hh", name = "a", descriptor = "(II)V")
-	public static void updateAnimations(@OriginalArg(1) int arg0) {
-		if (load(arg0)) {
-			updateAnimationsRecursive(-1, components[arg0]);
+	public static void updateAnimations(@OriginalArg(1) int interfaceId) {
+		if (load(interfaceId)) {
+			updateAnimationsRecursive(-1, components[interfaceId]);
 		}
 	}
 
 	@OriginalMember(owner = "client!jd", name = "a", descriptor = "(II[Lclient!be;)V")
-	public static void updateAnimationsRecursive(@OriginalArg(1) int arg0, @OriginalArg(2) Component[] arg1) {
-		for (@Pc(7) int local7 = 0; local7 < arg1.length; local7++) {
-			@Pc(15) Component local15 = arg1[local7];
-			if (local15 != null && local15.overlayer == arg0 && (!local15.if3 || !isHidden(local15))) {
-				if (local15.type == 0) {
-					if (!local15.if3 && isHidden(local15) && local15 != hoveredComponent) {
+	public static void updateAnimationsRecursive(@OriginalArg(1) int overlayerId, @OriginalArg(2) Component[] children) {
+		for (@Pc(7) int i = 0; i < children.length; i++) {
+			@Pc(15) Component child = children[i];
+			if (child != null && child.overlayer == overlayerId && (!child.if3 || !isHidden(child))) {
+				if (child.type == 0) {
+					if (!child.if3 && isHidden(child) && child != hoveredComponent) {
 						continue;
 					}
-					updateAnimationsRecursive(local15.id, arg1);
-					if (local15.createdComponents != null) {
-						updateAnimationsRecursive(local15.id, local15.createdComponents);
+					updateAnimationsRecursive(child.id, children);
+					if (child.createdComponents != null) {
+						updateAnimationsRecursive(child.id, child.createdComponents);
 					}
-					@Pc(73) ComponentPointer local73 = (ComponentPointer) openInterfaces.get(local15.id);
-					if (local73 != null) {
-						updateAnimations(local73.interfaceId);
+					@Pc(73) ComponentPointer ptr = (ComponentPointer) openInterfaces.get(child.id);
+					if (ptr != null) {
+						updateAnimations(ptr.interfaceId);
 					}
 				}
-				if (local15.type == 6) {
-					@Pc(105) int local105;
-					if (local15.modelSeqId != -1 || local15.activeModelSeqId != -1) {
-						@Pc(100) boolean local100 = Cs1ScriptRunner.isTrue(local15);
-						if (local100) {
-							local105 = local15.activeModelSeqId;
+				if (child.type == 6) {
+					@Pc(105) int seqId;
+					if (child.modelSeqId != -1 || child.activeModelSeqId != -1) {
+						@Pc(100) boolean active = Cs1ScriptRunner.isTrue(child);
+						if (active) {
+							seqId = child.activeModelSeqId;
 						} else {
-							local105 = local15.modelSeqId;
+							seqId = child.modelSeqId;
 						}
-						if (local105 != -1) {
-							@Pc(118) SeqType local118 = SeqTypeList.get(local105);
-							if (local118 != null) {
-								local15.seqCycle += Protocol.sceneDelta;
-								while (local15.seqCycle > local118.frameDelay[local15.seqFrame]) {
-									local15.seqCycle -= local118.frameDelay[local15.seqFrame];
-									local15.seqFrame++;
-									if (local118.frames.length <= local15.seqFrame) {
-										local15.seqFrame -= local118.replayoff;
-										if (local15.seqFrame < 0 || local118.frames.length <= local15.seqFrame) {
-											local15.seqFrame = 0;
+						if (seqId != -1) {
+							@Pc(118) SeqType seq = SeqTypeList.get(seqId);
+							if (seq != null) {
+								child.seqCycle += Protocol.sceneDelta;
+								while (child.seqCycle > seq.frameDelay[child.seqFrame]) {
+									child.seqCycle -= seq.frameDelay[child.seqFrame];
+									child.seqFrame++;
+									if (seq.frames.length <= child.seqFrame) {
+										child.seqFrame -= seq.replayoff;
+										if (child.seqFrame < 0 || seq.frames.length <= child.seqFrame) {
+											child.seqFrame = 0;
 										}
 									}
-									local15.seqNextFrame = local15.seqFrame + 1;
-									if (local118.frames.length <= local15.seqNextFrame) {
-										local15.seqNextFrame -= local118.replayoff;
-										if (local15.seqNextFrame < 0 || local118.frames.length <= local15.seqNextFrame) {
-											local15.seqNextFrame = -1;
+									child.seqNextFrame = child.seqFrame + 1;
+									if (seq.frames.length <= child.seqNextFrame) {
+										child.seqNextFrame -= seq.replayoff;
+										if (child.seqNextFrame < 0 || seq.frames.length <= child.seqNextFrame) {
+											child.seqNextFrame = -1;
 										}
 									}
-									redraw(local15);
+									redraw(child);
 								}
 							}
 						}
 					}
-					if (local15.modelRotationSpeed != 0 && !local15.if3) {
-						@Pc(239) int local239 = local15.modelRotationSpeed >> 16;
-						@Pc(243) int local243 = local239 * Protocol.sceneDelta;
-						local105 = local15.modelRotationSpeed << 16 >> 16;
-						local15.modelXAngle = local243 + local15.modelXAngle & 0x7FF;
-						local105 *= Protocol.sceneDelta;
-						local15.modelYAngle = local15.modelYAngle + local105 & 0x7FF;
-						redraw(local15);
+					if (child.modelRotationSpeed != 0 && !child.if3) {
+						@Pc(239) int xSpeed = child.modelRotationSpeed >> 16;
+						@Pc(243) int xDelta = xSpeed * Protocol.sceneDelta;
+						seqId = child.modelRotationSpeed << 16 >> 16;
+						child.modelXAngle = xDelta + child.modelXAngle & 0x7FF;
+						seqId *= Protocol.sceneDelta;
+						child.modelYAngle = child.modelYAngle + seqId & 0x7FF;
+						redraw(child);
 					}
 				}
 			}
@@ -1301,24 +1301,24 @@ public class InterfaceList {
 	}
 
 	@OriginalMember(owner = "client!gg", name = "c", descriptor = "(II)V")
-	public static void setCursor(@OriginalArg(0) int arg0) {
+	public static void setCursor(@OriginalArg(0) int cursorId) {
 		if (!Preferences.cursorsEnabled) {
-			arg0 = -1;
+			cursorId = -1;
 		}
-		if (arg0 == currentCursorId) {
+		if (cursorId == currentCursorId) {
 			return;
 		}
-		if (arg0 != -1) {
-			@Pc(24) CursorType local24 = CursorTypeList.get(arg0);
-			@Pc(28) SoftwareSprite local28 = local24.getSprite();
-			if (local28 == null) {
-				arg0 = -1;
+		if (cursorId != -1) {
+			@Pc(24) CursorType cursorType = CursorTypeList.get(cursorId);
+			@Pc(28) SoftwareSprite sprite = cursorType.getSprite();
+			if (sprite == null) {
+				cursorId = -1;
 			} else {
-				GameShell.signLink.setCursor(local28.toFullImage(), local28.innerWidth, GameShell.canvas, new Point(local24.hotSpotX, local24.hotSpotY), local28.innerHeight);
-				currentCursorId = arg0;
+				GameShell.signLink.setCursor(sprite.toFullImage(), sprite.innerWidth, GameShell.canvas, new Point(cursorType.hotSpotX, cursorType.hotSpotY), sprite.innerHeight);
+				currentCursorId = cursorId;
 			}
 		}
-		if (arg0 == -1 && currentCursorId != -1) {
+		if (cursorId == -1 && currentCursorId != -1) {
 			GameShell.signLink.setCursor(null, -1, GameShell.canvas, new Point(), -1);
 			currentCursorId = -1;
 		}
