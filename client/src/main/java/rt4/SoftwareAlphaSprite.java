@@ -9,697 +9,697 @@ import org.openrs2.deob.annotation.Pc;
 public final class SoftwareAlphaSprite extends SoftwareSprite {
 
 	@OriginalMember(owner = "client!am", name = "<init>", descriptor = "(IIIIII[I)V")
-	public SoftwareAlphaSprite(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int[] arg6) {
-		super(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+	public SoftwareAlphaSprite(@OriginalArg(0) int innerWidth, @OriginalArg(1) int innerHeight, @OriginalArg(2) int xOffset, @OriginalArg(3) int yOffset, @OriginalArg(4) int width, @OriginalArg(5) int height, @OriginalArg(6) int[] pixels) {
+		super(innerWidth, innerHeight, xOffset, yOffset, width, height, pixels);
 	}
 
 	@OriginalMember(owner = "client!am", name = "b", descriptor = "([I[IIIIIIIIIIII)V")
-	public static void blitAlphaScaledWithOpacity(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10, @OriginalArg(12) int arg11) {
-		@Pc(1) int local1 = arg2;
-		for (@Pc(4) int local4 = -arg7; local4 < 0; local4++) {
-			@Pc(12) int local12 = (arg3 >> 16) * arg10;
-			for (@Pc(15) int local15 = -arg6; local15 < 0; local15++) {
-				@Pc(25) int local25 = arg1[(arg2 >> 16) + local12];
-				@Pc(29) int local29 = arg0[arg4];
-				@Pc(37) int local37 = (local25 >>> 24) * arg11 >> 8;
-				@Pc(41) int local41 = 256 - local37;
-				arg0[arg4++] = ((local25 & 0xFF00FF) * local37 + (local29 & 0xFF00FF) * local41 & 0xFF00FF00) + ((local25 & 0xFF00) * local37 + (local29 & 0xFF00) * local41 & 0xFF0000) >>> 8;
-				arg2 += arg8;
+	public static void blitAlphaScaledWithOpacity(@OriginalArg(0) int[] dst, @OriginalArg(1) int[] src, @OriginalArg(3) int srcX, @OriginalArg(4) int srcY, @OriginalArg(5) int dstOff, @OriginalArg(6) int dstStep, @OriginalArg(7) int w, @OriginalArg(8) int h, @OriginalArg(9) int xStep, @OriginalArg(10) int yStep, @OriginalArg(11) int srcWidth, @OriginalArg(12) int opacity) {
+		@Pc(1) int startSrcX = srcX;
+		for (@Pc(4) int row = -h; row < 0; row++) {
+			@Pc(12) int srcRow = (srcY >> 16) * srcWidth;
+			for (@Pc(15) int col = -w; col < 0; col++) {
+				@Pc(25) int pixel = src[(srcX >> 16) + srcRow];
+				@Pc(29) int dstPixel = dst[dstOff];
+				@Pc(37) int alpha = (pixel >>> 24) * opacity >> 8;
+				@Pc(41) int invAlpha = 256 - alpha;
+				dst[dstOff++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+				srcX += xStep;
 			}
-			arg3 += arg9;
-			arg2 = local1;
-			arg4 += arg5;
+			srcY += yStep;
+			srcX = startSrcX;
+			dstOff += dstStep;
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "c", descriptor = "([I[IIIIIIII)V")
-	public static void blitAlphaFlipped(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
-		@Pc(2) int local2 = -arg4;
-		for (@Pc(5) int local5 = -arg5; local5 < 0; local5++) {
-			for (@Pc(9) int local9 = local2; local9 < 0; local9++) {
-				@Pc(16) int local16 = arg1[arg2--];
-				@Pc(20) int local20 = local16 >>> 24;
-				if (local20 == 0) {
-					arg3++;
+	public static void blitAlphaFlipped(@OriginalArg(0) int[] dst, @OriginalArg(1) int[] src, @OriginalArg(3) int srcOff, @OriginalArg(4) int dstOff, @OriginalArg(5) int w, @OriginalArg(6) int h, @OriginalArg(7) int dstStep, @OriginalArg(8) int srcStep) {
+		@Pc(2) int negW = -w;
+		for (@Pc(5) int row = -h; row < 0; row++) {
+			for (@Pc(9) int col = negW; col < 0; col++) {
+				@Pc(16) int pixel = src[srcOff--];
+				@Pc(20) int alpha = pixel >>> 24;
+				if (alpha == 0) {
+					dstOff++;
 				} else {
-					@Pc(26) int local26 = 256 - local20;
-					@Pc(30) int local30 = arg0[arg3];
-					arg0[arg3++] = ((local16 & 0xFF00FF) * local20 + (local30 & 0xFF00FF) * local26 & 0xFF00FF00) + ((local16 & 0xFF00) * local20 + (local30 & 0xFF00) * local26 & 0xFF0000) >>> 8;
+					@Pc(26) int invAlpha = 256 - alpha;
+					@Pc(30) int dstPixel = dst[dstOff];
+					dst[dstOff++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
 				}
 			}
-			arg3 += arg6;
-			arg2 += arg7;
+			dstOff += dstStep;
+			srcOff += srcStep;
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "d", descriptor = "([I[IIIIIIII)V")
-	public static void blitAlpha(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7) {
-		@Pc(2) int local2 = -arg4;
-		for (@Pc(5) int local5 = -arg5; local5 < 0; local5++) {
-			for (@Pc(9) int local9 = local2; local9 < 0; local9++) {
-				@Pc(16) int local16 = arg1[arg2++];
-				@Pc(20) int local20 = local16 >>> 24;
-				if (local20 == 0) {
-					arg3++;
+	public static void blitAlpha(@OriginalArg(0) int[] dst, @OriginalArg(1) int[] src, @OriginalArg(3) int srcOff, @OriginalArg(4) int dstOff, @OriginalArg(5) int w, @OriginalArg(6) int h, @OriginalArg(7) int dstStep, @OriginalArg(8) int srcStep) {
+		@Pc(2) int negW = -w;
+		for (@Pc(5) int row = -h; row < 0; row++) {
+			for (@Pc(9) int col = negW; col < 0; col++) {
+				@Pc(16) int pixel = src[srcOff++];
+				@Pc(20) int alpha = pixel >>> 24;
+				if (alpha == 0) {
+					dstOff++;
 				} else {
-					@Pc(26) int local26 = 256 - local20;
-					@Pc(30) int local30 = arg0[arg3];
-					arg0[arg3++] = ((local16 & 0xFF00FF) * local20 + (local30 & 0xFF00FF) * local26 & 0xFF00FF00) + ((local16 & 0xFF00) * local20 + (local30 & 0xFF00) * local26 & 0xFF0000) >>> 8;
+					@Pc(26) int invAlpha = 256 - alpha;
+					@Pc(30) int dstPixel = dst[dstOff];
+					dst[dstOff++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
 				}
 			}
-			arg3 += arg6;
-			arg2 += arg7;
+			dstOff += dstStep;
+			srcOff += srcStep;
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "b", descriptor = "([I[IIIIIIIII)V")
-	public static void blitAlphaWithOpacity(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8) {
-		for (@Pc(2) int local2 = -arg5; local2 < 0; local2++) {
-			for (@Pc(7) int local7 = -arg4; local7 < 0; local7++) {
-				@Pc(19) int local19 = (arg1[arg2] >>> 24) * arg8 >> 8;
-				@Pc(23) int local23 = 256 - local19;
-				@Pc(28) int local28 = arg1[arg2++];
-				@Pc(32) int local32 = arg0[arg3];
-				arg0[arg3++] = ((local28 & 0xFF00FF) * local19 + (local32 & 0xFF00FF) * local23 & 0xFF00FF00) + ((local28 & 0xFF00) * local19 + (local32 & 0xFF00) * local23 & 0xFF0000) >>> 8;
+	public static void blitAlphaWithOpacity(@OriginalArg(0) int[] dst, @OriginalArg(1) int[] src, @OriginalArg(3) int srcOff, @OriginalArg(4) int dstOff, @OriginalArg(5) int w, @OriginalArg(6) int h, @OriginalArg(7) int dstStep, @OriginalArg(8) int srcStep, @OriginalArg(9) int opacity) {
+		for (@Pc(2) int row = -h; row < 0; row++) {
+			for (@Pc(7) int col = -w; col < 0; col++) {
+				@Pc(19) int alpha = (src[srcOff] >>> 24) * opacity >> 8;
+				@Pc(23) int invAlpha = 256 - alpha;
+				@Pc(28) int pixel = src[srcOff++];
+				@Pc(32) int dstPixel = dst[dstOff];
+				dst[dstOff++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
 			}
-			arg3 += arg6;
-			arg2 += arg7;
+			dstOff += dstStep;
+			srcOff += srcStep;
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "b", descriptor = "([I[IIIIIIIIIII)V")
-	public static void blitAlphaScaled(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9, @OriginalArg(11) int arg10) {
-		@Pc(1) int local1 = arg2;
-		for (@Pc(4) int local4 = -arg7; local4 < 0; local4++) {
-			@Pc(12) int local12 = (arg3 >> 16) * arg10;
-			for (@Pc(15) int local15 = -arg6; local15 < 0; local15++) {
-				@Pc(25) int local25 = arg1[(arg2 >> 16) + local12];
-				@Pc(29) int local29 = local25 >>> 24;
-				if (local29 == 0) {
-					arg4++;
+	public static void blitAlphaScaled(@OriginalArg(0) int[] dst, @OriginalArg(1) int[] src, @OriginalArg(3) int srcX, @OriginalArg(4) int srcY, @OriginalArg(5) int dstOff, @OriginalArg(6) int dstStep, @OriginalArg(7) int w, @OriginalArg(8) int h, @OriginalArg(9) int xStep, @OriginalArg(10) int yStep, @OriginalArg(11) int srcWidth) {
+		@Pc(1) int startSrcX = srcX;
+		for (@Pc(4) int row = -h; row < 0; row++) {
+			@Pc(12) int srcRow = (srcY >> 16) * srcWidth;
+			for (@Pc(15) int col = -w; col < 0; col++) {
+				@Pc(25) int pixel = src[(srcX >> 16) + srcRow];
+				@Pc(29) int alpha = pixel >>> 24;
+				if (alpha == 0) {
+					dstOff++;
 				} else {
-					@Pc(35) int local35 = 256 - local29;
-					@Pc(39) int local39 = arg0[arg4];
-					arg0[arg4++] = ((local25 & 0xFF00FF) * local29 + (local39 & 0xFF00FF) * local35 & 0xFF00FF00) + ((local25 & 0xFF00) * local29 + (local39 & 0xFF00) * local35 & 0xFF0000) >>> 8;
+					@Pc(35) int invAlpha = 256 - alpha;
+					@Pc(39) int dstPixel = dst[dstOff];
+					dst[dstOff++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
 				}
-				arg2 += arg8;
+				srcX += xStep;
 			}
-			arg3 += arg9;
-			arg2 = local1;
-			arg4 += arg5;
+			srcY += yStep;
+			srcX = startSrcX;
+			dstOff += dstStep;
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "a", descriptor = "(IIIIIIDI)V")
 	@Override
-	public final void drawRotatedFixed(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(6) double arg2) {
+	public final void drawRotatedFixed(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(6) double theta) {
 		try {
-			@Pc(15) int local15 = (int) (Math.sin(arg2) * 65536.0D);
-			@Pc(21) int local21 = (int) (Math.cos(arg2) * 65536.0D);
-			@Pc(27) int local27 = local15 * 256 >> 8;
-			@Pc(33) int local33 = local21 * 256 >> 8;
-			@Pc(45) int local45 = local27 * -10 + local33 * -10 + 983040;
-			@Pc(57) int local57 = local33 * -10 + 983040 - local27 * -10;
-			@Pc(63) int local63 = arg0 + arg1 * SoftwareRaster.width;
-			for (@Pc(65) int local65 = 0; local65 < 20; local65++) {
-				@Pc(70) int local70 = local63;
-				@Pc(72) int local72 = local45;
-				@Pc(74) int local74 = local57;
-				for (@Pc(77) int local77 = -20; local77 < 0; local77++) {
-					@Pc(93) int local93 = this.pixels[(local72 >> 16) + (local74 >> 16) * this.width];
-					@Pc(97) int local97 = SoftwareRaster.pixels[local70];
-					@Pc(101) int local101 = local93 >>> 24;
-					@Pc(105) int local105 = 256 - local101;
-					SoftwareRaster.pixels[local70++] = ((local93 & 0xFF00FF) * local101 + (local97 & 0xFF00FF) * local105 & 0xFF00FF00) + ((local93 & 0xFF00) * local101 + (local97 & 0xFF00) * local105 & 0xFF0000) >>> 8;
-					local72 += local33;
-					local74 -= local27;
+			@Pc(15) int sinTheta = (int) (Math.sin(theta) * 65536.0D);
+			@Pc(21) int cosTheta = (int) (Math.cos(theta) * 65536.0D);
+			@Pc(27) int sinStep = sinTheta * 256 >> 8;
+			@Pc(33) int cosStep = cosTheta * 256 >> 8;
+			@Pc(45) int u = sinStep * -10 + cosStep * -10 + 983040;
+			@Pc(57) int v = cosStep * -10 + 983040 - sinStep * -10;
+			@Pc(63) int dstOff = x + y * SoftwareRaster.width;
+			for (@Pc(65) int row = 0; row < 20; row++) {
+				@Pc(70) int dst = dstOff;
+				@Pc(72) int curU = u;
+				@Pc(74) int curV = v;
+				for (@Pc(77) int col = -20; col < 0; col++) {
+					@Pc(93) int pixel = this.pixels[(curU >> 16) + (curV >> 16) * this.width];
+					@Pc(97) int dstPixel = SoftwareRaster.pixels[dst];
+					@Pc(101) int alpha = pixel >>> 24;
+					@Pc(105) int invAlpha = 256 - alpha;
+					SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+					curU += cosStep;
+					curV -= sinStep;
 				}
-				local45 += local27;
-				local57 += local33;
-				local63 += SoftwareRaster.width;
+				u += sinStep;
+				v += cosStep;
+				dstOff += SoftwareRaster.width;
 			}
-		} catch (@Pc(164) Exception local164) {
+		} catch (@Pc(164) Exception ex) {
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "e", descriptor = "(II)V")
 	@Override
-	public final void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		arg0 += this.xOffset;
-		arg1 += this.yOffset;
-		@Pc(15) int local15 = arg0 + arg1 * SoftwareRaster.width;
-		@Pc(17) int local17 = 0;
-		@Pc(20) int local20 = this.height;
-		@Pc(23) int local23 = this.width;
-		@Pc(27) int local27 = SoftwareRaster.width - local23;
-		@Pc(29) int local29 = 0;
-		@Pc(36) int local36;
-		if (arg1 < SoftwareRaster.clipTop) {
-			local36 = SoftwareRaster.clipTop - arg1;
-			local20 -= local36;
-			arg1 = SoftwareRaster.clipTop;
-			local17 = local36 * local23;
-			local15 += local36 * SoftwareRaster.width;
+	public final void render(@OriginalArg(0) int x, @OriginalArg(1) int y) {
+		x += this.xOffset;
+		y += this.yOffset;
+		@Pc(15) int dstOff = x + y * SoftwareRaster.width;
+		@Pc(17) int srcOff = 0;
+		@Pc(20) int h = this.height;
+		@Pc(23) int w = this.width;
+		@Pc(27) int dstStep = SoftwareRaster.width - w;
+		@Pc(29) int srcStep = 0;
+		@Pc(36) int clip;
+		if (y < SoftwareRaster.clipTop) {
+			clip = SoftwareRaster.clipTop - y;
+			h -= clip;
+			y = SoftwareRaster.clipTop;
+			srcOff = clip * w;
+			dstOff += clip * SoftwareRaster.width;
 		}
-		if (arg1 + local20 > SoftwareRaster.clipBottom) {
-			local20 -= arg1 + local20 - SoftwareRaster.clipBottom;
+		if (y + h > SoftwareRaster.clipBottom) {
+			h -= y + h - SoftwareRaster.clipBottom;
 		}
-		if (arg0 < SoftwareRaster.clipLeft) {
-			local36 = SoftwareRaster.clipLeft - arg0;
-			local23 -= local36;
-			arg0 = SoftwareRaster.clipLeft;
-			local17 += local36;
-			local15 += local36;
-			local29 = local36;
-			local27 += local36;
+		if (x < SoftwareRaster.clipLeft) {
+			clip = SoftwareRaster.clipLeft - x;
+			w -= clip;
+			x = SoftwareRaster.clipLeft;
+			srcOff += clip;
+			dstOff += clip;
+			srcStep = clip;
+			dstStep += clip;
 		}
-		if (arg0 + local23 > SoftwareRaster.clipRight) {
-			local36 = arg0 + local23 - SoftwareRaster.clipRight;
-			local23 -= local36;
-			local29 += local36;
-			local27 += local36;
+		if (x + w > SoftwareRaster.clipRight) {
+			clip = x + w - SoftwareRaster.clipRight;
+			w -= clip;
+			srcStep += clip;
+			dstStep += clip;
 		}
-		if (local23 > 0 && local20 > 0) {
-			blitAlpha(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
+		if (w > 0 && h > 0) {
+			blitAlpha(SoftwareRaster.pixels, this.pixels, srcOff, dstOff, w, h, dstStep, srcStep);
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "c", descriptor = "(II)V")
 	@Override
-	public final void drawPixels(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		arg0 += this.xOffset;
-		arg1 += this.yOffset;
-		@Pc(15) int local15 = arg0 + arg1 * SoftwareRaster.width;
-		@Pc(17) int local17 = 0;
-		@Pc(20) int local20 = this.height;
-		@Pc(23) int local23 = this.width;
-		@Pc(27) int local27 = SoftwareRaster.width - local23;
-		@Pc(29) int local29 = 0;
-		@Pc(36) int local36;
-		if (arg1 < SoftwareRaster.clipTop) {
-			local36 = SoftwareRaster.clipTop - arg1;
-			local20 -= local36;
-			arg1 = SoftwareRaster.clipTop;
-			local17 = local36 * local23;
-			local15 += local36 * SoftwareRaster.width;
+	public final void drawPixels(@OriginalArg(0) int x, @OriginalArg(1) int y) {
+		x += this.xOffset;
+		y += this.yOffset;
+		@Pc(15) int dstOff = x + y * SoftwareRaster.width;
+		@Pc(17) int srcOff = 0;
+		@Pc(20) int h = this.height;
+		@Pc(23) int w = this.width;
+		@Pc(27) int dstStep = SoftwareRaster.width - w;
+		@Pc(29) int srcStep = 0;
+		@Pc(36) int clip;
+		if (y < SoftwareRaster.clipTop) {
+			clip = SoftwareRaster.clipTop - y;
+			h -= clip;
+			y = SoftwareRaster.clipTop;
+			srcOff = clip * w;
+			dstOff += clip * SoftwareRaster.width;
 		}
-		if (arg1 + local20 > SoftwareRaster.clipBottom) {
-			local20 -= arg1 + local20 - SoftwareRaster.clipBottom;
+		if (y + h > SoftwareRaster.clipBottom) {
+			h -= y + h - SoftwareRaster.clipBottom;
 		}
-		if (arg0 < SoftwareRaster.clipLeft) {
-			local36 = SoftwareRaster.clipLeft - arg0;
-			local23 -= local36;
-			arg0 = SoftwareRaster.clipLeft;
-			local17 += local36;
-			local15 += local36;
-			local29 = local36;
-			local27 += local36;
+		if (x < SoftwareRaster.clipLeft) {
+			clip = SoftwareRaster.clipLeft - x;
+			w -= clip;
+			x = SoftwareRaster.clipLeft;
+			srcOff += clip;
+			dstOff += clip;
+			srcStep = clip;
+			dstStep += clip;
 		}
-		if (arg0 + local23 > SoftwareRaster.clipRight) {
-			local36 = arg0 + local23 - SoftwareRaster.clipRight;
-			local23 -= local36;
-			local29 += local36;
-			local27 += local36;
+		if (x + w > SoftwareRaster.clipRight) {
+			clip = x + w - SoftwareRaster.clipRight;
+			w -= clip;
+			srcStep += clip;
+			dstStep += clip;
 		}
-		if (local23 > 0 && local20 > 0) {
-			blitAlpha(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29);
+		if (w > 0 && h > 0) {
+			blitAlpha(SoftwareRaster.pixels, this.pixels, srcOff, dstOff, w, h, dstStep, srcStep);
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "a", descriptor = "(IIIIII)V")
 	@Override
-	protected final void drawRotatedScaled(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		if (arg5 == 0) {
+	protected final void drawRotatedScaled(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int pivotX, @OriginalArg(3) int pivotY, @OriginalArg(4) int angle, @OriginalArg(5) int zoom) {
+		if (zoom == 0) {
 			return;
 		}
-		@Pc(9) int local9 = arg0 - (this.xOffset << 4);
-		@Pc(16) int local16 = arg1 - (this.yOffset << 4);
-		@Pc(23) double local23 = (double) (arg4 & 0xFFFF) * 9.587379924285257E-5D;
-		@Pc(33) int local33 = (int) Math.floor(Math.sin(local23) * (double) arg5 + 0.5D);
-		@Pc(43) int local43 = (int) Math.floor(Math.cos(local23) * (double) arg5 + 0.5D);
-		@Pc(53) int local53 = -local9 * local43 + -local16 * local33;
-		@Pc(64) int local64 = --local9 * local33 + -local16 * local43;
-		@Pc(78) int local78 = ((this.width << 4) - local9) * local43 + -local16 * local33;
-		@Pc(93) int local93 = -((this.width << 4) - local9) * local33 + -local16 * local43;
-		@Pc(107) int local107 = -local9 * local43 + ((this.height << 4) - local16) * local33;
-		@Pc(122) int local122 = --local9 * local33 + ((this.height << 4) - local16) * local43;
-		@Pc(140) int local140 = ((this.width << 4) - local9) * local43 + ((this.height << 4) - local16) * local33;
-		@Pc(159) int local159 = -((this.width << 4) - local9) * local33 + ((this.height << 4) - local16) * local43;
-		@Pc(164) int local164;
-		@Pc(166) int local166;
-		if (local53 < local78) {
-			local164 = local53;
-			local166 = local78;
+		@Pc(9) int adjX = x - (this.xOffset << 4);
+		@Pc(16) int adjY = y - (this.yOffset << 4);
+		@Pc(23) double theta = (double) (angle & 0xFFFF) * 9.587379924285257E-5D;
+		@Pc(33) int sinTheta = (int) Math.floor(Math.sin(theta) * (double) zoom + 0.5D);
+		@Pc(43) int cosTheta = (int) Math.floor(Math.cos(theta) * (double) zoom + 0.5D);
+		@Pc(53) int ulX = -adjX * cosTheta + -adjY * sinTheta;
+		@Pc(64) int ulY = --adjX * sinTheta + -adjY * cosTheta;
+		@Pc(78) int urX = ((this.width << 4) - adjX) * cosTheta + -adjY * sinTheta;
+		@Pc(93) int urY = -((this.width << 4) - adjX) * sinTheta + -adjY * cosTheta;
+		@Pc(107) int llX = -adjX * cosTheta + ((this.height << 4) - adjY) * sinTheta;
+		@Pc(122) int llY = --adjX * sinTheta + ((this.height << 4) - adjY) * cosTheta;
+		@Pc(140) int lrX = ((this.width << 4) - adjX) * cosTheta + ((this.height << 4) - adjY) * sinTheta;
+		@Pc(159) int lrY = -((this.width << 4) - adjX) * sinTheta + ((this.height << 4) - adjY) * cosTheta;
+		@Pc(164) int minX;
+		@Pc(166) int maxX;
+		if (ulX < urX) {
+			minX = ulX;
+			maxX = urX;
 		} else {
-			local164 = local78;
-			local166 = local53;
+			minX = urX;
+			maxX = ulX;
 		}
-		if (local107 < local164) {
-			local164 = local107;
+		if (llX < minX) {
+			minX = llX;
 		}
-		if (local140 < local164) {
-			local164 = local140;
+		if (lrX < minX) {
+			minX = lrX;
 		}
-		if (local107 > local166) {
-			local166 = local107;
+		if (llX > maxX) {
+			maxX = llX;
 		}
-		if (local140 > local166) {
-			local166 = local140;
+		if (lrX > maxX) {
+			maxX = lrX;
 		}
-		@Pc(196) int local196;
-		@Pc(198) int local198;
-		if (local64 < local93) {
-			local196 = local64;
-			local198 = local93;
+		@Pc(196) int minY;
+		@Pc(198) int maxY;
+		if (ulY < urY) {
+			minY = ulY;
+			maxY = urY;
 		} else {
-			local196 = local93;
-			local198 = local64;
+			minY = urY;
+			maxY = ulY;
 		}
-		if (local122 < local196) {
-			local196 = local122;
+		if (llY < minY) {
+			minY = llY;
 		}
-		if (local159 < local196) {
-			local196 = local159;
+		if (lrY < minY) {
+			minY = lrY;
 		}
-		if (local122 > local198) {
-			local198 = local122;
+		if (llY > maxY) {
+			maxY = llY;
 		}
-		if (local159 > local198) {
-			local198 = local159;
+		if (lrY > maxY) {
+			maxY = lrY;
 		}
-		local164 >>= 0xC;
-		local166 = local166 + 4095 >> 12;
-		local196 >>= 0xC;
-		local198 = local198 + 4095 >> 12;
-		local164 += arg2;
-		local166 += arg2;
-		local196 += arg3;
-		local198 += arg3;
-		local164 >>= 0x4;
-		local166 = local166 + 15 >> 4;
-		local196 >>= 0x4;
-		local198 = local198 + 15 >> 4;
-		if (local164 < SoftwareRaster.clipLeft) {
-			local164 = SoftwareRaster.clipLeft;
+		minX >>= 0xC;
+		maxX = maxX + 4095 >> 12;
+		minY >>= 0xC;
+		maxY = maxY + 4095 >> 12;
+		minX += pivotX;
+		maxX += pivotX;
+		minY += pivotY;
+		maxY += pivotY;
+		minX >>= 0x4;
+		maxX = maxX + 15 >> 4;
+		minY >>= 0x4;
+		maxY = maxY + 15 >> 4;
+		if (minX < SoftwareRaster.clipLeft) {
+			minX = SoftwareRaster.clipLeft;
 		}
-		if (local166 > SoftwareRaster.clipRight) {
-			local166 = SoftwareRaster.clipRight;
+		if (maxX > SoftwareRaster.clipRight) {
+			maxX = SoftwareRaster.clipRight;
 		}
-		if (local196 < SoftwareRaster.clipTop) {
-			local196 = SoftwareRaster.clipTop;
+		if (minY < SoftwareRaster.clipTop) {
+			minY = SoftwareRaster.clipTop;
 		}
-		if (local198 > SoftwareRaster.clipBottom) {
-			local198 = SoftwareRaster.clipBottom;
+		if (maxY > SoftwareRaster.clipBottom) {
+			maxY = SoftwareRaster.clipBottom;
 		}
-		local166 = local164 - local166;
-		if (local166 >= 0) {
+		maxX = minX - maxX;
+		if (maxX >= 0) {
 			return;
 		}
-		local198 = local196 - local198;
-		if (local198 >= 0) {
+		maxY = minY - maxY;
+		if (maxY >= 0) {
 			return;
 		}
-		@Pc(319) int local319 = local196 * SoftwareRaster.width + local164;
-		@Pc(324) double local324 = 1.6777216E7D / (double) arg5;
-		@Pc(333) int local333 = (int) Math.floor(Math.sin(local23) * local324 + 0.5D);
-		@Pc(342) int local342 = (int) Math.floor(Math.cos(local23) * local324 + 0.5D);
-		@Pc(350) int local350 = (local164 << 4) + 8 - arg2;
-		@Pc(358) int local358 = (local196 << 4) + 8 - arg3;
-		@Pc(368) int local368 = (local9 << 8) - (local358 * local333 >> 4);
-		@Pc(378) int local378 = (local16 << 8) + (local358 * local342 >> 4);
-		@Pc(384) int local384;
-		@Pc(388) int local388;
-		@Pc(504) int local504;
-		@Pc(394) int local394;
-		@Pc(432) int local432;
-		@Pc(436) int local436;
-		@Pc(440) int local440;
-		@Pc(444) int local444;
-		@Pc(532) int local532;
-		if (local342 != 0) {
-			@Pc(802) int local802;
-			if (local342 < 0) {
-				if (local333 == 0) {
-					local384 = local198;
-					while (local384 < 0) {
-						local388 = local319;
-						local802 = local368 + (local350 * local342 >> 4);
-						local394 = local166;
-						if (local378 >= 0 && local378 - (this.height << 12) < 0) {
-							@Pc(825) int local825;
-							if ((local825 = local802 - (this.width << 12)) >= 0) {
-								local532 = (local342 - local825) / local342;
-								local394 = local166 + local532;
-								local802 += local342 * local532;
-								local388 = local319 + local532;
+		@Pc(319) int dstOff = minY * SoftwareRaster.width + minX;
+		@Pc(324) double invZoom = 1.6777216E7D / (double) zoom;
+		@Pc(333) int sinStep = (int) Math.floor(Math.sin(theta) * invZoom + 0.5D);
+		@Pc(342) int cosStep = (int) Math.floor(Math.cos(theta) * invZoom + 0.5D);
+		@Pc(350) int pixelOffX = (minX << 4) + 8 - pivotX;
+		@Pc(358) int pixelOffY = (minY << 4) + 8 - pivotY;
+		@Pc(368) int u = (adjX << 8) - (pixelOffY * sinStep >> 4);
+		@Pc(378) int v = (adjY << 8) + (pixelOffY * cosStep >> 4);
+		@Pc(384) int row;
+		@Pc(388) int dst;
+		@Pc(504) int curV;
+		@Pc(394) int col;
+		@Pc(432) int pixel;
+		@Pc(436) int dstPixel;
+		@Pc(440) int alpha;
+		@Pc(444) int invAlpha;
+		@Pc(532) int skip;
+		if (cosStep != 0) {
+			@Pc(802) int curU;
+			if (cosStep < 0) {
+				if (sinStep == 0) {
+					row = maxY;
+					while (row < 0) {
+						dst = dstOff;
+						curU = u + (pixelOffX * cosStep >> 4);
+						col = maxX;
+						if (v >= 0 && v - (this.height << 12) < 0) {
+							@Pc(825) int uEdge;
+							if ((uEdge = curU - (this.width << 12)) >= 0) {
+								skip = (cosStep - uEdge) / cosStep;
+								col = maxX + skip;
+								curU += cosStep * skip;
+								dst = dstOff + skip;
 							}
-							@Pc(853) int local853;
-							if ((local853 = (local802 - local342) / local342) > local394) {
-								local394 = local853;
+							@Pc(853) int uLimit;
+							if ((uLimit = (curU - cosStep) / cosStep) > col) {
+								col = uLimit;
 							}
-							while (local394 < 0) {
-								local432 = this.pixels[(local378 >> 12) * this.width + (local802 >> 12)];
-								local436 = SoftwareRaster.pixels[local388];
-								local440 = local432 >>> 24;
-								local444 = 256 - local440;
-								SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-								local802 += local342;
-								local394++;
+							while (col < 0) {
+								pixel = this.pixels[(v >> 12) * this.width + (curU >> 12)];
+								dstPixel = SoftwareRaster.pixels[dst];
+								alpha = pixel >>> 24;
+								invAlpha = 256 - alpha;
+								SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+								curU += cosStep;
+								col++;
 							}
 						}
-						local384++;
-						local378 += local342;
-						local319 += SoftwareRaster.width;
+						row++;
+						v += cosStep;
+						dstOff += SoftwareRaster.width;
 					}
-				} else if (local333 < 0) {
-					local384 = local198;
-					while (local384 < 0) {
-						local388 = local319;
-						local802 = local368 + (local350 * local342 >> 4);
-						local504 = local378 + (local350 * local333 >> 4);
-						local394 = local166;
-						@Pc(969) int local969;
-						if ((local969 = local802 - (this.width << 12)) >= 0) {
-							local532 = (local342 - local969) / local342;
-							local394 = local166 + local532;
-							local802 += local342 * local532;
-							local504 += local333 * local532;
-							local388 = local319 + local532;
+				} else if (sinStep < 0) {
+					row = maxY;
+					while (row < 0) {
+						dst = dstOff;
+						curU = u + (pixelOffX * cosStep >> 4);
+						curV = v + (pixelOffX * sinStep >> 4);
+						col = maxX;
+						@Pc(969) int uEdge;
+						if ((uEdge = curU - (this.width << 12)) >= 0) {
+							skip = (cosStep - uEdge) / cosStep;
+							col = maxX + skip;
+							curU += cosStep * skip;
+							curV += sinStep * skip;
+							dst = dstOff + skip;
 						}
-						@Pc(1003) int local1003;
-						if ((local1003 = (local802 - local342) / local342) > local394) {
-							local394 = local1003;
+						@Pc(1003) int uLimit;
+						if ((uLimit = (curU - cosStep) / cosStep) > col) {
+							col = uLimit;
 						}
-						@Pc(1015) int local1015;
-						if ((local1015 = local504 - (this.height << 12)) >= 0) {
-							local532 = (local333 - local1015) / local333;
-							local394 += local532;
-							local802 += local342 * local532;
-							local504 += local333 * local532;
-							local388 += local532;
+						@Pc(1015) int vEdge;
+						if ((vEdge = curV - (this.height << 12)) >= 0) {
+							skip = (sinStep - vEdge) / sinStep;
+							col += skip;
+							curU += cosStep * skip;
+							curV += sinStep * skip;
+							dst += skip;
 						}
-						@Pc(1049) int local1049;
-						if ((local1049 = (local504 - local333) / local333) > local394) {
-							local394 = local1049;
+						@Pc(1049) int vLimit;
+						if ((vLimit = (curV - sinStep) / sinStep) > col) {
+							col = vLimit;
 						}
-						while (local394 < 0) {
-							local432 = this.pixels[(local504 >> 12) * this.width + (local802 >> 12)];
-							local436 = SoftwareRaster.pixels[local388];
-							local440 = local432 >>> 24;
-							local444 = 256 - local440;
-							SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-							local802 += local342;
-							local504 += local333;
-							local394++;
+						while (col < 0) {
+							pixel = this.pixels[(curV >> 12) * this.width + (curU >> 12)];
+							dstPixel = SoftwareRaster.pixels[dst];
+							alpha = pixel >>> 24;
+							invAlpha = 256 - alpha;
+							SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+							curU += cosStep;
+							curV += sinStep;
+							col++;
 						}
-						local384++;
-						local368 -= local333;
-						local378 += local342;
-						local319 += SoftwareRaster.width;
+						row++;
+						u -= sinStep;
+						v += cosStep;
+						dstOff += SoftwareRaster.width;
 					}
 				} else {
-					local384 = local198;
-					while (local384 < 0) {
-						local388 = local319;
-						local802 = local368 + (local350 * local342 >> 4);
-						local504 = local378 + (local350 * local333 >> 4);
-						local394 = local166;
-						@Pc(1171) int local1171;
-						if ((local1171 = local802 - (this.width << 12)) >= 0) {
-							local532 = (local342 - local1171) / local342;
-							local394 = local166 + local532;
-							local802 += local342 * local532;
-							local504 += local333 * local532;
-							local388 = local319 + local532;
+					row = maxY;
+					while (row < 0) {
+						dst = dstOff;
+						curU = u + (pixelOffX * cosStep >> 4);
+						curV = v + (pixelOffX * sinStep >> 4);
+						col = maxX;
+						@Pc(1171) int uEdge;
+						if ((uEdge = curU - (this.width << 12)) >= 0) {
+							skip = (cosStep - uEdge) / cosStep;
+							col = maxX + skip;
+							curU += cosStep * skip;
+							curV += sinStep * skip;
+							dst = dstOff + skip;
 						}
-						@Pc(1205) int local1205;
-						if ((local1205 = (local802 - local342) / local342) > local394) {
-							local394 = local1205;
+						@Pc(1205) int uLimit;
+						if ((uLimit = (curU - cosStep) / cosStep) > col) {
+							col = uLimit;
 						}
-						if (local504 < 0) {
-							local532 = (local333 - local504 - 1) / local333;
-							local394 += local532;
-							local802 += local342 * local532;
-							local504 += local333 * local532;
-							local388 += local532;
+						if (curV < 0) {
+							skip = (sinStep - curV - 1) / sinStep;
+							col += skip;
+							curU += cosStep * skip;
+							curV += sinStep * skip;
+							dst += skip;
 						}
-						@Pc(1253) int local1253;
-						if ((local1253 = (local504 + 1 - (this.height << 12) - local333) / local333) > local394) {
-							local394 = local1253;
+						@Pc(1253) int vLimit;
+						if ((vLimit = (curV + 1 - (this.height << 12) - sinStep) / sinStep) > col) {
+							col = vLimit;
 						}
-						while (local394 < 0) {
-							local432 = this.pixels[(local504 >> 12) * this.width + (local802 >> 12)];
-							local436 = SoftwareRaster.pixels[local388];
-							local440 = local432 >>> 24;
-							local444 = 256 - local440;
-							SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-							local802 += local342;
-							local504 += local333;
-							local394++;
+						while (col < 0) {
+							pixel = this.pixels[(curV >> 12) * this.width + (curU >> 12)];
+							dstPixel = SoftwareRaster.pixels[dst];
+							alpha = pixel >>> 24;
+							invAlpha = 256 - alpha;
+							SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+							curU += cosStep;
+							curV += sinStep;
+							col++;
 						}
-						local384++;
-						local368 -= local333;
-						local378 += local342;
-						local319 += SoftwareRaster.width;
+						row++;
+						u -= sinStep;
+						v += cosStep;
+						dstOff += SoftwareRaster.width;
 					}
 				}
-			} else if (local333 == 0) {
-				local384 = local198;
-				while (local384 < 0) {
-					local388 = local319;
-					local802 = local368 + (local350 * local342 >> 4);
-					local394 = local166;
-					if (local378 >= 0 && local378 - (this.height << 12) < 0) {
-						if (local802 < 0) {
-							local532 = (local342 - local802 - 1) / local342;
-							local394 = local166 + local532;
-							local802 += local342 * local532;
-							local388 = local319 + local532;
+			} else if (sinStep == 0) {
+				row = maxY;
+				while (row < 0) {
+					dst = dstOff;
+					curU = u + (pixelOffX * cosStep >> 4);
+					col = maxX;
+					if (v >= 0 && v - (this.height << 12) < 0) {
+						if (curU < 0) {
+							skip = (cosStep - curU - 1) / cosStep;
+							col = maxX + skip;
+							curU += cosStep * skip;
+							dst = dstOff + skip;
 						}
-						@Pc(1412) int local1412;
-						if ((local1412 = (local802 + 1 - (this.width << 12) - local342) / local342) > local394) {
-							local394 = local1412;
+						@Pc(1412) int uLimit;
+						if ((uLimit = (curU + 1 - (this.width << 12) - cosStep) / cosStep) > col) {
+							col = uLimit;
 						}
-						while (local394 < 0) {
-							local432 = this.pixels[(local378 >> 12) * this.width + (local802 >> 12)];
-							local436 = SoftwareRaster.pixels[local388];
-							local440 = local432 >>> 24;
-							local444 = 256 - local440;
-							SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-							local802 += local342;
-							local394++;
+						while (col < 0) {
+							pixel = this.pixels[(v >> 12) * this.width + (curU >> 12)];
+							dstPixel = SoftwareRaster.pixels[dst];
+							alpha = pixel >>> 24;
+							invAlpha = 256 - alpha;
+							SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+							curU += cosStep;
+							col++;
 						}
 					}
-					local384++;
-					local378 += local342;
-					local319 += SoftwareRaster.width;
+					row++;
+					v += cosStep;
+					dstOff += SoftwareRaster.width;
 				}
-			} else if (local333 < 0) {
-				local384 = local198;
-				while (local384 < 0) {
-					local388 = local319;
-					local802 = local368 + (local350 * local342 >> 4);
-					local504 = local378 + (local350 * local333 >> 4);
-					local394 = local166;
-					if (local802 < 0) {
-						local532 = (local342 - local802 - 1) / local342;
-						local394 = local166 + local532;
-						local802 += local342 * local532;
-						local504 += local333 * local532;
-						local388 = local319 + local532;
+			} else if (sinStep < 0) {
+				row = maxY;
+				while (row < 0) {
+					dst = dstOff;
+					curU = u + (pixelOffX * cosStep >> 4);
+					curV = v + (pixelOffX * sinStep >> 4);
+					col = maxX;
+					if (curU < 0) {
+						skip = (cosStep - curU - 1) / cosStep;
+						col = maxX + skip;
+						curU += cosStep * skip;
+						curV += sinStep * skip;
+						dst = dstOff + skip;
 					}
-					@Pc(1564) int local1564;
-					if ((local1564 = (local802 + 1 - (this.width << 12) - local342) / local342) > local394) {
-						local394 = local1564;
+					@Pc(1564) int uLimit;
+					if ((uLimit = (curU + 1 - (this.width << 12) - cosStep) / cosStep) > col) {
+						col = uLimit;
 					}
-					@Pc(1576) int local1576;
-					if ((local1576 = local504 - (this.height << 12)) >= 0) {
-						local532 = (local333 - local1576) / local333;
-						local394 += local532;
-						local802 += local342 * local532;
-						local504 += local333 * local532;
-						local388 += local532;
+					@Pc(1576) int vEdge;
+					if ((vEdge = curV - (this.height << 12)) >= 0) {
+						skip = (sinStep - vEdge) / sinStep;
+						col += skip;
+						curU += cosStep * skip;
+						curV += sinStep * skip;
+						dst += skip;
 					}
-					@Pc(1610) int local1610;
-					if ((local1610 = (local504 - local333) / local333) > local394) {
-						local394 = local1610;
+					@Pc(1610) int vLimit;
+					if ((vLimit = (curV - sinStep) / sinStep) > col) {
+						col = vLimit;
 					}
-					while (local394 < 0) {
-						local432 = this.pixels[(local504 >> 12) * this.width + (local802 >> 12)];
-						local436 = SoftwareRaster.pixels[local388];
-						local440 = local432 >>> 24;
-						local444 = 256 - local440;
-						SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-						local802 += local342;
-						local504 += local333;
-						local394++;
+					while (col < 0) {
+						pixel = this.pixels[(curV >> 12) * this.width + (curU >> 12)];
+						dstPixel = SoftwareRaster.pixels[dst];
+						alpha = pixel >>> 24;
+						invAlpha = 256 - alpha;
+						SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+						curU += cosStep;
+						curV += sinStep;
+						col++;
 					}
-					local384++;
-					local368 -= local333;
-					local378 += local342;
-					local319 += SoftwareRaster.width;
+					row++;
+					u -= sinStep;
+					v += cosStep;
+					dstOff += SoftwareRaster.width;
 				}
 			} else {
-				local384 = local198;
-				while (local384 < 0) {
-					local388 = local319;
-					local802 = local368 + (local350 * local342 >> 4);
-					local504 = local378 + (local350 * local333 >> 4);
-					local394 = local166;
-					if (local802 < 0) {
-						local532 = (local342 - local802 - 1) / local342;
-						local394 = local166 + local532;
-						local802 += local342 * local532;
-						local504 += local333 * local532;
-						local388 = local319 + local532;
+				row = maxY;
+				while (row < 0) {
+					dst = dstOff;
+					curU = u + (pixelOffX * cosStep >> 4);
+					curV = v + (pixelOffX * sinStep >> 4);
+					col = maxX;
+					if (curU < 0) {
+						skip = (cosStep - curU - 1) / cosStep;
+						col = maxX + skip;
+						curU += cosStep * skip;
+						curV += sinStep * skip;
+						dst = dstOff + skip;
 					}
-					@Pc(1768) int local1768;
-					if ((local1768 = (local802 + 1 - (this.width << 12) - local342) / local342) > local394) {
-						local394 = local1768;
+					@Pc(1768) int uLimit;
+					if ((uLimit = (curU + 1 - (this.width << 12) - cosStep) / cosStep) > col) {
+						col = uLimit;
 					}
-					if (local504 < 0) {
-						local532 = (local333 - local504 - 1) / local333;
-						local394 += local532;
-						local802 += local342 * local532;
-						local504 += local333 * local532;
-						local388 += local532;
+					if (curV < 0) {
+						skip = (sinStep - curV - 1) / sinStep;
+						col += skip;
+						curU += cosStep * skip;
+						curV += sinStep * skip;
+						dst += skip;
 					}
-					@Pc(1816) int local1816;
-					if ((local1816 = (local504 + 1 - (this.height << 12) - local333) / local333) > local394) {
-						local394 = local1816;
+					@Pc(1816) int vLimit;
+					if ((vLimit = (curV + 1 - (this.height << 12) - sinStep) / sinStep) > col) {
+						col = vLimit;
 					}
-					while (local394 < 0) {
-						local432 = this.pixels[(local504 >> 12) * this.width + (local802 >> 12)];
-						local436 = SoftwareRaster.pixels[local388];
-						local440 = local432 >>> 24;
-						local444 = 256 - local440;
-						SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-						local802 += local342;
-						local504 += local333;
-						local394++;
+					while (col < 0) {
+						pixel = this.pixels[(curV >> 12) * this.width + (curU >> 12)];
+						dstPixel = SoftwareRaster.pixels[dst];
+						alpha = pixel >>> 24;
+						invAlpha = 256 - alpha;
+						SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+						curU += cosStep;
+						curV += sinStep;
+						col++;
 					}
-					local384++;
-					local368 -= local333;
-					local378 += local342;
-					local319 += SoftwareRaster.width;
+					row++;
+					u -= sinStep;
+					v += cosStep;
+					dstOff += SoftwareRaster.width;
 				}
 			}
-		} else if (local333 == 0) {
-			local384 = local198;
-			while (local384 < 0) {
-				local388 = local319;
-				local394 = local166;
-				if (local368 >= 0 && local378 >= 0 && local368 - (this.width << 12) < 0 && local378 - (this.height << 12) < 0) {
-					while (local394 < 0) {
-						local432 = this.pixels[(local378 >> 12) * this.width + (local368 >> 12)];
-						local436 = SoftwareRaster.pixels[local388];
-						local440 = local432 >>> 24;
-						local444 = 256 - local440;
-						SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-						local394++;
+		} else if (sinStep == 0) {
+			row = maxY;
+			while (row < 0) {
+				dst = dstOff;
+				col = maxX;
+				if (u >= 0 && v >= 0 && u - (this.width << 12) < 0 && v - (this.height << 12) < 0) {
+					while (col < 0) {
+						pixel = this.pixels[(v >> 12) * this.width + (u >> 12)];
+						dstPixel = SoftwareRaster.pixels[dst];
+						alpha = pixel >>> 24;
+						invAlpha = 256 - alpha;
+						SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+						col++;
 					}
 				}
-				local384++;
-				local319 += SoftwareRaster.width;
+				row++;
+				dstOff += SoftwareRaster.width;
 			}
-		} else if (local333 < 0) {
-			local384 = local198;
-			while (local384 < 0) {
-				local388 = local319;
-				local504 = local378 + (local350 * local333 >> 4);
-				local394 = local166;
-				if (local368 >= 0 && local368 - (this.width << 12) < 0) {
-					@Pc(525) int local525;
-					if ((local525 = local504 - (this.height << 12)) >= 0) {
-						local532 = (local333 - local525) / local333;
-						local394 = local166 + local532;
-						local504 += local333 * local532;
-						local388 = local319 + local532;
+		} else if (sinStep < 0) {
+			row = maxY;
+			while (row < 0) {
+				dst = dstOff;
+				curV = v + (pixelOffX * sinStep >> 4);
+				col = maxX;
+				if (u >= 0 && u - (this.width << 12) < 0) {
+					@Pc(525) int vEdge;
+					if ((vEdge = curV - (this.height << 12)) >= 0) {
+						skip = (sinStep - vEdge) / sinStep;
+						col = maxX + skip;
+						curV += sinStep * skip;
+						dst = dstOff + skip;
 					}
-					@Pc(553) int local553;
-					if ((local553 = (local504 - local333) / local333) > local394) {
-						local394 = local553;
+					@Pc(553) int vLimit;
+					if ((vLimit = (curV - sinStep) / sinStep) > col) {
+						col = vLimit;
 					}
-					while (local394 < 0) {
-						local432 = this.pixels[(local504 >> 12) * this.width + (local368 >> 12)];
-						local436 = SoftwareRaster.pixels[local388];
-						local440 = local432 >>> 24;
-						local444 = 256 - local440;
-						SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-						local504 += local333;
-						local394++;
+					while (col < 0) {
+						pixel = this.pixels[(curV >> 12) * this.width + (u >> 12)];
+						dstPixel = SoftwareRaster.pixels[dst];
+						alpha = pixel >>> 24;
+						invAlpha = 256 - alpha;
+						SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+						curV += sinStep;
+						col++;
 					}
 				}
-				local384++;
-				local368 -= local333;
-				local319 += SoftwareRaster.width;
+				row++;
+				u -= sinStep;
+				dstOff += SoftwareRaster.width;
 			}
 		} else {
-			local384 = local198;
-			while (local384 < 0) {
-				local388 = local319;
-				local504 = local378 + (local350 * local333 >> 4);
-				local394 = local166;
-				if (local368 >= 0 && local368 - (this.width << 12) < 0) {
-					if (local504 < 0) {
-						local532 = (local333 - local504 - 1) / local333;
-						local394 = local166 + local532;
-						local504 += local333 * local532;
-						local388 = local319 + local532;
+			row = maxY;
+			while (row < 0) {
+				dst = dstOff;
+				curV = v + (pixelOffX * sinStep >> 4);
+				col = maxX;
+				if (u >= 0 && u - (this.width << 12) < 0) {
+					if (curV < 0) {
+						skip = (sinStep - curV - 1) / sinStep;
+						col = maxX + skip;
+						curV += sinStep * skip;
+						dst = dstOff + skip;
 					}
-					@Pc(702) int local702;
-					if ((local702 = (local504 + 1 - (this.height << 12) - local333) / local333) > local394) {
-						local394 = local702;
+					@Pc(702) int vLimit;
+					if ((vLimit = (curV + 1 - (this.height << 12) - sinStep) / sinStep) > col) {
+						col = vLimit;
 					}
-					while (local394 < 0) {
-						local432 = this.pixels[(local504 >> 12) * this.width + (local368 >> 12)];
-						local436 = SoftwareRaster.pixels[local388];
-						local440 = local432 >>> 24;
-						local444 = 256 - local440;
-						SoftwareRaster.pixels[local388++] = ((local432 & 0xFF00FF) * local440 + (local436 & 0xFF00FF) * local444 & 0xFF00FF00) + ((local432 & 0xFF00) * local440 + (local436 & 0xFF00) * local444 & 0xFF0000) >>> 8;
-						local504 += local333;
-						local394++;
+					while (col < 0) {
+						pixel = this.pixels[(curV >> 12) * this.width + (u >> 12)];
+						dstPixel = SoftwareRaster.pixels[dst];
+						alpha = pixel >>> 24;
+						invAlpha = 256 - alpha;
+						SoftwareRaster.pixels[dst++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+						curV += sinStep;
+						col++;
 					}
 				}
-				local384++;
-				local368 -= local333;
-				local319 += SoftwareRaster.width;
+				row++;
+				u -= sinStep;
+				dstOff += SoftwareRaster.width;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "a", descriptor = "(IIIIIIII[I[I)V")
 	@Override
-	public final void renderRotated(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int w, @OriginalArg(3) int h, @OriginalArg(4) int anchorX, @OriginalArg(5) int anchorY, @OriginalArg(6) int theta, @OriginalArg(7) int zoom, @OriginalArg(8) int[] lineStarts, @OriginalArg(9) int[] arg9) {
+	public final void renderRotated(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int w, @OriginalArg(3) int h, @OriginalArg(4) int anchorX, @OriginalArg(5) int anchorY, @OriginalArg(6) int theta, @OriginalArg(7) int zoom, @OriginalArg(8) int[] lineStarts, @OriginalArg(9) int[] lineWidths) {
 		try {
-			@Pc(4) int local4 = -w / 2;
-			@Pc(9) int local9 = -h / 2;
-			@Pc(18) int local18 = (int) (Math.sin((double) theta / 326.11D) * 65536.0D);
-			@Pc(27) int local27 = (int) (Math.cos((double) theta / 326.11D) * 65536.0D);
-			@Pc(33) int local33 = local18 * zoom >> 8;
-			@Pc(39) int local39 = local27 * zoom >> 8;
-			@Pc(51) int local51 = (anchorX << 16) + local9 * local33 + local4 * local39;
-			@Pc(63) int local63 = (anchorY << 16) + (local9 * local39 - local4 * local33);
-			@Pc(69) int local69 = x + y * SoftwareRaster.width;
-			for (@Pc(71) int local71 = 0; local71 < h; local71++) {
-				@Pc(78) int local78 = lineStarts[local71];
-				@Pc(82) int local82 = local69 + local78;
-				@Pc(88) int local88 = local51 + local39 * local78;
-				@Pc(94) int local94 = local63 - local33 * local78;
-				for (@Pc(99) int local99 = -arg9[local71]; local99 < 0; local99++) {
-					@Pc(115) int local115 = this.pixels[(local88 >> 16) + (local94 >> 16) * this.width];
-					@Pc(119) int local119 = SoftwareRaster.pixels[local82];
-					@Pc(123) int local123 = local115 >>> 24;
-					@Pc(127) int local127 = 256 - local123;
-					SoftwareRaster.pixels[local82++] = ((local115 & 0xFF00FF) * local123 + (local119 & 0xFF00FF) * local127 & 0xFF00FF00) + ((local115 & 0xFF00) * local123 + (local119 & 0xFF00) * local127 & 0xFF0000) >>> 8;
-					local88 += local39;
-					local94 -= local33;
+			@Pc(4) int centerX = -w / 2;
+			@Pc(9) int centerY = -h / 2;
+			@Pc(18) int sin1 = (int) (Math.sin((double) theta / 326.11D) * 65536.0D);
+			@Pc(27) int cos1 = (int) (Math.cos((double) theta / 326.11D) * 65536.0D);
+			@Pc(33) int sin = sin1 * zoom >> 8;
+			@Pc(39) int cos = cos1 * zoom >> 8;
+			@Pc(51) int originX = (anchorX << 16) + centerY * sin + centerX * cos;
+			@Pc(63) int originY = (anchorY << 16) + (centerY * cos - centerX * sin);
+			@Pc(69) int origin = x + y * SoftwareRaster.width;
+			for (@Pc(71) int iy = 0; iy < h; iy++) {
+				@Pc(78) int start = lineStarts[iy];
+				@Pc(82) int dstOff = origin + start;
+				@Pc(88) int dstX = originX + cos * start;
+				@Pc(94) int dstY = originY - sin * start;
+				for (@Pc(99) int ix = -lineWidths[iy]; ix < 0; ix++) {
+					@Pc(115) int pixel = this.pixels[(dstX >> 16) + (dstY >> 16) * this.width];
+					@Pc(119) int dstPixel = SoftwareRaster.pixels[dstOff];
+					@Pc(123) int alpha = pixel >>> 24;
+					@Pc(127) int invAlpha = 256 - alpha;
+					SoftwareRaster.pixels[dstOff++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+					dstX += cos;
+					dstY -= sin;
 				}
-				local51 += local33;
-				local63 += local39;
-				local69 += SoftwareRaster.width;
+				originX += sin;
+				originY += cos;
+				origin += SoftwareRaster.width;
 			}
-		} catch (@Pc(186) Exception local186) {
+		} catch (@Pc(186) Exception ex) {
 		}
 	}
 
@@ -707,93 +707,93 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	@Override
 	public final void renderRotated(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int w, @OriginalArg(3) int h, @OriginalArg(4) int anchorX, @OriginalArg(5) int anchorY, @OriginalArg(6) int theta, @OriginalArg(8) int[] lineStart, @OriginalArg(9) int[] lineWidth) {
 		try {
-			@Pc(4) int local4 = -w / 2;
-			@Pc(9) int local9 = -h / 2;
-			@Pc(18) int local18 = (int) (Math.sin((double) theta / 326.11D) * 65536.0D);
-			@Pc(27) int local27 = (int) (Math.cos((double) theta / 326.11D) * 65536.0D);
-			@Pc(33) int local33 = local18 * 256 >> 8;
-			@Pc(39) int local39 = local27 * 256 >> 8;
-			@Pc(51) int local51 = (anchorX << 16) + local9 * local33 + local4 * local39;
-			@Pc(63) int local63 = (anchorY << 16) + (local9 * local39 - local4 * local33);
-			@Pc(69) int local69 = x + y * SoftwareRaster.width;
-			for (@Pc(71) int local71 = 0; local71 < h; local71++) {
-				@Pc(78) int local78 = lineStart[local71];
-				@Pc(82) int local82 = local69 + local78;
-				@Pc(88) int local88 = local51 + local39 * local78;
-				@Pc(94) int local94 = local63 - local33 * local78;
-				for (@Pc(99) int local99 = -lineWidth[local71]; local99 < 0; local99++) {
-					@Pc(115) int local115 = this.pixels[(local88 >> 16) + (local94 >> 16) * this.width];
-					@Pc(119) int local119 = SoftwareRaster.pixels[local82];
-					@Pc(123) int local123 = local115 >>> 24;
-					@Pc(127) int local127 = 256 - local123;
-					SoftwareRaster.pixels[local82++] = ((local115 & 0xFF00FF) * local123 + (local119 & 0xFF00FF) * local127 & 0xFF00FF00) + ((local115 & 0xFF00) * local123 + (local119 & 0xFF00) * local127 & 0xFF0000) >>> 8;
-					local88 += local39;
-					local94 -= local33;
+			@Pc(4) int centerX = -w / 2;
+			@Pc(9) int centerY = -h / 2;
+			@Pc(18) int sin1 = (int) (Math.sin((double) theta / 326.11D) * 65536.0D);
+			@Pc(27) int cos1 = (int) (Math.cos((double) theta / 326.11D) * 65536.0D);
+			@Pc(33) int sin = sin1 * 256 >> 8;
+			@Pc(39) int cos = cos1 * 256 >> 8;
+			@Pc(51) int originX = (anchorX << 16) + centerY * sin + centerX * cos;
+			@Pc(63) int originY = (anchorY << 16) + (centerY * cos - centerX * sin);
+			@Pc(69) int origin = x + y * SoftwareRaster.width;
+			for (@Pc(71) int iy = 0; iy < h; iy++) {
+				@Pc(78) int start = lineStart[iy];
+				@Pc(82) int dstOff = origin + start;
+				@Pc(88) int dstX = originX + cos * start;
+				@Pc(94) int dstY = originY - sin * start;
+				for (@Pc(99) int ix = -lineWidth[iy]; ix < 0; ix++) {
+					@Pc(115) int pixel = this.pixels[(dstX >> 16) + (dstY >> 16) * this.width];
+					@Pc(119) int dstPixel = SoftwareRaster.pixels[dstOff];
+					@Pc(123) int alpha = pixel >>> 24;
+					@Pc(127) int invAlpha = 256 - alpha;
+					SoftwareRaster.pixels[dstOff++] = ((pixel & 0xFF00FF) * alpha + (dstPixel & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((pixel & 0xFF00) * alpha + (dstPixel & 0xFF00) * invAlpha & 0xFF0000) >>> 8;
+					dstX += cos;
+					dstY -= sin;
 				}
-				local51 += local33;
-				local63 += local39;
-				local69 += SoftwareRaster.width;
+				originX += sin;
+				originY += cos;
+				origin += SoftwareRaster.width;
 			}
-		} catch (@Pc(186) Exception local186) {
+		} catch (@Pc(186) Exception ex) {
 		}
 	}
 
 	@OriginalMember(owner = "client!am", name = "b", descriptor = "(IIIII)V")
 	@Override
-	public final void renderAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg2 <= 0 || arg3 <= 0) {
+	public final void renderAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int scaledW, @OriginalArg(3) int scaledH, @OriginalArg(4) int opacity) {
+		if (scaledW <= 0 || scaledH <= 0) {
 			return;
 		}
-		@Pc(7) int local7 = this.width;
-		@Pc(10) int local10 = this.height;
-		@Pc(12) int local12 = 0;
-		@Pc(14) int local14 = 0;
-		@Pc(17) int local17 = this.innerWidth;
-		@Pc(20) int local20 = this.innerHeight;
-		@Pc(26) int local26 = (local17 << 16) / arg2;
-		@Pc(32) int local32 = (local20 << 16) / arg3;
-		@Pc(46) int local46;
+		@Pc(7) int srcW = this.width;
+		@Pc(10) int srcH = this.height;
+		@Pc(12) int srcX = 0;
+		@Pc(14) int srcY = 0;
+		@Pc(17) int fullW = this.innerWidth;
+		@Pc(20) int fullH = this.innerHeight;
+		@Pc(26) int xStep = (fullW << 16) / scaledW;
+		@Pc(32) int yStep = (fullH << 16) / scaledH;
+		@Pc(46) int dstOff;
 		if (this.xOffset > 0) {
-			local46 = ((this.xOffset << 16) + local26 - 1) / local26;
-			arg0 += local46;
-			local12 = local46 * local26 - (this.xOffset << 16);
+			dstOff = ((this.xOffset << 16) + xStep - 1) / xStep;
+			x += dstOff;
+			srcX = dstOff * xStep - (this.xOffset << 16);
 		}
 		if (this.yOffset > 0) {
-			local46 = ((this.yOffset << 16) + local32 - 1) / local32;
-			arg1 += local46;
-			local14 = local46 * local32 - (this.yOffset << 16);
+			dstOff = ((this.yOffset << 16) + yStep - 1) / yStep;
+			y += dstOff;
+			srcY = dstOff * yStep - (this.yOffset << 16);
 		}
-		if (local7 < local17) {
-			arg2 = ((local7 << 16) + local26 - local12 - 1) / local26;
+		if (srcW < fullW) {
+			scaledW = ((srcW << 16) + xStep - srcX - 1) / xStep;
 		}
-		if (local10 < local20) {
-			arg3 = ((local10 << 16) + local32 - local14 - 1) / local32;
+		if (srcH < fullH) {
+			scaledH = ((srcH << 16) + yStep - srcY - 1) / yStep;
 		}
-		local46 = arg0 + arg1 * SoftwareRaster.width;
-		@Pc(130) int local130 = SoftwareRaster.width - arg2;
-		if (arg1 + arg3 > SoftwareRaster.clipBottom) {
-			arg3 -= arg1 + arg3 - SoftwareRaster.clipBottom;
+		dstOff = x + y * SoftwareRaster.width;
+		@Pc(130) int dstStep = SoftwareRaster.width - scaledW;
+		if (y + scaledH > SoftwareRaster.clipBottom) {
+			scaledH -= y + scaledH - SoftwareRaster.clipBottom;
 		}
-		@Pc(150) int local150;
-		if (arg1 < SoftwareRaster.clipTop) {
-			local150 = SoftwareRaster.clipTop - arg1;
-			arg3 -= local150;
-			local46 += local150 * SoftwareRaster.width;
-			local14 += local32 * local150;
+		@Pc(150) int clip;
+		if (y < SoftwareRaster.clipTop) {
+			clip = SoftwareRaster.clipTop - y;
+			scaledH -= clip;
+			dstOff += clip * SoftwareRaster.width;
+			srcY += yStep * clip;
 		}
-		if (arg0 + arg2 > SoftwareRaster.clipRight) {
-			local150 = arg0 + arg2 - SoftwareRaster.clipRight;
-			arg2 -= local150;
-			local130 += local150;
+		if (x + scaledW > SoftwareRaster.clipRight) {
+			clip = x + scaledW - SoftwareRaster.clipRight;
+			scaledW -= clip;
+			dstStep += clip;
 		}
-		if (arg0 < SoftwareRaster.clipLeft) {
-			local150 = SoftwareRaster.clipLeft - arg0;
-			arg2 -= local150;
-			local46 += local150;
-			local12 += local26 * local150;
-			local130 += local150;
+		if (x < SoftwareRaster.clipLeft) {
+			clip = SoftwareRaster.clipLeft - x;
+			scaledW -= clip;
+			dstOff += clip;
+			srcX += xStep * clip;
+			dstStep += clip;
 		}
-		blitAlphaScaledWithOpacity(SoftwareRaster.pixels, this.pixels, local12, local14, local46, local130, arg2, arg3, local26, local32, local7, arg4);
+		blitAlphaScaledWithOpacity(SoftwareRaster.pixels, this.pixels, srcX, srcY, dstOff, dstStep, scaledW, scaledH, xStep, yStep, srcW, opacity);
 	}
 
 	@OriginalMember(owner = "client!am", name = "a", descriptor = "(IIII)V")
@@ -802,97 +802,97 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 		if (width <= 0 || height <= 0) {
 			return;
 		}
-		@Pc(7) int local7 = this.width;
-		@Pc(10) int local10 = this.height;
-		@Pc(12) int local12 = 0;
-		@Pc(14) int local14 = 0;
-		@Pc(17) int local17 = this.innerWidth;
-		@Pc(20) int local20 = this.innerHeight;
-		@Pc(26) int local26 = (local17 << 16) / width;
-		@Pc(32) int local32 = (local20 << 16) / height;
-		@Pc(46) int local46;
+		@Pc(7) int srcW = this.width;
+		@Pc(10) int srcH = this.height;
+		@Pc(12) int srcX = 0;
+		@Pc(14) int srcY = 0;
+		@Pc(17) int fullW = this.innerWidth;
+		@Pc(20) int fullH = this.innerHeight;
+		@Pc(26) int xStep = (fullW << 16) / width;
+		@Pc(32) int yStep = (fullH << 16) / height;
+		@Pc(46) int dstOff;
 		if (this.xOffset > 0) {
-			local46 = ((this.xOffset << 16) + local26 - 1) / local26;
-			x += local46;
-			local12 = local46 * local26 - (this.xOffset << 16);
+			dstOff = ((this.xOffset << 16) + xStep - 1) / xStep;
+			x += dstOff;
+			srcX = dstOff * xStep - (this.xOffset << 16);
 		}
 		if (this.yOffset > 0) {
-			local46 = ((this.yOffset << 16) + local32 - 1) / local32;
-			y += local46;
-			local14 = local46 * local32 - (this.yOffset << 16);
+			dstOff = ((this.yOffset << 16) + yStep - 1) / yStep;
+			y += dstOff;
+			srcY = dstOff * yStep - (this.yOffset << 16);
 		}
-		if (local7 < local17) {
-			width = ((local7 << 16) + local26 - local12 - 1) / local26;
+		if (srcW < fullW) {
+			width = ((srcW << 16) + xStep - srcX - 1) / xStep;
 		}
-		if (local10 < local20) {
-			height = ((local10 << 16) + local32 - local14 - 1) / local32;
+		if (srcH < fullH) {
+			height = ((srcH << 16) + yStep - srcY - 1) / yStep;
 		}
-		local46 = x + y * SoftwareRaster.width;
-		@Pc(130) int local130 = SoftwareRaster.width - width;
+		dstOff = x + y * SoftwareRaster.width;
+		@Pc(130) int dstStep = SoftwareRaster.width - width;
 		if (y + height > SoftwareRaster.clipBottom) {
 			height -= y + height - SoftwareRaster.clipBottom;
 		}
-		@Pc(150) int local150;
+		@Pc(150) int clip;
 		if (y < SoftwareRaster.clipTop) {
-			local150 = SoftwareRaster.clipTop - y;
-			height -= local150;
-			local46 += local150 * SoftwareRaster.width;
-			local14 += local32 * local150;
+			clip = SoftwareRaster.clipTop - y;
+			height -= clip;
+			dstOff += clip * SoftwareRaster.width;
+			srcY += yStep * clip;
 		}
 		if (x + width > SoftwareRaster.clipRight) {
-			local150 = x + width - SoftwareRaster.clipRight;
-			width -= local150;
-			local130 += local150;
+			clip = x + width - SoftwareRaster.clipRight;
+			width -= clip;
+			dstStep += clip;
 		}
 		if (x < SoftwareRaster.clipLeft) {
-			local150 = SoftwareRaster.clipLeft - x;
-			width -= local150;
-			local46 += local150;
-			local12 += local26 * local150;
-			local130 += local150;
+			clip = SoftwareRaster.clipLeft - x;
+			width -= clip;
+			dstOff += clip;
+			srcX += xStep * clip;
+			dstStep += clip;
 		}
-		blitAlphaScaled(SoftwareRaster.pixels, this.pixels, local12, local14, local46, local130, width, height, local26, local32, local7);
+		blitAlphaScaled(SoftwareRaster.pixels, this.pixels, srcX, srcY, dstOff, dstStep, width, height, xStep, yStep, srcW);
 	}
 
 	@OriginalMember(owner = "client!am", name = "d", descriptor = "(II)V")
 	@Override
-	public final void renderHorizontalFlip(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		arg0 += this.innerWidth - this.width - this.xOffset;
-		arg1 += this.yOffset;
-		@Pc(21) int local21 = arg0 + arg1 * SoftwareRaster.width;
-		@Pc(26) int local26 = this.width - 1;
-		@Pc(29) int local29 = this.height;
-		@Pc(32) int local32 = this.width;
-		@Pc(36) int local36 = SoftwareRaster.width - local32;
-		@Pc(40) int local40 = local32 + local32;
-		@Pc(47) int local47;
-		if (arg1 < SoftwareRaster.clipTop) {
-			local47 = SoftwareRaster.clipTop - arg1;
-			local29 -= local47;
-			arg1 = SoftwareRaster.clipTop;
-			local26 += local47 * local32;
-			local21 += local47 * SoftwareRaster.width;
+	public final void renderHorizontalFlip(@OriginalArg(0) int x, @OriginalArg(1) int y) {
+		x += this.innerWidth - this.width - this.xOffset;
+		y += this.yOffset;
+		@Pc(21) int dstOff = x + y * SoftwareRaster.width;
+		@Pc(26) int srcOff = this.width - 1;
+		@Pc(29) int h = this.height;
+		@Pc(32) int w = this.width;
+		@Pc(36) int dstStep = SoftwareRaster.width - w;
+		@Pc(40) int srcStep = w + w;
+		@Pc(47) int clip;
+		if (y < SoftwareRaster.clipTop) {
+			clip = SoftwareRaster.clipTop - y;
+			h -= clip;
+			y = SoftwareRaster.clipTop;
+			srcOff += clip * w;
+			dstOff += clip * SoftwareRaster.width;
 		}
-		if (arg1 + local29 > SoftwareRaster.clipBottom) {
-			local29 -= arg1 + local29 - SoftwareRaster.clipBottom;
+		if (y + h > SoftwareRaster.clipBottom) {
+			h -= y + h - SoftwareRaster.clipBottom;
 		}
-		if (arg0 < SoftwareRaster.clipLeft) {
-			local47 = SoftwareRaster.clipLeft - arg0;
-			local32 -= local47;
-			arg0 = SoftwareRaster.clipLeft;
-			local26 -= local47;
-			local21 += local47;
-			local40 -= local47;
-			local36 += local47;
+		if (x < SoftwareRaster.clipLeft) {
+			clip = SoftwareRaster.clipLeft - x;
+			w -= clip;
+			x = SoftwareRaster.clipLeft;
+			srcOff -= clip;
+			dstOff += clip;
+			srcStep -= clip;
+			dstStep += clip;
 		}
-		if (arg0 + local32 > SoftwareRaster.clipRight) {
-			local47 = arg0 + local32 - SoftwareRaster.clipRight;
-			local32 -= local47;
-			local40 -= local47;
-			local36 += local47;
+		if (x + w > SoftwareRaster.clipRight) {
+			clip = x + w - SoftwareRaster.clipRight;
+			w -= clip;
+			srcStep -= clip;
+			dstStep += clip;
 		}
-		if (local32 > 0 && local29 > 0) {
-			blitAlphaFlipped(SoftwareRaster.pixels, this.pixels, local26, local21, local32, local29, local36, local40);
+		if (w > 0 && h > 0) {
+			blitAlphaFlipped(SoftwareRaster.pixels, this.pixels, srcOff, dstOff, w, h, dstStep, srcStep);
 		}
 	}
 
@@ -901,40 +901,40 @@ public final class SoftwareAlphaSprite extends SoftwareSprite {
 	public final void renderAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int alpha) {
 		x += this.xOffset;
 		y += this.yOffset;
-		@Pc(15) int local15 = x + y * SoftwareRaster.width;
-		@Pc(17) int local17 = 0;
-		@Pc(20) int local20 = this.height;
-		@Pc(23) int local23 = this.width;
-		@Pc(27) int local27 = SoftwareRaster.width - local23;
-		@Pc(29) int local29 = 0;
-		@Pc(36) int local36;
+		@Pc(15) int dstOff = x + y * SoftwareRaster.width;
+		@Pc(17) int srcOff = 0;
+		@Pc(20) int h = this.height;
+		@Pc(23) int w = this.width;
+		@Pc(27) int dstStep = SoftwareRaster.width - w;
+		@Pc(29) int srcStep = 0;
+		@Pc(36) int clip;
 		if (y < SoftwareRaster.clipTop) {
-			local36 = SoftwareRaster.clipTop - y;
-			local20 -= local36;
+			clip = SoftwareRaster.clipTop - y;
+			h -= clip;
 			y = SoftwareRaster.clipTop;
-			local17 = local36 * local23;
-			local15 += local36 * SoftwareRaster.width;
+			srcOff = clip * w;
+			dstOff += clip * SoftwareRaster.width;
 		}
-		if (y + local20 > SoftwareRaster.clipBottom) {
-			local20 -= y + local20 - SoftwareRaster.clipBottom;
+		if (y + h > SoftwareRaster.clipBottom) {
+			h -= y + h - SoftwareRaster.clipBottom;
 		}
 		if (x < SoftwareRaster.clipLeft) {
-			local36 = SoftwareRaster.clipLeft - x;
-			local23 -= local36;
+			clip = SoftwareRaster.clipLeft - x;
+			w -= clip;
 			x = SoftwareRaster.clipLeft;
-			local17 += local36;
-			local15 += local36;
-			local29 = local36;
-			local27 += local36;
+			srcOff += clip;
+			dstOff += clip;
+			srcStep = clip;
+			dstStep += clip;
 		}
-		if (x + local23 > SoftwareRaster.clipRight) {
-			local36 = x + local23 - SoftwareRaster.clipRight;
-			local23 -= local36;
-			local29 += local36;
-			local27 += local36;
+		if (x + w > SoftwareRaster.clipRight) {
+			clip = x + w - SoftwareRaster.clipRight;
+			w -= clip;
+			srcStep += clip;
+			dstStep += clip;
 		}
-		if (local23 > 0 && local20 > 0) {
-			blitAlphaWithOpacity(SoftwareRaster.pixels, this.pixels, local17, local15, local23, local20, local27, local29, alpha);
+		if (w > 0 && h > 0) {
+			blitAlphaWithOpacity(SoftwareRaster.pixels, this.pixels, srcOff, dstOff, w, h, dstStep, srcStep, alpha);
 		}
 	}
 }
