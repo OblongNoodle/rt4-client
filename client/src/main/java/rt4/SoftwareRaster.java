@@ -66,17 +66,17 @@ public final class SoftwareRaster {
 		if (y + h > clipBottom) {
 			h = clipBottom - y;
 		}
-		@Pc(59) int local59 = ((color & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((color & 0xFF00) * alpha >> 8 & 0xFF00);
-		@Pc(63) int local63 = 256 - alpha;
-		@Pc(67) int local67 = width - w;
-		@Pc(73) int local73 = x + y * width;
-		for (@Pc(75) int local75 = 0; local75 < h; local75++) {
-			for (@Pc(81) int local81 = -w; local81 < 0; local81++) {
-				@Pc(87) int local87 = pixels[local73];
-				@Pc(107) int local107 = ((local87 & 0xFF00FF) * local63 >> 8 & 0xFF00FF) + ((local87 & 0xFF00) * local63 >> 8 & 0xFF00);
-				pixels[local73++] = local59 + local107;
+		@Pc(59) int srcColor = ((color & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((color & 0xFF00) * alpha >> 8 & 0xFF00);
+		@Pc(63) int invAlpha = 256 - alpha;
+		@Pc(67) int stride = width - w;
+		@Pc(73) int offset = x + y * width;
+		for (@Pc(75) int row = 0; row < h; row++) {
+			for (@Pc(81) int col = -w; col < 0; col++) {
+				@Pc(87) int dstColor = pixels[offset];
+				@Pc(107) int blendedDst = ((dstColor & 0xFF00FF) * invAlpha >> 8 & 0xFF00FF) + ((dstColor & 0xFF00) * invAlpha >> 8 & 0xFF00);
+				pixels[offset++] = srcColor + blendedDst;
 			}
-			local73 += local67;
+			offset += stride;
 		}
 	}
 
@@ -127,9 +127,9 @@ public final class SoftwareRaster {
 		if (x + length > clipRight) {
 			length = clipRight - x;
 		}
-		@Pc(32) int local32 = x + y * width;
-		for (@Pc(34) int local34 = 0; local34 < length; local34++) {
-			pixels[local32 + local34] = color;
+		@Pc(32) int offset = x + y * width;
+		for (@Pc(34) int i = 0; i < length; i++) {
+			pixels[offset + i] = color;
 		}
 	}
 
@@ -145,9 +145,9 @@ public final class SoftwareRaster {
 		if (y + length > clipBottom) {
 			length = clipBottom - y;
 		}
-		@Pc(32) int local32 = x + y * width;
-		for (@Pc(34) int local34 = 0; local34 < length; local34++) {
-			pixels[local32 + local34 * width] = color;
+		@Pc(32) int offset = x + y * width;
+		for (@Pc(34) int i = 0; i < length; i++) {
+			pixels[offset + i * width] = color;
 		}
 	}
 
@@ -161,21 +161,21 @@ public final class SoftwareRaster {
 
 	@OriginalMember(owner = "client!kb", name = "b", descriptor = "()V")
 	public static void clear() {
-		@Pc(1) int local1 = 0;
-		@Pc(7) int local7 = width * height - 7;
-		while (local1 < local7) {
-			pixels[local1++] = 0;
-			pixels[local1++] = 0;
-			pixels[local1++] = 0;
-			pixels[local1++] = 0;
-			pixels[local1++] = 0;
-			pixels[local1++] = 0;
-			pixels[local1++] = 0;
-			pixels[local1++] = 0;
+		@Pc(1) int i = 0;
+		@Pc(7) int end = width * height - 7;
+		while (i < end) {
+			pixels[i++] = 0;
+			pixels[i++] = 0;
+			pixels[i++] = 0;
+			pixels[i++] = 0;
+			pixels[i++] = 0;
+			pixels[i++] = 0;
+			pixels[i++] = 0;
+			pixels[i++] = 0;
 		}
-		local7 += 7;
-		while (local1 < local7) {
-			pixels[local1++] = 0;
+		end += 7;
+		while (i < end) {
+			pixels[i++] = 0;
 		}
 	}
 
@@ -197,58 +197,58 @@ public final class SoftwareRaster {
 		if (x + length > clipRight) {
 			length = clipRight - x;
 		}
-		@Pc(30) int local30 = 256 - alpha;
-		@Pc(38) int local38 = (color >> 16 & 0xFF) * alpha;
-		@Pc(46) int local46 = (color >> 8 & 0xFF) * alpha;
-		@Pc(52) int local52 = (color & 0xFF) * alpha;
-		@Pc(58) int local58 = x + y * width;
-		for (@Pc(60) int local60 = 0; local60 < length; local60++) {
-			@Pc(73) int local73 = (pixels[local58] >> 16 & 0xFF) * local30;
-			@Pc(83) int local83 = (pixels[local58] >> 8 & 0xFF) * local30;
-			@Pc(91) int local91 = (pixels[local58] & 0xFF) * local30;
-			@Pc(113) int local113 = (local38 + local73 >> 8 << 16) + (local46 + local83 >> 8 << 8) + (local52 + local91 >> 8);
-			pixels[local58++] = local113;
+		@Pc(30) int invAlpha = 256 - alpha;
+		@Pc(38) int srcR = (color >> 16 & 0xFF) * alpha;
+		@Pc(46) int srcG = (color >> 8 & 0xFF) * alpha;
+		@Pc(52) int srcB = (color & 0xFF) * alpha;
+		@Pc(58) int offset = x + y * width;
+		for (@Pc(60) int i = 0; i < length; i++) {
+			@Pc(73) int dstR = (pixels[offset] >> 16 & 0xFF) * invAlpha;
+			@Pc(83) int dstG = (pixels[offset] >> 8 & 0xFF) * invAlpha;
+			@Pc(91) int dstB = (pixels[offset] & 0xFF) * invAlpha;
+			@Pc(113) int blended = (srcR + dstR >> 8 << 16) + (srcG + dstG >> 8 << 8) + (srcB + dstB >> 8);
+			pixels[offset++] = blended;
 		}
 	}
 
 	@OriginalMember(owner = "client!kb", name = "c", descriptor = "(IIIIII)V")
 	public static void drawThickLine(@OriginalArg(0) int x1, @OriginalArg(1) int y1, @OriginalArg(2) int x2, @OriginalArg(3) int y2, @OriginalArg(4) int color, @OriginalArg(5) int thickness) {
-		@Pc(3) int local3 = x2 - x1;
-		@Pc(7) int local7 = y2 - y1;
-		@Pc(14) int local14 = local3 >= 0 ? local3 : -local3;
-		@Pc(21) int local21 = local7 >= 0 ? local7 : -local7;
-		@Pc(23) int local23 = local14;
-		if (local14 < local21) {
-			local23 = local21;
+		@Pc(3) int dx = x2 - x1;
+		@Pc(7) int dy = y2 - y1;
+		@Pc(14) int absDx = dx >= 0 ? dx : -dx;
+		@Pc(21) int absDy = dy >= 0 ? dy : -dy;
+		@Pc(23) int steps = absDx;
+		if (absDx < absDy) {
+			steps = absDy;
 		}
-		if (local23 == 0) {
+		if (steps == 0) {
 			return;
 		}
-		@Pc(37) int local37 = (local3 << 16) / local23;
-		@Pc(43) int local43 = (local7 << 16) / local23;
-		if (local43 <= local37) {
-			local37 = -local37;
+		@Pc(37) int xStep = (dx << 16) / steps;
+		@Pc(43) int yStep = (dy << 16) / steps;
+		if (yStep <= xStep) {
+			xStep = -xStep;
 		} else {
-			local43 = -local43;
+			yStep = -yStep;
 		}
-		@Pc(59) int local59 = thickness * local43 >> 17;
-		@Pc(67) int local67 = thickness * local43 + 1 >> 17;
-		@Pc(73) int local73 = thickness * local37 >> 17;
-		@Pc(81) int local81 = thickness * local37 + 1 >> 17;
-		@Pc(85) int local85 = x1 - Rasteriser.getOffsetRemainder();
-		@Pc(89) int local89 = y1 - Rasteriser.getOffset();
-		@Pc(93) int local93 = local85 + local59;
-		@Pc(97) int local97 = local85 - local67;
-		@Pc(103) int local103 = local85 + local3 - local67;
-		@Pc(109) int local109 = local85 + local3 + local59;
-		@Pc(113) int local113 = local89 + local73;
-		@Pc(117) int local117 = local89 - local81;
-		@Pc(123) int local123 = local89 + local7 - local81;
-		@Pc(129) int local129 = local89 + local7 + local73;
-		Rasteriser.testPoints(local93, local97, local103);
-		Rasteriser.fillTriangle(local113, local117, local123, local93, local97, local103, color);
-		Rasteriser.testPoints(local93, local103, local109);
-		Rasteriser.fillTriangle(local113, local123, local129, local93, local103, local109, color);
+		@Pc(59) int perpX1 = thickness * yStep >> 17;
+		@Pc(67) int perpX2 = thickness * yStep + 1 >> 17;
+		@Pc(73) int perpY1 = thickness * xStep >> 17;
+		@Pc(81) int perpY2 = thickness * xStep + 1 >> 17;
+		@Pc(85) int originX = x1 - Rasteriser.getOffsetRemainder();
+		@Pc(89) int originY = y1 - Rasteriser.getOffset();
+		@Pc(93) int ax = originX + perpX1;
+		@Pc(97) int bx = originX - perpX2;
+		@Pc(103) int cx = originX + dx - perpX2;
+		@Pc(109) int dx2 = originX + dx + perpX1;
+		@Pc(113) int ay = originY + perpY1;
+		@Pc(117) int by = originY - perpY2;
+		@Pc(123) int cy = originY + dy - perpY2;
+		@Pc(129) int dy2 = originY + dy + perpY1;
+		Rasteriser.testPoints(ax, bx, cx);
+		Rasteriser.fillTriangle(ay, by, cy, ax, bx, cx, color);
+		Rasteriser.testPoints(ax, cx, dx2);
+		Rasteriser.fillTriangle(ay, cy, dy2, ax, cx, dx2, color);
 	}
 
 	@OriginalMember(owner = "client!kb", name = "c", descriptor = "(IIIII)V")
@@ -267,13 +267,13 @@ public final class SoftwareRaster {
 		if (y + h > clipBottom) {
 			h = clipBottom - y;
 		}
-		@Pc(43) int local43 = width - w;
-		@Pc(49) int local49 = x + y * width;
-		for (@Pc(52) int local52 = -h; local52 < 0; local52++) {
-			for (@Pc(57) int local57 = -w; local57 < 0; local57++) {
-				pixels[local49++] = color;
+		@Pc(43) int stride = width - w;
+		@Pc(49) int offset = x + y * width;
+		for (@Pc(52) int row = -h; row < 0; row++) {
+			for (@Pc(57) int col = -w; col < 0; col++) {
+				pixels[offset++] = color;
 			}
-			local49 += local43;
+			offset += stride;
 		}
 	}
 
@@ -335,18 +335,18 @@ public final class SoftwareRaster {
 		if (y + length > clipBottom) {
 			length = clipBottom - y;
 		}
-		@Pc(30) int local30 = 256 - alpha;
-		@Pc(38) int local38 = (color >> 16 & 0xFF) * alpha;
-		@Pc(46) int local46 = (color >> 8 & 0xFF) * alpha;
-		@Pc(52) int local52 = (color & 0xFF) * alpha;
-		@Pc(58) int local58 = x + y * width;
-		for (@Pc(60) int local60 = 0; local60 < length; local60++) {
-			@Pc(73) int local73 = (pixels[local58] >> 16 & 0xFF) * local30;
-			@Pc(83) int local83 = (pixels[local58] >> 8 & 0xFF) * local30;
-			@Pc(91) int local91 = (pixels[local58] & 0xFF) * local30;
-			@Pc(113) int local113 = (local38 + local73 >> 8 << 16) + (local46 + local83 >> 8 << 8) + (local52 + local91 >> 8);
-			pixels[local58] = local113;
-			local58 += width;
+		@Pc(30) int invAlpha = 256 - alpha;
+		@Pc(38) int srcR = (color >> 16 & 0xFF) * alpha;
+		@Pc(46) int srcG = (color >> 8 & 0xFF) * alpha;
+		@Pc(52) int srcB = (color & 0xFF) * alpha;
+		@Pc(58) int offset = x + y * width;
+		for (@Pc(60) int i = 0; i < length; i++) {
+			@Pc(73) int dstR = (pixels[offset] >> 16 & 0xFF) * invAlpha;
+			@Pc(83) int dstG = (pixels[offset] >> 8 & 0xFF) * invAlpha;
+			@Pc(91) int dstB = (pixels[offset] & 0xFF) * invAlpha;
+			@Pc(113) int blended = (srcR + dstR >> 8 << 16) + (srcG + dstG >> 8 << 8) + (srcB + dstB >> 8);
+			pixels[offset] = blended;
+			offset += width;
 		}
 	}
 
@@ -367,48 +367,48 @@ public final class SoftwareRaster {
 				y1 += y2;
 				y2 = -y2;
 			}
-			@Pc(96) int local96;
-			@Pc(127) int local127;
+			@Pc(96) int step;
+			@Pc(127) int coord;
 			if (x2 > y2) {
 				y1 <<= 0x10;
 				y1 += 32768;
-				@Pc(86) int local86 = y2 << 16;
-				local96 = (int) Math.floor((double) local86 / (double) x2 + 0.5D);
+				@Pc(86) int scaledDy = y2 << 16;
+				step = (int) Math.floor((double) scaledDy / (double) x2 + 0.5D);
 				x2 += x1;
 				if (x1 < clipLeft) {
-					y1 += local96 * (clipLeft - x1);
+					y1 += step * (clipLeft - x1);
 					x1 = clipLeft;
 				}
 				if (x2 >= clipRight) {
 					x2 = clipRight - 1;
 				}
 				while (x1 <= x2) {
-					local127 = y1 >> 16;
-					if (local127 >= clipTop && local127 < clipBottom) {
-						pixels[x1 + local127 * width] = color;
+					coord = y1 >> 16;
+					if (coord >= clipTop && coord < clipBottom) {
+						pixels[x1 + coord * width] = color;
 					}
-					y1 += local96;
+					y1 += step;
 					x1++;
 				}
 			} else {
 				x1 <<= 0x10;
 				x1 += 32768;
-				@Pc(160) int local160 = x2 << 16;
-				local96 = (int) Math.floor((double) local160 / (double) y2 + 0.5D);
+				@Pc(160) int scaledDx = x2 << 16;
+				step = (int) Math.floor((double) scaledDx / (double) y2 + 0.5D);
 				y2 += y1;
 				if (y1 < clipTop) {
-					x1 += local96 * (clipTop - y1);
+					x1 += step * (clipTop - y1);
 					y1 = clipTop;
 				}
 				if (y2 >= clipBottom) {
 					y2 = clipBottom - 1;
 				}
 				while (y1 <= y2) {
-					local127 = x1 >> 16;
-					if (local127 >= clipLeft && local127 < clipRight) {
-						pixels[local127 + y1 * width] = color;
+					coord = x1 >> 16;
+					if (coord >= clipLeft && coord < clipRight) {
+						pixels[coord + y1 * width] = color;
 					}
-					x1 += local96;
+					x1 += step;
 					y1++;
 				}
 			}
@@ -428,73 +428,73 @@ public final class SoftwareRaster {
 		if (radius < 0) {
 			radius = -radius;
 		}
-		@Pc(15) int local15 = y - radius;
-		if (local15 < clipTop) {
-			local15 = clipTop;
+		@Pc(15) int startY = y - radius;
+		if (startY < clipTop) {
+			startY = clipTop;
 		}
-		@Pc(26) int local26 = y + radius + 1;
-		if (local26 > clipBottom) {
-			local26 = clipBottom;
+		@Pc(26) int endY = y + radius + 1;
+		if (endY > clipBottom) {
+			endY = clipBottom;
 		}
-		@Pc(33) int local33 = local15;
-		@Pc(37) int local37 = radius * radius;
-		@Pc(39) int local39 = 0;
-		@Pc(43) int local43 = y - local15;
-		@Pc(47) int local47 = local43 * local43;
-		@Pc(51) int local51 = local47 - local43;
-		if (y > local26) {
-			y = local26;
+		@Pc(33) int curY = startY;
+		@Pc(37) int radiusSq = radius * radius;
+		@Pc(39) int halfWidth = 0;
+		@Pc(43) int dy = y - startY;
+		@Pc(47) int dySq = dy * dy;
+		@Pc(51) int innerDySq = dySq - dy;
+		if (y > endY) {
+			y = endY;
 		}
-		@Pc(85) int local85;
-		@Pc(94) int local94;
-		@Pc(105) int local105;
-		@Pc(107) int local107;
-		while (local33 < y) {
-			while (local51 <= local37 || local47 <= local37) {
-				local47 += local39 + local39;
-				local51 += local39++ + local39;
+		@Pc(85) int leftX;
+		@Pc(94) int rightX;
+		@Pc(105) int offset;
+		@Pc(107) int px;
+		while (curY < y) {
+			while (innerDySq <= radiusSq || dySq <= radiusSq) {
+				dySq += halfWidth + halfWidth;
+				innerDySq += halfWidth++ + halfWidth;
 			}
-			local85 = x + 1 - local39;
-			if (local85 < clipLeft) {
-				local85 = clipLeft;
+			leftX = x + 1 - halfWidth;
+			if (leftX < clipLeft) {
+				leftX = clipLeft;
 			}
-			local94 = x + local39;
-			if (local94 > clipRight) {
-				local94 = clipRight;
+			rightX = x + halfWidth;
+			if (rightX > clipRight) {
+				rightX = clipRight;
 			}
-			local105 = local85 + local33 * width;
-			for (local107 = local85; local107 < local94; local107++) {
-				pixels[local105++] = 16776960;
+			offset = leftX + curY * width;
+			for (px = leftX; px < rightX; px++) {
+				pixels[offset++] = 16776960;
 			}
-			local33++;
-			local47 -= local43-- + local43;
-			local51 -= local43 + local43;
+			curY++;
+			dySq -= dy-- + dy;
+			innerDySq -= dy + dy;
 		}
-		local39 = radius;
-		local43 = local33 - y;
-		local51 = local43 * local43 + local37;
-		local47 = local51 - radius;
-		local51 -= local43;
-		while (local33 < local26) {
-			while (local51 > local37 && local47 > local37) {
-				local51 -= local39-- + local39;
-				local47 -= local39 + local39;
+		halfWidth = radius;
+		dy = curY - y;
+		innerDySq = dy * dy + radiusSq;
+		dySq = innerDySq - radius;
+		innerDySq -= dy;
+		while (curY < endY) {
+			while (innerDySq > radiusSq && dySq > radiusSq) {
+				innerDySq -= halfWidth-- + halfWidth;
+				dySq -= halfWidth + halfWidth;
 			}
-			local85 = x - local39;
-			if (local85 < clipLeft) {
-				local85 = clipLeft;
+			leftX = x - halfWidth;
+			if (leftX < clipLeft) {
+				leftX = clipLeft;
 			}
-			local94 = x + local39;
-			if (local94 > clipRight - 1) {
-				local94 = clipRight - 1;
+			rightX = x + halfWidth;
+			if (rightX > clipRight - 1) {
+				rightX = clipRight - 1;
 			}
-			local105 = local85 + local33 * width;
-			for (local107 = local85; local107 <= local94; local107++) {
-				pixels[local105++] = 16776960;
+			offset = leftX + curY * width;
+			for (px = leftX; px <= rightX; px++) {
+				pixels[offset++] = 16776960;
 			}
-			local33++;
-			local51 += local43 + local43;
-			local47 += local43++ + local43;
+			curY++;
+			innerDySq += dy + dy;
+			dySq += dy++ + dy;
 		}
 	}
 
@@ -507,89 +507,89 @@ public final class SoftwareRaster {
 			fillCircle(x, y, radius);
 			return;
 		}
-		@Pc(20) int local20 = 256 - alpha;
-		@Pc(28) int local28 = alpha * 255;
-		@Pc(36) int local36 = alpha * 255;
-		@Pc(42) int local42 = alpha * 0;
-		@Pc(46) int local46 = y - radius;
-		if (local46 < clipTop) {
-			local46 = clipTop;
+		@Pc(20) int invAlpha = 256 - alpha;
+		@Pc(28) int srcR = alpha * 255;
+		@Pc(36) int srcG = alpha * 255;
+		@Pc(42) int srcB = alpha * 0;
+		@Pc(46) int startY = y - radius;
+		if (startY < clipTop) {
+			startY = clipTop;
 		}
-		@Pc(57) int local57 = y + radius + 1;
-		if (local57 > clipBottom) {
-			local57 = clipBottom;
+		@Pc(57) int endY = y + radius + 1;
+		if (endY > clipBottom) {
+			endY = clipBottom;
 		}
-		@Pc(64) int local64 = local46;
-		@Pc(68) int local68 = radius * radius;
-		@Pc(70) int local70 = 0;
-		@Pc(74) int local74 = y - local46;
-		@Pc(78) int local78 = local74 * local74;
-		@Pc(82) int local82 = local78 - local74;
-		if (y > local57) {
-			y = local57;
+		@Pc(64) int curY = startY;
+		@Pc(68) int radiusSq = radius * radius;
+		@Pc(70) int halfWidth = 0;
+		@Pc(74) int dy = y - startY;
+		@Pc(78) int dySq = dy * dy;
+		@Pc(82) int innerDySq = dySq - dy;
+		if (y > endY) {
+			y = endY;
 		}
-		@Pc(151) int local151;
-		@Pc(161) int local161;
-		@Pc(169) int local169;
-		@Pc(116) int local116;
-		@Pc(125) int local125;
-		@Pc(136) int local136;
-		@Pc(138) int local138;
-		@Pc(191) int local191;
-		while (local64 < y) {
-			while (local82 <= local68 || local78 <= local68) {
-				local78 += local70 + local70;
-				local82 += local70++ + local70;
+		@Pc(151) int dstR;
+		@Pc(161) int dstG;
+		@Pc(169) int dstB;
+		@Pc(116) int leftX;
+		@Pc(125) int rightX;
+		@Pc(136) int offset;
+		@Pc(138) int px;
+		@Pc(191) int blended;
+		while (curY < y) {
+			while (innerDySq <= radiusSq || dySq <= radiusSq) {
+				dySq += halfWidth + halfWidth;
+				innerDySq += halfWidth++ + halfWidth;
 			}
-			local116 = x + 1 - local70;
-			if (local116 < clipLeft) {
-				local116 = clipLeft;
+			leftX = x + 1 - halfWidth;
+			if (leftX < clipLeft) {
+				leftX = clipLeft;
 			}
-			local125 = x + local70;
-			if (local125 > clipRight) {
-				local125 = clipRight;
+			rightX = x + halfWidth;
+			if (rightX > clipRight) {
+				rightX = clipRight;
 			}
-			local136 = local116 + local64 * width;
-			for (local138 = local116; local138 < local125; local138++) {
-				local151 = (pixels[local136] >> 16 & 0xFF) * local20;
-				local161 = (pixels[local136] >> 8 & 0xFF) * local20;
-				local169 = (pixels[local136] & 0xFF) * local20;
-				local191 = (local28 + local151 >> 8 << 16) + (local36 + local161 >> 8 << 8) + (local42 + local169 >> 8);
-				pixels[local136++] = local191;
+			offset = leftX + curY * width;
+			for (px = leftX; px < rightX; px++) {
+				dstR = (pixels[offset] >> 16 & 0xFF) * invAlpha;
+				dstG = (pixels[offset] >> 8 & 0xFF) * invAlpha;
+				dstB = (pixels[offset] & 0xFF) * invAlpha;
+				blended = (srcR + dstR >> 8 << 16) + (srcG + dstG >> 8 << 8) + (srcB + dstB >> 8);
+				pixels[offset++] = blended;
 			}
-			local64++;
-			local78 -= local74-- + local74;
-			local82 -= local74 + local74;
+			curY++;
+			dySq -= dy-- + dy;
+			innerDySq -= dy + dy;
 		}
-		local70 = radius;
-		local74 = -local74;
-		local82 = local74 * local74 + local68;
-		local78 = local82 - radius;
-		local82 -= local74;
-		while (local64 < local57) {
-			while (local82 > local68 && local78 > local68) {
-				local82 -= local70-- + local70;
-				local78 -= local70 + local70;
+		halfWidth = radius;
+		dy = -dy;
+		innerDySq = dy * dy + radiusSq;
+		dySq = innerDySq - radius;
+		innerDySq -= dy;
+		while (curY < endY) {
+			while (innerDySq > radiusSq && dySq > radiusSq) {
+				innerDySq -= halfWidth-- + halfWidth;
+				dySq -= halfWidth + halfWidth;
 			}
-			local116 = x - local70;
-			if (local116 < clipLeft) {
-				local116 = clipLeft;
+			leftX = x - halfWidth;
+			if (leftX < clipLeft) {
+				leftX = clipLeft;
 			}
-			local125 = x + local70;
-			if (local125 > clipRight - 1) {
-				local125 = clipRight - 1;
+			rightX = x + halfWidth;
+			if (rightX > clipRight - 1) {
+				rightX = clipRight - 1;
 			}
-			local136 = local116 + local64 * width;
-			for (local138 = local116; local138 <= local125; local138++) {
-				local151 = (pixels[local136] >> 16 & 0xFF) * local20;
-				local161 = (pixels[local136] >> 8 & 0xFF) * local20;
-				local169 = (pixels[local136] & 0xFF) * local20;
-				local191 = (local28 + local151 >> 8 << 16) + (local36 + local161 >> 8 << 8) + (local42 + local169 >> 8);
-				pixels[local136++] = local191;
+			offset = leftX + curY * width;
+			for (px = leftX; px <= rightX; px++) {
+				dstR = (pixels[offset] >> 16 & 0xFF) * invAlpha;
+				dstG = (pixels[offset] >> 8 & 0xFF) * invAlpha;
+				dstB = (pixels[offset] & 0xFF) * invAlpha;
+				blended = (srcR + dstR >> 8 << 16) + (srcG + dstG >> 8 << 8) + (srcB + dstB >> 8);
+				pixels[offset++] = blended;
 			}
-			local64++;
-			local82 += local74 + local74;
-			local78 += local74++ + local74;
+			curY++;
+			innerDySq += dy + dy;
+			dySq += dy++ + dy;
 		}
 	}
 
@@ -604,13 +604,13 @@ public final class SoftwareRaster {
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(III[I[I)V")
 	public static void clearMaskedRegion(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(3) int[] starts, @OriginalArg(4) int[] widths) {
-		@Pc(5) int local5 = x + y * width;
-		for (@Pc(7) int local7 = 0; local7 < starts.length; local7++) {
-			@Pc(17) int local17 = local5 + starts[local7];
-			for (@Pc(22) int local22 = -widths[local7]; local22 < 0; local22++) {
-				pixels[local17++] = 0;
+		@Pc(5) int rowOffset = x + y * width;
+		for (@Pc(7) int i = 0; i < starts.length; i++) {
+			@Pc(17) int offset = rowOffset + starts[i];
+			for (@Pc(22) int j = -widths[i]; j < 0; j++) {
+				pixels[offset++] = 0;
 			}
-			local5 += width;
+			rowOffset += width;
 		}
 	}
 }
