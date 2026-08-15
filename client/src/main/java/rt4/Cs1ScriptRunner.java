@@ -356,8 +356,8 @@ public class Cs1ScriptRunner {
 					}
 					@Pc(302) int drawRight;
 					@Pc(291) int drawBottom;
-					@Pc(270) int local270;
-					@Pc(276) int local276;
+					@Pc(270) int temp1;
+					@Pc(276) int temp2;
 					if (component.type == 2) {
 						drawBottom = clipBottom;
 						drawRight = clipRight;
@@ -366,23 +366,23 @@ public class Cs1ScriptRunner {
 					} else {
 						drawTop = componentY > clipTop ? componentY : clipTop;
 						drawLeft = clipLeft < componentX ? componentX : clipLeft;
-						local270 = component.width + componentX;
-						local276 = componentY + component.height;
+						temp1 = component.width + componentX;
+						temp2 = componentY + component.height;
 						if (component.type == 9) {
-							local276++;
-							local270++;
+							temp2++;
+							temp1++;
 						}
-						drawBottom = clipBottom <= local276 ? clipBottom : local276;
-						drawRight = local270 >= clipRight ? clipRight : local270;
+						drawBottom = clipBottom <= temp2 ? clipBottom : temp2;
+						drawRight = temp1 >= clipRight ? clipRight : temp1;
 					}
 					if (!component.if3 || drawRight > drawLeft && drawTop < drawBottom) {
-						@Pc(468) int local468;
+						@Pc(468) int temp3;
 						@Pc(503) int memory;
 						@Pc(514) int color;
 						@Pc(518) int cardMemory;
-						@Pc(556) int local556;
-						@Pc(563) int local563;
-						@Pc(571) int local571;
+						@Pc(556) int temp4;
+						@Pc(563) int temp5;
+						@Pc(571) int temp6;
 						@Pc(545) int objId;
 						if (component.clientCode != 0) {
 							if (component.clientCode == 1337 || component.clientCode == 1403 && GlRenderer.enabled) {
@@ -410,36 +410,36 @@ public class Cs1ScriptRunner {
 								if (MiniMap.state != 0 && MiniMap.state != 3 || isMenuOpen || drawLeft > ScriptRunner.interfaceMouseX || ScriptRunner.interfaceMouseY < drawTop || ScriptRunner.interfaceMouseX >= drawRight || drawBottom <= ScriptRunner.interfaceMouseY) {
 									continue;
 								}
-								local270 = ScriptRunner.interfaceMouseX - componentX;
-								local276 = ScriptRunner.interfaceMouseY - componentY;
-								local468 = component.clickMaskStart[local276];
-								if (local270 < local468 || local270 > local468 + component.clickMaskWidth[local276]) {
+								temp1 = ScriptRunner.interfaceMouseX - componentX;
+								temp2 = ScriptRunner.interfaceMouseY - componentY;
+								temp3 = component.clickMaskStart[temp2];
+								if (temp1 < temp3 || temp1 > temp3 + component.clickMaskWidth[temp2]) {
 									continue;
 								}
-								local276 -= component.height / 2;
+								temp2 -= component.height / 2;
 								memory = (int) Camera.yawTarget + MiniMap.compassAngleOffset & 0x7FF;
-								local270 -= component.width / 2;
+								temp1 -= component.width / 2;
 								color = MathUtils.sin[memory];
 								cardMemory = MathUtils.cos[memory];
 								color = (MiniMap.zoomOffset + 256) * color >> 8;
 								cardMemory = (MiniMap.zoomOffset + 256) * cardMemory >> 8;
-								objId = cardMemory * local276 - color * local270 >> 11;
-								local556 = local276 * color + local270 * cardMemory >> 11;
-								local563 = PlayerList.self.xFine + local556 >> 7;
-								local571 = PlayerList.self.yFine - objId >> 7;
+								objId = cardMemory * temp2 - color * temp1 >> 11;
+								temp4 = temp2 * color + temp1 * cardMemory >> 11;
+								temp5 = PlayerList.self.xFine + temp4 >> 7;
+								temp6 = PlayerList.self.yFine - objId >> 7;
 								if (MiniMenu.isTargeting && (MiniMenu.targetMask & 0x40) != 0) {
 									@Pc(583) Component targetComponent = InterfaceList.getComponent(MiniMenu.targetInterfaceId, MiniMenu.targetChildId);
 									if (targetComponent == null) {
 										MiniMenu.cancelTargeting();
 									} else {
-										MiniMenu.add(MiniMenu.targetCursorId, 1L, MiniMenu.ARROW_SUFFIX, local563, (short) 11, MiniMenu.targetVerb, local571);
+										MiniMenu.add(MiniMenu.targetCursorId, 1L, MiniMenu.ARROW_SUFFIX, temp5, (short) 11, MiniMenu.targetVerb, temp6);
 									}
 									continue;
 								}
 								if (client.game == 1) {
-									MiniMenu.add(-1, 1L, JagString.EMPTY, local563, (short) 36, LocalizedText.FACEHERE, local571);
+									MiniMenu.add(-1, 1L, JagString.EMPTY, temp5, (short) 36, LocalizedText.FACEHERE, temp6);
 								}
-								MiniMenu.add(-1, 1L, JagString.EMPTY, local563, (short) 60, MiniMenu.walkText, local571);
+								MiniMenu.add(-1, 1L, JagString.EMPTY, temp5, (short) 60, MiniMenu.walkText, temp6);
 								continue;
 							}
 							if (component.clientCode == 1339) {
@@ -493,40 +493,40 @@ public class Cs1ScriptRunner {
 								if (!Cheat.displayFps) {
 									continue;
 								}
-								local270 = component.width + componentX;
-								local276 = componentY + 15;
-								Fonts.p12Full.renderRight(JagString.concatenate(new JagString[]{Cheat.DEBUG_FPS2, JagString.parseInt((int) GameShell.framesPerSecond)}), local270, local276, 16776960, 0);
-								local276 += 15;
+								temp1 = component.width + componentX;
+								temp2 = componentY + 15;
+								Fonts.p12Full.renderRight(JagString.concatenate(new JagString[]{Cheat.DEBUG_FPS2, JagString.parseInt((int) GameShell.framesPerSecond)}), temp1, temp2, 16776960, 0);
+								temp2 += 15;
 								@Pc(795) Runtime runtime = Runtime.getRuntime();
 								memory = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L / 1024L);
 								color = 16776960;
 								if (memory > 128) {
 									color = 16711680;
 								}
-								Fonts.p12Full.renderRight(JagString.concatenate(new JagString[]{Cheat.DEBUG_MEM, JagString.parseInt(memory), Cheat.DEBUG_MEM_UNIT}), local270, local276, color, 0);
-								local276 += 15;
+								Fonts.p12Full.renderRight(JagString.concatenate(new JagString[]{Cheat.DEBUG_MEM, JagString.parseInt(memory), Cheat.DEBUG_MEM_UNIT}), temp1, temp2, color, 0);
+								temp2 += 15;
 								if (GlRenderer.enabled) {
 									color = 16776960;
 									cardMemory = (GlCleaner.onCardTexture + GlCleaner.onCardGeometry + GlCleaner.onCard2d) / 1024 / 1024;
 									if (cardMemory > 64) {
 										color = 16711680;
 									}
-									Fonts.p12Full.renderRight(JagString.concatenate(new JagString[]{Cheat.DEBUG_CARD, JagString.parseInt(cardMemory), Cheat.DEBUG_MEM_UNIT}), local270, local276, color, 0);
-									local276 += 15;
+									Fonts.p12Full.renderRight(JagString.concatenate(new JagString[]{Cheat.DEBUG_CARD, JagString.parseInt(cardMemory), Cheat.DEBUG_MEM_UNIT}), temp1, temp2, color, 0);
+									temp2 += 15;
 								}
 								cardMemory = 0;
 								objId = 0;
-								local556 = 0;
-								for (local563 = 0; local563 < 28; local563++) {
-									cardMemory += client.js5Providers[local563].getIndexSize();
-									local556 += client.js5Providers[local563].getVerifiedGroups();
-									objId += client.js5Providers[local563].getTotalVerifiedGroups();
+								temp4 = 0;
+								for (temp5 = 0; temp5 < 28; temp5++) {
+									cardMemory += client.js5Providers[temp5].getIndexSize();
+									temp4 += client.js5Providers[temp5].getVerifiedGroups();
+									objId += client.js5Providers[temp5].getTotalVerifiedGroups();
 								}
-								local571 = local556 * 10000 / cardMemory;
-								local563 = objId * 100 / cardMemory;
-								@Pc(968) JagString cacheStatText = JagString.concatenate(new JagString[]{Cheat.DEBUG_CAHE, StringUtils.formatNumber(0, true, 2, local571), CACHE_STAT_SEPARATOR, JagString.parseInt(local563), CACHE_STAT_SUFFIX});
-								Fonts.p11Full.renderRight(cacheStatText, local270, local276, 16776960, 0);
-								local276 += 12;
+								temp6 = temp4 * 10000 / cardMemory;
+								temp5 = objId * 100 / cardMemory;
+								@Pc(968) JagString cacheStatText = JagString.concatenate(new JagString[]{Cheat.DEBUG_CAHE, StringUtils.formatNumber(0, true, 2, temp6), CACHE_STAT_SEPARATOR, JagString.parseInt(temp5), CACHE_STAT_SUFFIX});
+								Fonts.p11Full.renderRight(cacheStatText, temp1, temp2, 16776960, 0);
+								temp2 += 12;
 								InterfaceList.rectangleDirty[rectangle] = true;
 								InterfaceList.rectangleRedraw[rectangle] = true;
 								continue;
@@ -591,24 +591,24 @@ public class Cs1ScriptRunner {
 
 							if (component.type != 1) {
 								if (component.type == 2) {
-									local270 = 0;
-									for (local276 = 0; local276 < component.baseHeight; local276++) {
-										for (local468 = 0; local468 < component.baseWidth; local468++) {
-											int y = componentY + local276 * (component.invMarginY + 32);
-											int x = (component.invMarginX + 32) * local468 + componentX;
-											if (local270 < 20) {
-												y += component.invOffsetY[local270];
-												x += component.invOffsetX[local270];
+									temp1 = 0;
+									for (temp2 = 0; temp2 < component.baseHeight; temp2++) {
+										for (temp3 = 0; temp3 < component.baseWidth; temp3++) {
+											int y = componentY + temp2 * (component.invMarginY + 32);
+											int x = (component.invMarginX + 32) * temp3 + componentX;
+											if (temp1 < 20) {
+												y += component.invOffsetY[temp1];
+												x += component.invOffsetX[temp1];
 											}
-											if (component.objTypes[local270] > 0) {
-												objId = component.objTypes[local270] - 1;
-												if (clipLeft < x + 32 && x < clipRight && clipTop < y + 32 && y < clipBottom || component == InterfaceList.clickedInventoryComponent && InterfaceList.mouseOverInventoryObjectIndex == local270) {
+											if (component.objTypes[temp1] > 0) {
+												objId = component.objTypes[temp1] - 1;
+												if (clipLeft < x + 32 && x < clipRight && clipTop < y + 32 && y < clipBottom || component == InterfaceList.clickedInventoryComponent && InterfaceList.mouseOverInventoryObjectIndex == temp1) {
 													@Pc(1476) Sprite sprite;
 
-													if (MiniMenu.itemTargetMode == 1 && MiniMenu.selectedObjSlot == local270 && component.id == MiniMap.selectedComponentId) {
-														sprite = Inv.getObjectSprite(2, objId, component.objDrawText, component.objCounts[local270], 0);
+													if (MiniMenu.itemTargetMode == 1 && MiniMenu.selectedObjSlot == temp1 && component.id == MiniMap.selectedComponentId) {
+														sprite = Inv.getObjectSprite(2, objId, component.objDrawText, component.objCounts[temp1], 0);
 													} else {
-														sprite = Inv.getObjectSprite(1, objId, component.objDrawText, component.objCounts[local270], 3153952);
+														sprite = Inv.getObjectSprite(1, objId, component.objDrawText, component.objCounts[temp1], 3153952);
 													}
 
 													if (Rasteriser.textureHasTransparency) {
@@ -617,7 +617,7 @@ public class Cs1ScriptRunner {
 
 													if (sprite == null) {
 														InterfaceList.redraw(component);
-													} else if (InterfaceList.clickedInventoryComponent == component && local270 == InterfaceList.mouseOverInventoryObjectIndex) {
+													} else if (InterfaceList.clickedInventoryComponent == component && temp1 == InterfaceList.mouseOverInventoryObjectIndex) {
 														int dragX = Mouse.lastMouseX - InterfaceList.clickedInventoryComponentX;
 														int dragY = Mouse.lastMouseY - InterfaceList.clickedInventoryComponentY;
 
@@ -681,7 +681,7 @@ public class Cs1ScriptRunner {
 																InterfaceList.redraw(scrollParent);
 															}
 														}
-													} else if (component == MiniMenu.pressedInventoryComponent && local270 == MiniMenu.pressedSlotIndex) {
+													} else if (component == MiniMenu.pressedInventoryComponent && temp1 == MiniMenu.pressedSlotIndex) {
 														sprite.renderAlpha(x, y, 128);
 													} else {
 														sprite.render(x, y);
@@ -689,8 +689,8 @@ public class Cs1ScriptRunner {
 														// sprite.renderResized(x, y, 36, 32);
 													}
 												}
-											} else if (component.invSprite != null && local270 < 20) {
-												@Pc(1381) Sprite invSprite = component.getInvSprite(local270);
+											} else if (component.invSprite != null && temp1 < 20) {
+												@Pc(1381) Sprite invSprite = component.getInvSprite(temp1);
 												if (invSprite != null) {
 													invSprite.render(x, y);
 												} else if (Component.loadFailed) {
@@ -698,44 +698,44 @@ public class Cs1ScriptRunner {
 												}
 											}
 
-											local270++;
+											temp1++;
 										}
 									}
 									PluginRepository.ComponentDraw(i, component, componentX, componentY);
 								} else if (component.type == 3) {
 									if (isTrue(component)) {
-										local270 = component.activeColor;
+										temp1 = component.activeColor;
 										if (InterfaceList.hoveredComponent == component && component.activeOverColor != 0) {
-											local270 = component.activeOverColor;
+											temp1 = component.activeOverColor;
 										}
 									} else {
-										local270 = component.color;
+										temp1 = component.color;
 										if (component == InterfaceList.hoveredComponent && component.overColor != 0) {
-											local270 = component.overColor;
+											temp1 = component.overColor;
 										}
 									}
 									if (alpha == 0) {
 										if (component.filled) {
 											if (GlRenderer.enabled) {
-												GlRaster.fillRect(componentX, componentY, component.width, component.height, local270);
+												GlRaster.fillRect(componentX, componentY, component.width, component.height, temp1);
 											} else {
-												SoftwareRaster.fillRect(componentX, componentY, component.width, component.height, local270);
+												SoftwareRaster.fillRect(componentX, componentY, component.width, component.height, temp1);
 											}
 										} else if (GlRenderer.enabled) {
-											GlRaster.drawRect(componentX, componentY, component.width, component.height, local270);
+											GlRaster.drawRect(componentX, componentY, component.width, component.height, temp1);
 										} else {
-											SoftwareRaster.drawRect(componentX, componentY, component.width, component.height, local270);
+											SoftwareRaster.drawRect(componentX, componentY, component.width, component.height, temp1);
 										}
 									} else if (component.filled) {
 										if (GlRenderer.enabled) {
-											GlRaster.fillRectAlpha(componentX, componentY, component.width, component.height, local270, 256 - (alpha & 0xFF));
+											GlRaster.fillRectAlpha(componentX, componentY, component.width, component.height, temp1, 256 - (alpha & 0xFF));
 										} else {
-											SoftwareRaster.fillRectAlpha(componentX, componentY, component.width, component.height, local270, 256 - (alpha & 0xFF));
+											SoftwareRaster.fillRectAlpha(componentX, componentY, component.width, component.height, temp1, 256 - (alpha & 0xFF));
 										}
 									} else if (GlRenderer.enabled) {
-										GlRaster.drawRectAlpha(componentX, componentY, component.width, component.height, local270, 256 - (alpha & 0xFF));
+										GlRaster.drawRectAlpha(componentX, componentY, component.width, component.height, temp1, 256 - (alpha & 0xFF));
 									} else {
-										SoftwareRaster.drawRectAlpha(componentX, componentY, component.width, component.height, local270, 256 - (alpha & 0xFF));
+										SoftwareRaster.drawRectAlpha(componentX, componentY, component.width, component.height, temp1, 256 - (alpha & 0xFF));
 									}
 									PluginRepository.ComponentDraw(i, component, componentX, componentY);
 								} else {
@@ -745,17 +745,17 @@ public class Cs1ScriptRunner {
 										if (font != null) {
 											@Pc(1934) JagString displayText = component.text;
 											if (isTrue(component)) {
-												local276 = component.activeColor;
+												temp2 = component.activeColor;
 												if (InterfaceList.hoveredComponent == component && component.activeOverColor != 0) {
-													local276 = component.activeOverColor;
+													temp2 = component.activeOverColor;
 												}
 												if (component.activeText.length() > 0) {
 													displayText = component.activeText;
 												}
 											} else {
-												local276 = component.color;
+												temp2 = component.color;
 												if (InterfaceList.hoveredComponent == component && component.overColor != 0) {
-													local276 = component.overColor;
+													temp2 = component.overColor;
 												}
 											}
 											if (component.if3 && component.objId != -1) {
@@ -769,13 +769,13 @@ public class Cs1ScriptRunner {
 												}
 											}
 											if (pleaseWaitComponent == component) {
-												local276 = component.color;
+												temp2 = component.color;
 												displayText = LocalizedText.PLEASEWAIT;
 											}
 											if (!component.if3) {
 												displayText = interpolate(component, displayText);
 											}
-											font.drawInterfaceText(displayText, componentX, componentY, component.width, component.height, local276, component.shadowed ? 0 : -1, component.halign, component.valign, component.vpadding);
+											font.drawInterfaceText(displayText, componentX, componentY, component.width, component.height, temp2, component.shadowed ? 0 : -1, component.halign, component.valign, component.vpadding);
 											PluginRepository.ComponentDraw(i, component, componentX, componentY);
 										} else if (Component.loadFailed) {
 											InterfaceList.redraw(component);
@@ -790,12 +790,12 @@ public class Cs1ScriptRunner {
 											}
 
 											if (sprite != null) {
-												local276 = sprite.innerWidth;
-												local468 = sprite.innerHeight;
+												temp2 = sprite.innerWidth;
+												temp3 = sprite.innerHeight;
 
 												if (component.spriteTiling) {
-													memory = (local276 + component.width - 1) / local276;
-													color = (component.height + local468 - 1) / local468;
+													memory = (temp2 + component.width - 1) / temp2;
+													color = (component.height + temp3 - 1) / temp3;
 
 													if (GlRenderer.enabled) {
 														GlRaster.setClipRegion(componentX, componentY, component.width + componentX, component.height + componentY);
@@ -811,61 +811,61 @@ public class Cs1ScriptRunner {
 															}
 															PluginRepository.ComponentDraw(i, component, componentX, componentY);
 														} else if (widthPow2) {
-															for (local563 = 0; local563 < color; local563++) {
+															for (temp5 = 0; temp5 < color; temp5++) {
 																if (alpha == 0) {
-																	glSprite.renderTiled(componentX, local563 * local468 + componentY, memory, 1);
+																	glSprite.renderTiled(componentX, temp5 * temp3 + componentY, memory, 1);
 																} else {
-																	glSprite.renderTiledAlpha(componentX, componentY + local563 * local468, -(alpha & 0xFF) + 256, memory, 1);
+																	glSprite.renderTiledAlpha(componentX, componentY + temp5 * temp3, -(alpha & 0xFF) + 256, memory, 1);
 																}
 															}
 															PluginRepository.ComponentDraw(i, component, componentX, componentY);
 														} else if (heightPow2) {
-															for (local563 = 0; local563 < memory; local563++) {
+															for (temp5 = 0; temp5 < memory; temp5++) {
 																if (alpha == 0) {
-																	glSprite.renderTiled(local276 * local563 + componentX, componentY, 1, color);
+																	glSprite.renderTiled(temp2 * temp5 + componentX, componentY, 1, color);
 																} else {
-																	glSprite.renderTiledAlpha(local276 * local563 + componentX, componentY, 256 - (alpha & 0xFF), 1, color);
+																	glSprite.renderTiledAlpha(temp2 * temp5 + componentX, componentY, 256 - (alpha & 0xFF), 1, color);
 																}
 															}
 															PluginRepository.ComponentDraw(i, component, componentX, componentY);
 														} else {
-															for (local563 = 0; local563 < memory; local563++) {
-																for (local571 = 0; local571 < color; local571++) {
+															for (temp5 = 0; temp5 < memory; temp5++) {
+																for (temp6 = 0; temp6 < color; temp6++) {
 																	if (alpha == 0) {
-																		sprite.render(componentX + local276 * local563, local468 * local571 + componentY);
+																		sprite.render(componentX + temp2 * temp5, temp3 * temp6 + componentY);
 																	} else {
-																		sprite.renderAlpha(local563 * local276 + componentX, local468 * local571 + componentY, 256 - (alpha & 0xFF));
+																		sprite.renderAlpha(temp5 * temp2 + componentX, temp3 * temp6 + componentY, 256 - (alpha & 0xFF));
 																	}
 																}
 															}
-															PluginRepository.ComponentDraw(i, component, componentX + local276, local468 + componentY);
+															PluginRepository.ComponentDraw(i, component, componentX + temp2, temp3 + componentY);
 														}
 
 														GlRaster.setClip(clipLeft, clipTop, clipRight, clipBottom);
 													} else {
 														SoftwareRaster.shrinkClip(componentX, componentY, componentX + component.width, componentY - -component.height);
 														for (cardMemory = 0; cardMemory < memory; cardMemory++) {
-															for (local556 = 0; local556 < color; local556++) {
+															for (temp4 = 0; temp4 < color; temp4++) {
 																if (component.angle2d != 0) {
-																	sprite.renderAngled(componentY + local468 * local556 + local468 / 2, component.angle2d, 4096, cardMemory * local276 + componentX + local276 / 2);
+																	sprite.renderAngled(componentY + temp3 * temp4 + temp3 / 2, component.angle2d, 4096, cardMemory * temp2 + componentX + temp2 / 2);
 																} else if (alpha == 0) {
-																	sprite.render(cardMemory * local276 + componentX, local468 * local556 + componentY);
+																	sprite.render(cardMemory * temp2 + componentX, temp3 * temp4 + componentY);
 																} else {
-																	sprite.renderAlpha(cardMemory * local276 + componentX, componentY + local556 * local468, 256 - (alpha & 0xFF));
+																	sprite.renderAlpha(cardMemory * temp2 + componentX, componentY + temp4 * temp3, 256 - (alpha & 0xFF));
 																}
 															}
 														}
-														PluginRepository.ComponentDraw(i, component, componentX + local276, componentY + local468);
+														PluginRepository.ComponentDraw(i, component, componentX + temp2, componentY + temp3);
 
 														SoftwareRaster.setClip(clipLeft, clipTop, clipRight, clipBottom);
 													}
 												} else {
-													memory = component.width * 4096 / local276;
+													memory = component.width * 4096 / temp2;
 													if (component.angle2d != 0) {
 														sprite.renderAngled(componentY + component.height / 2, component.angle2d, memory, componentX + component.width / 2);
 													} else if (alpha != 0) {
 														sprite.renderAlpha(componentX, componentY, component.width, component.height, 256 - (alpha & 0xFF));
-													} else if (local276 == component.width && local468 == component.height) {
+													} else if (temp2 == component.width && temp3 == component.height) {
 														sprite.render(componentX, componentY);
 													} else {
 														// render icons in a container i.e bank icons
@@ -890,16 +890,16 @@ public class Cs1ScriptRunner {
 											@Pc(2587) boolean active = isTrue(component);
 											@Pc(2589) Model model = null;
 											if (active) {
-												local276 = component.activeModelSeqId;
+												temp2 = component.activeModelSeqId;
 											} else {
-												local276 = component.modelSeqId;
+												temp2 = component.modelSeqId;
 											}
 											memory = 0;
 											if (component.objId != -1) {
 												objDef = ObjTypeList.get(component.objId);
 												if (objDef != null) {
 													objDef = objDef.getCountVariant(component.objCount);
-													@Pc(2630) SeqType seqType = local276 == -1 ? null : SeqTypeList.get(local276);
+													@Pc(2630) SeqType seqType = temp2 == -1 ? null : SeqTypeList.get(temp2);
 													model = objDef.getModel(component.seqNextFrame, component.seqCycle, seqType, 1, component.seqFrame);
 													if (model == null) {
 														InterfaceList.redraw(component);
@@ -916,18 +916,18 @@ public class Cs1ScriptRunner {
 														color = 2047;
 													}
 													@Pc(2751) Player player = PlayerList.players[color];
-													@Pc(2760) SeqType playerSeqType = local276 == -1 ? null : SeqTypeList.get(local276);
+													@Pc(2760) SeqType playerSeqType = temp2 == -1 ? null : SeqTypeList.get(temp2);
 													if (player != null && (int) player.username.encode37() << 11 == (component.modelId & 0xFFFFF800)) {
 														model = player.appearance.getBodyModel(null, -1, null, playerSeqType, 0, -1, 0, component.seqFrame, 0);
 													}
 												}
-											} else if (local276 == -1) {
+											} else if (temp2 == -1) {
 												model = component.getModel(-1, null, -1, 0, active, PlayerList.self.appearance);
 												if (model == null && Component.loadFailed) {
 													InterfaceList.redraw(component);
 												}
 											} else {
-												@Pc(2689) SeqType seqType = SeqTypeList.get(local276);
+												@Pc(2689) SeqType seqType = SeqTypeList.get(temp2);
 												model = component.getModel(component.seqNextFrame, seqType, component.seqFrame, component.seqCycle, active, PlayerList.self.appearance);
 												if (model == null && Component.loadFailed) {
 													InterfaceList.redraw(component);
@@ -944,13 +944,13 @@ public class Cs1ScriptRunner {
 												} else {
 													cardMemory = (component.height << 8) / component.modelViewportHeight;
 												}
-												local556 = componentX + component.width / 2 + (color * component.modelOriginX >> 8);
+												temp4 = componentX + component.width / 2 + (color * component.modelOriginX >> 8);
 												objId = component.height / 2 + componentY + (cardMemory * component.modelOriginY >> 8);
 												if (GlRenderer.enabled) {
 													if (component.modelOrtho) {
-														GlRenderer.setupModelPreview(local556, objId, component.modelZoom, component.modelViewAngle, color, cardMemory);
+														GlRenderer.setupModelPreview(temp4, objId, component.modelZoom, component.modelViewAngle, color, cardMemory);
 													} else {
-														GlRenderer.setFullscreenCamera(local556, objId, color, cardMemory);
+														GlRenderer.setFullscreenCamera(temp4, objId, color, cardMemory);
 														GlRenderer.setDepthBias(component.modelNearClip, (float) component.modelViewAngle * 1.5F);
 													}
 													GlRenderer.restoreLighting();
@@ -966,26 +966,26 @@ public class Cs1ScriptRunner {
 													if (component.modelTransparent) {
 														GlRenderer.disableDepthMask();
 													}
-													local563 = MathUtils.sin[component.modelXAngle] * component.modelZoom >> 16;
-													local571 = component.modelZoom * MathUtils.cos[component.modelXAngle] >> 16;
+													temp5 = MathUtils.sin[component.modelXAngle] * component.modelZoom >> 16;
+													temp6 = component.modelZoom * MathUtils.cos[component.modelXAngle] >> 16;
 													if (component.if3) {
-														model.setCamera(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + local563 + memory, component.modelZOffset + local571, -1L);
+														model.setCamera(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + temp5 + memory, component.modelZOffset + temp6, -1L);
 													} else {
-														model.setCamera(component.modelYAngle, 0, component.modelXAngle, 0, local563, local571, -1L);
+														model.setCamera(component.modelYAngle, 0, component.modelXAngle, 0, temp5, temp6, -1L);
 													}
 													if (component.modelTransparent) {
 														GlRenderer.enableDepthMask();
 													}
 												} else {
-													Rasteriser.setBounds(local556, objId);
-													local563 = MathUtils.sin[component.modelXAngle] * component.modelZoom >> 16;
-													local571 = component.modelZoom * MathUtils.cos[component.modelXAngle] >> 16;
+													Rasteriser.setBounds(temp4, objId);
+													temp5 = MathUtils.sin[component.modelXAngle] * component.modelZoom >> 16;
+													temp6 = component.modelZoom * MathUtils.cos[component.modelXAngle] >> 16;
 													if (!component.if3) {
-														model.setCamera(component.modelYAngle, 0, component.modelXAngle, 0, local563, local571, -1L);
+														model.setCamera(component.modelYAngle, 0, component.modelXAngle, 0, temp5, temp6, -1L);
 													} else if (component.modelOrtho) {
-														((SoftwareModel) model).renderOnInterface(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + memory + local563, local571 + component.modelZOffset, component.modelZoom);
+														((SoftwareModel) model).renderOnInterface(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + memory + temp5, temp6 + component.modelZOffset, component.modelZoom);
 													} else {
-														model.setCamera(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + local563 + memory, local571 + component.modelZOffset, -1L);
+														model.setCamera(component.modelYAngle, component.modelYOffset, component.modelXAngle, component.modelXOffset, component.modelZOffset + temp5 + memory, temp6 + component.modelZOffset, -1L);
 													}
 													Rasteriser.prepareOffsets();
 												}
@@ -1000,35 +1000,35 @@ public class Cs1ScriptRunner {
 													}
 													continue;
 												}
-												local276 = 0;
-												for (local468 = 0; local468 < component.baseHeight; local468++) {
+												temp2 = 0;
+												for (temp3 = 0; temp3 < component.baseHeight; temp3++) {
 													for (memory = 0; memory < component.baseWidth; memory++) {
-														if (component.objTypes[local276] > 0) {
-															objDef = ObjTypeList.get(component.objTypes[local276] - 1);
+														if (component.objTypes[temp2] > 0) {
+															objDef = ObjTypeList.get(component.objTypes[temp2] - 1);
 															@Pc(3159) JagString itemText;
-															if (objDef.stackable != 1 && component.objCounts[local276] == 1) {
+															if (objDef.stackable != 1 && component.objCounts[temp2] == 1) {
 																itemText = JagString.concatenate(new JagString[]{MiniMenu.COLOR_ITEM_ORANGE, objDef.name, JagString.CLOSE_COLOR});
 															} else {
-																itemText = JagString.concatenate(new JagString[]{MiniMenu.COLOR_ITEM_ORANGE, objDef.name, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCounts[local276])});
+																itemText = JagString.concatenate(new JagString[]{MiniMenu.COLOR_ITEM_ORANGE, objDef.name, JagString.CLOSE_COLOR_TIMES, formatItemCount(component.objCounts[temp2])});
 															}
-															local556 = componentX + memory * (component.invMarginX + 115);
-															objId = (component.invMarginY + 12) * local468 + componentY;
+															temp4 = componentX + memory * (component.invMarginX + 115);
+															objId = (component.invMarginY + 12) * temp3 + componentY;
 															if (component.halign == 0) {
-																font.renderLeft(itemText, local556, objId, component.color, component.shadowed ? 0 : -1);
+																font.renderLeft(itemText, temp4, objId, component.color, component.shadowed ? 0 : -1);
 															} else if (component.halign == 1) {
-																font.renderCenter(itemText, local556 + 57, objId, component.color, component.shadowed ? 0 : -1);
+																font.renderCenter(itemText, temp4 + 57, objId, component.color, component.shadowed ? 0 : -1);
 															} else {
-																font.renderRight(itemText, local556 + 115 - 1, objId, component.color, component.shadowed ? 0 : -1);
+																font.renderRight(itemText, temp4 + 115 - 1, objId, component.color, component.shadowed ? 0 : -1);
 															}
 														}
-														local276++;
+														temp2++;
 													}
 												}
 												PluginRepository.ComponentDraw(i, component, componentX + component.invMarginX + 115, componentY + component.invMarginY + 12);
 											}
 											if (component.type == 8 && Protocol.tooltipComponent == component && Protocol.tooltipTimer == TOOLTIP_DISPLAY_DELAY) {
-												local276 = 0;
-												local270 = 0;
+												temp2 = 0;
+												temp1 = 0;
 												@Pc(3297) JagString tooltipText = component.text;
 												@Pc(3299) Font tooltipFont = Fonts.p12Full;
 												tooltipText = interpolate(component, tooltipText);
@@ -1042,43 +1042,43 @@ public class Cs1ScriptRunner {
 														tooltipLine = tooltipText.substring(cardMemory, 0);
 														tooltipText = tooltipText.substring(cardMemory + 4);
 													}
-													local556 = tooltipFont.getStringWidth(tooltipLine);
-													local276 += tooltipFont.lineHeight + 1;
-													if (local270 < local556) {
-														local270 = local556;
+													temp4 = tooltipFont.getStringWidth(tooltipLine);
+													temp2 += tooltipFont.lineHeight + 1;
+													if (temp1 < temp4) {
+														temp1 = temp4;
 													}
 												}
-												local556 = componentY + component.height + 5;
-												local270 += 6;
-												local276 += 7;
-												if (local556 + local276 > clipBottom) {
-													local556 = clipBottom - local276;
+												temp4 = componentY + component.height + 5;
+												temp1 += 6;
+												temp2 += 7;
+												if (temp4 + temp2 > clipBottom) {
+													temp4 = clipBottom - temp2;
 												}
-												cardMemory = componentX + component.width - local270 - 5;
+												cardMemory = componentX + component.width - temp1 - 5;
 												if (cardMemory < componentX + 5) {
 													cardMemory = componentX + 5;
 												}
-												if (local270 + cardMemory > clipRight) {
-													cardMemory = clipRight - local270;
+												if (temp1 + cardMemory > clipRight) {
+													cardMemory = clipRight - temp1;
 												}
 												if (GlRenderer.enabled) {
-													GlRaster.fillRect(cardMemory, local556, local270, local276, 16777120);
-													GlRaster.drawRect(cardMemory, local556, local270, local276, 0);
+													GlRaster.fillRect(cardMemory, temp4, temp1, temp2, 16777120);
+													GlRaster.drawRect(cardMemory, temp4, temp1, temp2, 0);
 												} else {
-													SoftwareRaster.fillRect(cardMemory, local556, local270, local276, 16777120);
-													SoftwareRaster.drawRect(cardMemory, local556, local270, local276, 0);
+													SoftwareRaster.fillRect(cardMemory, temp4, temp1, temp2, 16777120);
+													SoftwareRaster.drawRect(cardMemory, temp4, temp1, temp2, 0);
 												}
 												tooltipText = component.text;
-												objId = local556 + tooltipFont.lineHeight + 2;
+												objId = temp4 + tooltipFont.lineHeight + 2;
 												tooltipText = interpolate(component, tooltipText);
 												while (tooltipText.length() > 0) {
-													local563 = tooltipText.indexOf(JagString.LINE_BREAK);
-													if (local563 == -1) {
+													temp5 = tooltipText.indexOf(JagString.LINE_BREAK);
+													if (temp5 == -1) {
 														tooltipLine = tooltipText;
 														tooltipText = JagString.EMPTY;
 													} else {
-														tooltipLine = tooltipText.substring(local563, 0);
-														tooltipText = tooltipText.substring(local563 + 4);
+														tooltipLine = tooltipText.substring(temp5, 0);
+														tooltipText = tooltipText.substring(temp5 + 4);
 													}
 													tooltipFont.renderLeft(tooltipLine, cardMemory + 3, objId, 0, -1);
 													objId += tooltipFont.lineHeight + 1;
@@ -1087,26 +1087,26 @@ public class Cs1ScriptRunner {
 											}
 											if (component.type == 9) {
 												if (component.lineFlipped) {
-													local468 = componentX + component.width;
-													local276 = componentY + component.height;
+													temp3 = componentX + component.width;
+													temp2 = componentY + component.height;
 													memory = componentY;
 												} else {
-													local276 = componentY;
+													temp2 = componentY;
 													memory = componentY + component.height;
-													local468 = componentX + component.width;
+													temp3 = componentX + component.width;
 												}
 												if (component.lineWidth == 1) {
 													if (GlRenderer.enabled) {
-														GlRaster.drawLine(componentX, local276, local468, memory, component.color);
+														GlRaster.drawLine(componentX, temp2, temp3, memory, component.color);
 													} else {
-														SoftwareRaster.drawLine(componentX, local276, local468, memory, component.color);
+														SoftwareRaster.drawLine(componentX, temp2, temp3, memory, component.color);
 													}
 												} else if (GlRenderer.enabled) {
-													GlRaster.drawThickLine(componentX, local276, local468, memory, component.color, component.lineWidth);
+													GlRaster.drawThickLine(componentX, temp2, temp3, memory, component.color, component.lineWidth);
 												} else {
-													SoftwareRaster.drawThickLine(componentX, local276, local468, memory, component.color, component.lineWidth);
+													SoftwareRaster.drawThickLine(componentX, temp2, temp3, memory, component.color, component.lineWidth);
 												}
-												PluginRepository.ComponentDraw(i, component, local468, local276);
+												PluginRepository.ComponentDraw(i, component, temp3, temp2);
 											}
 										}
 									}

@@ -11,7 +11,7 @@ public abstract class MixerListener extends Node {
 	public int delay;
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(Lclient!ei;)I")
-	public abstract int process(@OriginalArg(0) MixerPcmStream arg0);
+	public abstract int process(@OriginalArg(0) MixerPcmStream stream);
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "()V")
 	public abstract void onRemoved();

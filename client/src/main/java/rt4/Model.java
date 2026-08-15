@@ -188,7 +188,7 @@ public abstract class Model extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ak", name = "b", descriptor = "(I)V")
-	public abstract void rotateY(@OriginalArg(0) int arg0);
+	public abstract void rotateY(@OriginalArg(0) int angle);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;I)V")
 	public final void applyShadowAnimation(@OriginalArg(0) AnimFrameset frameset, @OriginalArg(1) int frameIndex) {
@@ -231,10 +231,10 @@ public abstract class Model extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ak", name = "b", descriptor = "(III)V")
-	public abstract void resize(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2);
+	public abstract void resize(@OriginalArg(0) int scaleX, @OriginalArg(1) int scaleY, @OriginalArg(2) int scaleZ);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(ZZZ)Lclient!ak;")
-	public abstract Model copyForAnimation(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
+	public abstract Model copyForAnimation(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean shareBones);
 
 	@OriginalMember(owner = "client!ak", name = "g", descriptor = "()I")
 	public abstract int getMaxX();
@@ -246,7 +246,7 @@ public abstract class Model extends Entity {
 	public abstract void rotateCounterClockwise();
 
 	@OriginalMember(owner = "client!ak", name = "c", descriptor = "(I)V")
-	public abstract void rotateZ(@OriginalArg(0) int arg0);
+	public abstract void rotateZ(@OriginalArg(0) int angle);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;ILclient!cl;IIIIZ[I)V")
 	public final void applyMaskedAnimation(@OriginalArg(0) AnimFrameset frameset1, @OriginalArg(1) int frameIndex1, @OriginalArg(2) AnimFrameset frameset2, @OriginalArg(3) int frameIndex2, @OriginalArg(4) int tweenDelta, @OriginalArg(5) int tweenLength, @OriginalArg(6) int partMask, @OriginalArg(7) boolean applyVertices, @OriginalArg(8) int[] partLabels) {
@@ -270,13 +270,13 @@ public abstract class Model extends Entity {
 	public abstract int getLengthXZ();
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(IIII)V")
-	protected abstract void transformShadowBone(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3);
+	protected abstract void transformShadowBone(@OriginalArg(0) int type, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int z);
 
 	@OriginalMember(owner = "client!ak", name = "b", descriptor = "(ZZZ)Lclient!ak;")
-	public abstract Model copyForLoc(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
+	public abstract Model copyForLoc(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean shareBones);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(I[IIIIZ)V")
-	protected abstract void transformBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5);
+	protected abstract void transformBone(@OriginalArg(0) int type, @OriginalArg(1) int[] bones, @OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(4) int z, @OriginalArg(5) boolean applyVertices);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(Lclient!cl;ILclient!cl;IIILclient!cl;ILclient!cl;III[ZZ)V")
 	public final void applyDualAnimation(@OriginalArg(0) AnimFrameset frameset1, @OriginalArg(1) int frameIndex1, @OriginalArg(2) AnimFrameset tweenFrameset1, @OriginalArg(3) int tweenIndex1, @OriginalArg(4) int tweenDelta1, @OriginalArg(5) int tweenLength1, @OriginalArg(6) AnimFrameset frameset2, @OriginalArg(7) int frameIndex2, @OriginalArg(8) AnimFrameset tweenFrameset2, @OriginalArg(9) int tweenIndex2, @OriginalArg(10) int tweenDelta2, @OriginalArg(11) int tweenLength2, @OriginalArg(12) boolean[] mask, @OriginalArg(13) boolean applyVertices) {
@@ -311,10 +311,10 @@ public abstract class Model extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(IIIIIIIJ)V")
-	public abstract void setCamera(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) long arg6);
+	public abstract void setCamera(@OriginalArg(1) int yaw, @OriginalArg(2) int yOffset, @OriginalArg(3) int pitch, @OriginalArg(4) int xOffset, @OriginalArg(5) int zNear, @OriginalArg(6) int zFar, @OriginalArg(7) long pickKey);
 
 	@OriginalMember(owner = "client!ak", name = "c", descriptor = "(ZZZ)Lclient!ak;")
-	public abstract Model copyForEntity(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2);
+	public abstract Model copyForEntity(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean shareBones);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "([[IIIIII)V")
 	protected final void alignToTerrain(@OriginalArg(0) int[][] heightMap, @OriginalArg(1) int xFine, @OriginalArg(2) int height, @OriginalArg(3) int yFine, @OriginalArg(4) int sizeX, @OriginalArg(5) int sizeY) {
@@ -357,24 +357,24 @@ public abstract class Model extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ak", name = "d", descriptor = "(I)V")
-	public abstract void rotateX(@OriginalArg(0) int arg0);
+	public abstract void rotateX(@OriginalArg(0) int angle);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(IIIII)V")
 	@Override
-	public final void updateModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void updateModel(@OriginalArg(0) int pitch, @OriginalArg(1) int yaw, @OriginalArg(2) int roll, @OriginalArg(3) int x, @OriginalArg(4) int z) {
 	}
 
 	@OriginalMember(owner = "client!ak", name = "c", descriptor = "(III)V")
-	public abstract void translate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2);
+	public abstract void translate(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int z);
 
 	@OriginalMember(owner = "client!ak", name = "k", descriptor = "()I")
 	public abstract int getMinZ();
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(IIIIIIIIJILclient!ga;)V")
-	public abstract void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) long arg8, @OriginalArg(9) int arg9, @OriginalArg(10) ParticleSystem arg10);
+	public abstract void render(@OriginalArg(0) int yaw, @OriginalArg(1) int sinCameraPitch, @OriginalArg(2) int cosCameraPitch, @OriginalArg(3) int sinCameraYaw, @OriginalArg(4) int cosCameraYaw, @OriginalArg(5) int sceneX, @OriginalArg(6) int sceneZ, @OriginalArg(7) int sceneY, @OriginalArg(8) long key, @OriginalArg(9) int plane, @OriginalArg(10) ParticleSystem particleSystem);
 
 	@OriginalMember(owner = "client!ak", name = "a", descriptor = "(I[IIIIZI[I)V")
-	protected abstract void transformMaskedBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7);
+	protected abstract void transformMaskedBone(@OriginalArg(0) int type, @OriginalArg(1) int[] bones, @OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(4) int z, @OriginalArg(5) boolean applyVertices, @OriginalArg(6) int partBits, @OriginalArg(7) int[] partLabels);
 
 	@OriginalMember(owner = "client!ak", name = "l", descriptor = "()V")
 	public abstract void rotateClockwise();

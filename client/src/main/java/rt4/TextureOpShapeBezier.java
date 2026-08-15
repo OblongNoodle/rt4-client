@@ -149,11 +149,11 @@ public final class TextureOpShapeBezier extends TextureOpShape {
 
 	@OriginalMember(owner = "client!re", name = "c", descriptor = "(III)V")
 	@Override
-	public final void renderFilledShape(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
+	public final void renderFilledShape(@OriginalArg(1) int h, @OriginalArg(2) int w) {
 	}
 
 	@OriginalMember(owner = "client!re", name = "a", descriptor = "(III)V")
 	@Override
-	public final void renderBorderedShape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public final void renderBorderedShape(@OriginalArg(0) int h, @OriginalArg(1) int w) {
 	}
 }

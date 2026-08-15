@@ -390,28 +390,28 @@ public class MiniMenu {
 			sorted = true;
 			for (@Pc(13) int i = 0; i < size - 1; i++) {
 				if ((actions[i] < 1000 && actions[i + 1] > 1000) || (actions[i] > 7000 && actions[i + 1] > actions[i])) {
-					@Pc(41) JagString local41 = opBases[i];
+					@Pc(41) JagString swapOpBase = opBases[i];
 					sorted = false;
 					opBases[i] = opBases[i + 1];
-					opBases[i + 1] = local41;
-					@Pc(61) JagString local61 = ops[i];
+					opBases[i + 1] = swapOpBase;
+					@Pc(61) JagString swapOp = ops[i];
 					ops[i] = ops[i + 1];
-					ops[i + 1] = local61;
-					@Pc(79) int local79 = intArgs1[i];
+					ops[i + 1] = swapOp;
+					@Pc(79) int swapIntArg1 = intArgs1[i];
 					intArgs1[i] = intArgs1[i + 1];
-					intArgs1[i + 1] = local79;
-					@Pc(97) int local97 = intArgs2[i];
+					intArgs1[i + 1] = swapIntArg1;
+					@Pc(97) int swapIntArg2 = intArgs2[i];
 					intArgs2[i] = intArgs2[i + 1];
-					intArgs2[i + 1] = local97;
-					@Pc(115) int local115 = cursors[i];
+					intArgs2[i + 1] = swapIntArg2;
+					@Pc(115) int swapCursor = cursors[i];
 					cursors[i] = cursors[i + 1];
-					cursors[i + 1] = local115;
-					@Pc(133) short local133 = actions[i];
+					cursors[i + 1] = swapCursor;
+					@Pc(133) short swapAction = actions[i];
 					actions[i] = actions[i + 1];
-					actions[i + 1] = local133;
-					@Pc(151) long local151 = keys[i];
+					actions[i + 1] = swapAction;
+					@Pc(151) long swapKey = keys[i];
 					keys[i] = keys[i + 1];
-					keys[i + 1] = local151;
+					keys[i + 1] = swapKey;
 				}
 			}
 		}
@@ -1379,20 +1379,20 @@ public class MiniMenu {
 
 	@OriginalMember(owner = "client!bc", name = "f", descriptor = "(B)Lclient!na;")
 	public static JagString getTooltipText() {
-		@Pc(32) JagString local32;
+		@Pc(32) JagString tooltipText;
 		if (itemTargetMode == 1 && size < 2) {
-			local32 = JagString.concatenate(new JagString[]{LocalizedText.USE, LocalizedText.MINISEPARATOR, selectedObjText, ARROW_SUFFIX});
+			tooltipText = JagString.concatenate(new JagString[]{LocalizedText.USE, LocalizedText.MINISEPARATOR, selectedObjText, ARROW_SUFFIX});
 		} else if (isTargeting && size < 2) {
-			local32 = JagString.concatenate(new JagString[]{targetVerb, LocalizedText.MINISEPARATOR, targetOpBase, ARROW_SUFFIX});
+			tooltipText = JagString.concatenate(new JagString[]{targetVerb, LocalizedText.MINISEPARATOR, targetOpBase, ARROW_SUFFIX});
 		} else if (Cheat.shiftClick && Keyboard.pressedKeys[Keyboard.KEY_SHIFT] && size > 2) {
-			local32 = getOp(size - 2);
+			tooltipText = getOp(size - 2);
 		} else {
-			local32 = getOp(size - 1);
+			tooltipText = getOp(size - 1);
 		}
 		if (size > 2) {
-			local32 = JagString.concatenate(new JagString[]{local32, MORE_OPTIONS_PREFIX, JagString.parseInt(size - 2), LocalizedText.MOREOPTIONS});
+			tooltipText = JagString.concatenate(new JagString[]{tooltipText, MORE_OPTIONS_PREFIX, JagString.parseInt(size - 2), LocalizedText.MOREOPTIONS});
 		}
-		return local32;
+		return tooltipText;
 	}
 
 	@OriginalMember(owner = "client!wk", name = "a", descriptor = "(I[Lclient!na;)[Lclient!na;")
@@ -1418,85 +1418,85 @@ public class MiniMenu {
 		if (npcType == null || !npcType.interactive) {
 			return;
 		}
-		@Pc(35) JagString local35 = npcType.name;
+		@Pc(35) JagString npcName = npcType.name;
 		if (npcType.combatLevel != 0) {
-			@Pc(47) JagString local47 = client.game == 1 ? LocalizedText.RATING : LocalizedText.LEVEL;
-			local35 = JagString.concatenate(new JagString[]{local35, getCombatLevelColor(npcType.combatLevel, PlayerList.self.combatLevel), OPEN_PARENTHESIS, local47, JagString.parseInt(npcType.combatLevel), CLOSE_PARENTHESIS});
+			@Pc(47) JagString levelLabel = client.game == 1 ? LocalizedText.RATING : LocalizedText.LEVEL;
+			npcName = JagString.concatenate(new JagString[]{npcName, getCombatLevelColor(npcType.combatLevel, PlayerList.self.combatLevel), OPEN_PARENTHESIS, levelLabel, JagString.parseInt(npcType.combatLevel), CLOSE_PARENTHESIS});
 		}
 		if (itemTargetMode == 1) {
-			add(MiniMap.useCursor, key, JagString.concatenate(new JagString[]{selectedObjText, ARROW_YELLOW, local35}), npcIndex, (short) 26, LocalizedText.USE, intArg2);
+			add(MiniMap.useCursor, key, JagString.concatenate(new JagString[]{selectedObjText, ARROW_YELLOW, npcName}), npcIndex, (short) 26, LocalizedText.USE, intArg2);
 		} else if (isTargeting) {
-			@Pc(378) ParamType local378 = targetParamId == -1 ? null : ParamTypeList.get(targetParamId);
-			if ((targetMask & 0x2) != 0 && (local378 == null || npcType.getParam(targetParamId, local378.defaultInt) != local378.defaultInt)) {
-				add(targetCursorId, key, JagString.concatenate(new JagString[]{targetOpBase, ARROW_YELLOW, local35}), npcIndex, (short) 45, targetVerb, intArg2);
+			@Pc(378) ParamType paramType = targetParamId == -1 ? null : ParamTypeList.get(targetParamId);
+			if ((targetMask & 0x2) != 0 && (paramType == null || npcType.getParam(targetParamId, paramType.defaultInt) != paramType.defaultInt)) {
+				add(targetCursorId, key, JagString.concatenate(new JagString[]{targetOpBase, ARROW_YELLOW, npcName}), npcIndex, (short) 45, targetVerb, intArg2);
 			}
 		} else {
-			@Pc(129) JagString[] local129 = npcType.ops;
+			@Pc(129) JagString[] npcOps = npcType.ops;
 			if (DEBUG_OPS) {
-				local129 = annotateOps(local129);
+				npcOps = annotateOps(npcOps);
 			}
-			@Pc(140) int local140;
-			if (local129 != null) {
-				for (local140 = 4; local140 >= 0; local140--) {
-					if (local129[local140] != null && (client.game != 0 || !local129[local140].equalsIgnoreCase(LocalizedText.ATTACK))) {
-						@Pc(161) byte local161 = 0;
-						if (local140 == 0) {
-							local161 = 17;
+			@Pc(140) int opIndex;
+			if (npcOps != null) {
+				for (opIndex = 4; opIndex >= 0; opIndex--) {
+					if (npcOps[opIndex] != null && (client.game != 0 || !npcOps[opIndex].equalsIgnoreCase(LocalizedText.ATTACK))) {
+						@Pc(161) byte actionCode = 0;
+						if (opIndex == 0) {
+							actionCode = 17;
 						}
-						if (local140 == 1) {
-							local161 = 16;
+						if (opIndex == 1) {
+							actionCode = 16;
 						}
-						@Pc(176) int local176 = -1;
-						if (local140 == 2) {
-							local161 = 4;
+						@Pc(176) int cursorId = -1;
+						if (opIndex == 2) {
+							actionCode = 4;
 						}
-						if (local140 == 3) {
-							local161 = 19;
+						if (opIndex == 3) {
+							actionCode = 19;
 						}
-						if (npcType.cursor1Op == local140) {
-							local176 = npcType.cursor1;
+						if (npcType.cursor1Op == opIndex) {
+							cursorId = npcType.cursor1;
 						}
-						if (local140 == npcType.cursor2Op) {
-							local176 = npcType.cursor2;
+						if (opIndex == npcType.cursor2Op) {
+							cursorId = npcType.cursor2;
 						}
-						if (local140 == 4) {
-							local161 = 2;
+						if (opIndex == 4) {
+							actionCode = 2;
 						}
-						add(local176, key, JagString.concatenate(new JagString[]{ COLOR_YELLOW, local35}), npcIndex, local161, local129[local140], intArg2);
+						add(cursorId, key, JagString.concatenate(new JagString[]{ COLOR_YELLOW, npcName}), npcIndex, actionCode, npcOps[opIndex], intArg2);
 					}
 				}
 			}
-			if (client.game == 0 && local129 != null) {
-				for (local140 = 4; local140 >= 0; local140--) {
-					if (local129[local140] != null && local129[local140].equalsIgnoreCase(LocalizedText.ATTACK)) {
-						@Pc(271) short local271 = 0;
+			if (client.game == 0 && npcOps != null) {
+				for (opIndex = 4; opIndex >= 0; opIndex--) {
+					if (npcOps[opIndex] != null && npcOps[opIndex].equalsIgnoreCase(LocalizedText.ATTACK)) {
+						@Pc(271) short priority = 0;
 						if (npcType.combatLevel > PlayerList.self.combatLevel) {
-							local271 = 2000; //THIS iS FOR LEFT CLICK ATTACK
+							priority = 2000; //THIS iS FOR LEFT CLICK ATTACK
 						}
-						@Pc(281) short local281 = 0;
-						if (local140 == 0) {
-							local281 = 17;
+						@Pc(281) short attackActionCode = 0;
+						if (opIndex == 0) {
+							attackActionCode = 17;
 						}
-						if (local140 == 1) {
-							local281 = 16;
+						if (opIndex == 1) {
+							attackActionCode = 16;
 						}
-						if (local140 == 2) {
-							local281 = 4;
+						if (opIndex == 2) {
+							attackActionCode = 4;
 						}
-						if (local140 == 3) {
-							local281 = 19;
+						if (opIndex == 3) {
+							attackActionCode = 19;
 						}
-						if (local140 == 4) {
-							local281 = 2;
+						if (opIndex == 4) {
+							attackActionCode = 2;
 						}
-						if (local281 != 0) {
-							local281 += local271;
+						if (attackActionCode != 0) {
+							attackActionCode += priority;
 						}
-						add(npcType.attackCursor, key, JagString.concatenate(new JagString[]{ COLOR_YELLOW, local35}), npcIndex, local281, local129[local140], intArg2);
+						add(npcType.attackCursor, key, JagString.concatenate(new JagString[]{ COLOR_YELLOW, npcName}), npcIndex, attackActionCode, npcOps[opIndex], intArg2);
 					}
 				}
 			}
-			add(MiniMap.examineCursor, key, JagString.concatenate(new JagString[]{ COLOR_YELLOW, local35}), npcIndex, (short) 1007, LocalizedText.EXAMINE, intArg2);
+			add(MiniMap.examineCursor, key, JagString.concatenate(new JagString[]{ COLOR_YELLOW, npcName}), npcIndex, (short) 1007, LocalizedText.EXAMINE, intArg2);
 		}
 	}
 
@@ -1521,47 +1521,47 @@ public class MiniMenu {
 					withinCombatRange = false;
 				}
 			}
-			@Pc(95) JagString local95 = client.game == 1 ? LocalizedText.RATING : LocalizedText.LEVEL;
+			@Pc(95) JagString levelLabel = client.game == 1 ? LocalizedText.RATING : LocalizedText.LEVEL;
 			if (other.combatLevelWithSummoning > other.combatLevel) {
-				string = JagString.concatenate(new JagString[]{other.getName(), withinCombatRange ? getCombatLevelColor(other.combatLevel, PlayerList.self.combatLevel) : COLOR_WHITE, OPEN_PARENTHESIS, local95, JagString.parseInt(other.combatLevel), PLUS, JagString.parseInt(other.combatLevelWithSummoning - other.combatLevel), CLOSE_PARENTHESIS});
+				string = JagString.concatenate(new JagString[]{other.getName(), withinCombatRange ? getCombatLevelColor(other.combatLevel, PlayerList.self.combatLevel) : COLOR_WHITE, OPEN_PARENTHESIS, levelLabel, JagString.parseInt(other.combatLevel), PLUS, JagString.parseInt(other.combatLevelWithSummoning - other.combatLevel), CLOSE_PARENTHESIS});
 			} else {
-				string = JagString.concatenate(new JagString[]{other.getName(), withinCombatRange ? getCombatLevelColor(other.combatLevel, PlayerList.self.combatLevel) : COLOR_WHITE, OPEN_PARENTHESIS, local95, JagString.parseInt(other.combatLevel), CLOSE_PARENTHESIS});
+				string = JagString.concatenate(new JagString[]{other.getName(), withinCombatRange ? getCombatLevelColor(other.combatLevel, PlayerList.self.combatLevel) : COLOR_WHITE, OPEN_PARENTHESIS, levelLabel, JagString.parseInt(other.combatLevel), CLOSE_PARENTHESIS});
 			}
 		} else {
 			string = JagString.concatenate(new JagString[]{other.getName(), OPEN_PARENTHESIS, LocalizedText.SKILL, JagString.parseInt(other.skill), CLOSE_PARENTHESIS});
 		}
-		@Pc(275) int local275;
+		@Pc(275) int i;
 		if (itemTargetMode == 1) {
 			add(MiniMap.useCursor, playerIndex, JagString.concatenate(new JagString[]{selectedObjText, ARROW_WHITE, string}), intArg2, (short) 1, LocalizedText.USE, key);
 		} else if (!isTargeting) {
-			for (local275 = 7; local275 >= 0; local275--) {
-				if (Player.options[local275] != null) {
-					@Pc(291) short local291 = 0;
-					if (client.game == 0 && Player.options[local275].equalsIgnoreCase(LocalizedText.ATTACK)) {
+			for (i = 7; i >= 0; i--) {
+				if (Player.options[i] != null) {
+					@Pc(291) short priority = 0;
+					if (client.game == 0 && Player.options[i].equalsIgnoreCase(LocalizedText.ATTACK)) {
 						if (other.combatLevel > PlayerList.self.combatLevel) {
-							local291 = 2000;
+							priority = 2000;
 						}
 						if (PlayerList.self.team != 0 && other.team != 0) {
 							if (PlayerList.self.team == other.team) {
-								local291 = 2000;
+								priority = 2000;
 							} else {
-								local291 = 0;
+								priority = 0;
 							}
 						}
-					} else if (Player.secondaryOptions[local275]) {
-						local291 = 2000;
+					} else if (Player.secondaryOptions[i]) {
+						priority = 2000;
 					}
-					@Pc(353) short local353 = PLAYER_OPTION_ACTION_CODES[local275];
-					@Pc(358) short local358 = (short) (local353 + local291);
-					add(Player.cursors[local275], playerIndex, JagString.concatenate(new JagString[]{COLOR_WHITE, string}), intArg2, local358, Player.options[local275], key);
+					@Pc(353) short baseActionCode = PLAYER_OPTION_ACTION_CODES[i];
+					@Pc(358) short actionCode = (short) (baseActionCode + priority);
+					add(Player.cursors[i], playerIndex, JagString.concatenate(new JagString[]{COLOR_WHITE, string}), intArg2, actionCode, Player.options[i], key);
 				}
 			}
 		} else if ((targetMask & 0x8) != 0) {
 			add(targetCursorId, playerIndex, JagString.concatenate(new JagString[]{targetOpBase, ARROW_WHITE, string}), intArg2, (short) 15, targetVerb, key);
 		}
-		for (local275 = 0; local275 < size; local275++) {
-			if (actions[local275] == 60) {
-				opBases[local275] = JagString.concatenate(new JagString[]{COLOR_WHITE, string});
+		for (i = 0; i < size; i++) {
+			if (actions[i] == 60) {
+				opBases[i] = JagString.concatenate(new JagString[]{COLOR_WHITE, string});
 				break;
 			}
 		}
@@ -1651,17 +1651,17 @@ public class MiniMenu {
 		if (size < 2 && itemTargetMode == 0 && !isTargeting) {
 			return;
 		}
-		@Pc(24) JagString local24 = getTooltipText();
+		@Pc(24) JagString tooltipText = getTooltipText();
 		if (component == null) {
-			@Pc(40) int local40 = Fonts.b12Full.renderWavyText(local24, x + 4, y - -15, client.aRandom1, gregorianDateSeed);
-			InterfaceList.redrawScreen(x + 4, Fonts.b12Full.getStringWidth(local24) + local40, y, 15);
+			@Pc(40) int wavyWidth = Fonts.b12Full.renderWavyText(tooltipText, x + 4, y - -15, client.aRandom1, gregorianDateSeed);
+			InterfaceList.redrawScreen(x + 4, Fonts.b12Full.getStringWidth(tooltipText) + wavyWidth, y, 15);
 			return;
 		}
-		@Pc(59) Font local59 = component.getFont(Sprites.nameIcons);
-		if (local59 == null) {
-			local59 = Fonts.b12Full;
+		@Pc(59) Font font = component.getFont(Sprites.nameIcons);
+		if (font == null) {
+			font = Fonts.b12Full;
 		}
-		local59.renderWavyTextAligned(local24, x, y, component.width, component.height, component.color, component.shadowColor, component.halign, component.valign, client.aRandom1, gregorianDateSeed, tooltipBounds);
+		font.renderWavyTextAligned(tooltipText, x, y, component.width, component.height, component.color, component.shadowColor, component.halign, component.valign, client.aRandom1, gregorianDateSeed, tooltipBounds);
 		InterfaceList.redrawScreen(tooltipBounds[0], tooltipBounds[2], tooltipBounds[1], tooltipBounds[3]);
 	}
 
@@ -1699,39 +1699,39 @@ public class MiniMenu {
 
 	@OriginalMember(owner = "client!lf", name = "b", descriptor = "(I)V")
 	public static void drawA() {
-		@Pc(3) int local3 = InterfaceList.menuY;
-		@Pc(9) int local9 = InterfaceList.menuWidth;
-		@Pc(11) int local11 = InterfaceList.menuX;
-		@Pc(15) int local15 = InterfaceList.menuHeight;
+		@Pc(3) int menuY = InterfaceList.menuY;
+		@Pc(9) int menuWidth = InterfaceList.menuWidth;
+		@Pc(11) int menuX = InterfaceList.menuX;
+		@Pc(15) int menuHeight = InterfaceList.menuHeight;
 		if (GlRenderer.enabled) {
-			GlRaster.fillRect(local11, local3, local9, local15, 6116423);
-			GlRaster.fillRect(local11 + 1, local3 + 1, local9 - 2, 16, 0);
-			GlRaster.drawRect(local11 + 1, local3 + 18, local9 - 2, local15 + -19, 0);
+			GlRaster.fillRect(menuX, menuY, menuWidth, menuHeight, 6116423);
+			GlRaster.fillRect(menuX + 1, menuY + 1, menuWidth - 2, 16, 0);
+			GlRaster.drawRect(menuX + 1, menuY + 18, menuWidth - 2, menuHeight + -19, 0);
 		} else {
-			SoftwareRaster.fillRect(local11, local3, local9, local15, 6116423);
-			SoftwareRaster.fillRect(local11 + 1, local3 + 1, local9 - 2, 16, 0);
-			SoftwareRaster.drawRect(local11 + 1, local3 + 18, local9 - 2, local15 + -19, 0);
+			SoftwareRaster.fillRect(menuX, menuY, menuWidth, menuHeight, 6116423);
+			SoftwareRaster.fillRect(menuX + 1, menuY + 1, menuWidth - 2, 16, 0);
+			SoftwareRaster.drawRect(menuX + 1, menuY + 18, menuWidth - 2, menuHeight + -19, 0);
 		}
-		Fonts.b12Full.renderLeft(LocalizedText.CHOOSE_OPTION, local11 + 3, local3 + 14, 6116423, -1);
-		@Pc(96) int local96 = Mouse.lastMouseY;
-		@Pc(98) int local98 = Mouse.lastMouseX;
-		for (@Pc(107) int local107 = 0; local107 < size; local107++) {
-			@Pc(127) int local127 = (size - local107 - 1) * 15 + local3 + 31;
+		Fonts.b12Full.renderLeft(LocalizedText.CHOOSE_OPTION, menuX + 3, menuY + 14, 6116423, -1);
+		@Pc(96) int mouseY = Mouse.lastMouseY;
+		@Pc(98) int mouseX = Mouse.lastMouseX;
+		for (@Pc(107) int i = 0; i < size; i++) {
+			@Pc(127) int entryY = (size - i - 1) * 15 + menuY + 31;
 			@Pc(129) int color = 16777215; //WHITE
-			if (local11 < local98 && local98 < local11 + local9 && local127 - 13 < local96 && local96 < local127 + 3) {
+			if (menuX < mouseX && mouseX < menuX + menuWidth && entryY - 13 < mouseY && mouseY < entryY + 3) {
 				color = 16776960; //YELLOW
 			}
-			Fonts.b12Full.renderLeft(getOp(local107), local11 + 3, local127, color, 0);
+			Fonts.b12Full.renderLeft(getOp(i), menuX + 3, entryY, color, 0);
 		}
 		InterfaceList.forceRedrawScreen(InterfaceList.menuX, InterfaceList.menuY, InterfaceList.menuHeight, InterfaceList.menuWidth);
 	}
 
 	@OriginalMember(owner = "client!ij", name = "a", descriptor = "(B)V")
 	public static void drawB() {
-		@Pc(3) int local3 = InterfaceList.menuX;
-		@Pc(9) int local9 = InterfaceList.menuY;
-		@Pc(11) int local11 = InterfaceList.menuHeight;
-		@Pc(13) int local13 = InterfaceList.menuWidth;
+		@Pc(3) int menuX = InterfaceList.menuX;
+		@Pc(9) int menuY = InterfaceList.menuY;
+		@Pc(11) int menuHeight = InterfaceList.menuHeight;
+		@Pc(13) int menuWidth = InterfaceList.menuWidth;
 		if (LoginManager.menuHeaderFillSprite == null || LoginManager.menuHeaderEdgeSprite == null) {
 			if (client.js5Archive8.isFileReady(LoginManager.menuHeaderFillSpriteId) && client.js5Archive8.isFileReady(LoginManager.menuHeaderEdgeSpriteId)) {
 				LoginManager.menuHeaderFillSprite = SoftwareSprite.loadSoftwareAlphaSprite(client.js5Archive8, LoginManager.menuHeaderFillSpriteId);
@@ -1749,38 +1749,38 @@ public class MiniMenu {
 					}
 				}
 			} else if (GlRenderer.enabled) {
-				GlRaster.fillRectAlpha(local3, local9, local13, 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
+				GlRaster.fillRectAlpha(menuX, menuY, menuWidth, 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
 			} else {
-				SoftwareRaster.fillRectAlpha(local3, local9, local13, 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
+				SoftwareRaster.fillRectAlpha(menuX, menuY, menuWidth, 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
 			}
 		}
-		@Pc(112) int local112;
-		@Pc(114) int local114;
+		@Pc(112) int mouseX;
+		@Pc(114) int mouseY;
 		if (LoginManager.menuHeaderFillSprite != null && LoginManager.menuHeaderEdgeSprite != null) {
-			local112 = local13 / LoginManager.menuHeaderFillSprite.width;
-			for (local114 = 0; local114 < local112; local114++) {
-				LoginManager.menuHeaderFillSprite.render(local114 * LoginManager.menuHeaderFillSprite.width + local3, local9);
+			mouseX = menuWidth / LoginManager.menuHeaderFillSprite.width;
+			for (mouseY = 0; mouseY < mouseX; mouseY++) {
+				LoginManager.menuHeaderFillSprite.render(mouseY * LoginManager.menuHeaderFillSprite.width + menuX, menuY);
 			}
-			LoginManager.menuHeaderEdgeSprite.render(local3, local9);
-			LoginManager.menuHeaderEdgeSprite.renderHorizontalFlip(local3 + local13 - LoginManager.menuHeaderEdgeSprite.width, local9);
+			LoginManager.menuHeaderEdgeSprite.render(menuX, menuY);
+			LoginManager.menuHeaderEdgeSprite.renderHorizontalFlip(menuX + menuWidth - LoginManager.menuHeaderEdgeSprite.width, menuY);
 		}
-		Fonts.b12Full.renderLeft(LocalizedText.CHOOSE_OPTION, local3 + 3, local9 + 14, LoginManager.menuTextColor, -1);
+		Fonts.b12Full.renderLeft(LocalizedText.CHOOSE_OPTION, menuX + 3, menuY + 14, LoginManager.menuTextColor, -1);
 		if (GlRenderer.enabled) {
-			GlRaster.fillRectAlpha(local3, local9 + 20, local13, local11 - 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
+			GlRaster.fillRectAlpha(menuX, menuY + 20, menuWidth, menuHeight - 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
 		} else {
-			SoftwareRaster.fillRectAlpha(local3, local9 + 20, local13, local11 - 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
+			SoftwareRaster.fillRectAlpha(menuX, menuY + 20, menuWidth, menuHeight - 20, LoginManager.menuFillColor, 256 - LoginManager.menuFillTransparency);
 		}
-		local114 = Mouse.lastMouseY;
-		local112 = Mouse.lastMouseX;
-		@Pc(203) int local203;
-		@Pc(219) int local219;
-		for (local203 = 0; local203 < size; local203++) {
-			local219 = (size - local203 - 1) * 15 + local9 + 35;
-			if (local3 < local112 && local112 < local3 + local13 && local114 > local219 - 13 && local114 < local219 + 3) {
+		mouseY = Mouse.lastMouseY;
+		mouseX = Mouse.lastMouseX;
+		@Pc(203) int i;
+		@Pc(219) int entryY;
+		for (i = 0; i < size; i++) {
+			entryY = (size - i - 1) * 15 + menuY + 35;
+			if (menuX < mouseX && mouseX < menuX + menuWidth && mouseY > entryY - 13 && mouseY < entryY + 3) {
 				if (GlRenderer.enabled) {
-					GlRaster.fillRectAlpha(local3, local219 - 13, local13, 16, LoginManager.menuHighlightColor, 256 - LoginManager.menuHighlightTransparency);
+					GlRaster.fillRectAlpha(menuX, entryY - 13, menuWidth, 16, LoginManager.menuHighlightColor, 256 - LoginManager.menuHighlightTransparency);
 				} else {
-					SoftwareRaster.fillRectAlpha(local3, local219 - 13, local13, 16, LoginManager.menuHighlightColor, 256 - LoginManager.menuHighlightTransparency);
+					SoftwareRaster.fillRectAlpha(menuX, entryY - 13, menuWidth, 16, LoginManager.menuHighlightColor, 256 - LoginManager.menuHighlightTransparency);
 				}
 			}
 		}
@@ -1806,27 +1806,27 @@ public class MiniMenu {
 				}
 			}
 		}
-		@Pc(418) int local418;
+		@Pc(418) int textColor;
 		if (LoginManager.menuBottomFillSprite != null && LoginManager.menuSideFillSprite != null && LoginManager.menuBottomEdgeSprite != null) {
-			local203 = local13 / LoginManager.menuBottomFillSprite.width;
-			for (local219 = 0; local219 < local203; local219++) {
-				LoginManager.menuBottomFillSprite.render(local3 + LoginManager.menuBottomFillSprite.width * local219, local11 + local9 + -LoginManager.menuBottomFillSprite.height);
+			i = menuWidth / LoginManager.menuBottomFillSprite.width;
+			for (entryY = 0; entryY < i; entryY++) {
+				LoginManager.menuBottomFillSprite.render(menuX + LoginManager.menuBottomFillSprite.width * entryY, menuHeight + menuY + -LoginManager.menuBottomFillSprite.height);
 			}
-			local219 = (local11 - 20) / LoginManager.menuSideFillSprite.height;
-			for (local418 = 0; local418 < local219; local418++) {
-				LoginManager.menuSideFillSprite.render(local3, local9 + local418 * LoginManager.menuSideFillSprite.height + 20);
-				LoginManager.menuSideFillSprite.renderHorizontalFlip(local3 + local13 - LoginManager.menuSideFillSprite.width, local9 + 20 + local418 * LoginManager.menuSideFillSprite.height);
+			entryY = (menuHeight - 20) / LoginManager.menuSideFillSprite.height;
+			for (textColor = 0; textColor < entryY; textColor++) {
+				LoginManager.menuSideFillSprite.render(menuX, menuY + textColor * LoginManager.menuSideFillSprite.height + 20);
+				LoginManager.menuSideFillSprite.renderHorizontalFlip(menuX + menuWidth - LoginManager.menuSideFillSprite.width, menuY + 20 + textColor * LoginManager.menuSideFillSprite.height);
 			}
-			LoginManager.menuBottomEdgeSprite.render(local3, local11 + local9 - LoginManager.menuBottomEdgeSprite.height);
-			LoginManager.menuBottomEdgeSprite.renderHorizontalFlip(local3 + local13 - LoginManager.menuBottomEdgeSprite.width, local9 - -local11 + -LoginManager.menuBottomEdgeSprite.height);
+			LoginManager.menuBottomEdgeSprite.render(menuX, menuHeight + menuY - LoginManager.menuBottomEdgeSprite.height);
+			LoginManager.menuBottomEdgeSprite.renderHorizontalFlip(menuX + menuWidth - LoginManager.menuBottomEdgeSprite.width, menuY - -menuHeight + -LoginManager.menuBottomEdgeSprite.height);
 		}
-		for (local203 = 0; local203 < size; local203++) {
-			local219 = (size - local203 - 1) * 15 + local9 + 35;
-			local418 = LoginManager.menuTextColor;
-			if (local3 < local112 && local13 + local3 > local112 && local219 - 13 < local114 && local114 < local219 + 3) {
-				local418 = LoginManager.menuHighlightTextColor;
+		for (i = 0; i < size; i++) {
+			entryY = (size - i - 1) * 15 + menuY + 35;
+			textColor = LoginManager.menuTextColor;
+			if (menuX < mouseX && menuWidth + menuX > mouseX && entryY - 13 < mouseY && mouseY < entryY + 3) {
+				textColor = LoginManager.menuHighlightTextColor;
 			}
-			Fonts.b12Full.renderLeft(getOp(local203), local3 + 3, local219, local418, 0);
+			Fonts.b12Full.renderLeft(getOp(i), menuX + 3, entryY, textColor, 0);
 		}
 		InterfaceList.forceRedrawScreen(InterfaceList.menuX, InterfaceList.menuY, InterfaceList.menuHeight, InterfaceList.menuWidth);
 	}
