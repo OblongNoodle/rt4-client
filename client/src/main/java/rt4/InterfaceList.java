@@ -198,22 +198,22 @@ public class InterfaceList {
 	@OriginalMember(owner = "client!i", name = "i", descriptor = "(Z)V")
 	public static void redrawActiveInterfaces() {
 		for (@Pc(6) ComponentPointer ptr = (ComponentPointer) openInterfaces.head(); ptr != null; ptr = (ComponentPointer) openInterfaces.next()) {
-			@Pc(14) int local14 = ptr.interfaceId;
-			if (load(local14)) {
-				@Pc(21) boolean local21 = true;
-				@Pc(25) Component[] local25 = components[local14];
-				@Pc(27) int local27;
-				for (local27 = 0; local27 < local25.length; local27++) {
-					if (local25[local27] != null) {
-						local21 = local25[local27].if3;
+			@Pc(14) int interfaceId = ptr.interfaceId;
+			if (load(interfaceId)) {
+				@Pc(21) boolean isIf3 = true;
+				@Pc(25) Component[] comps = components[interfaceId];
+				@Pc(27) int parentId;
+				for (parentId = 0; parentId < comps.length; parentId++) {
+					if (comps[parentId] != null) {
+						isIf3 = comps[parentId].if3;
 						break;
 					}
 				}
-				if (!local21) {
-					local27 = (int) ptr.key;
-					@Pc(60) Component local60 = getComponent(local27);
-					if (local60 != null) {
-						redraw(local60);
+				if (!isIf3) {
+					parentId = (int) ptr.key;
+					@Pc(60) Component parent = getComponent(parentId);
+					if (parent != null) {
+						redraw(parent);
 					}
 				}
 			}
@@ -754,10 +754,10 @@ public class InterfaceList {
 											j = (int) ((double) (Mouse.clickX - absX - component.width / 2) * 2.0D / (double) WorldMap.zoom);
 											skill = (int) ((double) (Mouse.clickY - absY - component.height / 2) * 2.0D / (double) WorldMap.zoom);
 											k = WorldMap.viewX + i;
-											@Pc(516) int local516 = WorldMap.viewY + skill;
-											@Pc(520) int local520 = k + WorldMap.originX;
-											@Pc(528) int local528 = WorldMap.length + WorldMap.originY - local516 - 1;
-											Cheat.teleport(local520, local528, 0);
+											@Pc(516) int mapY = WorldMap.viewY + skill;
+											@Pc(520) int tileX = k + WorldMap.originX;
+											@Pc(528) int tileY = WorldMap.length + WorldMap.originY - mapY - 1;
+											Cheat.teleport(tileX, tileY, 0);
 											ClientProt.closeWidget();
 											continue;
 										}
@@ -1024,12 +1024,12 @@ public class InterfaceList {
 							component.lastTransmitTimer = transmitTimer;
 							if (component.onKey != null) {
 								for (i = 0; i < keyQueueSize; i++) {
-									@Pc(1430) HookRequest local1430 = new HookRequest();
-									local1430.source = component;
-									local1430.keyCode = keyCodes[i];
-									local1430.keyChar = keyChars[i];
-									local1430.arguments = component.onKey;
-									lowPriorityRequests.addTail(local1430);
+									@Pc(1430) HookRequest keyRequest = new HookRequest();
+									keyRequest.source = component;
+									keyRequest.keyCode = keyCodes[i];
+									keyRequest.keyChar = keyChars[i];
+									keyRequest.arguments = component.onKey;
+									lowPriorityRequests.addTail(keyRequest);
 								}
 							}
 							if (Camera.splineJustFinished && component.onMinimapUnlock != null) {
@@ -1060,9 +1060,9 @@ public class InterfaceList {
 						if (component.createdComponents != null) {
 							processComponents(component.createdComponents, component.id, left, top, right, bottom, absX - component.scrollX, absY - component.scrollY);
 						}
-						@Pc(1595) ComponentPointer local1595 = (ComponentPointer) openInterfaces.get(component.id);
-						if (local1595 != null) {
-							processSubInterface(absX, top, absY, right, local1595.interfaceId, left, bottom);
+						@Pc(1595) ComponentPointer subPtr = (ComponentPointer) openInterfaces.get(component.id);
+						if (subPtr != null) {
+							processSubInterface(absX, top, absY, right, subPtr.interfaceId, left, bottom);
 						}
 					}
 				}
