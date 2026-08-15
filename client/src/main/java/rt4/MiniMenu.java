@@ -219,11 +219,11 @@ public class MiniMenu {
 		if (component.buttonType == 1) {
 			add(-1, 0L, JagString.EMPTY, 0, (short) 8, component.option, component.id);
 		}
-		@Pc(47) JagString local47;
+		@Pc(47) JagString verb;
 		if (component.buttonType == 2 && !isTargeting) {
-			local47 = MiniMap.getTargetVerb(component);
-			if (local47 != null) {
-				add(-1, 0L, JagString.concatenate(new JagString[]{COLOR_GREEN, component.optionSuffix}), -1, (short) 32, local47, component.id);
+			verb = MiniMap.getTargetVerb(component);
+			if (verb != null) {
+				add(-1, 0L, JagString.concatenate(new JagString[]{COLOR_GREEN, component.optionSuffix}), -1, (short) 32, verb, component.id);
 			}
 		}
 		if (component.buttonType == 3) {
@@ -238,104 +238,104 @@ public class MiniMenu {
 		if (component.buttonType == 6 && Cs1ScriptRunner.pleaseWaitComponent == null) {
 			add(-1, 0L, JagString.EMPTY, -1, (short) 41, component.option, component.id);
 		}
-		@Pc(173) int local173;
-		@Pc(171) int local171;
+		@Pc(173) int row;
+		@Pc(171) int slotIndex;
 		if (component.type == 2) {
-			local171 = 0;
-			for (local173 = 0; local173 < component.baseHeight; local173++) {
-				for (@Pc(183) int local183 = 0; local183 < component.baseWidth; local183++) {
-					@Pc(195) int local195 = (component.invMarginX + 32) * local183;
-					@Pc(202) int local202 = (component.invMarginY + 32) * local173;
-					if (local171 < 20) {
-						local202 += component.invOffsetY[local171];
-						local195 += component.invOffsetX[local171];
+			slotIndex = 0;
+			for (row = 0; row < component.baseHeight; row++) {
+				for (@Pc(183) int col = 0; col < component.baseWidth; col++) {
+					@Pc(195) int slotX = (component.invMarginX + 32) * col;
+					@Pc(202) int slotY = (component.invMarginY + 32) * row;
+					if (slotIndex < 20) {
+						slotY += component.invOffsetY[slotIndex];
+						slotX += component.invOffsetX[slotIndex];
 					}
-					if (mouseX >= local195 && local202 <= mouseY && local195 + 32 > mouseX && local202 + 32 > mouseY) {
+					if (mouseX >= slotX && slotY <= mouseY && slotX + 32 > mouseX && slotY + 32 > mouseY) {
 						InterfaceList.mouseOverInventoryInterface = component;
-						clickedInventoryIndex = local171;
-						if (component.objTypes[local171] > 0) {
-							@Pc(267) ServerActiveProperties local267 = InterfaceList.getServerActiveProperties(component);
-							@Pc(276) ObjType local276 = ObjTypeList.get(component.objTypes[local171] - 1);
-							if (itemTargetMode == 1 && local267.isObjOpsEnabled()) {
-								if (MiniMap.selectedComponentId != component.id || selectedObjSlot != local171) {
-									add(-1, local276.id, JagString.concatenate(new JagString[]{selectedObjText, ARROW_ORANGE, local276.name}), local171, (short) 40, LocalizedText.USE, component.id);
+						clickedInventoryIndex = slotIndex;
+						if (component.objTypes[slotIndex] > 0) {
+							@Pc(267) ServerActiveProperties serverProps = InterfaceList.getServerActiveProperties(component);
+							@Pc(276) ObjType objType = ObjTypeList.get(component.objTypes[slotIndex] - 1);
+							if (itemTargetMode == 1 && serverProps.isObjOpsEnabled()) {
+								if (MiniMap.selectedComponentId != component.id || selectedObjSlot != slotIndex) {
+									add(-1, objType.id, JagString.concatenate(new JagString[]{selectedObjText, ARROW_ORANGE, objType.name}), slotIndex, (short) 40, LocalizedText.USE, component.id);
 								}
-							} else if (isTargeting && local267.isObjOpsEnabled()) {
-								@Pc(596) ParamType local596 = targetParamId == -1 ? null : ParamTypeList.get(targetParamId);
-								if ((targetMask & 0x10) != 0 && (local596 == null || local276.getParam(local596.defaultInt, targetParamId) != local596.defaultInt)) {
-									add(targetCursorId, local276.id, JagString.concatenate(new JagString[]{targetOpBase, ARROW_ORANGE, local276.name}), local171, (short) 3, targetVerb, component.id);
+							} else if (isTargeting && serverProps.isObjOpsEnabled()) {
+								@Pc(596) ParamType paramType = targetParamId == -1 ? null : ParamTypeList.get(targetParamId);
+								if ((targetMask & 0x10) != 0 && (paramType == null || objType.getParam(paramType.defaultInt, targetParamId) != paramType.defaultInt)) {
+									add(targetCursorId, objType.id, JagString.concatenate(new JagString[]{targetOpBase, ARROW_ORANGE, objType.name}), slotIndex, (short) 3, targetVerb, component.id);
 								}
 							} else {
-								@Pc(296) JagString[] local296 = local276.iops;
+								@Pc(296) JagString[] options = objType.iops;
 								if (DEBUG_OPS) {
-									local296 = annotateOps(local296);
+									options = annotateOps(options);
 								}
-								@Pc(309) int local309;
-								@Pc(334) byte local334;
-								if (local267.isObjOpsEnabled()) {
-									for (local309 = 4; local309 >= 3; local309--) {
-										if (local296 != null && local296[local309] != null) {
-											if (local309 == 3) {
-												local334 = 35;
+								@Pc(309) int i;
+								@Pc(334) byte actionId;
+								if (serverProps.isObjOpsEnabled()) {
+									for (i = 4; i >= 3; i--) {
+										if (options != null && options[i] != null) {
+											if (i == 3) {
+												actionId = 35;
 											} else {
-												local334 = 58;
+												actionId = 58;
 											}
-											add(-1, local276.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, local276.name}), local171, local334, local296[local309], component.id);
+											add(-1, objType.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, objType.name}), slotIndex, actionId, options[i], component.id);
 										}
 									}
 								}
-								if (local267.isObjUseEnabled()) {
-									add(MiniMap.useCursor, local276.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, local276.name}), local171, (short) 22, LocalizedText.USE, component.id);
+								if (serverProps.isObjUseEnabled()) {
+									add(MiniMap.useCursor, objType.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, objType.name}), slotIndex, (short) 22, LocalizedText.USE, component.id);
 								}
-								if (local267.isObjOpsEnabled() && local296 != null) {
-									for (local309 = 2; local309 >= 0; local309--) {
-										if (local296[local309] != null) {
-											local334 = 0;
-											if (local309 == 0) {
-												local334 = 47;
+								if (serverProps.isObjOpsEnabled() && options != null) {
+									for (i = 2; i >= 0; i--) {
+										if (options[i] != null) {
+											actionId = 0;
+											if (i == 0) {
+												actionId = 47;
 											}
-											if (local309 == 1) {
-												local334 = 5;
+											if (i == 1) {
+												actionId = 5;
 											}
-											if (local309 == 2) {
-												local334 = 43;
+											if (i == 2) {
+												actionId = 43;
 											}
-											add(-1, local276.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, local276.name}), local171, local334, local296[local309], component.id);
+											add(-1, objType.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, objType.name}), slotIndex, actionId, options[i], component.id);
 										}
 									}
 								}
-								local296 = component.invOptions;
+								options = component.invOptions;
 								if (DEBUG_OPS) {
-									local296 = annotateOps(local296);
+									options = annotateOps(options);
 								}
-								if (local296 != null) {
-									for (local309 = 4; local309 >= 0; local309--) {
-										if (local296[local309] != null) {
-											local334 = 0;
-											if (local309 == 0) {
-												local334 = 25;
+								if (options != null) {
+									for (i = 4; i >= 0; i--) {
+										if (options[i] != null) {
+											actionId = 0;
+											if (i == 0) {
+												actionId = 25;
 											}
-											if (local309 == 1) {
-												local334 = 23;
+											if (i == 1) {
+												actionId = 23;
 											}
-											if (local309 == 2) {
-												local334 = 48;
+											if (i == 2) {
+												actionId = 48;
 											}
-											if (local309 == 3) {
-												local334 = 7;
+											if (i == 3) {
+												actionId = 7;
 											}
-											if (local309 == 4) {
-												local334 = 13;
+											if (i == 4) {
+												actionId = 13;
 											}
-											add(-1, local276.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, local276.name}), local171, local334, local296[local309], component.id);
+											add(-1, objType.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, objType.name}), slotIndex, actionId, options[i], component.id);
 										}
 									}
 								}
-								add(MiniMap.examineCursor, local276.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, local276.name}), local171, (short) 1006, LocalizedText.EXAMINE, component.id);
+								add(MiniMap.examineCursor, objType.id, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, objType.name}), slotIndex, (short) 1006, LocalizedText.EXAMINE, component.id);
 							}
 						}
 					}
-					local171++;
+					slotIndex++;
 				}
 			}
 		}
@@ -343,20 +343,20 @@ public class MiniMenu {
 			return;
 		}
 		if (!isTargeting) {
-			for (local171 = 9; local171 >= 5; local171--) {
-				@Pc(765) JagString local765 = InterfaceList.getOp(component, local171);
-				if (local765 != null) {
-					add(getOpCursor(local171, component), local171 + 1, component.optionBase, component.createdComponentId, (short) 1003, local765, component.id);
+			for (slotIndex = 9; slotIndex >= 5; slotIndex--) {
+				@Pc(765) JagString opText = InterfaceList.getOp(component, slotIndex);
+				if (opText != null) {
+					add(getOpCursor(slotIndex, component), slotIndex + 1, component.optionBase, component.createdComponentId, (short) 1003, opText, component.id);
 				}
 			}
-			local47 = MiniMap.getTargetVerb(component);
-			if (local47 != null) {
-				add(-1, 0L, component.optionBase, component.createdComponentId, (short) 32, local47, component.id);
+			verb = MiniMap.getTargetVerb(component);
+			if (verb != null) {
+				add(-1, 0L, component.optionBase, component.createdComponentId, (short) 32, verb, component.id);
 			}
-			for (local173 = 4; local173 >= 0; local173--) {
-				@Pc(828) JagString local828 = InterfaceList.getOp(component, local173);
-				if (local828 != null) {
-					add(getOpCursor(local173, component), local173 + 1, component.optionBase, component.createdComponentId, (short) 9, local828, component.id);
+			for (row = 4; row >= 0; row--) {
+				@Pc(828) JagString opText = InterfaceList.getOp(component, row);
+				if (opText != null) {
+					add(getOpCursor(row, component), row + 1, component.optionBase, component.createdComponentId, (short) 9, opText, component.id);
 				}
 			}
 			if (InterfaceList.getServerActiveProperties(component).isResumePauseButtonEnabled()) {
@@ -447,106 +447,106 @@ public class MiniMenu {
 		if (actionIndex < 0) {
 			return;
 		}
-		@Pc(15) int local15 = intArgs1[actionIndex];
-		@Pc(19) int local19 = intArgs2[actionIndex];
+		@Pc(15) int menuArg1 = intArgs1[actionIndex];
+		@Pc(19) int menuArg2 = intArgs2[actionIndex];
 		@Pc(23) int actionCode = actions[actionIndex];
 		if (actionCode >= 2000) {
 			actionCode -= 2000;
 		}
-		@Pc(31) long local31 = keys[actionIndex];
-		@Pc(36) int local36 = (int) keys[actionIndex];
-		@Pc(43) Player local43;
+		@Pc(31) long key = keys[actionIndex];
+		@Pc(36) int keyInt = (int) keys[actionIndex];
+		@Pc(43) Player player;
 		if (actionCode == PLAYER_FOLLOW_ACTION) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.type = 2;
 				Cross.milliseconds = 0;
 				Cross.x = Mouse.clickX;
 				Cross.y = Mouse.clickY;
 				Protocol.outboundBuffer.p1isaac(71);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 			}
 		}
 		if (actionCode == LOC_ACTION_4) {
-			PathFinder.findPathToLoc(local31, local19, local15);
+			PathFinder.findPathToLoc(key, menuArg2, menuArg1);
 			Protocol.outboundBuffer.p1isaac(247);
-			Protocol.outboundBuffer.ip2(Camera.originY + local19);
-			Protocol.outboundBuffer.ip2add(local15 + Camera.originX);
-			Protocol.outboundBuffer.p2(Integer.MAX_VALUE & (int) (local31 >>> 32));
+			Protocol.outboundBuffer.ip2(Camera.originY + menuArg2);
+			Protocol.outboundBuffer.ip2add(menuArg1 + Camera.originX);
+			Protocol.outboundBuffer.p2(Integer.MAX_VALUE & (int) (key >>> 32));
 		}
 		if (actionCode == OBJ_OBJ_ACTION) {
 			Protocol.outboundBuffer.p1isaac(27);
 			Protocol.outboundBuffer.p2(selectedObjSlot);
-			Protocol.outboundBuffer.ip4(local19);
-			Protocol.outboundBuffer.ip2(local15);
+			Protocol.outboundBuffer.ip4(menuArg2);
+			Protocol.outboundBuffer.ip2(menuArg1);
 			Protocol.outboundBuffer.ip4(MiniMap.selectedComponentId);
 			Protocol.outboundBuffer.ip2add(selectedObjId);
-			Protocol.outboundBuffer.ip2add(local36);
+			Protocol.outboundBuffer.ip2add(keyInt);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
-		@Pc(192) Npc local192;
+		@Pc(192) Npc npc;
 		if (actionCode == NPC_ACTION_4) {
-			local192 = NpcList.npcs[local36];
-			if (local192 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local192.movementQueueX[0], 1, 0, 2, local192.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			npc = NpcList.npcs[keyInt];
+			if (npc != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, npc.movementQueueX[0], 1, 0, 2, npc.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.x = Mouse.clickX;
 				Cross.type = 2;
 				Cross.milliseconds = 0;
 				Cross.y = Mouse.clickY;
 				Protocol.outboundBuffer.p1isaac(30);
-				Protocol.outboundBuffer.p2(local36);
+				Protocol.outboundBuffer.p2(keyInt);
 			}
 		}
 		if (actionCode == NPC_ACTION_1) {
-			local192 = NpcList.npcs[local36];
-			if (local192 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local192.movementQueueX[0], 1, 0, 2, local192.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			npc = NpcList.npcs[keyInt];
+			if (npc != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, npc.movementQueueX[0], 1, 0, 2, npc.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.x = Mouse.clickX;
 				Cross.milliseconds = 0;
 				Cross.type = 2;
 				Cross.y = Mouse.clickY;
 				Protocol.outboundBuffer.p1isaac(78);
-				Protocol.outboundBuffer.ip2(local36);
+				Protocol.outboundBuffer.ip2(keyInt);
 			}
 		}
 		if (actionCode == UNKNOWN_44) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.x = Mouse.clickX;
 				Cross.type = 2;
 				Cross.y = Mouse.clickY;
 				Cross.milliseconds = 0;
 				Protocol.outboundBuffer.p1isaac(133);
-				Protocol.outboundBuffer.ip2(local36);
+				Protocol.outboundBuffer.ip2(keyInt);
 			}
 		}
 		if (actionCode == OBJ_ACTION_5) {
 			Protocol.outboundBuffer.p1isaac(135);
-			Protocol.outboundBuffer.p2add(local36);
-			Protocol.outboundBuffer.p2add(local15);
-			Protocol.outboundBuffer.mp4(local19);
+			Protocol.outboundBuffer.p2add(keyInt);
+			Protocol.outboundBuffer.p2add(menuArg1);
+			Protocol.outboundBuffer.mp4(menuArg2);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == LOC_ACTION_1) {
-			PathFinder.findPathToLoc(local31, local19, local15);
+			PathFinder.findPathToLoc(key, menuArg2, menuArg1);
 			Protocol.outboundBuffer.p1isaac(254);
-			Protocol.outboundBuffer.ip2(local15 + Camera.originX);
-			Protocol.outboundBuffer.p2add((int) (local31 >>> 32) & Integer.MAX_VALUE);
-			Protocol.outboundBuffer.p2(local19 + Camera.originY);
+			Protocol.outboundBuffer.ip2(menuArg1 + Camera.originX);
+			Protocol.outboundBuffer.p2add((int) (key >>> 32) & Integer.MAX_VALUE);
+			Protocol.outboundBuffer.p2(menuArg2 + Camera.originY);
 		}
 		if (actionCode == COMPONENT_ACTION_CLOSE) {
 			ClientProt.closeWidget();
 		}
 		if (actionCode == COMPONENT_NPC_ACTION) {
-			local192 = NpcList.npcs[local36];
-			if (local192 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local192.movementQueueX[0], 1, 0, 2, local192.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			npc = NpcList.npcs[keyInt];
+			if (npc != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, npc.movementQueueX[0], 1, 0, 2, npc.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.x = Mouse.clickX;
 				Cross.type = 2;
 				Cross.milliseconds = 0;
@@ -554,17 +554,17 @@ public class MiniMenu {
 				Protocol.outboundBuffer.p1isaac(239);
 				Protocol.outboundBuffer.ip4(targetInterfaceId);
 				Protocol.outboundBuffer.p2add(targetChildId);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 			}
 		}
-		@Pc(560) boolean local560;
+		@Pc(560) boolean pathFound;
 		if (actionCode == OBJSTACK_ACTION_1) {
 			if (client.game == 1) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 			} else {
-				local560 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, local15, 0, 0, 2, local19, PlayerList.self.movementQueueX[0]);
-				if (!local560) {
-					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				pathFound = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, menuArg1, 0, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
+				if (!pathFound) {
+					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 				}
 			}
 			Cross.x = Mouse.clickX;
@@ -572,16 +572,16 @@ public class MiniMenu {
 			Cross.type = 2;
 			Cross.y = Mouse.clickY;
 			Protocol.outboundBuffer.p1isaac(66);
-			Protocol.outboundBuffer.ip2(Camera.originX + local15);
-			Protocol.outboundBuffer.p2(local36);
-			Protocol.outboundBuffer.ip2add(local19 + Camera.originY);
+			Protocol.outboundBuffer.ip2(Camera.originX + menuArg1);
+			Protocol.outboundBuffer.p2(keyInt);
+			Protocol.outboundBuffer.ip2add(menuArg2 + Camera.originY);
 		}
 		if (actionCode == LOC_ACTION_5) {
-			PathFinder.findPathToLoc(local31, local19, local15);
+			PathFinder.findPathToLoc(key, menuArg2, menuArg1);
 			Protocol.outboundBuffer.p1isaac(170);
-			Protocol.outboundBuffer.ip2add(Integer.MAX_VALUE & (int) (local31 >>> 32));
-			Protocol.outboundBuffer.ip2add(local15 + Camera.originX);
-			Protocol.outboundBuffer.ip2add(local19 + Camera.originY);
+			Protocol.outboundBuffer.ip2add(Integer.MAX_VALUE & (int) (key >>> 32));
+			Protocol.outboundBuffer.ip2add(menuArg1 + Camera.originX);
+			Protocol.outboundBuffer.ip2add(menuArg2 + Camera.originY);
 		}
 		if (actionCode == OBJ_EXAMINE) {
 			Cross.type = 2;
@@ -589,33 +589,33 @@ public class MiniMenu {
 			Cross.y = Mouse.clickY;
 			Cross.milliseconds = 0;
 			Protocol.outboundBuffer.p1isaac(92);
-			Protocol.outboundBuffer.ip2add(local36);
+			Protocol.outboundBuffer.ip2add(keyInt);
 		}
-		@Pc(693) Component local693;
+		@Pc(693) Component component;
 		if (actionCode == OBJ_EXAMINE_IN_COMPONENT) {
-			local693 = InterfaceList.getComponent(local19);
-			if (local693 == null || local693.objCounts[local15] < 100000) {
+			component = InterfaceList.getComponent(menuArg2);
+			if (component == null || component.objCounts[menuArg1] < 100000) {
 				Protocol.outboundBuffer.p1isaac(92);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 			} else {
-				Chat.add(JagString.EMPTY, 0, JagString.concatenate(new JagString[]{JagString.parseInt(local693.objCounts[local15]), QUANTITY_SEPARATOR, ObjTypeList.get(local36).name}));
+				Chat.add(JagString.EMPTY, 0, JagString.concatenate(new JagString[]{JagString.parseInt(component.objCounts[menuArg1]), QUANTITY_SEPARATOR, ObjTypeList.get(keyInt).name}));
 			}
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == WALK_HERE) {
-			if (local36 == 0) {
+			if (keyInt == 0) {
 				if (API.IsRoofVisibilityActive()) {
 					API.ClearDestinationRoofTarget();
 				}
-				setWalkDestination(Player.plane, local15, local19);
-			} else if (local36 == 1) {
+				setWalkDestination(Player.plane, menuArg1, menuArg2);
+			} else if (keyInt == 1) {
 				if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT]) {
-					Cheat.teleport(Camera.originX + local15, Camera.originY + local19, Player.plane);
-				} else if (PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, true, 0, local15, 0, 0, 1, local19, PlayerList.self.movementQueueX[0])) {
+					Cheat.teleport(Camera.originX + menuArg1, Camera.originY + menuArg2, Player.plane);
+				} else if (PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, true, 0, menuArg1, 0, 0, 1, menuArg2, PlayerList.self.movementQueueX[0])) {
 					if (API.IsRoofVisibilityActive()) {
-						API.SetDestinationRoofTarget(local15, local19);
+						API.SetDestinationRoofTarget(menuArg1, menuArg2);
 					}
 					Protocol.outboundBuffer.p1(InterfaceList.clickOffsetX);
 					Protocol.outboundBuffer.p1(clickOffsetY);
@@ -636,111 +636,111 @@ public class MiniMenu {
 			Cross.type = 2;
 			Cross.y = Mouse.clickY;
 			Cross.x = Mouse.clickX;
-			local192 = NpcList.npcs[local36];
-			if (local192 != null) {
-				@Pc(884) NpcType local884 = local192.type;
-				if (local884.multiNpcs != null) {
-					local884 = local884.getMultiNpc();
+			npc = NpcList.npcs[keyInt];
+			if (npc != null) {
+				@Pc(884) NpcType npcType = npc.type;
+				if (npcType.multiNpcs != null) {
+					npcType = npcType.getMultiNpc();
 				}
-				if (local884 != null) {
+				if (npcType != null) {
 					Protocol.outboundBuffer.p1isaac(72);
-					Protocol.outboundBuffer.p2(local884.id);
+					Protocol.outboundBuffer.p2(npcType.id);
 				}
 			}
 		}
 		if (actionCode == OBJ_ACTION_1) {
 			Protocol.outboundBuffer.p1isaac(156);
-			Protocol.outboundBuffer.ip2add(local15);
-			Protocol.outboundBuffer.p2add(local36);
-			Protocol.outboundBuffer.ip4(local19);
+			Protocol.outboundBuffer.ip2add(menuArg1);
+			Protocol.outboundBuffer.p2add(keyInt);
+			Protocol.outboundBuffer.ip4(menuArg2);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == COMPONENT_OBJ_ACTION) {
 			Protocol.outboundBuffer.p1isaac(253);
 			Protocol.outboundBuffer.ip4(targetInterfaceId);
-			Protocol.outboundBuffer.ip2add(local15);
-			Protocol.outboundBuffer.ip4(local19);
-			Protocol.outboundBuffer.p2add(local36);
+			Protocol.outboundBuffer.ip2add(menuArg1);
+			Protocol.outboundBuffer.ip4(menuArg2);
+			Protocol.outboundBuffer.p2add(keyInt);
 			Protocol.outboundBuffer.ip2(targetChildId);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == UNKNOWN_10) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.type = 2;
 				Cross.y = Mouse.clickY;
 				Cross.x = Mouse.clickX;
 				Cross.milliseconds = 0;
 				Protocol.outboundBuffer.p1isaac(4);
-				Protocol.outboundBuffer.ip2(local36);
+				Protocol.outboundBuffer.ip2(keyInt);
 			}
 		}
 		if (actionCode == UNKNOWN_41 && Cs1ScriptRunner.pleaseWaitComponent == null) {
-			sendComponentClickPacket(local15, local19);
-			Cs1ScriptRunner.pleaseWaitComponent = InterfaceList.getComponent(local19, local15);
+			sendComponentClickPacket(menuArg1, menuArg2);
+			Cs1ScriptRunner.pleaseWaitComponent = InterfaceList.getComponent(menuArg2, menuArg1);
 			InterfaceList.redraw(Cs1ScriptRunner.pleaseWaitComponent);
 		}
 		if (actionCode == LOC_ACTION_3) {
-			PathFinder.findPathToLoc(local31, local19, local15);
+			PathFinder.findPathToLoc(key, menuArg2, menuArg1);
 			Protocol.outboundBuffer.p1isaac(84);
-			Protocol.outboundBuffer.ip2add(Integer.MAX_VALUE & (int) (local31 >>> 32));
-			Protocol.outboundBuffer.ip2add(Camera.originY + local19);
-			Protocol.outboundBuffer.ip2(local15 + Camera.originX);
+			Protocol.outboundBuffer.ip2add(Integer.MAX_VALUE & (int) (key >>> 32));
+			Protocol.outboundBuffer.ip2add(Camera.originY + menuArg2);
+			Protocol.outboundBuffer.ip2(menuArg1 + Camera.originX);
 		}
 		if (actionCode == OBJ_OPERATE_ACTION) {
 			Protocol.outboundBuffer.p1isaac(206);
-			Protocol.outboundBuffer.p2add(local36);
-			Protocol.outboundBuffer.ip2(local15);
-			Protocol.outboundBuffer.ip4(local19);
+			Protocol.outboundBuffer.p2add(keyInt);
+			Protocol.outboundBuffer.ip2(menuArg1);
+			Protocol.outboundBuffer.ip4(menuArg2);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
-		if (actionCode == OBJ_LOC_ACTION && PathFinder.findPathToLoc(local31, local19, local15)) {
+		if (actionCode == OBJ_LOC_ACTION && PathFinder.findPathToLoc(key, menuArg2, menuArg1)) {
 			Protocol.outboundBuffer.p1isaac(134);
-			Protocol.outboundBuffer.p2add(Camera.originX + local15);
+			Protocol.outboundBuffer.p2add(Camera.originX + menuArg1);
 			Protocol.outboundBuffer.p2(selectedObjId);
-			Protocol.outboundBuffer.ip2(local19 + Camera.originY);
+			Protocol.outboundBuffer.ip2(menuArg2 + Camera.originY);
 			Protocol.outboundBuffer.p2(selectedObjSlot);
 			Protocol.outboundBuffer.mp4(MiniMap.selectedComponentId);
-			Protocol.outboundBuffer.p2add((int) (local31 >>> 32) & Integer.MAX_VALUE);
+			Protocol.outboundBuffer.p2add((int) (key >>> 32) & Integer.MAX_VALUE);
 		}
 		if (actionCode == PLAYER_REQ_ASSIST_ACTION) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.milliseconds = 0;
 				Cross.type = 2;
 				Cross.y = Mouse.clickY;
 				Cross.x = Mouse.clickX;
 				Protocol.outboundBuffer.p1isaac(114);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 			}
 		}
 		if (actionCode == UNKNOWN_9 || actionCode == UNKNOWN_1003) {
-			ClientProt.sendButtonClick(opBases[actionIndex], local15, local36, local19);
+			ClientProt.sendButtonClick(opBases[actionIndex], menuArg1, keyInt, menuArg2);
 		}
 		if (actionCode == OBJ_EQUIP_ACTION) {
 			Protocol.outboundBuffer.p1isaac(55);
-			Protocol.outboundBuffer.ip2(local36);
-			Protocol.outboundBuffer.p2add(local15);
-			Protocol.outboundBuffer.imp4(local19);
+			Protocol.outboundBuffer.ip2(keyInt);
+			Protocol.outboundBuffer.p2add(menuArg1);
+			Protocol.outboundBuffer.imp4(menuArg2);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == UNKNOWN_21) {
 			if (client.game == 1) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 			} else {
-				local560 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, local15, 0, 0, 2, local19, PlayerList.self.movementQueueX[0]);
-				if (!local560) {
-					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				pathFound = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, menuArg1, 0, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
+				if (!pathFound) {
+					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 				}
 			}
 			Cross.type = 2;
@@ -748,66 +748,66 @@ public class MiniMenu {
 			Cross.milliseconds = 0;
 			Cross.y = Mouse.clickY;
 			Protocol.outboundBuffer.p1isaac(228);
-			Protocol.outboundBuffer.p2(local36);
-			Protocol.outboundBuffer.ip2(Camera.originX + local15);
-			Protocol.outboundBuffer.ip2add(Camera.originY + local19);
+			Protocol.outboundBuffer.p2(keyInt);
+			Protocol.outboundBuffer.ip2(Camera.originX + menuArg1);
+			Protocol.outboundBuffer.ip2add(Camera.originY + menuArg2);
 		}
 		if (actionCode == NPC_ACTION_3) {
-			local192 = NpcList.npcs[local36];
-			if (local192 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local192.movementQueueX[0], 1, 0, 2, local192.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			npc = NpcList.npcs[keyInt];
+			if (npc != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, npc.movementQueueX[0], 1, 0, 2, npc.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.type = 2;
 				Cross.milliseconds = 0;
 				Cross.y = Mouse.clickY;
 				Cross.x = Mouse.clickX;
 				Protocol.outboundBuffer.p1isaac(148);
-				Protocol.outboundBuffer.p2add(local36);
+				Protocol.outboundBuffer.p2add(keyInt);
 			}
 		}
 		if (actionCode == UNKNOWN_32) {
-			local693 = InterfaceList.getComponent(local19, local15);
-			if (local693 != null) {
+			component = InterfaceList.getComponent(menuArg2, menuArg1);
+			if (component != null) {
 				cancelTargeting();
-				@Pc(1493) ServerActiveProperties local1493 = InterfaceList.getServerActiveProperties(local693);
-				startTargeting(local19, local15, local1493.getTargetMask(), local1493.targetParam, local693.targetCursor, local693.defaultTargetCursor);
+				@Pc(1493) ServerActiveProperties serverProps = InterfaceList.getServerActiveProperties(component);
+				startTargeting(menuArg2, menuArg1, serverProps.getTargetMask(), serverProps.targetParam, component.targetCursor, component.defaultTargetCursor);
 				itemTargetMode = 0;
-				targetVerb = MiniMap.getTargetVerb(local693);
+				targetVerb = MiniMap.getTargetVerb(component);
 				if (targetVerb == null) {
 					targetVerb = NULL_TEXT;
 				}
-				if (local693.if3) {
-					targetOpBase = JagString.concatenate(new JagString[]{local693.optionBase, COLOR_WHITE});
+				if (component.if3) {
+					targetOpBase = JagString.concatenate(new JagString[]{component.optionBase, COLOR_WHITE});
 				} else {
-					targetOpBase = JagString.concatenate(new JagString[]{COLOR_GREEN, local693.optionSuffix, COLOR_WHITE});
+					targetOpBase = JagString.concatenate(new JagString[]{COLOR_GREEN, component.optionSuffix, COLOR_WHITE});
 				}
 			}
 			return;
 		}
 		if (actionCode == PLAYER_ACTION_TRADE) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.y = Mouse.clickY;
 				Cross.milliseconds = 0;
 				Cross.type = 2;
 				Cross.x = Mouse.clickX;
 				Protocol.outboundBuffer.p1isaac(180);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 			}
 		}
 		if (actionCode == OBJ_ACTION_4) {
 			Protocol.outboundBuffer.p1isaac(161);
-			Protocol.outboundBuffer.ip4(local19);
-			Protocol.outboundBuffer.ip2add(local36);
-			Protocol.outboundBuffer.ip2add(local15);
+			Protocol.outboundBuffer.ip4(menuArg2);
+			Protocol.outboundBuffer.ip2add(keyInt);
+			Protocol.outboundBuffer.ip2add(menuArg1);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == COMPONENT_PLAYER_ACTION) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.milliseconds = 0;
 				Cross.type = 2;
 				Cross.x = Mouse.clickX;
@@ -815,16 +815,16 @@ public class MiniMenu {
 				Protocol.outboundBuffer.p1isaac(195);
 				Protocol.outboundBuffer.p2add(targetChildId);
 				Protocol.outboundBuffer.ip4(targetInterfaceId);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 			}
 		}
 		if (actionCode == PLAYER_ACTION_BLOCK) {
 			if (client.game == 1) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 			} else {
-				local560 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, local15, 0, 0, 2, local19, PlayerList.self.movementQueueX[0]);
-				if (!local560) {
-					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				pathFound = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, menuArg1, 0, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
+				if (!pathFound) {
+					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 				}
 			}
 			Cross.x = Mouse.clickX;
@@ -832,48 +832,48 @@ public class MiniMenu {
 			Cross.y = Mouse.clickY;
 			Cross.milliseconds = 0;
 			Protocol.outboundBuffer.p1isaac(109);
-			Protocol.outboundBuffer.ip2(local19 + Camera.originY);
-			Protocol.outboundBuffer.p2(local15 + Camera.originX);
-			Protocol.outboundBuffer.ip2add(local36);
+			Protocol.outboundBuffer.ip2(menuArg2 + Camera.originY);
+			Protocol.outboundBuffer.p2(menuArg1 + Camera.originX);
+			Protocol.outboundBuffer.ip2add(keyInt);
 		}
 		if (actionCode == OBJ_IN_COMPONENT_ACTION_1) {
 			Protocol.outboundBuffer.p1isaac(81);
-			Protocol.outboundBuffer.p2add(local15);
-			Protocol.outboundBuffer.p2(local36);
-			Protocol.outboundBuffer.imp4(local19);
+			Protocol.outboundBuffer.p2add(menuArg1);
+			Protocol.outboundBuffer.p2(keyInt);
+			Protocol.outboundBuffer.imp4(menuArg2);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == NPC_ACTION_5) {
-			local192 = NpcList.npcs[local36];
-			if (local192 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local192.movementQueueX[0], 1, 0, 2, local192.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			npc = NpcList.npcs[keyInt];
+			if (npc != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, npc.movementQueueX[0], 1, 0, 2, npc.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.y = Mouse.clickY;
 				Cross.type = 2;
 				Cross.x = Mouse.clickX;
 				Cross.milliseconds = 0;
 				Protocol.outboundBuffer.p1isaac(218);
-				Protocol.outboundBuffer.ip2(local36);
+				Protocol.outboundBuffer.ip2(keyInt);
 			}
 		}
-		@Pc(1955) int local1955;
+		@Pc(1955) int varpIndex;
 		if (actionCode == LOGOUT_ACTION) {
 			Protocol.outboundBuffer.p1isaac(10);
-			Protocol.outboundBuffer.p4(local19);
-			local693 = InterfaceList.getComponent(local19);
-			if (local693.cs1Scripts != null && local693.cs1Scripts[0][0] == 5) {
-				local1955 = local693.cs1Scripts[0][1];
-				if (VarpDomain.activeVarps[local1955] != local693.cs1ComparisonOperands[0]) {
-					VarpDomain.activeVarps[local1955] = local693.cs1ComparisonOperands[0];
-					VarpDomain.refreshMagicVarp(local1955);
+			Protocol.outboundBuffer.p4(menuArg2);
+			component = InterfaceList.getComponent(menuArg2);
+			if (component.cs1Scripts != null && component.cs1Scripts[0][0] == 5) {
+				varpIndex = component.cs1Scripts[0][1];
+				if (VarpDomain.activeVarps[varpIndex] != component.cs1ComparisonOperands[0]) {
+					VarpDomain.activeVarps[varpIndex] = component.cs1ComparisonOperands[0];
+					VarpDomain.refreshMagicVarp(varpIndex);
 				}
 			}
 		}
 		if (actionCode == OBJ_NPC_ACTION) {
-			local192 = NpcList.npcs[local36];
-			if (local192 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local192.movementQueueX[0], 1, 0, 2, local192.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			npc = NpcList.npcs[keyInt];
+			if (npc != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, npc.movementQueueX[0], 1, 0, 2, npc.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.type = 2;
 				Cross.milliseconds = 0;
 				Cross.y = Mouse.clickY;
@@ -881,35 +881,35 @@ public class MiniMenu {
 				Protocol.outboundBuffer.p1isaac(115);
 				Protocol.outboundBuffer.mp4(MiniMap.selectedComponentId);
 				Protocol.outboundBuffer.ip2(selectedObjSlot);
-				Protocol.outboundBuffer.ip2(local36);
+				Protocol.outboundBuffer.ip2(keyInt);
 				Protocol.outboundBuffer.ip2add(selectedObjId);
 			}
 		}
 		if (actionCode == LOGOUT_ACTION_2) {
 			Protocol.outboundBuffer.p1isaac(10);
-			Protocol.outboundBuffer.p4(local19);
-			local693 = InterfaceList.getComponent(local19);
-			if (local693.cs1Scripts != null && local693.cs1Scripts[0][0] == 5) {
-				local1955 = local693.cs1Scripts[0][1];
-				VarpDomain.activeVarps[local1955] = 1 - VarpDomain.activeVarps[local1955];
-				VarpDomain.refreshMagicVarp(local1955);
+			Protocol.outboundBuffer.p4(menuArg2);
+			component = InterfaceList.getComponent(menuArg2);
+			if (component.cs1Scripts != null && component.cs1Scripts[0][0] == 5) {
+				varpIndex = component.cs1Scripts[0][1];
+				VarpDomain.activeVarps[varpIndex] = 1 - VarpDomain.activeVarps[varpIndex];
+				VarpDomain.refreshMagicVarp(varpIndex);
 			}
 		}
 		if (actionCode == OBJ_OBJSTACK_ACTION) {
-			local560 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, local15, 0, 0, 2, local19, PlayerList.self.movementQueueX[0]);
-			if (!local560) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+			pathFound = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, menuArg1, 0, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
+			if (!pathFound) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 			}
 			Cross.x = Mouse.clickX;
 			Cross.milliseconds = 0;
 			Cross.y = Mouse.clickY;
 			Cross.type = 2;
 			Protocol.outboundBuffer.p1isaac(101);
-			Protocol.outboundBuffer.ip2add(local15 + Camera.originX);
+			Protocol.outboundBuffer.ip2add(menuArg1 + Camera.originX);
 			Protocol.outboundBuffer.ip2(selectedObjSlot);
 			Protocol.outboundBuffer.ip2(selectedObjId);
-			Protocol.outboundBuffer.ip2(local36);
-			Protocol.outboundBuffer.ip2add(Camera.originY + local19);
+			Protocol.outboundBuffer.ip2(keyInt);
+			Protocol.outboundBuffer.ip2add(Camera.originY + menuArg2);
 			Protocol.outboundBuffer.mp4(MiniMap.selectedComponentId);
 		}
 		if (actionCode == LOC_ACTION_EXAMINE) {
@@ -918,41 +918,41 @@ public class MiniMenu {
 			Cross.type = 2;
 			Cross.y = Mouse.clickY;
 			Protocol.outboundBuffer.p1isaac(94);
-			Protocol.outboundBuffer.ip2add(local36);
+			Protocol.outboundBuffer.ip2add(keyInt);
 		}
 		if (actionCode == UNKNOWN_11) {
-			if (local36 == 0) {
+			if (keyInt == 0) {
 				minimapWalkState = 1;
-				setWalkDestination(Player.plane, local15, local19);
-			} else if (local36 == 1) {
+				setWalkDestination(Player.plane, menuArg1, menuArg2);
+			} else if (keyInt == 1) {
 				Protocol.outboundBuffer.p1isaac(131);
 				Protocol.outboundBuffer.mp4(targetInterfaceId);
-				Protocol.outboundBuffer.p2add(Camera.originX + local15);
+				Protocol.outboundBuffer.p2add(Camera.originX + menuArg1);
 				Protocol.outboundBuffer.ip2add(targetChildId);
-				Protocol.outboundBuffer.p2add(local19 + Camera.originY);
+				Protocol.outboundBuffer.p2add(menuArg2 + Camera.originY);
 			}
 		}
 		if (actionCode == UNKNOWN_8) {
-			local693 = InterfaceList.getComponent(local19);
-			@Pc(2287) boolean local2287 = true;
-			if (local693.clientCode > 0) {
-				local2287 = handleSpecialButtonAction(local693);
+			component = InterfaceList.getComponent(menuArg2);
+			@Pc(2287) boolean shouldSend = true;
+			if (component.clientCode > 0) {
+				shouldSend = handleSpecialButtonAction(component);
 			}
-			if (local2287) {
+			if (shouldSend) {
 				Protocol.outboundBuffer.p1isaac(10);
-				Protocol.outboundBuffer.p4(local19);
+				Protocol.outboundBuffer.p4(menuArg2);
 			}
 		}
 		if (actionCode == OBJ_PLAYER_ACTION) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.milliseconds = 0;
 				Cross.y = Mouse.clickY;
 				Cross.type = 2;
 				Cross.x = Mouse.clickX;
 				Protocol.outboundBuffer.p1isaac(248);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 				Protocol.outboundBuffer.p2(selectedObjId);
 				Protocol.outboundBuffer.p2(selectedObjSlot);
 				Protocol.outboundBuffer.mp4(MiniMap.selectedComponentId);
@@ -960,20 +960,20 @@ public class MiniMenu {
 		}
 		if (actionCode == UNKNOWN_7) {
 			Protocol.outboundBuffer.p1isaac(85);
-			Protocol.outboundBuffer.imp4(local19);
-			Protocol.outboundBuffer.p2(local15);
-			Protocol.outboundBuffer.p2add(local36);
+			Protocol.outboundBuffer.imp4(menuArg2);
+			Protocol.outboundBuffer.p2(menuArg1);
+			Protocol.outboundBuffer.p2add(keyInt);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == UNKNOWN_24) {
 			if (client.game == 1) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 			} else {
-				local560 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, local15, 0, 0, 2, local19, PlayerList.self.movementQueueX[0]);
-				if (!local560) {
-					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				pathFound = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, menuArg1, 0, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
+				if (!pathFound) {
+					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 				}
 			}
 			Cross.type = 2;
@@ -981,94 +981,94 @@ public class MiniMenu {
 			Cross.x = Mouse.clickX;
 			Cross.milliseconds = 0;
 			Protocol.outboundBuffer.p1isaac(48);
-			Protocol.outboundBuffer.p2add(local15 + Camera.originX);
-			Protocol.outboundBuffer.ip2add(local36);
-			Protocol.outboundBuffer.ip2(Camera.originY + local19);
+			Protocol.outboundBuffer.p2add(menuArg1 + Camera.originX);
+			Protocol.outboundBuffer.ip2add(keyInt);
+			Protocol.outboundBuffer.ip2(Camera.originY + menuArg2);
 		}
-		if (actionCode == COMPONENT_LOC_ACTION && PathFinder.findPathToLoc(local31, local19, local15)) {
+		if (actionCode == COMPONENT_LOC_ACTION && PathFinder.findPathToLoc(key, menuArg2, menuArg1)) {
 			Protocol.outboundBuffer.p1isaac(233);
-			Protocol.outboundBuffer.ip2add(local19 + Camera.originY);
-			Protocol.outboundBuffer.p2add(Camera.originX + local15);
+			Protocol.outboundBuffer.ip2add(menuArg2 + Camera.originY);
+			Protocol.outboundBuffer.p2add(Camera.originX + menuArg1);
 			Protocol.outboundBuffer.ip2add(targetChildId);
 			Protocol.outboundBuffer.imp4(targetInterfaceId);
-			Protocol.outboundBuffer.p2add((int) (local31 >>> 32) & Integer.MAX_VALUE);
+			Protocol.outboundBuffer.p2add((int) (key >>> 32) & Integer.MAX_VALUE);
 		}
 		if (actionCode == UNKNOWN_13) {
 			Protocol.outboundBuffer.p1isaac(6);
-			Protocol.outboundBuffer.p4(local19);
-			Protocol.outboundBuffer.p2add(local15);
-			Protocol.outboundBuffer.ip2(local36);
+			Protocol.outboundBuffer.p4(menuArg2);
+			Protocol.outboundBuffer.p2add(menuArg1);
+			Protocol.outboundBuffer.ip2(keyInt);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == PLAYER_ACTION_5) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.type = 2;
 				Cross.y = Mouse.clickY;
 				Cross.x = Mouse.clickX;
 				Cross.milliseconds = 0;
 				Protocol.outboundBuffer.p1isaac(175);
-				Protocol.outboundBuffer.p2add(local36);
+				Protocol.outboundBuffer.p2add(keyInt);
 			}
 		}
 		if (actionCode == UNKNOWN_22) {
 			cancelTargeting();
-			local693 = InterfaceList.getComponent(local19);
-			MiniMap.selectedComponentId = local19;
-			selectedObjSlot = local15;
+			component = InterfaceList.getComponent(menuArg2);
+			MiniMap.selectedComponentId = menuArg2;
+			selectedObjSlot = menuArg1;
 			itemTargetMode = 1;
-			selectedObjId = local36;
-			InterfaceList.redraw(local693);
-			selectedObjText = JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, ObjTypeList.get(local36).name, COLOR_WHITE});
+			selectedObjId = keyInt;
+			InterfaceList.redraw(component);
+			selectedObjText = JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, ObjTypeList.get(keyInt).name, COLOR_WHITE});
 			if (selectedObjText == null) {
 				selectedObjText = NULL;
 			}
 			return;
 		}
 		if (actionCode == LOC_ACTION_2) {
-			PathFinder.findPathToLoc(local31, local19, local15);
+			PathFinder.findPathToLoc(key, menuArg2, menuArg1);
 			Protocol.outboundBuffer.p1isaac(194);
-			Protocol.outboundBuffer.ip2add(local19 + Camera.originY);
-			Protocol.outboundBuffer.ip2(Camera.originX + local15);
-			Protocol.outboundBuffer.p2((int) (local31 >>> 32) & Integer.MAX_VALUE);
+			Protocol.outboundBuffer.ip2add(menuArg2 + Camera.originY);
+			Protocol.outboundBuffer.ip2(Camera.originX + menuArg1);
+			Protocol.outboundBuffer.p2((int) (key >>> 32) & Integer.MAX_VALUE);
 		}
 		if (actionCode == UNKNOWN_48) {
 			Protocol.outboundBuffer.p1isaac(154);
-			Protocol.outboundBuffer.ip2(local15);
-			Protocol.outboundBuffer.imp4(local19);
-			Protocol.outboundBuffer.ip2add(local36);
+			Protocol.outboundBuffer.ip2(menuArg1);
+			Protocol.outboundBuffer.imp4(menuArg2);
+			Protocol.outboundBuffer.ip2add(keyInt);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == PLAYER_ACTION_1) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.milliseconds = 0;
 				Cross.x = Mouse.clickX;
 				Cross.y = Mouse.clickY;
 				Cross.type = 2;
 				Protocol.outboundBuffer.p1isaac(68);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 			}
 		}
 		if (actionCode == OBJ_IN_COMPONENT_ACTION_4) {
 			Protocol.outboundBuffer.p1isaac(153);
-			Protocol.outboundBuffer.ip4(local19);
-			Protocol.outboundBuffer.ip2(local15);
-			Protocol.outboundBuffer.ip2(local36);
+			Protocol.outboundBuffer.ip4(menuArg2);
+			Protocol.outboundBuffer.ip2(menuArg1);
+			Protocol.outboundBuffer.ip2(keyInt);
 			itemInteractionTick = 0;
-			pressedInventoryComponent = InterfaceList.getComponent(local19);
-			pressedSlotIndex = local15;
+			pressedInventoryComponent = InterfaceList.getComponent(menuArg2);
+			pressedSlotIndex = menuArg1;
 		}
 		if (actionCode == COMPONENT_OBJSTACK_ACTION) {
-			local560 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, local15, 0, 0, 2, local19, PlayerList.self.movementQueueX[0]);
-			if (!local560) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+			pathFound = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, menuArg1, 0, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
+			if (!pathFound) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 			}
 			Cross.y = Mouse.clickY;
 			Cross.x = Mouse.clickX;
@@ -1076,49 +1076,49 @@ public class MiniMenu {
 			Cross.milliseconds = 0;
 			Protocol.outboundBuffer.p1isaac(73);
 			Protocol.outboundBuffer.imp4(targetInterfaceId);
-			Protocol.outboundBuffer.p2(Camera.originY + local19);
-			Protocol.outboundBuffer.ip2add(local36);
-			Protocol.outboundBuffer.ip2add(local15 + Camera.originX);
+			Protocol.outboundBuffer.p2(Camera.originY + menuArg2);
+			Protocol.outboundBuffer.ip2add(keyInt);
+			Protocol.outboundBuffer.ip2add(menuArg1 + Camera.originX);
 			Protocol.outboundBuffer.ip2(targetChildId);
 		}
 		if (actionCode == UNKNOWN_12) {
 			Protocol.outboundBuffer.p1isaac(82);
 			Protocol.outboundBuffer.p2(targetChildId);
-			Protocol.outboundBuffer.imp4(local19);
+			Protocol.outboundBuffer.imp4(menuArg2);
 			Protocol.outboundBuffer.p4(targetInterfaceId);
-			Protocol.outboundBuffer.ip2add(local15);
+			Protocol.outboundBuffer.ip2add(menuArg1);
 		}
 		if (actionCode == UNKNOWN_36) {
-			if (local36 == 0) {
+			if (keyInt == 0) {
 				Protocol.viewportWalkState = 1;
-				setWalkDestination(Player.plane, local15, local19);
+				setWalkDestination(Player.plane, menuArg1, menuArg2);
 			} else if (LoginManager.staffModLevel > 0 && Keyboard.pressedKeys[Keyboard.KEY_CTRL] && Keyboard.pressedKeys[Keyboard.KEY_SHIFT]) {
-				Cheat.teleport(local15 + Camera.originX, Camera.originY - -local19, Player.plane);
+				Cheat.teleport(menuArg1 + Camera.originX, Camera.originY - -menuArg2, Player.plane);
 			} else {
 				Protocol.outboundBuffer.p1isaac(179);
-				Protocol.outboundBuffer.p2(local19 + Camera.originY);
-				Protocol.outboundBuffer.p2(local15 + Camera.originX);
+				Protocol.outboundBuffer.p2(menuArg2 + Camera.originY);
+				Protocol.outboundBuffer.p2(menuArg1 + Camera.originX);
 			}
 		}
 		if (actionCode == UNKNOWN_6) {
-			local43 = PlayerList.players[local36];
-			if (local43 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local43.movementQueueX[0], 1, 0, 2, local43.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			player = PlayerList.players[keyInt];
+			if (player != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.y = Mouse.clickY;
 				Cross.milliseconds = 0;
 				Cross.type = 2;
 				Cross.x = Mouse.clickX;
 				Protocol.outboundBuffer.p1isaac(106);
-				Protocol.outboundBuffer.p2(local36);
+				Protocol.outboundBuffer.p2(keyInt);
 			}
 		}
 		if (actionCode == OBJSTACK_ACTION_2) {
 			if (client.game == 1) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 			} else {
-				local560 = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, local15, 0, 0, 2, local19, PlayerList.self.movementQueueX[0]);
-				if (!local560) {
-					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local15, 1, 0, 2, local19, PlayerList.self.movementQueueX[0]);
+				pathFound = PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 0, false, 0, menuArg1, 0, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
+				if (!pathFound) {
+					PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, menuArg1, 1, 0, 2, menuArg2, PlayerList.self.movementQueueX[0]);
 				}
 			}
 			Cross.y = Mouse.clickY;
@@ -1126,20 +1126,20 @@ public class MiniMenu {
 			Cross.x = Mouse.clickX;
 			Cross.type = 2;
 			Protocol.outboundBuffer.p1isaac(33);
-			Protocol.outboundBuffer.p2(local36);
-			Protocol.outboundBuffer.p2(Camera.originX + local15);
-			Protocol.outboundBuffer.ip2(Camera.originY + local19);
+			Protocol.outboundBuffer.p2(keyInt);
+			Protocol.outboundBuffer.p2(Camera.originX + menuArg1);
+			Protocol.outboundBuffer.ip2(Camera.originY + menuArg2);
 		}
 		if (actionCode == NPC_ACTION_2) {
-			local192 = NpcList.npcs[local36];
-			if (local192 != null) {
-				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, local192.movementQueueX[0], 1, 0, 2, local192.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+			npc = NpcList.npcs[keyInt];
+			if (npc != null) {
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, npc.movementQueueX[0], 1, 0, 2, npc.movementQueueY[0], PlayerList.self.movementQueueX[0]);
 				Cross.x = Mouse.clickX;
 				Cross.milliseconds = 0;
 				Cross.y = Mouse.clickY;
 				Cross.type = 2;
 				Protocol.outboundBuffer.p1isaac(3);
-				Protocol.outboundBuffer.ip2add(local36);
+				Protocol.outboundBuffer.ip2add(keyInt);
 			}
 		}
 		if (actionCode >= 7990 && actionCode <= 7999) {
@@ -1182,193 +1182,193 @@ public class MiniMenu {
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(IIIIIIB)V")
 	public static void addEntries(@OriginalArg(0) int screenY, @OriginalArg(1) int width, @OriginalArg(2) int height, @OriginalArg(3) int screenX, @OriginalArg(4) int mouseY, @OriginalArg(5) int mouseX) {
-		@Pc(15) int local15;
+		@Pc(15) int i;
 		@Pc(47) int x;
 		if (itemTargetMode == 0) {
-			@Pc(13) int local13 = Rasteriser.screenUpperY;
-			local15 = Rasteriser.screenLowerY;
-			@Pc(17) int local17 = Rasteriser.screenUpperX;
-			@Pc(19) int local19 = Rasteriser.screenLowerX;
-			@Pc(33) int local33 = (mouseX - screenX) * (local17 - local19) / width + local19;
-			x = local15 + (local13 - local15) * (mouseY - screenY) / height;
+			@Pc(13) int upperY = Rasteriser.screenUpperY;
+			i = Rasteriser.screenLowerY;
+			@Pc(17) int upperX = Rasteriser.screenUpperX;
+			@Pc(19) int lowerX = Rasteriser.screenLowerX;
+			@Pc(33) int worldX = (mouseX - screenX) * (upperX - lowerX) / width + lowerX;
+			x = i + (upperY - i) * (mouseY - screenY) / height;
 			if (isTargeting && (targetMask & 0x40) != 0) {
-				@Pc(61) Component local61 = InterfaceList.getComponent(targetInterfaceId, targetChildId);
-				if (local61 == null) {
+				@Pc(61) Component targetComponent = InterfaceList.getComponent(targetInterfaceId, targetChildId);
+				if (targetComponent == null) {
 					cancelTargeting();
 				} else {
-					add(targetCursorId, 0L, ARROW_SUFFIX, local33, (short) 11, targetVerb, x);
+					add(targetCursorId, 0L, ARROW_SUFFIX, worldX, (short) 11, targetVerb, x);
 				}
 			} else {
 				if (client.game == 1) {
-					add(-1, 0L, JagString.EMPTY, local33, (short) 36, LocalizedText.FACEHERE, x);
+					add(-1, 0L, JagString.EMPTY, worldX, (short) 36, LocalizedText.FACEHERE, x);
 				}
-				add(-1, 0L, JagString.EMPTY, local33, (short) 60, walkText, x);
+				add(-1, 0L, JagString.EMPTY, worldX, (short) 60, walkText, x);
 			}
 		}
-		@Pc(112) long local112 = -1L;
-		for (local15 = 0; local15 < pickResultCount; local15++) {
-			@Pc(121) long local121 = Model.pickResults[local15];
-			x = (int) local121 & 0x7F;
-			@Pc(133) int local133 = (int) local121 >> 29 & 0x3;
-			@Pc(140) int local140 = (int) (local121 >>> 32) & Integer.MAX_VALUE;
-			@Pc(147) int y = (int) local121 >> 7 & 0x7F;
-			if (local121 != local112) {
-				local112 = local121;
-				@Pc(240) int local240;
-				if (local133 == 2 && SceneGraph.isLocValid(Player.plane, x, y, local121)) {
-					@Pc(172) LocType local172 = LocTypeList.get(local140);
-					if (local172.multiLocs != null) {
-						local172 = local172.getMultiLoc();
+		@Pc(112) long lastKey = -1L;
+		for (i = 0; i < pickResultCount; i++) {
+			@Pc(121) long pickKey = Model.pickResults[i];
+			x = (int) pickKey & 0x7F;
+			@Pc(133) int entityType = (int) pickKey >> 29 & 0x3;
+			@Pc(140) int entityId = (int) (pickKey >>> 32) & Integer.MAX_VALUE;
+			@Pc(147) int y = (int) pickKey >> 7 & 0x7F;
+			if (pickKey != lastKey) {
+				lastKey = pickKey;
+				@Pc(240) int j;
+				if (entityType == 2 && SceneGraph.isLocValid(Player.plane, x, y, pickKey)) {
+					@Pc(172) LocType locType = LocTypeList.get(entityId);
+					if (locType.multiLocs != null) {
+						locType = locType.getMultiLoc();
 					}
-					if (local172 == null) {
+					if (locType == null) {
 						continue;
 					}
 					if (itemTargetMode == 1) {
-						add(MiniMap.useCursor, local121, JagString.concatenate(new JagString[]{selectedObjText, ARROW_CYAN, local172.name}), x, (short) 14, LocalizedText.USE, y);
+						add(MiniMap.useCursor, pickKey, JagString.concatenate(new JagString[]{selectedObjText, ARROW_CYAN, locType.name}), x, (short) 14, LocalizedText.USE, y);
 					} else if (isTargeting) {
-						@Pc(363) ParamType local363 = targetParamId == -1 ? null : ParamTypeList.get(targetParamId);
-						if ((targetMask & 0x4) != 0 && (local363 == null || local172.getParam(local363.defaultInt, targetParamId) != local363.defaultInt)) {
-							add(targetCursorId, local121, JagString.concatenate(new JagString[]{targetOpBase, ARROW_CYAN, local172.name}), x, (short) 38, targetVerb, y);
+						@Pc(363) ParamType paramType = targetParamId == -1 ? null : ParamTypeList.get(targetParamId);
+						if ((targetMask & 0x4) != 0 && (paramType == null || locType.getParam(paramType.defaultInt, targetParamId) != paramType.defaultInt)) {
+							add(targetCursorId, pickKey, JagString.concatenate(new JagString[]{targetOpBase, ARROW_CYAN, locType.name}), x, (short) 38, targetVerb, y);
 						}
 					} else {
-						@Pc(228) JagString[] local228 = local172.ops;
+						@Pc(228) JagString[] locOps = locType.ops;
 						if (DEBUG_OPS) {
-							local228 = annotateOps(local228);
+							locOps = annotateOps(locOps);
 						}
-						if (local228 != null) {
-							for (local240 = 4; local240 >= 0; local240--) {
-								if (local228[local240] != null) {
-									@Pc(254) short local254 = 0;
-									if (local240 == 0) {
-										local254 = 42;
+						if (locOps != null) {
+							for (j = 4; j >= 0; j--) {
+								if (locOps[j] != null) {
+									@Pc(254) short actionId = 0;
+									if (j == 0) {
+										actionId = 42;
 									}
-									if (local240 == 1) {
-										local254 = 50;
+									if (j == 1) {
+										actionId = 50;
 									}
-									@Pc(268) int local268 = -1;
-									if (local240 == 2) {
-										local254 = 49;
+									@Pc(268) int cursorId = -1;
+									if (j == 2) {
+										actionId = 49;
 									}
-									if (local172.cursor1Op == local240) {
-										local268 = local172.cursor1;
+									if (locType.cursor1Op == j) {
+										cursorId = locType.cursor1;
 									}
-									if (local240 == 3) {
-										local254 = 46;
+									if (j == 3) {
+										actionId = 46;
 									}
-									if (local240 == local172.cursor2Op) {
-										local268 = local172.cursor2;
+									if (j == locType.cursor2Op) {
+										cursorId = locType.cursor2;
 									}
-									if (local240 == 4) {
-										local254 = 1001;
+									if (j == 4) {
+										actionId = 1001;
 									}
-									add(local268, local121, JagString.concatenate(new JagString[]{COLOR_CYAN, local172.name}), x, local254, local228[local240], y);
+									add(cursorId, pickKey, JagString.concatenate(new JagString[]{COLOR_CYAN, locType.name}), x, actionId, locOps[j], y);
 								}
 							}
 						}
-						add(MiniMap.examineCursor, local172.id, JagString.concatenate(new JagString[]{COLOR_CYAN, local172.name}), x, (short) 1004, LocalizedText.EXAMINE, y);
+						add(MiniMap.examineCursor, locType.id, JagString.concatenate(new JagString[]{COLOR_CYAN, locType.name}), x, (short) 1004, LocalizedText.EXAMINE, y);
 					}
 				}
-				@Pc(514) int local514;
-				@Pc(526) int local526;
-				@Pc(479) int local479;
-				@Pc(493) int local493;
-				@Pc(502) Npc local502;
-				@Pc(597) Player local597;
-				if (local133 == 1) {
-					@Pc(421) Npc local421 = NpcList.npcs[local140];
-					if ((local421.type.size & 0x1) == 0 && (local421.xFine & 0x7F) == 0 && (local421.yFine & 0x7F) == 0 || (local421.type.size & 0x1) == 1 && (local421.xFine & 0x7F) == 64 && (local421.yFine & 0x7F) == 64) {
-						local479 = local421.xFine + 64 - local421.type.size * 64;
-						local240 = local421.yFine - (local421.type.size - 1) * 64;
-						for (local493 = 0; local493 < NpcList.size; local493++) {
-							local502 = NpcList.npcs[NpcList.ids[local493]];
-							local514 = local502.xFine + 64 - local502.type.size * 64;
-							local526 = local502.yFine + 64 - local502.type.size * 64;
-							if (local502 != null && local421 != local502 && local514 >= local479 && local421.type.size - (local514 - local479 >> 7) >= local502.type.size && local240 <= local526 && local502.type.size <= local421.type.size - (local526 - local240 >> 7)) {
-								addNpcEntries(local502.type, x, NpcList.ids[local493], y);
+				@Pc(514) int otherFineX;
+				@Pc(526) int otherFineY;
+				@Pc(479) int minFineX;
+				@Pc(493) int k;
+				@Pc(502) Npc otherNpc;
+				@Pc(597) Player otherPlayer;
+				if (entityType == 1) {
+					@Pc(421) Npc npc = NpcList.npcs[entityId];
+					if ((npc.type.size & 0x1) == 0 && (npc.xFine & 0x7F) == 0 && (npc.yFine & 0x7F) == 0 || (npc.type.size & 0x1) == 1 && (npc.xFine & 0x7F) == 64 && (npc.yFine & 0x7F) == 64) {
+						minFineX = npc.xFine + 64 - npc.type.size * 64;
+						j = npc.yFine - (npc.type.size - 1) * 64;
+						for (k = 0; k < NpcList.size; k++) {
+							otherNpc = NpcList.npcs[NpcList.ids[k]];
+							otherFineX = otherNpc.xFine + 64 - otherNpc.type.size * 64;
+							otherFineY = otherNpc.yFine + 64 - otherNpc.type.size * 64;
+							if (otherNpc != null && npc != otherNpc && otherFineX >= minFineX && npc.type.size - (otherFineX - minFineX >> 7) >= otherNpc.type.size && j <= otherFineY && otherNpc.type.size <= npc.type.size - (otherFineY - j >> 7)) {
+								addNpcEntries(otherNpc.type, x, NpcList.ids[k], y);
 							}
 						}
-						for (local493 = 0; local493 < PlayerList.size; local493++) {
-							local597 = PlayerList.players[PlayerList.ids[local493]];
-							local514 = local597.xFine + 64 - local597.getSize() * 64;
-							local526 = local597.yFine + 64 - local597.getSize() * 64;
-							if (local597 != null && local514 >= local479 && local597.getSize() <= local421.type.size - (local514 - local479 >> 7) && local526 >= local240 && local597.getSize() <= local421.type.size - (local526 - local240 >> 7)) {
-								addPlayerEntries(PlayerList.ids[local493], y, local597, x);
+						for (k = 0; k < PlayerList.size; k++) {
+							otherPlayer = PlayerList.players[PlayerList.ids[k]];
+							otherFineX = otherPlayer.xFine + 64 - otherPlayer.getSize() * 64;
+							otherFineY = otherPlayer.yFine + 64 - otherPlayer.getSize() * 64;
+							if (otherPlayer != null && otherFineX >= minFineX && otherPlayer.getSize() <= npc.type.size - (otherFineX - minFineX >> 7) && otherFineY >= j && otherPlayer.getSize() <= npc.type.size - (otherFineY - j >> 7)) {
+								addPlayerEntries(PlayerList.ids[k], y, otherPlayer, x);
 							}
 						}
 					}
-					addNpcEntries(local421.type, x, local140, y);
+					addNpcEntries(npc.type, x, entityId, y);
 				}
-				if (local133 == 0) {
-					@Pc(688) Player player = PlayerList.players[local140];
+				if (entityType == 0) {
+					@Pc(688) Player player = PlayerList.players[entityId];
 					if ((player.xFine & 0x7F) == 64 && (player.yFine & 0x7F) == 64) {
-						local479 = player.xFine - (player.getSize() - 1) * 64;
-						local240 = player.yFine + 64 - player.getSize() * 64;
-						for (local493 = 0; local493 < NpcList.size; local493++) {
-							local502 = NpcList.npcs[NpcList.ids[local493]];
-							local514 = local502.xFine + 64 - local502.type.size * 64;
-							local526 = local502.yFine + 64 - local502.type.size * 64;
-							if (local502 != null && local514 >= local479 && local502.type.size <= player.getSize() - (local514 - local479 >> 7) && local526 >= local240 && local502.type.size <= player.getSize() - (local526 - local240 >> 7)) {
-								addNpcEntries(local502.type, x, NpcList.ids[local493], y);
+						minFineX = player.xFine - (player.getSize() - 1) * 64;
+						j = player.yFine + 64 - player.getSize() * 64;
+						for (k = 0; k < NpcList.size; k++) {
+							otherNpc = NpcList.npcs[NpcList.ids[k]];
+							otherFineX = otherNpc.xFine + 64 - otherNpc.type.size * 64;
+							otherFineY = otherNpc.yFine + 64 - otherNpc.type.size * 64;
+							if (otherNpc != null && otherFineX >= minFineX && otherNpc.type.size <= player.getSize() - (otherFineX - minFineX >> 7) && otherFineY >= j && otherNpc.type.size <= player.getSize() - (otherFineY - j >> 7)) {
+								addNpcEntries(otherNpc.type, x, NpcList.ids[k], y);
 							}
 						}
-						for (local493 = 0; local493 < PlayerList.size; local493++) {
-							local597 = PlayerList.players[PlayerList.ids[local493]];
-							local514 = local597.xFine - (local597.getSize() - 1) * 64;
-							local526 = local597.yFine + 64 - local597.getSize() * 64;
-							if (local597 != null && local597 != player && local479 <= local514 && local597.getSize() <= player.getSize() - (local514 - local479 >> 7) && local526 >= local240 && local597.getSize() <= player.getSize() - (local526 - local240 >> 7)) {
-								addPlayerEntries(PlayerList.ids[local493], y, local597, x);
+						for (k = 0; k < PlayerList.size; k++) {
+							otherPlayer = PlayerList.players[PlayerList.ids[k]];
+							otherFineX = otherPlayer.xFine - (otherPlayer.getSize() - 1) * 64;
+							otherFineY = otherPlayer.yFine + 64 - otherPlayer.getSize() * 64;
+							if (otherPlayer != null && otherPlayer != player && minFineX <= otherFineX && otherPlayer.getSize() <= player.getSize() - (otherFineX - minFineX >> 7) && otherFineY >= j && otherPlayer.getSize() <= player.getSize() - (otherFineY - j >> 7)) {
+								addPlayerEntries(PlayerList.ids[k], y, otherPlayer, x);
 							}
 						}
 					}
-					addPlayerEntries(local140, y, player, x);
+					addPlayerEntries(entityId, y, player, x);
 				}
-				if (local133 == 3) {
+				if (entityType == 3) {
 					@Pc(931) LinkedList objStacks = SceneGraph.objStacks[Player.plane][x][y];
 					if (objStacks != null) {
 						for (@Pc(940) ObjStackNode node = (ObjStackNode) objStacks.tail(); node != null; node = (ObjStackNode) objStacks.prev()) {
-							local240 = node.value.type;
-							@Pc(951) ObjType local951 = ObjTypeList.get(local240);
+							j = node.value.type;
+							@Pc(951) ObjType objType = ObjTypeList.get(j);
 							if (itemTargetMode == 1) {
-								add(MiniMap.useCursor, local240, JagString.concatenate(new JagString[]{selectedObjText, ARROW_ORANGE, local951.name}), x, (short) 33, LocalizedText.USE, y);
+								add(MiniMap.useCursor, j, JagString.concatenate(new JagString[]{selectedObjText, ARROW_ORANGE, objType.name}), x, (short) 33, LocalizedText.USE, y);
 							} else if (isTargeting) {
-								@Pc(1142) ParamType local1142 = targetParamId == -1 ? null : ParamTypeList.get(targetParamId);
-								if ((targetMask & 0x1) != 0 && (local1142 == null || local951.getParam(local1142.defaultInt, targetParamId) != local1142.defaultInt)) {
-									add(targetCursorId, local240, JagString.concatenate(new JagString[]{targetOpBase, ARROW_ORANGE, local951.name}), x, (short) 39, targetVerb, y);
+								@Pc(1142) ParamType paramType = targetParamId == -1 ? null : ParamTypeList.get(targetParamId);
+								if ((targetMask & 0x1) != 0 && (paramType == null || objType.getParam(paramType.defaultInt, targetParamId) != paramType.defaultInt)) {
+									add(targetCursorId, j, JagString.concatenate(new JagString[]{targetOpBase, ARROW_ORANGE, objType.name}), x, (short) 39, targetVerb, y);
 								}
 							} else {
-								@Pc(997) JagString[] local997 = local951.ops;
+								@Pc(997) JagString[] objOps = objType.ops;
 								if (DEBUG_OPS) {
-									local997 = annotateOps(local997);
+									objOps = annotateOps(objOps);
 								}
-								for (local514 = 4; local514 >= 0; local514--) {
-									if (local997 != null && local997[local514] != null) {
-										@Pc(1025) byte local1025 = 0;
-										if (local514 == 0) {
-											local1025 = 21;
+								for (otherFineX = 4; otherFineX >= 0; otherFineX--) {
+									if (objOps != null && objOps[otherFineX] != null) {
+										@Pc(1025) byte actionCode = 0;
+										if (otherFineX == 0) {
+											actionCode = 21;
 										}
-										if (local514 == 1) {
-											local1025 = 34;
+										if (otherFineX == 1) {
+											actionCode = 34;
 										}
-										@Pc(1041) int local1041 = -1;
-										if (local514 == local951.cursor1Op) {
-											local1041 = local951.cursor1;
+										@Pc(1041) int cursorId = -1;
+										if (otherFineX == objType.cursor1Op) {
+											cursorId = objType.cursor1;
 										}
-										if (local514 == 2) {
-											local1025 = 18;
+										if (otherFineX == 2) {
+											actionCode = 18;
 										}
-										if (local951.cursor2Op == local514) {
-											local1041 = local951.cursor2;
+										if (objType.cursor2Op == otherFineX) {
+											cursorId = objType.cursor2;
 										}
-										if (local514 == 3) {
-											local1025 = 20;
+										if (otherFineX == 3) {
+											actionCode = 20;
 										}
-										if (local514 == 4) {
-											local1025 = 24;
+										if (otherFineX == 4) {
+											actionCode = 24;
 										}
-										add(local1041, local240, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, local951.name}), x, local1025, local997[local514], y);
+										add(cursorId, j, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, objType.name}), x, actionCode, objOps[otherFineX], y);
 									}
 								}
-								add(MiniMap.examineCursor, local240, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, local951.name}), x, (short) 1002, LocalizedText.EXAMINE, y);
+								add(MiniMap.examineCursor, j, JagString.concatenate(new JagString[]{COLOR_ITEM_ORANGE, objType.name}), x, (short) 1002, LocalizedText.EXAMINE, y);
 							}
 						}
 					}
@@ -1593,11 +1593,11 @@ public class MiniMenu {
 		if (index < 0) {
 			return false;
 		}
-		@Pc(12) int local12 = actions[index];
-		if (local12 >= 2000) {
-			local12 -= 2000;
+		@Pc(12) int action = actions[index];
+		if (action >= 2000) {
+			action -= 2000;
 		}
-		return local12 == 1003;
+		return action == 1003;
 	}
 
 	@OriginalMember(owner = "client!ud", name = "a", descriptor = "(ILclient!be;)Z")
@@ -1615,26 +1615,26 @@ public class MiniMenu {
 		if (!isTargeting) {
 			return;
 		}
-		@Pc(19) Component local19 = InterfaceList.getComponent(targetInterfaceId, targetChildId);
-		if (local19 != null && local19.onUseWith != null) {
-			@Pc(29) HookRequest local29 = new HookRequest();
-			local29.arguments = local19.onUseWith;
-			local29.source = local19;
-			ScriptRunner.run(local29);
+		@Pc(19) Component component = InterfaceList.getComponent(targetInterfaceId, targetChildId);
+		if (component != null && component.onUseWith != null) {
+			@Pc(29) HookRequest hookRequest = new HookRequest();
+			hookRequest.arguments = component.onUseWith;
+			hookRequest.source = component;
+			ScriptRunner.run(hookRequest);
 		}
 		isTargeting = false;
 		defaultCursorId = -1;
-		InterfaceList.redraw(local19);
+		InterfaceList.redraw(component);
 	}
 
 	@OriginalMember(owner = "client!ub", name = "b", descriptor = "(IIIIIII)V")
 	public static void startTargeting(@OriginalArg(0) int interfaceId, @OriginalArg(1) int childId, @OriginalArg(2) int mask, @OriginalArg(3) int paramId, @OriginalArg(4) int cursorId, @OriginalArg(6) int defaultCursor) {
-		@Pc(8) Component local8 = InterfaceList.getComponent(interfaceId, childId);
-		if (local8 != null && local8.onUse != null) {
-			@Pc(19) HookRequest local19 = new HookRequest();
-			local19.source = local8;
-			local19.arguments = local8.onUse;
-			ScriptRunner.run(local19);
+		@Pc(8) Component component = InterfaceList.getComponent(interfaceId, childId);
+		if (component != null && component.onUse != null) {
+			@Pc(19) HookRequest hookRequest = new HookRequest();
+			hookRequest.source = component;
+			hookRequest.arguments = component.onUse;
+			ScriptRunner.run(hookRequest);
 		}
 		targetChildId = childId;
 		targetParamId = paramId;
@@ -1643,7 +1643,7 @@ public class MiniMenu {
 		isTargeting = true;
 		targetCursorId = cursorId;
 		defaultCursorId = defaultCursor;
-		InterfaceList.redraw(local8);
+		InterfaceList.redraw(component);
 	}
 
 	@OriginalMember(owner = "client!dm", name = "a", descriptor = "(Lclient!be;III)V")
