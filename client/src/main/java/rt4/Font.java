@@ -118,639 +118,639 @@ public abstract class Font extends SecondaryNode {
 	private int paragraphBottomPadding;
 
 	@OriginalMember(owner = "client!rk", name = "<init>", descriptor = "([B[I[I[I[I)V")
-	protected Font(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int[] arg3, @OriginalArg(4) int[] arg4) {
-		this.spriteXOffsets = arg1;
-		this.spriteYOffsets = arg2;
-		this.spriteInnerWidths = arg3;
-		this.spriteInnerHeights = arg4;
-		this.decode(arg0);
-		@Pc(21) int local21 = Integer.MAX_VALUE;
-		@Pc(23) int local23 = Integer.MIN_VALUE;
-		for (@Pc(25) int local25 = 0; local25 < 256; local25++) {
-			if (this.spriteYOffsets[local25] < local21 && this.spriteInnerHeights[local25] != 0) {
-				local21 = this.spriteYOffsets[local25];
+	protected Font(@OriginalArg(0) byte[] data, @OriginalArg(1) int[] xOffsets, @OriginalArg(2) int[] yOffsets, @OriginalArg(3) int[] innerWidths, @OriginalArg(4) int[] innerHeights) {
+		this.spriteXOffsets = xOffsets;
+		this.spriteYOffsets = yOffsets;
+		this.spriteInnerWidths = innerWidths;
+		this.spriteInnerHeights = innerHeights;
+		this.decode(data);
+		@Pc(21) int minTop = Integer.MAX_VALUE;
+		@Pc(23) int maxBottom = Integer.MIN_VALUE;
+		for (@Pc(25) int i = 0; i < 256; i++) {
+			if (this.spriteYOffsets[i] < minTop && this.spriteInnerHeights[i] != 0) {
+				minTop = this.spriteYOffsets[i];
 			}
-			if (this.spriteYOffsets[local25] + this.spriteInnerHeights[local25] > local23) {
-				local23 = this.spriteYOffsets[local25] + this.spriteInnerHeights[local25];
+			if (this.spriteYOffsets[i] + this.spriteInnerHeights[i] > maxBottom) {
+				maxBottom = this.spriteYOffsets[i] + this.spriteInnerHeights[i];
 			}
 		}
-		this.paragraphTopPadding = this.lineHeight - local21;
-		this.paragraphBottomPadding = local23 - this.lineHeight;
+		this.paragraphTopPadding = this.lineHeight - minTop;
+		this.paragraphBottomPadding = maxBottom - this.lineHeight;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "<init>", descriptor = "([B)V")
-	public Font(@OriginalArg(0) byte[] arg0) {
-		this.decode(arg0);
+	public Font(@OriginalArg(0) byte[] data) {
+		this.decode(data);
 	}
 
 	@OriginalMember(owner = "client!rk", name = "c", descriptor = "(Lclient!na;)Lclient!na;")
-	public static JagString escape(@OriginalArg(0) JagString arg0) {
-		@Pc(3) int local3 = arg0.length();
-		@Pc(5) int local5 = 0;
-		@Pc(15) int local15;
-		for (@Pc(7) int local7 = 0; local7 < local3; local7++) {
-			local15 = arg0.charAt(local7);
-			if (local15 == 60 || local15 == 62) {
-				local5 += 3;
+	public static JagString escape(@OriginalArg(0) JagString str) {
+		@Pc(3) int len = str.length();
+		@Pc(5) int extra = 0;
+		@Pc(15) int i;
+		for (@Pc(7) int j = 0; j < len; j++) {
+			i = str.charAt(j);
+			if (i == 60 || i == 62) {
+				extra += 3;
 			}
 		}
-		@Pc(30) JagString local30 = JagString.allocate(local3 + local5);
-		for (local15 = 0; local15 < local3; local15++) {
-			@Pc(40) int local40 = arg0.charAt(local15);
-			if (local40 == 60) {
-				local30.appendString(ESCAPED_LT);
-			} else if (local40 == 62) {
-				local30.appendString(ESCAPED_GT);
+		@Pc(30) JagString result = JagString.allocate(len + extra);
+		for (i = 0; i < len; i++) {
+			@Pc(40) int ch = str.charAt(i);
+			if (ch == 60) {
+				result.appendString(ESCAPED_LT);
+			} else if (ch == 62) {
+				result.appendString(ESCAPED_GT);
 			} else {
-				local30.append(local40);
+				result.append(ch);
 			}
 		}
-		return local30;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "([[B[[B[I[I[III)I")
-	public static int calculateKerning(@OriginalArg(0) byte[][] arg0, @OriginalArg(1) byte[][] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int[] arg3, @OriginalArg(4) int[] arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		@Pc(3) int local3 = arg2[arg5];
-		@Pc(9) int local9 = local3 + arg4[arg5];
-		@Pc(13) int local13 = arg2[arg6];
-		@Pc(19) int local19 = local13 + arg4[arg6];
-		@Pc(21) int local21 = local3;
-		if (local13 > local3) {
-			local21 = local13;
+	public static int calculateKerning(@OriginalArg(0) byte[][] leftGlyphs, @OriginalArg(1) byte[][] rightGlyphs, @OriginalArg(2) int[] offsets, @OriginalArg(3) int[] widths, @OriginalArg(4) int[] heights, @OriginalArg(5) int leftIdx, @OriginalArg(6) int rightIdx) {
+		@Pc(3) int leftTop = offsets[leftIdx];
+		@Pc(9) int leftBottom = leftTop + heights[leftIdx];
+		@Pc(13) int rightTop = offsets[rightIdx];
+		@Pc(19) int rightBottom = rightTop + heights[rightIdx];
+		@Pc(21) int top = leftTop;
+		if (rightTop > leftTop) {
+			top = rightTop;
 		}
-		@Pc(28) int local28 = local9;
-		if (local19 < local9) {
-			local28 = local19;
+		@Pc(28) int bottom = leftBottom;
+		if (rightBottom < leftBottom) {
+			bottom = rightBottom;
 		}
-		@Pc(37) int local37 = arg3[arg5];
-		if (arg3[arg6] < local37) {
-			local37 = arg3[arg6];
+		@Pc(37) int minKern = widths[leftIdx];
+		if (widths[rightIdx] < minKern) {
+			minKern = widths[rightIdx];
 		}
-		@Pc(50) byte[] local50 = arg1[arg5];
-		@Pc(54) byte[] local54 = arg0[arg6];
-		@Pc(58) int local58 = local21 - local3;
-		@Pc(62) int local62 = local21 - local13;
-		for (@Pc(64) int local64 = local21; local64 < local28; local64++) {
-			@Pc(77) int local77 = local50[local58++] + local54[local62++];
-			if (local77 < local37) {
-				local37 = local77;
+		@Pc(50) byte[] leftRow = rightGlyphs[leftIdx];
+		@Pc(54) byte[] rightRow = leftGlyphs[rightIdx];
+		@Pc(58) int leftOff = top - leftTop;
+		@Pc(62) int rightOff = top - rightTop;
+		for (@Pc(64) int y = top; y < bottom; y++) {
+			@Pc(77) int kern = leftRow[leftOff++] + rightRow[rightOff++];
+			if (kern < minKern) {
+				minKern = kern;
 			}
 		}
-		return -local37;
+		return -minKern;
 	}
 
 	@OriginalMember(owner = "client!ce", name = "a", descriptor = "(I[B)Lclient!rk;")
-	public static Font createFont(@OriginalArg(1) byte[] arg0) {
-		if (arg0 == null) {
+	public static Font createFont(@OriginalArg(1) byte[] data) {
+		if (data == null) {
 			return null;
 		}
-		@Pc(27) Font local27;
+		@Pc(27) Font font;
 		if (GlRenderer.enabled) {
-			local27 = new GlFont(arg0, SpriteLoader.xOffsets, SpriteLoader.yOffsets, SpriteLoader.innerWidths, SpriteLoader.innerHeights, SpriteLoader.pixels);
+			font = new GlFont(data, SpriteLoader.xOffsets, SpriteLoader.yOffsets, SpriteLoader.innerWidths, SpriteLoader.innerHeights, SpriteLoader.pixels);
 		} else {
-			local27 = new SoftwareFont(arg0, SpriteLoader.xOffsets, SpriteLoader.yOffsets, SpriteLoader.innerWidths, SpriteLoader.innerHeights, SpriteLoader.pixels);
+			font = new SoftwareFont(data, SpriteLoader.xOffsets, SpriteLoader.yOffsets, SpriteLoader.innerWidths, SpriteLoader.innerHeights, SpriteLoader.pixels);
 		}
 		SpriteLoader.clear();
-		return local27;
+		return font;
 	}
 
 	@OriginalMember(owner = "client!k", name = "a", descriptor = "(IIBLclient!ve;Lclient!ve;)Lclient!rk;")
-	public static Font load(@OriginalArg(1) int arg0, @OriginalArg(3) Js5 arg1, @OriginalArg(4) Js5 arg2) {
-		return SpriteLoader.decode(arg1, 0, arg0) ? createFont(arg2.fetchFile(arg0, 0)) : null;
+	public static Font load(@OriginalArg(1) int fontId, @OriginalArg(3) Js5 spriteJs5, @OriginalArg(4) Js5 fontJs5) {
+		return SpriteLoader.decode(spriteJs5, 0, fontId) ? createFont(fontJs5.fetchFile(fontId, 0)) : null;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIIIIIII)I")
-	public final int drawInterfaceText(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
-		return this.renderParagraphAlpha(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+	public final int drawInterfaceText(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int w, @OriginalArg(4) int h, @OriginalArg(5) int color, @OriginalArg(6) int shadow, @OriginalArg(7) int alpha, @OriginalArg(8) int valign, @OriginalArg(9) int halign) {
+		return this.renderParagraphAlpha(text, x, y, w, h, color, shadow, alpha, valign, halign);
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;II)V")
-	private void render(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(4) int local4 = arg2 - this.lineHeight;
-		@Pc(6) int local6 = -1;
-		@Pc(8) int local8 = 0;
-		@Pc(12) int local12 = arg0.length();
-		for (@Pc(14) int local14 = 0; local14 < local12; local14++) {
-			@Pc(22) int local22 = arg0.charAt(local14);
-			if (local22 == 60) {
-				local6 = local14;
+	private void render(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y) {
+		@Pc(4) int baseY = y - this.lineHeight;
+		@Pc(6) int tagStart = -1;
+		@Pc(8) int prevChar = 0;
+		@Pc(12) int len = text.length();
+		for (@Pc(14) int i = 0; i < len; i++) {
+			@Pc(22) int ch = text.charAt(i);
+			if (ch == 60) {
+				tagStart = i;
 			} else {
-				@Pc(120) int local120;
-				if (local22 == 62 && local6 != -1) {
-					@Pc(42) JagString local42 = arg0.substring(local14, local6 + 1);
-					local6 = -1;
-					if (local42.strEquals(TAG_LT)) {
-						local22 = 60;
-					} else if (local42.strEquals(TAG_GT)) {
-						local22 = 62;
-					} else if (local42.strEquals(TAG_NBSP)) {
-						local22 = 160;
-					} else if (local42.strEquals(TAB_SHY)) {
-						local22 = 173;
-					} else if (local42.strEquals(TAB_TIMES)) {
-						local22 = 215;
-					} else if (local42.strEquals(TAB_EURO)) {
-						local22 = 128;
-					} else if (local42.strEquals(TAB_COPY)) {
-						local22 = 169;
+				@Pc(120) int iconIdx;
+				if (ch == 62 && tagStart != -1) {
+					@Pc(42) JagString tag = text.substring(i, tagStart + 1);
+					tagStart = -1;
+					if (tag.strEquals(TAG_LT)) {
+						ch = 60;
+					} else if (tag.strEquals(TAG_GT)) {
+						ch = 62;
+					} else if (tag.strEquals(TAG_NBSP)) {
+						ch = 160;
+					} else if (tag.strEquals(TAB_SHY)) {
+						ch = 173;
+					} else if (tag.strEquals(TAB_TIMES)) {
+						ch = 215;
+					} else if (tag.strEquals(TAB_EURO)) {
+						ch = 128;
+					} else if (tag.strEquals(TAB_COPY)) {
+						ch = 169;
 					} else {
-						if (!local42.strEquals(TAG_REG)) {
-							if (local42.startsWith(TAG_IMG)) {
+						if (!tag.strEquals(TAG_REG)) {
+							if (tag.startsWith(TAG_IMG)) {
 								try {
-									local120 = local42.substring(4).parseInt();
-									@Pc(125) IndexedSprite local125 = this.nameIcons[local120];
-									@Pc(136) int local136 = this.nameIconHeights == null ? local125.innerHeight : this.nameIconHeights[local120];
+									iconIdx = tag.substring(4).parseInt();
+									@Pc(125) IndexedSprite icon = this.nameIcons[iconIdx];
+									@Pc(136) int iconHeight = this.nameIconHeights == null ? icon.innerHeight : this.nameIconHeights[iconIdx];
 									if (alphaOverride == 256) {
-										local125.renderTransparent(arg1, local4 + this.lineHeight - local136);
+										icon.renderTransparent(x, baseY + this.lineHeight - iconHeight);
 									} else {
-										local125.renderAlpha(arg1, local4 + this.lineHeight - local136, alphaOverride);
+										icon.renderAlpha(x, baseY + this.lineHeight - iconHeight, alphaOverride);
 									}
-									arg1 += local125.innerWidth;
-									local8 = 0;
-								} catch (@Pc(168) Exception local168) {
+									x += icon.innerWidth;
+									prevChar = 0;
+								} catch (@Pc(168) Exception ex) {
 								}
 							} else {
-								this.parseTag(local42);
+								this.parseTag(tag);
 							}
 							continue;
 						}
-						local22 = 174;
+						ch = 174;
 					}
 				}
-				if (local6 == -1) {
-					if (this.kerning != null && local8 != 0) {
-						arg1 += this.kerning[(local8 << 8) + local22];
+				if (tagStart == -1) {
+					if (this.kerning != null && prevChar != 0) {
+						x += this.kerning[(prevChar << 8) + ch];
 					}
-					@Pc(197) int local197 = this.spriteInnerWidths[local22];
-					local120 = this.spriteInnerHeights[local22];
-					if (local22 == 32) {
+					@Pc(197) int glyphW = this.spriteInnerWidths[ch];
+					iconIdx = this.spriteInnerHeights[ch];
+					if (ch == 32) {
 						if (spaceWidth > 0) {
 							extraSpaceWidth += spaceWidth;
-							arg1 += extraSpaceWidth >> 8;
+							x += extraSpaceWidth >> 8;
 							extraSpaceWidth &= 0xFF;
 						}
 					} else if (alphaOverride == 256) {
 						if (shadowColorOverride != -1) {
-							this.renderGlyph(local22, arg1 + this.spriteXOffsets[local22] + 1, local4 + this.spriteYOffsets[local22] + 1, local197, local120, shadowColorOverride);
+							this.renderGlyph(ch, x + this.spriteXOffsets[ch] + 1, baseY + this.spriteYOffsets[ch] + 1, glyphW, iconIdx, shadowColorOverride);
 						}
-						this.renderGlyph(local22, arg1 + this.spriteXOffsets[local22], local4 + this.spriteYOffsets[local22], local197, local120, colorOverride);
+						this.renderGlyph(ch, x + this.spriteXOffsets[ch], baseY + this.spriteYOffsets[ch], glyphW, iconIdx, colorOverride);
 					} else {
 						if (shadowColorOverride != -1) {
-							this.renderGlyphTransparent(local22, arg1 + this.spriteXOffsets[local22] + 1, local4 + this.spriteYOffsets[local22] + 1, local197, local120, shadowColorOverride, alphaOverride);
+							this.renderGlyphTransparent(ch, x + this.spriteXOffsets[ch] + 1, baseY + this.spriteYOffsets[ch] + 1, glyphW, iconIdx, shadowColorOverride, alphaOverride);
 						}
-						this.renderGlyphTransparent(local22, arg1 + this.spriteXOffsets[local22], local4 + this.spriteYOffsets[local22], local197, local120, colorOverride, alphaOverride);
+						this.renderGlyphTransparent(ch, x + this.spriteXOffsets[ch], baseY + this.spriteYOffsets[ch], glyphW, iconIdx, colorOverride, alphaOverride);
 					}
-					@Pc(323) int local323 = this.glyphWidths[local22];
+					@Pc(323) int advanceW = this.glyphWidths[ch];
 					if (strikethroughColor != -1) {
 						if (GlRenderer.enabled) {
-							GlRaster.drawHorizontalLine(arg1, local4 + (int) ((double) this.lineHeight * 0.7D), local323, strikethroughColor);
+							GlRaster.drawHorizontalLine(x, baseY + (int) ((double) this.lineHeight * 0.7D), advanceW, strikethroughColor);
 						} else {
-							SoftwareRaster.drawHorizontalLine(arg1, local4 + (int) ((double) this.lineHeight * 0.7D), local323, strikethroughColor);
+							SoftwareRaster.drawHorizontalLine(x, baseY + (int) ((double) this.lineHeight * 0.7D), advanceW, strikethroughColor);
 						}
 					}
 					if (underlineColor != -1) {
 						if (GlRenderer.enabled) {
-							GlRaster.drawHorizontalLine(arg1, local4 + this.lineHeight + 1, local323, underlineColor);
+							GlRaster.drawHorizontalLine(x, baseY + this.lineHeight + 1, advanceW, underlineColor);
 						} else {
-							SoftwareRaster.drawHorizontalLine(arg1, local4 + this.lineHeight + 1, local323, underlineColor);
+							SoftwareRaster.drawHorizontalLine(x, baseY + this.lineHeight + 1, advanceW, underlineColor);
 						}
 					}
-					arg1 += local323;
-					local8 = local22;
+					x += advanceW;
+					prevChar = ch;
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(IIIIIIZ)V")
-	protected abstract void renderGlyph(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5);
+	protected abstract void renderGlyph(@OriginalArg(0) int glyph, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int w, @OriginalArg(4) int h, @OriginalArg(5) int color);
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(IIIIIIIZ)V")
-	protected abstract void renderGlyphTransparent(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6);
+	protected abstract void renderGlyphTransparent(@OriginalArg(0) int glyph, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int w, @OriginalArg(4) int h, @OriginalArg(5) int color, @OriginalArg(6) int alpha);
 
 	@OriginalMember(owner = "client!rk", name = "b", descriptor = "(Lclient!na;I)I")
-	public final int getMaxLineWidth(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1) {
-		@Pc(10) int local10 = this.splitParagraph(arg0, new int[]{arg1}, lines);
-		@Pc(12) int local12 = 0;
-		for (@Pc(14) int local14 = 0; local14 < local10; local14++) {
-			@Pc(23) int local23 = this.getStringWidth(lines[local14]);
-			if (local23 > local12) {
-				local12 = local23;
+	public final int getMaxLineWidth(@OriginalArg(0) JagString text, @OriginalArg(1) int maxWidth) {
+		@Pc(10) int lineCount = this.splitParagraph(text, new int[]{maxWidth}, lines);
+		@Pc(12) int maxW = 0;
+		for (@Pc(14) int i = 0; i < lineCount; i++) {
+			@Pc(23) int w = this.getStringWidth(lines[i]);
+			if (w > maxW) {
+				maxW = w;
 			}
 		}
-		return local12;
+		return maxW;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIII)V")
-	public final void renderLeft(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg0 != null) {
-			this.setColors(arg3, arg4);
-			this.render(arg0, arg1, arg2);
+	public final void renderLeft(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int color, @OriginalArg(4) int shadow) {
+		if (text != null) {
+			this.setColors(color, shadow);
+			this.render(text, x, y);
 		}
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;)I")
-	public final int getStringWidth(@OriginalArg(0) JagString arg0) {
-		if (arg0 == null) {
+	public final int getStringWidth(@OriginalArg(0) JagString text) {
+		if (text == null) {
 			return 0;
 		}
-		@Pc(5) int local5 = -1;
-		@Pc(7) int local7 = 0;
-		@Pc(9) int local9 = 0;
-		@Pc(13) int local13 = arg0.length();
-		for (@Pc(15) int local15 = 0; local15 < local13; local15++) {
-			@Pc(23) int local23 = arg0.charAt(local15);
-			if (local23 == 60) {
-				local5 = local15;
+		@Pc(5) int tagStart = -1;
+		@Pc(7) int prevChar = 0;
+		@Pc(9) int totalWidth = 0;
+		@Pc(13) int len = text.length();
+		for (@Pc(15) int i = 0; i < len; i++) {
+			@Pc(23) int ch = text.charAt(i);
+			if (ch == 60) {
+				tagStart = i;
 			} else {
-				if (local23 == 62 && local5 != -1) {
-					@Pc(43) JagString local43 = arg0.substring(local15, local5 + 1);
-					local5 = -1;
-					if (local43.strEquals(TAG_LT)) {
-						local23 = 60;
-					} else if (local43.strEquals(TAG_GT)) {
-						local23 = 62;
-					} else if (local43.strEquals(TAG_NBSP)) {
-						local23 = 160;
-					} else if (local43.strEquals(TAB_SHY)) {
-						local23 = 173;
-					} else if (local43.strEquals(TAB_TIMES)) {
-						local23 = 215;
-					} else if (local43.strEquals(TAB_EURO)) {
-						local23 = 128;
-					} else if (local43.strEquals(TAB_COPY)) {
-						local23 = 169;
+				if (ch == 62 && tagStart != -1) {
+					@Pc(43) JagString tag = text.substring(i, tagStart + 1);
+					tagStart = -1;
+					if (tag.strEquals(TAG_LT)) {
+						ch = 60;
+					} else if (tag.strEquals(TAG_GT)) {
+						ch = 62;
+					} else if (tag.strEquals(TAG_NBSP)) {
+						ch = 160;
+					} else if (tag.strEquals(TAB_SHY)) {
+						ch = 173;
+					} else if (tag.strEquals(TAB_TIMES)) {
+						ch = 215;
+					} else if (tag.strEquals(TAB_EURO)) {
+						ch = 128;
+					} else if (tag.strEquals(TAB_COPY)) {
+						ch = 169;
 					} else {
-						if (!local43.strEquals(TAG_REG)) {
-							if (local43.startsWith(TAG_IMG)) {
+						if (!tag.strEquals(TAG_REG)) {
+							if (tag.startsWith(TAG_IMG)) {
 								try {
-									@Pc(121) int local121 = local43.substring(4).parseInt();
-									local9 += this.nameIcons[local121].innerWidth;
-									local7 = 0;
-								} catch (@Pc(133) Exception local133) {
+									@Pc(121) int iconIdx = tag.substring(4).parseInt();
+									totalWidth += this.nameIcons[iconIdx].innerWidth;
+									prevChar = 0;
+								} catch (@Pc(133) Exception ex) {
 								}
 							}
 							continue;
 						}
-						local23 = 174;
+						ch = 174;
 					}
 				}
-				if (local5 == -1) {
-					local9 += this.glyphWidths[local23];
-					if (this.kerning != null && local7 != 0) {
-						local9 += this.kerning[(local7 << 8) + local23];
+				if (tagStart == -1) {
+					totalWidth += this.glyphWidths[ch];
+					if (this.kerning != null && prevChar != 0) {
+						totalWidth += this.kerning[(prevChar << 8) + ch];
 					}
-					local7 = local23;
+					prevChar = ch;
 				}
 			}
 		}
-		return local9;
+		return totalWidth;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIILjava/util/Random;I)I")
-	public final int renderWavyText(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(5) Random arg3, @OriginalArg(6) int arg4) {
-		if (arg0 == null) {
+	public final int renderWavyText(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(5) Random random, @OriginalArg(6) int seed) {
+		if (text == null) {
 			return 0;
 		}
-		arg3.setSeed(arg4);
-		this.setColors(16777215, 0, (arg3.nextInt() & 0x1F) + 192);
-		@Pc(21) int local21 = arg0.length();
-		@Pc(24) int[] local24 = new int[local21];
-		@Pc(26) int local26 = 0;
-		for (@Pc(28) int local28 = 0; local28 < local21; local28++) {
-			local24[local28] = local26;
-			if ((arg3.nextInt() & 0x3) == 0) {
-				local26++;
+		random.setSeed(seed);
+		this.setColors(16777215, 0, (random.nextInt() & 0x1F) + 192);
+		@Pc(21) int len = text.length();
+		@Pc(24) int[] yOffsets = new int[len];
+		@Pc(26) int maxOffset = 0;
+		for (@Pc(28) int i = 0; i < len; i++) {
+			yOffsets[i] = maxOffset;
+			if ((random.nextInt() & 0x3) == 0) {
+				maxOffset++;
 			}
 		}
-		this.renderOffset(arg0, arg1, arg2, local24, null);
-		return local26;
+		this.renderOffset(text, x, y, yOffsets, null);
+		return maxOffset;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "c", descriptor = "(Lclient!na;I)I")
-	public final int getParagraphLineCount(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1) {
-		return this.splitParagraph(arg0, new int[]{arg1}, lines);
+	public final int getParagraphLineCount(@OriginalArg(0) JagString text, @OriginalArg(1) int width) {
+		return this.splitParagraph(text, new int[]{width}, lines);
 	}
 
 	@OriginalMember(owner = "client!rk", name = "b", descriptor = "(Lclient!na;)V")
-	private void parseTag(@OriginalArg(0) JagString arg0) {
+	private void parseTag(@OriginalArg(0) JagString tag) {
 		try {
-			if (arg0.startsWith(TAG_COL1)) {
-				colorOverride = arg0.substring(4).parseHexString(16);
-			} else if (arg0.strEquals(TAG_COL2)) {
+			if (tag.startsWith(TAG_COL1)) {
+				colorOverride = tag.substring(4).parseHexString(16);
+			} else if (tag.strEquals(TAG_COL2)) {
 				colorOverride = color;
-			} else if (arg0.startsWith(TAG_TRANS1)) {
-				alphaOverride = arg0.substring(6).parseInt();
-			} else if (arg0.strEquals(TAG_TRANS2)) {
+			} else if (tag.startsWith(TAG_TRANS1)) {
+				alphaOverride = tag.substring(6).parseInt();
+			} else if (tag.strEquals(TAG_TRANS2)) {
 				alphaOverride = alpha;
-			} else if (arg0.startsWith(TAG_STR1)) {
-				strikethroughColor = arg0.substring(4).parseHexString(16);
-			} else if (arg0.strEquals(TAG_STR2)) {
+			} else if (tag.startsWith(TAG_STR1)) {
+				strikethroughColor = tag.substring(4).parseHexString(16);
+			} else if (tag.strEquals(TAG_STR2)) {
 				strikethroughColor = 0x800000;
-			} else if (arg0.strEquals(TAG_STR3)) {
+			} else if (tag.strEquals(TAG_STR3)) {
 				strikethroughColor = -1;
-			} else if (arg0.startsWith(TAG_U1)) {
-				underlineColor = arg0.substring(2).parseHexString(16);
-			} else if (arg0.strEquals(TAG_U2)) {
+			} else if (tag.startsWith(TAG_U1)) {
+				underlineColor = tag.substring(2).parseHexString(16);
+			} else if (tag.strEquals(TAG_U2)) {
 				underlineColor = 0;
-			} else if (arg0.strEquals(TAG_U3)) {
+			} else if (tag.strEquals(TAG_U3)) {
 				underlineColor = -1;
-			} else if (arg0.startsWith(TAG_SHAD1)) {
-				shadowColorOverride = arg0.substring(5).parseHexString(16);
-			} else if (arg0.strEquals(TAG_SHAD2)) {
+			} else if (tag.startsWith(TAG_SHAD1)) {
+				shadowColorOverride = tag.substring(5).parseHexString(16);
+			} else if (tag.strEquals(TAG_SHAD2)) {
 				shadowColorOverride = 0;
-			} else if (arg0.strEquals(TAG_SHAD3)) {
+			} else if (tag.strEquals(TAG_SHAD3)) {
 				shadowColorOverride = shadowColor;
-			} else if (arg0.strEquals(TAG_BR)) {
+			} else if (tag.strEquals(TAG_BR)) {
 				this.setColors(color, shadowColor, alpha);
 			}
-		} catch (@Pc(144) Exception local144) {
+		} catch (@Pc(144) Exception ex) {
 		}
 	}
 
 	@OriginalMember(owner = "client!rk", name = "d", descriptor = "(I)I")
-	private int getGlyphWidth(@OriginalArg(0) int arg0) {
-		return this.glyphWidths[arg0 & 0xFF];
+	private int getGlyphWidth(@OriginalArg(0) int ch) {
+		return this.glyphWidths[ch & 0xFF];
 	}
 
 	@OriginalMember(owner = "client!rk", name = "b", descriptor = "(Lclient!na;IIII)V")
-	public final void renderRight(@OriginalArg(0) JagString string, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void renderRight(@OriginalArg(0) JagString string, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int color, @OriginalArg(4) int shadow) {
 		if (string != null) {
-			this.setColors(arg3, arg4);
+			this.setColors(color, shadow);
 			this.render(string, x - this.getStringWidth(string), y);
 		}
 	}
 
 	@OriginalMember(owner = "client!rk", name = "d", descriptor = "(Lclient!na;I)V")
-	private void justify(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1) {
-		@Pc(1) int local1 = 0;
-		@Pc(3) boolean local3 = false;
-		@Pc(7) int local7 = arg0.length();
-		for (@Pc(9) int local9 = 0; local9 < local7; local9++) {
-			@Pc(17) int local17 = arg0.charAt(local9);
-			if (local17 == 60) {
-				local3 = true;
-			} else if (local17 == 62) {
-				local3 = false;
-			} else if (!local3 && local17 == 32) {
-				local1++;
+	private void justify(@OriginalArg(0) JagString text, @OriginalArg(1) int lineWidth) {
+		@Pc(1) int spaceCount = 0;
+		@Pc(3) boolean inTag = false;
+		@Pc(7) int len = text.length();
+		for (@Pc(9) int i = 0; i < len; i++) {
+			@Pc(17) int ch = text.charAt(i);
+			if (ch == 60) {
+				inTag = true;
+			} else if (ch == 62) {
+				inTag = false;
+			} else if (!inTag && ch == 32) {
+				spaceCount++;
 			}
 		}
-		if (local1 > 0) {
-			spaceWidth = (arg1 - this.getStringWidth(arg0) << 8) / local1;
+		if (spaceCount > 0) {
+			spaceWidth = (lineWidth - this.getStringWidth(text) << 8) / spaceCount;
 		}
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;[I[Lclient!na;)I")
-	public final int splitParagraph(@OriginalArg(0) JagString arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) JagString[] arg2) {
-		if (arg0 == null) {
+	public final int splitParagraph(@OriginalArg(0) JagString text, @OriginalArg(1) int[] widths, @OriginalArg(2) JagString[] result) {
+		if (text == null) {
 			return 0;
 		}
 		buffer.setLength(0);
-		@Pc(9) int local9 = 0;
-		@Pc(11) int local11 = 0;
-		@Pc(13) int local13 = -1;
-		@Pc(15) int local15 = 0;
-		@Pc(17) byte local17 = 0;
-		@Pc(19) int local19 = -1;
-		@Pc(21) int local21 = 0;
-		@Pc(23) int local23 = 0;
-		@Pc(27) int local27 = arg0.length();
-		for (@Pc(29) int local29 = 0; local29 < local27; local29++) {
-			@Pc(37) int local37 = arg0.charAt(local29);
-			if (local37 == 60) {
-				local19 = local29;
+		@Pc(9) int lineWidth = 0;
+		@Pc(11) int lineStart = 0;
+		@Pc(13) int breakPos = -1;
+		@Pc(15) int breakWidth = 0;
+		@Pc(17) byte breakTrim = 0;
+		@Pc(19) int tagStart = -1;
+		@Pc(21) int prevChar = 0;
+		@Pc(23) int lineIdx = 0;
+		@Pc(27) int len = text.length();
+		for (@Pc(29) int i = 0; i < len; i++) {
+			@Pc(37) int ch = text.charAt(i);
+			if (ch == 60) {
+				tagStart = i;
 			} else {
-				if (local37 == 62 && local19 != -1) {
-					@Pc(57) JagString local57 = arg0.substring(local29, local19 + 1);
-					local19 = -1;
+				if (ch == 62 && tagStart != -1) {
+					@Pc(57) JagString tag = text.substring(i, tagStart + 1);
+					tagStart = -1;
 					buffer.append(60);
-					buffer.appendString(local57);
+					buffer.appendString(tag);
 					buffer.append(62);
-					if (local57.strEquals(TAG_BR)) {
-						if (arg2[local23] == null) {
-							arg2[local23] = buffer.asString().substring(buffer.length(), local11);
+					if (tag.strEquals(TAG_BR)) {
+						if (result[lineIdx] == null) {
+							result[lineIdx] = buffer.asString().substring(buffer.length(), lineStart);
 						} else {
-							arg2[local23].setLength(0);
-							arg2[local23].appendSubstring(buffer, local11, buffer.length());
+							result[lineIdx].setLength(0);
+							result[lineIdx].appendSubstring(buffer, lineStart, buffer.length());
 						}
-						local23++;
-						local11 = buffer.length();
-						local9 = 0;
-						local13 = -1;
-						local21 = 0;
-					} else if (local57.strEquals(TAG_LT)) {
-						local9 += this.getGlyphWidth(60);
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + 60];
+						lineIdx++;
+						lineStart = buffer.length();
+						lineWidth = 0;
+						breakPos = -1;
+						prevChar = 0;
+					} else if (tag.strEquals(TAG_LT)) {
+						lineWidth += this.getGlyphWidth(60);
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + 60];
 						}
-						local21 = 60;
-					} else if (local57.strEquals(TAG_GT)) {
-						local9 += this.getGlyphWidth(62);
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + 62];
+						prevChar = 60;
+					} else if (tag.strEquals(TAG_GT)) {
+						lineWidth += this.getGlyphWidth(62);
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + 62];
 						}
-						local21 = 62;
-					} else if (local57.strEquals(TAG_NBSP)) {
-						local9 += this.getGlyphWidth(160);
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + 160];
+						prevChar = 62;
+					} else if (tag.strEquals(TAG_NBSP)) {
+						lineWidth += this.getGlyphWidth(160);
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + 160];
 						}
-						local21 = 160;
-					} else if (local57.strEquals(TAB_SHY)) {
-						local9 += this.getGlyphWidth(173);
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + 173];
+						prevChar = 160;
+					} else if (tag.strEquals(TAB_SHY)) {
+						lineWidth += this.getGlyphWidth(173);
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + 173];
 						}
-						local21 = 173;
-					} else if (local57.strEquals(TAB_TIMES)) {
-						local9 += this.getGlyphWidth(215);
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + 215];
+						prevChar = 173;
+					} else if (tag.strEquals(TAB_TIMES)) {
+						lineWidth += this.getGlyphWidth(215);
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + 215];
 						}
-						local21 = 215;
-					} else if (local57.strEquals(TAB_EURO)) {
-						local9 += this.getGlyphWidth(128);
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + 128];
+						prevChar = 215;
+					} else if (tag.strEquals(TAB_EURO)) {
+						lineWidth += this.getGlyphWidth(128);
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + 128];
 						}
-						local21 = 128;
-					} else if (local57.strEquals(TAB_COPY)) {
-						local9 += this.getGlyphWidth(169);
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + 169];
+						prevChar = 128;
+					} else if (tag.strEquals(TAB_COPY)) {
+						lineWidth += this.getGlyphWidth(169);
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + 169];
 						}
-						local21 = 169;
-					} else if (local57.strEquals(TAG_REG)) {
-						local9 += this.getGlyphWidth(174);
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + 174];
+						prevChar = 169;
+					} else if (tag.strEquals(TAG_REG)) {
+						lineWidth += this.getGlyphWidth(174);
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + 174];
 						}
-						local21 = 174;
-					} else if (local57.startsWith(TAG_IMG)) {
+						prevChar = 174;
+					} else if (tag.startsWith(TAG_IMG)) {
 						try {
-							@Pc(377) int local377 = local57.substring(4).parseInt();
-							local9 += this.nameIcons[local377].innerWidth;
-							local21 = 0;
-						} catch (@Pc(389) Exception local389) {
+							@Pc(377) int iconIdx = tag.substring(4).parseInt();
+							lineWidth += this.nameIcons[iconIdx].innerWidth;
+							prevChar = 0;
+						} catch (@Pc(389) Exception ex) {
 						}
 					}
-					local37 = 0;
+					ch = 0;
 				}
-				if (local19 == -1) {
-					if (local37 != 0) {
-						buffer.append(local37);
-						local9 += this.glyphWidths[local37];
-						if (this.kerning != null && local21 != 0) {
-							local9 += this.kerning[(local21 << 8) + local37];
+				if (tagStart == -1) {
+					if (ch != 0) {
+						buffer.append(ch);
+						lineWidth += this.glyphWidths[ch];
+						if (this.kerning != null && prevChar != 0) {
+							lineWidth += this.kerning[(prevChar << 8) + ch];
 						}
-						local21 = local37;
+						prevChar = ch;
 					}
-					if (local37 == 32) {
-						local13 = buffer.length();
-						local15 = local9;
-						local17 = 1;
+					if (ch == 32) {
+						breakPos = buffer.length();
+						breakWidth = lineWidth;
+						breakTrim = 1;
 					}
-					if (arg1 != null && local9 > arg1[local23 < arg1.length ? local23 : arg1.length - 1] && local13 >= 0) {
-						if (arg2[local23] == null) {
-							arg2[local23] = buffer.asString().substring(local13 - local17, local11);
+					if (widths != null && lineWidth > widths[lineIdx < widths.length ? lineIdx : widths.length - 1] && breakPos >= 0) {
+						if (result[lineIdx] == null) {
+							result[lineIdx] = buffer.asString().substring(breakPos - breakTrim, lineStart);
 						} else {
-							arg2[local23].setLength(0);
-							arg2[local23] = arg2[local23].appendSubstring(buffer, local11, local13 - local17);
+							result[lineIdx].setLength(0);
+							result[lineIdx] = result[lineIdx].appendSubstring(buffer, lineStart, breakPos - breakTrim);
 						}
-						local23++;
-						local11 = local13;
-						local13 = -1;
-						local9 -= local15;
-						local21 = 0;
+						lineIdx++;
+						lineStart = breakPos;
+						breakPos = -1;
+						lineWidth -= breakWidth;
+						prevChar = 0;
 					}
-					if (local37 == 45) {
-						local13 = buffer.length();
-						local15 = local9;
-						local17 = 0;
+					if (ch == 45) {
+						breakPos = buffer.length();
+						breakWidth = lineWidth;
+						breakTrim = 0;
 					}
 				}
 			}
 		}
-		if (buffer.length() > local11) {
-			if (arg2[local23] == null) {
-				arg2[local23] = buffer.asString().substring(buffer.length(), local11);
+		if (buffer.length() > lineStart) {
+			if (result[lineIdx] == null) {
+				result[lineIdx] = buffer.asString().substring(buffer.length(), lineStart);
 			} else {
-				arg2[local23].setLength(0);
-				arg2[local23] = arg2[local23].appendSubstring(buffer, local11, buffer.length());
+				result[lineIdx].setLength(0);
+				result[lineIdx] = result[lineIdx].appendSubstring(buffer, lineStart, buffer.length());
 			}
-			local23++;
+			lineIdx++;
 		}
-		return local23;
+		return lineIdx;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIIII)V")
-	public final void renderShake(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		if (arg0 == null) {
+	public final void renderShake(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int color, @OriginalArg(5) int tick, @OriginalArg(6) int amplitude) {
+		if (text == null) {
 			return;
 		}
-		this.setColors(arg3, 0);
-		@Pc(13) double local13 = 7.0D - (double) arg5 / 8.0D;
-		if (local13 < 0.0D) {
-			local13 = 0.0D;
+		this.setColors(color, 0);
+		@Pc(13) double wave = 7.0D - (double) amplitude / 8.0D;
+		if (wave < 0.0D) {
+			wave = 0.0D;
 		}
-		@Pc(23) int local23 = arg0.length();
-		@Pc(26) int[] local26 = new int[local23];
-		for (@Pc(28) int local28 = 0; local28 < local23; local28++) {
-			local26[local28] = (int) (Math.sin((double) local28 / 1.5D + (double) arg4 / 1.0D) * local13);
+		@Pc(23) int len = text.length();
+		@Pc(26) int[] yOffsets = new int[len];
+		for (@Pc(28) int i = 0; i < len; i++) {
+			yOffsets[i] = (int) (Math.sin((double) i / 1.5D + (double) tick / 1.0D) * wave);
 		}
-		this.renderOffset(arg0, arg1 - this.getStringWidth(arg0) / 2, arg2, null, local26);
+		this.renderOffset(text, x - this.getStringWidth(text) / 2, y, null, yOffsets);
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIIIIIIII)I")
-	public final int renderParagraphAlpha(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) int arg8, @OriginalArg(10) int arg9) {
-		if (arg0 == null) {
+	public final int renderParagraphAlpha(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int w, @OriginalArg(4) int h, @OriginalArg(5) int color, @OriginalArg(6) int shadow, @OriginalArg(8) int halign, @OriginalArg(9) int valign, @OriginalArg(10) int lineSpacing) {
+		if (text == null) {
 			return 0;
 		}
-		this.setColors(arg5, arg6, 256);
-		if (arg9 == 0) {
-			arg9 = this.lineHeight;
+		this.setColors(color, shadow, 256);
+		if (lineSpacing == 0) {
+			lineSpacing = this.lineHeight;
 		}
-		@Pc(20) int[] local20 = new int[]{arg3};
-		if (arg4 < this.paragraphTopPadding + this.paragraphBottomPadding + arg9 && arg4 < arg9 + arg9) {
-			local20 = null;
+		@Pc(20) int[] lineWidths = new int[]{w};
+		if (h < this.paragraphTopPadding + this.paragraphBottomPadding + lineSpacing && h < lineSpacing + lineSpacing) {
+			lineWidths = null;
 		}
-		@Pc(42) int local42 = this.splitParagraph(arg0, local20, lines);
-		if (arg8 == 3 && local42 == 1) {
-			arg8 = 1;
+		@Pc(42) int lineCount = this.splitParagraph(text, lineWidths, lines);
+		if (valign == 3 && lineCount == 1) {
+			valign = 1;
 		}
-		@Pc(57) int local57;
-		@Pc(118) int local118;
-		if (arg8 == 0) {
-			local57 = arg2 + this.paragraphTopPadding;
-		} else if (arg8 == 1) {
-			local57 = arg2 + this.paragraphTopPadding + (arg4 - this.paragraphTopPadding - this.paragraphBottomPadding - (local42 - 1) * arg9) / 2;
-		} else if (arg8 == 2) {
-			local57 = arg2 + arg4 - this.paragraphBottomPadding - (local42 - 1) * arg9;
+		@Pc(57) int curY;
+		@Pc(118) int i;
+		if (valign == 0) {
+			curY = y + this.paragraphTopPadding;
+		} else if (valign == 1) {
+			curY = y + this.paragraphTopPadding + (h - this.paragraphTopPadding - this.paragraphBottomPadding - (lineCount - 1) * lineSpacing) / 2;
+		} else if (valign == 2) {
+			curY = y + h - this.paragraphBottomPadding - (lineCount - 1) * lineSpacing;
 		} else {
-			local118 = (arg4 - this.paragraphTopPadding - this.paragraphBottomPadding - (local42 - 1) * arg9) / (local42 + 1);
-			if (local118 < 0) {
-				local118 = 0;
+			i = (h - this.paragraphTopPadding - this.paragraphBottomPadding - (lineCount - 1) * lineSpacing) / (lineCount + 1);
+			if (i < 0) {
+				i = 0;
 			}
-			local57 = arg2 + this.paragraphTopPadding + local118;
-			arg9 += local118;
+			curY = y + this.paragraphTopPadding + i;
+			lineSpacing += i;
 		}
-		for (local118 = 0; local118 < local42; local118++) {
-			if (arg7 == 0) {
-				this.render(lines[local118], arg1, local57);
-			} else if (arg7 == 1) {
-				this.render(lines[local118], arg1 + (arg3 - this.getStringWidth(lines[local118])) / 2, local57);
-			} else if (arg7 == 2) {
-				this.render(lines[local118], arg1 + arg3 - this.getStringWidth(lines[local118]), local57);
-			} else if (local118 == local42 - 1) {
-				this.render(lines[local118], arg1, local57);
+		for (i = 0; i < lineCount; i++) {
+			if (halign == 0) {
+				this.render(lines[i], x, curY);
+			} else if (halign == 1) {
+				this.render(lines[i], x + (w - this.getStringWidth(lines[i])) / 2, curY);
+			} else if (halign == 2) {
+				this.render(lines[i], x + w - this.getStringWidth(lines[i]), curY);
+			} else if (i == lineCount - 1) {
+				this.render(lines[i], x, curY);
 			} else {
-				this.justify(lines[local118], arg3);
-				this.render(lines[local118], arg1, local57);
+				this.justify(lines[i], w);
+				this.render(lines[i], x, curY);
 				spaceWidth = 0;
 			}
-			local57 += arg9;
+			curY += lineSpacing;
 		}
-		return local42;
+		return lineCount;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIII)V")
-	public final void renderWave2(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
-		if (arg0 == null) {
+	public final void renderWave2(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int color, @OriginalArg(5) int tick) {
+		if (text == null) {
 			return;
 		}
-		this.setColors(arg3, 0);
-		@Pc(10) int local10 = arg0.length();
-		@Pc(13) int[] local13 = new int[local10];
-		@Pc(16) int[] local16 = new int[local10];
-		for (@Pc(18) int local18 = 0; local18 < local10; local18++) {
-			local13[local18] = (int) (Math.sin((double) local18 / 5.0D + (double) arg4 / 5.0D) * 5.0D);
-			local16[local18] = (int) (Math.sin((double) local18 / 3.0D + (double) arg4 / 5.0D) * 5.0D);
+		this.setColors(color, 0);
+		@Pc(10) int len = text.length();
+		@Pc(13) int[] xOffsets = new int[len];
+		@Pc(16) int[] yOffsets = new int[len];
+		for (@Pc(18) int i = 0; i < len; i++) {
+			xOffsets[i] = (int) (Math.sin((double) i / 5.0D + (double) tick / 5.0D) * 5.0D);
+			yOffsets[i] = (int) (Math.sin((double) i / 3.0D + (double) tick / 5.0D) * 5.0D);
 		}
-		this.renderOffset(arg0, arg1 - this.getStringWidth(arg0) / 2, arg2, local13, local16);
+		this.renderOffset(text, x - this.getStringWidth(text) / 2, y, xOffsets, yOffsets);
 	}
 
 	@OriginalMember(owner = "client!rk", name = "b", descriptor = "(Lclient!na;IIIII)V")
-	public final void renderWave(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
-		if (arg0 == null) {
+	public final void renderWave(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int color, @OriginalArg(5) int tick) {
+		if (text == null) {
 			return;
 		}
-		this.setColors(arg3, 0);
-		@Pc(10) int local10 = arg0.length();
-		@Pc(13) int[] local13 = new int[local10];
-		for (@Pc(15) int local15 = 0; local15 < local10; local15++) {
-			local13[local15] = (int) (Math.sin((double) local15 / 2.0D + (double) arg4 / 5.0D) * 5.0D);
+		this.setColors(color, 0);
+		@Pc(10) int len = text.length();
+		@Pc(13) int[] yOffsets = new int[len];
+		for (@Pc(15) int i = 0; i < len; i++) {
+			yOffsets[i] = (int) (Math.sin((double) i / 2.0D + (double) tick / 5.0D) * 5.0D);
 		}
-		this.renderOffset(arg0, arg1 - this.getStringWidth(arg0) / 2, arg2, null, local13);
+		this.renderOffset(text, x - this.getStringWidth(text) / 2, y, null, yOffsets);
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "([Lclient!ok;[I)V")
-	public final void setNameIcons(@OriginalArg(0) IndexedSprite[] arg0, @OriginalArg(1) int[] arg1) {
-		if (arg1 != null && arg1.length != arg0.length) {
+	public final void setNameIcons(@OriginalArg(0) IndexedSprite[] icons, @OriginalArg(1) int[] heights) {
+		if (heights != null && heights.length != icons.length) {
 			throw new IllegalArgumentException();
 		}
-		this.nameIcons = arg0;
-		this.nameIconHeights = arg1;
+		this.nameIcons = icons;
+		this.nameIconHeights = heights;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "c", descriptor = "(II)V")
@@ -768,247 +768,247 @@ public abstract class Font extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!rk", name = "c", descriptor = "(Lclient!na;IIII)V")
-	public final void renderCenter(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg0 != null) {
-			this.setColors(arg3, arg4);
-			this.render(arg0, arg1 - this.getStringWidth(arg0) / 2, arg2);
+	public final void renderCenter(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int color, @OriginalArg(4) int shadow) {
+		if (text != null) {
+			this.setColors(color, shadow);
+			this.render(text, x - this.getStringWidth(text) / 2, y);
 		}
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "([B)V")
-	private void decode(@OriginalArg(0) byte[] arg0) {
+	private void decode(@OriginalArg(0) byte[] data) {
 		this.glyphWidths = new int[256];
-		@Pc(9) int local9;
-		if (arg0.length == 257) {
-			for (local9 = 0; local9 < this.glyphWidths.length; local9++) {
-				this.glyphWidths[local9] = arg0[local9] & 0xFF;
+		@Pc(9) int pos;
+		if (data.length == 257) {
+			for (pos = 0; pos < this.glyphWidths.length; pos++) {
+				this.glyphWidths[pos] = data[pos] & 0xFF;
 			}
-			this.lineHeight = arg0[256] & 0xFF;
+			this.lineHeight = data[256] & 0xFF;
 			return;
 		}
-		local9 = 0;
-		for (@Pc(37) int local37 = 0; local37 < 256; local37++) {
-			this.glyphWidths[local37] = arg0[local9++] & 0xFF;
+		pos = 0;
+		for (@Pc(37) int i = 0; i < 256; i++) {
+			this.glyphWidths[i] = data[pos++] & 0xFF;
 		}
-		@Pc(55) int[] local55 = new int[256];
-		@Pc(58) int[] local58 = new int[256];
-		@Pc(60) int local60;
-		for (local60 = 0; local60 < 256; local60++) {
-			local55[local60] = arg0[local9++] & 0xFF;
+		@Pc(55) int[] glyphHeights = new int[256];
+		@Pc(58) int[] glyphWidthArr = new int[256];
+		@Pc(60) int i;
+		for (i = 0; i < 256; i++) {
+			glyphHeights[i] = data[pos++] & 0xFF;
 		}
-		for (local60 = 0; local60 < 256; local60++) {
-			local58[local60] = arg0[local9++] & 0xFF;
+		for (i = 0; i < 256; i++) {
+			glyphWidthArr[i] = data[pos++] & 0xFF;
 		}
-		@Pc(93) byte[][] local93 = new byte[256][];
-		@Pc(109) int local109;
-		for (@Pc(95) int local95 = 0; local95 < 256; local95++) {
-			local93[local95] = new byte[local55[local95]];
-			@Pc(107) byte local107 = 0;
-			for (local109 = 0; local109 < local93[local95].length; local109++) {
-				local107 += arg0[local9++];
-				local93[local95][local109] = local107;
+		@Pc(93) byte[][] rightGlyphs = new byte[256][];
+		@Pc(109) int k;
+		for (@Pc(95) int j = 0; j < 256; j++) {
+			rightGlyphs[j] = new byte[glyphHeights[j]];
+			@Pc(107) byte acc = 0;
+			for (k = 0; k < rightGlyphs[j].length; k++) {
+				acc += data[pos++];
+				rightGlyphs[j][k] = acc;
 			}
 		}
-		@Pc(136) byte[][] local136 = new byte[256][];
-		@Pc(138) int local138;
-		for (local138 = 0; local138 < 256; local138++) {
-			local136[local138] = new byte[local55[local138]];
-			@Pc(150) byte local150 = 0;
-			for (@Pc(152) int local152 = 0; local152 < local136[local138].length; local152++) {
-				local150 += arg0[local9++];
-				local136[local138][local152] = local150;
+		@Pc(136) byte[][] leftGlyphs = new byte[256][];
+		@Pc(138) int m;
+		for (m = 0; m < 256; m++) {
+			leftGlyphs[m] = new byte[glyphHeights[m]];
+			@Pc(150) byte acc = 0;
+			for (@Pc(152) int n = 0; n < leftGlyphs[m].length; n++) {
+				acc += data[pos++];
+				leftGlyphs[m][n] = acc;
 			}
 		}
 		this.kerning = new byte[65536];
-		for (local138 = 0; local138 < 256; local138++) {
-			if (local138 != 32 && local138 != 160) {
-				for (local109 = 0; local109 < 256; local109++) {
-					if (local109 != 32 && local109 != 160) {
-						this.kerning[(local138 << 8) + local109] = (byte) calculateKerning(local93, local136, local58, this.glyphWidths, local55, local138, local109);
+		for (m = 0; m < 256; m++) {
+			if (m != 32 && m != 160) {
+				for (k = 0; k < 256; k++) {
+					if (k != 32 && k != 160) {
+						this.kerning[(m << 8) + k] = (byte) calculateKerning(rightGlyphs, leftGlyphs, glyphWidthArr, this.glyphWidths, glyphHeights, m, k);
 					}
 				}
 			}
 		}
-		this.lineHeight = local58[32] + local55[32];
+		this.lineHeight = glyphWidthArr[32] + glyphHeights[32];
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(III)V")
-	private void setColors(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	private void setColors(@OriginalArg(0) int rgb, @OriginalArg(1) int shadow, @OriginalArg(2) int a) {
 		strikethroughColor = -1;
 		underlineColor = -1;
-		shadowColor = arg1;
-		shadowColorOverride = arg1;
-		color = arg0;
-		colorOverride = arg0;
-		alpha = arg2;
-		alphaOverride = arg2;
+		shadowColor = shadow;
+		shadowColorOverride = shadow;
+		color = rgb;
+		colorOverride = rgb;
+		alpha = a;
+		alphaOverride = a;
 		spaceWidth = 0;
 		extraSpaceWidth = 0;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;IIIIIIIILjava/util/Random;I[I)I")
-	public final int renderWavyTextAligned(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Random arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int[] arg11) {
-		if (arg0 == null) {
+	public final int renderWavyTextAligned(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int w, @OriginalArg(4) int h, @OriginalArg(5) int color, @OriginalArg(6) int shadow, @OriginalArg(7) int halign, @OriginalArg(8) int valign, @OriginalArg(9) Random random, @OriginalArg(10) int seed, @OriginalArg(11) int[] bounds) {
+		if (text == null) {
 			return 0;
 		}
-		arg9.setSeed(arg10);
-		this.setColors(arg5, arg6, (arg9.nextInt() & 0x1F) + 192);
-		@Pc(21) int local21 = arg0.length();
-		@Pc(24) int[] local24 = new int[local21];
-		@Pc(26) int local26 = 0;
-		@Pc(28) int local28;
-		for (local28 = 0; local28 < local21; local28++) {
-			local24[local28] = local26;
-			if ((arg9.nextInt() & 0x3) == 0) {
-				local26++;
+		random.setSeed(seed);
+		this.setColors(color, shadow, (random.nextInt() & 0x1F) + 192);
+		@Pc(21) int len = text.length();
+		@Pc(24) int[] xOffsets = new int[len];
+		@Pc(26) int maxOffset = 0;
+		@Pc(28) int i;
+		for (i = 0; i < len; i++) {
+			xOffsets[i] = maxOffset;
+			if ((random.nextInt() & 0x3) == 0) {
+				maxOffset++;
 			}
 		}
-		local28 = arg1;
-		@Pc(50) int local50 = arg2 + this.paragraphTopPadding;
-		@Pc(52) int local52 = -1;
-		if (arg8 == 1) {
-			local50 += (arg4 - this.paragraphTopPadding - this.paragraphBottomPadding) / 2;
-		} else if (arg8 == 2) {
-			local50 = arg2 + arg4 - this.paragraphBottomPadding;
+		i = x;
+		@Pc(50) int curY = y + this.paragraphTopPadding;
+		@Pc(52) int totalW = -1;
+		if (valign == 1) {
+			curY += (h - this.paragraphTopPadding - this.paragraphBottomPadding) / 2;
+		} else if (valign == 2) {
+			curY = y + h - this.paragraphBottomPadding;
 		}
-		if (arg7 == 1) {
-			local52 = this.getStringWidth(arg0) + local26;
-			local28 = arg1 + (arg3 - local52) / 2;
-		} else if (arg7 == 2) {
-			local52 = this.getStringWidth(arg0) + local26;
-			local28 = arg1 + arg3 - local52;
+		if (halign == 1) {
+			totalW = this.getStringWidth(text) + maxOffset;
+			i = x + (w - totalW) / 2;
+		} else if (halign == 2) {
+			totalW = this.getStringWidth(text) + maxOffset;
+			i = x + w - totalW;
 		}
-		this.renderOffset(arg0, local28, local50, local24, null);
-		if (arg11 != null) {
-			if (local52 == -1) {
-				local52 = this.getStringWidth(arg0) + local26;
+		this.renderOffset(text, i, curY, xOffsets, null);
+		if (bounds != null) {
+			if (totalW == -1) {
+				totalW = this.getStringWidth(text) + maxOffset;
 			}
-			arg11[0] = local28;
-			arg11[1] = local50 - this.paragraphTopPadding;
-			arg11[2] = local52;
-			arg11[3] = this.paragraphTopPadding + this.paragraphBottomPadding;
+			bounds[0] = i;
+			bounds[1] = curY - this.paragraphTopPadding;
+			bounds[2] = totalW;
+			bounds[3] = this.paragraphTopPadding + this.paragraphBottomPadding;
 		}
-		return local26;
+		return maxOffset;
 	}
 
 	@OriginalMember(owner = "client!rk", name = "a", descriptor = "(Lclient!na;II[I[I)V")
-	private void renderOffset(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[] arg3, @OriginalArg(4) int[] arg4) {
-		@Pc(4) int local4 = arg2 - this.lineHeight;
-		@Pc(6) int local6 = -1;
-		@Pc(8) int local8 = 0;
-		@Pc(10) int local10 = 0;
-		@Pc(14) int local14 = arg0.length();
-		for (@Pc(16) int local16 = 0; local16 < local14; local16++) {
-			@Pc(24) int local24 = arg0.charAt(local16);
-			if (local24 == 60) {
-				local6 = local16;
+	private void renderOffset(@OriginalArg(0) JagString text, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int[] xOffsets, @OriginalArg(4) int[] yOffsets) {
+		@Pc(4) int baseY = y - this.lineHeight;
+		@Pc(6) int tagStart = -1;
+		@Pc(8) int prevChar = 0;
+		@Pc(10) int charIdx = 0;
+		@Pc(14) int len = text.length();
+		for (@Pc(16) int i = 0; i < len; i++) {
+			@Pc(24) int ch = text.charAt(i);
+			if (ch == 60) {
+				tagStart = i;
 			} else {
-				@Pc(121) int local121;
-				@Pc(130) int local130;
-				@Pc(141) int local141;
-				if (local24 == 62 && local6 != -1) {
-					@Pc(44) JagString local44 = arg0.substring(local16, local6 + 1);
-					local6 = -1;
-					if (local44.strEquals(TAG_LT)) {
-						local24 = 60;
-					} else if (local44.strEquals(TAG_GT)) {
-						local24 = 62;
-					} else if (local44.strEquals(TAG_NBSP)) {
-						local24 = 160;
-					} else if (local44.strEquals(TAB_SHY)) {
-						local24 = 173;
-					} else if (local44.strEquals(TAB_TIMES)) {
-						local24 = 215;
-					} else if (local44.strEquals(TAB_EURO)) {
-						local24 = 128;
-					} else if (local44.strEquals(TAB_COPY)) {
-						local24 = 169;
+				@Pc(121) int xOff;
+				@Pc(130) int yOff;
+				@Pc(141) int iconIdx;
+				if (ch == 62 && tagStart != -1) {
+					@Pc(44) JagString tag = text.substring(i, tagStart + 1);
+					tagStart = -1;
+					if (tag.strEquals(TAG_LT)) {
+						ch = 60;
+					} else if (tag.strEquals(TAG_GT)) {
+						ch = 62;
+					} else if (tag.strEquals(TAG_NBSP)) {
+						ch = 160;
+					} else if (tag.strEquals(TAB_SHY)) {
+						ch = 173;
+					} else if (tag.strEquals(TAB_TIMES)) {
+						ch = 215;
+					} else if (tag.strEquals(TAB_EURO)) {
+						ch = 128;
+					} else if (tag.strEquals(TAB_COPY)) {
+						ch = 169;
 					} else {
-						if (!local44.strEquals(TAG_REG)) {
-							if (local44.startsWith(TAG_IMG)) {
+						if (!tag.strEquals(TAG_REG)) {
+							if (tag.startsWith(TAG_IMG)) {
 								try {
-									if (arg3 == null) {
-										local121 = 0;
+									if (xOffsets == null) {
+										xOff = 0;
 									} else {
-										local121 = arg3[local10];
+										xOff = xOffsets[charIdx];
 									}
-									if (arg4 == null) {
-										local130 = 0;
+									if (yOffsets == null) {
+										yOff = 0;
 									} else {
-										local130 = arg4[local10];
+										yOff = yOffsets[charIdx];
 									}
-									local10++;
-									local141 = local44.substring(4).parseInt();
-									@Pc(146) IndexedSprite local146 = this.nameIcons[local141];
-									@Pc(157) int local157 = this.nameIconHeights == null ? local146.innerHeight : this.nameIconHeights[local141];
+									charIdx++;
+									iconIdx = tag.substring(4).parseInt();
+									@Pc(146) IndexedSprite icon = this.nameIcons[iconIdx];
+									@Pc(157) int iconHeight = this.nameIconHeights == null ? icon.innerHeight : this.nameIconHeights[iconIdx];
 									if (alphaOverride == 256) {
-										local146.renderTransparent(arg1 + local121, local4 + this.lineHeight - local157 + local130);
+										icon.renderTransparent(x + xOff, baseY + this.lineHeight - iconHeight + yOff);
 									} else {
-										local146.renderAlpha(arg1 + local121, local4 + this.lineHeight - local157 + local130, alphaOverride);
+										icon.renderAlpha(x + xOff, baseY + this.lineHeight - iconHeight + yOff, alphaOverride);
 									}
-									arg1 += local146.innerWidth;
-									local8 = 0;
-								} catch (@Pc(197) Exception local197) {
+									x += icon.innerWidth;
+									prevChar = 0;
+								} catch (@Pc(197) Exception ex) {
 								}
 							} else {
-								this.parseTag(local44);
+								this.parseTag(tag);
 							}
 							continue;
 						}
-						local24 = 174;
+						ch = 174;
 					}
 				}
-				if (local6 == -1) {
-					if (this.kerning != null && local8 != 0) {
-						arg1 += this.kerning[(local8 << 8) + local24];
+				if (tagStart == -1) {
+					if (this.kerning != null && prevChar != 0) {
+						x += this.kerning[(prevChar << 8) + ch];
 					}
-					@Pc(226) int local226 = this.spriteInnerWidths[local24];
-					local121 = this.spriteInnerHeights[local24];
-					if (arg3 == null) {
-						local130 = 0;
+					@Pc(226) int glyphW = this.spriteInnerWidths[ch];
+					xOff = this.spriteInnerHeights[ch];
+					if (xOffsets == null) {
+						yOff = 0;
 					} else {
-						local130 = arg3[local10];
+						yOff = xOffsets[charIdx];
 					}
-					if (arg4 == null) {
-						local141 = 0;
+					if (yOffsets == null) {
+						iconIdx = 0;
 					} else {
-						local141 = arg4[local10];
+						iconIdx = yOffsets[charIdx];
 					}
-					local10++;
-					if (local24 == 32) {
+					charIdx++;
+					if (ch == 32) {
 						if (spaceWidth > 0) {
 							extraSpaceWidth += spaceWidth;
-							arg1 += extraSpaceWidth >> 8;
+							x += extraSpaceWidth >> 8;
 							extraSpaceWidth &= 0xFF;
 						}
 					} else if (alphaOverride == 256) {
 						if (shadowColorOverride != -1) {
-							this.renderGlyph(local24, arg1 + this.spriteXOffsets[local24] + local130 + 1, local4 + this.spriteYOffsets[local24] + 1 + local141, local226, local121, shadowColorOverride);
+							this.renderGlyph(ch, x + this.spriteXOffsets[ch] + yOff + 1, baseY + this.spriteYOffsets[ch] + 1 + iconIdx, glyphW, xOff, shadowColorOverride);
 						}
-						this.renderGlyph(local24, arg1 + this.spriteXOffsets[local24] + local130, local4 + this.spriteYOffsets[local24] + local141, local226, local121, colorOverride);
+						this.renderGlyph(ch, x + this.spriteXOffsets[ch] + yOff, baseY + this.spriteYOffsets[ch] + iconIdx, glyphW, xOff, colorOverride);
 					} else {
 						if (shadowColorOverride != -1) {
-							this.renderGlyphTransparent(local24, arg1 + this.spriteXOffsets[local24] + local130 + 1, local4 + this.spriteYOffsets[local24] + 1 + local141, local226, local121, shadowColorOverride, alphaOverride);
+							this.renderGlyphTransparent(ch, x + this.spriteXOffsets[ch] + yOff + 1, baseY + this.spriteYOffsets[ch] + 1 + iconIdx, glyphW, xOff, shadowColorOverride, alphaOverride);
 						}
-						this.renderGlyphTransparent(local24, arg1 + this.spriteXOffsets[local24] + local130, local4 + this.spriteYOffsets[local24] + local141, local226, local121, colorOverride, alphaOverride);
+						this.renderGlyphTransparent(ch, x + this.spriteXOffsets[ch] + yOff, baseY + this.spriteYOffsets[ch] + iconIdx, glyphW, xOff, colorOverride, alphaOverride);
 					}
-					@Pc(387) int local387 = this.glyphWidths[local24];
+					@Pc(387) int advanceW = this.glyphWidths[ch];
 					if (strikethroughColor != -1) {
 						if (GlRenderer.enabled) {
-							GlRaster.drawHorizontalLine(arg1, local4 + (int) ((double) this.lineHeight * 0.7D), local387, strikethroughColor);
+							GlRaster.drawHorizontalLine(x, baseY + (int) ((double) this.lineHeight * 0.7D), advanceW, strikethroughColor);
 						} else {
-							SoftwareRaster.drawHorizontalLine(arg1, local4 + (int) ((double) this.lineHeight * 0.7D), local387, strikethroughColor);
+							SoftwareRaster.drawHorizontalLine(x, baseY + (int) ((double) this.lineHeight * 0.7D), advanceW, strikethroughColor);
 						}
 					}
 					if (underlineColor != -1) {
 						if (GlRenderer.enabled) {
-							GlRaster.drawHorizontalLine(arg1, local4 + this.lineHeight, local387, underlineColor);
+							GlRaster.drawHorizontalLine(x, baseY + this.lineHeight, advanceW, underlineColor);
 						} else {
-							SoftwareRaster.drawHorizontalLine(arg1, local4 + this.lineHeight, local387, underlineColor);
+							SoftwareRaster.drawHorizontalLine(x, baseY + this.lineHeight, advanceW, underlineColor);
 						}
 					}
-					arg1 += local387;
-					local8 = local24;
+					x += advanceW;
+					prevChar = ch;
 				}
 			}
 		}
