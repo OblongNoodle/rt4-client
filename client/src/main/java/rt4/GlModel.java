@@ -206,63 +206,63 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "<init>", descriptor = "(Lclient!gb;IIZ)V")
-	public GlModel(@OriginalArg(0) RawModel model, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
-		@Pc(23) int[] local23 = new int[model.triangleCount];
+	public GlModel(@OriginalArg(0) RawModel model, @OriginalArg(1) int ambience, @OriginalArg(2) int contrast, @OriginalArg(3) boolean sortByPriority) {
+		@Pc(23) int[] triOrder = new int[model.triangleCount];
 		this.vertexOffsets = new int[model.vertexCount + 1];
-		for (@Pc(32) int local32 = 0; local32 < model.triangleCount; local32++) {
-			if ((model.triangleInfo == null || model.triangleInfo[local32] != 2) && (model.triangleTextures == null || model.triangleTextures[local32] == -1 || !Rasteriser.textureProvider.isTextureFlipped(model.triangleTextures[local32] & 0xFFFF))) {
-				local23[this.triangleCount++] = local32;
-				this.vertexOffsets[model.triangleVertexA[local32]]++;
-				this.vertexOffsets[model.triangleVertexB[local32]]++;
-				this.vertexOffsets[model.triangleVertexC[local32]]++;
+		for (@Pc(32) int i = 0; i < model.triangleCount; i++) {
+			if ((model.triangleInfo == null || model.triangleInfo[i] != 2) && (model.triangleTextures == null || model.triangleTextures[i] == -1 || !Rasteriser.textureProvider.isTextureFlipped(model.triangleTextures[i] & 0xFFFF))) {
+				triOrder[this.triangleCount++] = i;
+				this.vertexOffsets[model.triangleVertexA[i]]++;
+				this.vertexOffsets[model.triangleVertexB[i]]++;
+				this.vertexOffsets[model.triangleVertexC[i]]++;
 			}
 		}
-		@Pc(115) long[] local115 = new long[this.triangleCount];
-		@Pc(117) int local117;
-		@Pc(125) int local125;
-		@Pc(127) int local127;
-		@Pc(226) int local226;
-		for (local117 = 0; local117 < this.triangleCount; local117++) {
-			local125 = local23[local117];
-			local127 = 0;
-			@Pc(129) byte local129 = 0;
-			@Pc(131) int local131 = 0;
-			@Pc(133) int local133 = 0;
-			@Pc(135) short local135 = -1;
+		@Pc(115) long[] sortKeys = new long[this.triangleCount];
+		@Pc(117) int j;
+		@Pc(125) int k;
+		@Pc(127) int sortKey;
+		@Pc(226) int offset;
+		for (j = 0; j < this.triangleCount; j++) {
+			k = triOrder[j];
+			sortKey = 0;
+			@Pc(129) byte texGroup = 0;
+			@Pc(131) int materialType = 0;
+			@Pc(133) int animationType = 0;
+			@Pc(135) short texture = -1;
 			if (model.triangleTextures != null) {
-				local135 = model.triangleTextures[local125];
-				if (local135 != -1) {
-					local131 = Rasteriser.textureProvider.getMaterialType(local135 & 0xFFFF);
-					local133 = Rasteriser.textureProvider.getAnimationType(local135 & 0xFFFF);
+				texture = model.triangleTextures[k];
+				if (texture != -1) {
+					materialType = Rasteriser.textureProvider.getMaterialType(texture & 0xFFFF);
+					animationType = Rasteriser.textureProvider.getAnimationType(texture & 0xFFFF);
 				}
 			}
-			@Pc(182) boolean local182 = model.triangleAlpha != null && model.triangleAlpha[local125] != 0 || local135 != -1 && !Rasteriser.textureProvider.isOpaque(local135 & 0xFFFF);
-			if ((arg3 || local182) && model.trianglePriorities != null) {
-				local127 += model.trianglePriorities[local125] << 17;
+			@Pc(182) boolean hasTransparency = model.triangleAlpha != null && model.triangleAlpha[k] != 0 || texture != -1 && !Rasteriser.textureProvider.isOpaque(texture & 0xFFFF);
+			if ((sortByPriority || hasTransparency) && model.trianglePriorities != null) {
+				sortKey += model.trianglePriorities[k] << 17;
 			}
-			if (local182) {
-				local127 += 65536;
+			if (hasTransparency) {
+				sortKey += 65536;
 			}
-			local127 += (local131 & 0xFF) << 8;
-			local127 += local133 & 0xFF;
-			local226 = local129 + ((local135 & 0xFFFF) << 16);
-			@Pc(232) int local232 = local226 + (local117 & 0xFFFF);
-			local115[local117] = ((long) local127 << 32) + (long) local232;
+			sortKey += (materialType & 0xFF) << 8;
+			sortKey += animationType & 0xFF;
+			offset = texGroup + ((texture & 0xFFFF) << 16);
+			@Pc(232) int packedIdx = offset + (j & 0xFFFF);
+			sortKeys[j] = ((long) sortKey << 32) + (long) packedIdx;
 		}
-		ArrayUtils.sort(local115, local23);
+		ArrayUtils.sort(sortKeys, triOrder);
 		this.vertexCount = model.vertexCount;
 		this.vertexX = model.vertexX;
 		this.vertexY = model.vertexY;
 		this.vertexZ = model.vertexZ;
 		this.vertexBones = model.vertexBones;
 		this.vertexSources = model.vertexSources;
-		local117 = this.triangleCount * 3;
-		this.normalX = new short[local117];
-		this.normalY = new short[local117];
-		this.normalZ = new short[local117];
-		this.normalMagnitude = new short[local117];
-		this.vertexS = new float[local117];
-		this.vertexT = new float[local117];
+		j = this.triangleCount * 3;
+		this.normalX = new short[j];
+		this.normalY = new short[j];
+		this.normalZ = new short[j];
+		this.normalMagnitude = new short[j];
+		this.vertexS = new float[j];
+		this.vertexT = new float[j];
 		this.triangleColors = new short[this.triangleCount];
 		this.triangleAlpha = new byte[this.triangleCount];
 		this.triangleVertexA = new short[this.triangleCount];
@@ -283,336 +283,336 @@ public final class GlModel extends Model {
 		}
 		this.texCoordBuffer = new GlBuffer();
 		this.indexBuffer = new GlBuffer();
-		this.ambient = (short) arg1;
-		this.contrast = (short) arg2;
-		this.vertexLookup = new short[local117];
-		aLongArray10 = new long[local117];
-		local125 = 0;
-		for (local127 = 0; local127 < model.vertexCount; local127++) {
-			local226 = this.vertexOffsets[local127];
-			this.vertexOffsets[local127] = local125;
-			local125 += local226;
+		this.ambient = (short) ambience;
+		this.contrast = (short) contrast;
+		this.vertexLookup = new short[j];
+		aLongArray10 = new long[j];
+		k = 0;
+		for (sortKey = 0; sortKey < model.vertexCount; sortKey++) {
+			offset = this.vertexOffsets[sortKey];
+			this.vertexOffsets[sortKey] = k;
+			k += offset;
 		}
-		this.vertexOffsets[model.vertexCount] = local125;
-		@Pc(426) int[] local426 = null;
-		@Pc(428) int[] local428 = null;
-		@Pc(430) int[] local430 = null;
-		@Pc(433) float[][] local433 = null;
-		@Pc(553) int local553;
-		@Pc(439) int local439;
-		@Pc(683) float local683;
-		@Pc(714) float local714;
-		@Pc(685) float local685;
+		this.vertexOffsets[model.vertexCount] = k;
+		@Pc(426) int[] centerX = null;
+		@Pc(428) int[] centerY = null;
+		@Pc(430) int[] centerZ = null;
+		@Pc(433) float[][] matrices = null;
+		@Pc(553) int vz;
+		@Pc(439) int n;
+		@Pc(683) float scaleU;
+		@Pc(714) float scaleW;
+		@Pc(685) float scaleV;
 		if (model.triangleTextureIndex != null) {
-			local439 = model.texturedCount;
-			@Pc(442) int[] local442 = new int[local439];
-			@Pc(445) int[] local445 = new int[local439];
-			@Pc(448) int[] local448 = new int[local439];
-			@Pc(451) int[] local451 = new int[local439];
-			@Pc(454) int[] local454 = new int[local439];
-			@Pc(457) int[] local457 = new int[local439];
-			@Pc(459) int local459;
-			for (local459 = 0; local459 < local439; local459++) {
-				local442[local459] = Integer.MAX_VALUE;
-				local445[local459] = -2147483647;
-				local448[local459] = Integer.MAX_VALUE;
-				local451[local459] = -2147483647;
-				local454[local459] = Integer.MAX_VALUE;
-				local457[local459] = -2147483647;
+			n = model.texturedCount;
+			@Pc(442) int[] minBoundsX = new int[n];
+			@Pc(445) int[] maxBoundsX = new int[n];
+			@Pc(448) int[] minBoundsY = new int[n];
+			@Pc(451) int[] maxBoundsY = new int[n];
+			@Pc(454) int[] minBoundsZ = new int[n];
+			@Pc(457) int[] maxBoundsZ = new int[n];
+			@Pc(459) int m;
+			for (m = 0; m < n; m++) {
+				minBoundsX[m] = Integer.MAX_VALUE;
+				maxBoundsX[m] = -2147483647;
+				minBoundsY[m] = Integer.MAX_VALUE;
+				maxBoundsY[m] = -2147483647;
+				minBoundsZ[m] = Integer.MAX_VALUE;
+				maxBoundsZ[m] = -2147483647;
 			}
-			for (local459 = 0; local459 < this.triangleCount; local459++) {
-				@Pc(498) int local498 = local23[local459];
-				if (model.triangleTextureIndex[local498] != -1) {
-					@Pc(511) int local511 = model.triangleTextureIndex[local498] & 0xFF;
-					for (@Pc(513) int local513 = 0; local513 < 3; local513++) {
-						@Pc(523) int local523;
-						if (local513 == 0) {
-							local523 = model.triangleVertexA[local498];
-						} else if (local513 == 1) {
-							local523 = model.triangleVertexB[local498];
+			for (m = 0; m < this.triangleCount; m++) {
+				@Pc(498) int origTriIdx = triOrder[m];
+				if (model.triangleTextureIndex[origTriIdx] != -1) {
+					@Pc(511) int texGroupIdx = model.triangleTextureIndex[origTriIdx] & 0xFF;
+					for (@Pc(513) int v = 0; v < 3; v++) {
+						@Pc(523) int vertIdx;
+						if (v == 0) {
+							vertIdx = model.triangleVertexA[origTriIdx];
+						} else if (v == 1) {
+							vertIdx = model.triangleVertexB[origTriIdx];
 						} else {
-							local523 = model.triangleVertexC[local498];
+							vertIdx = model.triangleVertexC[origTriIdx];
 						}
-						@Pc(543) int local543 = model.vertexX[local523];
-						@Pc(548) int local548 = model.vertexY[local523];
-						local553 = model.vertexZ[local523];
-						if (local543 < local442[local511]) {
-							local442[local511] = local543;
+						@Pc(543) int vx = model.vertexX[vertIdx];
+						@Pc(548) int vy = model.vertexY[vertIdx];
+						vz = model.vertexZ[vertIdx];
+						if (vx < minBoundsX[texGroupIdx]) {
+							minBoundsX[texGroupIdx] = vx;
 						}
-						if (local543 > local445[local511]) {
-							local445[local511] = local543;
+						if (vx > maxBoundsX[texGroupIdx]) {
+							maxBoundsX[texGroupIdx] = vx;
 						}
-						if (local548 < local448[local511]) {
-							local448[local511] = local548;
+						if (vy < minBoundsY[texGroupIdx]) {
+							minBoundsY[texGroupIdx] = vy;
 						}
-						if (local548 > local451[local511]) {
-							local451[local511] = local548;
+						if (vy > maxBoundsY[texGroupIdx]) {
+							maxBoundsY[texGroupIdx] = vy;
 						}
-						if (local553 < local454[local511]) {
-							local454[local511] = local553;
+						if (vz < minBoundsZ[texGroupIdx]) {
+							minBoundsZ[texGroupIdx] = vz;
 						}
-						if (local553 > local457[local511]) {
-							local457[local511] = local553;
+						if (vz > maxBoundsZ[texGroupIdx]) {
+							maxBoundsZ[texGroupIdx] = vz;
 						}
 					}
 				}
 			}
-			local426 = new int[local439];
-			local428 = new int[local439];
-			local430 = new int[local439];
-			local433 = new float[local439][];
-			for (local459 = 0; local459 < local439; local459++) {
-				@Pc(633) byte local633 = model.textureTypes[local459];
-				if (local633 > 0) {
-					local426[local459] = (local442[local459] + local445[local459]) / 2;
-					local428[local459] = (local448[local459] + local451[local459]) / 2;
-					local430[local459] = (local454[local459] + local457[local459]) / 2;
-					if (local633 == 1) {
-						@Pc(679) short local679 = model.texturesScaleX[local459];
-						if (local679 == 0) {
-							local683 = 1.0F;
-							local685 = 1.0F;
-						} else if (local679 > 0) {
-							local683 = 1.0F;
-							local685 = (float) local679 / 1024.0F;
+			centerX = new int[n];
+			centerY = new int[n];
+			centerZ = new int[n];
+			matrices = new float[n][];
+			for (m = 0; m < n; m++) {
+				@Pc(633) byte textureType = model.textureTypes[m];
+				if (textureType > 0) {
+					centerX[m] = (minBoundsX[m] + maxBoundsX[m]) / 2;
+					centerY[m] = (minBoundsY[m] + maxBoundsY[m]) / 2;
+					centerZ[m] = (minBoundsZ[m] + maxBoundsZ[m]) / 2;
+					if (textureType == 1) {
+						@Pc(679) short scaleXRaw = model.texturesScaleX[m];
+						if (scaleXRaw == 0) {
+							scaleU = 1.0F;
+							scaleV = 1.0F;
+						} else if (scaleXRaw > 0) {
+							scaleU = 1.0F;
+							scaleV = (float) scaleXRaw / 1024.0F;
 						} else {
-							local685 = 1.0F;
-							local683 = (float) -local679 / 1024.0F;
+							scaleV = 1.0F;
+							scaleU = (float) -scaleXRaw / 1024.0F;
 						}
-						local714 = 64.0F / (float) (model.texturesScaleY[local459] & 0xFFFF);
-					} else if (local633 == 2) {
-						local683 = 64.0F / (float) (model.texturesScaleX[local459] & 0xFFFF);
-						local714 = 64.0F / (float) (model.texturesScaleY[local459] & 0xFFFF);
-						local685 = 64.0F / (float) (model.texturesScaleZ[local459] & 0xFFFF);
+						scaleW = 64.0F / (float) (model.texturesScaleY[m] & 0xFFFF);
+					} else if (textureType == 2) {
+						scaleU = 64.0F / (float) (model.texturesScaleX[m] & 0xFFFF);
+						scaleW = 64.0F / (float) (model.texturesScaleY[m] & 0xFFFF);
+						scaleV = 64.0F / (float) (model.texturesScaleZ[m] & 0xFFFF);
 					} else {
-						local683 = (float) model.texturesScaleX[local459] / 1024.0F;
-						local714 = (float) model.texturesScaleY[local459] / 1024.0F;
-						local685 = (float) model.texturesScaleZ[local459] / 1024.0F;
+						scaleU = (float) model.texturesScaleX[m] / 1024.0F;
+						scaleW = (float) model.texturesScaleY[m] / 1024.0F;
+						scaleV = (float) model.texturesScaleZ[m] / 1024.0F;
 					}
-					local433[local459] = buildTextureTransformMatrix(model.textureFacesP[local459], model.textureFacesM[local459], model.textureFacesN[local459], model.textureRotationY[local459] & 0xFF, local683, local714, local685);
+					matrices[m] = buildTextureTransformMatrix(model.textureFacesP[m], model.textureFacesM[m], model.textureFacesN[m], model.textureRotationY[m] & 0xFF, scaleU, scaleW, scaleV);
 				}
 			}
 		}
-		@Pc(817) int local817;
-		@Pc(822) short local822;
-		for (local439 = 0; local439 < this.triangleCount; local439++) {
-			@Pc(810) int local810 = local23[local439];
-			local817 = model.triangleColors[local810] & 0xFFFF;
+		@Pc(817) int color;
+		@Pc(822) short tex;
+		for (n = 0; n < this.triangleCount; n++) {
+			@Pc(810) int origIdx = triOrder[n];
+			color = model.triangleColors[origIdx] & 0xFFFF;
 			if (model.triangleTextures == null) {
-				local822 = -1;
+				tex = -1;
 			} else {
-				local822 = model.triangleTextures[local810];
+				tex = model.triangleTextures[origIdx];
 			}
-			@Pc(833) int local833;
+			@Pc(833) int texIdx;
 			if (model.triangleTextureIndex == null) {
-				local833 = -1;
+				texIdx = -1;
 			} else {
-				local833 = model.triangleTextureIndex[local810];
+				texIdx = model.triangleTextureIndex[origIdx];
 			}
-			@Pc(844) int local844;
+			@Pc(844) int alpha;
 			if (model.triangleAlpha == null) {
-				local844 = 0;
+				alpha = 0;
 			} else {
-				local844 = model.triangleAlpha[local810] & 0xFF;
+				alpha = model.triangleAlpha[origIdx] & 0xFF;
 			}
-			@Pc(854) float local854 = 0.0F;
-			@Pc(856) float local856 = 0.0F;
-			@Pc(858) float local858 = 0.0F;
-			local683 = 0.0F;
-			local714 = 0.0F;
-			local685 = 0.0F;
-			@Pc(866) byte local866 = 0;
-			@Pc(868) byte local868 = 0;
-			local553 = 0;
-			@Pc(902) byte local902;
-			@Pc(919) int local919;
-			@Pc(1280) int local1280;
-			if (local822 != -1) {
-				if (local833 == -1) {
-					local854 = 0.0F;
-					local856 = 1.0F;
-					local858 = 1.0F;
-					local683 = 1.0F;
-					local866 = 1;
-					local714 = 0.0F;
-					local685 = 0.0F;
-					local868 = 2;
+			@Pc(854) float uA = 0.0F;
+			@Pc(856) float vA = 0.0F;
+			@Pc(858) float uB = 0.0F;
+			scaleU = 0.0F;
+			scaleW = 0.0F;
+			scaleV = 0.0F;
+			@Pc(866) byte wrapB = 0;
+			@Pc(868) byte wrapC = 0;
+			vz = 0;
+			@Pc(902) byte texType;
+			@Pc(919) int vertC;
+			@Pc(1280) int cy;
+			if (tex != -1) {
+				if (texIdx == -1) {
+					uA = 0.0F;
+					vA = 1.0F;
+					uB = 1.0F;
+					scaleU = 1.0F;
+					wrapB = 1;
+					scaleW = 0.0F;
+					scaleV = 0.0F;
+					wrapC = 2;
 				} else {
-					local833 &= 0xFF;
-					local902 = model.textureTypes[local833];
-					@Pc(909) int local909;
-					@Pc(914) int local914;
-					@Pc(952) float local952;
-					@Pc(960) float local960;
-					@Pc(968) float local968;
-					@Pc(1048) float local1048;
-					@Pc(1056) float local1056;
-					@Pc(1064) float local1064;
-					@Pc(1072) float local1072;
-					@Pc(1080) float local1080;
-					@Pc(1088) float local1088;
-					if (local902 == 0) {
-						local909 = model.triangleVertexA[local810];
-						local914 = model.triangleVertexB[local810];
-						local919 = model.triangleVertexC[local810];
-						@Pc(924) short local924 = model.textureFacesP[local833];
-						@Pc(929) short local929 = model.textureFacesM[local833];
-						@Pc(934) short local934 = model.textureFacesN[local833];
-						@Pc(940) float local940 = (float) model.vertexX[local924];
-						@Pc(946) float local946 = (float) model.vertexY[local924];
-						local952 = model.vertexZ[local924];
-						local960 = (float) model.vertexX[local929] - local940;
-						local968 = (float) model.vertexY[local929] - local946;
-						@Pc(976) float local976 = (float) model.vertexZ[local929] - local952;
-						@Pc(984) float local984 = (float) model.vertexX[local934] - local940;
-						@Pc(992) float local992 = (float) model.vertexY[local934] - local946;
-						@Pc(1000) float local1000 = (float) model.vertexZ[local934] - local952;
-						@Pc(1008) float local1008 = (float) model.vertexX[local909] - local940;
-						@Pc(1016) float local1016 = (float) model.vertexY[local909] - local946;
-						@Pc(1024) float local1024 = (float) model.vertexZ[local909] - local952;
-						@Pc(1032) float local1032 = (float) model.vertexX[local914] - local940;
-						@Pc(1040) float local1040 = (float) model.vertexY[local914] - local946;
-						local1048 = (float) model.vertexZ[local914] - local952;
-						local1056 = (float) model.vertexX[local919] - local940;
-						local1064 = (float) model.vertexY[local919] - local946;
-						local1072 = (float) model.vertexZ[local919] - local952;
-						local1080 = local968 * local1000 - local976 * local992;
-						local1088 = local976 * local984 - local960 * local1000;
-						@Pc(1096) float local1096 = local960 * local992 - local968 * local984;
-						@Pc(1104) float local1104 = local992 * local1096 - local1000 * local1088;
-						@Pc(1112) float local1112 = local1000 * local1080 - local984 * local1096;
-						@Pc(1120) float local1120 = local984 * local1088 - local992 * local1080;
-						@Pc(1134) float local1134 = 1.0F / (local1104 * local960 + local1112 * local968 + local1120 * local976);
-						local854 = (local1104 * local1008 + local1112 * local1016 + local1120 * local1024) * local1134;
-						local858 = (local1104 * local1032 + local1112 * local1040 + local1120 * local1048) * local1134;
-						local714 = (local1104 * local1056 + local1112 * local1064 + local1120 * local1072) * local1134;
-						@Pc(1184) float local1184 = local968 * local1096 - local976 * local1088;
-						@Pc(1192) float local1192 = local976 * local1080 - local960 * local1096;
-						@Pc(1200) float local1200 = local960 * local1088 - local968 * local1080;
-						@Pc(1214) float local1214 = 1.0F / (local1184 * local984 + local1192 * local992 + local1200 * local1000);
-						local856 = (local1184 * local1008 + local1192 * local1016 + local1200 * local1024) * local1214;
-						local683 = (local1184 * local1032 + local1192 * local1040 + local1200 * local1048) * local1214;
-						local685 = (local1184 * local1056 + local1192 * local1064 + local1200 * local1072) * local1214;
+					texIdx &= 0xFF;
+					texType = model.textureTypes[texIdx];
+					@Pc(909) int vertA;
+					@Pc(914) int vertB;
+					@Pc(952) float pz;
+					@Pc(960) float edgeAx;
+					@Pc(968) float edgeAy;
+					@Pc(1048) float dBz;
+					@Pc(1056) float dCx;
+					@Pc(1064) float dCy;
+					@Pc(1072) float dCz;
+					@Pc(1080) float crossX;
+					@Pc(1088) float crossY;
+					if (texType == 0) {
+						vertA = model.triangleVertexA[origIdx];
+						vertB = model.triangleVertexB[origIdx];
+						vertC = model.triangleVertexC[origIdx];
+						@Pc(924) short faceP = model.textureFacesP[texIdx];
+						@Pc(929) short faceM = model.textureFacesM[texIdx];
+						@Pc(934) short faceN = model.textureFacesN[texIdx];
+						@Pc(940) float px = (float) model.vertexX[faceP];
+						@Pc(946) float py = (float) model.vertexY[faceP];
+						pz = model.vertexZ[faceP];
+						edgeAx = (float) model.vertexX[faceM] - px;
+						edgeAy = (float) model.vertexY[faceM] - py;
+						@Pc(976) float edgeAz = (float) model.vertexZ[faceM] - pz;
+						@Pc(984) float edgeBx = (float) model.vertexX[faceN] - px;
+						@Pc(992) float edgeBy = (float) model.vertexY[faceN] - py;
+						@Pc(1000) float edgeBz = (float) model.vertexZ[faceN] - pz;
+						@Pc(1008) float dAx = (float) model.vertexX[vertA] - px;
+						@Pc(1016) float dAy = (float) model.vertexY[vertA] - py;
+						@Pc(1024) float dAz = (float) model.vertexZ[vertA] - pz;
+						@Pc(1032) float dBx = (float) model.vertexX[vertB] - px;
+						@Pc(1040) float dBy = (float) model.vertexY[vertB] - py;
+						dBz = (float) model.vertexZ[vertB] - pz;
+						dCx = (float) model.vertexX[vertC] - px;
+						dCy = (float) model.vertexY[vertC] - py;
+						dCz = (float) model.vertexZ[vertC] - pz;
+						crossX = edgeAy * edgeBz - edgeAz * edgeBy;
+						crossY = edgeAz * edgeBx - edgeAx * edgeBz;
+						@Pc(1096) float crossZ = edgeAx * edgeBy - edgeAy * edgeBx;
+						@Pc(1104) float invRowX = edgeBy * crossZ - edgeBz * crossY;
+						@Pc(1112) float invRowY = edgeBz * crossX - edgeBx * crossZ;
+						@Pc(1120) float invRowZ = edgeBx * crossY - edgeBy * crossX;
+						@Pc(1134) float invDet = 1.0F / (invRowX * edgeAx + invRowY * edgeAy + invRowZ * edgeAz);
+						uA = (invRowX * dAx + invRowY * dAy + invRowZ * dAz) * invDet;
+						uB = (invRowX * dBx + invRowY * dBy + invRowZ * dBz) * invDet;
+						scaleW = (invRowX * dCx + invRowY * dCy + invRowZ * dCz) * invDet;
+						@Pc(1184) float invRow2X = edgeAy * crossZ - edgeAz * crossY;
+						@Pc(1192) float invRow2Y = edgeAz * crossX - edgeAx * crossZ;
+						@Pc(1200) float invRow2Z = edgeAx * crossY - edgeAy * crossX;
+						@Pc(1214) float invDet2 = 1.0F / (invRow2X * edgeBx + invRow2Y * edgeBy + invRow2Z * edgeBz);
+						vA = (invRow2X * dAx + invRow2Y * dAy + invRow2Z * dAz) * invDet2;
+						scaleU = (invRow2X * dBx + invRow2Y * dBy + invRow2Z * dBz) * invDet2;
+						scaleV = (invRow2X * dCx + invRow2Y * dCy + invRow2Z * dCz) * invDet2;
 					} else {
-						local909 = model.triangleVertexA[local810];
-						local914 = model.triangleVertexB[local810];
-						local919 = model.triangleVertexC[local810];
-						@Pc(1276) int local1276 = local426[local833];
-						local1280 = local428[local833];
-						@Pc(1284) int local1284 = local430[local833];
-						@Pc(1288) float[] local1288 = local433[local833];
-						@Pc(1293) byte local1293 = model.textureDirection[local833];
-						local952 = (float) model.textureSpeed[local833] / 256.0F;
-						if (local902 == 1) {
-							local960 = (float) (model.texturesScaleZ[local833] & 0xFFFF) / 1024.0F;
-							calculateCylindricalUV(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local1288, local960, local1293, local952);
-							local854 = cylindricalU;
-							local856 = cylindricalV;
-							calculateCylindricalUV(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local1288, local960, local1293, local952);
-							local858 = cylindricalU;
-							local683 = cylindricalV;
-							calculateCylindricalUV(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local1288, local960, local1293, local952);
-							local714 = cylindricalU;
-							local685 = cylindricalV;
-							local968 = local960 / 2.0F;
-							if ((local1293 & 0x1) == 0) {
-								if (local858 - local854 > local968) {
-									local858 -= local960;
-									local866 = 1;
-								} else if (local854 - local858 > local968) {
-									local858 += local960;
-									local866 = 2;
+						vertA = model.triangleVertexA[origIdx];
+						vertB = model.triangleVertexB[origIdx];
+						vertC = model.triangleVertexC[origIdx];
+						@Pc(1276) int cx = centerX[texIdx];
+						cy = centerY[texIdx];
+						@Pc(1284) int cz = centerZ[texIdx];
+						@Pc(1288) float[] matrix = matrices[texIdx];
+						@Pc(1293) byte direction = model.textureDirection[texIdx];
+						pz = (float) model.textureSpeed[texIdx] / 256.0F;
+						if (texType == 1) {
+							edgeAx = (float) (model.texturesScaleZ[texIdx] & 0xFFFF) / 1024.0F;
+							calculateCylindricalUV(model.vertexX[vertA], model.vertexY[vertA], model.vertexZ[vertA], cx, cy, cz, matrix, edgeAx, direction, pz);
+							uA = cylindricalU;
+							vA = cylindricalV;
+							calculateCylindricalUV(model.vertexX[vertB], model.vertexY[vertB], model.vertexZ[vertB], cx, cy, cz, matrix, edgeAx, direction, pz);
+							uB = cylindricalU;
+							scaleU = cylindricalV;
+							calculateCylindricalUV(model.vertexX[vertC], model.vertexY[vertC], model.vertexZ[vertC], cx, cy, cz, matrix, edgeAx, direction, pz);
+							scaleW = cylindricalU;
+							scaleV = cylindricalV;
+							edgeAy = edgeAx / 2.0F;
+							if ((direction & 0x1) == 0) {
+								if (uB - uA > edgeAy) {
+									uB -= edgeAx;
+									wrapB = 1;
+								} else if (uA - uB > edgeAy) {
+									uB += edgeAx;
+									wrapB = 2;
 								}
-								if (local714 - local854 > local968) {
-									local714 -= local960;
-									local868 = 1;
-								} else if (local854 - local714 > local968) {
-									local714 += local960;
-									local868 = 2;
+								if (scaleW - uA > edgeAy) {
+									scaleW -= edgeAx;
+									wrapC = 1;
+								} else if (uA - scaleW > edgeAy) {
+									scaleW += edgeAx;
+									wrapC = 2;
 								}
 							} else {
-								if (local683 - local856 > local968) {
-									local683 -= local960;
-									local866 = 1;
-								} else if (local856 - local683 > local968) {
-									local683 += local960;
-									local866 = 2;
+								if (scaleU - vA > edgeAy) {
+									scaleU -= edgeAx;
+									wrapB = 1;
+								} else if (vA - scaleU > edgeAy) {
+									scaleU += edgeAx;
+									wrapB = 2;
 								}
-								if (local685 - local856 > local968) {
-									local685 -= local960;
-									local868 = 1;
-								} else if (local856 - local685 > local968) {
-									local685 += local960;
-									local868 = 2;
+								if (scaleV - vA > edgeAy) {
+									scaleV -= edgeAx;
+									wrapC = 1;
+								} else if (vA - scaleV > edgeAy) {
+									scaleV += edgeAx;
+									wrapC = 2;
 								}
 							}
-						} else if (local902 == 2) {
-							local960 = (float) model.textureTransU[local833] / 256.0F;
-							local968 = (float) model.textureTransV[local833] / 256.0F;
-							@Pc(1525) int local1525 = model.vertexX[local914] - model.vertexX[local909];
-							@Pc(1535) int local1535 = model.vertexY[local914] - model.vertexY[local909];
-							@Pc(1545) int local1545 = model.vertexZ[local914] - model.vertexZ[local909];
-							@Pc(1555) int local1555 = model.vertexX[local919] - model.vertexX[local909];
-							@Pc(1565) int local1565 = model.vertexY[local919] - model.vertexY[local909];
-							@Pc(1575) int local1575 = model.vertexZ[local919] - model.vertexZ[local909];
-							@Pc(1583) int local1583 = local1535 * local1575 - local1565 * local1545;
-							@Pc(1591) int local1591 = local1545 * local1555 - local1575 * local1525;
-							@Pc(1599) int local1599 = local1525 * local1565 - local1555 * local1535;
-							local1048 = 64.0F / (float) (model.texturesScaleX[local833] & 0xFFFF);
-							local1056 = 64.0F / (float) (model.texturesScaleY[local833] & 0xFFFF);
-							local1064 = 64.0F / (float) (model.texturesScaleZ[local833] & 0xFFFF);
-							local1072 = ((float) local1583 * local1288[0] + (float) local1591 * local1288[1] + (float) local1599 * local1288[2]) / local1048;
-							local1080 = ((float) local1583 * local1288[3] + (float) local1591 * local1288[4] + (float) local1599 * local1288[5]) / local1056;
-							local1088 = ((float) local1583 * local1288[6] + (float) local1591 * local1288[7] + (float) local1599 * local1288[8]) / local1064;
-							local553 = getDominantAxis(local1072, local1080, local1088);
-							calculatePlanarUV(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
-							local854 = planarU;
-							local856 = planarV;
-							calculatePlanarUV(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
-							local858 = planarU;
-							local683 = planarV;
-							calculatePlanarUV(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local553, local1288, local1293, local952, local960, local968);
-							local714 = planarU;
-							local685 = planarV;
-						} else if (local902 == 3) {
-							calculateSphericalUV(model.vertexX[local909], model.vertexY[local909], model.vertexZ[local909], local1276, local1280, local1284, local1288, local1293, local952);
-							local854 = sphericalU;
-							local856 = sphericalV;
-							calculateSphericalUV(model.vertexX[local914], model.vertexY[local914], model.vertexZ[local914], local1276, local1280, local1284, local1288, local1293, local952);
-							local858 = sphericalU;
-							local683 = sphericalV;
-							calculateSphericalUV(model.vertexX[local919], model.vertexY[local919], model.vertexZ[local919], local1276, local1280, local1284, local1288, local1293, local952);
-							local714 = sphericalU;
-							local685 = sphericalV;
-							if ((local1293 & 0x1) == 0) {
-								if (local858 - local854 > 0.5F) {
-									local858--;
-									local866 = 1;
-								} else if (local854 - local858 > 0.5F) {
-									local858++;
-									local866 = 2;
+						} else if (texType == 2) {
+							edgeAx = (float) model.textureTransU[texIdx] / 256.0F;
+							edgeAy = (float) model.textureTransV[texIdx] / 256.0F;
+							@Pc(1525) int abx = model.vertexX[vertB] - model.vertexX[vertA];
+							@Pc(1535) int aby = model.vertexY[vertB] - model.vertexY[vertA];
+							@Pc(1545) int abz = model.vertexZ[vertB] - model.vertexZ[vertA];
+							@Pc(1555) int acx = model.vertexX[vertC] - model.vertexX[vertA];
+							@Pc(1565) int acy = model.vertexY[vertC] - model.vertexY[vertA];
+							@Pc(1575) int acz = model.vertexZ[vertC] - model.vertexZ[vertA];
+							@Pc(1583) int normalX = aby * acz - acy * abz;
+							@Pc(1591) int normalY = abz * acx - acz * abx;
+							@Pc(1599) int normalZ = abx * acy - acx * aby;
+							dBz = 64.0F / (float) (model.texturesScaleX[texIdx] & 0xFFFF);
+							dCx = 64.0F / (float) (model.texturesScaleY[texIdx] & 0xFFFF);
+							dCy = 64.0F / (float) (model.texturesScaleZ[texIdx] & 0xFFFF);
+							dCz = ((float) normalX * matrix[0] + (float) normalY * matrix[1] + (float) normalZ * matrix[2]) / dBz;
+							crossX = ((float) normalX * matrix[3] + (float) normalY * matrix[4] + (float) normalZ * matrix[5]) / dCx;
+							crossY = ((float) normalX * matrix[6] + (float) normalY * matrix[7] + (float) normalZ * matrix[8]) / dCy;
+							vz = getDominantAxis(dCz, crossX, crossY);
+							calculatePlanarUV(model.vertexX[vertA], model.vertexY[vertA], model.vertexZ[vertA], cx, cy, cz, vz, matrix, direction, pz, edgeAx, edgeAy);
+							uA = planarU;
+							vA = planarV;
+							calculatePlanarUV(model.vertexX[vertB], model.vertexY[vertB], model.vertexZ[vertB], cx, cy, cz, vz, matrix, direction, pz, edgeAx, edgeAy);
+							uB = planarU;
+							scaleU = planarV;
+							calculatePlanarUV(model.vertexX[vertC], model.vertexY[vertC], model.vertexZ[vertC], cx, cy, cz, vz, matrix, direction, pz, edgeAx, edgeAy);
+							scaleW = planarU;
+							scaleV = planarV;
+						} else if (texType == 3) {
+							calculateSphericalUV(model.vertexX[vertA], model.vertexY[vertA], model.vertexZ[vertA], cx, cy, cz, matrix, direction, pz);
+							uA = sphericalU;
+							vA = sphericalV;
+							calculateSphericalUV(model.vertexX[vertB], model.vertexY[vertB], model.vertexZ[vertB], cx, cy, cz, matrix, direction, pz);
+							uB = sphericalU;
+							scaleU = sphericalV;
+							calculateSphericalUV(model.vertexX[vertC], model.vertexY[vertC], model.vertexZ[vertC], cx, cy, cz, matrix, direction, pz);
+							scaleW = sphericalU;
+							scaleV = sphericalV;
+							if ((direction & 0x1) == 0) {
+								if (uB - uA > 0.5F) {
+									uB--;
+									wrapB = 1;
+								} else if (uA - uB > 0.5F) {
+									uB++;
+									wrapB = 2;
 								}
-								if (local714 - local854 > 0.5F) {
-									local714--;
-									local868 = 1;
-								} else if (local854 - local714 > 0.5F) {
-									local714++;
-									local868 = 2;
+								if (scaleW - uA > 0.5F) {
+									scaleW--;
+									wrapC = 1;
+								} else if (uA - scaleW > 0.5F) {
+									scaleW++;
+									wrapC = 2;
 								}
 							} else {
-								if (local683 - local856 > 0.5F) {
-									local683--;
-									local866 = 1;
-								} else if (local856 - local683 > 0.5F) {
-									local683++;
-									local866 = 2;
+								if (scaleU - vA > 0.5F) {
+									scaleU--;
+									wrapB = 1;
+								} else if (vA - scaleU > 0.5F) {
+									scaleU++;
+									wrapB = 2;
 								}
-								if (local685 - local856 > 0.5F) {
-									local685--;
-									local868 = 1;
-								} else if (local856 - local685 > 0.5F) {
-									local685++;
-									local868 = 2;
+								if (scaleV - vA > 0.5F) {
+									scaleV--;
+									wrapC = 1;
+								} else if (vA - scaleV > 0.5F) {
+									scaleV++;
+									wrapC = 2;
 								}
 							}
 						}
@@ -621,64 +621,64 @@ public final class GlModel extends Model {
 			}
 			model.calculateNormals();
 			if (model.triangleInfo == null) {
-				local902 = 0;
+				texType = 0;
 			} else {
-				local902 = model.triangleInfo[local810];
+				texType = model.triangleInfo[origIdx];
 			}
-			if (local902 == 0) {
-				@Pc(1994) long local1994 = (long) (local833 << 2) + ((long) (local553 << 24) + (long) (local817 << 8) + (long) local844 << 32);
-				local919 = model.triangleVertexA[local810];
-				@Pc(2004) VertexNormal local2004 = model.vertexNormals[local919];
-				this.triangleVertexA[local439] = this.findOrCreateVertex(model, local919, local1994, local2004.x, local2004.y, local2004.z, local2004.magnitude, local854, local856);
-				local1280 = model.triangleVertexB[local810];
-				@Pc(2033) VertexNormal local2033 = model.vertexNormals[local1280];
-				this.triangleVertexB[local439] = this.findOrCreateVertex(model, local1280, local1994 + (long) local866, local2033.x, local2033.y, local2033.z, local2033.magnitude, local858, local683);
-				@Pc(2060) int local2060 = model.triangleVertexC[local810];
-				@Pc(2065) VertexNormal local2065 = model.vertexNormals[local2060];
-				this.triangleVertexC[local439] = this.findOrCreateVertex(model, local2060, local1994 + (long) local868, local2065.x, local2065.y, local2065.z, local2065.magnitude, local714, local685);
-			} else if (local902 == 1) {
-				@Pc(2096) TriangleNormal local2096 = model.triangleNormals[local810];
-				@Pc(2137) long local2137 = (long) ((local833 << 2) + (local2096.x > 0 ? 1024 : 2048) + (local2096.y + 256 << 12) + (local2096.z + 256 << 22)) + ((long) (local553 << 24) + (long) (local817 << 8) + (long) local844 << 32);
-				this.triangleVertexA[local439] = this.findOrCreateVertex(model, model.triangleVertexA[local810], local2137, local2096.x, local2096.y, local2096.z, 0, local854, local856);
-				this.triangleVertexB[local439] = this.findOrCreateVertex(model, model.triangleVertexB[local810], local2137 + (long) local866, local2096.x, local2096.y, local2096.z, 0, local858, local683);
-				this.triangleVertexC[local439] = this.findOrCreateVertex(model, model.triangleVertexC[local810], local2137 + (long) local868, local2096.x, local2096.y, local2096.z, 0, local714, local685);
+			if (texType == 0) {
+				@Pc(1994) long normalKey = (long) (texIdx << 2) + ((long) (vz << 24) + (long) (color << 8) + (long) alpha << 32);
+				vertC = model.triangleVertexA[origIdx];
+				@Pc(2004) VertexNormal normalA = model.vertexNormals[vertC];
+				this.triangleVertexA[n] = this.findOrCreateVertex(model, vertC, normalKey, normalA.x, normalA.y, normalA.z, normalA.magnitude, uA, vA);
+				cy = model.triangleVertexB[origIdx];
+				@Pc(2033) VertexNormal normalB = model.vertexNormals[cy];
+				this.triangleVertexB[n] = this.findOrCreateVertex(model, cy, normalKey + (long) wrapB, normalB.x, normalB.y, normalB.z, normalB.magnitude, uB, scaleU);
+				@Pc(2060) int vertIdxC = model.triangleVertexC[origIdx];
+				@Pc(2065) VertexNormal normalC = model.vertexNormals[vertIdxC];
+				this.triangleVertexC[n] = this.findOrCreateVertex(model, vertIdxC, normalKey + (long) wrapC, normalC.x, normalC.y, normalC.z, normalC.magnitude, scaleW, scaleV);
+			} else if (texType == 1) {
+				@Pc(2096) TriangleNormal triNormal = model.triangleNormals[origIdx];
+				@Pc(2137) long flatKey = (long) ((texIdx << 2) + (triNormal.x > 0 ? 1024 : 2048) + (triNormal.y + 256 << 12) + (triNormal.z + 256 << 22)) + ((long) (vz << 24) + (long) (color << 8) + (long) alpha << 32);
+				this.triangleVertexA[n] = this.findOrCreateVertex(model, model.triangleVertexA[origIdx], flatKey, triNormal.x, triNormal.y, triNormal.z, 0, uA, vA);
+				this.triangleVertexB[n] = this.findOrCreateVertex(model, model.triangleVertexB[origIdx], flatKey + (long) wrapB, triNormal.x, triNormal.y, triNormal.z, 0, uB, scaleU);
+				this.triangleVertexC[n] = this.findOrCreateVertex(model, model.triangleVertexC[origIdx], flatKey + (long) wrapC, triNormal.x, triNormal.y, triNormal.z, 0, scaleW, scaleV);
 			}
 			if (model.triangleTextures == null) {
-				this.triangleTextures[local439] = -1;
+				this.triangleTextures[n] = -1;
 			} else {
-				this.triangleTextures[local439] = model.triangleTextures[local810];
+				this.triangleTextures[n] = model.triangleTextures[origIdx];
 			}
 			if (this.triangleBones != null) {
-				this.triangleBones[local439] = (byte) model.triangleBones[local810];
+				this.triangleBones[n] = (byte) model.triangleBones[origIdx];
 			}
-			this.triangleColors[local439] = model.triangleColors[local810];
+			this.triangleColors[n] = model.triangleColors[origIdx];
 			if (model.triangleAlpha != null) {
-				this.triangleAlpha[local439] = model.triangleAlpha[local810];
+				this.triangleAlpha[n] = model.triangleAlpha[origIdx];
 			}
 			if (model.triangleSources != null) {
-				this.triangleSources[local439] = model.triangleSources[local810];
+				this.triangleSources[n] = model.triangleSources[origIdx];
 			}
 		}
-		local439 = 0;
-		@Pc(2271) short local2271 = -10000;
-		for (local817 = 0; local817 < this.triangleCount; local817++) {
-			local822 = this.triangleTextures[local817];
-			if (local822 != local2271) {
-				local439++;
-				local2271 = local822;
+		n = 0;
+		@Pc(2271) short lastTexture = -10000;
+		for (color = 0; color < this.triangleCount; color++) {
+			tex = this.triangleTextures[color];
+			if (tex != lastTexture) {
+				n++;
+				lastTexture = tex;
 			}
 		}
-		this.textureGroupOffsets = new int[local439 + 1];
-		local439 = 0;
-		local2271 = -10000;
-		for (local817 = 0; local817 < this.triangleCount; local817++) {
-			local822 = this.triangleTextures[local817];
-			if (local822 != local2271) {
-				this.textureGroupOffsets[local439++] = local817;
-				local2271 = local822;
+		this.textureGroupOffsets = new int[n + 1];
+		n = 0;
+		lastTexture = -10000;
+		for (color = 0; color < this.triangleCount; color++) {
+			tex = this.triangleTextures[color];
+			if (tex != lastTexture) {
+				this.textureGroupOffsets[n++] = color;
+				lastTexture = tex;
 			}
 		}
-		this.textureGroupOffsets[local439] = this.triangleCount;
+		this.textureGroupOffsets[n] = this.triangleCount;
 		aLongArray10 = null;
 		this.normalX = ArrayUtils.copyOf(this.normalX, this.uniqueVertexCount);
 		this.normalY = ArrayUtils.copyOf(this.normalY, this.uniqueVertexCount);
@@ -689,15 +689,15 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(FFF)I")
-	public static int getDominantAxis(@OriginalArg(0) float arg0, @OriginalArg(1) float arg1, @OriginalArg(2) float arg2) {
-		@Pc(8) float local8 = arg0 < 0.0F ? -arg0 : arg0;
-		@Pc(17) float local17 = arg1 < 0.0F ? -arg1 : arg1;
-		@Pc(26) float local26 = arg2 < 0.0F ? -arg2 : arg2;
-		if (local17 > local8 && local17 > local26) {
-			return arg1 > 0.0F ? 0 : 1;
-		} else if (local26 > local8 && local26 > local17) {
-			return arg2 > 0.0F ? 2 : 3;
-		} else if (arg0 > 0.0F) {
+	public static int getDominantAxis(@OriginalArg(0) float x, @OriginalArg(1) float y, @OriginalArg(2) float z) {
+		@Pc(8) float absX = x < 0.0F ? -x : x;
+		@Pc(17) float absY = y < 0.0F ? -y : y;
+		@Pc(26) float absZ = z < 0.0F ? -z : z;
+		if (absY > absX && absY > absZ) {
+			return y > 0.0F ? 0 : 1;
+		} else if (absZ > absX && absZ > absY) {
+			return z > 0.0F ? 2 : 3;
+		} else if (x > 0.0F) {
 			return 4;
 		} else {
 			return 5;
@@ -705,210 +705,210 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIII[FFIF)V")
-	public static void calculateCylindricalUV(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) float[] arg6, @OriginalArg(7) float arg7, @OriginalArg(8) int arg8, @OriginalArg(9) float arg9) {
-		@Pc(3) int local3 = arg0 - arg3;
-		@Pc(7) int local7 = arg1 - arg4;
-		@Pc(11) int local11 = arg2 - arg5;
-		@Pc(32) float local32 = (float) local3 * arg6[0] + (float) local7 * arg6[1] + (float) local11 * arg6[2];
-		@Pc(53) float local53 = (float) local3 * arg6[3] + (float) local7 * arg6[4] + (float) local11 * arg6[5];
-		@Pc(74) float local74 = (float) local3 * arg6[6] + (float) local7 * arg6[7] + (float) local11 * arg6[8];
-		@Pc(85) float local85 = (float) Math.atan2(local32, local74) / 6.2831855F + 0.5F;
-		if (arg7 != 1.0F) {
-			local85 *= arg7;
+	public static void calculateCylindricalUV(@OriginalArg(0) int vx, @OriginalArg(1) int vy, @OriginalArg(2) int vz, @OriginalArg(3) int cx, @OriginalArg(4) int cy, @OriginalArg(5) int cz, @OriginalArg(6) float[] matrix, @OriginalArg(7) float scale, @OriginalArg(8) int direction, @OriginalArg(9) float speed) {
+		@Pc(3) int dx = vx - cx;
+		@Pc(7) int dy = vy - cy;
+		@Pc(11) int dz = vz - cz;
+		@Pc(32) float tx = (float) dx * matrix[0] + (float) dy * matrix[1] + (float) dz * matrix[2];
+		@Pc(53) float ty = (float) dx * matrix[3] + (float) dy * matrix[4] + (float) dz * matrix[5];
+		@Pc(74) float tz = (float) dx * matrix[6] + (float) dy * matrix[7] + (float) dz * matrix[8];
+		@Pc(85) float u = (float) Math.atan2(tx, tz) / 6.2831855F + 0.5F;
+		if (scale != 1.0F) {
+			u *= scale;
 		}
-		@Pc(99) float local99 = local53 + arg9 + 0.5F;
-		@Pc(104) float local104;
-		if (arg8 == 1) {
-			local104 = local85;
-			local85 = -local99;
-			local99 = local104;
-		} else if (arg8 == 2) {
-			local85 = -local85;
-			local99 = -local99;
-		} else if (arg8 == 3) {
-			local104 = local85;
-			local85 = local99;
-			local99 = -local104;
+		@Pc(99) float v = ty + speed + 0.5F;
+		@Pc(104) float temp;
+		if (direction == 1) {
+			temp = u;
+			u = -v;
+			v = temp;
+		} else if (direction == 2) {
+			u = -u;
+			v = -v;
+		} else if (direction == 3) {
+			temp = u;
+			u = v;
+			v = -temp;
 		}
-		cylindricalU = local85;
-		cylindricalV = local99;
+		cylindricalU = u;
+		cylindricalV = v;
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ISIB)I")
-	public static int packColorToRGBA(@OriginalArg(0) int arg0, @OriginalArg(1) short arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
-		@Pc(5) int local5 = Rasteriser.palette[ColorUtils.multiplyLightness2(arg0, arg2)];
-		if (arg1 != -1) {
-			@Pc(15) int local15 = Rasteriser.textureProvider.getTextureBrightness(arg1 & 0xFFFF);
-			@Pc(21) int local21;
-			@Pc(44) int local44;
-			if (local15 != 0) {
-				if (arg2 < 0) {
-					local21 = 0;
-				} else if (arg2 > 127) {
-					local21 = 16777215;
+	public static int packColorToRGBA(@OriginalArg(0) int color, @OriginalArg(1) short texture, @OriginalArg(2) int lightness, @OriginalArg(3) byte alpha) {
+		@Pc(5) int rgb = Rasteriser.palette[ColorUtils.multiplyLightness2(color, lightness)];
+		if (texture != -1) {
+			@Pc(15) int brightness = Rasteriser.textureProvider.getTextureBrightness(texture & 0xFFFF);
+			@Pc(21) int white;
+			@Pc(44) int blended;
+			if (brightness != 0) {
+				if (lightness < 0) {
+					white = 0;
+				} else if (lightness > 127) {
+					white = 16777215;
 				} else {
-					local21 = arg2 * 131586;
+					white = lightness * 131586;
 				}
-				if (local15 == 256) {
-					local5 = local21;
+				if (brightness == 256) {
+					rgb = white;
 				} else {
-					local44 = 256 - local15;
-					local5 = ((local21 & 0xFF00FF) * local15 + (local5 & 0xFF00FF) * local44 & 0xFF00FF00) + ((local21 & 0xFF00) * local15 + (local5 & 0xFF00) * local44 & 0xFF0000) >> 8;
+					blended = 256 - brightness;
+					rgb = ((white & 0xFF00FF) * brightness + (rgb & 0xFF00FF) * blended & 0xFF00FF00) + ((white & 0xFF00) * brightness + (rgb & 0xFF00) * blended & 0xFF0000) >> 8;
 				}
 			}
-			local21 = Rasteriser.textureProvider.getTextureSpeed(arg1 & 0xFFFF);
-			if (local21 != 0) {
-				local21 += 256;
-				@Pc(92) int local92 = (local5 >> 16 & 0xFF) * local21;
-				if (local92 > 65535) {
-					local92 = 65535;
+			white = Rasteriser.textureProvider.getTextureSpeed(texture & 0xFFFF);
+			if (white != 0) {
+				white += 256;
+				@Pc(92) int red = (rgb >> 16 & 0xFF) * white;
+				if (red > 65535) {
+					red = 65535;
 				}
-				local44 = (local5 >> 8 & 0xFF) * local21;
-				if (local44 > 65535) {
-					local44 = 65535;
+				blended = (rgb >> 8 & 0xFF) * white;
+				if (blended > 65535) {
+					blended = 65535;
 				}
-				@Pc(116) int local116 = (local5 & 0xFF) * local21;
-				if (local116 > 65535) {
-					local116 = 65535;
+				@Pc(116) int blue = (rgb & 0xFF) * white;
+				if (blue > 65535) {
+					blue = 65535;
 				}
-				local5 = ((local92 & 0xFF00) << 8) + (local44 & 0xFF00) + (local116 >> 8);
+				rgb = ((red & 0xFF00) << 8) + (blended & 0xFF00) + (blue >> 8);
 			}
 		}
-		return (local5 << 8) + (255 - (arg3 & 0xFF));
+		return (rgb << 8) + (255 - (alpha & 0xFF));
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIFFF)[F")
-	public static float[] buildTextureTransformMatrix(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) float arg4, @OriginalArg(5) float arg5, @OriginalArg(6) float arg6) {
-		@Pc(2) float[] local2 = new float[9];
-		@Pc(5) float[] local5 = new float[9];
-		@Pc(13) float local13 = (float) Math.cos((float) arg3 * 0.024543693F);
-		@Pc(21) float local21 = (float) Math.sin((float) arg3 * 0.024543693F);
-		local2[0] = local13;
-		local2[1] = 0.0F;
-		local2[2] = local21;
-		local2[3] = 0.0F;
-		local2[4] = 1.0F;
-		local2[5] = 0.0F;
-		local2[6] = -local21;
-		local2[7] = 0.0F;
-		local2[8] = local13;
-		@Pc(65) float[] local65 = new float[9];
-		@Pc(67) float local67 = 1.0F;
-		@Pc(69) float local69 = 0.0F;
-		@Pc(74) float local74 = (float) arg1 / 32767.0F;
-		@Pc(84) float local84 = -((float) Math.sqrt(1.0F - local74 * local74));
-		@Pc(88) float local88 = 1.0F - local74;
-		@Pc(99) float local99 = (float) Math.sqrt(arg0 * arg0 + arg2 * arg2);
-		if (local99 == 0.0F && local74 == 0.0F) {
-			local5 = local2;
+	public static float[] buildTextureTransformMatrix(@OriginalArg(0) int faceP, @OriginalArg(1) int faceM, @OriginalArg(2) int faceN, @OriginalArg(3) int rotation, @OriginalArg(4) float scaleX, @OriginalArg(5) float scaleY, @OriginalArg(6) float scaleZ) {
+		@Pc(2) float[] yawMatrix = new float[9];
+		@Pc(5) float[] result = new float[9];
+		@Pc(13) float cos = (float) Math.cos((float) rotation * 0.024543693F);
+		@Pc(21) float sin = (float) Math.sin((float) rotation * 0.024543693F);
+		yawMatrix[0] = cos;
+		yawMatrix[1] = 0.0F;
+		yawMatrix[2] = sin;
+		yawMatrix[3] = 0.0F;
+		yawMatrix[4] = 1.0F;
+		yawMatrix[5] = 0.0F;
+		yawMatrix[6] = -sin;
+		yawMatrix[7] = 0.0F;
+		yawMatrix[8] = cos;
+		@Pc(65) float[] tiltMatrix = new float[9];
+		@Pc(67) float nz = 1.0F;
+		@Pc(69) float nx = 0.0F;
+		@Pc(74) float ny = (float) faceM / 32767.0F;
+		@Pc(84) float sinTilt = -((float) Math.sqrt(1.0F - ny * ny));
+		@Pc(88) float oneMinusCos = 1.0F - ny;
+		@Pc(99) float magnitude = (float) Math.sqrt(faceP * faceP + faceN * faceN);
+		if (magnitude == 0.0F && ny == 0.0F) {
+			result = yawMatrix;
 		} else {
-			if (local99 != 0.0F) {
-				local67 = (float) -arg2 / local99;
-				local69 = (float) arg0 / local99;
+			if (magnitude != 0.0F) {
+				nz = (float) -faceN / magnitude;
+				nx = (float) faceP / magnitude;
 			}
-			local65[0] = local74 + local67 * local67 * local88;
-			local65[1] = local69 * local84;
-			local65[2] = local69 * local67 * local88;
-			local65[3] = -local69 * local84;
-			local65[4] = local74;
-			local65[5] = local67 * local84;
-			local65[6] = local67 * local69 * local88;
-			local65[7] = -local67 * local84;
-			local65[8] = local74 + local69 * local69 * local88;
-			local5[0] = local2[0] * local65[0] + local2[1] * local65[3] + local2[2] * local65[6];
-			local5[1] = local2[0] * local65[1] + local2[1] * local65[4] + local2[2] * local65[7];
-			local5[2] = local2[0] * local65[2] + local2[1] * local65[5] + local2[2] * local65[8];
-			local5[3] = local2[3] * local65[0] + local2[4] * local65[3] + local2[5] * local65[6];
-			local5[4] = local2[3] * local65[1] + local2[4] * local65[4] + local2[5] * local65[7];
-			local5[5] = local2[3] * local65[2] + local2[4] * local65[5] + local2[5] * local65[8];
-			local5[6] = local2[6] * local65[0] + local2[7] * local65[3] + local2[8] * local65[6];
-			local5[7] = local2[6] * local65[1] + local2[7] * local65[4] + local2[8] * local65[7];
-			local5[8] = local2[6] * local65[2] + local2[7] * local65[5] + local2[8] * local65[8];
+			tiltMatrix[0] = ny + nz * nz * oneMinusCos;
+			tiltMatrix[1] = nx * sinTilt;
+			tiltMatrix[2] = nx * nz * oneMinusCos;
+			tiltMatrix[3] = -nx * sinTilt;
+			tiltMatrix[4] = ny;
+			tiltMatrix[5] = nz * sinTilt;
+			tiltMatrix[6] = nz * nx * oneMinusCos;
+			tiltMatrix[7] = -nz * sinTilt;
+			tiltMatrix[8] = ny + nx * nx * oneMinusCos;
+			result[0] = yawMatrix[0] * tiltMatrix[0] + yawMatrix[1] * tiltMatrix[3] + yawMatrix[2] * tiltMatrix[6];
+			result[1] = yawMatrix[0] * tiltMatrix[1] + yawMatrix[1] * tiltMatrix[4] + yawMatrix[2] * tiltMatrix[7];
+			result[2] = yawMatrix[0] * tiltMatrix[2] + yawMatrix[1] * tiltMatrix[5] + yawMatrix[2] * tiltMatrix[8];
+			result[3] = yawMatrix[3] * tiltMatrix[0] + yawMatrix[4] * tiltMatrix[3] + yawMatrix[5] * tiltMatrix[6];
+			result[4] = yawMatrix[3] * tiltMatrix[1] + yawMatrix[4] * tiltMatrix[4] + yawMatrix[5] * tiltMatrix[7];
+			result[5] = yawMatrix[3] * tiltMatrix[2] + yawMatrix[4] * tiltMatrix[5] + yawMatrix[5] * tiltMatrix[8];
+			result[6] = yawMatrix[6] * tiltMatrix[0] + yawMatrix[7] * tiltMatrix[3] + yawMatrix[8] * tiltMatrix[6];
+			result[7] = yawMatrix[6] * tiltMatrix[1] + yawMatrix[7] * tiltMatrix[4] + yawMatrix[8] * tiltMatrix[7];
+			result[8] = yawMatrix[6] * tiltMatrix[2] + yawMatrix[7] * tiltMatrix[5] + yawMatrix[8] * tiltMatrix[8];
 		}
-		local5[0] *= arg4;
-		local5[1] *= arg4;
-		local5[2] *= arg4;
-		local5[3] *= arg5;
-		local5[4] *= arg5;
-		local5[5] *= arg5;
-		local5[6] *= arg6;
-		local5[7] *= arg6;
-		local5[8] *= arg6;
-		return local5;
+		result[0] *= scaleX;
+		result[1] *= scaleX;
+		result[2] *= scaleX;
+		result[3] *= scaleY;
+		result[4] *= scaleY;
+		result[5] *= scaleY;
+		result[6] *= scaleZ;
+		result[7] *= scaleZ;
+		result[8] *= scaleZ;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIII[FIF)V")
-	public static void calculateSphericalUV(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) float[] arg6, @OriginalArg(7) int arg7, @OriginalArg(8) float arg8) {
-		@Pc(3) int local3 = arg0 - arg3;
-		@Pc(7) int local7 = arg1 - arg4;
-		@Pc(11) int local11 = arg2 - arg5;
-		@Pc(32) float local32 = (float) local3 * arg6[0] + (float) local7 * arg6[1] + (float) local11 * arg6[2];
-		@Pc(53) float local53 = (float) local3 * arg6[3] + (float) local7 * arg6[4] + (float) local11 * arg6[5];
-		@Pc(74) float local74 = (float) local3 * arg6[6] + (float) local7 * arg6[7] + (float) local11 * arg6[8];
-		@Pc(89) float local89 = (float) Math.sqrt(local32 * local32 + local53 * local53 + local74 * local74);
-		@Pc(100) float local100 = (float) Math.atan2(local32, local74) / 6.2831855F + 0.5F;
-		@Pc(113) float local113 = (float) Math.asin(local53 / local89) / 3.1415927F + arg8 + 0.5F;
-		@Pc(118) float local118;
-		if (arg7 == 1) {
-			local118 = local100;
-			local100 = -local113;
-			local113 = local118;
-		} else if (arg7 == 2) {
-			local100 = -local100;
-			local113 = -local113;
-		} else if (arg7 == 3) {
-			local118 = local100;
-			local100 = local113;
-			local113 = -local118;
+	public static void calculateSphericalUV(@OriginalArg(0) int vx, @OriginalArg(1) int vy, @OriginalArg(2) int vz, @OriginalArg(3) int cx, @OriginalArg(4) int cy, @OriginalArg(5) int cz, @OriginalArg(6) float[] matrix, @OriginalArg(7) int direction, @OriginalArg(8) float speed) {
+		@Pc(3) int dx = vx - cx;
+		@Pc(7) int dy = vy - cy;
+		@Pc(11) int dz = vz - cz;
+		@Pc(32) float tx = (float) dx * matrix[0] + (float) dy * matrix[1] + (float) dz * matrix[2];
+		@Pc(53) float ty = (float) dx * matrix[3] + (float) dy * matrix[4] + (float) dz * matrix[5];
+		@Pc(74) float tz = (float) dx * matrix[6] + (float) dy * matrix[7] + (float) dz * matrix[8];
+		@Pc(89) float magnitude = (float) Math.sqrt(tx * tx + ty * ty + tz * tz);
+		@Pc(100) float u = (float) Math.atan2(tx, tz) / 6.2831855F + 0.5F;
+		@Pc(113) float v = (float) Math.asin(ty / magnitude) / 3.1415927F + speed + 0.5F;
+		@Pc(118) float temp;
+		if (direction == 1) {
+			temp = u;
+			u = -v;
+			v = temp;
+		} else if (direction == 2) {
+			u = -u;
+			v = -v;
+		} else if (direction == 3) {
+			temp = u;
+			u = v;
+			v = -temp;
 		}
-		sphericalU = local100;
-		sphericalV = local113;
+		sphericalU = u;
+		sphericalV = v;
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIIII[FIFFF)V")
-	public static void calculatePlanarUV(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float[] arg7, @OriginalArg(8) int arg8, @OriginalArg(9) float arg9, @OriginalArg(10) float arg10, @OriginalArg(11) float arg11) {
-		@Pc(3) int local3 = arg0 - arg3;
-		@Pc(7) int local7 = arg1 - arg4;
-		@Pc(11) int local11 = arg2 - arg5;
-		@Pc(32) float local32 = (float) local3 * arg7[0] + (float) local7 * arg7[1] + (float) local11 * arg7[2];
-		@Pc(53) float local53 = (float) local3 * arg7[3] + (float) local7 * arg7[4] + (float) local11 * arg7[5];
-		@Pc(74) float local74 = (float) local3 * arg7[6] + (float) local7 * arg7[7] + (float) local11 * arg7[8];
-		@Pc(82) float local82;
-		@Pc(89) float local89;
-		if (arg6 == 0) {
-			local82 = local32 + arg9 + 0.5F;
-			local89 = arg11 + 0.5F - local74;
-		} else if (arg6 == 1) {
-			local82 = local32 + arg9 + 0.5F;
-			local89 = local74 + arg11 + 0.5F;
-		} else if (arg6 == 2) {
-			local82 = arg9 + 0.5F - local32;
-			local89 = arg10 + 0.5F - local53;
-		} else if (arg6 == 3) {
-			local82 = local32 + arg9 + 0.5F;
-			local89 = arg10 + 0.5F - local53;
-		} else if (arg6 == 4) {
-			local82 = local74 + arg11 + 0.5F;
-			local89 = arg10 + 0.5F - local53;
+	public static void calculatePlanarUV(@OriginalArg(0) int vx, @OriginalArg(1) int vy, @OriginalArg(2) int vz, @OriginalArg(3) int cx, @OriginalArg(4) int cy, @OriginalArg(5) int cz, @OriginalArg(6) int axis, @OriginalArg(7) float[] matrix, @OriginalArg(8) int direction, @OriginalArg(9) float speed, @OriginalArg(10) float transU, @OriginalArg(11) float transV) {
+		@Pc(3) int dx = vx - cx;
+		@Pc(7) int dy = vy - cy;
+		@Pc(11) int dz = vz - cz;
+		@Pc(32) float tx = (float) dx * matrix[0] + (float) dy * matrix[1] + (float) dz * matrix[2];
+		@Pc(53) float ty = (float) dx * matrix[3] + (float) dy * matrix[4] + (float) dz * matrix[5];
+		@Pc(74) float tz = (float) dx * matrix[6] + (float) dy * matrix[7] + (float) dz * matrix[8];
+		@Pc(82) float u;
+		@Pc(89) float v;
+		if (axis == 0) {
+			u = tx + speed + 0.5F;
+			v = transV + 0.5F - tz;
+		} else if (axis == 1) {
+			u = tx + speed + 0.5F;
+			v = tz + transV + 0.5F;
+		} else if (axis == 2) {
+			u = speed + 0.5F - tx;
+			v = transU + 0.5F - ty;
+		} else if (axis == 3) {
+			u = tx + speed + 0.5F;
+			v = transU + 0.5F - ty;
+		} else if (axis == 4) {
+			u = tz + transV + 0.5F;
+			v = transU + 0.5F - ty;
 		} else {
-			local82 = arg11 + 0.5F - local74;
-			local89 = arg10 + 0.5F - local53;
+			u = transV + 0.5F - tz;
+			v = transU + 0.5F - ty;
 		}
-		@Pc(177) float local177;
-		if (arg8 == 1) {
-			local177 = local82;
-			local82 = -local89;
-			local89 = local177;
-		} else if (arg8 == 2) {
-			local82 = -local82;
-			local89 = -local89;
-		} else if (arg8 == 3) {
-			local177 = local82;
-			local82 = local89;
-			local89 = -local177;
+		@Pc(177) float temp;
+		if (direction == 1) {
+			temp = u;
+			u = -v;
+			v = temp;
+		} else if (direction == 2) {
+			u = -u;
+			v = -v;
+		} else if (direction == 3) {
+			temp = u;
+			u = v;
+			v = -temp;
 		}
-		planarU = local82;
-		planarV = local89;
+		planarU = u;
+		planarV = v;
 	}
 
 	@OriginalMember(owner = "client!td", name = "v", descriptor = "()V")
@@ -923,204 +923,204 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public final Model copyForAnimation(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
-		return this.copyToTarget(arg0, arg1, arg2, animCopyTarget, animCopyScratch);
+	public final Model copyForAnimation(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean shareNormals) {
+		return this.copyToTarget(shareAlpha, shareColors, shareNormals, animCopyTarget, animCopyScratch);
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIIIIIJILclient!ga;)V")
 	@Override
-	public final void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) long arg8, @OriginalArg(9) int arg9, @OriginalArg(10) ParticleSystem arg10) {
+	public final void render(@OriginalArg(0) int yaw, @OriginalArg(1) int sinCameraPitch, @OriginalArg(2) int cosCameraPitch, @OriginalArg(3) int sinCameraYaw, @OriginalArg(4) int cosCameraYaw, @OriginalArg(5) int sceneX, @OriginalArg(6) int sceneY, @OriginalArg(7) int sceneZ, @OriginalArg(8) long key, @OriginalArg(9) int plane, @OriginalArg(10) ParticleSystem particleSystem) {
 		if (this.uniqueVertexCount == 0) {
 			return;
 		}
 		if (!this.bounds.valid) {
 			this.calculateBounds();
 		}
-		@Pc(13) short local13 = this.bounds.cylinderRadius;
-		@Pc(17) short local17 = this.bounds.minY;
-		@Pc(21) short local21 = this.bounds.maxY;
-		@Pc(31) int local31 = arg7 * arg4 - arg5 * arg3 >> 16;
-		@Pc(41) int local41 = arg6 * arg1 + local31 * arg2 >> 16;
-		@Pc(53) int local53 = local41 + (local13 * arg2 + local21 * arg1 >> 16);
-		if (local53 <= 50) {
+		@Pc(13) short cylinderRadius = this.bounds.cylinderRadius;
+		@Pc(17) short minY = this.bounds.minY;
+		@Pc(21) short maxY = this.bounds.maxY;
+		@Pc(31) int rotatedZ = sceneZ * cosCameraYaw - sceneX * sinCameraYaw >> 16;
+		@Pc(41) int projectedDepth = sceneY * sinCameraPitch + rotatedZ * cosCameraPitch >> 16;
+		@Pc(53) int nearClip = projectedDepth + (cylinderRadius * cosCameraPitch + maxY * sinCameraPitch >> 16);
+		if (nearClip <= 50) {
 			return;
 		}
-		@Pc(70) int local70 = local41 + (-local13 * arg2 + local17 * arg1 >> 16);
-		if (local70 >= GlobalConfig.VIEW_DISTANCE) {
+		@Pc(70) int farClip = projectedDepth + (-cylinderRadius * cosCameraPitch + minY * sinCameraPitch >> 16);
+		if (farClip >= GlobalConfig.VIEW_DISTANCE) {
 			return;
 		}
-		@Pc(84) int local84 = arg7 * arg3 + arg5 * arg4 >> 16;
-		@Pc(90) int local90 = local84 + local13 << 9;
-		if (local90 / local53 <= Rasteriser.screenLowerX) {
+		@Pc(84) int projectedX = sceneZ * sinCameraYaw + sceneX * cosCameraYaw >> 16;
+		@Pc(90) int rightEdge = projectedX + cylinderRadius << 9;
+		if (rightEdge / nearClip <= Rasteriser.screenLowerX) {
 			return;
 		}
-		@Pc(102) int local102 = local84 - local13 << 9;
-		if (local102 / local53 >= Rasteriser.screenUpperX) {
+		@Pc(102) int leftEdge = projectedX - cylinderRadius << 9;
+		if (leftEdge / nearClip >= Rasteriser.screenUpperX) {
 			return;
 		}
-		@Pc(118) int local118 = arg6 * arg2 - local31 * arg1 >> 16;
-		@Pc(132) int local132 = local118 + (local13 * arg1 + local21 * arg2 >> 16) << 9;
-		if (local132 / local53 <= Rasteriser.screenLowerY) {
+		@Pc(118) int projectedY = sceneY * cosCameraPitch - rotatedZ * sinCameraPitch >> 16;
+		@Pc(132) int topEdge = projectedY + (cylinderRadius * sinCameraPitch + maxY * cosCameraPitch >> 16) << 9;
+		if (topEdge / nearClip <= Rasteriser.screenLowerY) {
 			return;
 		}
-		@Pc(153) int local153 = local118 + (-local13 * arg1 + local17 * arg2 >> 16) << 9;
-		if (local153 / local53 >= Rasteriser.screenUpperY) {
+		@Pc(153) int bottomEdge = projectedY + (-cylinderRadius * sinCameraPitch + minY * cosCameraPitch >> 16) << 9;
+		if (bottomEdge / nearClip >= Rasteriser.screenUpperY) {
 			return;
 		}
-		@Pc(161) int local161 = 0;
-		@Pc(163) int local163 = 0;
-		if (arg0 != 0) {
-			local161 = MathUtils.sin[arg0];
-			local163 = MathUtils.cos[arg0];
+		@Pc(161) int sinYaw = 0;
+		@Pc(163) int cosYaw = 0;
+		if (yaw != 0) {
+			sinYaw = MathUtils.sin[yaw];
+			cosYaw = MathUtils.cos[yaw];
 		}
-		@Pc(165) boolean roofVisibilityLocPick = API.IsRoofVisibilityLocPickable(arg8);
-		@Pc(168) boolean miniMenuPick = arg8 > 0L;
-		if ((miniMenuPick || roofVisibilityLocPick) && RawModel.allowInput && local70 > 0) {
-			@Pc(187) int local187;
-			@Pc(191) int local191;
-			if (local84 > 0) {
-				local187 = local102 / local53;
-				local191 = local90 / local70;
+		@Pc(165) boolean roofVisibilityLocPick = API.IsRoofVisibilityLocPickable(key);
+		@Pc(168) boolean miniMenuPick = key > 0L;
+		if ((miniMenuPick || roofVisibilityLocPick) && RawModel.allowInput && farClip > 0) {
+			@Pc(187) int minScreenX;
+			@Pc(191) int maxScreenX;
+			if (projectedX > 0) {
+				minScreenX = leftEdge / nearClip;
+				maxScreenX = rightEdge / farClip;
 			} else {
-				local187 = local102 / local70;
-				local191 = local90 / local53;
+				minScreenX = leftEdge / farClip;
+				maxScreenX = rightEdge / nearClip;
 			}
-			@Pc(206) int local206;
-			@Pc(210) int local210;
-			if (local118 > 0) {
-				local206 = local153 / local53;
-				local210 = local132 / local70;
+			@Pc(206) int minScreenY;
+			@Pc(210) int maxScreenY;
+			if (projectedY > 0) {
+				minScreenY = bottomEdge / nearClip;
+				maxScreenY = topEdge / farClip;
 			} else {
-				local206 = local153 / local70;
-				local210 = local132 / local53;
+				minScreenY = bottomEdge / farClip;
+				maxScreenY = topEdge / nearClip;
 			}
-			if (pickScreenX >= local187 && pickScreenX <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
-				local187 = 999999;
-				local191 = -999999;
-				local206 = 999999;
-				local210 = -999999;
-				@Pc(243) short local243 = this.bounds.minX;
-				@Pc(247) short local247 = this.bounds.maxX;
-				@Pc(251) short local251 = this.bounds.minZ;
-				@Pc(255) short local255 = this.bounds.maxZ;
-				@Pc(290) int[] local290 = new int[]{local243, local247, local243, local247, local243, local247, local243, local247};
-				@Pc(325) int[] local325 = new int[]{local251, local251, local255, local255, local251, local251, local255, local255};
-				@Pc(360) int[] local360 = new int[]{local17, local17, local17, local17, local21, local21, local21, local21};
-				@Pc(362) int local362;
-				@Pc(369) int local369;
-				@Pc(373) int local373;
-				@Pc(377) int local377;
-				@Pc(389) int local389;
-				@Pc(465) int local465;
-				@Pc(471) int local471;
-				for (local362 = 0; local362 < 8; local362++) {
-					local369 = local290[local362];
-					local373 = local360[local362];
-					local377 = local325[local362];
-					if (arg0 != 0) {
-						local389 = local377 * local161 + local369 * local163 >> 16;
-						local377 = local377 * local163 - local369 * local161 >> 16;
-						local369 = local389;
+			if (pickScreenX >= minScreenX && pickScreenX <= maxScreenX && RawModel.pickScreenY >= minScreenY && RawModel.pickScreenY <= maxScreenY) {
+				minScreenX = 999999;
+				maxScreenX = -999999;
+				minScreenY = 999999;
+				maxScreenY = -999999;
+				@Pc(243) short boundsMinX = this.bounds.minX;
+				@Pc(247) short boundsMaxX = this.bounds.maxX;
+				@Pc(251) short boundsMinZ = this.bounds.minZ;
+				@Pc(255) short boundsMaxZ = this.bounds.maxZ;
+				@Pc(290) int[] cornersX = new int[]{boundsMinX, boundsMaxX, boundsMinX, boundsMaxX, boundsMinX, boundsMaxX, boundsMinX, boundsMaxX};
+				@Pc(325) int[] cornersZ = new int[]{boundsMinZ, boundsMinZ, boundsMaxZ, boundsMaxZ, boundsMinZ, boundsMinZ, boundsMaxZ, boundsMaxZ};
+				@Pc(360) int[] cornersY = new int[]{minY, minY, minY, minY, maxY, maxY, maxY, maxY};
+				@Pc(362) int ci;
+				@Pc(369) int cx;
+				@Pc(373) int cy;
+				@Pc(377) int cz;
+				@Pc(389) int temp;
+				@Pc(465) int screenX;
+				@Pc(471) int screenY;
+				for (ci = 0; ci < 8; ci++) {
+					cx = cornersX[ci];
+					cy = cornersY[ci];
+					cz = cornersZ[ci];
+					if (yaw != 0) {
+						temp = cz * sinYaw + cx * cosYaw >> 16;
+						cz = cz * cosYaw - cx * sinYaw >> 16;
+						cx = temp;
 					}
-					local369 += arg5;
-					local373 += arg6;
-					local377 += arg7;
-					local389 = local377 * arg3 + local369 * arg4 >> 16;
-					local377 = local377 * arg4 - local369 * arg3 >> 16;
-					local369 = local389;
-					local389 = local373 * arg2 - local377 * arg1 >> 16;
-					local377 = local373 * arg1 + local377 * arg2 >> 16;
-					if (local377 > 0) {
-						local465 = (local369 << 9) / local377;
-						local471 = (local389 << 9) / local377;
-						if (local465 < local187) {
-							local187 = local465;
+					cx += sceneX;
+					cy += sceneY;
+					cz += sceneZ;
+					temp = cz * sinCameraYaw + cx * cosCameraYaw >> 16;
+					cz = cz * cosCameraYaw - cx * sinCameraYaw >> 16;
+					cx = temp;
+					temp = cy * cosCameraPitch - cz * sinCameraPitch >> 16;
+					cz = cy * sinCameraPitch + cz * cosCameraPitch >> 16;
+					if (cz > 0) {
+						screenX = (cx << 9) / cz;
+						screenY = (temp << 9) / cz;
+						if (screenX < minScreenX) {
+							minScreenX = screenX;
 						}
-						if (local465 > local191) {
-							local191 = local465;
+						if (screenX > maxScreenX) {
+							maxScreenX = screenX;
 						}
-						if (local471 < local206) {
-							local206 = local471;
+						if (screenY < minScreenY) {
+							minScreenY = screenY;
 						}
-						if (local471 > local210) {
-							local210 = local471;
+						if (screenY > maxScreenY) {
+							maxScreenY = screenY;
 						}
 					}
 				}
-				if (pickScreenX >= local187 && pickScreenX <= local191 && RawModel.pickScreenY >= local206 && RawModel.pickScreenY <= local210) {
+				if (pickScreenX >= minScreenX && pickScreenX <= maxScreenX && RawModel.pickScreenY >= minScreenY && RawModel.pickScreenY <= maxScreenY) {
 					if (this.pickable) {
 						if (miniMenuPick) {
-							Model.pickResults[MiniMenu.pickResultCount++] = arg8;
+							Model.pickResults[MiniMenu.pickResultCount++] = key;
 						}
 						if (roofVisibilityLocPick) {
-							API.ReportRoofVisibilityLoc(arg8, arg9);
+							API.ReportRoofVisibilityLoc(key, plane);
 						}
 					} else {
 						if (this.vertexX == null || this.vertexY == null || this.vertexZ == null || this.vertexOffsets == null || this.vertexLookup == null || this.triangleVertexA == null || this.triangleVertexB == null || this.triangleVertexC == null) {
 							if (roofVisibilityLocPick) {
-								API.ReportRoofVisibilityLoc(arg8, arg9);
+								API.ReportRoofVisibilityLoc(key, plane);
 							}
 						} else {
 							if (pickVertexScreenX.length < this.uniqueVertexCount) {
 								pickVertexScreenX = new int[this.uniqueVertexCount];
 								pickVertexScreenY = new int[this.uniqueVertexCount];
 							}
-							local362 = 0;
+							ci = 0;
 							processRoofCheck:
 							while (true) {
-								if (local362 >= this.vertexCount) {
-									local362 = 0;
+								if (ci >= this.vertexCount) {
+									ci = 0;
 									while (true) {
-										if (local362 >= this.triangleCount) {
+										if (ci >= this.triangleCount) {
 											break processRoofCheck;
 										}
-										@Pc(698) short local698 = this.triangleVertexA[local362];
-										@Pc(703) short local703 = this.triangleVertexB[local362];
-										@Pc(708) short local708 = this.triangleVertexC[local362];
-										if (this.pointWithinTriangle(pickScreenX, RawModel.pickScreenY, pickVertexScreenY[local698], pickVertexScreenY[local703], pickVertexScreenY[local708], pickVertexScreenX[local698], pickVertexScreenX[local703], pickVertexScreenX[local708])) {
+										@Pc(698) short triA = this.triangleVertexA[ci];
+										@Pc(703) short triB = this.triangleVertexB[ci];
+										@Pc(708) short triC = this.triangleVertexC[ci];
+										if (this.pointWithinTriangle(pickScreenX, RawModel.pickScreenY, pickVertexScreenY[triA], pickVertexScreenY[triB], pickVertexScreenY[triC], pickVertexScreenX[triA], pickVertexScreenX[triB], pickVertexScreenX[triC])) {
 											if (miniMenuPick) {
-												Model.pickResults[MiniMenu.pickResultCount++] = arg8;
+												Model.pickResults[MiniMenu.pickResultCount++] = key;
 											}
 											if (roofVisibilityLocPick) {
-												API.ReportRoofVisibilityLoc(arg8, arg9);
+												API.ReportRoofVisibilityLoc(key, plane);
 											}
 											break processRoofCheck;
 										}
-										local362++;
+										ci++;
 									}
 								}
-								local369 = this.vertexX[local362];
-								local373 = this.vertexY[local362];
-								local377 = this.vertexZ[local362];
-								if (arg0 != 0) {
-									local389 = local377 * local161 + local369 * local163 >> 16;
-									local377 = local377 * local163 - local369 * local161 >> 16;
-									local369 = local389;
+								cx = this.vertexX[ci];
+								cy = this.vertexY[ci];
+								cz = this.vertexZ[ci];
+								if (yaw != 0) {
+									temp = cz * sinYaw + cx * cosYaw >> 16;
+									cz = cz * cosYaw - cx * sinYaw >> 16;
+									cx = temp;
 								}
-								local369 += arg5;
-								local373 += arg6;
-								local377 += arg7;
-								local389 = local377 * arg3 + local369 * arg4 >> 16;
-								local377 = local377 * arg4 - local369 * arg3 >> 16;
-								local369 = local389;
-								local389 = local373 * arg2 - local377 * arg1 >> 16;
-								local377 = local373 * arg1 + local377 * arg2 >> 16;
-								if (local377 < 50) {
+								cx += sceneX;
+								cy += sceneY;
+								cz += sceneZ;
+								temp = cz * sinCameraYaw + cx * cosCameraYaw >> 16;
+								cz = cz * cosCameraYaw - cx * sinCameraYaw >> 16;
+								cx = temp;
+								temp = cy * cosCameraPitch - cz * sinCameraPitch >> 16;
+								cz = cy * sinCameraPitch + cz * cosCameraPitch >> 16;
+								if (cz < 50) {
 									break;
 								}
-								local465 = (local369 << 9) / local377;
-								local471 = (local389 << 9) / local377;
-								@Pc(652) int local652 = this.vertexOffsets[local362];
-								@Pc(659) int local659 = this.vertexOffsets[local362 + 1];
-								for (@Pc(661) int local661 = local652; local661 < local659; local661++) {
-									@Pc(671) int local671 = this.vertexLookup[local661] - 1;
-									if (local671 == -1) {
+								screenX = (cx << 9) / cz;
+								screenY = (temp << 9) / cz;
+								@Pc(652) int offsetStart = this.vertexOffsets[ci];
+								@Pc(659) int offsetEnd = this.vertexOffsets[ci + 1];
+								for (@Pc(661) int oi = offsetStart; oi < offsetEnd; oi++) {
+									@Pc(671) int uniqueIdx = this.vertexLookup[oi] - 1;
+									if (uniqueIdx == -1) {
 										break;
 									}
-									pickVertexScreenX[local671] = local465;
-									pickVertexScreenY[local671] = local471;
+									pickVertexScreenX[uniqueIdx] = screenX;
+									pickVertexScreenY[uniqueIdx] = screenY;
 								}
-								local362++;
+								ci++;
 							}
 						}
 					}
@@ -1129,11 +1129,11 @@ public final class GlModel extends Model {
 		}
 		@Pc(744) GL2 gl = GlRenderer.gl;
 		gl.glPushMatrix();
-		gl.glTranslatef((float) arg5, (float) arg6, (float) arg7);
-		gl.glRotatef((float) arg0 * 0.17578125F, 0.0F, 1.0F, 0.0F);
+		gl.glTranslatef((float) sceneX, (float) sceneY, (float) sceneZ);
+		gl.glRotatef((float) yaw * 0.17578125F, 0.0F, 1.0F, 0.0F);
 		this.ensureBuffersAndDraw();
-		gl.glRotatef((float) -arg0 * 0.17578125F, 0.0F, 1.0F, 0.0F);
-		gl.glTranslatef((float) -arg5, (float) -arg6, (float) -arg7);
+		gl.glRotatef((float) -yaw * 0.17578125F, 0.0F, 1.0F, 0.0F);
+		gl.glTranslatef((float) -sceneX, (float) -sceneY, (float) -sceneZ);
 		gl.glPopMatrix();
 	}
 
@@ -1143,16 +1143,16 @@ public final class GlModel extends Model {
 			this.rotateClockwise();
 			return;
 		}
-		@Pc(7) int local7;
-		for (local7 = 0; local7 < this.vertexCount; local7++) {
-			@Pc(16) int local16 = this.vertexZ[local7];
-			this.vertexZ[local7] = this.vertexX[local7];
-			this.vertexX[local7] = -local16;
+		@Pc(7) int i;
+		for (i = 0; i < this.vertexCount; i++) {
+			@Pc(16) int temp = this.vertexZ[i];
+			this.vertexZ[i] = this.vertexX[i];
+			this.vertexX[i] = -temp;
 		}
-		for (local7 = 0; local7 < this.uniqueVertexCount; local7++) {
-			@Pc(43) short local43 = this.normalZ[local7];
-			this.normalZ[local7] = this.normalX[local7];
-			this.normalX[local7] = (short) -local43;
+		for (i = 0; i < this.uniqueVertexCount; i++) {
+			@Pc(43) short tempN = this.normalZ[i];
+			this.normalZ[i] = this.normalX[i];
+			this.normalX[i] = (short) -tempN;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -1168,13 +1168,13 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "c", descriptor = "(I)V")
 	@Override
-	public final void rotateZ(@OriginalArg(0) int arg0) {
-		@Pc(3) int local3 = MathUtils.sin[arg0];
-		@Pc(7) int local7 = MathUtils.cos[arg0];
-		for (@Pc(9) int local9 = 0; local9 < this.vertexCount; local9++) {
-			@Pc(29) int local29 = this.vertexY[local9] * local3 + this.vertexX[local9] * local7 >> 16;
-			this.vertexY[local9] = this.vertexY[local9] * local7 - this.vertexX[local9] * local3 >> 16;
-			this.vertexX[local9] = local29;
+	public final void rotateZ(@OriginalArg(0) int angle) {
+		@Pc(3) int sinAngle = MathUtils.sin[angle];
+		@Pc(7) int cosAngle = MathUtils.cos[angle];
+		for (@Pc(9) int i = 0; i < this.vertexCount; i++) {
+			@Pc(29) int newX = this.vertexY[i] * sinAngle + this.vertexX[i] * cosAngle >> 16;
+			this.vertexY[i] = this.vertexY[i] * cosAngle - this.vertexX[i] * sinAngle >> 16;
+			this.vertexX[i] = newX;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -1215,11 +1215,11 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "c", descriptor = "(III)V")
 	@Override
-	public final void translate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			this.vertexX[local1] += arg0;
-			this.vertexY[local1] += arg1;
-			this.vertexZ[local1] += arg2;
+	public final void translate(@OriginalArg(0) int dx, @OriginalArg(1) int dy, @OriginalArg(2) int dz) {
+		for (@Pc(1) int i = 0; i < this.vertexCount; i++) {
+			this.vertexX[i] += dx;
+			this.vertexY[i] += dy;
+			this.vertexZ[i] += dz;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -1227,146 +1227,146 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "b", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public final Model copyForLoc(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
-		return this.copyToTarget(arg0, arg1, arg2, locCopyTarget, locCopyScratch);
+	public final Model copyForLoc(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean shareNormals) {
+		return this.copyToTarget(shareAlpha, shareColors, shareNormals, locCopyTarget, locCopyScratch);
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(Lclient!th;IIIZ)V")
 	@Override
-	public final void mergeNormals(@OriginalArg(0) Entity arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
-		@Pc(2) GlModel local2 = (GlModel) arg0;
-		if (this.triangleCount == 0 || local2.triangleCount == 0) {
+	public final void mergeNormals(@OriginalArg(0) Entity other, @OriginalArg(1) int offsetX, @OriginalArg(2) int offsetY, @OriginalArg(3) int offsetZ, @OriginalArg(4) boolean recolor) {
+		@Pc(2) GlModel otherModel = (GlModel) other;
+		if (this.triangleCount == 0 || otherModel.triangleCount == 0) {
 			return;
 		}
-		@Pc(12) int local12 = local2.vertexCount;
-		@Pc(15) int[] local15 = local2.vertexX;
-		@Pc(18) int[] local18 = local2.vertexY;
-		@Pc(21) int[] local21 = local2.vertexZ;
-		@Pc(24) short[] local24 = local2.normalX;
-		@Pc(27) short[] local27 = local2.normalY;
-		@Pc(30) short[] local30 = local2.normalZ;
-		@Pc(33) short[] local33 = local2.normalMagnitude;
-		@Pc(40) short[] local40;
-		@Pc(44) short[] local44;
-		@Pc(48) short[] local48;
-		@Pc(52) short[] local52;
+		@Pc(12) int otherVertexCount = otherModel.vertexCount;
+		@Pc(15) int[] otherVertexX = otherModel.vertexX;
+		@Pc(18) int[] otherVertexY = otherModel.vertexY;
+		@Pc(21) int[] otherVertexZ = otherModel.vertexZ;
+		@Pc(24) short[] otherNormalX = otherModel.normalX;
+		@Pc(27) short[] otherNormalY = otherModel.normalY;
+		@Pc(30) short[] otherNormalZ = otherModel.normalZ;
+		@Pc(33) short[] otherNormalMag = otherModel.normalMagnitude;
+		@Pc(40) short[] recolorSrc;
+		@Pc(44) short[] recolorDst;
+		@Pc(48) short[] retextureSrc;
+		@Pc(52) short[] retextureDst;
 		if (this.recoloring == null) {
-			local40 = null;
-			local44 = null;
-			local48 = null;
-			local52 = null;
+			recolorSrc = null;
+			recolorDst = null;
+			retextureSrc = null;
+			retextureDst = null;
 		} else {
-			local40 = this.recoloring.recolorSrc;
-			local44 = this.recoloring.recolorDst;
-			local48 = this.recoloring.retextureSrc;
-			local52 = this.recoloring.retextureDst;
+			recolorSrc = this.recoloring.recolorSrc;
+			recolorDst = this.recoloring.recolorDst;
+			retextureSrc = this.recoloring.retextureSrc;
+			retextureDst = this.recoloring.retextureDst;
 		}
-		@Pc(68) short[] local68;
-		@Pc(72) short[] local72;
-		@Pc(76) short[] local76;
-		@Pc(80) short[] local80;
-		if (local2.recoloring == null) {
-			local68 = null;
-			local72 = null;
-			local76 = null;
-			local80 = null;
+		@Pc(68) short[] otherRecolorSrc;
+		@Pc(72) short[] otherRecolorDst;
+		@Pc(76) short[] otherRetextureSrc;
+		@Pc(80) short[] otherRetextureDst;
+		if (otherModel.recoloring == null) {
+			otherRecolorSrc = null;
+			otherRecolorDst = null;
+			otherRetextureSrc = null;
+			otherRetextureDst = null;
 		} else {
-			local68 = local2.recoloring.recolorSrc;
-			local72 = local2.recoloring.recolorDst;
-			local76 = local2.recoloring.retextureSrc;
-			local80 = local2.recoloring.retextureDst;
+			otherRecolorSrc = otherModel.recoloring.recolorSrc;
+			otherRecolorDst = otherModel.recoloring.recolorDst;
+			otherRetextureSrc = otherModel.recoloring.retextureSrc;
+			otherRetextureDst = otherModel.recoloring.retextureDst;
 		}
-		@Pc(92) int[] local92 = local2.vertexOffsets;
-		@Pc(95) short[] local95 = local2.vertexLookup;
-		if (!local2.bounds.valid) {
-			local2.calculateBounds();
+		@Pc(92) int[] otherOffsets = otherModel.vertexOffsets;
+		@Pc(95) short[] otherLookup = otherModel.vertexLookup;
+		if (!otherModel.bounds.valid) {
+			otherModel.calculateBounds();
 		}
-		@Pc(105) short local105 = local2.bounds.minY;
-		@Pc(109) short local109 = local2.bounds.maxY;
-		@Pc(113) short local113 = local2.bounds.minX;
-		@Pc(117) short local117 = local2.bounds.maxX;
-		@Pc(121) short local121 = local2.bounds.minZ;
-		@Pc(125) short local125 = local2.bounds.maxZ;
-		for (@Pc(127) int local127 = 0; local127 < this.vertexCount; local127++) {
-			@Pc(138) int local138 = this.vertexY[local127] - arg2;
-			if (local138 >= local105 && local138 <= local109) {
-				@Pc(152) int local152 = this.vertexX[local127] - arg1;
-				if (local152 >= local113 && local152 <= local117) {
-					@Pc(166) int local166 = this.vertexZ[local127] - arg3;
-					if (local166 >= local121 && local166 <= local125) {
-						@Pc(175) int local175 = -1;
-						@Pc(180) int local180 = this.vertexOffsets[local127];
-						@Pc(187) int local187 = this.vertexOffsets[local127 + 1];
-						@Pc(189) int local189;
-						for (local189 = local180; local189 < local187; local189++) {
-							local175 = this.vertexLookup[local189] - 1;
-							if (local175 == -1 || this.normalMagnitude[local175] != 0) {
+		@Pc(105) short otherMinY = otherModel.bounds.minY;
+		@Pc(109) short otherMaxY = otherModel.bounds.maxY;
+		@Pc(113) short otherMinX = otherModel.bounds.minX;
+		@Pc(117) short otherMaxX = otherModel.bounds.maxX;
+		@Pc(121) short otherMinZ = otherModel.bounds.minZ;
+		@Pc(125) short otherMaxZ = otherModel.bounds.maxZ;
+		for (@Pc(127) int i = 0; i < this.vertexCount; i++) {
+			@Pc(138) int dy = this.vertexY[i] - offsetY;
+			if (dy >= otherMinY && dy <= otherMaxY) {
+				@Pc(152) int dx = this.vertexX[i] - offsetX;
+				if (dx >= otherMinX && dx <= otherMaxX) {
+					@Pc(166) int dz = this.vertexZ[i] - offsetZ;
+					if (dz >= otherMinZ && dz <= otherMaxZ) {
+						@Pc(175) int thisUniqueIdx = -1;
+						@Pc(180) int startOff = this.vertexOffsets[i];
+						@Pc(187) int endOff = this.vertexOffsets[i + 1];
+						@Pc(189) int j;
+						for (j = startOff; j < endOff; j++) {
+							thisUniqueIdx = this.vertexLookup[j] - 1;
+							if (thisUniqueIdx == -1 || this.normalMagnitude[thisUniqueIdx] != 0) {
 								break;
 							}
 						}
-						if (local175 != -1) {
-							for (local189 = 0; local189 < local12; local189++) {
-								if (local152 == local15[local189] && local166 == local21[local189] && local138 == local18[local189]) {
-									@Pc(237) int local237 = -1;
-									local180 = local92[local189];
-									local187 = local92[local189 + 1];
-									for (@Pc(249) int local249 = local180; local249 < local187; local249++) {
-										local237 = local95[local249] - 1;
-										if (local237 == -1 || local33[local237] != 0) {
+						if (thisUniqueIdx != -1) {
+							for (j = 0; j < otherVertexCount; j++) {
+								if (dx == otherVertexX[j] && dz == otherVertexZ[j] && dy == otherVertexY[j]) {
+									@Pc(237) int otherUniqueIdx = -1;
+									startOff = otherOffsets[j];
+									endOff = otherOffsets[j + 1];
+									for (@Pc(249) int k = startOff; k < endOff; k++) {
+										otherUniqueIdx = otherLookup[k] - 1;
+										if (otherUniqueIdx == -1 || otherNormalMag[otherUniqueIdx] != 0) {
 											break;
 										}
 									}
-									if (local237 != -1) {
-										if (local40 == null) {
+									if (otherUniqueIdx != -1) {
+										if (recolorSrc == null) {
 											this.recoloring = new GlModelRecoloring();
-											local40 = this.recoloring.recolorSrc = ArrayUtils.copyOfNullable(this.normalX);
-											local44 = this.recoloring.recolorDst = ArrayUtils.copyOfNullable(this.normalY);
-											local48 = this.recoloring.retextureSrc = ArrayUtils.copyOfNullable(this.normalZ);
-											local52 = this.recoloring.retextureDst = ArrayUtils.copyOfNullable(this.normalMagnitude);
+											recolorSrc = this.recoloring.recolorSrc = ArrayUtils.copyOfNullable(this.normalX);
+											recolorDst = this.recoloring.recolorDst = ArrayUtils.copyOfNullable(this.normalY);
+											retextureSrc = this.recoloring.retextureSrc = ArrayUtils.copyOfNullable(this.normalZ);
+											retextureDst = this.recoloring.retextureDst = ArrayUtils.copyOfNullable(this.normalMagnitude);
 										}
-										if (local68 == null) {
-											@Pc(325) GlModelRecoloring local325 = local2.recoloring = new GlModelRecoloring();
-											local68 = local325.recolorSrc = ArrayUtils.copyOfNullable(local24);
-											local72 = local325.recolorDst = ArrayUtils.copyOfNullable(local27);
-											local76 = local325.retextureSrc = ArrayUtils.copyOfNullable(local30);
-											local80 = local325.retextureDst = ArrayUtils.copyOfNullable(local33);
+										if (otherRecolorSrc == null) {
+											@Pc(325) GlModelRecoloring otherRecoloring = otherModel.recoloring = new GlModelRecoloring();
+											otherRecolorSrc = otherRecoloring.recolorSrc = ArrayUtils.copyOfNullable(otherNormalX);
+											otherRecolorDst = otherRecoloring.recolorDst = ArrayUtils.copyOfNullable(otherNormalY);
+											otherRetextureSrc = otherRecoloring.retextureSrc = ArrayUtils.copyOfNullable(otherNormalZ);
+											otherRetextureDst = otherRecoloring.retextureDst = ArrayUtils.copyOfNullable(otherNormalMag);
 										}
-										@Pc(358) short local358 = this.normalX[local175];
-										@Pc(363) short local363 = this.normalY[local175];
-										@Pc(368) short local368 = this.normalZ[local175];
-										@Pc(373) short local373 = this.normalMagnitude[local175];
-										local180 = local92[local189];
-										local187 = local92[local189 + 1];
-										@Pc(385) int local385;
-										@Pc(394) int local394;
-										for (local385 = local180; local385 < local187; local385++) {
-											local394 = local95[local385] - 1;
-											if (local394 == -1) {
+										@Pc(358) short nx = this.normalX[thisUniqueIdx];
+										@Pc(363) short ny = this.normalY[thisUniqueIdx];
+										@Pc(368) short nz = this.normalZ[thisUniqueIdx];
+										@Pc(373) short nm = this.normalMagnitude[thisUniqueIdx];
+										startOff = otherOffsets[j];
+										endOff = otherOffsets[j + 1];
+										@Pc(385) int ri;
+										@Pc(394) int uniqueIdx;
+										for (ri = startOff; ri < endOff; ri++) {
+											uniqueIdx = otherLookup[ri] - 1;
+											if (uniqueIdx == -1) {
 												break;
 											}
-											if (local80[local394] != 0) {
-												local68[local394] += local358;
-												local72[local394] += local363;
-												local76[local394] += local368;
-												local80[local394] += local373;
+											if (otherRetextureDst[uniqueIdx] != 0) {
+												otherRecolorSrc[uniqueIdx] += nx;
+												otherRecolorDst[uniqueIdx] += ny;
+												otherRetextureSrc[uniqueIdx] += nz;
+												otherRetextureDst[uniqueIdx] += nm;
 											}
 										}
-										local358 = local24[local237];
-										local363 = local27[local237];
-										local368 = local30[local237];
-										local373 = local33[local237];
-										local180 = this.vertexOffsets[local127];
-										local187 = this.vertexOffsets[local127 + 1];
-										for (local385 = local180; local385 < local187; local385++) {
-											local394 = this.vertexLookup[local385] - 1;
-											if (local394 == -1) {
+										nx = otherNormalX[otherUniqueIdx];
+										ny = otherNormalY[otherUniqueIdx];
+										nz = otherNormalZ[otherUniqueIdx];
+										nm = otherNormalMag[otherUniqueIdx];
+										startOff = this.vertexOffsets[i];
+										endOff = this.vertexOffsets[i + 1];
+										for (ri = startOff; ri < endOff; ri++) {
+											uniqueIdx = this.vertexLookup[ri] - 1;
+											if (uniqueIdx == -1) {
 												break;
 											}
-											if (local52[local394] != 0) {
-												local40[local394] += local358;
-												local44[local394] += local363;
-												local48[local394] += local368;
-												local52[local394] += local373;
+											if (retextureDst[uniqueIdx] != 0) {
+												recolorSrc[uniqueIdx] += nx;
+												recolorDst[uniqueIdx] += ny;
+												retextureSrc[uniqueIdx] += nz;
+												retextureDst[uniqueIdx] += nm;
 											}
 										}
 									}
@@ -1381,61 +1381,61 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIIIIJ)V")
 	@Override
-	public final void setCamera(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) long arg6) {
+	public final void setCamera(@OriginalArg(1) int yaw, @OriginalArg(2) int roll, @OriginalArg(3) int pitch, @OriginalArg(4) int offsetX, @OriginalArg(5) int offsetY, @OriginalArg(6) int offsetZ, @OriginalArg(7) long key) {
 		if (this.uniqueVertexCount == 0) {
 			return;
 		}
 		@Pc(5) GL2 gl = GlRenderer.gl;
 		gl.glPushMatrix();
-		if (arg2 != 0) {
-			gl.glRotatef((float) arg2 * 0.17578125F, 1.0F, 0.0F, 0.0F);
+		if (pitch != 0) {
+			gl.glRotatef((float) pitch * 0.17578125F, 1.0F, 0.0F, 0.0F);
 		}
-		gl.glTranslatef((float) arg3, (float) arg4, (float) arg5);
-		if (arg0 != 0) {
-			gl.glRotatef((float) arg0 * 0.17578125F, 0.0F, 1.0F, 0.0F);
+		gl.glTranslatef((float) offsetX, (float) offsetY, (float) offsetZ);
+		if (yaw != 0) {
+			gl.glRotatef((float) yaw * 0.17578125F, 0.0F, 1.0F, 0.0F);
 		}
-		if (arg1 != 0) {
-			gl.glRotatef((float) -arg1 * 0.17578125F, 0.0F, 0.0F, 1.0F);
+		if (roll != 0) {
+			gl.glRotatef((float) -roll * 0.17578125F, 0.0F, 0.0F, 1.0F);
 		}
 		this.ensureBuffersAndDraw();
 		gl.glPopMatrix();
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(Lclient!gb;IJIIIIFF)S")
-	private short findOrCreateVertex(@OriginalArg(0) RawModel arg0, @OriginalArg(1) int arg1, @OriginalArg(2) long arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) float arg7, @OriginalArg(8) float arg8) {
-		@Pc(4) int local4 = this.vertexOffsets[arg1];
-		@Pc(11) int local11 = this.vertexOffsets[arg1 + 1];
-		@Pc(13) int local13 = 0;
-		for (@Pc(15) int local15 = local4; local15 < local11; local15++) {
-			@Pc(23) short local23 = this.vertexLookup[local15];
-			if (local23 == 0) {
-				local13 = local15;
+	private short findOrCreateVertex(@OriginalArg(0) RawModel model, @OriginalArg(1) int vertexIndex, @OriginalArg(2) long key, @OriginalArg(3) int normalX, @OriginalArg(4) int normalY, @OriginalArg(5) int normalZ, @OriginalArg(6) int normalMagnitude, @OriginalArg(7) float u, @OriginalArg(8) float v) {
+		@Pc(4) int startOffset = this.vertexOffsets[vertexIndex];
+		@Pc(11) int endOffset = this.vertexOffsets[vertexIndex + 1];
+		@Pc(13) int insertIdx = 0;
+		for (@Pc(15) int i = startOffset; i < endOffset; i++) {
+			@Pc(23) short existing = this.vertexLookup[i];
+			if (existing == 0) {
+				insertIdx = i;
 				break;
 			}
-			if (aLongArray10[local15] == arg2) {
-				return (short) (local23 - 1);
+			if (aLongArray10[i] == key) {
+				return (short) (existing - 1);
 			}
 		}
-		this.vertexLookup[local13] = (short) (this.uniqueVertexCount + 1);
-		aLongArray10[local13] = arg2;
-		this.normalX[this.uniqueVertexCount] = (short) arg3;
-		this.normalY[this.uniqueVertexCount] = (short) arg4;
-		this.normalZ[this.uniqueVertexCount] = (short) arg5;
-		this.normalMagnitude[this.uniqueVertexCount] = (short) arg6;
-		this.vertexS[this.uniqueVertexCount] = arg7;
-		this.vertexT[this.uniqueVertexCount] = arg8;
+		this.vertexLookup[insertIdx] = (short) (this.uniqueVertexCount + 1);
+		aLongArray10[insertIdx] = key;
+		this.normalX[this.uniqueVertexCount] = (short) normalX;
+		this.normalY[this.uniqueVertexCount] = (short) normalY;
+		this.normalZ[this.uniqueVertexCount] = (short) normalZ;
+		this.normalMagnitude[this.uniqueVertexCount] = (short) normalMagnitude;
+		this.vertexS[this.uniqueVertexCount] = u;
+		this.vertexT[this.uniqueVertexCount] = v;
 		return (short) this.uniqueVertexCount++;
 	}
 
 	@OriginalMember(owner = "client!td", name = "b", descriptor = "(I)V")
 	@Override
-	public final void rotateY(@OriginalArg(0) int arg0) {
-		@Pc(3) int local3 = MathUtils.sin[arg0];
-		@Pc(7) int local7 = MathUtils.cos[arg0];
-		for (@Pc(9) int local9 = 0; local9 < this.vertexCount; local9++) {
-			@Pc(29) int local29 = this.vertexZ[local9] * local3 + this.vertexX[local9] * local7 >> 16;
-			this.vertexZ[local9] = this.vertexZ[local9] * local7 - this.vertexX[local9] * local3 >> 16;
-			this.vertexX[local9] = local29;
+	public final void rotateY(@OriginalArg(0) int angle) {
+		@Pc(3) int sinAngle = MathUtils.sin[angle];
+		@Pc(7) int cosAngle = MathUtils.cos[angle];
+		for (@Pc(9) int i = 0; i < this.vertexCount; i++) {
+			@Pc(29) int newX = this.vertexZ[i] * sinAngle + this.vertexX[i] * cosAngle >> 16;
+			this.vertexZ[i] = this.vertexZ[i] * cosAngle - this.vertexX[i] * sinAngle >> 16;
+			this.vertexX[i] = newX;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -1443,175 +1443,175 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(I[IIIIZI[I)V")
 	@Override
-	protected final void transformMaskedBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7) {
-		@Pc(2) int local2 = arg1.length;
-		@Pc(18) int local18;
-		@Pc(26) int local26;
-		@Pc(45) int local45;
-		@Pc(53) int local53;
-		@Pc(33) int local33;
-		if (arg0 == 0) {
-			arg2 <<= 0x4;
-			arg3 <<= 0x4;
-			arg4 <<= 0x4;
-			local18 = 0;
+	protected final void transformMaskedBone(@OriginalArg(0) int transformType, @OriginalArg(1) int[] labels, @OriginalArg(2) int transformX, @OriginalArg(3) int transformY, @OriginalArg(4) int transformZ, @OriginalArg(5) boolean delayed, @OriginalArg(6) int mask, @OriginalArg(7) int[] matrix) {
+		@Pc(2) int labelCount = labels.length;
+		@Pc(18) int count;
+		@Pc(26) int i;
+		@Pc(45) int j;
+		@Pc(53) int vertIdx;
+		@Pc(33) int rz;
+		if (transformType == 0) {
+			transformX <<= 0x4;
+			transformY <<= 0x4;
+			transformZ <<= 0x4;
+			count = 0;
 			originX = 0;
 			originY = 0;
 			originZ = 0;
-			for (local26 = 0; local26 < local2; local26++) {
-				local33 = arg1[local26];
-				if (local33 < this.boneVertices.length) {
-					@Pc(43) int[] local43 = this.boneVertices[local33];
-					for (local45 = 0; local45 < local43.length; local45++) {
-						local53 = local43[local45];
-						if (this.vertexSources == null || (arg6 & this.vertexSources[local53]) != 0) {
-							originX += this.vertexX[local53];
-							originY += this.vertexY[local53];
-							originZ += this.vertexZ[local53];
-							local18++;
+			for (i = 0; i < labelCount; i++) {
+				rz = labels[i];
+				if (rz < this.boneVertices.length) {
+					@Pc(43) int[] boneVerts = this.boneVertices[rz];
+					for (j = 0; j < boneVerts.length; j++) {
+						vertIdx = boneVerts[j];
+						if (this.vertexSources == null || (mask & this.vertexSources[vertIdx]) != 0) {
+							originX += this.vertexX[vertIdx];
+							originY += this.vertexY[vertIdx];
+							originZ += this.vertexZ[vertIdx];
+							count++;
 						}
 					}
 				}
 			}
-			if (local18 > 0) {
-				originX = originX / local18 + arg2;
-				originY = originY / local18 + arg3;
-				originZ = originZ / local18 + arg4;
+			if (count > 0) {
+				originX = originX / count + transformX;
+				originY = originY / count + transformY;
+				originZ = originZ / count + transformZ;
 				originValid = true;
 			} else {
-				originX = arg2;
-				originY = arg3;
-				originZ = arg4;
+				originX = transformX;
+				originY = transformY;
+				originZ = transformZ;
 			}
 			return;
 		}
-		@Pc(228) int[] local228;
-		@Pc(230) int local230;
-		if (arg0 == 1) {
-			if (arg7 != null) {
-				local18 = arg7[0] * arg2 + arg7[1] * arg3 + arg7[2] * arg4 + 16384 >> 15;
-				local26 = arg7[3] * arg2 + arg7[4] * arg3 + arg7[5] * arg4 + 16384 >> 15;
-				local33 = arg7[6] * arg2 + arg7[7] * arg3 + arg7[8] * arg4 + 16384 >> 15;
-				arg2 = local18;
-				arg3 = local26;
-				arg4 = local33;
+		@Pc(228) int[] verts;
+		@Pc(230) int k;
+		if (transformType == 1) {
+			if (matrix != null) {
+				count = matrix[0] * transformX + matrix[1] * transformY + matrix[2] * transformZ + 16384 >> 15;
+				i = matrix[3] * transformX + matrix[4] * transformY + matrix[5] * transformZ + 16384 >> 15;
+				rz = matrix[6] * transformX + matrix[7] * transformY + matrix[8] * transformZ + 16384 >> 15;
+				transformX = count;
+				transformY = i;
+				transformZ = rz;
 			}
-			arg2 <<= 0x4;
-			arg3 <<= 0x4;
-			arg4 <<= 0x4;
-			for (local18 = 0; local18 < local2; local18++) {
-				local26 = arg1[local18];
-				if (local26 < this.boneVertices.length) {
-					local228 = this.boneVertices[local26];
-					for (local230 = 0; local230 < local228.length; local230++) {
-						local45 = local228[local230];
-						if (this.vertexSources == null || (arg6 & this.vertexSources[local45]) != 0) {
-							this.vertexX[local45] += arg2;
-							this.vertexY[local45] += arg3;
-							this.vertexZ[local45] += arg4;
+			transformX <<= 0x4;
+			transformY <<= 0x4;
+			transformZ <<= 0x4;
+			for (count = 0; count < labelCount; count++) {
+				i = labels[count];
+				if (i < this.boneVertices.length) {
+					verts = this.boneVertices[i];
+					for (k = 0; k < verts.length; k++) {
+						j = verts[k];
+						if (this.vertexSources == null || (mask & this.vertexSources[j]) != 0) {
+							this.vertexX[j] += transformX;
+							this.vertexY[j] += transformY;
+							this.vertexZ[j] += transformZ;
 						}
 					}
 				}
 			}
 			return;
 		}
-		@Pc(343) int local343;
-		@Pc(365) int local365;
-		@Pc(387) int local387;
-		@Pc(428) int local428;
-		@Pc(434) int local434;
-		@Pc(440) int local440;
-		@Pc(446) int local446;
-		@Pc(454) int local454;
-		@Pc(462) int local462;
-		@Pc(615) int local615;
-		@Pc(640) int local640;
-		@Pc(644) int local644;
-		@Pc(652) int local652;
-		@Pc(657) int local657;
-		@Pc(662) int local662;
-		@Pc(667) int local667;
-		@Pc(789) int[] local789;
-		@Pc(791) int local791;
-		@Pc(796) int local796;
-		@Pc(801) int local801;
-		@Pc(803) int local803;
-		@Pc(929) int local929;
-		if (arg0 == 2) {
-			if (arg7 == null) {
-				for (local18 = 0; local18 < local2; local18++) {
-					local26 = arg1[local18];
-					if (local26 < this.boneVertices.length) {
-						local228 = this.boneVertices[local26];
-						for (local230 = 0; local230 < local228.length; local230++) {
-							local45 = local228[local230];
-							if (this.vertexSources == null || (arg6 & this.vertexSources[local45]) != 0) {
-								this.vertexX[local45] -= originX;
-								this.vertexY[local45] -= originY;
-								this.vertexZ[local45] -= originZ;
-								if (arg4 != 0) {
-									local53 = MathUtils.sin[arg4];
-									local343 = MathUtils.cos[arg4];
-									local365 = this.vertexY[local45] * local53 + this.vertexX[local45] * local343 + 32767 >> 16;
-									this.vertexY[local45] = this.vertexY[local45] * local343 + 32767 - this.vertexX[local45] * local53 >> 16;
-									this.vertexX[local45] = local365;
+		@Pc(343) int rx;
+		@Pc(365) int ry;
+		@Pc(387) int rResult;
+		@Pc(428) int sinAngle;
+		@Pc(434) int cosAngle;
+		@Pc(440) int rotTemp;
+		@Pc(446) int sinZ;
+		@Pc(454) int cosTimeSinZ;
+		@Pc(462) int sinTimesZ;
+		@Pc(615) int relY;
+		@Pc(640) int relZ;
+		@Pc(644) int pivotX;
+		@Pc(652) int pivotZ;
+		@Pc(657) int mi;
+		@Pc(662) int mj;
+		@Pc(667) int sum;
+		@Pc(789) int[] finalMatrix;
+		@Pc(791) int fi;
+		@Pc(796) int fj;
+		@Pc(801) int fk;
+		@Pc(803) int li;
+		@Pc(929) int boneId;
+		if (transformType == 2) {
+			if (matrix == null) {
+				for (count = 0; count < labelCount; count++) {
+					i = labels[count];
+					if (i < this.boneVertices.length) {
+						verts = this.boneVertices[i];
+						for (k = 0; k < verts.length; k++) {
+							j = verts[k];
+							if (this.vertexSources == null || (mask & this.vertexSources[j]) != 0) {
+								this.vertexX[j] -= originX;
+								this.vertexY[j] -= originY;
+								this.vertexZ[j] -= originZ;
+								if (transformZ != 0) {
+									vertIdx = MathUtils.sin[transformZ];
+									rx = MathUtils.cos[transformZ];
+									ry = this.vertexY[j] * vertIdx + this.vertexX[j] * rx + 32767 >> 16;
+									this.vertexY[j] = this.vertexY[j] * rx + 32767 - this.vertexX[j] * vertIdx >> 16;
+									this.vertexX[j] = ry;
 								}
-								if (arg2 != 0) {
-									local53 = MathUtils.sin[arg2];
-									local343 = MathUtils.cos[arg2];
-									local365 = this.vertexY[local45] * local343 + 32767 - this.vertexZ[local45] * local53 >> 16;
-									this.vertexZ[local45] = this.vertexY[local45] * local53 + this.vertexZ[local45] * local343 + 32767 >> 16;
-									this.vertexY[local45] = local365;
+								if (transformX != 0) {
+									vertIdx = MathUtils.sin[transformX];
+									rx = MathUtils.cos[transformX];
+									ry = this.vertexY[j] * rx + 32767 - this.vertexZ[j] * vertIdx >> 16;
+									this.vertexZ[j] = this.vertexY[j] * vertIdx + this.vertexZ[j] * rx + 32767 >> 16;
+									this.vertexY[j] = ry;
 								}
-								if (arg3 != 0) {
-									local53 = MathUtils.sin[arg3];
-									local343 = MathUtils.cos[arg3];
-									local365 = this.vertexZ[local45] * local53 + this.vertexX[local45] * local343 + 32767 >> 16;
-									this.vertexZ[local45] = this.vertexZ[local45] * local343 + 32767 - this.vertexX[local45] * local53 >> 16;
-									this.vertexX[local45] = local365;
+								if (transformY != 0) {
+									vertIdx = MathUtils.sin[transformY];
+									rx = MathUtils.cos[transformY];
+									ry = this.vertexZ[j] * vertIdx + this.vertexX[j] * rx + 32767 >> 16;
+									this.vertexZ[j] = this.vertexZ[j] * rx + 32767 - this.vertexX[j] * vertIdx >> 16;
+									this.vertexX[j] = ry;
 								}
-								this.vertexX[local45] += originX;
-								this.vertexY[local45] += originY;
-								this.vertexZ[local45] += originZ;
+								this.vertexX[j] += originX;
+								this.vertexY[j] += originY;
+								this.vertexZ[j] += originZ;
 							}
 						}
 					}
 				}
-				if (arg5 && this.normalX != null) {
-					for (local18 = 0; local18 < local2; local18++) {
-						local26 = arg1[local18];
-						if (local26 < this.boneVertices.length) {
-							local228 = this.boneVertices[local26];
-							for (local230 = 0; local230 < local228.length; local230++) {
-								local45 = local228[local230];
-								if (this.vertexSources == null || (arg6 & this.vertexSources[local45]) != 0) {
-									local53 = this.vertexOffsets[local45];
-									local343 = this.vertexOffsets[local45 + 1];
-									for (local365 = local53; local365 < local343; local365++) {
-										local387 = this.vertexLookup[local365] - 1;
-										if (local387 == -1) {
+				if (delayed && this.normalX != null) {
+					for (count = 0; count < labelCount; count++) {
+						i = labels[count];
+						if (i < this.boneVertices.length) {
+							verts = this.boneVertices[i];
+							for (k = 0; k < verts.length; k++) {
+								j = verts[k];
+								if (this.vertexSources == null || (mask & this.vertexSources[j]) != 0) {
+									vertIdx = this.vertexOffsets[j];
+									rx = this.vertexOffsets[j + 1];
+									for (ry = vertIdx; ry < rx; ry++) {
+										rResult = this.vertexLookup[ry] - 1;
+										if (rResult == -1) {
 											break;
 										}
-										if (arg4 != 0) {
-											local428 = MathUtils.sin[arg4];
-											local434 = MathUtils.cos[arg4];
-											local440 = this.normalY[local387] * local428 + this.normalX[local387] * local434 + 32767 >> 16;
-											this.normalY[local387] = (short) (this.normalY[local387] * local434 + 32767 - this.normalX[local387] * local428 >> 16);
-											this.normalX[local387] = (short) local440;
+										if (transformZ != 0) {
+											sinAngle = MathUtils.sin[transformZ];
+											cosAngle = MathUtils.cos[transformZ];
+											rotTemp = this.normalY[rResult] * sinAngle + this.normalX[rResult] * cosAngle + 32767 >> 16;
+											this.normalY[rResult] = (short) (this.normalY[rResult] * cosAngle + 32767 - this.normalX[rResult] * sinAngle >> 16);
+											this.normalX[rResult] = (short) rotTemp;
 										}
-										if (arg2 != 0) {
-											local428 = MathUtils.sin[arg2];
-											local434 = MathUtils.cos[arg2];
-											local440 = this.normalY[local387] * local434 + 32767 - this.normalZ[local387] * local428 >> 16;
-											this.normalZ[local387] = (short) (this.normalY[local387] * local428 + this.normalZ[local387] * local434 + 32767 >> 16);
-											this.normalY[local387] = (short) local440;
+										if (transformX != 0) {
+											sinAngle = MathUtils.sin[transformX];
+											cosAngle = MathUtils.cos[transformX];
+											rotTemp = this.normalY[rResult] * cosAngle + 32767 - this.normalZ[rResult] * sinAngle >> 16;
+											this.normalZ[rResult] = (short) (this.normalY[rResult] * sinAngle + this.normalZ[rResult] * cosAngle + 32767 >> 16);
+											this.normalY[rResult] = (short) rotTemp;
 										}
-										if (arg3 != 0) {
-											local428 = MathUtils.sin[arg3];
-											local434 = MathUtils.cos[arg3];
-											local440 = this.normalZ[local387] * local428 + this.normalX[local387] * local434 + 32767 >> 16;
-											this.normalZ[local387] = (short) (this.normalZ[local387] * local434 + 32767 - this.normalX[local387] * local428 >> 16);
-											this.normalX[local387] = (short) local440;
+										if (transformY != 0) {
+											sinAngle = MathUtils.sin[transformY];
+											cosAngle = MathUtils.cos[transformY];
+											rotTemp = this.normalZ[rResult] * sinAngle + this.normalX[rResult] * cosAngle + 32767 >> 16;
+											this.normalZ[rResult] = (short) (this.normalZ[rResult] * cosAngle + 32767 - this.normalX[rResult] * sinAngle >> 16);
+											this.normalX[rResult] = (short) rotTemp;
 										}
 									}
 								}
@@ -1623,249 +1623,249 @@ public final class GlModel extends Model {
 					}
 				}
 			} else {
-				local18 = arg7[9] << 4;
-				local26 = arg7[10] << 4;
-				local33 = arg7[11] << 4;
-				local230 = arg7[12] << 4;
-				local45 = arg7[13] << 4;
-				local53 = arg7[14] << 4;
+				count = matrix[9] << 4;
+				i = matrix[10] << 4;
+				rz = matrix[11] << 4;
+				k = matrix[12] << 4;
+				j = matrix[13] << 4;
+				vertIdx = matrix[14] << 4;
 				if (originValid) {
-					local343 = arg7[0] * originX + arg7[3] * originY + arg7[6] * originZ + 16384 >> 15;
-					local365 = arg7[1] * originX + arg7[4] * originY + arg7[7] * originZ + 16384 >> 15;
-					local387 = arg7[2] * originX + arg7[5] * originY + arg7[8] * originZ + 16384 >> 15;
-					local343 += local230;
-					local365 += local45;
-					local387 += local53;
-					originX = local343;
-					originY = local365;
-					originZ = local387;
+					rx = matrix[0] * originX + matrix[3] * originY + matrix[6] * originZ + 16384 >> 15;
+					ry = matrix[1] * originX + matrix[4] * originY + matrix[7] * originZ + 16384 >> 15;
+					rResult = matrix[2] * originX + matrix[5] * originY + matrix[8] * originZ + 16384 >> 15;
+					rx += k;
+					ry += j;
+					rResult += vertIdx;
+					originX = rx;
+					originY = ry;
+					originZ = rResult;
 					originValid = false;
 				}
-				@Pc(410) int[] local410 = new int[9];
-				local365 = MathUtils.cos[arg2] >> 1;
-				local387 = MathUtils.sin[arg2] >> 1;
-				local428 = MathUtils.cos[arg3] >> 1;
-				local434 = MathUtils.sin[arg3] >> 1;
-				local440 = MathUtils.cos[arg4] >> 1;
-				local446 = MathUtils.sin[arg4] >> 1;
-				local454 = local387 * local440 + 16384 >> 15;
-				local462 = local387 * local446 + 16384 >> 15;
-				local410[0] = local428 * local440 + local434 * local462 + 16384 >> 15;
-				local410[1] = -local428 * local446 + local434 * local454 + 16384 >> 15;
-				local410[2] = local434 * local365 + 16384 >> 15;
-				local410[3] = local365 * local446 + 16384 >> 15;
-				local410[4] = local365 * local440 + 16384 >> 15;
-				local410[5] = -local387;
-				local410[6] = -local434 * local440 + local428 * local462 + 16384 >> 15;
-				local410[7] = local434 * local446 + local428 * local454 + 16384 >> 15;
-				local410[8] = local428 * local365 + 16384 >> 15;
-				@Pc(590) int local590 = local410[0] * -originX + local410[1] * -originY + local410[2] * -originZ + 16384 >> 15;
-				local615 = local410[3] * -originX + local410[4] * -originY + local410[5] * -originZ + 16384 >> 15;
-				local640 = local410[6] * -originX + local410[7] * -originY + local410[8] * -originZ + 16384 >> 15;
-				local644 = local590 + originX;
-				@Pc(648) int local648 = local615 + originY;
-				local652 = local640 + originZ;
-				@Pc(655) int[] local655 = new int[9];
-				for (local657 = 0; local657 < 3; local657++) {
-					for (local662 = 0; local662 < 3; local662++) {
-						local667 = 0;
-						for (@Pc(669) int local669 = 0; local669 < 3; local669++) {
-							local667 += local410[local657 * 3 + local669] * arg7[local662 * 3 + local669];
+				@Pc(410) int[] rotMatrix = new int[9];
+				ry = MathUtils.cos[transformX] >> 1;
+				rResult = MathUtils.sin[transformX] >> 1;
+				sinAngle = MathUtils.cos[transformY] >> 1;
+				cosAngle = MathUtils.sin[transformY] >> 1;
+				rotTemp = MathUtils.cos[transformZ] >> 1;
+				sinZ = MathUtils.sin[transformZ] >> 1;
+				cosTimeSinZ = rResult * rotTemp + 16384 >> 15;
+				sinTimesZ = rResult * sinZ + 16384 >> 15;
+				rotMatrix[0] = sinAngle * rotTemp + cosAngle * sinTimesZ + 16384 >> 15;
+				rotMatrix[1] = -sinAngle * sinZ + cosAngle * cosTimeSinZ + 16384 >> 15;
+				rotMatrix[2] = cosAngle * ry + 16384 >> 15;
+				rotMatrix[3] = ry * sinZ + 16384 >> 15;
+				rotMatrix[4] = ry * rotTemp + 16384 >> 15;
+				rotMatrix[5] = -rResult;
+				rotMatrix[6] = -cosAngle * rotTemp + sinAngle * sinTimesZ + 16384 >> 15;
+				rotMatrix[7] = cosAngle * sinZ + sinAngle * cosTimeSinZ + 16384 >> 15;
+				rotMatrix[8] = sinAngle * ry + 16384 >> 15;
+				@Pc(590) int relX = rotMatrix[0] * -originX + rotMatrix[1] * -originY + rotMatrix[2] * -originZ + 16384 >> 15;
+				relY = rotMatrix[3] * -originX + rotMatrix[4] * -originY + rotMatrix[5] * -originZ + 16384 >> 15;
+				relZ = rotMatrix[6] * -originX + rotMatrix[7] * -originY + rotMatrix[8] * -originZ + 16384 >> 15;
+				pivotX = relX + originX;
+				@Pc(648) int pivotY = relY + originY;
+				pivotZ = relZ + originZ;
+				@Pc(655) int[] composedMatrix = new int[9];
+				for (mi = 0; mi < 3; mi++) {
+					for (mj = 0; mj < 3; mj++) {
+						sum = 0;
+						for (@Pc(669) int mk = 0; mk < 3; mk++) {
+							sum += rotMatrix[mi * 3 + mk] * matrix[mj * 3 + mk];
 						}
-						local655[local657 * 3 + local662] = local667 + 16384 >> 15;
+						composedMatrix[mi * 3 + mj] = sum + 16384 >> 15;
 					}
 				}
-				local657 = local410[0] * local230 + local410[1] * local45 + local410[2] * local53 + 16384 >> 15;
-				local662 = local410[3] * local230 + local410[4] * local45 + local410[5] * local53 + 16384 >> 15;
-				local667 = local410[6] * local230 + local410[7] * local45 + local410[8] * local53 + 16384 >> 15;
-				local657 += local644;
-				local662 += local648;
-				local667 += local652;
-				local789 = new int[9];
-				for (local791 = 0; local791 < 3; local791++) {
-					for (local796 = 0; local796 < 3; local796++) {
-						local801 = 0;
-						for (local803 = 0; local803 < 3; local803++) {
-							local801 += arg7[local791 * 3 + local803] * local655[local796 + local803 * 3];
+				mi = rotMatrix[0] * k + rotMatrix[1] * j + rotMatrix[2] * vertIdx + 16384 >> 15;
+				mj = rotMatrix[3] * k + rotMatrix[4] * j + rotMatrix[5] * vertIdx + 16384 >> 15;
+				sum = rotMatrix[6] * k + rotMatrix[7] * j + rotMatrix[8] * vertIdx + 16384 >> 15;
+				mi += pivotX;
+				mj += pivotY;
+				sum += pivotZ;
+				finalMatrix = new int[9];
+				for (fi = 0; fi < 3; fi++) {
+					for (fj = 0; fj < 3; fj++) {
+						fk = 0;
+						for (li = 0; li < 3; li++) {
+							fk += matrix[fi * 3 + li] * composedMatrix[fj + li * 3];
 						}
-						local789[local791 * 3 + local796] = local801 + 16384 >> 15;
+						finalMatrix[fi * 3 + fj] = fk + 16384 >> 15;
 					}
 				}
-				local791 = arg7[0] * local657 + arg7[1] * local662 + arg7[2] * local667 + 16384 >> 15;
-				local796 = arg7[3] * local657 + arg7[4] * local662 + arg7[5] * local667 + 16384 >> 15;
-				local801 = arg7[6] * local657 + arg7[7] * local662 + arg7[8] * local667 + 16384 >> 15;
-				local791 += local18;
-				local796 += local26;
-				local801 += local33;
-				for (local803 = 0; local803 < local2; local803++) {
-					local929 = arg1[local803];
-					if (local929 < this.boneVertices.length) {
-						@Pc(939) int[] local939 = this.boneVertices[local929];
-						for (@Pc(941) int local941 = 0; local941 < local939.length; local941++) {
-							@Pc(949) int local949 = local939[local941];
-							if (this.vertexSources == null || (arg6 & this.vertexSources[local949]) != 0) {
-								@Pc(991) int local991 = local789[0] * this.vertexX[local949] + local789[1] * this.vertexY[local949] + local789[2] * this.vertexZ[local949] + 16384 >> 15;
-								@Pc(1022) int local1022 = local789[3] * this.vertexX[local949] + local789[4] * this.vertexY[local949] + local789[5] * this.vertexZ[local949] + 16384 >> 15;
-								@Pc(1053) int local1053 = local789[6] * this.vertexX[local949] + local789[7] * this.vertexY[local949] + local789[8] * this.vertexZ[local949] + 16384 >> 15;
-								@Pc(1057) int local1057 = local991 + local791;
-								@Pc(1061) int local1061 = local1022 + local796;
-								@Pc(1065) int local1065 = local1053 + local801;
-								this.vertexX[local949] = local1057;
-								this.vertexY[local949] = local1061;
-								this.vertexZ[local949] = local1065;
+				fi = matrix[0] * mi + matrix[1] * mj + matrix[2] * sum + 16384 >> 15;
+				fj = matrix[3] * mi + matrix[4] * mj + matrix[5] * sum + 16384 >> 15;
+				fk = matrix[6] * mi + matrix[7] * mj + matrix[8] * sum + 16384 >> 15;
+				fi += count;
+				fj += i;
+				fk += rz;
+				for (li = 0; li < labelCount; li++) {
+					boneId = labels[li];
+					if (boneId < this.boneVertices.length) {
+						@Pc(939) int[] boneVertices = this.boneVertices[boneId];
+						for (@Pc(941) int bi = 0; bi < boneVertices.length; bi++) {
+							@Pc(949) int vi = boneVertices[bi];
+							if (this.vertexSources == null || (mask & this.vertexSources[vi]) != 0) {
+								@Pc(991) int newX = finalMatrix[0] * this.vertexX[vi] + finalMatrix[1] * this.vertexY[vi] + finalMatrix[2] * this.vertexZ[vi] + 16384 >> 15;
+								@Pc(1022) int newY = finalMatrix[3] * this.vertexX[vi] + finalMatrix[4] * this.vertexY[vi] + finalMatrix[5] * this.vertexZ[vi] + 16384 >> 15;
+								@Pc(1053) int newZ = finalMatrix[6] * this.vertexX[vi] + finalMatrix[7] * this.vertexY[vi] + finalMatrix[8] * this.vertexZ[vi] + 16384 >> 15;
+								@Pc(1057) int finalX = newX + fi;
+								@Pc(1061) int finalY = newY + fj;
+								@Pc(1065) int finalZ = newZ + fk;
+								this.vertexX[vi] = finalX;
+								this.vertexY[vi] = finalY;
+								this.vertexZ[vi] = finalZ;
 							}
 						}
 					}
 				}
 			}
-		} else if (arg0 == 3) {
-			if (arg7 == null) {
-				for (local18 = 0; local18 < local2; local18++) {
-					local26 = arg1[local18];
-					if (local26 < this.boneVertices.length) {
-						local228 = this.boneVertices[local26];
-						for (local230 = 0; local230 < local228.length; local230++) {
-							local45 = local228[local230];
-							if (this.vertexSources == null || (arg6 & this.vertexSources[local45]) != 0) {
-								this.vertexX[local45] -= originX;
-								this.vertexY[local45] -= originY;
-								this.vertexZ[local45] -= originZ;
-								this.vertexX[local45] = this.vertexX[local45] * arg2 >> 7;
-								this.vertexY[local45] = this.vertexY[local45] * arg3 >> 7;
-								this.vertexZ[local45] = this.vertexZ[local45] * arg4 >> 7;
-								this.vertexX[local45] += originX;
-								this.vertexY[local45] += originY;
-								this.vertexZ[local45] += originZ;
+		} else if (transformType == 3) {
+			if (matrix == null) {
+				for (count = 0; count < labelCount; count++) {
+					i = labels[count];
+					if (i < this.boneVertices.length) {
+						verts = this.boneVertices[i];
+						for (k = 0; k < verts.length; k++) {
+							j = verts[k];
+							if (this.vertexSources == null || (mask & this.vertexSources[j]) != 0) {
+								this.vertexX[j] -= originX;
+								this.vertexY[j] -= originY;
+								this.vertexZ[j] -= originZ;
+								this.vertexX[j] = this.vertexX[j] * transformX >> 7;
+								this.vertexY[j] = this.vertexY[j] * transformY >> 7;
+								this.vertexZ[j] = this.vertexZ[j] * transformZ >> 7;
+								this.vertexX[j] += originX;
+								this.vertexY[j] += originY;
+								this.vertexZ[j] += originZ;
 							}
 						}
 					}
 				}
 			} else {
-				local18 = arg7[9] << 4;
-				local26 = arg7[10] << 4;
-				local33 = arg7[11] << 4;
-				local230 = arg7[12] << 4;
-				local45 = arg7[13] << 4;
-				local53 = arg7[14] << 4;
+				count = matrix[9] << 4;
+				i = matrix[10] << 4;
+				rz = matrix[11] << 4;
+				k = matrix[12] << 4;
+				j = matrix[13] << 4;
+				vertIdx = matrix[14] << 4;
 				if (originValid) {
-					local343 = arg7[0] * originX + arg7[3] * originY + arg7[6] * originZ + 16384 >> 15;
-					local365 = arg7[1] * originX + arg7[4] * originY + arg7[7] * originZ + 16384 >> 15;
-					local387 = arg7[2] * originX + arg7[5] * originY + arg7[8] * originZ + 16384 >> 15;
-					local343 += local230;
-					local365 += local45;
-					local387 += local53;
-					originX = local343;
-					originY = local365;
-					originZ = local387;
+					rx = matrix[0] * originX + matrix[3] * originY + matrix[6] * originZ + 16384 >> 15;
+					ry = matrix[1] * originX + matrix[4] * originY + matrix[7] * originZ + 16384 >> 15;
+					rResult = matrix[2] * originX + matrix[5] * originY + matrix[8] * originZ + 16384 >> 15;
+					rx += k;
+					ry += j;
+					rResult += vertIdx;
+					originX = rx;
+					originY = ry;
+					originZ = rResult;
 					originValid = false;
 				}
-				local343 = arg2 << 15 >> 7;
-				local365 = arg3 << 15 >> 7;
-				local387 = arg4 << 15 >> 7;
-				local428 = local343 * -originX + 16384 >> 15;
-				local434 = local365 * -originY + 16384 >> 15;
-				local440 = local387 * -originZ + 16384 >> 15;
-				local446 = local428 + originX;
-				local454 = local434 + originY;
-				local462 = local440 + originZ;
-				@Pc(1783) int[] local1783 = new int[]{local343 * arg7[0] + 16384 >> 15, local343 * arg7[3] + 16384 >> 15, local343 * arg7[6] + 16384 >> 15, local365 * arg7[1] + 16384 >> 15, local365 * arg7[4] + 16384 >> 15, local365 * arg7[7] + 16384 >> 15, local387 * arg7[2] + 16384 >> 15, local387 * arg7[5] + 16384 >> 15, local387 * arg7[8] + 16384 >> 15};
-				local615 = local343 * local230 + 16384 >> 15;
-				local640 = local365 * local45 + 16384 >> 15;
-				local644 = local387 * local53 + 16384 >> 15;
-				@Pc(1919) int local1919 = local615 + local446;
-				@Pc(1923) int local1923 = local640 + local454;
-				@Pc(1927) int local1927 = local644 + local462;
-				@Pc(1930) int[] local1930 = new int[9];
-				@Pc(1937) int local1937;
-				for (local652 = 0; local652 < 3; local652++) {
-					for (local1937 = 0; local1937 < 3; local1937++) {
-						local657 = 0;
-						for (local662 = 0; local662 < 3; local662++) {
-							local657 += arg7[local652 * 3 + local662] * local1783[local1937 + local662 * 3];
+				rx = transformX << 15 >> 7;
+				ry = transformY << 15 >> 7;
+				rResult = transformZ << 15 >> 7;
+				sinAngle = rx * -originX + 16384 >> 15;
+				cosAngle = ry * -originY + 16384 >> 15;
+				rotTemp = rResult * -originZ + 16384 >> 15;
+				sinZ = sinAngle + originX;
+				cosTimeSinZ = cosAngle + originY;
+				sinTimesZ = rotTemp + originZ;
+				@Pc(1783) int[] scaleMatrix = new int[]{rx * matrix[0] + 16384 >> 15, rx * matrix[3] + 16384 >> 15, rx * matrix[6] + 16384 >> 15, ry * matrix[1] + 16384 >> 15, ry * matrix[4] + 16384 >> 15, ry * matrix[7] + 16384 >> 15, rResult * matrix[2] + 16384 >> 15, rResult * matrix[5] + 16384 >> 15, rResult * matrix[8] + 16384 >> 15};
+				relY = rx * k + 16384 >> 15;
+				relZ = ry * j + 16384 >> 15;
+				pivotX = rResult * vertIdx + 16384 >> 15;
+				@Pc(1919) int scalePivotX = relY + sinZ;
+				@Pc(1923) int scalePivotY = relZ + cosTimeSinZ;
+				@Pc(1927) int scalePivotZ = pivotX + sinTimesZ;
+				@Pc(1930) int[] scaleComposed = new int[9];
+				@Pc(1937) int si;
+				for (pivotZ = 0; pivotZ < 3; pivotZ++) {
+					for (si = 0; si < 3; si++) {
+						mi = 0;
+						for (mj = 0; mj < 3; mj++) {
+							mi += matrix[pivotZ * 3 + mj] * scaleMatrix[si + mj * 3];
 						}
-						local1930[local652 * 3 + local1937] = local657 + 16384 >> 15;
+						scaleComposed[pivotZ * 3 + si] = mi + 16384 >> 15;
 					}
 				}
-				local652 = arg7[0] * local1919 + arg7[1] * local1923 + arg7[2] * local1927 + 16384 >> 15;
-				local1937 = arg7[3] * local1919 + arg7[4] * local1923 + arg7[5] * local1927 + 16384 >> 15;
-				local657 = arg7[6] * local1919 + arg7[7] * local1923 + arg7[8] * local1927 + 16384 >> 15;
-				local652 += local18;
-				local1937 += local26;
-				local657 += local33;
-				for (local662 = 0; local662 < local2; local662++) {
-					local667 = arg1[local662];
-					if (local667 < this.boneVertices.length) {
-						local789 = this.boneVertices[local667];
-						for (local791 = 0; local791 < local789.length; local791++) {
-							local796 = local789[local791];
-							if (this.vertexSources == null || (arg6 & this.vertexSources[local796]) != 0) {
-								local801 = local1930[0] * this.vertexX[local796] + local1930[1] * this.vertexY[local796] + local1930[2] * this.vertexZ[local796] + 16384 >> 15;
-								local803 = local1930[3] * this.vertexX[local796] + local1930[4] * this.vertexY[local796] + local1930[5] * this.vertexZ[local796] + 16384 >> 15;
-								local929 = local1930[6] * this.vertexX[local796] + local1930[7] * this.vertexY[local796] + local1930[8] * this.vertexZ[local796] + 16384 >> 15;
-								@Pc(2198) int local2198 = local801 + local652;
-								@Pc(2202) int local2202 = local803 + local1937;
-								@Pc(2206) int local2206 = local929 + local657;
-								this.vertexX[local796] = local2198;
-								this.vertexY[local796] = local2202;
-								this.vertexZ[local796] = local2206;
+				pivotZ = matrix[0] * scalePivotX + matrix[1] * scalePivotY + matrix[2] * scalePivotZ + 16384 >> 15;
+				si = matrix[3] * scalePivotX + matrix[4] * scalePivotY + matrix[5] * scalePivotZ + 16384 >> 15;
+				mi = matrix[6] * scalePivotX + matrix[7] * scalePivotY + matrix[8] * scalePivotZ + 16384 >> 15;
+				pivotZ += count;
+				si += i;
+				mi += rz;
+				for (mj = 0; mj < labelCount; mj++) {
+					sum = labels[mj];
+					if (sum < this.boneVertices.length) {
+						finalMatrix = this.boneVertices[sum];
+						for (fi = 0; fi < finalMatrix.length; fi++) {
+							fj = finalMatrix[fi];
+							if (this.vertexSources == null || (mask & this.vertexSources[fj]) != 0) {
+								fk = scaleComposed[0] * this.vertexX[fj] + scaleComposed[1] * this.vertexY[fj] + scaleComposed[2] * this.vertexZ[fj] + 16384 >> 15;
+								li = scaleComposed[3] * this.vertexX[fj] + scaleComposed[4] * this.vertexY[fj] + scaleComposed[5] * this.vertexZ[fj] + 16384 >> 15;
+								boneId = scaleComposed[6] * this.vertexX[fj] + scaleComposed[7] * this.vertexY[fj] + scaleComposed[8] * this.vertexZ[fj] + 16384 >> 15;
+								@Pc(2198) int resultX = fk + pivotZ;
+								@Pc(2202) int resultY = li + si;
+								@Pc(2206) int resultZ = boneId + mi;
+								this.vertexX[fj] = resultX;
+								this.vertexY[fj] = resultY;
+								this.vertexZ[fj] = resultZ;
 							}
 						}
 					}
 				}
 			}
-		} else if (arg0 == 5) {
+		} else if (transformType == 5) {
 			if (this.boneTriangles != null && this.triangleAlpha != null) {
-				for (local18 = 0; local18 < local2; local18++) {
-					local26 = arg1[local18];
-					if (local26 < this.boneTriangles.length) {
-						local228 = this.boneTriangles[local26];
-						for (local230 = 0; local230 < local228.length; local230++) {
-							local45 = local228[local230];
-							if (this.triangleSources == null || (arg6 & this.triangleSources[local45]) != 0) {
-								local53 = (this.triangleAlpha[local45] & 0xFF) + arg2 * 8;
-								if (local53 < 0) {
-									local53 = 0;
-								} else if (local53 > 255) {
-									local53 = 255;
+				for (count = 0; count < labelCount; count++) {
+					i = labels[count];
+					if (i < this.boneTriangles.length) {
+						verts = this.boneTriangles[i];
+						for (k = 0; k < verts.length; k++) {
+							j = verts[k];
+							if (this.triangleSources == null || (mask & this.triangleSources[j]) != 0) {
+								vertIdx = (this.triangleAlpha[j] & 0xFF) + transformX * 8;
+								if (vertIdx < 0) {
+									vertIdx = 0;
+								} else if (vertIdx > 255) {
+									vertIdx = 255;
 								}
-								this.triangleAlpha[local45] = (byte) local53;
+								this.triangleAlpha[j] = (byte) vertIdx;
 							}
 						}
-						if (local228.length > 0) {
+						if (verts.length > 0) {
 							this.colorBuffer.valid = false;
 						}
 					}
 				}
 			}
-		} else if (arg0 == 7 && this.boneTriangles != null) {
-			for (local18 = 0; local18 < local2; local18++) {
-				local26 = arg1[local18];
-				if (local26 < this.boneTriangles.length) {
-					local228 = this.boneTriangles[local26];
-					for (local230 = 0; local230 < local228.length; local230++) {
-						local45 = local228[local230];
-						if (this.triangleSources == null || (arg6 & this.triangleSources[local45]) != 0) {
-							local53 = this.triangleColors[local45] & 0xFFFF;
-							local343 = local53 >> 10 & 0x3F;
-							local365 = local53 >> 7 & 0x7;
-							local387 = local53 & 0x7F;
-							@Pc(2518) int local2518 = local343 + arg2 & 0x3F;
-							local365 += arg3 / 4;
-							if (local365 < 0) {
-								local365 = 0;
-							} else if (local365 > 7) {
-								local365 = 7;
+		} else if (transformType == 7 && this.boneTriangles != null) {
+			for (count = 0; count < labelCount; count++) {
+				i = labels[count];
+				if (i < this.boneTriangles.length) {
+					verts = this.boneTriangles[i];
+					for (k = 0; k < verts.length; k++) {
+						j = verts[k];
+						if (this.triangleSources == null || (mask & this.triangleSources[j]) != 0) {
+							vertIdx = this.triangleColors[j] & 0xFFFF;
+							rx = vertIdx >> 10 & 0x3F;
+							ry = vertIdx >> 7 & 0x7;
+							rResult = vertIdx & 0x7F;
+							@Pc(2518) int newHue = rx + transformX & 0x3F;
+							ry += transformY / 4;
+							if (ry < 0) {
+								ry = 0;
+							} else if (ry > 7) {
+								ry = 7;
 							}
-							local387 += arg4;
-							if (local387 < 0) {
-								local387 = 0;
-							} else if (local387 > 127) {
-								local387 = 127;
+							rResult += transformZ;
+							if (rResult < 0) {
+								rResult = 0;
+							} else if (rResult > 127) {
+								rResult = 127;
 							}
-							this.triangleColors[local45] = (short) (local2518 << 10 | local365 << 7 | local387);
+							this.triangleColors[j] = (short) (newHue << 10 | ry << 7 | rResult);
 						}
 					}
-					if (local228.length > 0) {
+					if (verts.length > 0) {
 						this.colorBuffer.valid = false;
 					}
 				}
@@ -1884,61 +1884,61 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "o", descriptor = "()V")
 	public final void createBones() {
-		@Pc(5) int[] local5;
-		@Pc(7) int local7;
-		@Pc(24) int local24;
-		@Pc(9) int local9;
-		@Pc(20) int local20;
+		@Pc(5) int[] counts;
+		@Pc(7) int maxBone;
+		@Pc(24) int count;
+		@Pc(9) int i;
+		@Pc(20) int boneId;
 		if (this.vertexBones != null) {
-			local5 = new int[256];
-			local7 = 0;
-			for (local9 = 0; local9 < this.vertexCount; local9++) {
-				local20 = this.vertexBones[local9] & 0xFF;
-				local24 = local5[local20]++;
-				if (local20 > local7) {
-					local7 = local20;
+			counts = new int[256];
+			maxBone = 0;
+			for (i = 0; i < this.vertexCount; i++) {
+				boneId = this.vertexBones[i] & 0xFF;
+				count = counts[boneId]++;
+				if (boneId > maxBone) {
+					maxBone = boneId;
 				}
 			}
-			this.boneVertices = new int[local7 + 1][];
-			for (local9 = 0; local9 <= local7; local9++) {
-				this.boneVertices[local9] = new int[local5[local9]];
-				local5[local9] = 0;
+			this.boneVertices = new int[maxBone + 1][];
+			for (i = 0; i <= maxBone; i++) {
+				this.boneVertices[i] = new int[counts[i]];
+				counts[i] = 0;
 			}
-			local9 = 0;
-			while (local9 < this.vertexCount) {
-				local20 = this.vertexBones[local9] & 0xFF;
-				this.boneVertices[local20][local5[local20]++] = local9++;
+			i = 0;
+			while (i < this.vertexCount) {
+				boneId = this.vertexBones[i] & 0xFF;
+				this.boneVertices[boneId][counts[boneId]++] = i++;
 			}
 			this.vertexBones = null;
 		}
 		if (this.triangleBones == null) {
 			return;
 		}
-		local5 = new int[256];
-		local7 = 0;
-		for (local9 = 0; local9 < this.triangleCount; local9++) {
-			local20 = this.triangleBones[local9] & 0xFF;
-			local24 = local5[local20]++;
-			if (local20 > local7) {
-				local7 = local20;
+		counts = new int[256];
+		maxBone = 0;
+		for (i = 0; i < this.triangleCount; i++) {
+			boneId = this.triangleBones[i] & 0xFF;
+			count = counts[boneId]++;
+			if (boneId > maxBone) {
+				maxBone = boneId;
 			}
 		}
-		this.boneTriangles = new int[local7 + 1][];
-		for (local9 = 0; local9 <= local7; local9++) {
-			this.boneTriangles[local9] = new int[local5[local9]];
-			local5[local9] = 0;
+		this.boneTriangles = new int[maxBone + 1][];
+		for (i = 0; i <= maxBone; i++) {
+			this.boneTriangles[i] = new int[counts[i]];
+			counts[i] = 0;
 		}
-		local9 = 0;
-		while (local9 < this.triangleCount) {
-			local20 = this.triangleBones[local9] & 0xFF;
-			this.boneTriangles[local20][local5[local20]++] = local9++;
+		i = 0;
+		while (i < this.triangleCount) {
+			boneId = this.triangleBones[i] & 0xFF;
+			this.boneTriangles[boneId][counts[boneId]++] = i++;
 		}
 		this.triangleBones = null;
 	}
 
 	@OriginalMember(owner = "client!td", name = "e", descriptor = "(I)V")
-	public final void setDiffuseIntensity(@OriginalArg(0) int arg0) {
-		this.contrast = (short) arg0;
+	public final void setDiffuseIntensity(@OriginalArg(0) int value) {
+		this.contrast = (short) value;
 		if (this.normalsBuffer != null) {
 			this.normalsBuffer.valid = false;
 		}
@@ -1950,14 +1950,14 @@ public final class GlModel extends Model {
 			this.rotate180();
 			return;
 		}
-		@Pc(7) int local7;
-		for (local7 = 0; local7 < this.vertexCount; local7++) {
-			this.vertexX[local7] = -this.vertexX[local7];
-			this.vertexZ[local7] = -this.vertexZ[local7];
+		@Pc(7) int i;
+		for (i = 0; i < this.vertexCount; i++) {
+			this.vertexX[i] = -this.vertexX[i];
+			this.vertexZ[i] = -this.vertexZ[i];
 		}
-		for (local7 = 0; local7 < this.uniqueVertexCount; local7++) {
-			this.normalX[local7] = (short) -this.normalX[local7];
-			this.normalZ[local7] = (short) -this.normalZ[local7];
+		for (i = 0; i < this.uniqueVertexCount; i++) {
+			this.normalX[i] = (short) -this.normalX[i];
+			this.normalZ[i] = (short) -this.normalZ[i];
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -1968,11 +1968,11 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "b", descriptor = "(III)V")
 	@Override
-	public final void resize(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			this.vertexX[local1] = this.vertexX[local1] * arg0 >> 7;
-			this.vertexY[local1] = this.vertexY[local1] * arg1 >> 7;
-			this.vertexZ[local1] = this.vertexZ[local1] * arg2 >> 7;
+	public final void resize(@OriginalArg(0) int scaleX, @OriginalArg(1) int scaleY, @OriginalArg(2) int scaleZ) {
+		for (@Pc(1) int i = 0; i < this.vertexCount; i++) {
+			this.vertexX[i] = this.vertexX[i] * scaleX >> 7;
+			this.vertexY[i] = this.vertexY[i] * scaleY >> 7;
+			this.vertexZ[i] = this.vertexZ[i] * scaleZ >> 7;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -1980,16 +1980,16 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "c", descriptor = "(ZZZ)Lclient!ak;")
 	@Override
-	public final Model copyForEntity(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2) {
-		return this.copyToTarget(arg0, arg1, arg2, entityCopyTarget, entityCopyScratch);
+	public final Model copyForEntity(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean shareNormals) {
+		return this.copyToTarget(shareAlpha, shareColors, shareNormals, entityCopyTarget, entityCopyScratch);
 	}
 
 	@OriginalMember(owner = "client!td", name = "e", descriptor = "()V")
 	@Override
 	public final void rotate180() {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			this.vertexX[local1] = -this.vertexX[local1];
-			this.vertexZ[local1] = -this.vertexZ[local1];
+		for (@Pc(1) int i = 0; i < this.vertexCount; i++) {
+			this.vertexX[i] = -this.vertexX[i];
+			this.vertexZ[i] = -this.vertexZ[i];
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -2002,26 +2002,26 @@ public final class GlModel extends Model {
 		} else {
 			tempBuffer.offset = 0;
 		}
-		@Pc(25) int local25;
+		@Pc(25) int i;
 		if (GlRenderer.bigEndian) {
-			for (local25 = 0; local25 < this.triangleCount; local25++) {
-				tempBuffer.p4(this.triangleVertexA[local25]);
-				tempBuffer.p4(this.triangleVertexB[local25]);
-				tempBuffer.p4(this.triangleVertexC[local25]);
+			for (i = 0; i < this.triangleCount; i++) {
+				tempBuffer.p4(this.triangleVertexA[i]);
+				tempBuffer.p4(this.triangleVertexB[i]);
+				tempBuffer.p4(this.triangleVertexC[i]);
 			}
 		} else {
-			for (local25 = 0; local25 < this.triangleCount; local25++) {
-				tempBuffer.ip4(this.triangleVertexA[local25]);
-				tempBuffer.ip4(this.triangleVertexB[local25]);
-				tempBuffer.ip4(this.triangleVertexC[local25]);
+			for (i = 0; i < this.triangleCount; i++) {
+				tempBuffer.ip4(this.triangleVertexA[i]);
+				tempBuffer.ip4(this.triangleVertexB[i]);
+				tempBuffer.ip4(this.triangleVertexC[i]);
 			}
 		}
 		if (!GlRenderer.arbVboSupported) {
-			@Pc(115) ByteBuffer local115 = ByteBuffer.allocateDirect(tempBuffer.offset);
-			local115.put(tempBuffer.data, 0, tempBuffer.offset);
-			local115.flip();
+			@Pc(115) ByteBuffer directBuffer = ByteBuffer.allocateDirect(tempBuffer.offset);
+			directBuffer.put(tempBuffer.data, 0, tempBuffer.offset);
+			directBuffer.flip();
 			this.indexBuffer.valid = true;
-			this.indexBuffer.buffer = local115;
+			this.indexBuffer.buffer = directBuffer;
 			this.indexBuffer.vbo = null;
 			return;
 		}
@@ -2034,8 +2034,8 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "f", descriptor = "(I)V")
-	public final void setAmbientIntensity(@OriginalArg(0) int arg0) {
-		this.ambient = (short) arg0;
+	public final void setAmbientIntensity(@OriginalArg(0) int value) {
+		this.ambient = (short) value;
 		this.colorBuffer.valid = false;
 	}
 
@@ -2045,10 +2045,10 @@ public final class GlModel extends Model {
 		if (this.boneVertices == null) {
 			return false;
 		}
-		for (@Pc(6) int local6 = 0; local6 < this.vertexCount; local6++) {
-			this.vertexX[local6] <<= 0x4;
-			this.vertexY[local6] <<= 0x4;
-			this.vertexZ[local6] <<= 0x4;
+		for (@Pc(6) int i = 0; i < this.vertexCount; i++) {
+			this.vertexX[i] <<= 0x4;
+			this.vertexY[i] <<= 0x4;
+			this.vertexZ[i] <<= 0x4;
 		}
 		originX = 0;
 		originY = 0;
@@ -2057,26 +2057,26 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(SS)V")
-	public final void retexture(@OriginalArg(0) short arg0, @OriginalArg(1) short arg1) {
-		@Pc(1) int local1;
-		for (local1 = 0; local1 < this.triangleCount; local1++) {
-			if (this.triangleTextures[local1] == arg0) {
-				this.triangleTextures[local1] = arg1;
+	public final void retexture(@OriginalArg(0) short oldTexture, @OriginalArg(1) short newTexture) {
+		@Pc(1) int i;
+		for (i = 0; i < this.triangleCount; i++) {
+			if (this.triangleTextures[i] == oldTexture) {
+				this.triangleTextures[i] = newTexture;
 			}
 		}
-		local1 = 0;
-		@Pc(22) int local22 = 0;
-		if (arg0 != -1) {
-			local1 = Rasteriser.textureProvider.getTextureBrightness(arg0 & 0xFFFF);
-			local22 = Rasteriser.textureProvider.getTextureSpeed(arg0 & 0xFFFF);
+		i = 0;
+		@Pc(22) int oldSpeed = 0;
+		if (oldTexture != -1) {
+			i = Rasteriser.textureProvider.getTextureBrightness(oldTexture & 0xFFFF);
+			oldSpeed = Rasteriser.textureProvider.getTextureSpeed(oldTexture & 0xFFFF);
 		}
-		@Pc(41) int local41 = 0;
-		@Pc(43) int local43 = 0;
-		if (arg1 != -1) {
-			local41 = Rasteriser.textureProvider.getTextureBrightness(arg1 & 0xFFFF);
-			local43 = Rasteriser.textureProvider.getTextureSpeed(arg1 & 0xFFFF);
+		@Pc(41) int newBrightness = 0;
+		@Pc(43) int newSpeed = 0;
+		if (newTexture != -1) {
+			newBrightness = Rasteriser.textureProvider.getTextureBrightness(newTexture & 0xFFFF);
+			newSpeed = Rasteriser.textureProvider.getTextureSpeed(newTexture & 0xFFFF);
 		}
-		if (local1 != local41 || local22 != local43) {
+		if (i != newBrightness || oldSpeed != newSpeed) {
 			this.colorBuffer.valid = false;
 		}
 	}
@@ -2134,121 +2134,121 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "b", descriptor = "(SS)V")
-	public final void recolor(@OriginalArg(0) short arg0, @OriginalArg(1) short arg1) {
-		for (@Pc(1) int local1 = 0; local1 < this.triangleCount; local1++) {
-			if (this.triangleColors[local1] == arg0) {
-				this.triangleColors[local1] = arg1;
+	public final void recolor(@OriginalArg(0) short oldColor, @OriginalArg(1) short newColor) {
+		for (@Pc(1) int i = 0; i < this.triangleCount; i++) {
+			if (this.triangleColors[i] == oldColor) {
+				this.triangleColors[i] = newColor;
 			}
 		}
 		this.colorBuffer.valid = false;
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IILclient!td;[[I[[IIII)V")
-	public final void alignToTerrain(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) GlModel arg2, @OriginalArg(3) int[][] arg3, @OriginalArg(4) int[][] arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		if (!arg2.bounds.valid) {
-			arg2.calculateBounds();
+	public final void alignToTerrain(@OriginalArg(0) int type, @OriginalArg(1) int blendFactor, @OriginalArg(2) GlModel model, @OriginalArg(3) int[][] tileHeights, @OriginalArg(4) int[][] renderHeights, @OriginalArg(5) int sceneX, @OriginalArg(6) int baseHeight, @OriginalArg(7) int sceneZ) {
+		if (!model.bounds.valid) {
+			model.calculateBounds();
 		}
-		@Pc(11) int local11 = arg5 + arg2.bounds.minX;
-		@Pc(17) int local17 = arg5 + arg2.bounds.maxX;
-		@Pc(23) int local23 = arg7 + arg2.bounds.minZ;
-		@Pc(29) int local29 = arg7 + arg2.bounds.maxZ;
-		if ((arg0 == 1 || arg0 == 2 || arg0 == 3 || arg0 == 5) && (local11 < 0 || local17 + 128 >> 7 >= arg3.length || local23 < 0 || local29 + 128 >> 7 >= arg3[0].length)) {
+		@Pc(11) int minX = sceneX + model.bounds.minX;
+		@Pc(17) int maxX = sceneX + model.bounds.maxX;
+		@Pc(23) int minZ = sceneZ + model.bounds.minZ;
+		@Pc(29) int maxZ = sceneZ + model.bounds.maxZ;
+		if ((type == 1 || type == 2 || type == 3 || type == 5) && (minX < 0 || maxX + 128 >> 7 >= tileHeights.length || minZ < 0 || maxZ + 128 >> 7 >= tileHeights[0].length)) {
 			return;
 		}
-		if (arg0 == 4 || arg0 == 5) {
-			if (arg4 == null) {
+		if (type == 4 || type == 5) {
+			if (renderHeights == null) {
 				return;
 			}
-			if (local11 < 0 || local17 + 128 >> 7 >= arg4.length || local23 < 0 || local29 + 128 >> 7 >= arg4[0].length) {
+			if (minX < 0 || maxX + 128 >> 7 >= renderHeights.length || minZ < 0 || maxZ + 128 >> 7 >= renderHeights[0].length) {
 				return;
 			}
 		} else {
-			local11 >>= 0x7;
-			local17 = local17 + 127 >> 7;
-			local23 >>= 0x7;
-			local29 = local29 + 127 >> 7;
-			if (arg3[local11][local23] == arg6 && arg3[local17][local23] == arg6 && arg3[local11][local29] == arg6 && arg3[local17][local29] == arg6) {
+			minX >>= 0x7;
+			maxX = maxX + 127 >> 7;
+			minZ >>= 0x7;
+			maxZ = maxZ + 127 >> 7;
+			if (tileHeights[minX][minZ] == baseHeight && tileHeights[maxX][minZ] == baseHeight && tileHeights[minX][maxZ] == baseHeight && tileHeights[maxX][maxZ] == baseHeight) {
 				return;
 			}
 		}
-		@Pc(150) int local150;
-		@Pc(161) int local161;
-		@Pc(168) int local168;
-		@Pc(172) int local172;
-		@Pc(176) int local176;
-		@Pc(180) int local180;
-		@Pc(184) int local184;
-		@Pc(206) int local206;
-		@Pc(232) int local232;
-		@Pc(244) int local244;
-		if (arg0 == 1) {
-			for (local150 = 0; local150 < this.vertexCount; local150++) {
-				local161 = this.vertexX[local150] + arg5;
-				local168 = this.vertexZ[local150] + arg7;
-				local172 = local161 & 0x7F;
-				local176 = local168 & 0x7F;
-				local180 = local161 >> 7;
-				local184 = local168 >> 7;
-				local206 = arg3[local180][local184] * (128 - local172) + arg3[local180 + 1][local184] * local172 >> 7;
-				local232 = arg3[local180][local184 + 1] * (128 - local172) + arg3[local180 + 1][local184 + 1] * local172 >> 7;
-				local244 = local206 * (128 - local176) + local232 * local176 >> 7;
-				this.vertexY[local150] = this.vertexY[local150] + local244 - arg6;
+		@Pc(150) int i;
+		@Pc(161) int wx;
+		@Pc(168) int wz;
+		@Pc(172) int fracX;
+		@Pc(176) int fracZ;
+		@Pc(180) int tileX;
+		@Pc(184) int tileZ;
+		@Pc(206) int heightNW;
+		@Pc(232) int heightSW;
+		@Pc(244) int heightInterp;
+		if (type == 1) {
+			for (i = 0; i < this.vertexCount; i++) {
+				wx = this.vertexX[i] + sceneX;
+				wz = this.vertexZ[i] + sceneZ;
+				fracX = wx & 0x7F;
+				fracZ = wz & 0x7F;
+				tileX = wx >> 7;
+				tileZ = wz >> 7;
+				heightNW = tileHeights[tileX][tileZ] * (128 - fracX) + tileHeights[tileX + 1][tileZ] * fracX >> 7;
+				heightSW = tileHeights[tileX][tileZ + 1] * (128 - fracX) + tileHeights[tileX + 1][tileZ + 1] * fracX >> 7;
+				heightInterp = heightNW * (128 - fracZ) + heightSW * fracZ >> 7;
+				this.vertexY[i] = this.vertexY[i] + heightInterp - baseHeight;
 			}
 		} else {
-			@Pc(362) int local362;
-			@Pc(374) int local374;
-			if (arg0 == 2) {
-				@Pc(266) short local266 = arg2.bounds.minY;
-				for (local161 = 0; local161 < this.vertexCount; local161++) {
-					local168 = (this.vertexY[local161] << 16) / local266;
-					if (local168 < arg1) {
-						local172 = this.vertexX[local161] + arg5;
-						local176 = this.vertexZ[local161] + arg7;
-						local180 = local172 & 0x7F;
-						local184 = local176 & 0x7F;
-						local206 = local172 >> 7;
-						local232 = local176 >> 7;
-						local244 = arg3[local206][local232] * (128 - local180) + arg3[local206 + 1][local232] * local180 >> 7;
-						local362 = arg3[local206][local232 + 1] * (128 - local180) + arg3[local206 + 1][local232 + 1] * local180 >> 7;
-						local374 = local244 * (128 - local184) + local362 * local184 >> 7;
-						this.vertexY[local161] += (local374 - arg6) * (arg1 - local168) / arg1;
+			@Pc(362) int heightSW2;
+			@Pc(374) int interpHeight;
+			if (type == 2) {
+				@Pc(266) short minBoundsY = model.bounds.minY;
+				for (wx = 0; wx < this.vertexCount; wx++) {
+					wz = (this.vertexY[wx] << 16) / minBoundsY;
+					if (wz < blendFactor) {
+						fracX = this.vertexX[wx] + sceneX;
+						fracZ = this.vertexZ[wx] + sceneZ;
+						tileX = fracX & 0x7F;
+						tileZ = fracZ & 0x7F;
+						heightNW = fracX >> 7;
+						heightSW = fracZ >> 7;
+						heightInterp = tileHeights[heightNW][heightSW] * (128 - tileX) + tileHeights[heightNW + 1][heightSW] * tileX >> 7;
+						heightSW2 = tileHeights[heightNW][heightSW + 1] * (128 - tileX) + tileHeights[heightNW + 1][heightSW + 1] * tileX >> 7;
+						interpHeight = heightInterp * (128 - tileZ) + heightSW2 * tileZ >> 7;
+						this.vertexY[wx] += (interpHeight - baseHeight) * (blendFactor - wz) / blendFactor;
 					}
 				}
-			} else if (arg0 == 3) {
-				local150 = (arg1 & 0xFF) * 4;
-				local161 = (arg1 >> 8 & 0xFF) * 4;
-				this.alignToTerrain(arg3, arg5, arg6, arg7, local150, local161);
-			} else if (arg0 == 4) {
-				local150 = arg2.bounds.maxY - arg2.bounds.minY;
-				for (local161 = 0; local161 < this.vertexCount; local161++) {
-					local168 = this.vertexX[local161] + arg5;
-					local172 = this.vertexZ[local161] + arg7;
-					local176 = local168 & 0x7F;
-					local180 = local172 & 0x7F;
-					local184 = local168 >> 7;
-					local206 = local172 >> 7;
-					local232 = arg4[local184][local206] * (128 - local176) + arg4[local184 + 1][local206] * local176 >> 7;
-					local244 = arg4[local184][local206 + 1] * (128 - local176) + arg4[local184 + 1][local206 + 1] * local176 >> 7;
-					local362 = local232 * (128 - local180) + local244 * local180 >> 7;
-					this.vertexY[local161] = this.vertexY[local161] + local362 + local150 - arg6;
+			} else if (type == 3) {
+				i = (blendFactor & 0xFF) * 4;
+				wx = (blendFactor >> 8 & 0xFF) * 4;
+				this.alignToTerrain(tileHeights, sceneX, baseHeight, sceneZ, i, wx);
+			} else if (type == 4) {
+				i = model.bounds.maxY - model.bounds.minY;
+				for (wx = 0; wx < this.vertexCount; wx++) {
+					wz = this.vertexX[wx] + sceneX;
+					fracX = this.vertexZ[wx] + sceneZ;
+					fracZ = wz & 0x7F;
+					tileX = fracX & 0x7F;
+					tileZ = wz >> 7;
+					heightNW = fracX >> 7;
+					heightSW = renderHeights[tileZ][heightNW] * (128 - fracZ) + renderHeights[tileZ + 1][heightNW] * fracZ >> 7;
+					heightInterp = renderHeights[tileZ][heightNW + 1] * (128 - fracZ) + renderHeights[tileZ + 1][heightNW + 1] * fracZ >> 7;
+					heightSW2 = heightSW * (128 - tileX) + heightInterp * tileX >> 7;
+					this.vertexY[wx] = this.vertexY[wx] + heightSW2 + i - baseHeight;
 				}
-			} else if (arg0 == 5) {
-				local150 = arg2.bounds.maxY - arg2.bounds.minY;
-				for (local161 = 0; local161 < this.vertexCount; local161++) {
-					local168 = this.vertexX[local161] + arg5;
-					local172 = this.vertexZ[local161] + arg7;
-					local176 = local168 & 0x7F;
-					local180 = local172 & 0x7F;
-					local184 = local168 >> 7;
-					local206 = local172 >> 7;
-					local232 = arg3[local184][local206] * (128 - local176) + arg3[local184 + 1][local206] * local176 >> 7;
-					local244 = arg3[local184][local206 + 1] * (128 - local176) + arg3[local184 + 1][local206 + 1] * local176 >> 7;
-					local362 = local232 * (128 - local180) + local244 * local180 >> 7;
-					local232 = arg4[local184][local206] * (128 - local176) + arg4[local184 + 1][local206] * local176 >> 7;
-					local244 = arg4[local184][local206 + 1] * (128 - local176) + arg4[local184 + 1][local206 + 1] * local176 >> 7;
-					local374 = local232 * (128 - local180) + local244 * local180 >> 7;
-					@Pc(716) int local716 = local362 - local374;
-					this.vertexY[local161] = ((this.vertexY[local161] << 8) / local150 * local716 >> 8) - (arg6 - local362);
+			} else if (type == 5) {
+				i = model.bounds.maxY - model.bounds.minY;
+				for (wx = 0; wx < this.vertexCount; wx++) {
+					wz = this.vertexX[wx] + sceneX;
+					fracX = this.vertexZ[wx] + sceneZ;
+					fracZ = wz & 0x7F;
+					tileX = fracX & 0x7F;
+					tileZ = wz >> 7;
+					heightNW = fracX >> 7;
+					heightSW = tileHeights[tileZ][heightNW] * (128 - fracZ) + tileHeights[tileZ + 1][heightNW] * fracZ >> 7;
+					heightInterp = tileHeights[tileZ][heightNW + 1] * (128 - fracZ) + tileHeights[tileZ + 1][heightNW + 1] * fracZ >> 7;
+					heightSW2 = heightSW * (128 - tileX) + heightInterp * tileX >> 7;
+					heightSW = renderHeights[tileZ][heightNW] * (128 - fracZ) + renderHeights[tileZ + 1][heightNW] * fracZ >> 7;
+					heightInterp = renderHeights[tileZ][heightNW + 1] * (128 - fracZ) + renderHeights[tileZ + 1][heightNW + 1] * fracZ >> 7;
+					interpHeight = heightSW * (128 - tileX) + heightInterp * tileX >> 7;
+					@Pc(716) int heightDiff = heightSW2 - interpHeight;
+					this.vertexY[wx] = ((this.vertexY[wx] << 8) / i * heightDiff >> 8) - (baseHeight - heightSW2);
 				}
 			}
 		}
@@ -2257,18 +2257,18 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZZZZZ)V")
-	public final void uploadBuffers(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(4) boolean arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5) {
+	public final void uploadBuffers(@OriginalArg(0) boolean releaseVertices, @OriginalArg(1) boolean releaseColors, @OriginalArg(2) boolean releaseNormals, @OriginalArg(4) boolean buildIndex, @OriginalArg(5) boolean releaseBones, @OriginalArg(6) boolean pack) {
 		if (this.updateFlags != 0) {
 			throw new IllegalArgumentException();
 		} else if (this.uniqueVertexCount != 0) {
-			if (arg5) {
-				@Pc(26) boolean local26 = !this.colorBuffer.valid && (arg1 || arg2 && !Preferences.highDetailLighting);
-				this.packInterleavedVertexData(false, !this.vertexBuffer.valid && arg0, local26, this.normalsBuffer != null && !this.normalsBuffer.valid && arg2, !this.texCoordBuffer.valid);
-				if (!this.indexBuffer.valid && arg3 && arg1) {
+			if (pack) {
+				@Pc(26) boolean needsColorUpdate = !this.colorBuffer.valid && (releaseColors || releaseNormals && !Preferences.highDetailLighting);
+				this.packInterleavedVertexData(false, !this.vertexBuffer.valid && releaseVertices, needsColorUpdate, this.normalsBuffer != null && !this.normalsBuffer.valid && releaseNormals, !this.texCoordBuffer.valid);
+				if (!this.indexBuffer.valid && buildIndex && releaseColors) {
 					this.buildIndexBuffer();
 				}
 			}
-			if (arg0) {
+			if (releaseVertices) {
 				if (this.vertexBuffer.valid) {
 					if (!this.bounds.valid) {
 						this.calculateBounds();
@@ -2282,7 +2282,7 @@ public final class GlModel extends Model {
 					this.deferredReleaseFlags = (byte) (this.deferredReleaseFlags | 0x1);
 				}
 			}
-			if (arg1) {
+			if (releaseColors) {
 				if (this.colorBuffer.valid) {
 					this.triangleColors = null;
 					this.triangleAlpha = null;
@@ -2290,7 +2290,7 @@ public final class GlModel extends Model {
 					this.deferredReleaseFlags = (byte) (this.deferredReleaseFlags | 0x2);
 				}
 			}
-			if (arg2 && Preferences.highDetailLighting) {
+			if (releaseNormals && Preferences.highDetailLighting) {
 				if (this.normalsBuffer.valid) {
 					this.normalX = null;
 					this.normalY = null;
@@ -2306,7 +2306,7 @@ public final class GlModel extends Model {
 			} else {
 				this.deferredReleaseFlags = (byte) (this.deferredReleaseFlags | 0x8);
 			}
-			if (arg3 && arg1) {
+			if (buildIndex && releaseColors) {
 				if (this.indexBuffer.valid && this.colorBuffer.valid) {
 					this.triangleVertexA = null;
 					this.triangleVertexB = null;
@@ -2315,7 +2315,7 @@ public final class GlModel extends Model {
 					this.deferredReleaseFlags = (byte) (this.deferredReleaseFlags | 0x10);
 				}
 			}
-			if (arg4) {
+			if (releaseBones) {
 				this.vertexBones = null;
 				this.triangleBones = null;
 				this.boneVertices = null;
@@ -2325,21 +2325,21 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZZZ)V")
-	private void packInterleavedVertexData(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) boolean arg4) {
+	private void packInterleavedVertexData(@OriginalArg(0) boolean useVbo, @OriginalArg(1) boolean packVertices, @OriginalArg(2) boolean packColors, @OriginalArg(3) boolean packNormals, @OriginalArg(4) boolean packTexCoords) {
 		@Pc(1) int stride = 0;
-		if (arg1) {
+		if (packVertices) {
 			this.vertexBuffer.pointer = 0;
 			stride += 12;
 		}
-		if (arg2) {
+		if (packColors) {
 			this.colorBuffer.pointer = stride;
 			stride += 4;
 		}
-		if (arg3) {
+		if (packNormals) {
 			this.normalsBuffer.pointer = stride;
 			stride += 12;
 		}
-		if (arg4) {
+		if (packTexCoords) {
 			this.texCoordBuffer.pointer = stride;
 			stride += 8;
 		}
@@ -2351,225 +2351,225 @@ public final class GlModel extends Model {
 		} else {
 			tempBuffer.offset = 0;
 		}
-		@Pc(60) int local60;
-		@Pc(71) int local71;
-		@Pc(78) int local78;
-		@Pc(85) int local85;
-		@Pc(90) int local90;
-		@Pc(97) int local97;
-		@Pc(99) int local99;
-		if (arg1) {
-			@Pc(109) int local109;
+		@Pc(60) int i;
+		@Pc(71) int bitsX;
+		@Pc(78) int bitsY;
+		@Pc(85) int bitsZ;
+		@Pc(90) int startOff;
+		@Pc(97) int endOff;
+		@Pc(99) int oi;
+		if (packVertices) {
+			@Pc(109) int uniqueIdx;
 			if (GlRenderer.bigEndian) {
-				for (local60 = 0; local60 < this.vertexCount; local60++) {
-					local71 = Float.floatToRawIntBits((float) this.vertexX[local60]);
-					local78 = Float.floatToRawIntBits((float) this.vertexY[local60]);
-					local85 = Float.floatToRawIntBits((float) this.vertexZ[local60]);
-					local90 = this.vertexOffsets[local60];
-					local97 = this.vertexOffsets[local60 + 1];
-					for (local99 = local90; local99 < local97; local99++) {
-						local109 = this.vertexLookup[local99] - 1;
-						if (local109 == -1) {
+				for (i = 0; i < this.vertexCount; i++) {
+					bitsX = Float.floatToRawIntBits((float) this.vertexX[i]);
+					bitsY = Float.floatToRawIntBits((float) this.vertexY[i]);
+					bitsZ = Float.floatToRawIntBits((float) this.vertexZ[i]);
+					startOff = this.vertexOffsets[i];
+					endOff = this.vertexOffsets[i + 1];
+					for (oi = startOff; oi < endOff; oi++) {
+						uniqueIdx = this.vertexLookup[oi] - 1;
+						if (uniqueIdx == -1) {
 							break;
 						}
-						tempBuffer.offset = local109 * stride;
-						tempBuffer.p4(local71);
-						tempBuffer.p4(local78);
-						tempBuffer.p4(local85);
+						tempBuffer.offset = uniqueIdx * stride;
+						tempBuffer.p4(bitsX);
+						tempBuffer.p4(bitsY);
+						tempBuffer.p4(bitsZ);
 					}
 				}
 			} else {
-				for (local60 = 0; local60 < this.vertexCount; local60++) {
-					local71 = Float.floatToRawIntBits((float) this.vertexX[local60]);
-					local78 = Float.floatToRawIntBits((float) this.vertexY[local60]);
-					local85 = Float.floatToRawIntBits((float) this.vertexZ[local60]);
-					local90 = this.vertexOffsets[local60];
-					local97 = this.vertexOffsets[local60 + 1];
-					for (local99 = local90; local99 < local97; local99++) {
-						local109 = this.vertexLookup[local99] - 1;
-						if (local109 == -1) {
+				for (i = 0; i < this.vertexCount; i++) {
+					bitsX = Float.floatToRawIntBits((float) this.vertexX[i]);
+					bitsY = Float.floatToRawIntBits((float) this.vertexY[i]);
+					bitsZ = Float.floatToRawIntBits((float) this.vertexZ[i]);
+					startOff = this.vertexOffsets[i];
+					endOff = this.vertexOffsets[i + 1];
+					for (oi = startOff; oi < endOff; oi++) {
+						uniqueIdx = this.vertexLookup[oi] - 1;
+						if (uniqueIdx == -1) {
 							break;
 						}
-						tempBuffer.offset = local109 * stride;
-						tempBuffer.ip4(local71);
-						tempBuffer.ip4(local78);
-						tempBuffer.ip4(local85);
+						tempBuffer.offset = uniqueIdx * stride;
+						tempBuffer.ip4(bitsX);
+						tempBuffer.ip4(bitsY);
+						tempBuffer.ip4(bitsZ);
 					}
 				}
 			}
 		}
-		if (arg2) {
+		if (packColors) {
 			if (Preferences.highDetailLighting) {
-				for (local60 = 0; local60 < this.triangleCount; local60++) {
-					local71 = packColorToRGBA(this.triangleColors[local60], this.triangleTextures[local60], this.ambient, this.triangleAlpha[local60]);
-					tempBuffer.offset = this.colorBuffer.pointer + this.triangleVertexA[local60] * stride;
-					tempBuffer.p4(local71);
-					tempBuffer.offset = this.colorBuffer.pointer + this.triangleVertexB[local60] * stride;
-					tempBuffer.p4(local71);
-					tempBuffer.offset = this.colorBuffer.pointer + this.triangleVertexC[local60] * stride;
-					tempBuffer.p4(local71);
+				for (i = 0; i < this.triangleCount; i++) {
+					bitsX = packColorToRGBA(this.triangleColors[i], this.triangleTextures[i], this.ambient, this.triangleAlpha[i]);
+					tempBuffer.offset = this.colorBuffer.pointer + this.triangleVertexA[i] * stride;
+					tempBuffer.p4(bitsX);
+					tempBuffer.offset = this.colorBuffer.pointer + this.triangleVertexB[i] * stride;
+					tempBuffer.p4(bitsX);
+					tempBuffer.offset = this.colorBuffer.pointer + this.triangleVertexC[i] * stride;
+					tempBuffer.p4(bitsX);
 				}
 			} else {
-				local60 = (int) FogManager.light0Position[0];
-				local71 = (int) FogManager.light0Position[1];
-				local78 = (int) FogManager.light0Position[2];
-				local85 = (int) Math.sqrt(local60 * local60 + local71 * local71 + local78 * local78);
-				local90 = (int) ((float) this.ambient * 1.3F);
-				local97 = this.contrast * local85 >> 8;
-				for (local99 = 0; local99 < this.triangleCount; local99++) {
-					@Pc(270) short local270 = this.triangleVertexA[local99];
-					@Pc(275) short local275 = this.normalMagnitude[local270];
-					@Pc(281) int local281;
-					if (local275 < 0) {
-						local281 = -local275 - 1;
+				i = (int) FogManager.light0Position[0];
+				bitsX = (int) FogManager.light0Position[1];
+				bitsY = (int) FogManager.light0Position[2];
+				bitsZ = (int) Math.sqrt(i * i + bitsX * bitsX + bitsY * bitsY);
+				startOff = (int) ((float) this.ambient * 1.3F);
+				endOff = this.contrast * bitsZ >> 8;
+				for (oi = 0; oi < this.triangleCount; oi++) {
+					@Pc(270) short vertA = this.triangleVertexA[oi];
+					@Pc(275) short magA = this.normalMagnitude[vertA];
+					@Pc(281) int lightnessA;
+					if (magA < 0) {
+						lightnessA = -magA - 1;
 					} else {
-						if (local275 == 0) {
-							local281 = local90 + (local60 * this.normalX[local270] + local71 * this.normalY[local270] + local78 * this.normalZ[local270]) / (local97 + local97 / 2);
+						if (magA == 0) {
+							lightnessA = startOff + (i * this.normalX[vertA] + bitsX * this.normalY[vertA] + bitsY * this.normalZ[vertA]) / (endOff + endOff / 2);
 						} else {
-							local281 = local90 + (local60 * this.normalX[local270] + local71 * this.normalY[local270] + local78 * this.normalZ[local270]) / (local97 * local275);
+							lightnessA = startOff + (i * this.normalX[vertA] + bitsX * this.normalY[vertA] + bitsY * this.normalZ[vertA]) / (endOff * magA);
 						}
-						if (local281 < 0) {
-							local281 = 0;
-						} else if (local281 > 16384) {
-							local281 = 16384;
+						if (lightnessA < 0) {
+							lightnessA = 0;
+						} else if (lightnessA > 16384) {
+							lightnessA = 16384;
 						}
-						this.normalMagnitude[local270] = (short) (-local281 - 1);
+						this.normalMagnitude[vertA] = (short) (-lightnessA - 1);
 					}
-					@Pc(364) short local364 = this.triangleVertexB[local99];
-					@Pc(369) short local369 = this.normalMagnitude[local364];
-					@Pc(375) int local375;
-					if (local369 < 0) {
-						local375 = -local369 - 1;
+					@Pc(364) short vertB = this.triangleVertexB[oi];
+					@Pc(369) short magB = this.normalMagnitude[vertB];
+					@Pc(375) int lightnessB;
+					if (magB < 0) {
+						lightnessB = -magB - 1;
 					} else {
-						if (local369 == 0) {
-							local375 = local90 + (local60 * this.normalX[local364] + local71 * this.normalY[local364] + local78 * this.normalZ[local364]) / (local97 + local97 / 2);
+						if (magB == 0) {
+							lightnessB = startOff + (i * this.normalX[vertB] + bitsX * this.normalY[vertB] + bitsY * this.normalZ[vertB]) / (endOff + endOff / 2);
 						} else {
-							local375 = local90 + (local60 * this.normalX[local364] + local71 * this.normalY[local364] + local78 * this.normalZ[local364]) / (local97 * local369);
+							lightnessB = startOff + (i * this.normalX[vertB] + bitsX * this.normalY[vertB] + bitsY * this.normalZ[vertB]) / (endOff * magB);
 						}
-						if (local375 < 0) {
-							local375 = 0;
-						} else if (local375 > 16384) {
-							local375 = 16384;
+						if (lightnessB < 0) {
+							lightnessB = 0;
+						} else if (lightnessB > 16384) {
+							lightnessB = 16384;
 						}
-						this.normalMagnitude[local364] = (short) (-local375 - 1);
+						this.normalMagnitude[vertB] = (short) (-lightnessB - 1);
 					}
-					@Pc(458) short local458 = this.triangleVertexC[local99];
-					@Pc(463) short local463 = this.normalMagnitude[local458];
-					@Pc(469) int local469;
-					if (local463 < 0) {
-						local469 = -local463 - 1;
+					@Pc(458) short vertC = this.triangleVertexC[oi];
+					@Pc(463) short magC = this.normalMagnitude[vertC];
+					@Pc(469) int lightnessC;
+					if (magC < 0) {
+						lightnessC = -magC - 1;
 					} else {
-						if (local463 == 0) {
-							local469 = local90 + (local60 * this.normalX[local458] + local71 * this.normalY[local458] + local78 * this.normalZ[local458]) / (local97 + local97 / 2);
+						if (magC == 0) {
+							lightnessC = startOff + (i * this.normalX[vertC] + bitsX * this.normalY[vertC] + bitsY * this.normalZ[vertC]) / (endOff + endOff / 2);
 						} else {
-							local469 = local90 + (local60 * this.normalX[local458] + local71 * this.normalY[local458] + local78 * this.normalZ[local458]) / (local97 * local463);
+							lightnessC = startOff + (i * this.normalX[vertC] + bitsX * this.normalY[vertC] + bitsY * this.normalZ[vertC]) / (endOff * magC);
 						}
-						if (local469 < 0) {
-							local469 = 0;
-						} else if (local469 > 16384) {
-							local469 = 16384;
+						if (lightnessC < 0) {
+							lightnessC = 0;
+						} else if (lightnessC > 16384) {
+							lightnessC = 16384;
 						}
-						this.normalMagnitude[local458] = (short) (-local469 - 1);
+						this.normalMagnitude[vertC] = (short) (-lightnessC - 1);
 					}
-					@Pc(562) int local562 = packColorToRGBA(this.triangleColors[local99], this.triangleTextures[local99], local281, this.triangleAlpha[local99]);
-					@Pc(577) int local577 = packColorToRGBA(this.triangleColors[local99], this.triangleTextures[local99], local375, this.triangleAlpha[local99]);
-					@Pc(592) int local592 = packColorToRGBA(this.triangleColors[local99], this.triangleTextures[local99], local469, this.triangleAlpha[local99]);
-					tempBuffer.offset = this.colorBuffer.pointer + local270 * stride;
-					tempBuffer.p4(local562);
-					tempBuffer.offset = this.colorBuffer.pointer + local364 * stride;
-					tempBuffer.p4(local577);
-					tempBuffer.offset = this.colorBuffer.pointer + local458 * stride;
-					tempBuffer.p4(local592);
+					@Pc(562) int colorA = packColorToRGBA(this.triangleColors[oi], this.triangleTextures[oi], lightnessA, this.triangleAlpha[oi]);
+					@Pc(577) int colorB = packColorToRGBA(this.triangleColors[oi], this.triangleTextures[oi], lightnessB, this.triangleAlpha[oi]);
+					@Pc(592) int colorC = packColorToRGBA(this.triangleColors[oi], this.triangleTextures[oi], lightnessC, this.triangleAlpha[oi]);
+					tempBuffer.offset = this.colorBuffer.pointer + vertA * stride;
+					tempBuffer.p4(colorA);
+					tempBuffer.offset = this.colorBuffer.pointer + vertB * stride;
+					tempBuffer.p4(colorB);
+					tempBuffer.offset = this.colorBuffer.pointer + vertC * stride;
+					tempBuffer.p4(colorC);
 				}
 				this.normalX = null;
 				this.normalY = null;
 				this.normalZ = null;
 			}
 		}
-		if (arg3) {
-			@Pc(723) float local723 = 3.0F / (float) this.contrast;
-			@Pc(734) float local734 = 3.0F / (float) (this.contrast + this.contrast / 2);
+		if (packNormals) {
+			@Pc(723) float normalScale = 3.0F / (float) this.contrast;
+			@Pc(734) float normalScaleZero = 3.0F / (float) (this.contrast + this.contrast / 2);
 			tempBuffer.offset = this.normalsBuffer.pointer;
-			@Pc(752) short local752;
-			@Pc(790) float local790;
+			@Pc(752) short magnitude;
+			@Pc(790) float adjustedScale;
 			if (GlRenderer.bigEndian) {
-				for (local78 = 0; local78 < this.uniqueVertexCount; local78++) {
-					local752 = this.normalMagnitude[local78];
-					if (local752 == 0) {
-						tempBuffer.pFloat((float) this.normalX[local78] * local734);
-						tempBuffer.pFloat((float) this.normalY[local78] * local734);
-						tempBuffer.pFloat((float) this.normalZ[local78] * local734);
+				for (bitsY = 0; bitsY < this.uniqueVertexCount; bitsY++) {
+					magnitude = this.normalMagnitude[bitsY];
+					if (magnitude == 0) {
+						tempBuffer.pFloat((float) this.normalX[bitsY] * normalScaleZero);
+						tempBuffer.pFloat((float) this.normalY[bitsY] * normalScaleZero);
+						tempBuffer.pFloat((float) this.normalZ[bitsY] * normalScaleZero);
 					} else {
-						local790 = local723 / (float) local752;
-						tempBuffer.pFloat((float) this.normalX[local78] * local790);
-						tempBuffer.pFloat((float) this.normalY[local78] * local790);
-						tempBuffer.pFloat((float) this.normalZ[local78] * local790);
+						adjustedScale = normalScale / (float) magnitude;
+						tempBuffer.pFloat((float) this.normalX[bitsY] * adjustedScale);
+						tempBuffer.pFloat((float) this.normalY[bitsY] * adjustedScale);
+						tempBuffer.pFloat((float) this.normalZ[bitsY] * adjustedScale);
 					}
 					tempBuffer.offset += stride - 12;
 				}
 			} else {
-				for (local78 = 0; local78 < this.uniqueVertexCount; local78++) {
-					local752 = this.normalMagnitude[local78];
-					if (local752 == 0) {
-						tempBuffer.gFloat((float) this.normalX[local78] * local734);
-						tempBuffer.gFloat((float) this.normalY[local78] * local734);
-						tempBuffer.gFloat((float) this.normalZ[local78] * local734);
+				for (bitsY = 0; bitsY < this.uniqueVertexCount; bitsY++) {
+					magnitude = this.normalMagnitude[bitsY];
+					if (magnitude == 0) {
+						tempBuffer.gFloat((float) this.normalX[bitsY] * normalScaleZero);
+						tempBuffer.gFloat((float) this.normalY[bitsY] * normalScaleZero);
+						tempBuffer.gFloat((float) this.normalZ[bitsY] * normalScaleZero);
 					} else {
-						local790 = local723 / (float) local752;
-						tempBuffer.gFloat((float) this.normalX[local78] * local790);
-						tempBuffer.gFloat((float) this.normalY[local78] * local790);
-						tempBuffer.gFloat((float) this.normalZ[local78] * local790);
+						adjustedScale = normalScale / (float) magnitude;
+						tempBuffer.gFloat((float) this.normalX[bitsY] * adjustedScale);
+						tempBuffer.gFloat((float) this.normalY[bitsY] * adjustedScale);
+						tempBuffer.gFloat((float) this.normalZ[bitsY] * adjustedScale);
 					}
 					tempBuffer.offset += stride - 12;
 				}
 			}
 		}
-		if (arg4) {
+		if (packTexCoords) {
 			tempBuffer.offset = this.texCoordBuffer.pointer;
 			if (GlRenderer.bigEndian) {
-				for (local60 = 0; local60 < this.uniqueVertexCount; local60++) {
-					tempBuffer.pFloat(this.vertexS[local60]);
-					tempBuffer.pFloat(this.vertexT[local60]);
+				for (i = 0; i < this.uniqueVertexCount; i++) {
+					tempBuffer.pFloat(this.vertexS[i]);
+					tempBuffer.pFloat(this.vertexT[i]);
 					tempBuffer.offset += stride - 8;
 				}
 			} else {
-				for (local60 = 0; local60 < this.uniqueVertexCount; local60++) {
-					tempBuffer.gFloat(this.vertexS[local60]);
-					tempBuffer.gFloat(this.vertexT[local60]);
+				for (i = 0; i < this.uniqueVertexCount; i++) {
+					tempBuffer.gFloat(this.vertexS[i]);
+					tempBuffer.gFloat(this.vertexT[i]);
 					tempBuffer.offset += stride - 8;
 				}
 			}
 		}
 		tempBuffer.offset = stride * this.uniqueVertexCount;
-		@Pc(1007) ByteBuffer local1007;
-		if (arg0) {
+		@Pc(1007) ByteBuffer byteBuffer;
+		if (useVbo) {
 			if (arbVboSupported) {
-				local1007 = ByteBuffer.wrap(tempBuffer.data, 0, tempBuffer.offset);
+				byteBuffer = ByteBuffer.wrap(tempBuffer.data, 0, tempBuffer.offset);
 				if (this.interleavedVbo == null) {
 					this.interleavedVbo = new GlVertexBufferObject(true);
-					this.interleavedVbo.setArrayBuffer(local1007);
+					this.interleavedVbo.setArrayBuffer(byteBuffer);
 				} else {
-					this.interleavedVbo.updateArrayBuffer(local1007);
+					this.interleavedVbo.updateArrayBuffer(byteBuffer);
 				}
-				if (arg1) {
+				if (packVertices) {
 					this.vertexBuffer.valid = true;
 					this.vertexBuffer.buffer = null;
 					this.vertexBuffer.vbo = this.interleavedVbo;
 					this.vertexBuffer.stride = stride;
 				}
-				if (arg2) {
+				if (packColors) {
 					this.colorBuffer.valid = true;
 					this.colorBuffer.buffer = null;
 					this.colorBuffer.vbo = this.interleavedVbo;
 					this.colorBuffer.stride = stride;
 				}
-				if (arg3) {
+				if (packNormals) {
 					this.normalsBuffer.valid = true;
 					this.normalsBuffer.buffer = null;
 					this.normalsBuffer.vbo = this.interleavedVbo;
 					this.normalsBuffer.stride = stride;
 				}
-				if (arg4) {
+				if (packTexCoords) {
 					this.texCoordBuffer.valid = true;
 					this.texCoordBuffer.buffer = null;
 					this.texCoordBuffer.vbo = this.interleavedVbo;
@@ -2583,25 +2583,25 @@ public final class GlModel extends Model {
 				}
 				aByteBuffer9.put(tempBuffer.data, 0, tempBuffer.offset);
 				aByteBuffer9.flip();
-				if (arg1) {
+				if (packVertices) {
 					this.vertexBuffer.valid = true;
 					this.vertexBuffer.buffer = aByteBuffer9;
 					this.vertexBuffer.vbo = null;
 					this.vertexBuffer.stride = stride;
 				}
-				if (arg2) {
+				if (packColors) {
 					this.colorBuffer.valid = true;
 					this.colorBuffer.buffer = aByteBuffer9;
 					this.vertexBuffer.vbo = null;
 					this.colorBuffer.stride = stride;
 				}
-				if (arg3) {
+				if (packNormals) {
 					this.normalsBuffer.valid = true;
 					this.normalsBuffer.buffer = aByteBuffer9;
 					this.normalsBuffer.vbo = null;
 					this.normalsBuffer.stride = stride;
 				}
-				if (arg4) {
+				if (packTexCoords) {
 					this.texCoordBuffer.valid = true;
 					this.texCoordBuffer.buffer = aByteBuffer9;
 					this.texCoordBuffer.vbo = null;
@@ -2609,58 +2609,58 @@ public final class GlModel extends Model {
 				}
 			}
 		} else if (GlRenderer.arbVboSupported) {
-			@Pc(1211) GlVertexBufferObject local1211 = new GlVertexBufferObject();
-			@Pc(1218) ByteBuffer local1218 = ByteBuffer.wrap(tempBuffer.data, 0, tempBuffer.offset);
-			local1211.setArrayBuffer(local1218);
-			if (arg1) {
+			@Pc(1211) GlVertexBufferObject vbo = new GlVertexBufferObject();
+			@Pc(1218) ByteBuffer wrappedBuffer = ByteBuffer.wrap(tempBuffer.data, 0, tempBuffer.offset);
+			vbo.setArrayBuffer(wrappedBuffer);
+			if (packVertices) {
 				this.vertexBuffer.valid = true;
 				this.vertexBuffer.buffer = null;
-				this.vertexBuffer.vbo = local1211;
+				this.vertexBuffer.vbo = vbo;
 				this.vertexBuffer.stride = stride;
 			}
-			if (arg2) {
+			if (packColors) {
 				this.colorBuffer.valid = true;
 				this.colorBuffer.buffer = null;
-				this.colorBuffer.vbo = local1211;
+				this.colorBuffer.vbo = vbo;
 				this.colorBuffer.stride = stride;
 			}
-			if (arg3) {
+			if (packNormals) {
 				this.normalsBuffer.valid = true;
 				this.normalsBuffer.buffer = null;
-				this.normalsBuffer.vbo = local1211;
+				this.normalsBuffer.vbo = vbo;
 				this.normalsBuffer.stride = stride;
 			}
-			if (arg4) {
+			if (packTexCoords) {
 				this.texCoordBuffer.valid = true;
 				this.texCoordBuffer.buffer = null;
-				this.texCoordBuffer.vbo = local1211;
+				this.texCoordBuffer.vbo = vbo;
 				this.texCoordBuffer.stride = stride;
 			}
 		} else {
-			local1007 = ByteBuffer.allocateDirect(tempBuffer.offset);
-			local1007.put(tempBuffer.data, 0, tempBuffer.offset);
-			local1007.flip();
-			if (arg1) {
+			byteBuffer = ByteBuffer.allocateDirect(tempBuffer.offset);
+			byteBuffer.put(tempBuffer.data, 0, tempBuffer.offset);
+			byteBuffer.flip();
+			if (packVertices) {
 				this.vertexBuffer.valid = true;
-				this.vertexBuffer.buffer = local1007;
+				this.vertexBuffer.buffer = byteBuffer;
 				this.vertexBuffer.vbo = null;
 				this.vertexBuffer.stride = stride;
 			}
-			if (arg2) {
+			if (packColors) {
 				this.colorBuffer.valid = true;
-				this.colorBuffer.buffer = local1007;
+				this.colorBuffer.buffer = byteBuffer;
 				this.vertexBuffer.vbo = null;
 				this.colorBuffer.stride = stride;
 			}
-			if (arg3) {
+			if (packNormals) {
 				this.normalsBuffer.valid = true;
-				this.normalsBuffer.buffer = local1007;
+				this.normalsBuffer.buffer = byteBuffer;
 				this.normalsBuffer.vbo = null;
 				this.normalsBuffer.stride = stride;
 			}
-			if (arg4) {
+			if (packTexCoords) {
 				this.texCoordBuffer.valid = true;
-				this.texCoordBuffer.buffer = local1007;
+				this.texCoordBuffer.buffer = byteBuffer;
 				this.texCoordBuffer.vbo = null;
 				this.texCoordBuffer.stride = stride;
 			}
@@ -2668,115 +2668,115 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZLclient!td;Lclient!td;)Lclient!ak;")
-	private Model copyToTarget(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) GlModel arg3, @OriginalArg(4) GlModel arg4) {
-		arg3.vertexCount = this.vertexCount;
-		arg3.uniqueVertexCount = this.uniqueVertexCount;
-		arg3.triangleCount = this.triangleCount;
-		arg3.ambient = this.ambient;
-		arg3.contrast = this.contrast;
-		arg3.updateFlags = (byte) ((arg0 && arg1 ? 0 : 2) | 0x1 | (arg2 ? 0 : 4));
-		if (arg3.vertexX == null || arg3.vertexX.length < this.vertexCount) {
-			arg3.vertexX = new int[this.vertexCount + 100];
-			arg3.vertexY = new int[this.vertexCount + 100];
-			arg3.vertexZ = new int[this.vertexCount + 100];
+	private Model copyToTarget(@OriginalArg(0) boolean shareAlpha, @OriginalArg(1) boolean shareColors, @OriginalArg(2) boolean shareNormals, @OriginalArg(3) GlModel target, @OriginalArg(4) GlModel scratch) {
+		target.vertexCount = this.vertexCount;
+		target.uniqueVertexCount = this.uniqueVertexCount;
+		target.triangleCount = this.triangleCount;
+		target.ambient = this.ambient;
+		target.contrast = this.contrast;
+		target.updateFlags = (byte) ((shareAlpha && shareColors ? 0 : 2) | 0x1 | (shareNormals ? 0 : 4));
+		if (target.vertexX == null || target.vertexX.length < this.vertexCount) {
+			target.vertexX = new int[this.vertexCount + 100];
+			target.vertexY = new int[this.vertexCount + 100];
+			target.vertexZ = new int[this.vertexCount + 100];
 		}
-		@Pc(69) int local69;
-		for (local69 = 0; local69 < this.vertexCount; local69++) {
-			arg3.vertexX[local69] = this.vertexX[local69];
-			arg3.vertexY[local69] = this.vertexY[local69];
-			arg3.vertexZ[local69] = this.vertexZ[local69];
+		@Pc(69) int i;
+		for (i = 0; i < this.vertexCount; i++) {
+			target.vertexX[i] = this.vertexX[i];
+			target.vertexY[i] = this.vertexY[i];
+			target.vertexZ[i] = this.vertexZ[i];
 		}
-		if (arg3.vertexBuffer == null) {
-			arg3.vertexBuffer = new GlBuffer();
+		if (target.vertexBuffer == null) {
+			target.vertexBuffer = new GlBuffer();
 		}
-		arg3.vertexBuffer.valid = false;
-		if (arg3.bounds == null) {
-			arg3.bounds = new GlBoundingBox();
+		target.vertexBuffer.valid = false;
+		if (target.bounds == null) {
+			target.bounds = new GlBoundingBox();
 		}
-		arg3.bounds.valid = false;
-		if (arg0) {
-			arg3.triangleAlpha = this.triangleAlpha;
+		target.bounds.valid = false;
+		if (shareAlpha) {
+			target.triangleAlpha = this.triangleAlpha;
 		} else {
-			if (arg4.triangleAlpha == null || arg4.triangleAlpha.length < this.triangleCount) {
-				arg4.triangleAlpha = new byte[this.triangleCount + 100];
+			if (scratch.triangleAlpha == null || scratch.triangleAlpha.length < this.triangleCount) {
+				scratch.triangleAlpha = new byte[this.triangleCount + 100];
 			}
-			arg3.triangleAlpha = arg4.triangleAlpha;
-			for (local69 = 0; local69 < this.triangleCount; local69++) {
-				arg3.triangleAlpha[local69] = this.triangleAlpha[local69];
-			}
-		}
-		if (arg1) {
-			arg3.triangleColors = this.triangleColors;
-		} else {
-			if (arg4.triangleColors == null || arg4.triangleColors.length < this.triangleCount) {
-				arg4.triangleColors = new short[this.triangleCount + 100];
-			}
-			arg3.triangleColors = arg4.triangleColors;
-			for (local69 = 0; local69 < this.triangleCount; local69++) {
-				arg3.triangleColors[local69] = this.triangleColors[local69];
+			target.triangleAlpha = scratch.triangleAlpha;
+			for (i = 0; i < this.triangleCount; i++) {
+				target.triangleAlpha[i] = this.triangleAlpha[i];
 			}
 		}
-		if (arg0 && arg1) {
-			arg3.colorBuffer = this.colorBuffer;
+		if (shareColors) {
+			target.triangleColors = this.triangleColors;
 		} else {
-			if (arg4.colorBuffer == null) {
-				arg4.colorBuffer = new GlBuffer();
+			if (scratch.triangleColors == null || scratch.triangleColors.length < this.triangleCount) {
+				scratch.triangleColors = new short[this.triangleCount + 100];
 			}
-			arg3.colorBuffer = arg4.colorBuffer;
-			arg3.colorBuffer.valid = false;
+			target.triangleColors = scratch.triangleColors;
+			for (i = 0; i < this.triangleCount; i++) {
+				target.triangleColors[i] = this.triangleColors[i];
+			}
 		}
-		if (arg2 || this.normalX == null) {
-			arg3.normalX = this.normalX;
-			arg3.normalY = this.normalY;
-			arg3.normalZ = this.normalZ;
-			arg3.normalMagnitude = this.normalMagnitude;
-			arg3.normalsBuffer = this.normalsBuffer;
+		if (shareAlpha && shareColors) {
+			target.colorBuffer = this.colorBuffer;
 		} else {
-			if (arg4.normalX == null || arg4.normalX.length < this.uniqueVertexCount) {
-				arg4.normalX = new short[this.uniqueVertexCount + 100];
-				arg4.normalY = new short[this.uniqueVertexCount + 100];
-				arg4.normalZ = new short[this.uniqueVertexCount + 100];
-				arg4.normalMagnitude = new short[this.uniqueVertexCount + 100];
+			if (scratch.colorBuffer == null) {
+				scratch.colorBuffer = new GlBuffer();
 			}
-			arg3.normalX = arg4.normalX;
-			arg3.normalY = arg4.normalY;
-			arg3.normalZ = arg4.normalZ;
-			arg3.normalMagnitude = arg4.normalMagnitude;
-			for (local69 = 0; local69 < this.uniqueVertexCount; local69++) {
-				arg3.normalX[local69] = this.normalX[local69];
-				arg3.normalY[local69] = this.normalY[local69];
-				arg3.normalZ[local69] = this.normalZ[local69];
-				arg3.normalMagnitude[local69] = this.normalMagnitude[local69];
+			target.colorBuffer = scratch.colorBuffer;
+			target.colorBuffer.valid = false;
+		}
+		if (shareNormals || this.normalX == null) {
+			target.normalX = this.normalX;
+			target.normalY = this.normalY;
+			target.normalZ = this.normalZ;
+			target.normalMagnitude = this.normalMagnitude;
+			target.normalsBuffer = this.normalsBuffer;
+		} else {
+			if (scratch.normalX == null || scratch.normalX.length < this.uniqueVertexCount) {
+				scratch.normalX = new short[this.uniqueVertexCount + 100];
+				scratch.normalY = new short[this.uniqueVertexCount + 100];
+				scratch.normalZ = new short[this.uniqueVertexCount + 100];
+				scratch.normalMagnitude = new short[this.uniqueVertexCount + 100];
+			}
+			target.normalX = scratch.normalX;
+			target.normalY = scratch.normalY;
+			target.normalZ = scratch.normalZ;
+			target.normalMagnitude = scratch.normalMagnitude;
+			for (i = 0; i < this.uniqueVertexCount; i++) {
+				target.normalX[i] = this.normalX[i];
+				target.normalY[i] = this.normalY[i];
+				target.normalZ[i] = this.normalZ[i];
+				target.normalMagnitude[i] = this.normalMagnitude[i];
 			}
 			if (Preferences.highDetailLighting) {
-				if (arg4.normalsBuffer == null) {
-					arg4.normalsBuffer = new GlBuffer();
+				if (scratch.normalsBuffer == null) {
+					scratch.normalsBuffer = new GlBuffer();
 				}
-				arg3.normalsBuffer = arg4.normalsBuffer;
-				arg3.normalsBuffer.valid = false;
+				target.normalsBuffer = scratch.normalsBuffer;
+				target.normalsBuffer.valid = false;
 			} else {
-				arg3.normalsBuffer = null;
+				target.normalsBuffer = null;
 			}
 		}
-		arg3.vertexS = this.vertexS;
-		arg3.vertexT = this.vertexT;
-		arg3.vertexBones = this.vertexBones;
-		arg3.boneVertices = this.boneVertices;
-		arg3.triangleVertexA = this.triangleVertexA;
-		arg3.triangleVertexB = this.triangleVertexB;
-		arg3.triangleVertexC = this.triangleVertexC;
-		arg3.triangleTextures = this.triangleTextures;
-		arg3.triangleBones = this.triangleBones;
-		arg3.boneTriangles = this.boneTriangles;
-		arg3.texCoordBuffer = this.texCoordBuffer;
-		arg3.indexBuffer = this.indexBuffer;
-		arg3.textureGroupOffsets = this.textureGroupOffsets;
-		arg3.vertexLookup = this.vertexLookup;
-		arg3.vertexOffsets = this.vertexOffsets;
-		arg3.pickable = this.pickable;
-		arg3.vertexSources = this.vertexSources;
-		arg3.triangleSources = this.triangleSources;
-		return arg3;
+		target.vertexS = this.vertexS;
+		target.vertexT = this.vertexT;
+		target.vertexBones = this.vertexBones;
+		target.boneVertices = this.boneVertices;
+		target.triangleVertexA = this.triangleVertexA;
+		target.triangleVertexB = this.triangleVertexB;
+		target.triangleVertexC = this.triangleVertexC;
+		target.triangleTextures = this.triangleTextures;
+		target.triangleBones = this.triangleBones;
+		target.boneTriangles = this.boneTriangles;
+		target.texCoordBuffer = this.texCoordBuffer;
+		target.indexBuffer = this.indexBuffer;
+		target.textureGroupOffsets = this.textureGroupOffsets;
+		target.vertexLookup = this.vertexLookup;
+		target.vertexOffsets = this.vertexOffsets;
+		target.pickable = this.pickable;
+		target.vertexSources = this.vertexSources;
+		target.triangleSources = this.triangleSources;
+		return target;
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(III)Lclient!th;")
@@ -2804,16 +2804,16 @@ public final class GlModel extends Model {
 			this.rotateCounterClockwise();
 			return;
 		}
-		@Pc(7) int local7;
-		for (local7 = 0; local7 < this.vertexCount; local7++) {
-			@Pc(16) int local16 = this.vertexX[local7];
-			this.vertexX[local7] = this.vertexZ[local7];
-			this.vertexZ[local7] = -local16;
+		@Pc(7) int i;
+		for (i = 0; i < this.vertexCount; i++) {
+			@Pc(16) int temp = this.vertexX[i];
+			this.vertexX[i] = this.vertexZ[i];
+			this.vertexZ[i] = -temp;
 		}
-		for (local7 = 0; local7 < this.uniqueVertexCount; local7++) {
-			@Pc(43) short local43 = this.normalX[local7];
-			this.normalX[local7] = this.normalZ[local7];
-			this.normalZ[local7] = (short) -local43;
+		for (i = 0; i < this.uniqueVertexCount; i++) {
+			@Pc(43) short tempN = this.normalX[i];
+			this.normalX[i] = this.normalZ[i];
+			this.normalZ[i] = (short) -tempN;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -2823,42 +2823,42 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ZZZZZZZZZZZ)Lclient!td;")
-	public final GlModel deepCopy(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(4) boolean arg3, @OriginalArg(5) boolean arg4, @OriginalArg(6) boolean arg5, @OriginalArg(7) boolean arg6, @OriginalArg(9) boolean arg7, @OriginalArg(10) boolean arg8) {
+	public final GlModel deepCopy(@OriginalArg(0) boolean shareXZ, @OriginalArg(1) boolean shareY, @OriginalArg(2) boolean shareColors, @OriginalArg(4) boolean shareAlpha, @OriginalArg(5) boolean shareNormals, @OriginalArg(6) boolean shareNormalsValid, @OriginalArg(7) boolean shareColorBuffer, @OriginalArg(9) boolean shareTriangles, @OriginalArg(10) boolean shareTextures) {
 		@Pc(3) GlModel model = new GlModel();
 		model.vertexCount = this.vertexCount;
 		model.uniqueVertexCount = this.uniqueVertexCount;
 		model.triangleCount = this.triangleCount;
-		if (arg0) {
+		if (shareXZ) {
 			model.vertexX = this.vertexX;
 			model.vertexZ = this.vertexZ;
 		} else {
 			model.vertexX = ArrayUtils.copyOfNullable(this.vertexX);
 			model.vertexZ = ArrayUtils.copyOfNullable(this.vertexZ);
 		}
-		if (arg1) {
+		if (shareY) {
 			model.vertexY = this.vertexY;
 		} else {
 			model.vertexY = ArrayUtils.copyOfNullable(this.vertexY);
 		}
-		if (arg0 && arg1) {
+		if (shareXZ && shareY) {
 			model.vertexBuffer = this.vertexBuffer;
 			model.bounds = this.bounds;
 		} else {
 			model.vertexBuffer = new GlBuffer();
 			model.bounds = new GlBoundingBox();
 		}
-		if (arg2) {
+		if (shareColors) {
 			model.triangleColors = this.triangleColors;
 		} else {
 			model.triangleColors = ArrayUtils.copyOfNullable(this.triangleColors);
 		}
 		model.triangleAlpha = this.triangleAlpha;
-		if (arg2 && arg3 && (arg6 && arg4 || Preferences.highDetailLighting)) {
+		if (shareColors && shareAlpha && (shareColorBuffer && shareNormals || Preferences.highDetailLighting)) {
 			model.colorBuffer = this.colorBuffer;
 		} else {
 			model.colorBuffer = new GlBuffer();
 		}
-		if (arg4) {
+		if (shareNormals) {
 			model.normalX = this.normalX;
 			model.normalY = this.normalY;
 			model.normalZ = this.normalZ;
@@ -2871,7 +2871,7 @@ public final class GlModel extends Model {
 		}
 		if (!Preferences.highDetailLighting) {
 			model.normalsBuffer = null;
-		} else if (arg4 && arg5 && arg6) {
+		} else if (shareNormals && shareNormalsValid && shareColorBuffer) {
 			model.normalsBuffer = this.normalsBuffer;
 		} else {
 			model.normalsBuffer = new GlBuffer();
@@ -2879,7 +2879,7 @@ public final class GlModel extends Model {
 		model.vertexS = this.vertexS;
 		model.vertexT = this.vertexT;
 		model.texCoordBuffer = this.texCoordBuffer;
-		if (arg7) {
+		if (shareTriangles) {
 			model.triangleVertexA = this.triangleVertexA;
 			model.triangleVertexB = this.triangleVertexB;
 			model.triangleVertexC = this.triangleVertexC;
@@ -2890,7 +2890,7 @@ public final class GlModel extends Model {
 			model.triangleVertexC = ArrayUtils.copyOfNullable(this.triangleVertexC);
 			model.indexBuffer = new GlBuffer();
 		}
-		if (arg8) {
+		if (shareTextures) {
 			model.triangleTextures = this.triangleTextures;
 		} else {
 			model.triangleTextures = ArrayUtils.copyOfNullable(this.triangleTextures);
@@ -2912,25 +2912,25 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "i", descriptor = "()V")
 	@Override
 	public final void rotateCounterClockwise() {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			@Pc(10) int local10 = this.vertexX[local1];
-			this.vertexX[local1] = this.vertexZ[local1];
-			this.vertexZ[local1] = -local10;
+		for (@Pc(1) int i = 0; i < this.vertexCount; i++) {
+			@Pc(10) int temp = this.vertexX[i];
+			this.vertexX[i] = this.vertexZ[i];
+			this.vertexZ[i] = -temp;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIIIIIII)Z")
-	private boolean pointWithinTriangle(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		if (arg1 < arg2 && arg1 < arg3 && arg1 < arg4) {
+	private boolean pointWithinTriangle(@OriginalArg(0) int pointX, @OriginalArg(1) int pointY, @OriginalArg(2) int y0, @OriginalArg(3) int y1, @OriginalArg(4) int y2, @OriginalArg(5) int x0, @OriginalArg(6) int x1, @OriginalArg(7) int x2) {
+		if (pointY < y0 && pointY < y1 && pointY < y2) {
 			return false;
-		} else if (arg1 > arg2 && arg1 > arg3 && arg1 > arg4) {
+		} else if (pointY > y0 && pointY > y1 && pointY > y2) {
 			return false;
-		} else if (arg0 < arg5 && arg0 < arg6 && arg0 < arg7) {
+		} else if (pointX < x0 && pointX < x1 && pointX < x2) {
 			return false;
 		} else {
-			return arg0 <= arg5 || arg0 <= arg6 || arg0 <= arg7;
+			return pointX <= x0 || pointX <= x1 || pointX <= x2;
 		}
 	}
 
@@ -2945,144 +2945,144 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(I[IIIIZ)V")
 	@Override
-	protected final void transformBone(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
-		@Pc(2) int local2 = arg1.length;
-		@Pc(18) int local18;
-		@Pc(26) int local26;
-		@Pc(45) int local45;
-		@Pc(53) int local53;
-		@Pc(8) int local8;
-		@Pc(12) int local12;
-		@Pc(16) int local16;
-		if (arg0 == 0) {
-			local8 = arg2 << 4;
-			local12 = arg3 << 4;
-			local16 = arg4 << 4;
-			local18 = 0;
+	protected final void transformBone(@OriginalArg(0) int transformType, @OriginalArg(1) int[] labels, @OriginalArg(2) int transformX, @OriginalArg(3) int transformY, @OriginalArg(4) int transformZ, @OriginalArg(5) boolean delayed) {
+		@Pc(2) int labelCount = labels.length;
+		@Pc(18) int count;
+		@Pc(26) int i;
+		@Pc(45) int j;
+		@Pc(53) int vertIdx;
+		@Pc(8) int scaledX;
+		@Pc(12) int scaledY;
+		@Pc(16) int scaledZ;
+		if (transformType == 0) {
+			scaledX = transformX << 4;
+			scaledY = transformY << 4;
+			scaledZ = transformZ << 4;
+			count = 0;
 			originX = 0;
 			originY = 0;
 			originZ = 0;
-			for (local26 = 0; local26 < local2; local26++) {
-				@Pc(33) int local33 = arg1[local26];
-				if (local33 < this.boneVertices.length) {
-					@Pc(43) int[] local43 = this.boneVertices[local33];
-					for (local45 = 0; local45 < local43.length; local45++) {
-						local53 = local43[local45];
-						originX += this.vertexX[local53];
-						originY += this.vertexY[local53];
-						originZ += this.vertexZ[local53];
-						local18++;
+			for (i = 0; i < labelCount; i++) {
+				@Pc(33) int label = labels[i];
+				if (label < this.boneVertices.length) {
+					@Pc(43) int[] boneVerts = this.boneVertices[label];
+					for (j = 0; j < boneVerts.length; j++) {
+						vertIdx = boneVerts[j];
+						originX += this.vertexX[vertIdx];
+						originY += this.vertexY[vertIdx];
+						originZ += this.vertexZ[vertIdx];
+						count++;
 					}
 				}
 			}
-			if (local18 > 0) {
-				originX = originX / local18 + local8;
-				originY = originY / local18 + local12;
-				originZ = originZ / local18 + local16;
+			if (count > 0) {
+				originX = originX / count + scaledX;
+				originY = originY / count + scaledY;
+				originZ = originZ / count + scaledZ;
 			} else {
-				originX = local8;
-				originY = local12;
-				originZ = local16;
+				originX = scaledX;
+				originY = scaledY;
+				originZ = scaledZ;
 			}
 			return;
 		}
-		@Pc(141) int[] local141;
-		@Pc(143) int local143;
-		if (arg0 == 1) {
-			local8 = arg2 << 4;
-			local12 = arg3 << 4;
-			local16 = arg4 << 4;
-			for (local18 = 0; local18 < local2; local18++) {
-				local26 = arg1[local18];
-				if (local26 < this.boneVertices.length) {
-					local141 = this.boneVertices[local26];
-					for (local143 = 0; local143 < local141.length; local143++) {
-						local45 = local141[local143];
-						this.vertexX[local45] += local8;
-						this.vertexY[local45] += local12;
-						this.vertexZ[local45] += local16;
+		@Pc(141) int[] verts;
+		@Pc(143) int k;
+		if (transformType == 1) {
+			scaledX = transformX << 4;
+			scaledY = transformY << 4;
+			scaledZ = transformZ << 4;
+			for (count = 0; count < labelCount; count++) {
+				i = labels[count];
+				if (i < this.boneVertices.length) {
+					verts = this.boneVertices[i];
+					for (k = 0; k < verts.length; k++) {
+						j = verts[k];
+						this.vertexX[j] += scaledX;
+						this.vertexY[j] += scaledY;
+						this.vertexZ[j] += scaledZ;
 					}
 				}
 			}
 			return;
 		}
-		@Pc(246) int local246;
-		@Pc(264) int local264;
-		@Pc(484) int local484;
-		if (arg0 == 2) {
-			for (local18 = 0; local18 < local2; local18++) {
-				local26 = arg1[local18];
-				if (local26 < this.boneVertices.length) {
-					local141 = this.boneVertices[local26];
-					for (local143 = 0; local143 < local141.length; local143++) {
-						local45 = local141[local143];
-						this.vertexX[local45] -= originX;
-						this.vertexY[local45] -= originY;
-						this.vertexZ[local45] -= originZ;
-						if (arg4 != 0) {
-							local53 = MathUtils.sin[arg4];
-							local246 = MathUtils.cos[arg4];
-							local264 = this.vertexY[local45] * local53 + this.vertexX[local45] * local246 + 32767 >> 16;
-							this.vertexY[local45] = this.vertexY[local45] * local246 + 32767 - this.vertexX[local45] * local53 >> 16;
-							this.vertexX[local45] = local264;
+		@Pc(246) int cosAngle;
+		@Pc(264) int temp;
+		@Pc(484) int lookupIdx;
+		if (transformType == 2) {
+			for (count = 0; count < labelCount; count++) {
+				i = labels[count];
+				if (i < this.boneVertices.length) {
+					verts = this.boneVertices[i];
+					for (k = 0; k < verts.length; k++) {
+						j = verts[k];
+						this.vertexX[j] -= originX;
+						this.vertexY[j] -= originY;
+						this.vertexZ[j] -= originZ;
+						if (transformZ != 0) {
+							vertIdx = MathUtils.sin[transformZ];
+							cosAngle = MathUtils.cos[transformZ];
+							temp = this.vertexY[j] * vertIdx + this.vertexX[j] * cosAngle + 32767 >> 16;
+							this.vertexY[j] = this.vertexY[j] * cosAngle + 32767 - this.vertexX[j] * vertIdx >> 16;
+							this.vertexX[j] = temp;
 						}
-						if (arg2 != 0) {
-							local53 = MathUtils.sin[arg2];
-							local246 = MathUtils.cos[arg2];
-							local264 = this.vertexY[local45] * local246 + 32767 - this.vertexZ[local45] * local53 >> 16;
-							this.vertexZ[local45] = this.vertexY[local45] * local53 + this.vertexZ[local45] * local246 + 32767 >> 16;
-							this.vertexY[local45] = local264;
+						if (transformX != 0) {
+							vertIdx = MathUtils.sin[transformX];
+							cosAngle = MathUtils.cos[transformX];
+							temp = this.vertexY[j] * cosAngle + 32767 - this.vertexZ[j] * vertIdx >> 16;
+							this.vertexZ[j] = this.vertexY[j] * vertIdx + this.vertexZ[j] * cosAngle + 32767 >> 16;
+							this.vertexY[j] = temp;
 						}
-						if (arg3 != 0) {
-							local53 = MathUtils.sin[arg3];
-							local246 = MathUtils.cos[arg3];
-							local264 = this.vertexZ[local45] * local53 + this.vertexX[local45] * local246 + 32767 >> 16;
-							this.vertexZ[local45] = this.vertexZ[local45] * local246 + 32767 - this.vertexX[local45] * local53 >> 16;
-							this.vertexX[local45] = local264;
+						if (transformY != 0) {
+							vertIdx = MathUtils.sin[transformY];
+							cosAngle = MathUtils.cos[transformY];
+							temp = this.vertexZ[j] * vertIdx + this.vertexX[j] * cosAngle + 32767 >> 16;
+							this.vertexZ[j] = this.vertexZ[j] * cosAngle + 32767 - this.vertexX[j] * vertIdx >> 16;
+							this.vertexX[j] = temp;
 						}
-						this.vertexX[local45] += originX;
-						this.vertexY[local45] += originY;
-						this.vertexZ[local45] += originZ;
+						this.vertexX[j] += originX;
+						this.vertexY[j] += originY;
+						this.vertexZ[j] += originZ;
 					}
 				}
 			}
-			if (arg5 && this.normalX != null) {
-				for (local18 = 0; local18 < local2; local18++) {
-					local26 = arg1[local18];
-					if (local26 < this.boneVertices.length) {
-						local141 = this.boneVertices[local26];
-						for (local143 = 0; local143 < local141.length; local143++) {
-							local45 = local141[local143];
-							local53 = this.vertexOffsets[local45];
-							local246 = this.vertexOffsets[local45 + 1];
-							for (local264 = local53; local264 < local246; local264++) {
-								local484 = this.vertexLookup[local264] - 1;
-								if (local484 == -1) {
+			if (delayed && this.normalX != null) {
+				for (count = 0; count < labelCount; count++) {
+					i = labels[count];
+					if (i < this.boneVertices.length) {
+						verts = this.boneVertices[i];
+						for (k = 0; k < verts.length; k++) {
+							j = verts[k];
+							vertIdx = this.vertexOffsets[j];
+							cosAngle = this.vertexOffsets[j + 1];
+							for (temp = vertIdx; temp < cosAngle; temp++) {
+								lookupIdx = this.vertexLookup[temp] - 1;
+								if (lookupIdx == -1) {
 									break;
 								}
-								@Pc(494) int local494;
-								@Pc(498) int local498;
-								@Pc(516) int local516;
-								if (arg4 != 0) {
-									local494 = MathUtils.sin[arg4];
-									local498 = MathUtils.cos[arg4];
-									local516 = this.normalY[local484] * local494 + this.normalX[local484] * local498 + 32767 >> 16;
-									this.normalY[local484] = (short) (this.normalY[local484] * local498 + 32767 - this.normalX[local484] * local494 >> 16);
-									this.normalX[local484] = (short) local516;
+								@Pc(494) int sinAngle;
+								@Pc(498) int cosAngle2;
+								@Pc(516) int rotResult;
+								if (transformZ != 0) {
+									sinAngle = MathUtils.sin[transformZ];
+									cosAngle2 = MathUtils.cos[transformZ];
+									rotResult = this.normalY[lookupIdx] * sinAngle + this.normalX[lookupIdx] * cosAngle2 + 32767 >> 16;
+									this.normalY[lookupIdx] = (short) (this.normalY[lookupIdx] * cosAngle2 + 32767 - this.normalX[lookupIdx] * sinAngle >> 16);
+									this.normalX[lookupIdx] = (short) rotResult;
 								}
-								if (arg2 != 0) {
-									local494 = MathUtils.sin[arg2];
-									local498 = MathUtils.cos[arg2];
-									local516 = this.normalY[local484] * local498 + 32767 - this.normalZ[local484] * local494 >> 16;
-									this.normalZ[local484] = (short) (this.normalY[local484] * local494 + this.normalZ[local484] * local498 + 32767 >> 16);
-									this.normalY[local484] = (short) local516;
+								if (transformX != 0) {
+									sinAngle = MathUtils.sin[transformX];
+									cosAngle2 = MathUtils.cos[transformX];
+									rotResult = this.normalY[lookupIdx] * cosAngle2 + 32767 - this.normalZ[lookupIdx] * sinAngle >> 16;
+									this.normalZ[lookupIdx] = (short) (this.normalY[lookupIdx] * sinAngle + this.normalZ[lookupIdx] * cosAngle2 + 32767 >> 16);
+									this.normalY[lookupIdx] = (short) rotResult;
 								}
-								if (arg3 != 0) {
-									local494 = MathUtils.sin[arg3];
-									local498 = MathUtils.cos[arg3];
-									local516 = this.normalZ[local484] * local494 + this.normalX[local484] * local498 + 32767 >> 16;
-									this.normalZ[local484] = (short) (this.normalZ[local484] * local498 + 32767 - this.normalX[local484] * local494 >> 16);
-									this.normalX[local484] = (short) local516;
+								if (transformY != 0) {
+									sinAngle = MathUtils.sin[transformY];
+									cosAngle2 = MathUtils.cos[transformY];
+									rotResult = this.normalZ[lookupIdx] * sinAngle + this.normalX[lookupIdx] * cosAngle2 + 32767 >> 16;
+									this.normalZ[lookupIdx] = (short) (this.normalZ[lookupIdx] * cosAngle2 + 32767 - this.normalX[lookupIdx] * sinAngle >> 16);
+									this.normalX[lookupIdx] = (short) rotResult;
 								}
 							}
 						}
@@ -3092,74 +3092,74 @@ public final class GlModel extends Model {
 					this.normalsBuffer.valid = false;
 				}
 			}
-		} else if (arg0 == 3) {
-			for (local18 = 0; local18 < local2; local18++) {
-				local26 = arg1[local18];
-				if (local26 < this.boneVertices.length) {
-					local141 = this.boneVertices[local26];
-					for (local143 = 0; local143 < local141.length; local143++) {
-						local45 = local141[local143];
-						this.vertexX[local45] -= originX;
-						this.vertexY[local45] -= originY;
-						this.vertexZ[local45] -= originZ;
-						this.vertexX[local45] = this.vertexX[local45] * arg2 >> 7;
-						this.vertexY[local45] = this.vertexY[local45] * arg3 >> 7;
-						this.vertexZ[local45] = this.vertexZ[local45] * arg4 >> 7;
-						this.vertexX[local45] += originX;
-						this.vertexY[local45] += originY;
-						this.vertexZ[local45] += originZ;
+		} else if (transformType == 3) {
+			for (count = 0; count < labelCount; count++) {
+				i = labels[count];
+				if (i < this.boneVertices.length) {
+					verts = this.boneVertices[i];
+					for (k = 0; k < verts.length; k++) {
+						j = verts[k];
+						this.vertexX[j] -= originX;
+						this.vertexY[j] -= originY;
+						this.vertexZ[j] -= originZ;
+						this.vertexX[j] = this.vertexX[j] * transformX >> 7;
+						this.vertexY[j] = this.vertexY[j] * transformY >> 7;
+						this.vertexZ[j] = this.vertexZ[j] * transformZ >> 7;
+						this.vertexX[j] += originX;
+						this.vertexY[j] += originY;
+						this.vertexZ[j] += originZ;
 					}
 				}
 			}
-		} else if (arg0 == 5) {
+		} else if (transformType == 5) {
 			if (this.boneTriangles != null && this.triangleAlpha != null) {
-				for (local18 = 0; local18 < local2; local18++) {
-					local26 = arg1[local18];
-					if (local26 < this.boneTriangles.length) {
-						local141 = this.boneTriangles[local26];
-						for (local143 = 0; local143 < local141.length; local143++) {
-							local45 = local141[local143];
-							local53 = (this.triangleAlpha[local45] & 0xFF) + arg2 * 8;
-							if (local53 < 0) {
-								local53 = 0;
-							} else if (local53 > 255) {
-								local53 = 255;
+				for (count = 0; count < labelCount; count++) {
+					i = labels[count];
+					if (i < this.boneTriangles.length) {
+						verts = this.boneTriangles[i];
+						for (k = 0; k < verts.length; k++) {
+							j = verts[k];
+							vertIdx = (this.triangleAlpha[j] & 0xFF) + transformX * 8;
+							if (vertIdx < 0) {
+								vertIdx = 0;
+							} else if (vertIdx > 255) {
+								vertIdx = 255;
 							}
-							this.triangleAlpha[local45] = (byte) local53;
+							this.triangleAlpha[j] = (byte) vertIdx;
 						}
-						if (local141.length > 0) {
+						if (verts.length > 0) {
 							this.colorBuffer.valid = false;
 						}
 					}
 				}
 			}
-		} else if (arg0 == 7 && this.boneTriangles != null) {
-			for (local18 = 0; local18 < local2; local18++) {
-				local26 = arg1[local18];
-				if (local26 < this.boneTriangles.length) {
-					local141 = this.boneTriangles[local26];
-					for (local143 = 0; local143 < local141.length; local143++) {
-						local45 = local141[local143];
-						local53 = this.triangleColors[local45] & 0xFFFF;
-						local246 = local53 >> 10 & 0x3F;
-						local264 = local53 >> 7 & 0x7;
-						local484 = local53 & 0x7F;
-						@Pc(932) int local932 = local246 + arg2 & 0x3F;
-						local264 += arg3 / 4;
-						if (local264 < 0) {
-							local264 = 0;
-						} else if (local264 > 7) {
-							local264 = 7;
+		} else if (transformType == 7 && this.boneTriangles != null) {
+			for (count = 0; count < labelCount; count++) {
+				i = labels[count];
+				if (i < this.boneTriangles.length) {
+					verts = this.boneTriangles[i];
+					for (k = 0; k < verts.length; k++) {
+						j = verts[k];
+						vertIdx = this.triangleColors[j] & 0xFFFF;
+						cosAngle = vertIdx >> 10 & 0x3F;
+						temp = vertIdx >> 7 & 0x7;
+						lookupIdx = vertIdx & 0x7F;
+						@Pc(932) int newHue = cosAngle + transformX & 0x3F;
+						temp += transformY / 4;
+						if (temp < 0) {
+							temp = 0;
+						} else if (temp > 7) {
+							temp = 7;
 						}
-						local484 += arg4;
-						if (local484 < 0) {
-							local484 = 0;
-						} else if (local484 > 127) {
-							local484 = 127;
+						lookupIdx += transformZ;
+						if (lookupIdx < 0) {
+							lookupIdx = 0;
+						} else if (lookupIdx > 127) {
+							lookupIdx = 127;
 						}
-						this.triangleColors[local45] = (short) (local932 << 10 | local264 << 7 | local484);
+						this.triangleColors[j] = (short) (newHue << 10 | temp << 7 | lookupIdx);
 					}
-					if (local141.length > 0) {
+					if (verts.length > 0) {
 						this.colorBuffer.valid = false;
 					}
 				}
@@ -3169,111 +3169,111 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(IIII)V")
 	@Override
-	protected final void transformShadowBone(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(3) int local3;
-		@Pc(11) int local11;
-		if (arg0 == 0) {
-			local3 = 0;
+	protected final void transformShadowBone(@OriginalArg(0) int transformType, @OriginalArg(1) int transformX, @OriginalArg(2) int transformY, @OriginalArg(3) int transformZ) {
+		@Pc(3) int i;
+		@Pc(11) int sinAngle;
+		if (transformType == 0) {
+			i = 0;
 			originX = 0;
 			originY = 0;
 			originZ = 0;
-			for (local11 = 0; local11 < this.vertexCount; local11++) {
-				originX += this.vertexX[local11];
-				originY += this.vertexY[local11];
-				originZ += this.vertexZ[local11];
-				local3++;
+			for (sinAngle = 0; sinAngle < this.vertexCount; sinAngle++) {
+				originX += this.vertexX[sinAngle];
+				originY += this.vertexY[sinAngle];
+				originZ += this.vertexZ[sinAngle];
+				i++;
 			}
-			if (local3 > 0) {
-				originX = originX / local3 + arg1;
-				originY = originY / local3 + arg2;
-				originZ = originZ / local3 + arg3;
+			if (i > 0) {
+				originX = originX / i + transformX;
+				originY = originY / i + transformY;
+				originZ = originZ / i + transformZ;
 			} else {
-				originX = arg1;
-				originY = arg2;
-				originZ = arg3;
+				originX = transformX;
+				originY = transformY;
+				originZ = transformZ;
 			}
-		} else if (arg0 == 1) {
-			for (local3 = 0; local3 < this.vertexCount; local3++) {
-				this.vertexX[local3] += arg1;
-				this.vertexY[local3] += arg2;
-				this.vertexZ[local3] += arg3;
+		} else if (transformType == 1) {
+			for (i = 0; i < this.vertexCount; i++) {
+				this.vertexX[i] += transformX;
+				this.vertexY[i] += transformY;
+				this.vertexZ[i] += transformZ;
 			}
 		} else {
-			@Pc(146) int local146;
-			@Pc(164) int local164;
-			if (arg0 == 2) {
-				for (local3 = 0; local3 < this.vertexCount; local3++) {
-					this.vertexX[local3] -= originX;
-					this.vertexY[local3] -= originY;
-					this.vertexZ[local3] -= originZ;
-					if (arg3 != 0) {
-						local11 = MathUtils.sin[arg3];
-						local146 = MathUtils.cos[arg3];
-						local164 = this.vertexY[local3] * local11 + this.vertexX[local3] * local146 + 32767 >> 16;
-						this.vertexY[local3] = this.vertexY[local3] * local146 + 32767 - this.vertexX[local3] * local11 >> 16;
-						this.vertexX[local3] = local164;
+			@Pc(146) int cosAngle;
+			@Pc(164) int temp;
+			if (transformType == 2) {
+				for (i = 0; i < this.vertexCount; i++) {
+					this.vertexX[i] -= originX;
+					this.vertexY[i] -= originY;
+					this.vertexZ[i] -= originZ;
+					if (transformZ != 0) {
+						sinAngle = MathUtils.sin[transformZ];
+						cosAngle = MathUtils.cos[transformZ];
+						temp = this.vertexY[i] * sinAngle + this.vertexX[i] * cosAngle + 32767 >> 16;
+						this.vertexY[i] = this.vertexY[i] * cosAngle + 32767 - this.vertexX[i] * sinAngle >> 16;
+						this.vertexX[i] = temp;
 					}
-					if (arg1 != 0) {
-						local11 = MathUtils.sin[arg1];
-						local146 = MathUtils.cos[arg1];
-						local164 = this.vertexY[local3] * local146 + 32767 - this.vertexZ[local3] * local11 >> 16;
-						this.vertexZ[local3] = this.vertexY[local3] * local11 + this.vertexZ[local3] * local146 + 32767 >> 16;
-						this.vertexY[local3] = local164;
+					if (transformX != 0) {
+						sinAngle = MathUtils.sin[transformX];
+						cosAngle = MathUtils.cos[transformX];
+						temp = this.vertexY[i] * cosAngle + 32767 - this.vertexZ[i] * sinAngle >> 16;
+						this.vertexZ[i] = this.vertexY[i] * sinAngle + this.vertexZ[i] * cosAngle + 32767 >> 16;
+						this.vertexY[i] = temp;
 					}
-					if (arg2 != 0) {
-						local11 = MathUtils.sin[arg2];
-						local146 = MathUtils.cos[arg2];
-						local164 = this.vertexZ[local3] * local11 + this.vertexX[local3] * local146 + 32767 >> 16;
-						this.vertexZ[local3] = this.vertexZ[local3] * local146 + 32767 - this.vertexX[local3] * local11 >> 16;
-						this.vertexX[local3] = local164;
+					if (transformY != 0) {
+						sinAngle = MathUtils.sin[transformY];
+						cosAngle = MathUtils.cos[transformY];
+						temp = this.vertexZ[i] * sinAngle + this.vertexX[i] * cosAngle + 32767 >> 16;
+						this.vertexZ[i] = this.vertexZ[i] * cosAngle + 32767 - this.vertexX[i] * sinAngle >> 16;
+						this.vertexX[i] = temp;
 					}
-					this.vertexX[local3] += originX;
-					this.vertexY[local3] += originY;
-					this.vertexZ[local3] += originZ;
+					this.vertexX[i] += originX;
+					this.vertexY[i] += originY;
+					this.vertexZ[i] += originZ;
 				}
-			} else if (arg0 == 3) {
-				for (local3 = 0; local3 < this.vertexCount; local3++) {
-					this.vertexX[local3] -= originX;
-					this.vertexY[local3] -= originY;
-					this.vertexZ[local3] -= originZ;
-					this.vertexX[local3] = this.vertexX[local3] * arg1 / 128;
-					this.vertexY[local3] = this.vertexY[local3] * arg2 / 128;
-					this.vertexZ[local3] = this.vertexZ[local3] * arg3 / 128;
-					this.vertexX[local3] += originX;
-					this.vertexY[local3] += originY;
-					this.vertexZ[local3] += originZ;
+			} else if (transformType == 3) {
+				for (i = 0; i < this.vertexCount; i++) {
+					this.vertexX[i] -= originX;
+					this.vertexY[i] -= originY;
+					this.vertexZ[i] -= originZ;
+					this.vertexX[i] = this.vertexX[i] * transformX / 128;
+					this.vertexY[i] = this.vertexY[i] * transformY / 128;
+					this.vertexZ[i] = this.vertexZ[i] * transformZ / 128;
+					this.vertexX[i] += originX;
+					this.vertexY[i] += originY;
+					this.vertexZ[i] += originZ;
 				}
-			} else if (arg0 == 5) {
-				for (local3 = 0; local3 < this.triangleCount; local3++) {
-					local11 = (this.triangleAlpha[local3] & 0xFF) + arg1 * 8;
-					if (local11 < 0) {
-						local11 = 0;
-					} else if (local11 > 255) {
-						local11 = 255;
+			} else if (transformType == 5) {
+				for (i = 0; i < this.triangleCount; i++) {
+					sinAngle = (this.triangleAlpha[i] & 0xFF) + transformX * 8;
+					if (sinAngle < 0) {
+						sinAngle = 0;
+					} else if (sinAngle > 255) {
+						sinAngle = 255;
 					}
-					this.triangleAlpha[local3] = (byte) local11;
+					this.triangleAlpha[i] = (byte) sinAngle;
 				}
 				this.colorBuffer.valid = false;
-			} else if (arg0 == 7) {
-				for (local3 = 0; local3 < this.triangleCount; local3++) {
-					local11 = this.triangleColors[local3] & 0xFFFF;
-					local146 = local11 >> 10 & 0x3F;
-					local164 = local11 >> 7 & 0x7;
-					@Pc(496) int local496 = local11 & 0x7F;
-					@Pc(502) int local502 = local146 + arg1 & 0x3F;
-					local164 += arg2 / 4;
-					if (local164 < 0) {
-						local164 = 0;
-					} else if (local164 > 7) {
-						local164 = 7;
+			} else if (transformType == 7) {
+				for (i = 0; i < this.triangleCount; i++) {
+					sinAngle = this.triangleColors[i] & 0xFFFF;
+					cosAngle = sinAngle >> 10 & 0x3F;
+					temp = sinAngle >> 7 & 0x7;
+					@Pc(496) int lightness = sinAngle & 0x7F;
+					@Pc(502) int newHue = cosAngle + transformX & 0x3F;
+					temp += transformY / 4;
+					if (temp < 0) {
+						temp = 0;
+					} else if (temp > 7) {
+						temp = 7;
 					}
-					local496 += arg3;
-					if (local496 < 0) {
-						local496 = 0;
-					} else if (local496 > 127) {
-						local496 = 127;
+					lightness += transformZ;
+					if (lightness < 0) {
+						lightness = 0;
+					} else if (lightness > 127) {
+						lightness = 127;
 					}
-					this.triangleColors[local3] = (short) (local502 << 10 | local164 << 7 | local496);
+					this.triangleColors[i] = (short) (newHue << 10 | temp << 7 | lightness);
 				}
 				this.colorBuffer.valid = false;
 			}
@@ -3331,30 +3331,30 @@ public final class GlModel extends Model {
 			}
 			this.deferredReleaseFlags = 0;
 		}
-		@Pc(172) GlVertexBufferObject local172 = null;
+		@Pc(172) GlVertexBufferObject lastVbo = null;
 		if (this.vertexBuffer.vbo != null) {
 			this.vertexBuffer.vbo.bindArray();
-			local172 = this.vertexBuffer.vbo;
+			lastVbo = this.vertexBuffer.vbo;
 			gl.glVertexPointer(3, GL2.GL_FLOAT, this.vertexBuffer.stride, this.vertexBuffer.pointer);
 		}
 		if (this.colorBuffer.vbo != null) {
-			if (local172 != this.colorBuffer.vbo) {
+			if (lastVbo != this.colorBuffer.vbo) {
 				this.colorBuffer.vbo.bindArray();
-				local172 = this.colorBuffer.vbo;
+				lastVbo = this.colorBuffer.vbo;
 			}
 			gl.glColorPointer(4, GL2.GL_UNSIGNED_BYTE, this.colorBuffer.stride, this.colorBuffer.pointer);
 		}
 		if (Preferences.highDetailLighting && this.normalsBuffer.vbo != null) {
-			if (local172 != this.normalsBuffer.vbo) {
+			if (lastVbo != this.normalsBuffer.vbo) {
 				this.normalsBuffer.vbo.bindArray();
-				local172 = this.normalsBuffer.vbo;
+				lastVbo = this.normalsBuffer.vbo;
 			}
 			gl.glNormalPointer(GL2.GL_FLOAT, this.normalsBuffer.stride, this.normalsBuffer.pointer);
 		}
 		if (this.texCoordBuffer.vbo != null) {
-			if (local172 != this.texCoordBuffer.vbo) {
+			if (lastVbo != this.texCoordBuffer.vbo) {
 				this.texCoordBuffer.vbo.bindArray();
-				local172 = this.texCoordBuffer.vbo;
+				lastVbo = this.texCoordBuffer.vbo;
 			}
 			gl.glTexCoordPointer(2, GL2.GL_FLOAT, this.texCoordBuffer.stride, this.texCoordBuffer.pointer);
 		}
@@ -3385,22 +3385,22 @@ public final class GlModel extends Model {
 		if (this.indexBuffer.vbo == null && GlRenderer.arbVboSupported) {
 			gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
-		@Pc(417) int local417 = this.textureGroupOffsets.length - 1;
-		for (@Pc(419) int local419 = 0; local419 < local417; local419++) {
-			@Pc(427) int local427 = this.textureGroupOffsets[local419];
-			@Pc(434) int local434 = this.textureGroupOffsets[local419 + 1];
-			@Pc(439) short local439 = this.triangleTextures[local427];
-			if (local439 == -1) {
+		@Pc(417) int groupCount = this.textureGroupOffsets.length - 1;
+		for (@Pc(419) int i = 0; i < groupCount; i++) {
+			@Pc(427) int startOffset = this.textureGroupOffsets[i];
+			@Pc(434) int endOffset = this.textureGroupOffsets[i + 1];
+			@Pc(439) short texture = this.triangleTextures[startOffset];
+			if (texture == -1) {
 				GlRenderer.setTextureId(-1);
 				MaterialManager.setMaterial(0, 0);
 			} else {
-				Rasteriser.textureProvider.bindTexture(local439 & 0xFFFF);
+				Rasteriser.textureProvider.bindTexture(texture & 0xFFFF);
 			}
 			if (this.indexBuffer.vbo == null) {
-				this.indexBuffer.buffer.position(local427 * 12);
-				gl.glDrawElements(GL2.GL_TRIANGLES, (local434 - local427) * 3, GL2.GL_UNSIGNED_INT, this.indexBuffer.buffer);
+				this.indexBuffer.buffer.position(startOffset * 12);
+				gl.glDrawElements(GL2.GL_TRIANGLES, (endOffset - startOffset) * 3, GL2.GL_UNSIGNED_INT, this.indexBuffer.buffer);
 			} else {
-				gl.glDrawElements(GL2.GL_TRIANGLES, (local434 - local427) * 3, GL2.GL_UNSIGNED_INT, local427 * 12L);
+				gl.glDrawElements(GL2.GL_TRIANGLES, (endOffset - startOffset) * 3, GL2.GL_UNSIGNED_INT, startOffset * 12L);
 			}
 		}
 	}
@@ -3408,10 +3408,10 @@ public final class GlModel extends Model {
 	@OriginalMember(owner = "client!td", name = "f", descriptor = "()V")
 	@Override
 	protected final void resetAfterAnimation() {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			this.vertexX[local1] = this.vertexX[local1] + 7 >> 4;
-			this.vertexY[local1] = this.vertexY[local1] + 7 >> 4;
-			this.vertexZ[local1] = this.vertexZ[local1] + 7 >> 4;
+		for (@Pc(1) int i = 0; i < this.vertexCount; i++) {
+			this.vertexX[i] = this.vertexX[i] + 7 >> 4;
+			this.vertexY[i] = this.vertexY[i] + 7 >> 4;
+			this.vertexZ[i] = this.vertexZ[i] + 7 >> 4;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -3419,19 +3419,19 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "x", descriptor = "()V")
 	public final void mirrorZ() {
-		@Pc(1) int local1;
-		for (local1 = 0; local1 < this.vertexCount; local1++) {
-			this.vertexZ[local1] = -this.vertexZ[local1];
+		@Pc(1) int i;
+		for (i = 0; i < this.vertexCount; i++) {
+			this.vertexZ[i] = -this.vertexZ[i];
 		}
 		if (this.normalZ != null) {
-			for (local1 = 0; local1 < this.uniqueVertexCount; local1++) {
-				this.normalZ[local1] = (short) -this.normalZ[local1];
+			for (i = 0; i < this.uniqueVertexCount; i++) {
+				this.normalZ[i] = (short) -this.normalZ[i];
 			}
 		}
-		for (local1 = 0; local1 < this.triangleCount; local1++) {
-			@Pc(48) short local48 = this.triangleVertexA[local1];
-			this.triangleVertexA[local1] = this.triangleVertexC[local1];
-			this.triangleVertexC[local1] = local48;
+		for (i = 0; i < this.triangleCount; i++) {
+			@Pc(48) short temp = this.triangleVertexA[i];
+			this.triangleVertexA[i] = this.triangleVertexC[i];
+			this.triangleVertexC[i] = temp;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -3443,13 +3443,13 @@ public final class GlModel extends Model {
 
 	@OriginalMember(owner = "client!td", name = "d", descriptor = "(I)V")
 	@Override
-	public final void rotateX(@OriginalArg(0) int arg0) {
-		@Pc(3) int local3 = MathUtils.sin[arg0];
-		@Pc(7) int local7 = MathUtils.cos[arg0];
-		for (@Pc(9) int local9 = 0; local9 < this.vertexCount; local9++) {
-			@Pc(29) int local29 = this.vertexY[local9] * local7 - this.vertexZ[local9] * local3 >> 16;
-			this.vertexZ[local9] = this.vertexY[local9] * local3 + this.vertexZ[local9] * local7 >> 16;
-			this.vertexY[local9] = local29;
+	public final void rotateX(@OriginalArg(0) int angle) {
+		@Pc(3) int sinAngle = MathUtils.sin[angle];
+		@Pc(7) int cosAngle = MathUtils.cos[angle];
+		for (@Pc(9) int i = 0; i < this.vertexCount; i++) {
+			@Pc(29) int newY = this.vertexY[i] * cosAngle - this.vertexZ[i] * sinAngle >> 16;
+			this.vertexZ[i] = this.vertexY[i] * sinAngle + this.vertexZ[i] * cosAngle >> 16;
+			this.vertexY[i] = newY;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -3461,19 +3461,19 @@ public final class GlModel extends Model {
 			this.rotateY(256);
 			return;
 		}
-		@Pc(10) int local10 = MathUtils.sin[256];
-		@Pc(14) int local14 = MathUtils.cos[256];
-		@Pc(16) int local16;
-		@Pc(36) int local36;
-		for (local16 = 0; local16 < this.vertexCount; local16++) {
-			local36 = this.vertexZ[local16] * local10 + this.vertexX[local16] * local14 >> 16;
-			this.vertexZ[local16] = this.vertexZ[local16] * local14 - this.vertexX[local16] * local10 >> 16;
-			this.vertexX[local16] = local36;
+		@Pc(10) int sinAngle = MathUtils.sin[256];
+		@Pc(14) int cosAngle = MathUtils.cos[256];
+		@Pc(16) int i;
+		@Pc(36) int newX;
+		for (i = 0; i < this.vertexCount; i++) {
+			newX = this.vertexZ[i] * sinAngle + this.vertexX[i] * cosAngle >> 16;
+			this.vertexZ[i] = this.vertexZ[i] * cosAngle - this.vertexX[i] * sinAngle >> 16;
+			this.vertexX[i] = newX;
 		}
-		for (local16 = 0; local16 < this.uniqueVertexCount; local16++) {
-			local36 = this.normalZ[local16] * local10 + this.normalX[local16] * local14 >> 16;
-			this.normalZ[local16] = (short) (this.normalZ[local16] * local14 - this.normalX[local16] * local10 >> 16);
-			this.normalX[local16] = (short) local36;
+		for (i = 0; i < this.uniqueVertexCount; i++) {
+			newX = this.normalZ[i] * sinAngle + this.normalX[i] * cosAngle >> 16;
+			this.normalZ[i] = (short) (this.normalZ[i] * cosAngle - this.normalX[i] * sinAngle >> 16);
+			this.normalX[i] = (short) newX;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
@@ -3483,92 +3483,92 @@ public final class GlModel extends Model {
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(Lclient!ek;)Lclient!ek;")
-	public final SoftwareIndexedSprite projectShadow(@OriginalArg(0) SoftwareIndexedSprite arg0) {
+	public final SoftwareIndexedSprite projectShadow(@OriginalArg(0) SoftwareIndexedSprite sprite) {
 		if (this.uniqueVertexCount == 0) {
 			return null;
 		}
 		if (!this.bounds.valid) {
 			this.calculateBounds();
 		}
-		@Pc(26) int local26;
-		@Pc(40) int local40;
+		@Pc(26) int minX;
+		@Pc(40) int maxX;
 		if (FogManager.lightX > 0) {
-			local26 = this.bounds.minX - (this.bounds.maxY * FogManager.lightX >> 8) >> 3;
-			local40 = this.bounds.maxX - (this.bounds.minY * FogManager.lightX >> 8) >> 3;
+			minX = this.bounds.minX - (this.bounds.maxY * FogManager.lightX >> 8) >> 3;
+			maxX = this.bounds.maxX - (this.bounds.minY * FogManager.lightX >> 8) >> 3;
 		} else {
-			local26 = this.bounds.minX - (this.bounds.minY * FogManager.lightX >> 8) >> 3;
-			local40 = this.bounds.maxX - (this.bounds.maxY * FogManager.lightX >> 8) >> 3;
+			minX = this.bounds.minX - (this.bounds.minY * FogManager.lightX >> 8) >> 3;
+			maxX = this.bounds.maxX - (this.bounds.maxY * FogManager.lightX >> 8) >> 3;
 		}
-		@Pc(85) int local85;
-		@Pc(99) int local99;
+		@Pc(85) int minZ;
+		@Pc(99) int maxZ;
 		if (FogManager.lightZ > 0) {
-			local85 = this.bounds.minZ - (this.bounds.maxY * FogManager.lightZ >> 8) >> 3;
-			local99 = this.bounds.maxZ - (this.bounds.minY * FogManager.lightZ >> 8) >> 3;
+			minZ = this.bounds.minZ - (this.bounds.maxY * FogManager.lightZ >> 8) >> 3;
+			maxZ = this.bounds.maxZ - (this.bounds.minY * FogManager.lightZ >> 8) >> 3;
 		} else {
-			local85 = this.bounds.minZ - (this.bounds.minY * FogManager.lightZ >> 8) >> 3;
-			local99 = this.bounds.maxZ - (this.bounds.maxY * FogManager.lightZ >> 8) >> 3;
+			minZ = this.bounds.minZ - (this.bounds.minY * FogManager.lightZ >> 8) >> 3;
+			maxZ = this.bounds.maxZ - (this.bounds.maxY * FogManager.lightZ >> 8) >> 3;
 		}
-		@Pc(134) int local134 = local40 + 1 - local26;
-		@Pc(140) int local140 = local99 + 1 - local85;
-		@Pc(151) SoftwareIndexedSprite local151;
-		if (arg0 == null || arg0.pixels.length < local134 * local140) {
-			local151 = new SoftwareIndexedSprite(local134, local140, 0);
+		@Pc(134) int width = maxX + 1 - minX;
+		@Pc(140) int height = maxZ + 1 - minZ;
+		@Pc(151) SoftwareIndexedSprite shadow;
+		if (sprite == null || sprite.pixels.length < width * height) {
+			shadow = new SoftwareIndexedSprite(width, height, 0);
 		} else {
-			local151 = arg0;
-			arg0.innerWidth = arg0.width = local134;
-			arg0.innerHeight = arg0.height = local140;
-			arg0.clear();
+			shadow = sprite;
+			sprite.innerWidth = sprite.width = width;
+			sprite.innerHeight = sprite.height = height;
+			sprite.clear();
 		}
-		local151.xOffset = local26;
-		local151.yOffset = local85;
+		shadow.xOffset = minX;
+		shadow.yOffset = minZ;
 		if (pickVertexScreenX.length < this.uniqueVertexCount) {
 			pickVertexScreenX = new int[this.uniqueVertexCount];
 			pickVertexScreenY = new int[this.uniqueVertexCount];
 		}
-		@Pc(194) int local194;
-		@Pc(246) int local246;
-		@Pc(248) int local248;
-		@Pc(258) int local258;
-		for (local194 = 0; local194 < this.vertexCount; local194++) {
-			@Pc(216) int local216 = (this.vertexX[local194] - (this.vertexY[local194] * FogManager.lightX >> 8) >> 3) - local26;
-			@Pc(234) int local234 = (this.vertexZ[local194] - (this.vertexY[local194] * FogManager.lightZ >> 8) >> 3) - local85;
-			@Pc(239) int local239 = this.vertexOffsets[local194];
-			local246 = this.vertexOffsets[local194 + 1];
-			for (local248 = local239; local248 < local246; local248++) {
-				local258 = this.vertexLookup[local248] - 1;
-				if (local258 == -1) {
+		@Pc(194) int i;
+		@Pc(246) int endOff;
+		@Pc(248) int oi;
+		@Pc(258) int uniqueIdx;
+		for (i = 0; i < this.vertexCount; i++) {
+			@Pc(216) int projX = (this.vertexX[i] - (this.vertexY[i] * FogManager.lightX >> 8) >> 3) - minX;
+			@Pc(234) int projZ = (this.vertexZ[i] - (this.vertexY[i] * FogManager.lightZ >> 8) >> 3) - minZ;
+			@Pc(239) int startOff = this.vertexOffsets[i];
+			endOff = this.vertexOffsets[i + 1];
+			for (oi = startOff; oi < endOff; oi++) {
+				uniqueIdx = this.vertexLookup[oi] - 1;
+				if (uniqueIdx == -1) {
 					break;
 				}
-				pickVertexScreenX[local258] = local216;
-				pickVertexScreenY[local258] = local234;
+				pickVertexScreenX[uniqueIdx] = projX;
+				pickVertexScreenY[uniqueIdx] = projZ;
 			}
 		}
-		for (local194 = 0; local194 < this.triangleCount; local194++) {
-			if (this.triangleAlpha[local194] <= 128) {
-				@Pc(292) short local292 = this.triangleVertexA[local194];
-				@Pc(297) short local297 = this.triangleVertexB[local194];
-				@Pc(302) short local302 = this.triangleVertexC[local194];
-				local246 = pickVertexScreenX[local292];
-				local248 = pickVertexScreenX[local297];
-				local258 = pickVertexScreenX[local302];
-				@Pc(318) int local318 = pickVertexScreenY[local292];
-				@Pc(322) int local322 = pickVertexScreenY[local297];
-				@Pc(326) int local326 = pickVertexScreenY[local302];
-				if ((local246 - local248) * (local322 - local326) - (local322 - local318) * (local258 - local248) > 0) {
-					Rasteriser.fillSpriteTriangle(local151.pixels, local318, local322, local326, local246, local248, local258, local134);
+		for (i = 0; i < this.triangleCount; i++) {
+			if (this.triangleAlpha[i] <= 128) {
+				@Pc(292) short triA = this.triangleVertexA[i];
+				@Pc(297) short triB = this.triangleVertexB[i];
+				@Pc(302) short triC = this.triangleVertexC[i];
+				endOff = pickVertexScreenX[triA];
+				oi = pickVertexScreenX[triB];
+				uniqueIdx = pickVertexScreenX[triC];
+				@Pc(318) int zA = pickVertexScreenY[triA];
+				@Pc(322) int zB = pickVertexScreenY[triB];
+				@Pc(326) int zC = pickVertexScreenY[triC];
+				if ((endOff - oi) * (zB - zC) - (zB - zA) * (uniqueIdx - oi) > 0) {
+					Rasteriser.fillSpriteTriangle(shadow.pixels, zA, zB, zC, endOff, oi, uniqueIdx, width);
 				}
 			}
 		}
-		return local151;
+		return shadow;
 	}
 
 	@OriginalMember(owner = "client!td", name = "l", descriptor = "()V")
 	@Override
 	public final void rotateClockwise() {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			@Pc(10) int local10 = this.vertexZ[local1];
-			this.vertexZ[local1] = this.vertexX[local1];
-			this.vertexX[local1] = -local10;
+		for (@Pc(1) int i = 0; i < this.vertexCount; i++) {
+			@Pc(10) int temp = this.vertexZ[i];
+			this.vertexZ[i] = this.vertexX[i];
+			this.vertexX[i] = -temp;
 		}
 		this.bounds.valid = false;
 		this.vertexBuffer.valid = false;
