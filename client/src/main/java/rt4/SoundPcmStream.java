@@ -85,738 +85,738 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(I[B[IIIIIIIILclient!b;)I")
-	public static int mixForwardStereo(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(10) SoundPcmStream arg8) {
-		arg2 >>= 0x8;
-		@Pc(7) int local7 = arg7 >> 8;
-		@Pc(11) int local11 = arg4 << 2;
-		@Pc(15) int local15 = arg5 << 2;
-		@Pc(22) int local22;
-		if ((local22 = arg3 + local7 - arg2) > arg6) {
-			local22 = arg6;
+	public static int mixForwardStereo(@OriginalArg(1) byte[] samples, @OriginalArg(2) int[] output, @OriginalArg(3) int samplePos, @OriginalArg(4) int outPos, @OriginalArg(5) int leftVol, @OriginalArg(6) int rightVol, @OriginalArg(8) int maxOutPos, @OriginalArg(9) int sampleEnd, @OriginalArg(10) SoundPcmStream stream) {
+		samplePos >>= 0x8;
+		@Pc(7) int endSampleIdx = sampleEnd >> 8;
+		@Pc(11) int scaledLeftVol = leftVol << 2;
+		@Pc(15) int scaledRightVol = rightVol << 2;
+		@Pc(22) int limit;
+		if ((limit = outPos + endSampleIdx - samplePos) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg3 <<= 0x1;
-		local22 <<= 0x1;
-		local22 -= 6;
-		@Pc(43) byte local43;
-		@Pc(46) int local46;
-		while (arg3 < local22) {
-			@Pc(41) int local41 = arg2 + 1;
-			local43 = arg0[arg2];
-			local46 = arg3 + 1;
-			arg1[arg3] += local43 * local11;
-			@Pc(56) int local56 = local46 + 1;
-			arg1[local46] += local43 * local15;
-			@Pc(66) int local66 = local41 + 1;
-			@Pc(68) byte local68 = arg0[local41];
-			@Pc(71) int local71 = local56 + 1;
-			arg1[local56] += local68 * local11;
-			@Pc(81) int local81 = local71 + 1;
-			arg1[local71] += local68 * local15;
-			@Pc(91) int local91 = local66 + 1;
-			@Pc(93) byte local93 = arg0[local66];
-			@Pc(96) int local96 = local81 + 1;
-			arg1[local81] += local93 * local11;
-			@Pc(106) int local106 = local96 + 1;
-			arg1[local96] += local93 * local15;
-			arg2 = local91 + 1;
-			@Pc(118) byte local118 = arg0[local91];
-			@Pc(121) int local121 = local106 + 1;
-			arg1[local106] += local118 * local11;
-			arg3 = local121 + 1;
-			arg1[local121] += local118 * local15;
+		outPos <<= 0x1;
+		limit <<= 0x1;
+		limit -= 6;
+		@Pc(43) byte sample;
+		@Pc(46) int outIdx;
+		while (outPos < limit) {
+			@Pc(41) int sampleIdx1 = samplePos + 1;
+			sample = samples[samplePos];
+			outIdx = outPos + 1;
+			output[outPos] += sample * scaledLeftVol;
+			@Pc(56) int outIdx2 = outIdx + 1;
+			output[outIdx] += sample * scaledRightVol;
+			@Pc(66) int sampleIdx2 = sampleIdx1 + 1;
+			@Pc(68) byte sample2 = samples[sampleIdx1];
+			@Pc(71) int outIdx3 = outIdx2 + 1;
+			output[outIdx2] += sample2 * scaledLeftVol;
+			@Pc(81) int outIdx4 = outIdx3 + 1;
+			output[outIdx3] += sample2 * scaledRightVol;
+			@Pc(91) int sampleIdx3 = sampleIdx2 + 1;
+			@Pc(93) byte sample3 = samples[sampleIdx2];
+			@Pc(96) int outIdx5 = outIdx4 + 1;
+			output[outIdx4] += sample3 * scaledLeftVol;
+			@Pc(106) int outIdx6 = outIdx5 + 1;
+			output[outIdx5] += sample3 * scaledRightVol;
+			samplePos = sampleIdx3 + 1;
+			@Pc(118) byte sample4 = samples[sampleIdx3];
+			@Pc(121) int outIdx7 = outIdx6 + 1;
+			output[outIdx6] += sample4 * scaledLeftVol;
+			outPos = outIdx7 + 1;
+			output[outIdx7] += sample4 * scaledRightVol;
 		}
-		local22 += 6;
-		while (arg3 < local22) {
-			local43 = arg0[arg2++];
-			local46 = arg3 + 1;
-			arg1[arg3] += local43 * local11;
-			arg3 = local46 + 1;
-			arg1[local46] += local43 * local15;
+		limit += 6;
+		while (outPos < limit) {
+			sample = samples[samplePos++];
+			outIdx = outPos + 1;
+			output[outPos] += sample * scaledLeftVol;
+			outPos = outIdx + 1;
+			output[outIdx] += sample * scaledRightVol;
 		}
-		arg8.samplePosition = arg2 << 8;
-		return arg3 >> 1;
+		stream.samplePosition = samplePos << 8;
+		return outPos >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(II[B[IIIIIIIIIILclient!b;II)I")
-	public static int mixForwardStereoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9, @OriginalArg(13) SoundPcmStream arg10, @OriginalArg(14) int arg11, @OriginalArg(15) int arg12) {
-		arg10.currentVolume -= arg10.volumeDelta * arg3;
-		@Pc(23) int local23;
-		if (arg11 == 0 || (local23 = arg3 + (arg9 + arg11 - arg2 - 257) / arg11) > arg8) {
-			local23 = arg8;
+	public static int mixForwardStereoResampledFading(@OriginalArg(2) byte[] samples, @OriginalArg(3) int[] output, @OriginalArg(4) int samplePos, @OriginalArg(5) int outPos, @OriginalArg(6) int leftVol, @OriginalArg(7) int rightVol, @OriginalArg(8) int leftVolDelta, @OriginalArg(9) int rightVolDelta, @OriginalArg(11) int maxOutPos, @OriginalArg(12) int sampleEnd, @OriginalArg(13) SoundPcmStream stream, @OriginalArg(14) int rate, @OriginalArg(15) int lastSample) {
+		stream.currentVolume -= stream.volumeDelta * outPos;
+		@Pc(23) int limit;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate - samplePos - 257) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg3 <<= 0x1;
-		local23 <<= 0x1;
-		@Pc(46) byte local46;
-		@Pc(65) int local65;
-		@Pc(62) int local62;
-		@Pc(64) int local64;
-		while (arg3 < local23) {
-			@Pc(42) int local42 = arg2 >> 8;
-			local46 = arg0[local42];
-			local62 = (local46 << 8) + (arg0[local42 + 1] - local46) * (arg2 & 0xFF);
-			local64 = arg3;
-			local65 = arg3 + 1;
-			arg1[local64] += local62 * arg4 >> 6;
-			arg4 += arg6;
-			@Pc(80) int local80 = local65;
-			arg3 = local65 + 1;
-			arg1[local80] += local62 * arg5 >> 6;
-			arg5 += arg7;
-			arg2 += arg11;
+		outPos <<= 0x1;
+		limit <<= 0x1;
+		@Pc(46) byte sample;
+		@Pc(65) int outIdxR;
+		@Pc(62) int interpolated;
+		@Pc(64) int outIdxL;
+		while (outPos < limit) {
+			@Pc(42) int sampleIdx = samplePos >> 8;
+			sample = samples[sampleIdx];
+			interpolated = (sample << 8) + (samples[sampleIdx + 1] - sample) * (samplePos & 0xFF);
+			outIdxL = outPos;
+			outIdxR = outPos + 1;
+			output[outIdxL] += interpolated * leftVol >> 6;
+			leftVol += leftVolDelta;
+			@Pc(80) int rightIdx = outIdxR;
+			outPos = outIdxR + 1;
+			output[rightIdx] += interpolated * rightVol >> 6;
+			rightVol += rightVolDelta;
+			samplePos += rate;
 		}
-		if (arg11 == 0 || (local23 = (arg3 >> 1) + (arg9 + arg11 - arg2 - 1) / arg11) > arg8) {
-			local23 = arg8;
+		if (rate == 0 || (limit = (outPos >> 1) + (sampleEnd + rate - samplePos - 1) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		local23 <<= 0x1;
-		while (arg3 < local23) {
-			local46 = arg0[arg2 >> 8];
-			local62 = (local46 << 8) + (arg12 - local46) * (arg2 & 0xFF);
-			local64 = arg3;
-			local65 = arg3 + 1;
-			arg1[local64] += local62 * arg4 >> 6;
-			arg4 += arg6;
-			local64 = local65;
-			arg3 = local65 + 1;
-			arg1[local64] += local62 * arg5 >> 6;
-			arg5 += arg7;
-			arg2 += arg11;
+		limit <<= 0x1;
+		while (outPos < limit) {
+			sample = samples[samplePos >> 8];
+			interpolated = (sample << 8) + (lastSample - sample) * (samplePos & 0xFF);
+			outIdxL = outPos;
+			outIdxR = outPos + 1;
+			output[outIdxL] += interpolated * leftVol >> 6;
+			leftVol += leftVolDelta;
+			outIdxL = outIdxR;
+			outPos = outIdxR + 1;
+			output[outIdxL] += interpolated * rightVol >> 6;
+			rightVol += rightVolDelta;
+			samplePos += rate;
 		}
-		local65 = arg3 >> 1;
-		arg10.currentVolume += arg10.volumeDelta * local65;
-		arg10.leftVolume = arg4;
-		arg10.rightVolume = arg5;
-		arg10.samplePosition = arg2;
-		return local65;
+		outIdxR = outPos >> 1;
+		stream.currentVolume += stream.volumeDelta * outIdxR;
+		stream.leftVolume = leftVol;
+		stream.rightVolume = rightVol;
+		stream.samplePosition = samplePos;
+		return outIdxR;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
-	public static int mixForwardMonoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
-		arg8.leftVolume -= arg8.leftVolumeDelta * arg3;
-		arg8.rightVolume -= arg8.rightVolumeDelta * arg3;
-		@Pc(32) int local32;
-		if (arg9 == 0 || (local32 = arg3 + (arg7 + arg9 - arg2 - 257) / arg9) > arg6) {
-			local32 = arg6;
+	public static int mixForwardMonoResampledFading(@OriginalArg(2) byte[] samples, @OriginalArg(3) int[] output, @OriginalArg(4) int samplePos, @OriginalArg(5) int outPos, @OriginalArg(6) int vol, @OriginalArg(7) int volDelta, @OriginalArg(9) int maxOutPos, @OriginalArg(10) int sampleEnd, @OriginalArg(11) SoundPcmStream stream, @OriginalArg(12) int rate, @OriginalArg(13) int lastSample) {
+		stream.leftVolume -= stream.leftVolumeDelta * outPos;
+		stream.rightVolume -= stream.rightVolumeDelta * outPos;
+		@Pc(32) int limit;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate - samplePos - 257) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		@Pc(47) byte local47;
-		@Pc(49) int local49;
-		while (arg3 < local32) {
-			@Pc(43) int local43 = arg2 >> 8;
-			local47 = arg0[local43];
-			local49 = arg3++;
-			arg1[local49] += ((local47 << 8) + (arg0[local43 + 1] - local47) * (arg2 & 0xFF)) * arg4 >> 6;
-			arg4 += arg5;
-			arg2 += arg9;
+		@Pc(47) byte sample;
+		@Pc(49) int outIdx;
+		while (outPos < limit) {
+			@Pc(43) int sampleIdx = samplePos >> 8;
+			sample = samples[sampleIdx];
+			outIdx = outPos++;
+			output[outIdx] += ((sample << 8) + (samples[sampleIdx + 1] - sample) * (samplePos & 0xFF)) * vol >> 6;
+			vol += volDelta;
+			samplePos += rate;
 		}
-		if (arg9 == 0 || (local32 = arg3 + (arg7 + arg9 - arg2 - 1) / arg9) > arg6) {
-			local32 = arg6;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate - samplePos - 1) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		while (arg3 < local32) {
-			local47 = arg0[arg2 >> 8];
-			local49 = arg3++;
-			arg1[local49] += ((local47 << 8) + (arg10 - local47) * (arg2 & 0xFF)) * arg4 >> 6;
-			arg4 += arg5;
-			arg2 += arg9;
+		while (outPos < limit) {
+			sample = samples[samplePos >> 8];
+			outIdx = outPos++;
+			output[outIdx] += ((sample << 8) + (lastSample - sample) * (samplePos & 0xFF)) * vol >> 6;
+			vol += volDelta;
+			samplePos += rate;
 		}
-		arg8.leftVolume += arg8.leftVolumeDelta * arg3;
-		arg8.rightVolume += arg8.rightVolumeDelta * arg3;
-		arg8.currentVolume = arg4;
-		arg8.samplePosition = arg2;
-		return arg3;
+		stream.leftVolume += stream.leftVolumeDelta * outPos;
+		stream.rightVolume += stream.rightVolumeDelta * outPos;
+		stream.currentVolume = vol;
+		stream.samplePosition = samplePos;
+		return outPos;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(II[B[IIIIIIILclient!b;II)I")
-	public static int mixBackwardMonoResampled(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(8) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) SoundPcmStream arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9) {
-		@Pc(14) int local14;
-		if (arg8 == 0 || (local14 = arg3 + (arg6 + arg8 + 256 - arg2) / arg8) > arg5) {
-			local14 = arg5;
+	public static int mixBackwardMonoResampled(@OriginalArg(2) byte[] samples, @OriginalArg(3) int[] output, @OriginalArg(4) int samplePos, @OriginalArg(5) int outPos, @OriginalArg(6) int vol, @OriginalArg(8) int maxOutPos, @OriginalArg(9) int sampleEnd, @OriginalArg(10) SoundPcmStream stream, @OriginalArg(11) int rate, @OriginalArg(12) int lastSample) {
+		@Pc(14) int limit;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate + 256 - samplePos) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		@Pc(33) int local33;
-		while (arg3 < local14) {
-			@Pc(25) int local25 = arg2 >> 8;
-			@Pc(31) byte local31 = arg0[local25 - 1];
-			local33 = arg3++;
-			arg1[local33] += ((local31 << 8) + (arg0[local25] - local31) * (arg2 & 0xFF)) * arg4 >> 6;
-			arg2 += arg8;
+		@Pc(33) int outIdx;
+		while (outPos < limit) {
+			@Pc(25) int sampleIdx = samplePos >> 8;
+			@Pc(31) byte sample = samples[sampleIdx - 1];
+			outIdx = outPos++;
+			output[outIdx] += ((sample << 8) + (samples[sampleIdx] - sample) * (samplePos & 0xFF)) * vol >> 6;
+			samplePos += rate;
 		}
-		if (arg8 == 0 || (local14 = arg3 + (arg6 + arg8 - arg2) / arg8) > arg5) {
-			local14 = arg5;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate - samplePos) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		while (arg3 < local14) {
-			local33 = arg3++;
-			arg1[local33] += ((arg9 << 8) + (arg0[arg2 >> 8] - arg9) * (arg2 & 0xFF)) * arg4 >> 6;
-			arg2 += arg8;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			output[outIdx] += ((lastSample << 8) + (samples[samplePos >> 8] - lastSample) * (samplePos & 0xFF)) * vol >> 6;
+			samplePos += rate;
 		}
-		arg7.samplePosition = arg2;
-		return arg3;
+		stream.samplePosition = samplePos;
+		return outPos;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "([B[IIIIIIILclient!b;)I")
-	public static int mixForwardMono(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) SoundPcmStream arg7) {
-		arg2 >>= 0x8;
-		@Pc(7) int local7 = arg6 >> 8;
-		@Pc(11) int local11 = arg4 << 2;
-		@Pc(18) int local18;
-		if ((local18 = arg3 + local7 - arg2) > arg5) {
-			local18 = arg5;
+	public static int mixForwardMono(@OriginalArg(0) byte[] samples, @OriginalArg(1) int[] output, @OriginalArg(2) int samplePos, @OriginalArg(3) int outPos, @OriginalArg(4) int vol, @OriginalArg(6) int maxOutPos, @OriginalArg(7) int sampleEnd, @OriginalArg(8) SoundPcmStream stream) {
+		samplePos >>= 0x8;
+		@Pc(7) int endSampleIdx = sampleEnd >> 8;
+		@Pc(11) int scaledVol = vol << 2;
+		@Pc(18) int limit;
+		if ((limit = outPos + endSampleIdx - samplePos) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		local18 -= 3;
-		@Pc(28) int local28;
-		while (arg3 < local18) {
-			local28 = arg3++;
-			@Pc(31) int local31 = arg1[local28];
-			@Pc(34) int local34 = arg2 + 1;
-			arg1[local28] = local31 + arg0[arg2] * local11;
-			@Pc(41) int local41 = arg3++;
-			@Pc(44) int local44 = arg1[local41];
-			@Pc(47) int local47 = local34 + 1;
-			arg1[local41] = local44 + arg0[local34] * local11;
-			@Pc(54) int local54 = arg3++;
-			@Pc(57) int local57 = arg1[local54];
-			@Pc(60) int local60 = local47 + 1;
-			arg1[local54] = local57 + arg0[local47] * local11;
-			@Pc(67) int local67 = arg3++;
-			@Pc(70) int local70 = arg1[local67];
-			arg2 = local60 + 1;
-			arg1[local67] = local70 + arg0[local60] * local11;
+		limit -= 3;
+		@Pc(28) int outIdx;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			@Pc(31) int curOut = output[outIdx];
+			@Pc(34) int sampleIdx1 = samplePos + 1;
+			output[outIdx] = curOut + samples[samplePos] * scaledVol;
+			@Pc(41) int outIdx2 = outPos++;
+			@Pc(44) int curOut3 = output[outIdx2];
+			@Pc(47) int sampleIdx3 = sampleIdx1 + 1;
+			output[outIdx2] = curOut3 + samples[sampleIdx1] * scaledVol;
+			@Pc(54) int outIdx4 = outPos++;
+			@Pc(57) int curOut5 = output[outIdx4];
+			@Pc(60) int sampleIdx5 = sampleIdx3 + 1;
+			output[outIdx4] = curOut5 + samples[sampleIdx3] * scaledVol;
+			@Pc(67) int outIdx6 = outPos++;
+			@Pc(70) int curOut7 = output[outIdx6];
+			samplePos = sampleIdx5 + 1;
+			output[outIdx6] = curOut7 + samples[sampleIdx5] * scaledVol;
 		}
-		local18 += 3;
-		while (arg3 < local18) {
-			local28 = arg3++;
-			arg1[local28] += arg0[arg2++] * local11;
+		limit += 3;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			output[outIdx] += samples[samplePos++] * scaledVol;
 		}
-		arg7.samplePosition = arg2 << 8;
-		return arg3;
+		stream.samplePosition = samplePos << 8;
+		return outPos;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(I[B[IIIIIIIIIILclient!b;)I")
-	public static int mixForwardStereoFading(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(10) int arg8, @OriginalArg(11) int arg9, @OriginalArg(12) SoundPcmStream arg10) {
-		arg2 >>= 0x8;
-		@Pc(7) int local7 = arg9 >> 8;
-		arg4 <<= 0x2;
-		arg5 <<= 0x2;
-		@Pc(19) int local19 = arg6 << 2;
-		@Pc(23) int local23 = arg7 << 2;
-		@Pc(30) int local30;
-		if ((local30 = arg3 + local7 - arg2) > arg8) {
-			local30 = arg8;
+	public static int mixForwardStereoFading(@OriginalArg(1) byte[] samples, @OriginalArg(2) int[] output, @OriginalArg(3) int samplePos, @OriginalArg(4) int outPos, @OriginalArg(5) int leftVol, @OriginalArg(6) int rightVol, @OriginalArg(7) int leftVolDelta, @OriginalArg(8) int rightVolDelta, @OriginalArg(10) int maxOutPos, @OriginalArg(11) int sampleEnd, @OriginalArg(12) SoundPcmStream stream) {
+		samplePos >>= 0x8;
+		@Pc(7) int endSampleIdx = sampleEnd >> 8;
+		leftVol <<= 0x2;
+		rightVol <<= 0x2;
+		@Pc(19) int scaledLeftVolDelta = leftVolDelta << 2;
+		@Pc(23) int scaledRightVolDelta = rightVolDelta << 2;
+		@Pc(30) int limit;
+		if ((limit = outPos + endSampleIdx - samplePos) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg10.currentVolume += arg10.volumeDelta * (local30 - arg3);
-		arg3 <<= 0x1;
-		local30 <<= 0x1;
-		local30 -= 6;
-		@Pc(62) byte local62;
-		@Pc(65) int local65;
-		while (arg3 < local30) {
-			@Pc(60) int local60 = arg2 + 1;
-			local62 = arg0[arg2];
-			local65 = arg3 + 1;
-			arg1[arg3] += local62 * arg4;
-			@Pc(76) int local76 = arg4 + local19;
-			@Pc(79) int local79 = local65 + 1;
-			arg1[local65] += local62 * arg5;
-			@Pc(90) int local90 = arg5 + local23;
-			@Pc(93) int local93 = local60 + 1;
-			@Pc(95) byte local95 = arg0[local60];
-			@Pc(98) int local98 = local79 + 1;
-			arg1[local79] += local95 * local76;
-			@Pc(109) int local109 = local76 + local19;
-			@Pc(112) int local112 = local98 + 1;
-			arg1[local98] += local95 * local90;
-			@Pc(123) int local123 = local90 + local23;
-			@Pc(126) int local126 = local93 + 1;
-			@Pc(128) byte local128 = arg0[local93];
-			@Pc(131) int local131 = local112 + 1;
-			arg1[local112] += local128 * local109;
-			@Pc(142) int local142 = local109 + local19;
-			@Pc(145) int local145 = local131 + 1;
-			arg1[local131] += local128 * local123;
-			@Pc(156) int local156 = local123 + local23;
-			arg2 = local126 + 1;
-			@Pc(161) byte local161 = arg0[local126];
-			@Pc(164) int local164 = local145 + 1;
-			arg1[local145] += local161 * local142;
-			arg4 = local142 + local19;
-			arg3 = local164 + 1;
-			arg1[local164] += local161 * local156;
-			arg5 = local156 + local23;
+		stream.currentVolume += stream.volumeDelta * (limit - outPos);
+		outPos <<= 0x1;
+		limit <<= 0x1;
+		limit -= 6;
+		@Pc(62) byte sample;
+		@Pc(65) int outIdxL;
+		while (outPos < limit) {
+			@Pc(60) int sampleIdx1 = samplePos + 1;
+			sample = samples[samplePos];
+			outIdxL = outPos + 1;
+			output[outPos] += sample * leftVol;
+			@Pc(76) int nextLeftVol = leftVol + scaledLeftVolDelta;
+			@Pc(79) int outIdxL2 = outIdxL + 1;
+			output[outIdxL] += sample * rightVol;
+			@Pc(90) int nextRightVol = rightVol + scaledRightVolDelta;
+			@Pc(93) int sampleIdx2 = sampleIdx1 + 1;
+			@Pc(95) byte sampleIdx3 = samples[sampleIdx1];
+			@Pc(98) int outIdxR2 = outIdxL2 + 1;
+			output[outIdxL2] += sampleIdx3 * nextLeftVol;
+			@Pc(109) int nextLeftVol3 = nextLeftVol + scaledLeftVolDelta;
+			@Pc(112) int outIdxL4 = outIdxR2 + 1;
+			output[outIdxR2] += sampleIdx3 * nextRightVol;
+			@Pc(123) int nextRightVol3 = nextRightVol + scaledRightVolDelta;
+			@Pc(126) int sampleIdx4 = sampleIdx2 + 1;
+			@Pc(128) byte sampleIdx5 = samples[sampleIdx2];
+			@Pc(131) int outIdxR4 = outIdxL4 + 1;
+			output[outIdxL4] += sampleIdx5 * nextLeftVol3;
+			@Pc(142) int nextLeftVol5 = nextLeftVol3 + scaledLeftVolDelta;
+			@Pc(145) int outIdxL6 = outIdxR4 + 1;
+			output[outIdxR4] += sampleIdx5 * nextRightVol3;
+			@Pc(156) int nextRightVol5 = nextRightVol3 + scaledRightVolDelta;
+			samplePos = sampleIdx4 + 1;
+			@Pc(161) byte sample5 = samples[sampleIdx4];
+			@Pc(164) int outIdxR6 = outIdxL6 + 1;
+			output[outIdxL6] += sample5 * nextLeftVol5;
+			leftVol = nextLeftVol5 + scaledLeftVolDelta;
+			outPos = outIdxR6 + 1;
+			output[outIdxR6] += sample5 * nextRightVol5;
+			rightVol = nextRightVol5 + scaledRightVolDelta;
 		}
-		local30 += 6;
-		while (arg3 < local30) {
-			local62 = arg0[arg2++];
-			local65 = arg3 + 1;
-			arg1[arg3] += local62 * arg4;
-			arg4 += local19;
-			arg3 = local65 + 1;
-			arg1[local65] += local62 * arg5;
-			arg5 += local23;
+		limit += 6;
+		while (outPos < limit) {
+			sample = samples[samplePos++];
+			outIdxL = outPos + 1;
+			output[outPos] += sample * leftVol;
+			leftVol += scaledLeftVolDelta;
+			outPos = outIdxL + 1;
+			output[outIdxL] += sample * rightVol;
+			rightVol += scaledRightVolDelta;
 		}
-		arg10.leftVolume = arg4 >> 2;
-		arg10.rightVolume = arg5 >> 2;
-		arg10.samplePosition = arg2 << 8;
-		return arg3 >> 1;
+		stream.leftVolume = leftVol >> 2;
+		stream.rightVolume = rightVol >> 2;
+		stream.samplePosition = samplePos << 8;
+		return outPos >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "([B[IIIIIIIILclient!b;)I")
-	public static int mixBackwardMonoFading(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) SoundPcmStream arg8) {
-		arg2 >>= 0x8;
-		@Pc(7) int local7 = arg7 >> 8;
-		arg4 <<= 0x2;
-		@Pc(15) int local15 = arg5 << 2;
-		@Pc(24) int local24;
-		if ((local24 = arg3 + arg2 + 1 - local7) > arg6) {
-			local24 = arg6;
+	public static int mixBackwardMonoFading(@OriginalArg(0) byte[] samples, @OriginalArg(1) int[] output, @OriginalArg(2) int samplePos, @OriginalArg(3) int outPos, @OriginalArg(4) int vol, @OriginalArg(5) int volDelta, @OriginalArg(7) int maxOutPos, @OriginalArg(8) int sampleEnd, @OriginalArg(9) SoundPcmStream stream) {
+		samplePos >>= 0x8;
+		@Pc(7) int endSampleIdx = sampleEnd >> 8;
+		vol <<= 0x2;
+		@Pc(15) int scaledVolDelta = volDelta << 2;
+		@Pc(24) int limit;
+		if ((limit = outPos + samplePos + 1 - endSampleIdx) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg8.leftVolume += arg8.leftVolumeDelta * (local24 - arg3);
-		arg8.rightVolume += arg8.rightVolumeDelta * (local24 - arg3);
-		local24 -= 3;
-		@Pc(56) int local56;
-		while (arg3 < local24) {
-			local56 = arg3++;
-			@Pc(59) int local59 = arg1[local56];
-			@Pc(62) int local62 = arg2 - 1;
-			arg1[local56] = local59 + arg0[arg2] * arg4;
-			@Pc(71) int local71 = arg4 + local15;
-			@Pc(73) int local73 = arg3++;
-			@Pc(76) int local76 = arg1[local73];
-			@Pc(79) int local79 = local62 - 1;
-			arg1[local73] = local76 + arg0[local62] * local71;
-			@Pc(88) int local88 = local71 + local15;
-			@Pc(90) int local90 = arg3++;
-			@Pc(93) int local93 = arg1[local90];
-			@Pc(96) int local96 = local79 - 1;
-			arg1[local90] = local93 + arg0[local79] * local88;
-			@Pc(105) int local105 = local88 + local15;
-			@Pc(107) int local107 = arg3++;
-			@Pc(110) int local110 = arg1[local107];
-			arg2 = local96 - 1;
-			arg1[local107] = local110 + arg0[local96] * local105;
-			arg4 = local105 + local15;
+		stream.leftVolume += stream.leftVolumeDelta * (limit - outPos);
+		stream.rightVolume += stream.rightVolumeDelta * (limit - outPos);
+		limit -= 3;
+		@Pc(56) int outIdx;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			@Pc(59) int curOut = output[outIdx];
+			@Pc(62) int sampleIdx1 = samplePos - 1;
+			output[outIdx] = curOut + samples[samplePos] * vol;
+			@Pc(71) int nextVol2 = vol + scaledVolDelta;
+			@Pc(73) int outIdx2 = outPos++;
+			@Pc(76) int curOut2 = output[outIdx2];
+			@Pc(79) int sampleIdx2 = sampleIdx1 - 1;
+			output[outIdx2] = curOut2 + samples[sampleIdx1] * nextVol2;
+			@Pc(88) int nextVol4 = nextVol2 + scaledVolDelta;
+			@Pc(90) int outIdx3 = outPos++;
+			@Pc(93) int curOut3 = output[outIdx3];
+			@Pc(96) int sampleIdx3 = sampleIdx2 - 1;
+			output[outIdx3] = curOut3 + samples[sampleIdx2] * nextVol4;
+			@Pc(105) int nextVol6 = nextVol4 + scaledVolDelta;
+			@Pc(107) int outIdx4 = outPos++;
+			@Pc(110) int curOut4 = output[outIdx4];
+			samplePos = sampleIdx3 - 1;
+			output[outIdx4] = curOut4 + samples[sampleIdx3] * nextVol6;
+			vol = nextVol6 + scaledVolDelta;
 		}
-		local24 += 3;
-		while (arg3 < local24) {
-			local56 = arg3++;
-			arg1[local56] += arg0[arg2--] * arg4;
-			arg4 += local15;
+		limit += 3;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			output[outIdx] += samples[samplePos--] * vol;
+			vol += scaledVolDelta;
 		}
-		arg8.currentVolume = arg4 >> 2;
-		arg8.samplePosition = arg2 << 8;
-		return arg3;
+		stream.currentVolume = vol >> 2;
+		stream.samplePosition = samplePos << 8;
+		return outPos;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([B[IIIIIIIILclient!b;)I")
-	public static int mixForwardMonoFading(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(9) SoundPcmStream arg8) {
-		arg2 >>= 0x8;
-		@Pc(7) int local7 = arg7 >> 8;
-		arg4 <<= 0x2;
-		@Pc(15) int local15 = arg5 << 2;
-		@Pc(22) int local22;
-		if ((local22 = arg3 + local7 - arg2) > arg6) {
-			local22 = arg6;
+	public static int mixForwardMonoFading(@OriginalArg(0) byte[] samples, @OriginalArg(1) int[] output, @OriginalArg(2) int samplePos, @OriginalArg(3) int outPos, @OriginalArg(4) int vol, @OriginalArg(5) int volDelta, @OriginalArg(7) int maxOutPos, @OriginalArg(8) int sampleEnd, @OriginalArg(9) SoundPcmStream stream) {
+		samplePos >>= 0x8;
+		@Pc(7) int endSampleIdx = sampleEnd >> 8;
+		vol <<= 0x2;
+		@Pc(15) int scaledVolDelta = volDelta << 2;
+		@Pc(22) int limit;
+		if ((limit = outPos + endSampleIdx - samplePos) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg8.leftVolume += arg8.leftVolumeDelta * (local22 - arg3);
-		arg8.rightVolume += arg8.rightVolumeDelta * (local22 - arg3);
-		local22 -= 3;
-		@Pc(54) int local54;
-		while (arg3 < local22) {
-			local54 = arg3++;
-			@Pc(57) int local57 = arg1[local54];
-			@Pc(60) int local60 = arg2 + 1;
-			arg1[local54] = local57 + arg0[arg2] * arg4;
-			@Pc(69) int local69 = arg4 + local15;
-			@Pc(71) int local71 = arg3++;
-			@Pc(74) int local74 = arg1[local71];
-			@Pc(77) int local77 = local60 + 1;
-			arg1[local71] = local74 + arg0[local60] * local69;
-			@Pc(86) int local86 = local69 + local15;
-			@Pc(88) int local88 = arg3++;
-			@Pc(91) int local91 = arg1[local88];
-			@Pc(94) int local94 = local77 + 1;
-			arg1[local88] = local91 + arg0[local77] * local86;
-			@Pc(103) int local103 = local86 + local15;
-			@Pc(105) int local105 = arg3++;
-			@Pc(108) int local108 = arg1[local105];
-			arg2 = local94 + 1;
-			arg1[local105] = local108 + arg0[local94] * local103;
-			arg4 = local103 + local15;
+		stream.leftVolume += stream.leftVolumeDelta * (limit - outPos);
+		stream.rightVolume += stream.rightVolumeDelta * (limit - outPos);
+		limit -= 3;
+		@Pc(54) int outIdx;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			@Pc(57) int curOut = output[outIdx];
+			@Pc(60) int sampleIdx1 = samplePos + 1;
+			output[outIdx] = curOut + samples[samplePos] * vol;
+			@Pc(69) int nextVol = vol + scaledVolDelta;
+			@Pc(71) int outIdx2 = outPos++;
+			@Pc(74) int curOut2 = output[outIdx2];
+			@Pc(77) int sampleIdx2 = sampleIdx1 + 1;
+			output[outIdx2] = curOut2 + samples[sampleIdx1] * nextVol;
+			@Pc(86) int nextVol2 = nextVol + scaledVolDelta;
+			@Pc(88) int outIdx3 = outPos++;
+			@Pc(91) int curOut3 = output[outIdx3];
+			@Pc(94) int sampleIdx3 = sampleIdx2 + 1;
+			output[outIdx3] = curOut3 + samples[sampleIdx2] * nextVol2;
+			@Pc(103) int nextVol3 = nextVol2 + scaledVolDelta;
+			@Pc(105) int outIdx4 = outPos++;
+			@Pc(108) int curOut4 = output[outIdx4];
+			samplePos = sampleIdx3 + 1;
+			output[outIdx4] = curOut4 + samples[sampleIdx3] * nextVol3;
+			vol = nextVol3 + scaledVolDelta;
 		}
-		local22 += 3;
-		while (arg3 < local22) {
-			local54 = arg3++;
-			arg1[local54] += arg0[arg2++] * arg4;
-			arg4 += local15;
+		limit += 3;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			output[outIdx] += samples[samplePos++] * vol;
+			vol += scaledVolDelta;
 		}
-		arg8.currentVolume = arg4 >> 2;
-		arg8.samplePosition = arg2 << 8;
-		return arg3;
+		stream.currentVolume = vol >> 2;
+		stream.samplePosition = samplePos << 8;
+		return outPos;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(Lclient!kj;III)Lclient!b;")
-	public static SoundPcmStream create(@OriginalArg(0) PcmSound arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		return arg0.samples == null || arg0.samples.length == 0 ? null : new SoundPcmStream(arg0, arg1, arg2, arg3);
+	public static SoundPcmStream create(@OriginalArg(0) PcmSound sound, @OriginalArg(1) int sampleRate, @OriginalArg(2) int volume, @OriginalArg(3) int pan) {
+		return sound.samples == null || sound.samples.length == 0 ? null : new SoundPcmStream(sound, sampleRate, volume, pan);
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
-	public static int mixForwardStereoResampled(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
-		@Pc(14) int local14;
-		if (arg9 == 0 || (local14 = arg3 + (arg7 + arg9 - arg2 - 257) / arg9) > arg6) {
-			local14 = arg6;
+	public static int mixForwardStereoResampled(@OriginalArg(2) byte[] samples, @OriginalArg(3) int[] output, @OriginalArg(4) int samplePos, @OriginalArg(5) int outPos, @OriginalArg(6) int leftVol, @OriginalArg(7) int rightVol, @OriginalArg(9) int maxOutPos, @OriginalArg(10) int sampleEnd, @OriginalArg(11) SoundPcmStream stream, @OriginalArg(12) int rate, @OriginalArg(13) int lastSample) {
+		@Pc(14) int limit;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate - samplePos - 257) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg3 <<= 0x1;
-		local14 <<= 0x1;
-		@Pc(37) byte local37;
-		@Pc(56) int local56;
-		@Pc(53) int local53;
-		@Pc(55) int local55;
-		while (arg3 < local14) {
-			@Pc(33) int local33 = arg2 >> 8;
-			local37 = arg0[local33];
-			local53 = (local37 << 8) + (arg0[local33 + 1] - local37) * (arg2 & 0xFF);
-			local55 = arg3;
-			local56 = arg3 + 1;
-			arg1[local55] += local53 * arg4 >> 6;
-			@Pc(67) int local67 = local56;
-			arg3 = local56 + 1;
-			arg1[local67] += local53 * arg5 >> 6;
-			arg2 += arg9;
+		outPos <<= 0x1;
+		limit <<= 0x1;
+		@Pc(37) byte sample;
+		@Pc(56) int outIdxR;
+		@Pc(53) int interpolated;
+		@Pc(55) int outIdxL;
+		while (outPos < limit) {
+			@Pc(33) int sampleIdx = samplePos >> 8;
+			sample = samples[sampleIdx];
+			interpolated = (sample << 8) + (samples[sampleIdx + 1] - sample) * (samplePos & 0xFF);
+			outIdxL = outPos;
+			outIdxR = outPos + 1;
+			output[outIdxL] += interpolated * leftVol >> 6;
+			@Pc(67) int rightIdx = outIdxR;
+			outPos = outIdxR + 1;
+			output[rightIdx] += interpolated * rightVol >> 6;
+			samplePos += rate;
 		}
-		if (arg9 == 0 || (local14 = (arg3 >> 1) + (arg7 + arg9 - arg2 - 1) / arg9) > arg6) {
-			local14 = arg6;
+		if (rate == 0 || (limit = (outPos >> 1) + (sampleEnd + rate - samplePos - 1) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		local14 <<= 0x1;
-		while (arg3 < local14) {
-			local37 = arg0[arg2 >> 8];
-			local53 = (local37 << 8) + (arg10 - local37) * (arg2 & 0xFF);
-			local55 = arg3;
-			local56 = arg3 + 1;
-			arg1[local55] += local53 * arg4 >> 6;
-			local55 = local56;
-			arg3 = local56 + 1;
-			arg1[local55] += local53 * arg5 >> 6;
-			arg2 += arg9;
+		limit <<= 0x1;
+		while (outPos < limit) {
+			sample = samples[samplePos >> 8];
+			interpolated = (sample << 8) + (lastSample - sample) * (samplePos & 0xFF);
+			outIdxL = outPos;
+			outIdxR = outPos + 1;
+			output[outIdxL] += interpolated * leftVol >> 6;
+			outIdxL = outIdxR;
+			outPos = outIdxR + 1;
+			output[outIdxL] += interpolated * rightVol >> 6;
+			samplePos += rate;
 		}
-		arg8.samplePosition = arg2;
-		return arg3 >> 1;
+		stream.samplePosition = samplePos;
+		return outPos >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II[B[IIIIIIILclient!b;II)I")
-	public static int mixForwardMonoResampled(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(8) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) SoundPcmStream arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9) {
-		@Pc(14) int local14;
-		if (arg8 == 0 || (local14 = arg3 + (arg6 + arg8 - arg2 - 257) / arg8) > arg5) {
-			local14 = arg5;
+	public static int mixForwardMonoResampled(@OriginalArg(2) byte[] samples, @OriginalArg(3) int[] output, @OriginalArg(4) int samplePos, @OriginalArg(5) int outPos, @OriginalArg(6) int vol, @OriginalArg(8) int maxOutPos, @OriginalArg(9) int sampleEnd, @OriginalArg(10) SoundPcmStream stream, @OriginalArg(11) int rate, @OriginalArg(12) int lastSample) {
+		@Pc(14) int limit;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate - samplePos - 257) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		@Pc(29) byte local29;
-		@Pc(31) int local31;
-		while (arg3 < local14) {
-			@Pc(25) int local25 = arg2 >> 8;
-			local29 = arg0[local25];
-			local31 = arg3++;
-			arg1[local31] += ((local29 << 8) + (arg0[local25 + 1] - local29) * (arg2 & 0xFF)) * arg4 >> 6;
-			arg2 += arg8;
+		@Pc(29) byte sample;
+		@Pc(31) int outIdx;
+		while (outPos < limit) {
+			@Pc(25) int sampleIdx = samplePos >> 8;
+			sample = samples[sampleIdx];
+			outIdx = outPos++;
+			output[outIdx] += ((sample << 8) + (samples[sampleIdx + 1] - sample) * (samplePos & 0xFF)) * vol >> 6;
+			samplePos += rate;
 		}
-		if (arg8 == 0 || (local14 = arg3 + (arg6 + arg8 - arg2 - 1) / arg8) > arg5) {
-			local14 = arg5;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate - samplePos - 1) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		while (arg3 < local14) {
-			local29 = arg0[arg2 >> 8];
-			local31 = arg3++;
-			arg1[local31] += ((local29 << 8) + (arg9 - local29) * (arg2 & 0xFF)) * arg4 >> 6;
-			arg2 += arg8;
+		while (outPos < limit) {
+			sample = samples[samplePos >> 8];
+			outIdx = outPos++;
+			output[outIdx] += ((sample << 8) + (lastSample - sample) * (samplePos & 0xFF)) * vol >> 6;
+			samplePos += rate;
 		}
-		arg7.samplePosition = arg2;
-		return arg3;
+		stream.samplePosition = samplePos;
+		return outPos;
 	}
 
 	@OriginalMember(owner = "client!b", name = "e", descriptor = "(II)I")
-	public static int calculateRightVolume(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		return arg1 < 0 ? -arg0 : (int) ((double) arg0 * Math.sqrt((double) arg1 * 1.220703125E-4D) + 0.5D);
+	public static int calculateRightVolume(@OriginalArg(0) int volume, @OriginalArg(1) int pan) {
+		return pan < 0 ? -volume : (int) ((double) volume * Math.sqrt((double) pan * 1.220703125E-4D) + 0.5D);
 	}
 
 	@OriginalMember(owner = "client!b", name = "d", descriptor = "(II)I")
-	public static int calculateLeftVolume(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		return arg1 < 0 ? arg0 : (int) ((double) arg0 * Math.sqrt((double) (16384 - arg1) * 1.220703125E-4D) + 0.5D);
+	public static int calculateLeftVolume(@OriginalArg(0) int volume, @OriginalArg(1) int pan) {
+		return pan < 0 ? volume : (int) ((double) volume * Math.sqrt((double) (16384 - pan) * 1.220703125E-4D) + 0.5D);
 	}
 
 	@OriginalMember(owner = "client!b", name = "d", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
-	public static int mixBackwardStereoResampled(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
-		@Pc(14) int local14;
-		if (arg9 == 0 || (local14 = arg3 + (arg7 + arg9 + 256 - arg2) / arg9) > arg6) {
-			local14 = arg6;
+	public static int mixBackwardStereoResampled(@OriginalArg(2) byte[] samples, @OriginalArg(3) int[] output, @OriginalArg(4) int samplePos, @OriginalArg(5) int outPos, @OriginalArg(6) int leftVol, @OriginalArg(7) int rightVol, @OriginalArg(9) int maxOutPos, @OriginalArg(10) int sampleEnd, @OriginalArg(11) SoundPcmStream stream, @OriginalArg(12) int rate, @OriginalArg(13) int lastSample) {
+		@Pc(14) int limit;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate + 256 - samplePos) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg3 <<= 0x1;
-		local14 <<= 0x1;
-		@Pc(56) int local56;
-		@Pc(53) int local53;
-		@Pc(55) int local55;
-		while (arg3 < local14) {
-			@Pc(33) int local33 = arg2 >> 8;
-			@Pc(39) byte local39 = arg0[local33 - 1];
-			local53 = (local39 << 8) + (arg0[local33] - local39) * (arg2 & 0xFF);
-			local55 = arg3;
-			local56 = arg3 + 1;
-			arg1[local55] += local53 * arg4 >> 6;
-			@Pc(67) int local67 = local56;
-			arg3 = local56 + 1;
-			arg1[local67] += local53 * arg5 >> 6;
-			arg2 += arg9;
+		outPos <<= 0x1;
+		limit <<= 0x1;
+		@Pc(56) int outIdxR;
+		@Pc(53) int interpolated;
+		@Pc(55) int outIdxL;
+		while (outPos < limit) {
+			@Pc(33) int sampleIdx = samplePos >> 8;
+			@Pc(39) byte sample = samples[sampleIdx - 1];
+			interpolated = (sample << 8) + (samples[sampleIdx] - sample) * (samplePos & 0xFF);
+			outIdxL = outPos;
+			outIdxR = outPos + 1;
+			output[outIdxL] += interpolated * leftVol >> 6;
+			@Pc(67) int rightIdx = outIdxR;
+			outPos = outIdxR + 1;
+			output[rightIdx] += interpolated * rightVol >> 6;
+			samplePos += rate;
 		}
-		if (arg9 == 0 || (local14 = (arg3 >> 1) + (arg7 + arg9 - arg2) / arg9) > arg6) {
-			local14 = arg6;
+		if (rate == 0 || (limit = (outPos >> 1) + (sampleEnd + rate - samplePos) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		local14 <<= 0x1;
-		while (arg3 < local14) {
-			local53 = (arg10 << 8) + (arg0[arg2 >> 8] - arg10) * (arg2 & 0xFF);
-			local55 = arg3;
-			local56 = arg3 + 1;
-			arg1[local55] += local53 * arg4 >> 6;
-			local55 = local56;
-			arg3 = local56 + 1;
-			arg1[local55] += local53 * arg5 >> 6;
-			arg2 += arg9;
+		limit <<= 0x1;
+		while (outPos < limit) {
+			interpolated = (lastSample << 8) + (samples[samplePos >> 8] - lastSample) * (samplePos & 0xFF);
+			outIdxL = outPos;
+			outIdxR = outPos + 1;
+			output[outIdxL] += interpolated * leftVol >> 6;
+			outIdxL = outIdxR;
+			outPos = outIdxR + 1;
+			output[outIdxL] += interpolated * rightVol >> 6;
+			samplePos += rate;
 		}
-		arg8.samplePosition = arg2;
-		return arg3 >> 1;
+		stream.samplePosition = samplePos;
+		return outPos >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([B[IIIIIIILclient!b;)I")
-	public static int mixBackwardMono(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) SoundPcmStream arg7) {
-		arg2 >>= 0x8;
-		@Pc(7) int local7 = arg6 >> 8;
-		@Pc(11) int local11 = arg4 << 2;
-		@Pc(20) int local20;
-		if ((local20 = arg3 + arg2 + 1 - local7) > arg5) {
-			local20 = arg5;
+	public static int mixBackwardMono(@OriginalArg(0) byte[] samples, @OriginalArg(1) int[] output, @OriginalArg(2) int samplePos, @OriginalArg(3) int outPos, @OriginalArg(4) int vol, @OriginalArg(6) int maxOutPos, @OriginalArg(7) int sampleEnd, @OriginalArg(8) SoundPcmStream stream) {
+		samplePos >>= 0x8;
+		@Pc(7) int endSampleIdx = sampleEnd >> 8;
+		@Pc(11) int scaledVol = vol << 2;
+		@Pc(20) int limit;
+		if ((limit = outPos + samplePos + 1 - endSampleIdx) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		local20 -= 3;
-		@Pc(30) int local30;
-		while (arg3 < local20) {
-			local30 = arg3++;
-			@Pc(33) int local33 = arg1[local30];
-			@Pc(36) int local36 = arg2 - 1;
-			arg1[local30] = local33 + arg0[arg2] * local11;
-			@Pc(43) int local43 = arg3++;
-			@Pc(46) int local46 = arg1[local43];
-			@Pc(49) int local49 = local36 - 1;
-			arg1[local43] = local46 + arg0[local36] * local11;
-			@Pc(56) int local56 = arg3++;
-			@Pc(59) int local59 = arg1[local56];
-			@Pc(62) int local62 = local49 - 1;
-			arg1[local56] = local59 + arg0[local49] * local11;
-			@Pc(69) int local69 = arg3++;
-			@Pc(72) int local72 = arg1[local69];
-			arg2 = local62 - 1;
-			arg1[local69] = local72 + arg0[local62] * local11;
+		limit -= 3;
+		@Pc(30) int outIdx;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			@Pc(33) int curOut = output[outIdx];
+			@Pc(36) int sampleIdx1 = samplePos - 1;
+			output[outIdx] = curOut + samples[samplePos] * scaledVol;
+			@Pc(43) int outIdx2 = outPos++;
+			@Pc(46) int curOut2 = output[outIdx2];
+			@Pc(49) int sampleIdx2 = sampleIdx1 - 1;
+			output[outIdx2] = curOut2 + samples[sampleIdx1] * scaledVol;
+			@Pc(56) int outIdx3 = outPos++;
+			@Pc(59) int curOut3 = output[outIdx3];
+			@Pc(62) int sampleIdx3 = sampleIdx2 - 1;
+			output[outIdx3] = curOut3 + samples[sampleIdx2] * scaledVol;
+			@Pc(69) int outIdx4 = outPos++;
+			@Pc(72) int curOut4 = output[outIdx4];
+			samplePos = sampleIdx3 - 1;
+			output[outIdx4] = curOut4 + samples[sampleIdx3] * scaledVol;
 		}
-		local20 += 3;
-		while (arg3 < local20) {
-			local30 = arg3++;
-			arg1[local30] += arg0[arg2--] * local11;
+		limit += 3;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			output[outIdx] += samples[samplePos--] * scaledVol;
 		}
-		arg7.samplePosition = arg2 << 8;
-		return arg3;
+		stream.samplePosition = samplePos << 8;
+		return outPos;
 	}
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "(II[B[IIIIIIIILclient!b;II)I")
-	public static int mixBackwardMonoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(9) int arg6, @OriginalArg(10) int arg7, @OriginalArg(11) SoundPcmStream arg8, @OriginalArg(12) int arg9, @OriginalArg(13) int arg10) {
-		arg8.leftVolume -= arg8.leftVolumeDelta * arg3;
-		arg8.rightVolume -= arg8.rightVolumeDelta * arg3;
-		@Pc(32) int local32;
-		if (arg9 == 0 || (local32 = arg3 + (arg7 + arg9 + 256 - arg2) / arg9) > arg6) {
-			local32 = arg6;
+	public static int mixBackwardMonoResampledFading(@OriginalArg(2) byte[] samples, @OriginalArg(3) int[] output, @OriginalArg(4) int samplePos, @OriginalArg(5) int outPos, @OriginalArg(6) int vol, @OriginalArg(7) int volDelta, @OriginalArg(9) int maxOutPos, @OriginalArg(10) int sampleEnd, @OriginalArg(11) SoundPcmStream stream, @OriginalArg(12) int rate, @OriginalArg(13) int lastSample) {
+		stream.leftVolume -= stream.leftVolumeDelta * outPos;
+		stream.rightVolume -= stream.rightVolumeDelta * outPos;
+		@Pc(32) int limit;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate + 256 - samplePos) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		@Pc(51) int local51;
-		while (arg3 < local32) {
-			@Pc(43) int local43 = arg2 >> 8;
-			@Pc(49) byte local49 = arg0[local43 - 1];
-			local51 = arg3++;
-			arg1[local51] += ((local49 << 8) + (arg0[local43] - local49) * (arg2 & 0xFF)) * arg4 >> 6;
-			arg4 += arg5;
-			arg2 += arg9;
+		@Pc(51) int outIdx;
+		while (outPos < limit) {
+			@Pc(43) int sampleIdx = samplePos >> 8;
+			@Pc(49) byte sample = samples[sampleIdx - 1];
+			outIdx = outPos++;
+			output[outIdx] += ((sample << 8) + (samples[sampleIdx] - sample) * (samplePos & 0xFF)) * vol >> 6;
+			vol += volDelta;
+			samplePos += rate;
 		}
-		if (arg9 == 0 || (local32 = arg3 + (arg7 + arg9 - arg2) / arg9) > arg6) {
-			local32 = arg6;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate - samplePos) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		while (arg3 < local32) {
-			local51 = arg3++;
-			arg1[local51] += ((arg10 << 8) + (arg0[arg2 >> 8] - arg10) * (arg2 & 0xFF)) * arg4 >> 6;
-			arg4 += arg5;
-			arg2 += arg9;
+		while (outPos < limit) {
+			outIdx = outPos++;
+			output[outIdx] += ((lastSample << 8) + (samples[samplePos >> 8] - lastSample) * (samplePos & 0xFF)) * vol >> 6;
+			vol += volDelta;
+			samplePos += rate;
 		}
-		arg8.leftVolume += arg8.leftVolumeDelta * arg3;
-		arg8.rightVolume += arg8.rightVolumeDelta * arg3;
-		arg8.currentVolume = arg4;
-		arg8.samplePosition = arg2;
-		return arg3;
+		stream.leftVolume += stream.leftVolumeDelta * outPos;
+		stream.rightVolume += stream.rightVolumeDelta * outPos;
+		stream.currentVolume = vol;
+		stream.samplePosition = samplePos;
+		return outPos;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(I[B[IIIIIIIILclient!b;)I")
-	public static int mixBackwardStereo(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(10) SoundPcmStream arg8) {
-		arg2 >>= 0x8;
-		@Pc(7) int local7 = arg7 >> 8;
-		@Pc(11) int local11 = arg4 << 2;
-		@Pc(15) int local15 = arg5 << 2;
-		@Pc(24) int local24;
-		if ((local24 = arg3 + arg2 + 1 - local7) > arg6) {
-			local24 = arg6;
+	public static int mixBackwardStereo(@OriginalArg(1) byte[] samples, @OriginalArg(2) int[] output, @OriginalArg(3) int samplePos, @OriginalArg(4) int outPos, @OriginalArg(5) int leftVol, @OriginalArg(6) int rightVol, @OriginalArg(8) int maxOutPos, @OriginalArg(9) int sampleEnd, @OriginalArg(10) SoundPcmStream stream) {
+		samplePos >>= 0x8;
+		@Pc(7) int endSampleIdx = sampleEnd >> 8;
+		@Pc(11) int scaledLeftVol = leftVol << 2;
+		@Pc(15) int scaledRightVol = rightVol << 2;
+		@Pc(24) int limit;
+		if ((limit = outPos + samplePos + 1 - endSampleIdx) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg3 <<= 0x1;
-		local24 <<= 0x1;
-		local24 -= 6;
-		@Pc(45) byte local45;
-		@Pc(48) int local48;
-		while (arg3 < local24) {
-			@Pc(43) int local43 = arg2 - 1;
-			local45 = arg0[arg2];
-			local48 = arg3 + 1;
-			arg1[arg3] += local45 * local11;
-			@Pc(58) int local58 = local48 + 1;
-			arg1[local48] += local45 * local15;
-			@Pc(68) int local68 = local43 - 1;
-			@Pc(70) byte local70 = arg0[local43];
-			@Pc(73) int local73 = local58 + 1;
-			arg1[local58] += local70 * local11;
-			@Pc(83) int local83 = local73 + 1;
-			arg1[local73] += local70 * local15;
-			@Pc(93) int local93 = local68 - 1;
-			@Pc(95) byte local95 = arg0[local68];
-			@Pc(98) int local98 = local83 + 1;
-			arg1[local83] += local95 * local11;
-			@Pc(108) int local108 = local98 + 1;
-			arg1[local98] += local95 * local15;
-			arg2 = local93 - 1;
-			@Pc(120) byte local120 = arg0[local93];
-			@Pc(123) int local123 = local108 + 1;
-			arg1[local108] += local120 * local11;
-			arg3 = local123 + 1;
-			arg1[local123] += local120 * local15;
+		outPos <<= 0x1;
+		limit <<= 0x1;
+		limit -= 6;
+		@Pc(45) byte sample;
+		@Pc(48) int outIdxL;
+		while (outPos < limit) {
+			@Pc(43) int sampleIdx1 = samplePos - 1;
+			sample = samples[samplePos];
+			outIdxL = outPos + 1;
+			output[outPos] += sample * scaledLeftVol;
+			@Pc(58) int outIdxL2 = outIdxL + 1;
+			output[outIdxL] += sample * scaledRightVol;
+			@Pc(68) int sampleIdx2 = sampleIdx1 - 1;
+			@Pc(70) byte sample2 = samples[sampleIdx1];
+			@Pc(73) int outIdxR = outIdxL2 + 1;
+			output[outIdxL2] += sample2 * scaledLeftVol;
+			@Pc(83) int outIdxR2 = outIdxR + 1;
+			output[outIdxR] += sample2 * scaledRightVol;
+			@Pc(93) int sampleIdx3 = sampleIdx2 - 1;
+			@Pc(95) byte sample3 = samples[sampleIdx2];
+			@Pc(98) int outIdxL3 = outIdxR2 + 1;
+			output[outIdxR2] += sample3 * scaledLeftVol;
+			@Pc(108) int outIdxL4 = outIdxL3 + 1;
+			output[outIdxL3] += sample3 * scaledRightVol;
+			samplePos = sampleIdx3 - 1;
+			@Pc(120) byte sample4 = samples[sampleIdx3];
+			@Pc(123) int outIdxR3 = outIdxL4 + 1;
+			output[outIdxL4] += sample4 * scaledLeftVol;
+			outPos = outIdxR3 + 1;
+			output[outIdxR3] += sample4 * scaledRightVol;
 		}
-		local24 += 6;
-		while (arg3 < local24) {
-			local45 = arg0[arg2--];
-			local48 = arg3 + 1;
-			arg1[arg3] += local45 * local11;
-			arg3 = local48 + 1;
-			arg1[local48] += local45 * local15;
+		limit += 6;
+		while (outPos < limit) {
+			sample = samples[samplePos--];
+			outIdxL = outPos + 1;
+			output[outPos] += sample * scaledLeftVol;
+			outPos = outIdxL + 1;
+			output[outIdxL] += sample * scaledRightVol;
 		}
-		arg8.samplePosition = arg2 << 8;
-		return arg3 >> 1;
+		stream.samplePosition = samplePos << 8;
+		return outPos >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II[B[IIIIIIIIIILclient!b;II)I")
-	public static int mixBackwardStereoResampledFading(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int[] arg1, @OriginalArg(4) int arg2, @OriginalArg(5) int arg3, @OriginalArg(6) int arg4, @OriginalArg(7) int arg5, @OriginalArg(8) int arg6, @OriginalArg(9) int arg7, @OriginalArg(11) int arg8, @OriginalArg(12) int arg9, @OriginalArg(13) SoundPcmStream arg10, @OriginalArg(14) int arg11, @OriginalArg(15) int arg12) {
-		arg10.currentVolume -= arg10.volumeDelta * arg3;
-		@Pc(23) int local23;
-		if (arg11 == 0 || (local23 = arg3 + (arg9 + arg11 + 256 - arg2) / arg11) > arg8) {
-			local23 = arg8;
+	public static int mixBackwardStereoResampledFading(@OriginalArg(2) byte[] samples, @OriginalArg(3) int[] output, @OriginalArg(4) int samplePos, @OriginalArg(5) int outPos, @OriginalArg(6) int leftVol, @OriginalArg(7) int rightVol, @OriginalArg(8) int leftVolDelta, @OriginalArg(9) int rightVolDelta, @OriginalArg(11) int maxOutPos, @OriginalArg(12) int sampleEnd, @OriginalArg(13) SoundPcmStream stream, @OriginalArg(14) int rate, @OriginalArg(15) int lastSample) {
+		stream.currentVolume -= stream.volumeDelta * outPos;
+		@Pc(23) int limit;
+		if (rate == 0 || (limit = outPos + (sampleEnd + rate + 256 - samplePos) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg3 <<= 0x1;
-		local23 <<= 0x1;
-		@Pc(65) int local65;
-		@Pc(62) int local62;
-		@Pc(64) int local64;
-		while (arg3 < local23) {
-			@Pc(42) int local42 = arg2 >> 8;
-			@Pc(48) byte local48 = arg0[local42 - 1];
-			local62 = (local48 << 8) + (arg0[local42] - local48) * (arg2 & 0xFF);
-			local64 = arg3;
-			local65 = arg3 + 1;
-			arg1[local64] += local62 * arg4 >> 6;
-			arg4 += arg6;
-			@Pc(80) int local80 = local65;
-			arg3 = local65 + 1;
-			arg1[local80] += local62 * arg5 >> 6;
-			arg5 += arg7;
-			arg2 += arg11;
+		outPos <<= 0x1;
+		limit <<= 0x1;
+		@Pc(65) int outIdxR;
+		@Pc(62) int interpolated;
+		@Pc(64) int outIdxL;
+		while (outPos < limit) {
+			@Pc(42) int sampleIdx = samplePos >> 8;
+			@Pc(48) byte sample = samples[sampleIdx - 1];
+			interpolated = (sample << 8) + (samples[sampleIdx] - sample) * (samplePos & 0xFF);
+			outIdxL = outPos;
+			outIdxR = outPos + 1;
+			output[outIdxL] += interpolated * leftVol >> 6;
+			leftVol += leftVolDelta;
+			@Pc(80) int rightIdx = outIdxR;
+			outPos = outIdxR + 1;
+			output[rightIdx] += interpolated * rightVol >> 6;
+			rightVol += rightVolDelta;
+			samplePos += rate;
 		}
-		if (arg11 == 0 || (local23 = (arg3 >> 1) + (arg9 + arg11 - arg2) / arg11) > arg8) {
-			local23 = arg8;
+		if (rate == 0 || (limit = (outPos >> 1) + (sampleEnd + rate - samplePos) / rate) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		local23 <<= 0x1;
-		while (arg3 < local23) {
-			local62 = (arg12 << 8) + (arg0[arg2 >> 8] - arg12) * (arg2 & 0xFF);
-			local64 = arg3;
-			local65 = arg3 + 1;
-			arg1[local64] += local62 * arg4 >> 6;
-			arg4 += arg6;
-			local64 = local65;
-			arg3 = local65 + 1;
-			arg1[local64] += local62 * arg5 >> 6;
-			arg5 += arg7;
-			arg2 += arg11;
+		limit <<= 0x1;
+		while (outPos < limit) {
+			interpolated = (lastSample << 8) + (samples[samplePos >> 8] - lastSample) * (samplePos & 0xFF);
+			outIdxL = outPos;
+			outIdxR = outPos + 1;
+			output[outIdxL] += interpolated * leftVol >> 6;
+			leftVol += leftVolDelta;
+			outIdxL = outIdxR;
+			outPos = outIdxR + 1;
+			output[outIdxL] += interpolated * rightVol >> 6;
+			rightVol += rightVolDelta;
+			samplePos += rate;
 		}
-		local65 = arg3 >> 1;
-		arg10.currentVolume += arg10.volumeDelta * local65;
-		arg10.leftVolume = arg4;
-		arg10.rightVolume = arg5;
-		arg10.samplePosition = arg2;
-		return local65;
+		outIdxR = outPos >> 1;
+		stream.currentVolume += stream.volumeDelta * outIdxR;
+		stream.leftVolume = leftVol;
+		stream.rightVolume = rightVol;
+		stream.samplePosition = samplePos;
+		return outIdxR;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(I[B[IIIIIIIIIILclient!b;)I")
-	public static int mixBackwardStereoFading(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int[] arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6, @OriginalArg(8) int arg7, @OriginalArg(10) int arg8, @OriginalArg(11) int arg9, @OriginalArg(12) SoundPcmStream arg10) {
-		arg2 >>= 0x8;
-		@Pc(7) int local7 = arg9 >> 8;
-		arg4 <<= 0x2;
-		arg5 <<= 0x2;
-		@Pc(19) int local19 = arg6 << 2;
-		@Pc(23) int local23 = arg7 << 2;
-		@Pc(32) int local32;
-		if ((local32 = arg3 + arg2 + 1 - local7) > arg8) {
-			local32 = arg8;
+	public static int mixBackwardStereoFading(@OriginalArg(1) byte[] samples, @OriginalArg(2) int[] output, @OriginalArg(3) int samplePos, @OriginalArg(4) int outPos, @OriginalArg(5) int leftVol, @OriginalArg(6) int rightVol, @OriginalArg(7) int leftVolDelta, @OriginalArg(8) int rightVolDelta, @OriginalArg(10) int maxOutPos, @OriginalArg(11) int sampleEnd, @OriginalArg(12) SoundPcmStream stream) {
+		samplePos >>= 0x8;
+		@Pc(7) int endSampleIdx = sampleEnd >> 8;
+		leftVol <<= 0x2;
+		rightVol <<= 0x2;
+		@Pc(19) int scaledLeftVolDelta = leftVolDelta << 2;
+		@Pc(23) int scaledRightVolDelta = rightVolDelta << 2;
+		@Pc(32) int limit;
+		if ((limit = outPos + samplePos + 1 - endSampleIdx) > maxOutPos) {
+			limit = maxOutPos;
 		}
-		arg10.currentVolume += arg10.volumeDelta * (local32 - arg3);
-		arg3 <<= 0x1;
-		local32 <<= 0x1;
-		local32 -= 6;
-		@Pc(64) byte local64;
-		@Pc(67) int local67;
-		while (arg3 < local32) {
-			@Pc(62) int local62 = arg2 - 1;
-			local64 = arg0[arg2];
-			local67 = arg3 + 1;
-			arg1[arg3] += local64 * arg4;
-			@Pc(78) int local78 = arg4 + local19;
-			@Pc(81) int local81 = local67 + 1;
-			arg1[local67] += local64 * arg5;
-			@Pc(92) int local92 = arg5 + local23;
-			@Pc(95) int local95 = local62 - 1;
-			@Pc(97) byte local97 = arg0[local62];
-			@Pc(100) int local100 = local81 + 1;
-			arg1[local81] += local97 * local78;
-			@Pc(111) int local111 = local78 + local19;
-			@Pc(114) int local114 = local100 + 1;
-			arg1[local100] += local97 * local92;
-			@Pc(125) int local125 = local92 + local23;
-			@Pc(128) int local128 = local95 - 1;
-			@Pc(130) byte local130 = arg0[local95];
-			@Pc(133) int local133 = local114 + 1;
-			arg1[local114] += local130 * local111;
-			@Pc(144) int local144 = local111 + local19;
-			@Pc(147) int local147 = local133 + 1;
-			arg1[local133] += local130 * local125;
-			@Pc(158) int local158 = local125 + local23;
-			arg2 = local128 - 1;
-			@Pc(163) byte local163 = arg0[local128];
-			@Pc(166) int local166 = local147 + 1;
-			arg1[local147] += local163 * local144;
-			arg4 = local144 + local19;
-			arg3 = local166 + 1;
-			arg1[local166] += local163 * local158;
-			arg5 = local158 + local23;
+		stream.currentVolume += stream.volumeDelta * (limit - outPos);
+		outPos <<= 0x1;
+		limit <<= 0x1;
+		limit -= 6;
+		@Pc(64) byte sample;
+		@Pc(67) int outIdxL;
+		while (outPos < limit) {
+			@Pc(62) int sampleIdx1 = samplePos - 1;
+			sample = samples[samplePos];
+			outIdxL = outPos + 1;
+			output[outPos] += sample * leftVol;
+			@Pc(78) int nextLeftVol = leftVol + scaledLeftVolDelta;
+			@Pc(81) int outIdxR = outIdxL + 1;
+			output[outIdxL] += sample * rightVol;
+			@Pc(92) int nextRightVol = rightVol + scaledRightVolDelta;
+			@Pc(95) int sampleIdx2 = sampleIdx1 - 1;
+			@Pc(97) byte sample2 = samples[sampleIdx1];
+			@Pc(100) int outIdxR2 = outIdxR + 1;
+			output[outIdxR] += sample2 * nextLeftVol;
+			@Pc(111) int nextLeftVol2 = nextLeftVol + scaledLeftVolDelta;
+			@Pc(114) int outIdxL3 = outIdxR2 + 1;
+			output[outIdxR2] += sample2 * nextRightVol;
+			@Pc(125) int nextRightVol2 = nextRightVol + scaledRightVolDelta;
+			@Pc(128) int sampleIdx3 = sampleIdx2 - 1;
+			@Pc(130) byte sample3 = samples[sampleIdx2];
+			@Pc(133) int outIdxR3 = outIdxL3 + 1;
+			output[outIdxL3] += sample3 * nextLeftVol2;
+			@Pc(144) int nextLeftVol3 = nextLeftVol2 + scaledLeftVolDelta;
+			@Pc(147) int outIdxL4 = outIdxR3 + 1;
+			output[outIdxR3] += sample3 * nextRightVol2;
+			@Pc(158) int nextRightVol3 = nextRightVol2 + scaledRightVolDelta;
+			samplePos = sampleIdx3 - 1;
+			@Pc(163) byte sample5 = samples[sampleIdx3];
+			@Pc(166) int outIdxR5 = outIdxL4 + 1;
+			output[outIdxL4] += sample5 * nextLeftVol3;
+			leftVol = nextLeftVol3 + scaledLeftVolDelta;
+			outPos = outIdxR5 + 1;
+			output[outIdxR5] += sample5 * nextRightVol3;
+			rightVol = nextRightVol3 + scaledRightVolDelta;
 		}
-		local32 += 6;
-		while (arg3 < local32) {
-			local64 = arg0[arg2--];
-			local67 = arg3 + 1;
-			arg1[arg3] += local64 * arg4;
-			arg4 += local19;
-			arg3 = local67 + 1;
-			arg1[local67] += local64 * arg5;
-			arg5 += local23;
+		limit += 6;
+		while (outPos < limit) {
+			sample = samples[samplePos--];
+			outIdxL = outPos + 1;
+			output[outPos] += sample * leftVol;
+			leftVol += scaledLeftVolDelta;
+			outPos = outIdxL + 1;
+			output[outIdxL] += sample * rightVol;
+			rightVol += scaledRightVolDelta;
 		}
-		arg10.leftVolume = arg4 >> 2;
-		arg10.rightVolume = arg5 >> 2;
-		arg10.samplePosition = arg2 << 8;
-		return arg3 >> 1;
+		stream.leftVolume = leftVol >> 2;
+		stream.rightVolume = rightVol >> 2;
+		stream.samplePosition = samplePos << 8;
+		return outPos >> 1;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([III)V")
@@ -826,16 +826,16 @@ public final class SoundPcmStream extends PcmStream {
 			this.skip(length);
 			return;
 		}
-		@Pc(13) PcmSound local13 = (PcmSound) this.sound;
-		@Pc(18) int local18 = this.start << 8;
-		@Pc(23) int local23 = this.end << 8;
-		@Pc(29) int local29 = local13.samples.length << 8;
-		@Pc(33) int local33 = local23 - local18;
-		if (local33 <= 0) {
+		@Pc(13) PcmSound sound = (PcmSound) this.sound;
+		@Pc(18) int loopStart = this.start << 8;
+		@Pc(23) int loopEnd = this.end << 8;
+		@Pc(29) int sampleLength = sound.samples.length << 8;
+		@Pc(33) int loopLength = loopEnd - loopStart;
+		if (loopLength <= 0) {
 			this.loopCount = 0;
 		}
-		@Pc(40) int local40 = offset;
-		@Pc(44) int local44 = length + offset;
+		@Pc(40) int pos = offset;
+		@Pc(44) int endPos = length + offset;
 		if (this.samplePosition < 0) {
 			if (this.sampleRate <= 0) {
 				this.cancelTransition();
@@ -844,13 +844,13 @@ public final class SoundPcmStream extends PcmStream {
 			}
 			this.samplePosition = 0;
 		}
-		if (this.samplePosition >= local29) {
+		if (this.samplePosition >= sampleLength) {
 			if (this.sampleRate >= 0) {
 				this.cancelTransition();
 				this.unlink();
 				return;
 			}
-			this.samplePosition = local29 - 1;
+			this.samplePosition = sampleLength - 1;
 		}
 		if (this.loopCount >= 0) {
 			if (this.loopCount > 0) {
@@ -858,171 +858,171 @@ public final class SoundPcmStream extends PcmStream {
 					loopDone:
 					{
 						if (this.sampleRate < 0) {
-							local40 = this.readBackward(buffer, offset, local18, local44, local13.samples[this.start]);
-							if (this.samplePosition >= local18) {
+							pos = this.readBackward(buffer, offset, loopStart, endPos, sound.samples[this.start]);
+							if (this.samplePosition >= loopStart) {
 								return;
 							}
-							this.samplePosition = local18 + local18 - this.samplePosition - 1;
+							this.samplePosition = loopStart + loopStart - this.samplePosition - 1;
 							this.sampleRate = -this.sampleRate;
 							if (--this.loopCount == 0) {
 								break loopDone;
 							}
 						}
 						do {
-							local40 = this.readForward(buffer, local40, local23, local44, local13.samples[this.end - 1]);
-							if (this.samplePosition < local23) {
+							pos = this.readForward(buffer, pos, loopEnd, endPos, sound.samples[this.end - 1]);
+							if (this.samplePosition < loopEnd) {
 								return;
 							}
-							this.samplePosition = local23 + local23 - this.samplePosition - 1;
+							this.samplePosition = loopEnd + loopEnd - this.samplePosition - 1;
 							this.sampleRate = -this.sampleRate;
 							if (--this.loopCount == 0) {
 								break;
 							}
-							local40 = this.readBackward(buffer, local40, local18, local44, local13.samples[this.start]);
-							if (this.samplePosition >= local18) {
+							pos = this.readBackward(buffer, pos, loopStart, endPos, sound.samples[this.start]);
+							if (this.samplePosition >= loopStart) {
 								return;
 							}
-							this.samplePosition = local18 + local18 - this.samplePosition - 1;
+							this.samplePosition = loopStart + loopStart - this.samplePosition - 1;
 							this.sampleRate = -this.sampleRate;
 						} while (--this.loopCount != 0);
 					}
 				} else {
-					@Pc(417) int local417;
+					@Pc(417) int loopSkips;
 					if (this.sampleRate < 0) {
 						while (true) {
-							local40 = this.readBackward(buffer, local40, local18, local44, local13.samples[this.end - 1]);
-							if (this.samplePosition >= local18) {
+							pos = this.readBackward(buffer, pos, loopStart, endPos, sound.samples[this.end - 1]);
+							if (this.samplePosition >= loopStart) {
 								return;
 							}
-							local417 = (local23 - this.samplePosition - 1) / local33;
-							if (local417 >= this.loopCount) {
-								this.samplePosition += local33 * this.loopCount;
+							loopSkips = (loopEnd - this.samplePosition - 1) / loopLength;
+							if (loopSkips >= this.loopCount) {
+								this.samplePosition += loopLength * this.loopCount;
 								this.loopCount = 0;
 								break;
 							}
-							this.samplePosition += local33 * local417;
-							this.loopCount -= local417;
+							this.samplePosition += loopLength * loopSkips;
+							this.loopCount -= loopSkips;
 						}
 					} else {
 						while (true) {
-							local40 = this.readForward(buffer, local40, local23, local44, local13.samples[this.start]);
-							if (this.samplePosition < local23) {
+							pos = this.readForward(buffer, pos, loopEnd, endPos, sound.samples[this.start]);
+							if (this.samplePosition < loopEnd) {
 								return;
 							}
-							local417 = (this.samplePosition - local18) / local33;
-							if (local417 >= this.loopCount) {
-								this.samplePosition -= local33 * this.loopCount;
+							loopSkips = (this.samplePosition - loopStart) / loopLength;
+							if (loopSkips >= this.loopCount) {
+								this.samplePosition -= loopLength * this.loopCount;
 								this.loopCount = 0;
 								break;
 							}
-							this.samplePosition -= local33 * local417;
-							this.loopCount -= local417;
+							this.samplePosition -= loopLength * loopSkips;
+							this.loopCount -= loopSkips;
 						}
 					}
 				}
 			}
 			if (this.sampleRate < 0) {
-				this.readBackward(buffer, local40, 0, local44, 0);
+				this.readBackward(buffer, pos, 0, endPos, 0);
 				if (this.samplePosition < 0) {
 					this.samplePosition = -1;
 					this.cancelTransition();
 					this.unlink();
 				}
 			} else {
-				this.readForward(buffer, local40, local29, local44, 0);
-				if (this.samplePosition >= local29) {
-					this.samplePosition = local29;
+				this.readForward(buffer, pos, sampleLength, endPos, 0);
+				if (this.samplePosition >= sampleLength) {
+					this.samplePosition = sampleLength;
 					this.cancelTransition();
 					this.unlink();
 				}
 			}
 		} else if (this.pingPongLoop) {
 			if (this.sampleRate < 0) {
-				local40 = this.readBackward(buffer, offset, local18, local44, local13.samples[this.start]);
-				if (this.samplePosition >= local18) {
+				pos = this.readBackward(buffer, offset, loopStart, endPos, sound.samples[this.start]);
+				if (this.samplePosition >= loopStart) {
 					return;
 				}
-				this.samplePosition = local18 + local18 - this.samplePosition - 1;
+				this.samplePosition = loopStart + loopStart - this.samplePosition - 1;
 				this.sampleRate = -this.sampleRate;
 			}
 			while (true) {
-				local40 = this.readForward(buffer, local40, local23, local44, local13.samples[this.end - 1]);
-				if (this.samplePosition < local23) {
+				pos = this.readForward(buffer, pos, loopEnd, endPos, sound.samples[this.end - 1]);
+				if (this.samplePosition < loopEnd) {
 					return;
 				}
-				this.samplePosition = local23 + local23 - this.samplePosition - 1;
+				this.samplePosition = loopEnd + loopEnd - this.samplePosition - 1;
 				this.sampleRate = -this.sampleRate;
-				local40 = this.readBackward(buffer, local40, local18, local44, local13.samples[this.start]);
-				if (this.samplePosition >= local18) {
+				pos = this.readBackward(buffer, pos, loopStart, endPos, sound.samples[this.start]);
+				if (this.samplePosition >= loopStart) {
 					return;
 				}
-				this.samplePosition = local18 + local18 - this.samplePosition - 1;
+				this.samplePosition = loopStart + loopStart - this.samplePosition - 1;
 				this.sampleRate = -this.sampleRate;
 			}
 		} else if (this.sampleRate < 0) {
 			while (true) {
-				local40 = this.readBackward(buffer, local40, local18, local44, local13.samples[this.end - 1]);
-				if (this.samplePosition >= local18) {
+				pos = this.readBackward(buffer, pos, loopStart, endPos, sound.samples[this.end - 1]);
+				if (this.samplePosition >= loopStart) {
 					return;
 				}
-				this.samplePosition = local23 - (local23 - 1 - this.samplePosition) % local33 - 1;
+				this.samplePosition = loopEnd - (loopEnd - 1 - this.samplePosition) % loopLength - 1;
 			}
 		} else {
 			while (true) {
-				local40 = this.readForward(buffer, local40, local23, local44, local13.samples[this.start]);
-				if (this.samplePosition < local23) {
+				pos = this.readForward(buffer, pos, loopEnd, endPos, sound.samples[this.start]);
+				if (this.samplePosition < loopEnd) {
 					return;
 				}
-				this.samplePosition = local18 + (this.samplePosition - local18) % local33;
+				this.samplePosition = loopStart + (this.samplePosition - loopStart) % loopLength;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "e", descriptor = "()Z")
 	private boolean applyVolumeTransition() {
-		@Pc(2) int local2 = this.volume;
-		@Pc(10) int local10;
-		@Pc(8) int local8;
-		if (local2 == Integer.MIN_VALUE) {
-			local8 = 0;
-			local10 = 0;
-			local2 = 0;
+		@Pc(2) int targetVolume = this.volume;
+		@Pc(10) int targetLeftVol;
+		@Pc(8) int targetRightVol;
+		if (targetVolume == Integer.MIN_VALUE) {
+			targetRightVol = 0;
+			targetLeftVol = 0;
+			targetVolume = 0;
 		} else {
-			local10 = calculateLeftVolume(local2, this.pan);
-			local8 = calculateRightVolume(local2, this.pan);
+			targetLeftVol = calculateLeftVolume(targetVolume, this.pan);
+			targetRightVol = calculateRightVolume(targetVolume, this.pan);
 		}
-		if (this.currentVolume != local2 || this.leftVolume != local10 || this.rightVolume != local8) {
-			if (this.currentVolume < local2) {
+		if (this.currentVolume != targetVolume || this.leftVolume != targetLeftVol || this.rightVolume != targetRightVol) {
+			if (this.currentVolume < targetVolume) {
 				this.volumeDelta = 1;
-				this.fadeRemaining = local2 - this.currentVolume;
-			} else if (this.currentVolume > local2) {
+				this.fadeRemaining = targetVolume - this.currentVolume;
+			} else if (this.currentVolume > targetVolume) {
 				this.volumeDelta = -1;
-				this.fadeRemaining = this.currentVolume - local2;
+				this.fadeRemaining = this.currentVolume - targetVolume;
 			} else {
 				this.volumeDelta = 0;
 			}
-			if (this.leftVolume < local10) {
+			if (this.leftVolume < targetLeftVol) {
 				this.leftVolumeDelta = 1;
-				if (this.fadeRemaining == 0 || this.fadeRemaining > local10 - this.leftVolume) {
-					this.fadeRemaining = local10 - this.leftVolume;
+				if (this.fadeRemaining == 0 || this.fadeRemaining > targetLeftVol - this.leftVolume) {
+					this.fadeRemaining = targetLeftVol - this.leftVolume;
 				}
-			} else if (this.leftVolume > local10) {
+			} else if (this.leftVolume > targetLeftVol) {
 				this.leftVolumeDelta = -1;
-				if (this.fadeRemaining == 0 || this.fadeRemaining > this.leftVolume - local10) {
-					this.fadeRemaining = this.leftVolume - local10;
+				if (this.fadeRemaining == 0 || this.fadeRemaining > this.leftVolume - targetLeftVol) {
+					this.fadeRemaining = this.leftVolume - targetLeftVol;
 				}
 			} else {
 				this.leftVolumeDelta = 0;
 			}
-			if (this.rightVolume < local8) {
+			if (this.rightVolume < targetRightVol) {
 				this.rightVolumeDelta = 1;
-				if (this.fadeRemaining == 0 || this.fadeRemaining > local8 - this.rightVolume) {
-					this.fadeRemaining = local8 - this.rightVolume;
+				if (this.fadeRemaining == 0 || this.fadeRemaining > targetRightVol - this.rightVolume) {
+					this.fadeRemaining = targetRightVol - this.rightVolume;
 				}
-			} else if (this.rightVolume > local8) {
+			} else if (this.rightVolume > targetRightVol) {
 				this.rightVolumeDelta = -1;
-				if (this.fadeRemaining == 0 || this.fadeRemaining > this.rightVolume - local8) {
-					this.fadeRemaining = this.rightVolume - local8;
+				if (this.fadeRemaining == 0 || this.fadeRemaining > this.rightVolume - targetRightVol) {
+					this.fadeRemaining = this.rightVolume - targetRightVol;
 				}
 			} else {
 				this.rightVolumeDelta = 0;
@@ -1040,8 +1040,8 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "d", descriptor = "(I)V")
-	public final synchronized void fadeOutAndRelease(@OriginalArg(0) int arg0) {
-		if (arg0 == 0) {
+	public final synchronized void fadeOutAndRelease(@OriginalArg(0) int duration) {
+		if (duration == 0) {
 			this.resetVolume();
 			this.unlink();
 		} else if (this.leftVolume == 0 && this.rightVolume == 0) {
@@ -1050,91 +1050,91 @@ public final class SoundPcmStream extends PcmStream {
 			this.currentVolume = 0;
 			this.unlink();
 		} else {
-			@Pc(31) int local31 = -this.currentVolume;
-			if (this.currentVolume > local31) {
-				local31 = this.currentVolume;
+			@Pc(31) int maxDuration = -this.currentVolume;
+			if (this.currentVolume > maxDuration) {
+				maxDuration = this.currentVolume;
 			}
-			if (-this.leftVolume > local31) {
-				local31 = -this.leftVolume;
+			if (-this.leftVolume > maxDuration) {
+				maxDuration = -this.leftVolume;
 			}
-			if (this.leftVolume > local31) {
-				local31 = this.leftVolume;
+			if (this.leftVolume > maxDuration) {
+				maxDuration = this.leftVolume;
 			}
-			if (-this.rightVolume > local31) {
-				local31 = -this.rightVolume;
+			if (-this.rightVolume > maxDuration) {
+				maxDuration = -this.rightVolume;
 			}
-			if (this.rightVolume > local31) {
-				local31 = this.rightVolume;
+			if (this.rightVolume > maxDuration) {
+				maxDuration = this.rightVolume;
 			}
-			if (arg0 > local31) {
-				arg0 = local31;
+			if (duration > maxDuration) {
+				duration = maxDuration;
 			}
-			this.fadeRemaining = arg0;
+			this.fadeRemaining = duration;
 			this.volume = Integer.MIN_VALUE;
-			this.volumeDelta = -this.currentVolume / arg0;
-			this.leftVolumeDelta = -this.leftVolume / arg0;
-			this.rightVolumeDelta = -this.rightVolume / arg0;
+			this.volumeDelta = -this.currentVolume / duration;
+			this.leftVolumeDelta = -this.leftVolume / duration;
+			this.rightVolumeDelta = -this.rightVolume / duration;
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "([IIIII)I")
-	private int readForward(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private int readForward(@OriginalArg(0) int[] output, @OriginalArg(1) int outPos, @OriginalArg(2) int sampleEnd, @OriginalArg(3) int maxOutPos, @OriginalArg(4) int boundarySample) {
 		while (true) {
 			if (this.fadeRemaining > 0) {
-				@Pc(7) int local7 = arg1 + this.fadeRemaining;
-				if (local7 > arg3) {
-					local7 = arg3;
+				@Pc(7) int fadeEnd = outPos + this.fadeRemaining;
+				if (fadeEnd > maxOutPos) {
+					fadeEnd = maxOutPos;
 				}
-				this.fadeRemaining += arg1;
+				this.fadeRemaining += outPos;
 				if (this.sampleRate == 256 && (this.samplePosition & 0xFF) == 0) {
 					if (AudioChannel.stereo) {
-						arg1 = mixForwardStereoFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, local7, arg2, this);
+						outPos = mixForwardStereoFading(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, fadeEnd, sampleEnd, this);
 					} else {
-						arg1 = mixForwardMonoFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, this.volumeDelta, local7, arg2, this);
+						outPos = mixForwardMonoFading(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.currentVolume, this.volumeDelta, fadeEnd, sampleEnd, this);
 					}
 				} else if (AudioChannel.stereo) {
-					arg1 = mixForwardStereoResampledFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, local7, arg2, this, this.sampleRate, arg4);
+					outPos = mixForwardStereoResampledFading(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, fadeEnd, sampleEnd, this, this.sampleRate, boundarySample);
 				} else {
-					arg1 = mixForwardMonoResampledFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, this.volumeDelta, local7, arg2, this, this.sampleRate, arg4);
+					outPos = mixForwardMonoResampledFading(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.currentVolume, this.volumeDelta, fadeEnd, sampleEnd, this, this.sampleRate, boundarySample);
 				}
-				this.fadeRemaining -= arg1;
+				this.fadeRemaining -= outPos;
 				if (this.fadeRemaining != 0) {
-					return arg1;
+					return outPos;
 				}
 				if (!this.applyVolumeTransition()) {
 					continue;
 				}
-				return arg3;
+				return maxOutPos;
 			}
 			if (this.sampleRate == 256 && (this.samplePosition & 0xFF) == 0) {
 				if (AudioChannel.stereo) {
-					return mixForwardStereo(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, arg3, arg2, this);
+					return mixForwardStereo(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.leftVolume, this.rightVolume, maxOutPos, sampleEnd, this);
 				}
-				return mixForwardMono(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, arg3, arg2, this);
+				return mixForwardMono(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.currentVolume, maxOutPos, sampleEnd, this);
 			}
 			if (AudioChannel.stereo) {
-				return mixForwardStereoResampled(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, arg3, arg2, this, this.sampleRate, arg4);
+				return mixForwardStereoResampled(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.leftVolume, this.rightVolume, maxOutPos, sampleEnd, this, this.sampleRate, boundarySample);
 			}
-			return mixForwardMonoResampled(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, arg3, arg2, this, this.sampleRate, arg4);
+			return mixForwardMonoResampled(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.currentVolume, maxOutPos, sampleEnd, this, this.sampleRate, boundarySample);
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "e", descriptor = "(I)V")
-	public final synchronized void setVolume(@OriginalArg(0) int arg0) {
-		this.setVolumeAndPan(arg0 << 6, this.getPan());
+	public final synchronized void setVolume(@OriginalArg(0) int volume) {
+		this.setVolumeAndPan(volume << 6, this.getPan());
 	}
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "()I")
 	@Override
 	public final int getEffectiveVolume() {
-		@Pc(6) int local6 = this.currentVolume * 3 >> 6;
-		local6 = (local6 ^ local6 >> 31) + (local6 >>> 31);
+		@Pc(6) int effectiveVol = this.currentVolume * 3 >> 6;
+		effectiveVol = (effectiveVol ^ effectiveVol >> 31) + (effectiveVol >>> 31);
 		if (this.loopCount == 0) {
-			local6 -= local6 * this.samplePosition / (((PcmSound) this.sound).samples.length << 8);
+			effectiveVol -= effectiveVol * this.samplePosition / (((PcmSound) this.sound).samples.length << 8);
 		} else if (this.loopCount >= 0) {
-			local6 -= local6 * this.start / ((PcmSound) this.sound).samples.length;
+			effectiveVol -= effectiveVol * this.start / ((PcmSound) this.sound).samples.length;
 		}
-		return local6 > 255 ? 255 : local6;
+		return effectiveVol > 255 ? 255 : effectiveVol;
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "()I")
@@ -1168,12 +1168,12 @@ public final class SoundPcmStream extends PcmStream {
 				this.fadeRemaining -= length;
 			}
 		}
-		@Pc(71) PcmSound local71 = (PcmSound) this.sound;
-		@Pc(76) int local76 = this.start << 8;
-		@Pc(81) int local81 = this.end << 8;
-		@Pc(87) int local87 = local71.samples.length << 8;
-		@Pc(91) int local91 = local81 - local76;
-		if (local91 <= 0) {
+		@Pc(71) PcmSound sound = (PcmSound) this.sound;
+		@Pc(76) int loopStart = this.start << 8;
+		@Pc(81) int loopEnd = this.end << 8;
+		@Pc(87) int sampleLength = sound.samples.length << 8;
+		@Pc(91) int loopLength = loopEnd - loopStart;
+		if (loopLength <= 0) {
 			this.loopCount = 0;
 		}
 		if (this.samplePosition < 0) {
@@ -1184,13 +1184,13 @@ public final class SoundPcmStream extends PcmStream {
 			}
 			this.samplePosition = 0;
 		}
-		if (this.samplePosition >= local87) {
+		if (this.samplePosition >= sampleLength) {
 			if (this.sampleRate >= 0) {
 				this.cancelTransition();
 				this.unlink();
 				return;
 			}
-			this.samplePosition = local87 - 1;
+			this.samplePosition = sampleLength - 1;
 		}
 		this.samplePosition += this.sampleRate * length;
 		if (this.loopCount >= 0) {
@@ -1199,56 +1199,56 @@ public final class SoundPcmStream extends PcmStream {
 					loopDone:
 					{
 						if (this.sampleRate < 0) {
-							if (this.samplePosition >= local76) {
+							if (this.samplePosition >= loopStart) {
 								return;
 							}
-							this.samplePosition = local76 + local76 - this.samplePosition - 1;
+							this.samplePosition = loopStart + loopStart - this.samplePosition - 1;
 							this.sampleRate = -this.sampleRate;
 							if (--this.loopCount == 0) {
 								break loopDone;
 							}
 						}
 						do {
-							if (this.samplePosition < local81) {
+							if (this.samplePosition < loopEnd) {
 								return;
 							}
-							this.samplePosition = local81 + local81 - this.samplePosition - 1;
+							this.samplePosition = loopEnd + loopEnd - this.samplePosition - 1;
 							this.sampleRate = -this.sampleRate;
 							if (--this.loopCount == 0) {
 								break;
 							}
-							if (this.samplePosition >= local76) {
+							if (this.samplePosition >= loopStart) {
 								return;
 							}
-							this.samplePosition = local76 + local76 - this.samplePosition - 1;
+							this.samplePosition = loopStart + loopStart - this.samplePosition - 1;
 							this.sampleRate = -this.sampleRate;
 						} while (--this.loopCount != 0);
 					}
 				} else {
 					loopDone:
 					{
-						@Pc(362) int local362;
+						@Pc(362) int loopSkips;
 						if (this.sampleRate < 0) {
-							if (this.samplePosition >= local76) {
+							if (this.samplePosition >= loopStart) {
 								return;
 							}
-							local362 = (local81 - this.samplePosition - 1) / local91;
-							if (local362 >= this.loopCount) {
-								this.samplePosition += local91 * this.loopCount;
+							loopSkips = (loopEnd - this.samplePosition - 1) / loopLength;
+							if (loopSkips >= this.loopCount) {
+								this.samplePosition += loopLength * this.loopCount;
 								this.loopCount = 0;
 								break loopDone;
 							}
-							this.samplePosition += local91 * local362;
-							this.loopCount -= local362;
-						} else if (this.samplePosition >= local81) {
-							local362 = (this.samplePosition - local76) / local91;
-							if (local362 >= this.loopCount) {
-								this.samplePosition -= local91 * this.loopCount;
+							this.samplePosition += loopLength * loopSkips;
+							this.loopCount -= loopSkips;
+						} else if (this.samplePosition >= loopEnd) {
+							loopSkips = (this.samplePosition - loopStart) / loopLength;
+							if (loopSkips >= this.loopCount) {
+								this.samplePosition -= loopLength * this.loopCount;
 								this.loopCount = 0;
 								break loopDone;
 							}
-							this.samplePosition -= local91 * local362;
-							this.loopCount -= local362;
+							this.samplePosition -= loopLength * loopSkips;
+							this.loopCount -= loopSkips;
 						} else {
 							return;
 						}
@@ -1262,43 +1262,43 @@ public final class SoundPcmStream extends PcmStream {
 					this.cancelTransition();
 					this.unlink();
 				}
-			} else if (this.samplePosition >= local87) {
-				this.samplePosition = local87;
+			} else if (this.samplePosition >= sampleLength) {
+				this.samplePosition = sampleLength;
 				this.cancelTransition();
 				this.unlink();
 			}
 		} else if (this.pingPongLoop) {
 			if (this.sampleRate < 0) {
-				if (this.samplePosition >= local76) {
+				if (this.samplePosition >= loopStart) {
 					return;
 				}
-				this.samplePosition = local76 + local76 - this.samplePosition - 1;
+				this.samplePosition = loopStart + loopStart - this.samplePosition - 1;
 				this.sampleRate = -this.sampleRate;
 			}
-			while (this.samplePosition >= local81) {
-				this.samplePosition = local81 + local81 - this.samplePosition - 1;
+			while (this.samplePosition >= loopEnd) {
+				this.samplePosition = loopEnd + loopEnd - this.samplePosition - 1;
 				this.sampleRate = -this.sampleRate;
-				if (this.samplePosition >= local76) {
+				if (this.samplePosition >= loopStart) {
 					return;
 				}
-				this.samplePosition = local76 + local76 - this.samplePosition - 1;
+				this.samplePosition = loopStart + loopStart - this.samplePosition - 1;
 				this.sampleRate = -this.sampleRate;
 			}
 		} else if (this.sampleRate < 0) {
-			if (this.samplePosition >= local76) {
+			if (this.samplePosition >= loopStart) {
 				return;
 			}
-			this.samplePosition = local81 - (local81 - 1 - this.samplePosition) % local91 - 1;
-		} else if (this.samplePosition >= local81) {
-			this.samplePosition = local76 + (this.samplePosition - local76) % local91;
+			this.samplePosition = loopEnd - (loopEnd - 1 - this.samplePosition) % loopLength - 1;
+		} else if (this.samplePosition >= loopEnd) {
+			this.samplePosition = loopStart + (this.samplePosition - loopStart) % loopLength;
 		} else {
 			return;
 		}
 	}
 
 	@OriginalMember(owner = "client!b", name = "f", descriptor = "(I)V")
-	public final synchronized void setLoops(@OriginalArg(0) int arg0) {
-		this.loopCount = arg0;
+	public final synchronized void setLoops(@OriginalArg(0) int loops) {
+		this.loopCount = loops;
 	}
 
 	@OriginalMember(owner = "client!b", name = "g", descriptor = "(I)V")
@@ -1307,8 +1307,8 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "(II)V")
-	public final synchronized void fadeToVolume(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		this.fadeToVolumeAndPan(arg0, arg1, this.getPan());
+	public final synchronized void fadeToVolume(@OriginalArg(0) int volume, @OriginalArg(1) int pan) {
+		this.fadeToVolumeAndPan(volume, pan, this.getPan());
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "()Lclient!qb;")
@@ -1318,56 +1318,56 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "h", descriptor = "(I)V")
-	public final synchronized void setSamplePosition(@OriginalArg(0) int arg0) {
-		@Pc(7) int local7 = ((PcmSound) this.sound).samples.length << 8;
-		if (arg0 < -1) {
-			arg0 = -1;
+	public final synchronized void setSamplePosition(@OriginalArg(0) int position) {
+		@Pc(7) int maxPosition = ((PcmSound) this.sound).samples.length << 8;
+		if (position < -1) {
+			position = -1;
 		}
-		if (arg0 > local7) {
-			arg0 = local7;
+		if (position > maxPosition) {
+			position = maxPosition;
 		}
-		this.samplePosition = arg0;
+		this.samplePosition = position;
 	}
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "([IIIII)I")
-	private int readBackward(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private int readBackward(@OriginalArg(0) int[] output, @OriginalArg(1) int outPos, @OriginalArg(2) int sampleEnd, @OriginalArg(3) int maxOutPos, @OriginalArg(4) int boundarySample) {
 		while (true) {
 			if (this.fadeRemaining > 0) {
-				@Pc(7) int local7 = arg1 + this.fadeRemaining;
-				if (local7 > arg3) {
-					local7 = arg3;
+				@Pc(7) int fadeEnd = outPos + this.fadeRemaining;
+				if (fadeEnd > maxOutPos) {
+					fadeEnd = maxOutPos;
 				}
-				this.fadeRemaining += arg1;
+				this.fadeRemaining += outPos;
 				if (this.sampleRate == -256 && (this.samplePosition & 0xFF) == 0) {
 					if (AudioChannel.stereo) {
-						arg1 = mixBackwardStereoFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, local7, arg2, this);
+						outPos = mixBackwardStereoFading(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, fadeEnd, sampleEnd, this);
 					} else {
-						arg1 = mixBackwardMonoFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, this.volumeDelta, local7, arg2, this);
+						outPos = mixBackwardMonoFading(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.currentVolume, this.volumeDelta, fadeEnd, sampleEnd, this);
 					}
 				} else if (AudioChannel.stereo) {
-					arg1 = mixBackwardStereoResampledFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, local7, arg2, this, this.sampleRate, arg4);
+					outPos = mixBackwardStereoResampledFading(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.leftVolume, this.rightVolume, this.leftVolumeDelta, this.rightVolumeDelta, fadeEnd, sampleEnd, this, this.sampleRate, boundarySample);
 				} else {
-					arg1 = mixBackwardMonoResampledFading(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, this.volumeDelta, local7, arg2, this, this.sampleRate, arg4);
+					outPos = mixBackwardMonoResampledFading(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.currentVolume, this.volumeDelta, fadeEnd, sampleEnd, this, this.sampleRate, boundarySample);
 				}
-				this.fadeRemaining -= arg1;
+				this.fadeRemaining -= outPos;
 				if (this.fadeRemaining != 0) {
-					return arg1;
+					return outPos;
 				}
 				if (!this.applyVolumeTransition()) {
 					continue;
 				}
-				return arg3;
+				return maxOutPos;
 			}
 			if (this.sampleRate == -256 && (this.samplePosition & 0xFF) == 0) {
 				if (AudioChannel.stereo) {
-					return mixBackwardStereo(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, arg3, arg2, this);
+					return mixBackwardStereo(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.leftVolume, this.rightVolume, maxOutPos, sampleEnd, this);
 				}
-				return mixBackwardMono(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, arg3, arg2, this);
+				return mixBackwardMono(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.currentVolume, maxOutPos, sampleEnd, this);
 			}
 			if (AudioChannel.stereo) {
-				return mixBackwardStereoResampled(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.leftVolume, this.rightVolume, arg3, arg2, this, this.sampleRate, arg4);
+				return mixBackwardStereoResampled(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.leftVolume, this.rightVolume, maxOutPos, sampleEnd, this, this.sampleRate, boundarySample);
 			}
-			return mixBackwardMonoResampled(((PcmSound) this.sound).samples, arg0, this.samplePosition, arg1, this.currentVolume, arg3, arg2, this, this.sampleRate, arg4);
+			return mixBackwardMonoResampled(((PcmSound) this.sound).samples, output, this.samplePosition, outPos, this.currentVolume, maxOutPos, sampleEnd, this, this.sampleRate, boundarySample);
 		}
 	}
 
@@ -1389,9 +1389,9 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "c", descriptor = "(II)V")
-	private synchronized void setVolumeAndPan(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		this.volume = arg0;
-		this.pan = arg1;
+	private synchronized void setVolumeAndPan(@OriginalArg(0) int volume, @OriginalArg(1) int pan) {
+		this.volume = volume;
+		this.pan = pan;
 		this.fadeRemaining = 0;
 		this.recalculateChannelVolumes();
 	}
@@ -1403,11 +1403,11 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "i", descriptor = "(I)V")
-	public final synchronized void setRate(@OriginalArg(0) int arg0) {
+	public final synchronized void setRate(@OriginalArg(0) int rate) {
 		if (this.sampleRate < 0) {
-			this.sampleRate = -arg0;
+			this.sampleRate = -rate;
 		} else {
-			this.sampleRate = arg0;
+			this.sampleRate = rate;
 		}
 	}
 
@@ -1429,42 +1429,42 @@ public final class SoundPcmStream extends PcmStream {
 	}
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "(III)V")
-	public final synchronized void fadeToVolumeAndPan(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		if (arg0 == 0) {
-			this.setVolumeAndPan(arg1, arg2);
+	public final synchronized void fadeToVolumeAndPan(@OriginalArg(0) int duration, @OriginalArg(1) int targetVolume, @OriginalArg(2) int targetPan) {
+		if (duration == 0) {
+			this.setVolumeAndPan(targetVolume, targetPan);
 			return;
 		}
-		@Pc(10) int local10 = calculateLeftVolume(arg1, arg2);
-		@Pc(14) int local14 = calculateRightVolume(arg1, arg2);
-		if (this.leftVolume == local10 && this.rightVolume == local14) {
+		@Pc(10) int targetRight = calculateLeftVolume(targetVolume, targetPan);
+		@Pc(14) int targetLeft = calculateRightVolume(targetVolume, targetPan);
+		if (this.leftVolume == targetRight && this.rightVolume == targetLeft) {
 			this.fadeRemaining = 0;
 			return;
 		}
-		@Pc(31) int local31 = arg1 - this.currentVolume;
-		if (this.currentVolume - arg1 > local31) {
-			local31 = this.currentVolume - arg1;
+		@Pc(31) int maxDelta = targetVolume - this.currentVolume;
+		if (this.currentVolume - targetVolume > maxDelta) {
+			maxDelta = this.currentVolume - targetVolume;
 		}
-		if (local10 - this.leftVolume > local31) {
-			local31 = local10 - this.leftVolume;
+		if (targetRight - this.leftVolume > maxDelta) {
+			maxDelta = targetRight - this.leftVolume;
 		}
-		if (this.leftVolume - local10 > local31) {
-			local31 = this.leftVolume - local10;
+		if (this.leftVolume - targetRight > maxDelta) {
+			maxDelta = this.leftVolume - targetRight;
 		}
-		if (local14 - this.rightVolume > local31) {
-			local31 = local14 - this.rightVolume;
+		if (targetLeft - this.rightVolume > maxDelta) {
+			maxDelta = targetLeft - this.rightVolume;
 		}
-		if (this.rightVolume - local14 > local31) {
-			local31 = this.rightVolume - local14;
+		if (this.rightVolume - targetLeft > maxDelta) {
+			maxDelta = this.rightVolume - targetLeft;
 		}
-		if (arg0 > local31) {
-			arg0 = local31;
+		if (duration > maxDelta) {
+			duration = maxDelta;
 		}
-		this.fadeRemaining = arg0;
-		this.volume = arg1;
-		this.pan = arg2;
-		this.volumeDelta = (arg1 - this.currentVolume) / arg0;
-		this.leftVolumeDelta = (local10 - this.leftVolume) / arg0;
-		this.rightVolumeDelta = (local14 - this.rightVolume) / arg0;
+		this.fadeRemaining = duration;
+		this.volume = targetVolume;
+		this.pan = targetPan;
+		this.volumeDelta = (targetVolume - this.currentVolume) / duration;
+		this.leftVolumeDelta = (targetRight - this.leftVolume) / duration;
+		this.rightVolumeDelta = (targetLeft - this.rightVolume) / duration;
 	}
 
 	@OriginalMember(owner = "client!b", name = "l", descriptor = "()I")
