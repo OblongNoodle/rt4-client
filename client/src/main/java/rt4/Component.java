@@ -870,7 +870,7 @@ public final class Component {
 		this.objCounts[oldIndex] = tmpCount;
 	}
 
-	@OriginalMember(owner = "client!be", name = "a", descriptor = "(IIB)V")
+	@OriginalMember(owner = "client!be", name = "a", descriptor = "(ILclient!tk;IIIZLclient!hh;)Lclient!ak;")
 	public final Model getModel(@OriginalArg(0) int frame, @OriginalArg(1) SeqType seq, @OriginalArg(2) int nextFrame, @OriginalArg(4) int tweenDelta, @OriginalArg(5) boolean active, @OriginalArg(6) PlayerAppearance appearance) {
 		loadFailed = false;
 		@Pc(10) int mType;

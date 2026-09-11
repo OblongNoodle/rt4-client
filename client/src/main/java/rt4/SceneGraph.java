@@ -1270,7 +1270,7 @@ public class SceneGraph {
 			}
 			tiles[level][x][y].plainTile = tile;
 		} else if (shape == 1) {
-			tile = new PlainTile(overlayColorSW, overlayColorSE, overlayColorNE, overlayColorNW, texture, overlayRgb, heightSW == heightSE && heightSW == heightNE && heightNW == heightSW);
+			tile = new PlainTile(overlayColorSW, overlayColorSE, overlayColorNE, overlayColorNW, texture, overlayRgb, heightSW == heightSE && heightSW == heightNE && heightSW == heightNW);
 			for (level0 = level; level0 >= 0; level0--) {
 				if (tiles[level0][x][y] == null) {
 					tiles[level0][x][y] = new Tile(level0, x, y);
