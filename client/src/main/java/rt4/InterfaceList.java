@@ -120,10 +120,10 @@ public class InterfaceList {
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(ZLclient!ve;Lclient!ve;Lclient!ve;Lclient!ve;)V")
 	public static void init(@OriginalArg(1) Js5 fontProvider, @OriginalArg(2) Js5 spriteProvider, @OriginalArg(3) Js5 interfaceProvider, @OriginalArg(4) Js5 modelProvider) {
-		spriteProvider = spriteProvider;
-		fontProvider = fontProvider;
-		interfaceProvider = interfaceProvider;
-		modelProvider = modelProvider;
+		InterfaceList.spriteProvider = spriteProvider;
+		InterfaceList.fontProvider = fontProvider;
+		InterfaceList.interfaceProvider = interfaceProvider;
+		InterfaceList.modelProvider = modelProvider;
 		components = new Component[interfaceProvider.capacity()][];
 		interfaceLoaded = new boolean[interfaceProvider.capacity()];
 	}
