@@ -80,13 +80,13 @@ public class NpcList {
 	public static void lerpToForceMoveDest(@OriginalArg(0) PathingEntity entity) {
 		if (client.loop == entity.forceMoveCyclesToDest || entity.seqId == -1 || entity.seqDelay != 0 || entity.seqDelayClock + 1 > SeqTypeList.get(entity.seqId).frameDelay[entity.seqFrame]) {
 			@Pc(35) int cyclesDiff = entity.forceMoveCyclesToDest - entity.forceMoveCyclesToStart;
-			@Pc(41) int elapsed = client.loop - entity.forceMoveCyclesToStart;
+			@Pc(41) int lerpCyclesRemaining = client.loop - entity.forceMoveCyclesToStart;
 			@Pc(52) int startXFine = entity.forceMoveStartX * 128 + entity.getSize() * 64;
 			@Pc(64) int startYFine = entity.forceMoveStartY * 128 + entity.getSize() * 64;
 			@Pc(75) int destXFine = entity.forceMoveDestX * 128 + entity.getSize() * 64;
 			@Pc(86) int destYFine = entity.forceMoveDestY * 128 + entity.getSize() * 64;
-			entity.xFine = (elapsed * destXFine + startXFine * (cyclesDiff - elapsed)) / cyclesDiff;
-			entity.yFine = (destYFine * elapsed + startYFine * (cyclesDiff - elapsed)) / cyclesDiff;
+			entity.xFine = (lerpCyclesRemaining * destXFine + startXFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
+			entity.yFine = (destYFine * lerpCyclesRemaining + startYFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
 		}
 		entity.movementCatchupTicks = 0;
 		if (entity.forceMoveDirection == 0) {

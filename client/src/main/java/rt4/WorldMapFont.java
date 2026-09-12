@@ -46,24 +46,24 @@ public final class WorldMapFont {
 		this.dataIndex = ALPHABET_SIZE * 9;
 		this.grayscale = false;
 		@Pc(30) Font font = new Font("Helvetica", Font.BOLD, size);
-		@Pc(34) FontMetrics metrics = component.getFontMetrics(font);
+		@Pc(34) FontMetrics boldMetrics = component.getFontMetrics(font);
 		@Pc(36) int i;
 		for (i = 0; i < ALPHABET_SIZE; i++) {
-			this.preRenderGlyph(font, metrics, ALPHABET.charAt(i), i, false);
+			this.preRenderGlyph(font, boldMetrics, ALPHABET.charAt(i), i, false);
 		}
 		if (this.grayscale) {
 			this.dataIndex = ALPHABET_SIZE * 9;
 			this.grayscale = false;
 			font = new Font("Helvetica", Font.PLAIN, size);
-			metrics = component.getFontMetrics(font);
+			boldMetrics = component.getFontMetrics(font);
 			for (i = 0; i < ALPHABET_SIZE; i++) {
-				this.preRenderGlyph(font, metrics, ALPHABET.charAt(i), i, false);
+				this.preRenderGlyph(font, boldMetrics, ALPHABET.charAt(i), i, false);
 			}
 			if (!this.grayscale) {
 				this.dataIndex = ALPHABET_SIZE * 9;
 				this.grayscale = false;
 				for (i = 0; i < ALPHABET_SIZE; i++) {
-					this.preRenderGlyph(font, metrics, ALPHABET.charAt(i), i, true);
+					this.preRenderGlyph(font, boldMetrics, ALPHABET.charAt(i), i, true);
 				}
 			}
 		}
