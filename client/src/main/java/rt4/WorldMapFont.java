@@ -210,8 +210,8 @@ public final class WorldMapFont {
 	}
 
 	@OriginalMember(owner = "client!fd", name = "a", descriptor = "(Ljava/awt/Font;Ljava/awt/FontMetrics;CIZ)V")
-	private void preRenderGlyph(@OriginalArg(0) Font font, @OriginalArg(1) FontMetrics boldMetrics, @OriginalArg(2) char ch, @OriginalArg(3) int glyphIndex, @OriginalArg(4) boolean doubleRender) {
-		@Pc(3) int charWidth = boldMetrics.charWidth(ch);
+	private void preRenderGlyph(@OriginalArg(0) Font font, @OriginalArg(1) FontMetrics metrics, @OriginalArg(2) char ch, @OriginalArg(3) int glyphIndex, @OriginalArg(4) boolean doubleRender) {
+		@Pc(3) int charWidth = metrics.charWidth(ch);
 		@Pc(5) int advanceWidth = charWidth;
 		if (doubleRender) {
 			try {
@@ -224,9 +224,9 @@ public final class WorldMapFont {
 			} catch (@Pc(45) Exception ignored) {
 			}
 		}
-		@Pc(48) int maxAscent = boldMetrics.getMaxAscent();
-		@Pc(54) int totalHeight = boldMetrics.getMaxAscent() + boldMetrics.getMaxDescent();
-		@Pc(57) int lineHeight = boldMetrics.getHeight();
+		@Pc(48) int maxAscent = metrics.getMaxAscent();
+		@Pc(54) int totalHeight = metrics.getMaxAscent() + metrics.getMaxDescent();
+		@Pc(57) int lineHeight = metrics.getHeight();
 		@Pc(62) Image img = GameShell.canvas.createImage(charWidth, totalHeight);
 		@Pc(65) Graphics g = img.getGraphics();
 		g.setColor(Color.black);
