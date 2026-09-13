@@ -884,8 +884,8 @@ public class InterfaceList {
 									lowPriorityRequests.addTail(request);
 								} else {
 									checkVarcs:
-									for (i = component.updatedVarcsReaderIndex; i < VarcDomain.updatedVarcsWriterIndex; i++) {
-										skill = VarcDomain.updatedVarcs[i & 0x1F];
+									for (j = component.updatedVarcsReaderIndex; j < VarcDomain.updatedVarcsWriterIndex; j++) {
+										skill = VarcDomain.updatedVarcs[j & 0x1F];
 										for (k = 0; k < component.varcTriggers.length; k++) {
 											if (component.varcTriggers[k] == skill) {
 												request2 = new HookRequest();
@@ -907,8 +907,8 @@ public class InterfaceList {
 									lowPriorityRequests.addTail(request);
 								} else {
 									checkVarcstrs:
-									for (i = component.updatedVarcstrsReaderIndex; i < VarcDomain.updatedVarcstrsWriterIndex; i++) {
-										skill = VarcDomain.updatedVarcstrs[i & 0x1F];
+									for (j = component.updatedVarcstrsReaderIndex; j < VarcDomain.updatedVarcstrsWriterIndex; j++) {
+										skill = VarcDomain.updatedVarcstrs[j & 0x1F];
 										for (k = 0; k < component.varcstrTriggers.length; k++) {
 											if (component.varcstrTriggers[k] == skill) {
 												request2 = new HookRequest();
@@ -930,8 +930,8 @@ public class InterfaceList {
 									lowPriorityRequests.addTail(request);
 								} else {
 									checkVarps:
-									for (i = component.updatedVarpsReaderIndex; i < VarpDomain.updatedVarpsWriterIndex; i++) {
-										skill = VarpDomain.updatedVarps[i & 0x1F];
+									for (j = component.updatedVarpsReaderIndex; j < VarpDomain.updatedVarpsWriterIndex; j++) {
+										skill = VarpDomain.updatedVarps[j & 0x1F];
 										for (k = 0; k < component.varpTriggers.length; k++) {
 											if (component.varpTriggers[k] == skill) {
 												request2 = new HookRequest();
@@ -953,8 +953,8 @@ public class InterfaceList {
 									lowPriorityRequests.addTail(request);
 								} else {
 									outer:
-									for (i = component.updatedInventoriesReaderIndex; i < Inv.updatedInventoriesWriterIndex; i++) {
-										skill = Inv.updatedInventories[i & 0x1F];
+									for (j = component.updatedInventoriesReaderIndex; j < Inv.updatedInventoriesWriterIndex; j++) {
+										skill = Inv.updatedInventories[j & 0x1F];
 										for (k = 0; k < component.inventoryTriggers.length; k++) {
 											if (component.inventoryTriggers[k] == skill) {
 												request2 = new HookRequest();
@@ -976,8 +976,8 @@ public class InterfaceList {
 									lowPriorityRequests.addTail(request);
 								} else {
 									outer:
-									for (i = component.updatedStatsReaderIndex; i < PlayerSkillXpTable.updatedStatsWriterIndex; i++) {
-										skill = PlayerSkillXpTable.updatedStats[i & 0x1F];
+									for (j = component.updatedStatsReaderIndex; j < PlayerSkillXpTable.updatedStatsWriterIndex; j++) {
+										skill = PlayerSkillXpTable.updatedStats[j & 0x1F];
 										for (k = 0; k < component.statTriggers.length; k++) {
 											if (component.statTriggers[k] == skill) {
 												request2 = new HookRequest();
@@ -1023,11 +1023,11 @@ public class InterfaceList {
 							}
 							component.lastTransmitTimer = transmitTimer;
 							if (component.onKey != null) {
-								for (i = 0; i < keyQueueSize; i++) {
+								for (j = 0; j < keyQueueSize; j++) {
 									@Pc(1430) HookRequest keyRequest = new HookRequest();
 									keyRequest.source = component;
-									keyRequest.keyCode = keyCodes[i];
-									keyRequest.keyChar = keyChars[i];
+									keyRequest.keyCode = keyCodes[j];
+									keyRequest.keyChar = keyChars[j];
 									keyRequest.arguments = component.onKey;
 									lowPriorityRequests.addTail(keyRequest);
 								}
