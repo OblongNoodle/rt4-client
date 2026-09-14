@@ -21,25 +21,25 @@ public final class TextureOpBinary extends TextureOp {
 
 	@OriginalMember(owner = "client!ca", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(29) int[] local29 = this.getChildMonochromeOutput(0, arg0);
-			for (@Pc(31) int local31 = 0; local31 < Texture.width; local31++) {
-				@Pc(38) int local38 = local29[local31];
-				local19[local31] = this.minValue <= local38 && local38 <= this.maxValue ? 4096 : 0;
+			@Pc(29) int[] childOutput = this.getChildMonochromeOutput(0, row);
+			for (@Pc(31) int i = 0; i < Texture.width; i++) {
+				@Pc(38) int value = childOutput[i];
+				output[i] = this.minValue <= value && value <= this.maxValue ? 4096 : 0;
 			}
 		}
-		return local19;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!ca", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.minValue = arg1.g2();
-		} else if (arg0 == 1) {
-			this.maxValue = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buffer) {
+		if (opcode == 0) {
+			this.minValue = buffer.g2();
+		} else if (opcode == 1) {
+			this.maxValue = buffer.g2();
 		}
 	}
 }

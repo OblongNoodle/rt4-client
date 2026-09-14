@@ -23,7 +23,7 @@ public final class UnlitMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!ue", name = "a", descriptor = "(I)V")
 	@Override
-	public final void setArgument(@OriginalArg(0) int arg0) {
+	public final void setArgument(@OriginalArg(0) int argument) {
 	}
 
 	@OriginalMember(owner = "client!ue", name = "a", descriptor = "()V")

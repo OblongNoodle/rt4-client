@@ -9,69 +9,69 @@ import org.openrs2.deob.annotation.Pc;
 public final class MapElementList {
 
 	@OriginalMember(owner = "client!se", name = "i", descriptor = "I")
-	public final int anInt5074;
+	public final int count;
 
 	@OriginalMember(owner = "client!se", name = "j", descriptor = "[Lclient!na;")
-	public final JagString[] aClass100Array153;
+	public final JagString[] names;
 
 	@OriginalMember(owner = "client!se", name = "d", descriptor = "[S")
-	public final short[] aShortArray72;
+	public final short[] coordY;
 
 	@OriginalMember(owner = "client!se", name = "n", descriptor = "[I")
-	public final int[] anIntArray444;
+	public final int[] colors;
 
 	@OriginalMember(owner = "client!se", name = "u", descriptor = "[B")
-	public final byte[] aByteArray69;
+	public final byte[] flags;
 
 	@OriginalMember(owner = "client!se", name = "q", descriptor = "[S")
-	public final short[] aShortArray73;
+	public final short[] coordX;
 
 	@OriginalMember(owner = "client!se", name = "<init>", descriptor = "(I)V")
-	public MapElementList(@OriginalArg(0) int arg0) {
-		this.anInt5074 = arg0;
-		this.aClass100Array153 = new JagString[this.anInt5074];
-		this.aShortArray72 = new short[this.anInt5074];
-		this.anIntArray444 = new int[this.anInt5074];
-		this.aByteArray69 = new byte[this.anInt5074];
-		this.aShortArray73 = new short[this.anInt5074];
+	public MapElementList(@OriginalArg(0) int count) {
+		this.count = count;
+		this.names = new JagString[this.count];
+		this.coordY = new short[this.count];
+		this.colors = new int[this.count];
+		this.flags = new byte[this.count];
+		this.coordX = new short[this.count];
 	}
 
 	@OriginalMember(owner = "client!la", name = "a", descriptor = "(ILclient!na;Lclient!ve;)Lclient!se;")
-	public static MapElementList create(@OriginalArg(1) JagString arg0, @OriginalArg(2) Js5 arg1) {
-		@Pc(10) int local10 = arg1.getGroupId(arg0);
-		if (local10 == -1) {
+	public static MapElementList create(@OriginalArg(1) JagString name, @OriginalArg(2) Js5 archive) {
+		@Pc(10) int groupId = archive.getGroupId(name);
+		if (groupId == -1) {
 			return new MapElementList(0);
 		}
-		@Pc(29) int[] local29 = arg1.getFileIds(local10);
-		@Pc(35) MapElementList local35 = new MapElementList(local29.length);
-		for (@Pc(37) int local37 = 0; local37 < local35.anInt5074; local37++) {
-			@Pc(56) Buffer local56 = new Buffer(arg1.fetchFile(local10, local29[local37]));
-			local35.aClass100Array153[local37] = local56.gjstr();
-			local35.aByteArray69[local37] = local56.g1b();
-			local35.aShortArray73[local37] = (short) local56.g2();
-			local35.aShortArray72[local37] = (short) local56.g2();
-			local35.anIntArray444[local37] = local56.g4();
+		@Pc(29) int[] fileIds = archive.getFileIds(groupId);
+		@Pc(35) MapElementList list = new MapElementList(fileIds.length);
+		for (@Pc(37) int i = 0; i < list.count; i++) {
+			@Pc(56) Buffer buf = new Buffer(archive.fetchFile(groupId, fileIds[i]));
+			list.names[i] = buf.gjstr();
+			list.flags[i] = buf.g1b();
+			list.coordX[i] = (short) buf.g2();
+			list.coordY[i] = (short) buf.g2();
+			list.colors[i] = buf.g4();
 		}
-		return local35;
+		return list;
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(IB)Z")
-	public final boolean method3890(@OriginalArg(0) int arg0) {
-		return (this.aByteArray69[arg0] & 0x8) != 0;
+	public final boolean isTextLabel(@OriginalArg(0) int index) {
+		return (this.flags[index] & 0x8) != 0;
 	}
 
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "(II)Z")
-	public final boolean method3892(@OriginalArg(0) int arg0) {
-		return (this.aByteArray69[arg0] & 0x4) != 0;
+	public final boolean isMinimapLabelVisible(@OriginalArg(0) int index) {
+		return (this.flags[index] & 0x4) != 0;
 	}
 
 	@OriginalMember(owner = "client!se", name = "b", descriptor = "(II)I")
-	public final int method3894(@OriginalArg(0) int arg0) {
-		return this.aByteArray69[arg0] & 0x3;
+	public final int getLabelSize(@OriginalArg(0) int index) {
+		return this.flags[index] & 0x3;
 	}
 
 	@OriginalMember(owner = "client!se", name = "c", descriptor = "(II)Z")
-	public final boolean method3897(@OriginalArg(0) int arg0) {
-		return (this.aByteArray69[arg0] & 0x10) == 0;
+	public final boolean isVisible(@OriginalArg(0) int index) {
+		return (this.flags[index] & 0x10) == 0;
 	}
 }

@@ -34,155 +34,155 @@ public class ClientProt {
 	public static final int NO_TIMEOUT = 93; // assumed
 
 	@OriginalMember(owner = "client!vg", name = "a", descriptor = "(Lclient!na;IIBI)V")
-	public static void method4512(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg3) {
-		@Pc(8) Component local8 = InterfaceList.method1418(arg3, arg1);
-		if (local8 == null) {
+	public static void sendButtonClick(@OriginalArg(0) JagString opBase, @OriginalArg(1) int childId, @OriginalArg(2) int op, @OriginalArg(4) int componentId) {
+		@Pc(8) Component component = InterfaceList.getComponent(componentId, childId);
+		if (component == null) {
 			return;
 		}
-		if (local8.onOptionClick != null) {
-			@Pc(19) HookRequest local19 = new HookRequest();
-			local19.arguments = local8.onOptionClick;
-			local19.source = local8;
-			local19.opBase = arg0;
-			local19.op = arg2;
-			ScriptRunner.run(local19);
+		if (component.onOptionClick != null) {
+			@Pc(19) HookRequest hookRequest = new HookRequest();
+			hookRequest.arguments = component.onOptionClick;
+			hookRequest.source = component;
+			hookRequest.opBase = opBase;
+			hookRequest.op = op;
+			ScriptRunner.run(hookRequest);
 		}
-		@Pc(37) boolean local37 = true;
-		if (local8.clientCode > 0) {
-			local37 = MiniMenu.method4265(local8);
+		@Pc(37) boolean sendToServer = true;
+		if (component.clientCode > 0) {
+			sendToServer = MiniMenu.handleSpecialButtonAction(component);
 		}
-		if (!local37 || !InterfaceList.getServerActiveProperties(local8).isButtonEnabled(arg2 - 1)) {
+		if (!sendToServer || !InterfaceList.getServerActiveProperties(component).isButtonEnabled(op - 1)) {
 			return;
 		}
-		if (arg2 == 1) {
+		if (op == 1) {
 			Protocol.outboundBuffer.p1isaac(155);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 2) {
+		if (op == 2) {
 			Protocol.outboundBuffer.p1isaac(196);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 3) {
+		if (op == 3) {
 			Protocol.outboundBuffer.p1isaac(124);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 4) {
+		if (op == 4) {
 			Protocol.outboundBuffer.p1isaac(199);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 5) {
+		if (op == 5) {
 			Protocol.outboundBuffer.p1isaac(234);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 6) {
+		if (op == 6) {
 			Protocol.outboundBuffer.p1isaac(168);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 7) {
+		if (op == 7) {
 			Protocol.outboundBuffer.p1isaac(166);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 8) {
+		if (op == 8) {
 			Protocol.outboundBuffer.p1isaac(64);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 9) {
+		if (op == 9) {
 			Protocol.outboundBuffer.p1isaac(53);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
-		if (arg2 == 10) {
+		if (op == 10) {
 			Protocol.outboundBuffer.p1isaac(9);
-			Protocol.outboundBuffer.p4(arg3);
-			Protocol.outboundBuffer.p2(arg1);
+			Protocol.outboundBuffer.p4(componentId);
+			Protocol.outboundBuffer.p2(childId);
 		}
 	}
 
 	@OriginalMember(owner = "client!pi", name = "c", descriptor = "(III)V")
-	public static void method3502(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(13) int local13 = arg0;
-		if (arg0 > 25) {
-			local13 = 25;
+	public static void sendMovePacket(@OriginalArg(1) int pathLength, @OriginalArg(2) int moveType) {
+		@Pc(13) int clampedLength = pathLength;
+		if (pathLength > 25) {
+			clampedLength = 25;
 		}
-		arg0--;
-		@Pc(23) int local23 = PathFinder.queueX[arg0];
-		@Pc(27) int local27 = PathFinder.queueZ[arg0];
-		if (arg1 == 0) {
+		pathLength--;
+		@Pc(23) int startX = PathFinder.queueX[pathLength];
+		@Pc(27) int startY = PathFinder.queueY[pathLength];
+		if (moveType == 0) {
 			Protocol.outboundBuffer.p1isaac(ClientProt.MOVE_GAMECLICK);
-			Protocol.outboundBuffer.p1(local13 + local13 + 3);
+			Protocol.outboundBuffer.p1(clampedLength + clampedLength + 3);
 		}
-		if (arg1 == 1) {
+		if (moveType == 1) {
 			Protocol.outboundBuffer.p1isaac(ClientProt.MOVE_MINIMAPCLICK);
-			Protocol.outboundBuffer.p1(local13 + local13 + 3 + 14);
+			Protocol.outboundBuffer.p1(clampedLength + clampedLength + 3 + 14);
 		}
-		if (arg1 == 2) {
+		if (moveType == 2) {
 			Protocol.outboundBuffer.p1isaac(77);
-			Protocol.outboundBuffer.p1(local13 + local13 + 3);
+			Protocol.outboundBuffer.p1(clampedLength + clampedLength + 3);
 		}
 		Protocol.outboundBuffer.p1add(Keyboard.pressedKeys[Keyboard.KEY_CTRL] ? 1 : 0);
-		Protocol.outboundBuffer.p2(Camera.originX + local23);
-		Protocol.outboundBuffer.p2add(Camera.originZ + local27);
-		LoginManager.mapFlagZ = PathFinder.queueZ[0];
+		Protocol.outboundBuffer.p2(Camera.originX + startX);
+		Protocol.outboundBuffer.p2add(Camera.originY + startY);
+		LoginManager.mapFlagY = PathFinder.queueY[0];
 		LoginManager.mapFlagX = PathFinder.queueX[0];
-		for (@Pc(126) int local126 = 1; local126 < local13; local126++) {
-			arg0--;
-			Protocol.outboundBuffer.p1add(PathFinder.queueX[arg0] - local23);
-			Protocol.outboundBuffer.p1sub(PathFinder.queueZ[arg0] - local27);
+		for (@Pc(126) int i = 1; i < clampedLength; i++) {
+			pathLength--;
+			Protocol.outboundBuffer.p1add(PathFinder.queueX[pathLength] - startX);
+			Protocol.outboundBuffer.p1sub(PathFinder.queueY[pathLength] - startY);
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "f", descriptor = "(B)V")
 	public static void closeWidget() {
 		Protocol.outboundBuffer.p1isaac(ClientProt.CLOSE_MODAL);
-		for (@Pc(18) ComponentPointer local18 = (ComponentPointer) InterfaceList.openInterfaces.head(); local18 != null; local18 = (ComponentPointer) InterfaceList.openInterfaces.next()) {
-			if (local18.anInt5879 == 0) {
-				InterfaceList.closeInterface(true, local18);
+		for (@Pc(18) ComponentPointer pointer = (ComponentPointer) InterfaceList.openInterfaces.head(); pointer != null; pointer = (ComponentPointer) InterfaceList.openInterfaces.next()) {
+			if (pointer.type == 0) {
+				InterfaceList.closeInterface(true, pointer);
 			}
 		}
-		if (Cs1ScriptRunner.aClass13_10 != null) {
-			InterfaceList.redraw(Cs1ScriptRunner.aClass13_10);
-			Cs1ScriptRunner.aClass13_10 = null;
+		if (Cs1ScriptRunner.pleaseWaitComponent != null) {
+			InterfaceList.redraw(Cs1ScriptRunner.pleaseWaitComponent);
+			Cs1ScriptRunner.pleaseWaitComponent = null;
 		}
 	}
 
 	@OriginalMember(owner = "client!wh", name = "a", descriptor = "(IILclient!na;)V")
-	public static void clickPlayerOption(@OriginalArg(0) int arg0, @OriginalArg(2) JagString arg1) {
-		@Pc(7) JagString local7 = arg1.method3159().toTitleCase();
-		@Pc(13) boolean local13 = false;
-		for (@Pc(15) int local15 = 0; local15 < PlayerList.size; local15++) {
-			@Pc(28) Player local28 = PlayerList.players[PlayerList.ids[local15]];
-			if (local28 != null && local28.username != null && local28.username.equalsIgnoreCase(local7)) {
-				local13 = true;
-				PathFinder.findPath(PlayerList.self.movementQueueZ[0], 0, 1, false, 0, local28.movementQueueX[0], 1, 0, 2, local28.movementQueueZ[0], PlayerList.self.movementQueueX[0]);
-				if (arg0 == 1) {
+	public static void clickPlayerOption(@OriginalArg(0) int option, @OriginalArg(2) JagString playerName) {
+		@Pc(7) JagString formattedName = playerName.toBase37Name().toTitleCase();
+		@Pc(13) boolean found = false;
+		for (@Pc(15) int i = 0; i < PlayerList.size; i++) {
+			@Pc(28) Player player = PlayerList.players[PlayerList.ids[i]];
+			if (player != null && player.username != null && player.username.equalsIgnoreCase(formattedName)) {
+				found = true;
+				PathFinder.findPath(PlayerList.self.movementQueueY[0], 0, 1, false, 0, player.movementQueueX[0], 1, 0, 2, player.movementQueueY[0], PlayerList.self.movementQueueX[0]);
+				if (option == 1) {
 					Protocol.outboundBuffer.p1isaac(68);
-					Protocol.outboundBuffer.ip2add(PlayerList.ids[local15]);
-				} else if (arg0 == 4) {
+					Protocol.outboundBuffer.ip2add(PlayerList.ids[i]);
+				} else if (option == 4) {
 					Protocol.outboundBuffer.p1isaac(180);
-					Protocol.outboundBuffer.ip2add(PlayerList.ids[local15]);
-				} else if (arg0 == 5) {
+					Protocol.outboundBuffer.ip2add(PlayerList.ids[i]);
+				} else if (option == 5) {
 					Protocol.outboundBuffer.p1isaac(4);
-					Protocol.outboundBuffer.ip2(PlayerList.ids[local15]);
-				} else if (arg0 == 6) {
+					Protocol.outboundBuffer.ip2(PlayerList.ids[i]);
+				} else if (option == 6) {
 					Protocol.outboundBuffer.p1isaac(133);
-					Protocol.outboundBuffer.ip2(PlayerList.ids[local15]);
-				} else if (arg0 == 7) {
+					Protocol.outboundBuffer.ip2(PlayerList.ids[i]);
+				} else if (option == 7) {
 					Protocol.outboundBuffer.p1isaac(114);
-					Protocol.outboundBuffer.ip2add(PlayerList.ids[local15]);
+					Protocol.outboundBuffer.ip2add(PlayerList.ids[i]);
 				}
 				break;
 			}
 		}
-		if (!local13) {
-			Chat.add(JagString.EMPTY, 0, JagString.concatenate(new JagString[]{LocalizedText.UNABLETOFIND, local7}));
+		if (!found) {
+			Chat.add(JagString.EMPTY, 0, JagString.concatenate(new JagString[]{LocalizedText.UNABLETOFIND, formattedName}));
 		}
 	}
 
@@ -196,23 +196,23 @@ public class ClientProt {
 	}
 
 	@OriginalMember(owner = "client!ah", name = "a", descriptor = "(BZ)V")
-	public static void ping(@OriginalArg(1) boolean arg0) {
+	public static void ping(@OriginalArg(1) boolean force) {
 		client.audioLoop();
 		if (client.gameState != 30 && client.gameState != 25) {
 			return;
 		}
-		Protocol.anInt3251++;
-		if (Protocol.anInt3251 < 50 && !arg0) {
+		Protocol.ticksSinceWrite++;
+		if (Protocol.ticksSinceWrite < 50 && !force) {
 			return;
 		}
-		Protocol.anInt3251 = 0;
-		if (!LoginManager.aBoolean247 && Protocol.socket != null) {
+		Protocol.ticksSinceWrite = 0;
+		if (!LoginManager.pingFailed && Protocol.socket != null) {
 			Protocol.outboundBuffer.p1isaac(ClientProt.NO_TIMEOUT);
 			try {
 				Protocol.socket.write(Protocol.outboundBuffer.data, Protocol.outboundBuffer.offset);
 				Protocol.outboundBuffer.offset = 0;
-			} catch (@Pc(53) IOException local53) {
-				LoginManager.aBoolean247 = true;
+			} catch (@Pc(53) IOException ex) {
+				LoginManager.pingFailed = true;
 			}
 		}
 		client.audioLoop();

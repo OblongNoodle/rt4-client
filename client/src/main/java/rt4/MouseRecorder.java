@@ -34,7 +34,7 @@ public final class MouseRecorder implements Runnable {
 	@Override
 	public final void run() {
 		while (this.running) {
-			@Pc(12) Object local12 = this.lock;
+			@Pc(12) Object lock = this.lock;
 			synchronized (this.lock) {
 				if (this.samples < 500) {
 					this.x[this.samples] = Mouse.lastMouseX;

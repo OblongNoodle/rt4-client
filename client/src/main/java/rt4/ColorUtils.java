@@ -6,130 +6,130 @@ import org.openrs2.deob.annotation.Pc;
 
 public class ColorUtils {
 	@OriginalMember(owner = "client!ug", name = "b", descriptor = "[F")
-	public static final float[] aFloatArray28 = new float[4];
+	public static final float[] rgbaBuffer = new float[4];
 
 	@OriginalMember(owner = "client!ib", name = "a", descriptor = "(II)I")
-	public static int rgbToHsl(@OriginalArg(1) int arg0) {
-		@Pc(10) double local10 = (double) (arg0 >> 16 & 0xFF) / 256.0D;
-		@Pc(19) double local19 = (double) (arg0 >> 8 & 0xFF) / 256.0D;
-		@Pc(25) double local25 = 0.0D;
-		@Pc(32) double local32 = (double) (arg0 & 0xFF) / 256.0D;
-		@Pc(34) double local34 = local10;
-		@Pc(37) double local37 = 0;
-		@Pc(39) double local39 = local10;
-		if (local10 > local19) {
-			local34 = local19;
+	public static int rgbToHsl(@OriginalArg(1) int rgb) {
+		@Pc(10) double r = (double) (rgb >> 16 & 0xFF) / 256.0D;
+		@Pc(19) double g = (double) (rgb >> 8 & 0xFF) / 256.0D;
+		@Pc(25) double hue = 0.0D;
+		@Pc(32) double b = (double) (rgb & 0xFF) / 256.0D;
+		@Pc(34) double min = r;
+		@Pc(37) double saturation = 0;
+		@Pc(39) double max = r;
+		if (r > g) {
+			min = g;
 		}
-		if (local32 < local34) {
-			local34 = local32;
+		if (b < min) {
+			min = b;
 		}
-		if (local19 > local10) {
-			local39 = local19;
+		if (g > r) {
+			max = g;
 		}
-		if (local32 > local39) {
-			local39 = local32;
+		if (b > max) {
+			max = b;
 		}
-		@Pc(72) double local72 = (local34 + local39) / 2.0D;
-		if (local34 != local39) {
-			if (local72 < 0.5D) {
-				local37 = (local39 - local34) / (local34 + local39);
+		@Pc(72) double lightness = (min + max) / 2.0D;
+		if (min != max) {
+			if (lightness < 0.5D) {
+				saturation = (max - min) / (min + max);
 			}
-			if (local72 >= 0.5D) {
-				local37 = (local39 - local34) / (2.0D - local39 - local34);
+			if (lightness >= 0.5D) {
+				saturation = (max - min) / (2.0D - max - min);
 			}
-			if (local39 == local10) {
-				local25 = (local19 - local32) / (local39 - local34);
-			} else if (local19 == local39) {
-				local25 = (local32 - local10) / (local39 - local34) + 2.0D;
-			} else if (local39 == local32) {
-				local25 = (local10 - local19) / (-local34 + local39) + 4.0D;
+			if (max == r) {
+				hue = (g - b) / (max - min);
+			} else if (g == max) {
+				hue = (b - r) / (max - min) + 2.0D;
+			} else if (max == b) {
+				hue = (r - g) / (-min + max) + 4.0D;
 			}
 		}
-		@Pc(159) int local159 = (int) (local37 * 256.0D);
-		@Pc(164) int local164 = (int) (local72 * 256.0D);
-		local25 /= 6.0D;
-		if (local164 < 0) {
-			local164 = 0;
-		} else if (local164 > 255) {
-			local164 = 255;
+		@Pc(159) int sat = (int) (saturation * 256.0D);
+		@Pc(164) int light = (int) (lightness * 256.0D);
+		hue /= 6.0D;
+		if (light < 0) {
+			light = 0;
+		} else if (light > 255) {
+			light = 255;
 		}
-		@Pc(188) int local188 = (int) (local25 * 256.0D);
-		if (local159 < 0) {
-			local159 = 0;
-		} else if (local159 > 255) {
-			local159 = 255;
+		@Pc(188) int h = (int) (hue * 256.0D);
+		if (sat < 0) {
+			sat = 0;
+		} else if (sat > 255) {
+			sat = 255;
 		}
-		if (local164 > 243) {
-			local159 >>= 0x4;
-		} else if (local164 > 217) {
-			local159 >>= 0x3;
-		} else if (local164 > 192) {
-			local159 >>= 0x2;
-		} else if (local164 > 179) {
-			local159 >>= 0x1;
+		if (light > 243) {
+			sat >>= 0x4;
+		} else if (light > 217) {
+			sat >>= 0x3;
+		} else if (light > 192) {
+			sat >>= 0x2;
+		} else if (light > 179) {
+			sat >>= 0x1;
 		}
-		return (local188 >> 2 << 10) + (local159 >> 5 << 7) + (local164 >> 1);
+		return (h >> 2 << 10) + (sat >> 5 << 7) + (light >> 1);
 	}
 
 	@OriginalMember(owner = "client!pf", name = "a", descriptor = "(II)[F")
-	public static float[] getRgbFloat(@OriginalArg(0) int arg0) {
-		@Pc(7) float local7 = FogManager.getLightingModelAmbient() + FogManager.getLight0Diffuse();
-		@Pc(9) int local9 = FogManager.getLightColor();
-		@Pc(11) float local11 = 0.58823526F;
-		aFloatArray28[3] = 1.0F;
-		@Pc(24) float local24 = (float) (local9 >> 16 & 0xFF) / 255.0F;
-		@Pc(33) float local33 = (float) (local9 >> 8 & 0xFF) / 255.0F;
-		aFloatArray28[1] = local7 * (float) (arg0 >> 8 & 0xFF) / 255.0F * local33 * local11;
-		aFloatArray28[0] = local7 * local11 * local24 * ((float) (arg0 >> 16 & 0xFF) / 255.0F);
-		@Pc(74) float local74 = (float) (local9 & 0xFF) / 255.0F;
-		aFloatArray28[2] = (float) (arg0 & 0xFF) / 255.0F * local74 * local11 * local7;
-		return aFloatArray28;
+	public static float[] getRgbFloat(@OriginalArg(0) int color) {
+		@Pc(7) float totalLight = FogManager.getLightingModelAmbient() + FogManager.getLight0Diffuse();
+		@Pc(9) int lightColor = FogManager.getLightColor();
+		@Pc(11) float scale = 0.58823526F;
+		rgbaBuffer[3] = 1.0F;
+		@Pc(24) float lightR = (float) (lightColor >> 16 & 0xFF) / 255.0F;
+		@Pc(33) float lightG = (float) (lightColor >> 8 & 0xFF) / 255.0F;
+		rgbaBuffer[1] = totalLight * (float) (color >> 8 & 0xFF) / 255.0F * lightG * scale;
+		rgbaBuffer[0] = totalLight * scale * lightR * ((float) (color >> 16 & 0xFF) / 255.0F);
+		@Pc(74) float lightB = (float) (lightColor & 0xFF) / 255.0F;
+		rgbaBuffer[2] = (float) (color & 0xFF) / 255.0F * lightB * scale * totalLight;
+		return rgbaBuffer;
 	}
 
 	@OriginalMember(owner = "client!gn", name = "a", descriptor = "(IZI)I")
-	public static int multiplyLightnessSafe(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		if (arg1 == -1) {
+	public static int multiplyLightnessSafe(@OriginalArg(0) int multiplier, @OriginalArg(2) int hsl) {
+		if (hsl == -1) {
 			return 12345678;
 		}
-		arg0 = arg0 * (arg1 & 0x7F) >> 7;
-		if (arg0 < 2) {
-			arg0 = 2;
-		} else if (arg0 > 126) {
-			arg0 = 126;
+		multiplier = multiplier * (hsl & 0x7F) >> 7;
+		if (multiplier < 2) {
+			multiplier = 2;
+		} else if (multiplier > 126) {
+			multiplier = 126;
 		}
-		return arg0 + (arg1 & 0xFF80);
+		return multiplier + (hsl & 0xFF80);
 	}
 
 	@OriginalMember(owner = "client!sj", name = "a", descriptor = "(BII)I")
-	public static int multiplyLightnessGrayscale(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		if (arg0 == -2) {
+	public static int multiplyLightnessGrayscale(@OriginalArg(1) int hsl, @OriginalArg(2) int lightness) {
+		if (hsl == -2) {
 			return 12345678;
-		} else if (arg0 == -1) {
-			if (arg1 < 2) {
-				arg1 = 2;
-			} else if (arg1 > 126) {
-				arg1 = 126;
+		} else if (hsl == -1) {
+			if (lightness < 2) {
+				lightness = 2;
+			} else if (lightness > 126) {
+				lightness = 126;
 			}
-			return arg1;
+			return lightness;
 		} else {
-			arg1 = (arg0 & 0x7F) * arg1 >> 7;
-			if (arg1 < 2) {
-				arg1 = 2;
-			} else if (arg1 > 126) {
-				arg1 = 126;
+			lightness = (hsl & 0x7F) * lightness >> 7;
+			if (lightness < 2) {
+				lightness = 2;
+			} else if (lightness > 126) {
+				lightness = 126;
 			}
-			return (arg0 & 0xFF80) + arg1;
+			return (hsl & 0xFF80) + lightness;
 		}
 	}
 
 	@OriginalMember(owner = "client!w", name = "f", descriptor = "(I)I")
-	public static int method4582(@OriginalArg(0) int arg0) {
-		if (arg0 < 2) {
-			arg0 = 2;
-		} else if (arg0 > 126) {
-			arg0 = 126;
+	public static int clampLightness(@OriginalArg(0) int lightness) {
+		if (lightness < 2) {
+			lightness = 2;
+		} else if (lightness > 126) {
+			lightness = 126;
 		}
-		return arg0;
+		return lightness;
 	}
 
 	@OriginalMember(owner = "client!hf", name = "a", descriptor = "(II)I")
@@ -166,16 +166,16 @@ public class ColorUtils {
 	}
 
 	@OriginalMember(owner = "client!ed", name = "a", descriptor = "(IIII)I")
-	public static int method1309(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
-		if (arg0 > 243) {
-			arg1 >>= 0x4;
-		} else if (arg0 > 217) {
-			arg1 >>= 0x3;
-		} else if (arg0 > 192) {
-			arg1 >>= 0x2;
-		} else if (arg0 > 179) {
-			arg1 >>= 0x1;
+	public static int packHsl(@OriginalArg(0) int lightness, @OriginalArg(2) int saturation, @OriginalArg(3) int hue) {
+		if (lightness > 243) {
+			saturation >>= 0x4;
+		} else if (lightness > 217) {
+			saturation >>= 0x3;
+		} else if (lightness > 192) {
+			saturation >>= 0x2;
+		} else if (lightness > 179) {
+			saturation >>= 0x1;
 		}
-		return (arg0 >> 1) + (arg1 >> 5 << 7) + (arg2 >> 2 << 10);
+		return (lightness >> 1) + (saturation >> 5 << 7) + (hue >> 2 << 10);
 	}
 }

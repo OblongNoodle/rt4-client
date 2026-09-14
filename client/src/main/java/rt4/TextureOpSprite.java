@@ -32,57 +32,57 @@ public class TextureOpSprite extends TextureOp {
 		} else if (this.spriteId < 0) {
 			return false;
 		} else {
-			@Pc(43) SoftwareSprite local43 = Texture.spriteGroupId < 0 ? SpriteLoader.loadSoftwareSpriteAutoDetect(Texture.spritesArchive, this.spriteId) : SpriteLoader.loadSoftwareSprite(this.spriteId, Texture.spritesArchive, Texture.spriteGroupId);
-			local43.trim();
-			this.height = local43.height;
-			this.width = local43.width;
-			this.pixels = local43.pixels;
+			@Pc(43) SoftwareSprite sprite = Texture.spriteGroupId < 0 ? SpriteLoader.loadSoftwareSpriteAutoDetect(Texture.spritesArchive, this.spriteId) : SpriteLoader.loadSoftwareSprite(this.spriteId, Texture.spritesArchive, Texture.spriteGroupId);
+			sprite.trim();
+			this.height = sprite.height;
+			this.width = sprite.width;
+			this.pixels = sprite.pixels;
 			return true;
 		}
 	}
 
 	@OriginalMember(owner = "client!nh", name = "f", descriptor = "(I)I")
 	@Override
-	public final int method4631() {
+	public final int getRequiredSpriteId() {
 		return this.spriteId;
 	}
 
 	@OriginalMember(owner = "client!nh", name = "b", descriptor = "(II)[[I")
 	@Override
-	public int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(18) int[][] local18 = this.colorImageCache.get(arg0);
+	public int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(18) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid && this.loadSprite()) {
-			@Pc(31) int[] local31 = local18[0];
-			@Pc(35) int[] local35 = local18[1];
-			@Pc(39) int[] local39 = local18[2];
-			@Pc(59) int local59 = (this.height == Texture.height ? arg0 : this.height * arg0 / Texture.height) * this.width;
-			@Pc(65) int local65;
-			@Pc(78) int local78;
+			@Pc(31) int[] redChannel = output[0];
+			@Pc(35) int[] greenChannel = output[1];
+			@Pc(39) int[] blueChannel = output[2];
+			@Pc(59) int srcRowOffset = (this.height == Texture.height ? row : this.height * row / Texture.height) * this.width;
+			@Pc(65) int i;
+			@Pc(78) int pixel;
 			if (Texture.width == this.width) {
-				for (local65 = 0; local65 < Texture.width; local65++) {
-					local78 = this.pixels[local59++];
-					local39[local65] = (local78 & 0xFF) << 4;
-					local35[local65] = local78 >> 4 & 0xFF0;
-					local31[local65] = local78 >> 12 & 0xFF0;
+				for (i = 0; i < Texture.width; i++) {
+					pixel = this.pixels[srcRowOffset++];
+					blueChannel[i] = (pixel & 0xFF) << 4;
+					greenChannel[i] = pixel >> 4 & 0xFF0;
+					redChannel[i] = pixel >> 12 & 0xFF0;
 				}
 			} else {
-				for (local65 = 0; local65 < Texture.width; local65++) {
-					local78 = this.width * local65 / Texture.width;
-					@Pc(127) int local127 = this.pixels[local59 + local78];
-					local39[local65] = (local127 & 0xFF) << 4;
-					local35[local65] = local127 >> 4 & 0xFF0;
-					local31[local65] = local127 >> 12 & 0xFF0;
+				for (i = 0; i < Texture.width; i++) {
+					pixel = this.width * i / Texture.width;
+					@Pc(127) int color = this.pixels[srcRowOffset + pixel];
+					blueChannel[i] = (color & 0xFF) << 4;
+					greenChannel[i] = color >> 4 & 0xFF0;
+					redChannel[i] = color >> 12 & 0xFF0;
 				}
 			}
 		}
-		return local18;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!nh", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.spriteId = arg1.g2();
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buffer) {
+		if (opcode == 0) {
+			this.spriteId = buffer.g2();
 		}
 	}
 

@@ -19,35 +19,35 @@ public final class CursorType {
 
 	@OriginalMember(owner = "client!ia", name = "a", descriptor = "(B)Lclient!mm;")
 	public final SoftwareSprite getSprite() {
-		@Pc(7) SoftwareSprite local7 = (SoftwareSprite) CursorTypeList.sprites.get(this.spriteId);
-		if (local7 != null) {
-			return local7;
+		@Pc(7) SoftwareSprite sprite = (SoftwareSprite) CursorTypeList.sprites.get(this.spriteId);
+		if (sprite != null) {
+			return sprite;
 		}
-		local7 = SoftwareSprite.loadSoftwareAlphaSprite(CursorTypeList.spritesArchive, this.spriteId);
-		if (local7 != null) {
-			CursorTypeList.sprites.put(local7, this.spriteId);
+		sprite = SoftwareSprite.loadSoftwareAlphaSprite(CursorTypeList.spritesArchive, this.spriteId);
+		if (sprite != null) {
+			CursorTypeList.sprites.put(sprite, this.spriteId);
 		}
-		return local7;
+		return sprite;
 	}
 
 	@OriginalMember(owner = "client!ia", name = "a", descriptor = "(Lclient!wa;IB)V")
-	public final void decode(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1) {
+	public final void decode(@OriginalArg(0) Buffer buf, @OriginalArg(1) int id) {
 		while (true) {
-			@Pc(18) int local18 = arg0.g1();
-			if (local18 == 0) {
+			@Pc(18) int opcode = buf.g1();
+			if (opcode == 0) {
 				return;
 			}
-			this.decode(arg1, local18, arg0);
+			this.decode(id, opcode, buf);
 		}
 	}
 
 	@OriginalMember(owner = "client!ia", name = "a", descriptor = "(IIILclient!wa;)V")
-	private void decode(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) Buffer arg2) {
-		if (arg1 == 1) {
-			this.spriteId = arg2.g2();
-		} else if (arg1 == 2) {
-			this.hotSpotX = arg2.g1();
-			this.hotSpotY = arg2.g1();
+	private void decode(@OriginalArg(1) int id, @OriginalArg(2) int opcode, @OriginalArg(3) Buffer buf) {
+		if (opcode == 1) {
+			this.spriteId = buf.g2();
+		} else if (opcode == 2) {
+			this.hotSpotX = buf.g1();
+			this.hotSpotY = buf.g1();
 		}
 	}
 }

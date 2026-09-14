@@ -8,11 +8,11 @@ public class LocTypeList {
 	@OriginalMember(owner = "client!oe", name = "j", descriptor = "Lclient!n;")
 	public static final SoftLruHashTable types = new SoftLruHashTable(64);
 	@OriginalMember(owner = "client!nf", name = "f", descriptor = "Lclient!n;")
-	public static final SoftLruHashTable aClass99_24 = new SoftLruHashTable(500);
+	public static final SoftLruHashTable rawModelCache = new SoftLruHashTable(500);
 	@OriginalMember(owner = "client!he", name = "fb", descriptor = "Lclient!n;")
-	public static final SoftLruHashTable aClass99_14 = new SoftLruHashTable(30);
+	public static final SoftLruHashTable staticEntityCache = new SoftLruHashTable(30);
 	@OriginalMember(owner = "client!vf", name = "l", descriptor = "Lclient!n;")
-	public static final SoftLruHashTable aClass99_36 = new SoftLruHashTable(50);
+	public static final SoftLruHashTable animatedEntityCache = new SoftLruHashTable(50);
 	@OriginalMember(owner = "client!cg", name = "c", descriptor = "Z")
 	public static boolean allowMembers;
 	@OriginalMember(owner = "client!lg", name = "g", descriptor = "Lclient!ve;")
@@ -55,40 +55,40 @@ public class LocTypeList {
 	}
 
 	@OriginalMember(owner = "client!oi", name = "a", descriptor = "(ILclient!ve;Lclient!ve;Z)V")
-	public static void init(@OriginalArg(1) Js5 arg0, @OriginalArg(2) Js5 arg1) {
+	public static void init(@OriginalArg(1) Js5 locsJs5, @OriginalArg(2) Js5 modelsJs5) {
 		allowMembers = true;
-		modelsArchive = arg1;
-		locsArchive = arg0;
+		modelsArchive = modelsJs5;
+		locsArchive = locsJs5;
 	}
 
 	@OriginalMember(owner = "client!oe", name = "b", descriptor = "(I)V")
 	public static void removeSoft() {
 		types.removeSoft();
-		aClass99_24.removeSoft();
-		aClass99_14.removeSoft();
-		aClass99_36.removeSoft();
+		rawModelCache.removeSoft();
+		staticEntityCache.removeSoft();
+		animatedEntityCache.removeSoft();
 	}
 
 	@OriginalMember(owner = "client!va", name = "b", descriptor = "(II)V")
 	public static void clean() {
 		types.clean(5);
-		aClass99_24.clean(5);
-		aClass99_14.clean(5);
-		aClass99_36.clean(5);
+		rawModelCache.clean(5);
+		staticEntityCache.clean(5);
+		animatedEntityCache.clean(5);
 	}
 
 	@OriginalMember(owner = "client!hb", name = "c", descriptor = "(I)V")
 	public static void clear() {
 		types.clear();
-		aClass99_24.clear();
-		aClass99_14.clear();
-		aClass99_36.clear();
+		rawModelCache.clear();
+		staticEntityCache.clear();
+		animatedEntityCache.clear();
 	}
 
 	@OriginalMember(owner = "client!pe", name = "a", descriptor = "(BZ)V")
-	public static void setAllowMembers(@OriginalArg(1) boolean arg0) {
-		if (arg0 != allowMembers) {
-			allowMembers = arg0;
+	public static void setAllowMembers(@OriginalArg(1) boolean allow) {
+		if (allow != allowMembers) {
+			allowMembers = allow;
 			clear();
 		}
 	}

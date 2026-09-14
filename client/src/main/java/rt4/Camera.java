@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.Pc;
 
 public class Camera {
 	@OriginalMember(owner = "client!id", name = "d", descriptor = "[[[I")
-	public static final int[][][] anIntArrayArrayArray9 = new int[2][][];
+	public static final int[][][] cameraPathData = new int[2][][];
 	@OriginalMember(owner = "client!sa", name = "Q", descriptor = "[I")
 	public static final int[] cameraJitter = new int[5];
 	@OriginalMember(owner = "client!wh", name = "m", descriptor = "[I")
@@ -25,7 +25,7 @@ public class Camera {
 	public static double pitchAccel = 0;
 
 	@OriginalMember(owner = "client!ii", name = "a", descriptor = "I")
-	public static int cameraZ;
+	public static int cameraY;
 	@OriginalMember(owner = "client!gg", name = "bb", descriptor = "I")
 	public static int cameraX;
 	@OriginalMember(owner = "client!tg", name = "b", descriptor = "I")
@@ -35,68 +35,68 @@ public class Camera {
 	@OriginalMember(owner = "client!sg", name = "o", descriptor = "I")
 	public static int cameraType;
 	@OriginalMember(owner = "client!g", name = "d", descriptor = "I")
-	public static int anInt2119 = 0;
+	public static int lookAtSplineIndex = 0;
 	@OriginalMember(owner = "client!eb", name = "t", descriptor = "I")
-	public static int anInt1694 = -1;
+	public static int lookAtPathId = -1;
 	@OriginalMember(owner = "client!j", name = "K", descriptor = "I")
-	public static int anInt5843 = 0;
+	public static int moveSplineSpeedEnd = 0;
 	@OriginalMember(owner = "client!sh", name = "c", descriptor = "I")
-	public static int anInt5101 = 0;
+	public static int moveSplineSpeedStart = 0;
 	@OriginalMember(owner = "client!t", name = "z", descriptor = "I")
-	public static int anInt5224 = 0;
+	public static int splineProgress = 0;
 	@OriginalMember(owner = "client!k", name = "i", descriptor = "I")
-	public static int anInt3125 = 0;
+	public static int moveSplineIndex = 0;
 	@OriginalMember(owner = "client!me", name = "k", descriptor = "I")
-	public static int anInt3718 = -1;
+	public static int movePathId = -1;
 	@OriginalMember(owner = "client!lc", name = "n", descriptor = "I")
-	public static int originZ;
+	public static int originY;
 	@OriginalMember(owner = "client!se", name = "a", descriptor = "I")
 	public static int originX;
 	@OriginalMember(owner = "client!bc", name = "I", descriptor = "Z")
-	public static boolean aBoolean16 = false;
+	public static boolean splineJustFinished = false;
 	@OriginalMember(owner = "client!km", name = "Pc", descriptor = "I")
 	public static int renderX;
 	@OriginalMember(owner = "client!kh", name = "f", descriptor = "I")
-	public static int renderZ;
+	public static int renderY;
 	@OriginalMember(owner = "client!uc", name = "f", descriptor = "I")
-	public static int anInt4232;
+	public static int lockedTargetY;
 	@OriginalMember(owner = "client!ug", name = "h", descriptor = "I")
-	public static int anInt5449;
+	public static int lockedLookAtX;
 	@OriginalMember(owner = "client!vj", name = "d", descriptor = "I")
-	public static int anInt5765;
+	public static int lockedLookAtY;
 	@OriginalMember(owner = "client!tm", name = "g", descriptor = "I")
-	public static int anInt5375;
+	public static int lockedTargetX;
 	@OriginalMember(owner = "client!pa", name = "K", descriptor = "Z")
-	public static boolean aBoolean205 = false;
+	public static boolean splineFinished = false;
 	@OriginalMember(owner = "client!gk", name = "d", descriptor = "F")
-	public static float aFloat10;
+	public static float yawRadians;
 	public static int ZOOM = 600;
 	@OriginalMember(owner = "client!il", name = "O", descriptor = "I")
-	public static int anInt4612;
+	public static int lockedMoveSpeed;
 	@OriginalMember(owner = "client!eg", name = "a", descriptor = "I")
-	public static int anInt1744;
+	public static int lockedLookAtHeight;
 	@OriginalMember(owner = "client!kf", name = "f", descriptor = "I")
-	public static int anInt5230;
+	public static int lockedMinStep;
 	@OriginalMember(owner = "client!ke", name = "U", descriptor = "I")
-	public static int anInt3291 = 0;
+	public static int cameraOffsetX = 0;
 	@OriginalMember(owner = "client!uc", name = "a", descriptor = "I")
-	public static int anInt4229 = 2;
+	public static int offsetXDelta = 2;
 	@OriginalMember(owner = "client!ta", name = "B", descriptor = "I")
-	public static int anInt5245 = 0;
+	public static int maxPitchDistance = 0;
 	@OriginalMember(owner = "client!qk", name = "h", descriptor = "I")
-	public static int anInt4774 = 0;
+	public static int cameraOffsetY = 0;
 	@OriginalMember(owner = "client!sj", name = "H", descriptor = "I")
-	public static int anInt5161 = 0;
+	public static int yawDrift = 0;
 	@OriginalMember(owner = "client!af", name = "d", descriptor = "I")
-	public static int anInt40;
+	public static int renderZ;
 	@OriginalMember(owner = "client!lg", name = "d", descriptor = "F")
-	public static float aFloat15;
+	public static float pitchRadians;
 	@OriginalMember(owner = "client!sk", name = "jb", descriptor = "I")
-	public static int anInt5203;
+	public static int lockedTargetHeight;
 	@OriginalMember(owner = "client!t", name = "o", descriptor = "I")
-	public static int anInt5217;
+	public static int lockedAngleSpeed;
 	@OriginalMember(owner = "client!t", name = "A", descriptor = "I")
-	public static int anInt5225;
+	public static int lockedMinMoveStep;
 
 	public static double mod(double a, double b) {
 		return ((a % b) + b) % b;
@@ -111,217 +111,217 @@ public class Camera {
 			pitchTarget = 383;
 		}
 		yawTarget = mod(yawTarget, 2047.0d);
-		@Pc(33) int local33 = cameraX >> 7;
-		@Pc(37) int local37 = cameraZ >> 7;
-		@Pc(43) int local43 = SceneGraph.getTileHeight(Player.plane, cameraX, cameraZ);
-		@Pc(45) int local45 = 0;
-		@Pc(64) int local64;
-		if (local33 > 3 && local37 > 3 && local33 < 100 && local37 < 100) {
-			for (local64 = local33 - 4; local64 <= local33 + 4; local64++) {
-				for (@Pc(73) int local73 = local37 - 4; local73 <= local37 + 4; local73++) {
-					@Pc(80) int local80 = Player.plane;
-					if (local80 < 3 && (SceneGraph.renderFlags[1][local64][local73] & 0x2) == 2) {
-						local80++;
+		@Pc(33) int tileX = cameraX >> 7;
+		@Pc(37) int tileY = cameraY >> 7;
+		@Pc(43) int groundHeight = SceneGraph.getTileHeight(Player.plane, cameraX, cameraY);
+		@Pc(45) int maxHeight = 0;
+		@Pc(64) int i;
+		if (tileX > 3 && tileY > 3 && tileX < 100 && tileY < 100) {
+			for (i = tileX - 4; i <= tileX + 4; i++) {
+				for (@Pc(73) int j = tileY - 4; j <= tileY + 4; j++) {
+					@Pc(80) int plane = Player.plane;
+					if (plane < 3 && (SceneGraph.renderFlags[1][i][j] & 0x2) == 2) {
+						plane++;
 					}
-					@Pc(117) int local117 = (SceneGraph.aByteArrayArrayArray13[local80][local64][local73] & 0xFF) * 8 + local43 - SceneGraph.tileHeights[local80][local64][local73];
-					if (local117 > local45) {
-						local45 = local117;
+					@Pc(117) int heightDiff = (SceneGraph.occlusionHeights[plane][i][j] & 0xFF) * 8 + groundHeight - SceneGraph.tileHeights[plane][i][j];
+					if (heightDiff > maxHeight) {
+						maxHeight = heightDiff;
 					}
 				}
 			}
 		}
-		local64 = local45 * 192;
-		if (local64 > 98048) {
-			local64 = 98048;
+		i = maxHeight * 192;
+		if (i > 98048) {
+			i = 98048;
 		}
-		if (local64 < 32768) {
-			local64 = 32768;
+		if (i < 32768) {
+			i = 32768;
 		}
-		if (anInt5245 < local64) {
-			anInt5245 += (local64 - anInt5245) / 24;
-		} else if (local64 < anInt5245) {
-			anInt5245 += (local64 - anInt5245) / 80;
+		if (maxPitchDistance < i) {
+			maxPitchDistance += (i - maxPitchDistance) / 24;
+		} else if (i < maxPitchDistance) {
+			maxPitchDistance += (i - maxPitchDistance) / 80;
 		}
 	}
 
 	@OriginalMember(owner = "client!jl", name = "c", descriptor = "(I)V")
 	public static void updateLockedCamera() {
-		@Pc(9) int local9 = anInt4232 * 128 + 64;
-		@Pc(15) int local15 = anInt5375 * 128 + 64;
-		@Pc(23) int local23 = SceneGraph.getTileHeight(Player.plane, local15, local9) - anInt5203;
-		if (anInt4612 >= 100) {
-			renderX = anInt5375 * 128 + 64;
-			renderZ = anInt4232 * 128 + 64;
-			anInt40 = SceneGraph.getTileHeight(Player.plane, renderX, renderZ) - anInt5203;
+		@Pc(9) int targetFineY = lockedTargetY * 128 + 64;
+		@Pc(15) int targetFineX = lockedTargetX * 128 + 64;
+		@Pc(23) int targetZ = SceneGraph.getTileHeight(Player.plane, targetFineX, targetFineY) - lockedTargetHeight;
+		if (lockedMoveSpeed >= 100) {
+			renderX = lockedTargetX * 128 + 64;
+			renderY = lockedTargetY * 128 + 64;
+			renderZ = SceneGraph.getTileHeight(Player.plane, renderX, renderY) - lockedTargetHeight;
 		} else {
-			if (renderX < local15) {
-				renderX += anInt5225 + anInt4612 * (local15 - renderX) / 1000;
-				if (renderX > local15) {
-					renderX = local15;
+			if (renderX < targetFineX) {
+				renderX += lockedMinMoveStep + lockedMoveSpeed * (targetFineX - renderX) / 1000;
+				if (renderX > targetFineX) {
+					renderX = targetFineX;
 				}
 			}
-			if (anInt40 < local23) {
-				anInt40 += (local23 - anInt40) * anInt4612 / 1000 + anInt5225;
-				if (anInt40 > local23) {
-					anInt40 = local23;
+			if (renderZ < targetZ) {
+				renderZ += (targetZ - renderZ) * lockedMoveSpeed / 1000 + lockedMinMoveStep;
+				if (renderZ > targetZ) {
+					renderZ = targetZ;
 				}
 			}
-			if (renderX > local15) {
-				renderX -= anInt5225 + (renderX - local15) * anInt4612 / 1000;
-				if (renderX < local15) {
-					renderX = local15;
+			if (renderX > targetFineX) {
+				renderX -= lockedMinMoveStep + (renderX - targetFineX) * lockedMoveSpeed / 1000;
+				if (renderX < targetFineX) {
+					renderX = targetFineX;
 				}
 			}
-			if (renderZ < local9) {
-				renderZ += anInt5225 + anInt4612 * (local9 - renderZ) / 1000;
-				if (local9 < renderZ) {
-					renderZ = local9;
+			if (renderY < targetFineY) {
+				renderY += lockedMinMoveStep + lockedMoveSpeed * (targetFineY - renderY) / 1000;
+				if (targetFineY < renderY) {
+					renderY = targetFineY;
 				}
 			}
-			if (local23 < anInt40) {
-				anInt40 -= (anInt40 - local23) * anInt4612 / 1000 + anInt5225;
-				if (local23 > anInt40) {
-					anInt40 = local23;
+			if (targetZ < renderZ) {
+				renderZ -= (renderZ - targetZ) * lockedMoveSpeed / 1000 + lockedMinMoveStep;
+				if (targetZ > renderZ) {
+					renderZ = targetZ;
 				}
 			}
-			if (renderZ > local9) {
-				renderZ -= anInt5225 + (renderZ - local9) * anInt4612 / 1000;
-				if (local9 > renderZ) {
-					renderZ = local9;
+			if (renderY > targetFineY) {
+				renderY -= lockedMinMoveStep + (renderY - targetFineY) * lockedMoveSpeed / 1000;
+				if (targetFineY > renderY) {
+					renderY = targetFineY;
 				}
 			}
 		}
-		local9 = anInt5765 * 128 + 64;
-		local15 = anInt5449 * 128 + 64;
-		local23 = SceneGraph.getTileHeight(Player.plane, local15, local9) - anInt1744;
-		@Pc(236) int local236 = local23 - anInt40;
-		@Pc(241) int local241 = local9 - renderZ;
-		@Pc(246) int local246 = local15 - renderX;
-		@Pc(257) int local257 = (int) Math.sqrt(local246 * local246 + local241 * local241);
-		@Pc(268) int local268 = (int) (Math.atan2(local236, local257) * 325.949D) & 0x7FF;
-		if (local268 < 128) {
-			local268 = 128;
+		targetFineY = lockedLookAtY * 128 + 64;
+		targetFineX = lockedLookAtX * 128 + 64;
+		targetZ = SceneGraph.getTileHeight(Player.plane, targetFineX, targetFineY) - lockedLookAtHeight;
+		@Pc(236) int dz = targetZ - renderZ;
+		@Pc(241) int dy = targetFineY - renderY;
+		@Pc(246) int dx = targetFineX - renderX;
+		@Pc(257) int horizontalDist = (int) Math.sqrt(dx * dx + dy * dy);
+		@Pc(268) int targetPitch = (int) (Math.atan2(dz, horizontalDist) * 325.949D) & 0x7FF;
+		if (targetPitch < 128) {
+			targetPitch = 128;
 		}
-		if (local268 > 383) {
-			local268 = 383;
+		if (targetPitch > 383) {
+			targetPitch = 383;
 		}
-		@Pc(292) int local292 = (int) (-325.949D * Math.atan2(local246, local241)) & 0x7FF;
-		if (cameraPitch < local268) {
-			cameraPitch += anInt5230 + anInt5217 * (local268 - cameraPitch) / 1000;
-			if (cameraPitch > local268) {
-				cameraPitch = local268;
+		@Pc(292) int targetYaw = (int) (-325.949D * Math.atan2(dx, dy)) & 0x7FF;
+		if (cameraPitch < targetPitch) {
+			cameraPitch += lockedMinStep + lockedAngleSpeed * (targetPitch - cameraPitch) / 1000;
+			if (cameraPitch > targetPitch) {
+				cameraPitch = targetPitch;
 			}
 		}
-		if (cameraPitch > local268) {
-			cameraPitch -= (cameraPitch - local268) * anInt5217 / 1000 + anInt5230;
-			if (cameraPitch < local268) {
-				cameraPitch = local268;
+		if (cameraPitch > targetPitch) {
+			cameraPitch -= (cameraPitch - targetPitch) * lockedAngleSpeed / 1000 + lockedMinStep;
+			if (cameraPitch < targetPitch) {
+				cameraPitch = targetPitch;
 			}
 		}
-		@Pc(350) int local350 = local292 - cameraYaw;
-		if (local350 > 1024) {
-			local350 -= 2048;
+		@Pc(350) int yawDelta = targetYaw - cameraYaw;
+		if (yawDelta > 1024) {
+			yawDelta -= 2048;
 		}
-		if (local350 < -1024) {
-			local350 += 2048;
+		if (yawDelta < -1024) {
+			yawDelta += 2048;
 		}
-		if (local350 > 0) {
-			cameraYaw += local350 * anInt5217 / 1000 + anInt5230;
+		if (yawDelta > 0) {
+			cameraYaw += yawDelta * lockedAngleSpeed / 1000 + lockedMinStep;
 			cameraYaw &= 0x7FF;
 		}
-		if (local350 < 0) {
-			cameraYaw -= anInt5217 * -local350 / 1000 + anInt5230;
+		if (yawDelta < 0) {
+			cameraYaw -= lockedAngleSpeed * -yawDelta / 1000 + lockedMinStep;
 			cameraYaw &= 0x7FF;
 		}
-		@Pc(404) int local404 = local292 - cameraYaw;
-		if (local404 > 1024) {
-			local404 -= 2048;
+		@Pc(404) int yawCheck = targetYaw - cameraYaw;
+		if (yawCheck > 1024) {
+			yawCheck -= 2048;
 		}
-		if (local404 < -1024) {
-			local404 += 2048;
+		if (yawCheck < -1024) {
+			yawCheck += 2048;
 		}
-		if (local404 < 0 && local350 > 0 || local404 > 0 && local350 < 0) {
-			cameraYaw = local292;
+		if (yawCheck < 0 && yawDelta > 0 || yawCheck > 0 && yawDelta < 0) {
+			cameraYaw = targetYaw;
 		}
 	}
 
 	@OriginalMember(owner = "client!da", name = "d", descriptor = "(I)V")
 	public static void updateLoginScreenCamera() {
-		if (anInt3718 == -1 || anInt1694 == -1) {
+		if (movePathId == -1 || lookAtPathId == -1) {
 			return;
 		}
-		@Pc(27) int local27 = (anInt5224 * (anInt5843 - anInt5101) >> 16) + anInt5101;
+		@Pc(27) int speed = (splineProgress * (moveSplineSpeedEnd - moveSplineSpeedStart) >> 16) + moveSplineSpeedStart;
 		@Pc(30) float[] renderCoordinates = new float[3];
-		anInt5224 += local27;
-		if (anInt5224 >= 65535) {
-			anInt5224 = 65535;
-			aBoolean16 = !aBoolean205;
-			aBoolean205 = true;
+		splineProgress += speed;
+		if (splineProgress >= 65535) {
+			splineProgress = 65535;
+			splineJustFinished = !splineFinished;
+			splineFinished = true;
 		} else {
-			aBoolean205 = false;
-			aBoolean16 = false;
+			splineFinished = false;
+			splineJustFinished = false;
 		}
-		@Pc(66) float local66 = (float) anInt5224 / 65535.0F;
-		@Pc(70) int local70 = anInt3125 * 2;
-		@Pc(141) int local141;
-		@Pc(131) int local131;
-		@Pc(111) int local111;
-		@Pc(119) int local119;
-		@Pc(146) int local146;
-		@Pc(155) int local155;
-		@Pc(173) int local173;
-		for (@Pc(72) int local72 = 0; local72 < 3; local72++) {
-			local111 = (anIntArrayArrayArray9[anInt3718][local70 + 2][local72] + anIntArrayArrayArray9[anInt3718][local70 + 2][local72] - anIntArrayArrayArray9[anInt3718][local70 + 3][local72]) * 3;
-			local119 = anIntArrayArrayArray9[anInt3718][local70][local72];
-			local131 = anIntArrayArrayArray9[anInt3718][local70 + 1][local72] * 3;
-			local141 = anIntArrayArrayArray9[anInt3718][local70][local72] * 3;
-			local146 = local131 - local141;
-			local155 = local111 + local141 - local131 * 2;
-			local173 = anIntArrayArrayArray9[anInt3718][local70 + 2][local72] + local131 - local119 - local111;
-			renderCoordinates[local72] = (float) local119 + (((float) local173 * local66 + (float) local155) * local66 + (float) local146) * local66;
+		@Pc(66) float t = (float) splineProgress / 65535.0F;
+		@Pc(70) int moveOffset = moveSplineIndex * 2;
+		@Pc(141) int c0;
+		@Pc(131) int c1;
+		@Pc(111) int c2;
+		@Pc(119) int c3;
+		@Pc(146) int c4;
+		@Pc(155) int c5;
+		@Pc(173) int c6;
+		for (@Pc(72) int axis = 0; axis < 3; axis++) {
+			c2 = (cameraPathData[movePathId][moveOffset + 2][axis] + cameraPathData[movePathId][moveOffset + 2][axis] - cameraPathData[movePathId][moveOffset + 3][axis]) * 3;
+			c3 = cameraPathData[movePathId][moveOffset][axis];
+			c1 = cameraPathData[movePathId][moveOffset + 1][axis] * 3;
+			c0 = cameraPathData[movePathId][moveOffset][axis] * 3;
+			c4 = c1 - c0;
+			c5 = c2 + c0 - c1 * 2;
+			c6 = cameraPathData[movePathId][moveOffset + 2][axis] + c1 - c3 - c2;
+			renderCoordinates[axis] = (float) c3 + (((float) c6 * t + (float) c5) * t + (float) c4) * t;
 		}
-		anInt40 = (int) renderCoordinates[1] * -1;
+		renderZ = (int) renderCoordinates[1] * -1;
 		renderX = (int) renderCoordinates[0] - originX * 128;
-		renderZ = (int) renderCoordinates[2] - originZ * 128;
-		@Pc(226) float[] local226 = new float[3];
-		local141 = anInt2119 * 2;
-		for (local131 = 0; local131 < 3; local131++) {
-			local111 = anIntArrayArrayArray9[anInt1694][local141][local131] * 3;
-			local146 = (anIntArrayArrayArray9[anInt1694][local141 + 2][local131] + anIntArrayArrayArray9[anInt1694][local141 + 2][local131] - anIntArrayArrayArray9[anInt1694][local141 + 3][local131]) * 3;
-			local155 = anIntArrayArrayArray9[anInt1694][local141][local131];
-			local119 = anIntArrayArrayArray9[anInt1694][local141 + 1][local131] * 3;
-			local173 = local119 - local111;
-			@Pc(313) int local313 = local146 + local111 - local119 * 2;
-			@Pc(331) int local331 = anIntArrayArrayArray9[anInt1694][local141 + 2][local131] + local119 - local146 - local155;
-			local226[local131] = (float) local155 + local66 * (local66 * (local66 * (float) local331 + (float) local313) + (float) local173);
+		renderY = (int) renderCoordinates[2] - originY * 128;
+		@Pc(226) float[] lookAtCoords = new float[3];
+		c0 = lookAtSplineIndex * 2;
+		for (c1 = 0; c1 < 3; c1++) {
+			c2 = cameraPathData[lookAtPathId][c0][c1] * 3;
+			c4 = (cameraPathData[lookAtPathId][c0 + 2][c1] + cameraPathData[lookAtPathId][c0 + 2][c1] - cameraPathData[lookAtPathId][c0 + 3][c1]) * 3;
+			c5 = cameraPathData[lookAtPathId][c0][c1];
+			c3 = cameraPathData[lookAtPathId][c0 + 1][c1] * 3;
+			c6 = c3 - c2;
+			@Pc(313) int quadCoeff = c4 + c2 - c3 * 2;
+			@Pc(331) int cubicCoeff = cameraPathData[lookAtPathId][c0 + 2][c1] + c3 - c4 - c5;
+			lookAtCoords[c1] = (float) c5 + t * (t * (t * (float) cubicCoeff + (float) quadCoeff) + (float) c6);
 		}
-		@Pc(363) float local363 = local226[0] - renderCoordinates[0];
-		@Pc(371) float local371 = local226[2] - renderCoordinates[2];
-		@Pc(382) float local382 = (local226[1] - renderCoordinates[1]) * -1.0F;
-		@Pc(392) double local392 = Math.sqrt(local371 * local371 + local363 * local363);
-		aFloat15 = (float) Math.atan2(local382, local392);
-		aFloat10 = -((float) Math.atan2(local363, local371));
-		cameraPitch = (int) ((double) aFloat15 * 325.949D) & 0x7FF;
-		cameraYaw = (int) ((double) aFloat10 * 325.949D) & 0x7FF;
+		@Pc(363) float dx = lookAtCoords[0] - renderCoordinates[0];
+		@Pc(371) float dz = lookAtCoords[2] - renderCoordinates[2];
+		@Pc(382) float dy = (lookAtCoords[1] - renderCoordinates[1]) * -1.0F;
+		@Pc(392) double horizontalDist = Math.sqrt(dz * dz + dx * dx);
+		pitchRadians = (float) Math.atan2(dy, horizontalDist);
+		yawRadians = -((float) Math.atan2(dx, dz));
+		cameraPitch = (int) ((double) pitchRadians * 325.949D) & 0x7FF;
+		cameraYaw = (int) ((double) yawRadians * 325.949D) & 0x7FF;
 	}
 
 	@OriginalMember(owner = "client!vd", name = "a", descriptor = "(IIIIBI)V")
-	public static void method3849(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
-		anInt5230 = arg2;
-		anInt5765 = arg1;
-		anInt5217 = arg4;
-		anInt5449 = arg3;
-		anInt1744 = arg0;
-		if (anInt5217 >= 100) {
-			@Pc(30) int local30 = anInt5449 * 128 + 64;
-			@Pc(36) int local36 = anInt5765 * 128 + 64;
-			@Pc(44) int local44 = SceneGraph.getTileHeight(Player.plane, local30, local36) - anInt1744;
-			@Pc(49) int local49 = local44 - anInt40;
-			@Pc(54) int local54 = local30 - renderX;
-			@Pc(59) int local59 = local36 - renderZ;
-			@Pc(70) int local70 = (int) Math.sqrt(local59 * local59 + local54 * local54);
-			cameraPitch = (int) (Math.atan2(local49, local70) * 325.949D) & 0x7FF;
-			cameraYaw = (int) (Math.atan2(local54, local59) * -325.949D) & 0x7FF;
+	public static void setLockedLookAt(@OriginalArg(0) int height, @OriginalArg(1) int tileY, @OriginalArg(2) int minStep, @OriginalArg(3) int tileX, @OriginalArg(5) int angleSpeed) {
+		lockedMinStep = minStep;
+		lockedLookAtY = tileY;
+		lockedAngleSpeed = angleSpeed;
+		lockedLookAtX = tileX;
+		lockedLookAtHeight = height;
+		if (lockedAngleSpeed >= 100) {
+			@Pc(30) int fineX = lockedLookAtX * 128 + 64;
+			@Pc(36) int fineY = lockedLookAtY * 128 + 64;
+			@Pc(44) int fineZ = SceneGraph.getTileHeight(Player.plane, fineX, fineY) - lockedLookAtHeight;
+			@Pc(49) int dz = fineZ - renderZ;
+			@Pc(54) int dx = fineX - renderX;
+			@Pc(59) int dy = fineY - renderY;
+			@Pc(70) int horizontalDist = (int) Math.sqrt(dy * dy + dx * dx);
+			cameraPitch = (int) (Math.atan2(dz, horizontalDist) * 325.949D) & 0x7FF;
+			cameraYaw = (int) (Math.atan2(dx, dy) * -325.949D) & 0x7FF;
 			if (cameraPitch < 128) {
 				cameraPitch = 128;
 			}
@@ -333,49 +333,49 @@ public class Camera {
 	}
 
 	@OriginalMember(owner = "client!lb", name = "a", descriptor = "(ZIIIBII)V")
-	public static void method2722(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5) {
-		anInt4612 = arg3;
-		anInt5203 = arg2;
-		anInt5375 = arg5;
-		anInt5225 = arg1;
-		anInt4232 = arg4;
-		if (arg0 && anInt4612 >= 100) {
-			renderX = anInt5375 * 128 + 64;
-			renderZ = anInt4232 * 128 + 64;
-			anInt40 = SceneGraph.getTileHeight(Player.plane, renderX, renderZ) - anInt5203;
+	public static void setLockedPosition(@OriginalArg(0) boolean initialize, @OriginalArg(1) int minMoveStep, @OriginalArg(2) int height, @OriginalArg(3) int moveSpeed, @OriginalArg(5) int tileY, @OriginalArg(6) int tileX) {
+		lockedMoveSpeed = moveSpeed;
+		lockedTargetHeight = height;
+		lockedTargetX = tileX;
+		lockedMinMoveStep = minMoveStep;
+		lockedTargetY = tileY;
+		if (initialize && lockedMoveSpeed >= 100) {
+			renderX = lockedTargetX * 128 + 64;
+			renderY = lockedTargetY * 128 + 64;
+			renderZ = SceneGraph.getTileHeight(Player.plane, renderX, renderY) - lockedTargetHeight;
 		}
 		cameraType = 2;
 	}
 
 	@OriginalMember(owner = "client!cl", name = "e", descriptor = "(I)V")
 	public static void resetCameraEffects() {
-		for (@Pc(3) int local3 = 0; local3 < 5; local3++) {
-			customCameraActive[local3] = false;
+		for (@Pc(3) int i = 0; i < 5; i++) {
+			customCameraActive[i] = false;
 		}
-		anInt5230 = 0;
-		anInt5217 = 0;
-		anInt3718 = -1;
-		anInt1694 = -1;
+		lockedMinStep = 0;
+		lockedAngleSpeed = 0;
+		movePathId = -1;
+		lookAtPathId = -1;
 		cameraType = 1;
 	}
 
 	@OriginalMember(owner = "client!uf", name = "a", descriptor = "(B)V")
-	public static void method4273() {
-		@Pc(14) int playerX = PlayerList.self.xFine + anInt3291;
-		@Pc(20) int playerZ = PlayerList.self.zFine + anInt4774;
-		if (cameraX - playerX < -500 || cameraX - playerX > 500 || cameraZ - playerZ < -500 || cameraZ - playerZ > 500) {
+	public static void updatePlayerCamera() {
+		@Pc(14) int playerX = PlayerList.self.xFine + cameraOffsetX;
+		@Pc(20) int playerY = PlayerList.self.yFine + cameraOffsetY;
+		if (cameraX - playerX < -500 || cameraX - playerX > 500 || cameraY - playerY < -500 || cameraY - playerY > 500) {
 			cameraX = playerX;
-			cameraZ = playerZ;
+			cameraY = playerY;
 		}
-		if (cameraZ != playerZ) {
-			cameraZ += (playerZ - cameraZ) / 16;
+		if (cameraY != playerY) {
+			cameraY += (playerY - cameraY) / 16;
 		}
 		if (cameraX != playerX) {
 			cameraX += (playerX - cameraX) / 16;
 		}
-		if (Preferences.aBoolean63) {
-			for (@Pc(93) int local93 = 0; local93 < InterfaceList.keyQueueSize; local93++) {
-				@Pc(104) int code = InterfaceList.keyCodes[local93];
+		if (Preferences.keyboardCameraEnabled) {
+			for (@Pc(93) int i = 0; i < InterfaceList.keyQueueSize; i++) {
+				@Pc(104) int code = InterfaceList.keyCodes[i];
 				if (code == Keyboard.KEY_UP) {
 					pitchTarget += 47;
 				} else if (code == Keyboard.KEY_DOWN) {
@@ -391,42 +391,42 @@ public class Camera {
 	}
 
 	@OriginalMember(owner = "client!bh", name = "a", descriptor = "(IIIIIIII)V")
-	public static void method555(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4, @OriginalArg(6) int arg5, @OriginalArg(7) int arg6) {
-		@Pc(5) int local5;
-		@Pc(29) int local29;
+	public static void calculateRenderPosition(@OriginalArg(0) int x, @OriginalArg(2) int pitch, @OriginalArg(3) int z, @OriginalArg(4) int distance, @OriginalArg(5) int yaw, @OriginalArg(6) int y, @OriginalArg(7) int camPitch) {
+		@Pc(5) int scaledPitch;
+		@Pc(29) int viewDist;
 		if (GlRenderer.enabled) {
-			local5 = arg1 - 334;
-			if (local5 < 0) {
-				local5 = 0;
-			} else if (local5 > 100) {
-				local5 = 100;
+			scaledPitch = pitch - 334;
+			if (scaledPitch < 0) {
+				scaledPitch = 0;
+			} else if (scaledPitch > 100) {
+				scaledPitch = 100;
 			}
-			local29 = local5 * (ScriptRunner.aShort27 - ScriptRunner.aShort30) / 100 + ScriptRunner.aShort30;
-			arg3 = local29 * arg3 >> 8;
+			viewDist = scaledPitch * (ScriptRunner.maxViewDistance - ScriptRunner.minViewDistance) / 100 + ScriptRunner.minViewDistance;
+			distance = viewDist * distance >> 8;
 		}
-		local5 = 2048 - arg6 & 0x7FF;
-		local29 = 2048 - arg4 & 0x7FF;
-		@Pc(55) int local55 = 0;
-		@Pc(57) int local57 = arg3;
-		@Pc(59) int local59 = 0;
-		@Pc(72) int local72;
-		@Pc(68) int local68;
-		if (local5 != 0) {
-			local68 = MathUtils.cos[local5];
-			local72 = MathUtils.sin[local5];
-			local59 = local72 * -arg3 >> 16;
-			local57 = local68 * arg3 >> 16;
+		scaledPitch = 2048 - camPitch & 0x7FF;
+		viewDist = 2048 - yaw & 0x7FF;
+		@Pc(55) int offsetX = 0;
+		@Pc(57) int offsetZ = distance;
+		@Pc(59) int offsetY = 0;
+		@Pc(72) int sin;
+		@Pc(68) int cos;
+		if (scaledPitch != 0) {
+			cos = MathUtils.cos[scaledPitch];
+			sin = MathUtils.sin[scaledPitch];
+			offsetY = sin * -distance >> 16;
+			offsetZ = cos * distance >> 16;
 		}
-		if (local29 != 0) {
-			local72 = MathUtils.sin[local29];
-			local68 = MathUtils.cos[local29];
-			local55 = local72 * local57 >> 16;
-			local57 = local57 * local68 >> 16;
+		if (viewDist != 0) {
+			sin = MathUtils.sin[viewDist];
+			cos = MathUtils.cos[viewDist];
+			offsetX = sin * offsetZ >> 16;
+			offsetZ = offsetZ * cos >> 16;
 		}
-		cameraPitch = arg6;
-		cameraYaw = arg4;
-		renderZ = arg5 - local57;
-		renderX = arg0 - local55;
-		anInt40 = arg2 - local59;
+		cameraPitch = camPitch;
+		cameraYaw = yaw;
+		renderY = y - offsetZ;
+		renderX = x - offsetX;
+		renderZ = z - offsetY;
 	}
 }

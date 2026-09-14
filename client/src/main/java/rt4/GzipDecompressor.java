@@ -19,21 +19,21 @@ public final class GzipDecompressor {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "<init>", descriptor = "(III)V")
-	private GzipDecompressor(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	private GzipDecompressor(@OriginalArg(0) int windowBits, @OriginalArg(1) int inputBufferSize, @OriginalArg(2) int outputBufferSize) {
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "([BLclient!wa;Z)V")
-	public final void method1842(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg1.data[arg1.offset] != 31 || arg1.data[arg1.offset + 1] != -117) {
+	public final void decompress(@OriginalArg(0) byte[] output, @OriginalArg(1) Buffer input) {
+		if (input.data[input.offset] != 31 || input.data[input.offset + 1] != -117) {
 			throw new RuntimeException("Invalid GZIP header!");
 		}
 		if (this.anInflater1 == null) {
 			this.anInflater1 = new Inflater(true);
 		}
 		try {
-			this.anInflater1.setInput(arg1.data, arg1.offset + 10, -8 - (arg1.offset + 10) + arg1.data.length);
-			this.anInflater1.inflate(arg0);
-		} catch (@Pc(64) Exception local64) {
+			this.anInflater1.setInput(input.data, input.offset + 10, -8 - (input.offset + 10) + input.data.length);
+			this.anInflater1.inflate(output);
+		} catch (@Pc(64) Exception ex) {
 			this.anInflater1.reset();
 			throw new RuntimeException("Invalid GZIP compressed data!");
 		}

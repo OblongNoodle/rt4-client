@@ -8,10 +8,10 @@ import org.openrs2.deob.annotation.Pc;
 public final class AreaSound extends Node {
 
 	@OriginalMember(owner = "client!fl", name = "p", descriptor = "I")
-	public int maxZFine;
+	public int maxYFine;
 
 	@OriginalMember(owner = "client!fl", name = "q", descriptor = "I")
-	public int minZFine;
+	public int minYFine;
 
 	@OriginalMember(owner = "client!fl", name = "t", descriptor = "I")
 	public int minInterval;

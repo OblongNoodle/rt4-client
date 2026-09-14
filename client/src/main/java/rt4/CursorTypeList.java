@@ -15,24 +15,24 @@ public class CursorTypeList {
 	public static Js5 spritesArchive;
 
 	@OriginalMember(owner = "client!u", name = "a", descriptor = "(BLclient!ve;Lclient!ve;)V")
-	public static void init(@OriginalArg(1) Js5 arg0, @OriginalArg(2) Js5 arg1) {
-		archive = arg0;
-		spritesArchive = arg1;
+	public static void init(@OriginalArg(1) Js5 cursorArchive, @OriginalArg(2) Js5 spriteArchive) {
+		archive = cursorArchive;
+		spritesArchive = spriteArchive;
 	}
 
 	@OriginalMember(owner = "client!qg", name = "d", descriptor = "(II)Lclient!ia;")
-	public static CursorType get(@OriginalArg(0) int arg0) {
-		@Pc(10) CursorType local10 = (CursorType) types.get(arg0);
-		if (local10 != null) {
-			return local10;
+	public static CursorType get(@OriginalArg(0) int id) {
+		@Pc(10) CursorType type = (CursorType) types.get(id);
+		if (type != null) {
+			return type;
 		}
-		@Pc(20) byte[] local20 = archive.fetchFile(33, arg0);
-		local10 = new CursorType();
-		if (local20 != null) {
-			local10.decode(new Buffer(local20), arg0);
+		@Pc(20) byte[] data = archive.fetchFile(33, id);
+		type = new CursorType();
+		if (data != null) {
+			type.decode(new Buffer(data), id);
 		}
-		types.put(local10, arg0);
-		return local10;
+		types.put(type, id);
+		return type;
 	}
 
 	@OriginalMember(owner = "client!an", name = "i", descriptor = "(I)V")

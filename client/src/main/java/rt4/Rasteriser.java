@@ -67,7 +67,7 @@ public final class Rasteriser {
 
 	@OriginalMember(owner = "client!hf", name = "a", descriptor = "(IIIIIIIIIIIIIIIIIII)V")
 	public static void fillTexturedTriangle(@OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(6) int colorA, @OriginalArg(7) int colorB, @OriginalArg(8) int colorC, @OriginalArg(9) int viewXA, @OriginalArg(10) int viewXB, @OriginalArg(11) int viewXC, @OriginalArg(12) int viewYA, @OriginalArg(13) int viewYB, @OriginalArg(14) int viewYC, @OriginalArg(15) int viewZA, @OriginalArg(16) int viewZB, @OriginalArg(17) int viewZC, @OriginalArg(18) int textureId) {
-		@Pc(5) int[] texels = textureProvider.method3232(textureId, brightness);
+		@Pc(5) int[] texels = textureProvider.getAnimatedPixels(textureId, brightness);
 		if (texels == null) {
 			int averageColor = textureProvider.getAverageColor(textureId);
 			fillGouraudTriangle(yA, yB, yC, xA, xB, xC, ColorUtils.multiplyLightness(averageColor, colorA), ColorUtils.multiplyLightness(averageColor, colorB), ColorUtils.multiplyLightness(averageColor, colorC));
@@ -106,26 +106,26 @@ public final class Rasteriser {
 		@Pc(131) int colorStepA = (colorStepAB * dyAC - colorStepAC * dyAB << 9) / length;
 		@Pc(143) int colorStepB = (colorStepAC * dxAB - colorStepAB * dxAC << 9) / length;
 
-		@Pc(147) int local147 = viewXA - viewXB;
-		@Pc(151) int local151 = viewYA - viewYB;
-		@Pc(155) int local155 = viewZA - viewZB;
+		@Pc(147) int edgeABx = viewXA - viewXB;
+		@Pc(151) int edgeABy = viewYA - viewYB;
+		@Pc(155) int edgeABz = viewZA - viewZB;
 
-		@Pc(159) int local159 = viewXC - viewXA;
-		@Pc(163) int local163 = viewYC - viewYA;
-		@Pc(167) int local167 = viewZC - viewZA;
+		@Pc(159) int edgeACx = viewXC - viewXA;
+		@Pc(163) int edgeACy = viewYC - viewYA;
+		@Pc(167) int edgeACz = viewZC - viewZA;
 
-		@Pc(177) int local177 = local159 * viewYA - local163 * viewXA << 14;
-		@Pc(187) int local187 = local163 * viewZA - local167 * viewYA << 5;
-		@Pc(197) int local197 = local167 * viewXA - local159 * viewZA << 5;
+		@Pc(177) int texVertA = edgeACx * viewYA - edgeACy * viewXA << 14;
+		@Pc(187) int texHorizA = edgeACy * viewZA - edgeACz * viewYA << 5;
+		@Pc(197) int texScanStepA = edgeACz * viewXA - edgeACx * viewZA << 5;
 
-		@Pc(207) int local207 = local147 * viewYA - local151 * viewXA << 14;
-		@Pc(217) int local217 = local151 * viewZA - local155 * viewYA << 5;
-		@Pc(227) int local227 = local155 * viewXA - local147 * viewZA << 5;
+		@Pc(207) int texVertB = edgeABx * viewYA - edgeABy * viewXA << 14;
+		@Pc(217) int texHorizB = edgeABy * viewZA - edgeABz * viewYA << 5;
+		@Pc(227) int texScanStepB = edgeABz * viewXA - edgeABx * viewZA << 5;
 
-		@Pc(237) int local237 = local151 * local159 - local147 * local163 << 14;
-		@Pc(247) int local247 = local155 * local163 - local151 * local167 << 5;
-		@Pc(257) int local257 = local147 * local167 - local155 * local159 << 5;
-		@Pc(336) int local336;
+		@Pc(237) int texVertC = edgeABy * edgeACx - edgeABx * edgeACy << 14;
+		@Pc(247) int texHorizC = edgeABz * edgeACy - edgeABy * edgeACz << 5;
+		@Pc(257) int texScanStepC = edgeABx * edgeACz - edgeABz * edgeACx << 5;
+		@Pc(336) int yOffset;
 
 		if (yA <= yB && yA <= yC) {
 			if (yA < height) {
@@ -153,10 +153,10 @@ public final class Rasteriser {
 						yB = 0;
 					}
 
-					local336 = yA - centerY;
-					local177 += local197 * local336;
-					local207 += local227 * local336;
-					local237 += local257 * local336;
+					yOffset = yA - centerY;
+					texVertA += texScanStepA * yOffset;
+					texVertB += texScanStepB * yOffset;
+					texVertC += texScanStepC * yOffset;
 					if (yA != yB && xStepAC < xStepAB || yA == yB && xStepAC > xStepBC) {
 						yC -= yB;
 						yB -= yA;
@@ -170,25 +170,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xB >> 16, colorA, colorStepA, local177, local207, local237, local187, local217, local247);
+									drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xB >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xC += xStepAC;
 									xB += xStepBC;
 									colorA += colorStepB;
 									yA += SoftwareRaster.width;
-									local177 += local197;
-									local207 += local227;
-									local237 += local257;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xA >> 16, colorA, colorStepA, local177, local207, local237, local187, local217, local247);
+							drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xA >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xC += xStepAC;
 							xA += xStepAB;
 							colorA += colorStepB;
 							yA += SoftwareRaster.width;
-							local177 += local197;
-							local207 += local227;
-							local237 += local257;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					} else {
 						yC -= yB;
@@ -203,25 +203,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xB >> 16, xC >> 16, colorA, colorStepA, local177, local207, local237, local187, local217, local247);
+									drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xB >> 16, xC >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xC += xStepAC;
 									xB += xStepBC;
 									colorA += colorStepB;
 									yA += SoftwareRaster.width;
-									local177 += local197;
-									local207 += local227;
-									local237 += local257;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xC >> 16, colorA, colorStepA, local177, local207, local237, local187, local217, local247);
+							drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xC >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xC += xStepAC;
 							xA += xStepAB;
 							colorA += colorStepB;
 							yA += SoftwareRaster.width;
-							local177 += local197;
-							local207 += local227;
-							local237 += local257;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					}
 				} else {
@@ -239,10 +239,10 @@ public final class Rasteriser {
 						yC = 0;
 					}
 
-					local336 = yA - centerY;
-					local177 += local197 * local336;
-					local207 += local227 * local336;
-					local237 += local257 * local336;
+					yOffset = yA - centerY;
+					texVertA += texScanStepA * yOffset;
+					texVertB += texScanStepB * yOffset;
+					texVertC += texScanStepC * yOffset;
 					if ((yA == yC || xStepAC >= xStepAB) && (yA != yC || xStepBC <= xStepAB)) {
 						yB -= yC;
 						yC -= yA;
@@ -255,25 +255,25 @@ public final class Rasteriser {
 									if (yB < 0) {
 										return;
 									}
-									drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xC >> 16, colorA, colorStepA, local177, local207, local237, local187, local217, local247);
+									drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xC >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xC += xStepBC;
 									xA += xStepAB;
 									colorA += colorStepB;
 									yA += SoftwareRaster.width;
-									local177 += local197;
-									local207 += local227;
-									local237 += local257;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xB >> 16, colorA, colorStepA, local177, local207, local237, local187, local217, local247);
+							drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xB >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xB += xStepAC;
 							xA += xStepAB;
 							colorA += colorStepB;
 							yA += SoftwareRaster.width;
-							local177 += local197;
-							local207 += local227;
-							local237 += local257;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					} else {
 						yB -= yC;
@@ -288,25 +288,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xA >> 16, colorA, colorStepA, local177, local207, local237, local187, local217, local247);
+									drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xA >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xC += xStepBC;
 									xA += xStepAB;
 									colorA += colorStepB;
 									yA += SoftwareRaster.width;
-									local177 += local197;
-									local207 += local227;
-									local237 += local257;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xB >> 16, xA >> 16, colorA, colorStepA, local177, local207, local237, local187, local217, local247);
+							drawTexturedScanline(SoftwareRaster.pixels, texels, yA, xB >> 16, xA >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xB += xStepAC;
 							xA += xStepAB;
 							colorA += colorStepB;
 							yA += SoftwareRaster.width;
-							local177 += local197;
-							local207 += local227;
-							local237 += local257;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					}
 				}
@@ -337,10 +337,10 @@ public final class Rasteriser {
 						yC = 0;
 					}
 
-					local336 = yB - centerY;
-					local177 += local197 * local336;
-					local207 += local227 * local336;
-					local237 += local257 * local336;
+					yOffset = yB - centerY;
+					texVertA += texScanStepA * yOffset;
+					texVertB += texScanStepB * yOffset;
+					texVertC += texScanStepC * yOffset;
 					if (yB != yC && xStepAB < xStepBC || yB == yC && xStepAB > xStepAC) {
 						yA -= yC;
 						yC -= yB;
@@ -354,25 +354,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xC >> 16, colorB, colorStepA, local177, local207, local237, local187, local217, local247);
+									drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xC >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xA += xStepAB;
 									xC += xStepAC;
 									colorB += colorStepB;
 									yB += SoftwareRaster.width;
-									local177 += local197;
-									local207 += local227;
-									local237 += local257;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xB >> 16, colorB, colorStepA, local177, local207, local237, local187, local217, local247);
+							drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xB >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xA += xStepAB;
 							xB += xStepBC;
 							colorB += colorStepB;
 							yB += SoftwareRaster.width;
-							local177 += local197;
-							local207 += local227;
-							local237 += local257;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					} else {
 						yA -= yC;
@@ -387,25 +387,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xC >> 16, xA >> 16, colorB, colorStepA, local177, local207, local237, local187, local217, local247);
+									drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xC >> 16, xA >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xA += xStepAB;
 									xC += xStepAC;
 									colorB += colorStepB;
 									yB += SoftwareRaster.width;
-									local177 += local197;
-									local207 += local227;
-									local237 += local257;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xA >> 16, colorB, colorStepA, local177, local207, local237, local187, local217, local247);
+							drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xA >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xA += xStepAB;
 							xB += xStepBC;
 							colorB += colorStepB;
 							yB += SoftwareRaster.width;
-							local177 += local197;
-							local207 += local227;
-							local237 += local257;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					}
 				} else {
@@ -423,10 +423,10 @@ public final class Rasteriser {
 						yA = 0;
 					}
 
-					local336 = yB - centerY;
-					local177 += local197 * local336;
-					local207 += local227 * local336;
-					local237 += local257 * local336;
+					yOffset = yB - centerY;
+					texVertA += texScanStepA * yOffset;
+					texVertB += texScanStepB * yOffset;
+					texVertC += texScanStepC * yOffset;
 					if (xStepAB < xStepBC) {
 						yC -= yA;
 						yA -= yB;
@@ -440,25 +440,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xB >> 16, colorB, colorStepA, local177, local207, local237, local187, local217, local247);
+									drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xB >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xA += xStepAC;
 									xB += xStepBC;
 									colorB += colorStepB;
 									yB += SoftwareRaster.width;
-									local177 += local197;
-									local207 += local227;
-									local237 += local257;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xC >> 16, xB >> 16, colorB, colorStepA, local177, local207, local237, local187, local217, local247);
+							drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xC >> 16, xB >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xC += xStepAB;
 							xB += xStepBC;
 							colorB += colorStepB;
 							yB += SoftwareRaster.width;
-							local177 += local197;
-							local207 += local227;
-							local237 += local257;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					} else {
 						yC -= yA;
@@ -473,25 +473,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xA >> 16, colorB, colorStepA, local177, local207, local237, local187, local217, local247);
+									drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xA >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xA += xStepAC;
 									xB += xStepBC;
 									colorB += colorStepB;
 									yB += SoftwareRaster.width;
-									local177 += local197;
-									local207 += local227;
-									local237 += local257;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xC >> 16, colorB, colorStepA, local177, local207, local237, local187, local217, local247);
+							drawTexturedScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xC >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xC += xStepAB;
 							xB += xStepBC;
 							colorB += colorStepB;
 							yB += SoftwareRaster.width;
-							local177 += local197;
-							local207 += local227;
-							local237 += local257;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					}
 				}
@@ -521,10 +521,10 @@ public final class Rasteriser {
 					yA = 0;
 				}
 
-				local336 = yC - centerY;
-				local177 += local197 * local336;
-				local207 += local227 * local336;
-				local237 += local257 * local336;
+				yOffset = yC - centerY;
+				texVertA += texScanStepA * yOffset;
+				texVertB += texScanStepB * yOffset;
+				texVertC += texScanStepC * yOffset;
 				if (xStepBC < xStepAC) {
 					yB -= yA;
 					yA -= yC;
@@ -538,25 +538,25 @@ public final class Rasteriser {
 									return;
 								}
 
-								drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xA >> 16, colorC, colorStepA, local177, local207, local237, local187, local217, local247);
+								drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xA >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 								xB += xStepBC;
 								xA += xStepAB;
 								colorC += colorStepB;
 								yC += SoftwareRaster.width;
-								local177 += local197;
-								local207 += local227;
-								local237 += local257;
+								texVertA += texScanStepA;
+								texVertB += texScanStepB;
+								texVertC += texScanStepC;
 							}
 						}
 
-						drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xC >> 16, colorC, colorStepA, local177, local207, local237, local187, local217, local247);
+						drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xC >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 						xB += xStepBC;
 						xC += xStepAC;
 						colorC += colorStepB;
 						yC += SoftwareRaster.width;
-						local177 += local197;
-						local207 += local227;
-						local237 += local257;
+						texVertA += texScanStepA;
+						texVertB += texScanStepB;
+						texVertC += texScanStepC;
 					}
 				} else {
 					yB -= yA;
@@ -571,25 +571,25 @@ public final class Rasteriser {
 									return;
 								}
 
-								drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xA >> 16, xB >> 16, colorC, colorStepA, local177, local207, local237, local187, local217, local247);
+								drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xA >> 16, xB >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 								xB += xStepBC;
 								xA += xStepAB;
 								colorC += colorStepB;
 								yC += SoftwareRaster.width;
-								local177 += local197;
-								local207 += local227;
-								local237 += local257;
+								texVertA += texScanStepA;
+								texVertB += texScanStepB;
+								texVertC += texScanStepC;
 							}
 						}
 
-						drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xB >> 16, colorC, colorStepA, local177, local207, local237, local187, local217, local247);
+						drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xB >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 						xB += xStepBC;
 						xC += xStepAC;
 						colorC += colorStepB;
 						yC += SoftwareRaster.width;
-						local177 += local197;
-						local207 += local227;
-						local237 += local257;
+						texVertA += texScanStepA;
+						texVertB += texScanStepB;
+						texVertC += texScanStepC;
 					}
 				}
 			} else {
@@ -607,10 +607,10 @@ public final class Rasteriser {
 					yB = 0;
 				}
 
-				local336 = yC - centerY;
-				local177 += local197 * local336;
-				local207 += local227 * local336;
-				local237 += local257 * local336;
+				yOffset = yC - centerY;
+				texVertA += texScanStepA * yOffset;
+				texVertB += texScanStepB * yOffset;
+				texVertC += texScanStepC * yOffset;
 				if (xStepBC < xStepAC) {
 					yA -= yB;
 					yB -= yC;
@@ -624,25 +624,25 @@ public final class Rasteriser {
 									return;
 								}
 
-								drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xC >> 16, colorC, colorStepA, local177, local207, local237, local187, local217, local247);
+								drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xC >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 								xB += xStepAB;
 								xC += xStepAC;
 								colorC += colorStepB;
 								yC += SoftwareRaster.width;
-								local177 += local197;
-								local207 += local227;
-								local237 += local257;
+								texVertA += texScanStepA;
+								texVertB += texScanStepB;
+								texVertC += texScanStepC;
 							}
 						}
 
-						drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xA >> 16, xC >> 16, colorC, colorStepA, local177, local207, local237, local187, local217, local247);
+						drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xA >> 16, xC >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 						xA += xStepBC;
 						xC += xStepAC;
 						colorC += colorStepB;
 						yC += SoftwareRaster.width;
-						local177 += local197;
-						local207 += local227;
-						local237 += local257;
+						texVertA += texScanStepA;
+						texVertB += texScanStepB;
+						texVertC += texScanStepC;
 					}
 				} else {
 					yA -= yB;
@@ -657,25 +657,25 @@ public final class Rasteriser {
 									return;
 								}
 
-								drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xB >> 16, colorC, colorStepA, local177, local207, local237, local187, local217, local247);
+								drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xB >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 								xB += xStepAB;
 								xC += xStepAC;
 								colorC += colorStepB;
 								yC += SoftwareRaster.width;
-								local177 += local197;
-								local207 += local227;
-								local237 += local257;
+								texVertA += texScanStepA;
+								texVertB += texScanStepB;
+								texVertC += texScanStepC;
 							}
 						}
 
-						drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xA >> 16, colorC, colorStepA, local177, local207, local237, local187, local217, local247);
+						drawTexturedScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xA >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 						xA += xStepBC;
 						xC += xStepAC;
 						colorC += colorStepB;
 						yC += SoftwareRaster.width;
-						local177 += local197;
-						local207 += local227;
-						local237 += local257;
+						texVertA += texScanStepA;
+						texVertB += texScanStepB;
+						texVertC += texScanStepC;
 					}
 				}
 			}
@@ -690,7 +690,7 @@ public final class Rasteriser {
 
 	@OriginalMember(owner = "client!hf", name = "b", descriptor = "(IIIIIIIIIIIIIIIIIII)V")
 	public static void fillTexturedAlphaTriangle(@OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(6) int colorA, @OriginalArg(7) int colorB, @OriginalArg(8) int colorC, @OriginalArg(9) int viewXA, @OriginalArg(10) int viewXB, @OriginalArg(11) int viewXC, @OriginalArg(12) int viewYA, @OriginalArg(13) int viewYB, @OriginalArg(14) int viewYC, @OriginalArg(15) int viewZA, @OriginalArg(16) int viewZB, @OriginalArg(17) int viewZC, @OriginalArg(18) int textureId) {
-		@Pc(5) int[] texels = textureProvider.method3232(textureId, brightness);
+		@Pc(5) int[] texels = textureProvider.getAnimatedPixels(textureId, brightness);
 		if (texels == null || alpha > 10) {
 			int average = textureProvider.getAverageColor(textureId);
 			textureHasTransparency = true;
@@ -730,24 +730,24 @@ public final class Rasteriser {
 		@Pc(136) int colorStepA = (colorStepAB * dyAC - colorStepAC * dyAB << 9) / length;
 		@Pc(148) int colorStepB = (colorStepAC * dxAB - colorStepAB * dxAC << 9) / length;
 
-		@Pc(152) int local152 = viewXA - viewXB;
-		@Pc(156) int local156 = viewYA - viewYB;
-		@Pc(160) int local160 = viewZA - viewZB;
+		@Pc(152) int edgeABx = viewXA - viewXB;
+		@Pc(156) int edgeABy = viewYA - viewYB;
+		@Pc(160) int edgeABz = viewZA - viewZB;
 
-		@Pc(164) int local164 = viewXC - viewXA;
-		@Pc(168) int local168 = viewYC - viewYA;
-		@Pc(172) int local172 = viewZC - viewZA;
+		@Pc(164) int edgeACx = viewXC - viewXA;
+		@Pc(168) int edgeACy = viewYC - viewYA;
+		@Pc(172) int edgeACz = viewZC - viewZA;
 
-		@Pc(182) int local182 = local164 * viewYA - local168 * viewXA << 14;
-		@Pc(192) int local192 = local168 * viewZA - local172 * viewYA << 8;
-		@Pc(202) int local202 = local172 * viewXA - local164 * viewZA << 5;
-		@Pc(212) int local212 = local152 * viewYA - local156 * viewXA << 14;
-		@Pc(222) int local222 = local156 * viewZA - local160 * viewYA << 8;
-		@Pc(232) int local232 = local160 * viewXA - local152 * viewZA << 5;
-		@Pc(242) int local242 = local156 * local164 - local152 * local168 << 14;
-		@Pc(252) int local252 = local160 * local168 - local156 * local172 << 8;
-		@Pc(262) int local262 = local152 * local172 - local160 * local164 << 5;
-		@Pc(341) int local341;
+		@Pc(182) int texVertA = edgeACx * viewYA - edgeACy * viewXA << 14;
+		@Pc(192) int texHorizA = edgeACy * viewZA - edgeACz * viewYA << 8;
+		@Pc(202) int texScanStepA = edgeACz * viewXA - edgeACx * viewZA << 5;
+		@Pc(212) int texVertB = edgeABx * viewYA - edgeABy * viewXA << 14;
+		@Pc(222) int texHorizB = edgeABy * viewZA - edgeABz * viewYA << 8;
+		@Pc(232) int texScanStepB = edgeABz * viewXA - edgeABx * viewZA << 5;
+		@Pc(242) int texVertC = edgeABy * edgeACx - edgeABx * edgeACy << 14;
+		@Pc(252) int texHorizC = edgeABz * edgeACy - edgeABy * edgeACz << 8;
+		@Pc(262) int texScanStepC = edgeABx * edgeACz - edgeABz * edgeACx << 5;
+		@Pc(341) int yOffset;
 
 		if (yA <= yB && yA <= yC) {
 			if (yA < height) {
@@ -774,10 +774,10 @@ public final class Rasteriser {
 						yB = 0;
 					}
 
-					local341 = yA - centerY;
-					local182 += local202 * local341;
-					local212 += local232 * local341;
-					local242 += local262 * local341;
+					yOffset = yA - centerY;
+					texVertA += texScanStepA * yOffset;
+					texVertB += texScanStepB * yOffset;
+					texVertC += texScanStepC * yOffset;
 					if (yA != yB && xStepAC < xStepAB || yA == yB && xStepAC > xStepBC) {
 						yC -= yB;
 						yB -= yA;
@@ -791,25 +791,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xB >> 16, colorA, colorStepA, local182, local212, local242, local192, local222, local252);
+									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xB >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xC += xStepAC;
 									xB += xStepBC;
 									colorA += colorStepB;
 									yA += SoftwareRaster.width;
-									local182 += local202;
-									local212 += local232;
-									local242 += local262;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xA >> 16, colorA, colorStepA, local182, local212, local242, local192, local222, local252);
+							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xA >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xC += xStepAC;
 							xA += xStepAB;
 							colorA += colorStepB;
 							yA += SoftwareRaster.width;
-							local182 += local202;
-							local212 += local232;
-							local242 += local262;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					} else {
 						yC -= yB;
@@ -824,25 +824,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xB >> 16, xC >> 16, colorA, colorStepA, local182, local212, local242, local192, local222, local252);
+									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xB >> 16, xC >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xC += xStepAC;
 									xB += xStepBC;
 									colorA += colorStepB;
 									yA += SoftwareRaster.width;
-									local182 += local202;
-									local212 += local232;
-									local242 += local262;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xC >> 16, colorA, colorStepA, local182, local212, local242, local192, local222, local252);
+							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xC >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xC += xStepAC;
 							xA += xStepAB;
 							colorA += colorStepB;
 							yA += SoftwareRaster.width;
-							local182 += local202;
-							local212 += local232;
-							local242 += local262;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					}
 				} else {
@@ -860,10 +860,10 @@ public final class Rasteriser {
 						yC = 0;
 					}
 
-					local341 = yA - centerY;
-					local182 += local202 * local341;
-					local212 += local232 * local341;
-					local242 += local262 * local341;
+					yOffset = yA - centerY;
+					texVertA += texScanStepA * yOffset;
+					texVertB += texScanStepB * yOffset;
+					texVertC += texScanStepC * yOffset;
 					if ((yA == yC || xStepAC >= xStepAB) && (yA != yC || xStepBC <= xStepAB)) {
 						yB -= yC;
 						yC -= yA;
@@ -877,25 +877,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xC >> 16, colorA, colorStepA, local182, local212, local242, local192, local222, local252);
+									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xC >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xC += xStepBC;
 									xA += xStepAB;
 									colorA += colorStepB;
 									yA += SoftwareRaster.width;
-									local182 += local202;
-									local212 += local232;
-									local242 += local262;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xB >> 16, colorA, colorStepA, local182, local212, local242, local192, local222, local252);
+							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xA >> 16, xB >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xB += xStepAC;
 							xA += xStepAB;
 							colorA += colorStepB;
 							yA += SoftwareRaster.width;
-							local182 += local202;
-							local212 += local232;
-							local242 += local262;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					} else {
 						yB -= yC;
@@ -910,25 +910,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xA >> 16, colorA, colorStepA, local182, local212, local242, local192, local222, local252);
+									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xC >> 16, xA >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xC += xStepBC;
 									xA += xStepAB;
 									colorA += colorStepB;
 									yA += SoftwareRaster.width;
-									local182 += local202;
-									local212 += local232;
-									local242 += local262;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xB >> 16, xA >> 16, colorA, colorStepA, local182, local212, local242, local192, local222, local252);
+							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yA, xB >> 16, xA >> 16, colorA, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xB += xStepAC;
 							xA += xStepAB;
 							colorA += colorStepB;
 							yA += SoftwareRaster.width;
-							local182 += local202;
-							local212 += local232;
-							local242 += local262;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					}
 				}
@@ -957,10 +957,10 @@ public final class Rasteriser {
 						yC = 0;
 					}
 
-					local341 = yB - centerY;
-					local182 += local202 * local341;
-					local212 += local232 * local341;
-					local242 += local262 * local341;
+					yOffset = yB - centerY;
+					texVertA += texScanStepA * yOffset;
+					texVertB += texScanStepB * yOffset;
+					texVertC += texScanStepC * yOffset;
 					if (yB != yC && xStepAB < xStepBC || yB == yC && xStepAB > xStepAC) {
 						yA -= yC;
 						yC -= yB;
@@ -974,25 +974,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xC >> 16, colorB, colorStepA, local182, local212, local242, local192, local222, local252);
+									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xC >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xA += xStepAB;
 									xC += xStepAC;
 									colorB += colorStepB;
 									yB += SoftwareRaster.width;
-									local182 += local202;
-									local212 += local232;
-									local242 += local262;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xB >> 16, colorB, colorStepA, local182, local212, local242, local192, local222, local252);
+							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xB >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xA += xStepAB;
 							xB += xStepBC;
 							colorB += colorStepB;
 							yB += SoftwareRaster.width;
-							local182 += local202;
-							local212 += local232;
-							local242 += local262;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					} else {
 						yA -= yC;
@@ -1007,25 +1007,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xC >> 16, xA >> 16, colorB, colorStepA, local182, local212, local242, local192, local222, local252);
+									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xC >> 16, xA >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xA += xStepAB;
 									xC += xStepAC;
 									colorB += colorStepB;
 									yB += SoftwareRaster.width;
-									local182 += local202;
-									local212 += local232;
-									local242 += local262;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xA >> 16, colorB, colorStepA, local182, local212, local242, local192, local222, local252);
+							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xA >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xA += xStepAB;
 							xB += xStepBC;
 							colorB += colorStepB;
 							yB += SoftwareRaster.width;
-							local182 += local202;
-							local212 += local232;
-							local242 += local262;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					}
 				} else {
@@ -1043,10 +1043,10 @@ public final class Rasteriser {
 						yA = 0;
 					}
 
-					local341 = yB - centerY;
-					local182 += local202 * local341;
-					local212 += local232 * local341;
-					local242 += local262 * local341;
+					yOffset = yB - centerY;
+					texVertA += texScanStepA * yOffset;
+					texVertB += texScanStepB * yOffset;
+					texVertC += texScanStepC * yOffset;
 					if (xStepAB < xStepBC) {
 						yC -= yA;
 						yA -= yB;
@@ -1060,25 +1060,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xB >> 16, colorB, colorStepA, local182, local212, local242, local192, local222, local252);
+									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xA >> 16, xB >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xA += xStepAC;
 									xB += xStepBC;
 									colorB += colorStepB;
 									yB += SoftwareRaster.width;
-									local182 += local202;
-									local212 += local232;
-									local242 += local262;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xC >> 16, xB >> 16, colorB, colorStepA, local182, local212, local242, local192, local222, local252);
+							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xC >> 16, xB >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xC += xStepAB;
 							xB += xStepBC;
 							colorB += colorStepB;
 							yB += SoftwareRaster.width;
-							local182 += local202;
-							local212 += local232;
-							local242 += local262;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					} else {
 						yC -= yA;
@@ -1093,25 +1093,25 @@ public final class Rasteriser {
 										return;
 									}
 
-									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xA >> 16, colorB, colorStepA, local182, local212, local242, local192, local222, local252);
+									drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xA >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 									xA += xStepAC;
 									xB += xStepBC;
 									colorB += colorStepB;
 									yB += SoftwareRaster.width;
-									local182 += local202;
-									local212 += local232;
-									local242 += local262;
+									texVertA += texScanStepA;
+									texVertB += texScanStepB;
+									texVertC += texScanStepC;
 								}
 							}
 
-							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xC >> 16, colorB, colorStepA, local182, local212, local242, local192, local222, local252);
+							drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yB, xB >> 16, xC >> 16, colorB, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 							xC += xStepAB;
 							xB += xStepBC;
 							colorB += colorStepB;
 							yB += SoftwareRaster.width;
-							local182 += local202;
-							local212 += local232;
-							local242 += local262;
+							texVertA += texScanStepA;
+							texVertB += texScanStepB;
+							texVertC += texScanStepC;
 						}
 					}
 				}
@@ -1139,10 +1139,10 @@ public final class Rasteriser {
 					yA = 0;
 				}
 
-				local341 = yC - centerY;
-				local182 += local202 * local341;
-				local212 += local232 * local341;
-				local242 += local262 * local341;
+				yOffset = yC - centerY;
+				texVertA += texScanStepA * yOffset;
+				texVertB += texScanStepB * yOffset;
+				texVertC += texScanStepC * yOffset;
 				if (xStepBC < xStepAC) {
 					yB -= yA;
 					yA -= yC;
@@ -1156,25 +1156,25 @@ public final class Rasteriser {
 									return;
 								}
 
-								drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xA >> 16, colorC, colorStepA, local182, local212, local242, local192, local222, local252);
+								drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xA >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 								xB += xStepBC;
 								xA += xStepAB;
 								colorC += colorStepB;
 								yC += SoftwareRaster.width;
-								local182 += local202;
-								local212 += local232;
-								local242 += local262;
+								texVertA += texScanStepA;
+								texVertB += texScanStepB;
+								texVertC += texScanStepC;
 							}
 						}
 
-						drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xC >> 16, colorC, colorStepA, local182, local212, local242, local192, local222, local252);
+						drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xC >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 						xB += xStepBC;
 						xC += xStepAC;
 						colorC += colorStepB;
 						yC += SoftwareRaster.width;
-						local182 += local202;
-						local212 += local232;
-						local242 += local262;
+						texVertA += texScanStepA;
+						texVertB += texScanStepB;
+						texVertC += texScanStepC;
 					}
 				} else {
 					yB -= yA;
@@ -1189,25 +1189,25 @@ public final class Rasteriser {
 									return;
 								}
 
-								drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xA >> 16, xB >> 16, colorC, colorStepA, local182, local212, local242, local192, local222, local252);
+								drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xA >> 16, xB >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 								xB += xStepBC;
 								xA += xStepAB;
 								colorC += colorStepB;
 								yC += SoftwareRaster.width;
-								local182 += local202;
-								local212 += local232;
-								local242 += local262;
+								texVertA += texScanStepA;
+								texVertB += texScanStepB;
+								texVertC += texScanStepC;
 							}
 						}
 
-						drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xB >> 16, colorC, colorStepA, local182, local212, local242, local192, local222, local252);
+						drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xB >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 						xB += xStepBC;
 						xC += xStepAC;
 						colorC += colorStepB;
 						yC += SoftwareRaster.width;
-						local182 += local202;
-						local212 += local232;
-						local242 += local262;
+						texVertA += texScanStepA;
+						texVertB += texScanStepB;
+						texVertC += texScanStepC;
 					}
 				}
 			} else {
@@ -1225,10 +1225,10 @@ public final class Rasteriser {
 					yB = 0;
 				}
 
-				local341 = yC - centerY;
-				local182 += local202 * local341;
-				local212 += local232 * local341;
-				local242 += local262 * local341;
+				yOffset = yC - centerY;
+				texVertA += texScanStepA * yOffset;
+				texVertB += texScanStepB * yOffset;
+				texVertC += texScanStepC * yOffset;
 				if (xStepBC < xStepAC) {
 					yA -= yB;
 					yB -= yC;
@@ -1242,25 +1242,25 @@ public final class Rasteriser {
 									return;
 								}
 
-								drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xC >> 16, colorC, colorStepA, local182, local212, local242, local192, local222, local252);
+								drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xB >> 16, xC >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 								xB += xStepAB;
 								xC += xStepAC;
 								colorC += colorStepB;
 								yC += SoftwareRaster.width;
-								local182 += local202;
-								local212 += local232;
-								local242 += local262;
+								texVertA += texScanStepA;
+								texVertB += texScanStepB;
+								texVertC += texScanStepC;
 							}
 						}
 
-						drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xA >> 16, xC >> 16, colorC, colorStepA, local182, local212, local242, local192, local222, local252);
+						drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xA >> 16, xC >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 						xA += xStepBC;
 						xC += xStepAC;
 						colorC += colorStepB;
 						yC += SoftwareRaster.width;
-						local182 += local202;
-						local212 += local232;
-						local242 += local262;
+						texVertA += texScanStepA;
+						texVertB += texScanStepB;
+						texVertC += texScanStepC;
 					}
 				} else {
 					yA -= yB;
@@ -1275,25 +1275,25 @@ public final class Rasteriser {
 									return;
 								}
 
-								drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xB >> 16, colorC, colorStepA, local182, local212, local242, local192, local222, local252);
+								drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xB >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 								xB += xStepAB;
 								xC += xStepAC;
 								colorC += colorStepB;
 								yC += SoftwareRaster.width;
-								local182 += local202;
-								local212 += local232;
-								local242 += local262;
+								texVertA += texScanStepA;
+								texVertB += texScanStepB;
+								texVertC += texScanStepC;
 							}
 						}
 
-						drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xA >> 16, colorC, colorStepA, local182, local212, local242, local192, local222, local252);
+						drawTexturedAlphaScanline(SoftwareRaster.pixels, texels, yC, xC >> 16, xA >> 16, colorC, colorStepA, texVertA, texVertB, texVertC, texHorizA, texHorizB, texHorizC);
 						xA += xStepBC;
 						xC += xStepAC;
 						colorC += colorStepB;
 						yC += SoftwareRaster.width;
-						local182 += local202;
-						local212 += local232;
-						local242 += local262;
+						texVertA += texScanStepA;
+						texVertB += texScanStepB;
+						texVertC += texScanStepC;
 					}
 				}
 			}
@@ -2643,411 +2643,411 @@ public final class Rasteriser {
 	}
 
 	@OriginalMember(owner = "client!hf", name = "a", descriptor = "([BIIIIIII)V")
-	public static void fillSpriteTriangle(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		@Pc(1) int local1 = 0;
-		if (arg2 != arg1) {
-			local1 = (arg5 - arg4 << 16) / (arg2 - arg1);
+	public static void fillSpriteTriangle(@OriginalArg(0) byte[] dst, @OriginalArg(1) int yA, @OriginalArg(2) int yB, @OriginalArg(3) int yC, @OriginalArg(4) int xA, @OriginalArg(5) int xB, @OriginalArg(6) int xC, @OriginalArg(7) int stride) {
+		@Pc(1) int xStepAB = 0;
+		if (yB != yA) {
+			xStepAB = (xB - xA << 16) / (yB - yA);
 		}
 
-		@Pc(16) int local16 = 0;
-		if (arg3 != arg2) {
-			local16 = (arg6 - arg5 << 16) / (arg3 - arg2);
+		@Pc(16) int xStepBC = 0;
+		if (yC != yB) {
+			xStepBC = (xC - xB << 16) / (yC - yB);
 		}
 
-		@Pc(31) int local31 = 0;
-		if (arg3 != arg1) {
-			local31 = (arg4 - arg6 << 16) / (arg1 - arg3);
+		@Pc(31) int xStepAC = 0;
+		if (yC != yA) {
+			xStepAC = (xA - xC << 16) / (yA - yC);
 		}
 
-		if (arg1 <= arg2 && arg1 <= arg3) {
-			if (arg2 < arg3) {
-				arg6 = arg4 <<= 0x10;
-				if (arg1 < 0) {
-					arg6 -= local31 * arg1;
-					arg4 -= local1 * arg1;
-					arg1 = 0;
+		if (yA <= yB && yA <= yC) {
+			if (yB < yC) {
+				xC = xA <<= 0x10;
+				if (yA < 0) {
+					xC -= xStepAC * yA;
+					xA -= xStepAB * yA;
+					yA = 0;
 				}
 
-				arg5 <<= 0x10;
-				if (arg2 < 0) {
-					arg5 -= local16 * arg2;
-					arg2 = 0;
+				xB <<= 0x10;
+				if (yB < 0) {
+					xB -= xStepBC * yB;
+					yB = 0;
 				}
 
-				if ((arg1 == arg2 || local31 >= local1) && (arg1 != arg2 || local31 <= local16)) {
-					arg3 -= arg2;
-					arg2 -= arg1;
-					arg1 *= arg7;
+				if ((yA == yB || xStepAC >= xStepAB) && (yA != yB || xStepAC <= xStepBC)) {
+					yC -= yB;
+					yB -= yA;
+					yA *= stride;
 					while (true) {
-						arg2--;
-						if (arg2 < 0) {
+						yB--;
+						if (yB < 0) {
 							while (true) {
-								arg3--;
-								if (arg3 < 0) {
+								yC--;
+								if (yC < 0) {
 									return;
 								}
-								drawSpriteScanline(arg0, arg1, arg5 >> 16, arg6 >> 16);
-								arg6 += local31;
-								arg5 += local16;
-								arg1 += arg7;
+								drawSpriteScanline(dst, yA, xB >> 16, xC >> 16);
+								xC += xStepAC;
+								xB += xStepBC;
+								yA += stride;
 							}
 						}
 
-						drawSpriteScanline(arg0, arg1, arg4 >> 16, arg6 >> 16);
-						arg6 += local31;
-						arg4 += local1;
-						arg1 += arg7;
+						drawSpriteScanline(dst, yA, xA >> 16, xC >> 16);
+						xC += xStepAC;
+						xA += xStepAB;
+						yA += stride;
 					}
 				} else {
-					arg3 -= arg2;
-					arg2 -= arg1;
-					arg1 *= arg7;
+					yC -= yB;
+					yB -= yA;
+					yA *= stride;
 					while (true) {
-						arg2--;
-						if (arg2 < 0) {
+						yB--;
+						if (yB < 0) {
 							while (true) {
-								arg3--;
-								if (arg3 < 0) {
+								yC--;
+								if (yC < 0) {
 									return;
 								}
-								drawSpriteScanline(arg0, arg1, arg6 >> 16, arg5 >> 16);
-								arg6 += local31;
-								arg5 += local16;
-								arg1 += arg7;
+								drawSpriteScanline(dst, yA, xC >> 16, xB >> 16);
+								xC += xStepAC;
+								xB += xStepBC;
+								yA += stride;
 							}
 						}
 
-						drawSpriteScanline(arg0, arg1, arg6 >> 16, arg4 >> 16);
-						arg6 += local31;
-						arg4 += local1;
-						arg1 += arg7;
+						drawSpriteScanline(dst, yA, xC >> 16, xA >> 16);
+						xC += xStepAC;
+						xA += xStepAB;
+						yA += stride;
 					}
 				}
 			} else {
-				arg5 = arg4 <<= 0x10;
-				if (arg1 < 0) {
-					arg5 -= local31 * arg1;
-					arg4 -= local1 * arg1;
-					arg1 = 0;
+				xB = xA <<= 0x10;
+				if (yA < 0) {
+					xB -= xStepAC * yA;
+					xA -= xStepAB * yA;
+					yA = 0;
 				}
 
-				arg6 <<= 0x10;
-				if (arg3 < 0) {
-					arg6 -= local16 * arg3;
-					arg3 = 0;
+				xC <<= 0x10;
+				if (yC < 0) {
+					xC -= xStepBC * yC;
+					yC = 0;
 				}
 
-				if ((arg1 == arg3 || local31 >= local1) && (arg1 != arg3 || local16 <= local1)) {
-					arg2 -= arg3;
-					arg3 -= arg1;
-					arg1 *= arg7;
+				if ((yA == yC || xStepAC >= xStepAB) && (yA != yC || xStepBC <= xStepAB)) {
+					yB -= yC;
+					yC -= yA;
+					yA *= stride;
 					while (true) {
-						arg3--;
-						if (arg3 < 0) {
+						yC--;
+						if (yC < 0) {
 							while (true) {
-								arg2--;
-								if (arg2 < 0) {
+								yB--;
+								if (yB < 0) {
 									return;
 								}
 
-								drawSpriteScanline(arg0, arg1, arg4 >> 16, arg6 >> 16);
-								arg6 += local16;
-								arg4 += local1;
-								arg1 += arg7;
+								drawSpriteScanline(dst, yA, xA >> 16, xC >> 16);
+								xC += xStepBC;
+								xA += xStepAB;
+								yA += stride;
 							}
 						}
 
-						drawSpriteScanline(arg0, arg1, arg4 >> 16, arg5 >> 16);
-						arg5 += local31;
-						arg4 += local1;
-						arg1 += arg7;
+						drawSpriteScanline(dst, yA, xA >> 16, xB >> 16);
+						xB += xStepAC;
+						xA += xStepAB;
+						yA += stride;
 					}
 				} else {
-					arg2 -= arg3;
-					arg3 -= arg1;
-					arg1 *= arg7;
+					yB -= yC;
+					yC -= yA;
+					yA *= stride;
 					while (true) {
-						arg3--;
-						if (arg3 < 0) {
+						yC--;
+						if (yC < 0) {
 							while (true) {
-								arg2--;
-								if (arg2 < 0) {
+								yB--;
+								if (yB < 0) {
 									return;
 								}
 
-								drawSpriteScanline(arg0, arg1, arg6 >> 16, arg4 >> 16);
-								arg6 += local16;
-								arg4 += local1;
-								arg1 += arg7;
+								drawSpriteScanline(dst, yA, xC >> 16, xA >> 16);
+								xC += xStepBC;
+								xA += xStepAB;
+								yA += stride;
 							}
 						}
 
-						drawSpriteScanline(arg0, arg1, arg5 >> 16, arg4 >> 16);
-						arg5 += local31;
-						arg4 += local1;
-						arg1 += arg7;
+						drawSpriteScanline(dst, yA, xB >> 16, xA >> 16);
+						xB += xStepAC;
+						xA += xStepAB;
+						yA += stride;
 					}
 				}
 			}
-		} else if (arg2 <= arg3) {
-			if (arg3 < arg1) {
-				arg4 = arg5 <<= 0x10;
-				if (arg2 < 0) {
-					arg4 -= local1 * arg2;
-					arg5 -= local16 * arg2;
-					arg2 = 0;
+		} else if (yB <= yC) {
+			if (yC < yA) {
+				xA = xB <<= 0x10;
+				if (yB < 0) {
+					xA -= xStepAB * yB;
+					xB -= xStepBC * yB;
+					yB = 0;
 				}
 
-				arg6 <<= 0x10;
-				if (arg3 < 0) {
-					arg6 -= local31 * arg3;
-					arg3 = 0;
+				xC <<= 0x10;
+				if (yC < 0) {
+					xC -= xStepAC * yC;
+					yC = 0;
 				}
 
-				if (arg2 != arg3 && local1 < local16 || arg2 == arg3 && local1 > local31) {
-					arg1 -= arg3;
-					arg3 -= arg2;
-					arg2 *= arg7;
+				if (yB != yC && xStepAB < xStepBC || yB == yC && xStepAB > xStepAC) {
+					yA -= yC;
+					yC -= yB;
+					yB *= stride;
 					while (true) {
-						arg3--;
-						if (arg3 < 0) {
+						yC--;
+						if (yC < 0) {
 							while (true) {
-								arg1--;
-								if (arg1 < 0) {
+								yA--;
+								if (yA < 0) {
 									return;
 								}
-								drawSpriteScanline(arg0, arg2, arg4 >> 16, arg6 >> 16);
-								arg4 += local1;
-								arg6 += local31;
-								arg2 += arg7;
+								drawSpriteScanline(dst, yB, xA >> 16, xC >> 16);
+								xA += xStepAB;
+								xC += xStepAC;
+								yB += stride;
 							}
 						}
 
-						drawSpriteScanline(arg0, arg2, arg4 >> 16, arg5 >> 16);
-						arg4 += local1;
-						arg5 += local16;
-						arg2 += arg7;
+						drawSpriteScanline(dst, yB, xA >> 16, xB >> 16);
+						xA += xStepAB;
+						xB += xStepBC;
+						yB += stride;
 					}
 				} else {
-					arg1 -= arg3;
-					arg3 -= arg2;
-					arg2 *= arg7;
+					yA -= yC;
+					yC -= yB;
+					yB *= stride;
 					while (true) {
-						arg3--;
-						if (arg3 < 0) {
+						yC--;
+						if (yC < 0) {
 							while (true) {
-								arg1--;
-								if (arg1 < 0) {
+								yA--;
+								if (yA < 0) {
 									return;
 								}
 
-								drawSpriteScanline(arg0, arg2, arg6 >> 16, arg4 >> 16);
-								arg4 += local1;
-								arg6 += local31;
-								arg2 += arg7;
+								drawSpriteScanline(dst, yB, xC >> 16, xA >> 16);
+								xA += xStepAB;
+								xC += xStepAC;
+								yB += stride;
 							}
 						}
 
-						drawSpriteScanline(arg0, arg2, arg5 >> 16, arg4 >> 16);
-						arg4 += local1;
-						arg5 += local16;
-						arg2 += arg7;
+						drawSpriteScanline(dst, yB, xB >> 16, xA >> 16);
+						xA += xStepAB;
+						xB += xStepBC;
+						yB += stride;
 					}
 				}
 			} else {
-				arg6 = arg5 <<= 0x10;
-				if (arg2 < 0) {
-					arg6 -= local1 * arg2;
-					arg5 -= local16 * arg2;
-					arg2 = 0;
+				xC = xB <<= 0x10;
+				if (yB < 0) {
+					xC -= xStepAB * yB;
+					xB -= xStepBC * yB;
+					yB = 0;
 				}
 
-				arg4 <<= 0x10;
-				if (arg1 < 0) {
-					arg4 -= local31 * arg1;
-					arg1 = 0;
+				xA <<= 0x10;
+				if (yA < 0) {
+					xA -= xStepAC * yA;
+					yA = 0;
 				}
 
-				if (local1 < local16) {
-					arg3 -= arg1;
-					arg1 -= arg2;
-					arg2 *= arg7;
+				if (xStepAB < xStepBC) {
+					yC -= yA;
+					yA -= yB;
+					yB *= stride;
 					while (true) {
-						arg1--;
-						if (arg1 < 0) {
+						yA--;
+						if (yA < 0) {
 							while (true) {
-								arg3--;
-								if (arg3 < 0) {
+								yC--;
+								if (yC < 0) {
 									return;
 								}
 
-								drawSpriteScanline(arg0, arg2, arg4 >> 16, arg5 >> 16);
-								arg4 += local31;
-								arg5 += local16;
-								arg2 += arg7;
+								drawSpriteScanline(dst, yB, xA >> 16, xB >> 16);
+								xA += xStepAC;
+								xB += xStepBC;
+								yB += stride;
 							}
 						}
 
-						drawSpriteScanline(arg0, arg2, arg6 >> 16, arg5 >> 16);
-						arg6 += local1;
-						arg5 += local16;
-						arg2 += arg7;
+						drawSpriteScanline(dst, yB, xC >> 16, xB >> 16);
+						xC += xStepAB;
+						xB += xStepBC;
+						yB += stride;
 					}
 				} else {
-					arg3 -= arg1;
-					arg1 -= arg2;
-					arg2 *= arg7;
+					yC -= yA;
+					yA -= yB;
+					yB *= stride;
 					while (true) {
-						arg1--;
-						if (arg1 < 0) {
+						yA--;
+						if (yA < 0) {
 							while (true) {
-								arg3--;
-								if (arg3 < 0) {
+								yC--;
+								if (yC < 0) {
 									return;
 								}
 
-								drawSpriteScanline(arg0, arg2, arg5 >> 16, arg4 >> 16);
-								arg4 += local31;
-								arg5 += local16;
-								arg2 += arg7;
+								drawSpriteScanline(dst, yB, xB >> 16, xA >> 16);
+								xA += xStepAC;
+								xB += xStepBC;
+								yB += stride;
 							}
 						}
 
-						drawSpriteScanline(arg0, arg2, arg5 >> 16, arg6 >> 16);
-						arg6 += local1;
-						arg5 += local16;
-						arg2 += arg7;
+						drawSpriteScanline(dst, yB, xB >> 16, xC >> 16);
+						xC += xStepAB;
+						xB += xStepBC;
+						yB += stride;
 					}
 				}
 			}
-		} else if (arg1 < arg2) {
-			arg5 = arg6 <<= 0x10;
-			if (arg3 < 0) {
-				arg5 -= local16 * arg3;
-				arg6 -= local31 * arg3;
-				arg3 = 0;
+		} else if (yA < yB) {
+			xB = xC <<= 0x10;
+			if (yC < 0) {
+				xB -= xStepBC * yC;
+				xC -= xStepAC * yC;
+				yC = 0;
 			}
 
-			arg4 <<= 0x10;
-			if (arg1 < 0) {
-				arg4 -= local1 * arg1;
-				arg1 = 0;
+			xA <<= 0x10;
+			if (yA < 0) {
+				xA -= xStepAB * yA;
+				yA = 0;
 			}
 
-			if (local16 < local31) {
-				arg2 -= arg1;
-				arg1 -= arg3;
-				arg3 *= arg7;
+			if (xStepBC < xStepAC) {
+				yB -= yA;
+				yA -= yC;
+				yC *= stride;
 				while (true) {
-					arg1--;
-					if (arg1 < 0) {
+					yA--;
+					if (yA < 0) {
 						while (true) {
-							arg2--;
-							if (arg2 < 0) {
+							yB--;
+							if (yB < 0) {
 								return;
 							}
 
-							drawSpriteScanline(arg0, arg3, arg5 >> 16, arg4 >> 16);
-							arg5 += local16;
-							arg4 += local1;
-							arg3 += arg7;
+							drawSpriteScanline(dst, yC, xB >> 16, xA >> 16);
+							xB += xStepBC;
+							xA += xStepAB;
+							yC += stride;
 						}
 					}
 
-					drawSpriteScanline(arg0, arg3, arg5 >> 16, arg6 >> 16);
-					arg5 += local16;
-					arg6 += local31;
-					arg3 += arg7;
+					drawSpriteScanline(dst, yC, xB >> 16, xC >> 16);
+					xB += xStepBC;
+					xC += xStepAC;
+					yC += stride;
 				}
 			} else {
-				arg2 -= arg1;
-				arg1 -= arg3;
-				arg3 *= arg7;
+				yB -= yA;
+				yA -= yC;
+				yC *= stride;
 				while (true) {
-					arg1--;
-					if (arg1 < 0) {
+					yA--;
+					if (yA < 0) {
 						while (true) {
-							arg2--;
-							if (arg2 < 0) {
+							yB--;
+							if (yB < 0) {
 								return;
 							}
 
-							drawSpriteScanline(arg0, arg3, arg4 >> 16, arg5 >> 16);
-							arg5 += local16;
-							arg4 += local1;
-							arg3 += arg7;
+							drawSpriteScanline(dst, yC, xA >> 16, xB >> 16);
+							xB += xStepBC;
+							xA += xStepAB;
+							yC += stride;
 						}
 					}
 
-					drawSpriteScanline(arg0, arg3, arg6 >> 16, arg5 >> 16);
-					arg5 += local16;
-					arg6 += local31;
-					arg3 += arg7;
+					drawSpriteScanline(dst, yC, xC >> 16, xB >> 16);
+					xB += xStepBC;
+					xC += xStepAC;
+					yC += stride;
 				}
 			}
 		} else {
-			arg4 = arg6 <<= 0x10;
-			if (arg3 < 0) {
-				arg4 -= local16 * arg3;
-				arg6 -= local31 * arg3;
-				arg3 = 0;
+			xA = xC <<= 0x10;
+			if (yC < 0) {
+				xA -= xStepBC * yC;
+				xC -= xStepAC * yC;
+				yC = 0;
 			}
 
-			arg5 <<= 0x10;
-			if (arg2 < 0) {
-				arg5 -= local1 * arg2;
-				arg2 = 0;
+			xB <<= 0x10;
+			if (yB < 0) {
+				xB -= xStepAB * yB;
+				yB = 0;
 			}
 
-			if (local16 < local31) {
-				arg1 -= arg2;
-				arg2 -= arg3;
-				arg3 *= arg7;
+			if (xStepBC < xStepAC) {
+				yA -= yB;
+				yB -= yC;
+				yC *= stride;
 				while (true) {
-					arg2--;
-					if (arg2 < 0) {
+					yB--;
+					if (yB < 0) {
 						while (true) {
-							arg1--;
-							if (arg1 < 0) {
+							yA--;
+							if (yA < 0) {
 								return;
 							}
 
-							drawSpriteScanline(arg0, arg3, arg5 >> 16, arg6 >> 16);
-							arg5 += local1;
-							arg6 += local31;
-							arg3 += arg7;
+							drawSpriteScanline(dst, yC, xB >> 16, xC >> 16);
+							xB += xStepAB;
+							xC += xStepAC;
+							yC += stride;
 						}
 					}
 
-					drawSpriteScanline(arg0, arg3, arg4 >> 16, arg6 >> 16);
-					arg4 += local16;
-					arg6 += local31;
-					arg3 += arg7;
+					drawSpriteScanline(dst, yC, xA >> 16, xC >> 16);
+					xA += xStepBC;
+					xC += xStepAC;
+					yC += stride;
 				}
 			} else {
-				arg1 -= arg2;
-				arg2 -= arg3;
-				arg3 *= arg7;
+				yA -= yB;
+				yB -= yC;
+				yC *= stride;
 				while (true) {
-					arg2--;
-					if (arg2 < 0) {
+					yB--;
+					if (yB < 0) {
 						while (true) {
-							arg1--;
-							if (arg1 < 0) {
+							yA--;
+							if (yA < 0) {
 								return;
 							}
 
-							drawSpriteScanline(arg0, arg3, arg6 >> 16, arg5 >> 16);
-							arg5 += local1;
-							arg6 += local31;
-							arg3 += arg7;
+							drawSpriteScanline(dst, yC, xC >> 16, xB >> 16);
+							xB += xStepAB;
+							xC += xStepAC;
+							yC += stride;
 						}
 					}
 
-					drawSpriteScanline(arg0, arg3, arg6 >> 16, arg4 >> 16);
-					arg4 += local16;
-					arg6 += local31;
-					arg3 += arg7;
+					drawSpriteScanline(dst, yC, xC >> 16, xA >> 16);
+					xA += xStepBC;
+					xC += xStepAC;
+					yC += stride;
 				}
 			}
 		}
@@ -3748,20 +3748,20 @@ public final class Rasteriser {
 	}
 
 	@OriginalMember(owner = "client!hf", name = "a", descriptor = "([BIIII)V")
-	private static void drawSpriteScanline(@OriginalArg(0) byte[] dst, @OriginalArg(1) int off, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		if (arg2 >= arg3) {
+	private static void drawSpriteScanline(@OriginalArg(0) byte[] dst, @OriginalArg(1) int off, @OriginalArg(3) int yB, @OriginalArg(4) int yC) {
+		if (yB >= yC) {
 			return;
 		}
 
-		off += arg2;
-		@Pc(13) int local13 = arg3 - arg2 >> 2;
+		off += yB;
+		@Pc(13) int count = yC - yB >> 2;
 		while (true) {
-			local13--;
-			if (local13 < 0) {
-				local13 = arg3 - arg2 & 0x3;
+			count--;
+			if (count < 0) {
+				count = yC - yB & 0x3;
 				while (true) {
-					local13--;
-					if (local13 < 0) {
+					count--;
+					if (count < 0) {
 						return;
 					}
 					dst[off++] = 1;

@@ -42,7 +42,7 @@ public final class SeqType {
 	public int offhand = -1;
 
 	@OriginalMember(owner = "client!tk", name = "d", descriptor = "Z")
-	public boolean aBoolean278 = false;
+	public boolean hasModelTransforms = false;
 
 	@OriginalMember(owner = "client!tk", name = "t", descriptor = "I")
 	public int replaycount = 99;
@@ -63,7 +63,7 @@ public final class SeqType {
 	public int mainhand = -1;
 
 	@OriginalMember(owner = "client!tk", name = "L", descriptor = "Z")
-	public boolean aBoolean280 = false;
+	public boolean updateShadows = false;
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(Lclient!wa;B)V")
 	public void decode(@OriginalArg(0) Buffer buffer) {
@@ -77,172 +77,172 @@ public final class SeqType {
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(IIILclient!ak;II)Lclient!ak;")
-	public Model method4214(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) Model arg2, @OriginalArg(4) int arg3, @OriginalArg(5) int arg4) {
-		@Pc(10) int local10 = this.frameDelay[arg0];
-		@Pc(15) int local15 = this.frames[arg0];
-		@Pc(23) AnimFrameset local23 = SeqTypeList.getAnimFrameset(local15 >> 16);
-		@Pc(27) int local27 = local15 & 0xFFFF;
-		if (local23 == null) {
-			return arg2.method4568(true, true, true);
+	public Model animateLocSoftware(@OriginalArg(1) int frame, @OriginalArg(2) int nextFrame, @OriginalArg(3) Model model, @OriginalArg(4) int locInfo, @OriginalArg(5) int tweenDelta) {
+		@Pc(10) int delay = this.frameDelay[frame];
+		@Pc(15) int frameId = this.frames[frame];
+		@Pc(23) AnimFrameset animFrameset = SeqTypeList.getAnimFrameset(frameId >> 16);
+		@Pc(27) int frameIdx = frameId & 0xFFFF;
+		if (animFrameset == null) {
+			return model.copyForLoc(true, true, true);
 		}
-		@Pc(39) int local39 = arg3 & 0x3;
-		@Pc(41) AnimFrameset local41 = null;
-		if ((this.tween || applyTweening) && arg1 != -1 && this.frames.length > arg1) {
-			@Pc(69) int local69 = this.frames[arg1];
-			local41 = SeqTypeList.getAnimFrameset(local69 >> 16);
-			arg1 = local69 & 0xFFFF;
+		@Pc(39) int rotation = locInfo & 0x3;
+		@Pc(41) AnimFrameset nextAnimFrameset = null;
+		if ((this.tween || applyTweening) && nextFrame != -1 && this.frames.length > nextFrame) {
+			@Pc(69) int nextFrameId = this.frames[nextFrame];
+			nextAnimFrameset = SeqTypeList.getAnimFrameset(nextFrameId >> 16);
+			nextFrame = nextFrameId & 0xFFFF;
 		}
-		@Pc(124) Model local124;
-		if (local41 == null) {
-			local124 = arg2.method4568(!local23.isAlphaTransformed(local27), !local23.isColorTransformed(local27), !this.aBoolean278);
+		@Pc(124) Model copy;
+		if (nextAnimFrameset == null) {
+			copy = model.copyForLoc(!animFrameset.isAlphaTransformed(frameIdx), !animFrameset.isColorTransformed(frameIdx), !this.hasModelTransforms);
 		} else {
-			local124 = arg2.method4568(!local23.isAlphaTransformed(local27) & !local41.isAlphaTransformed(arg1), !local23.isColorTransformed(local27) & !local41.isColorTransformed(arg1), !this.aBoolean278);
+			copy = model.copyForLoc(!animFrameset.isAlphaTransformed(frameIdx) & !nextAnimFrameset.isAlphaTransformed(nextFrame), !animFrameset.isColorTransformed(frameIdx) & !nextAnimFrameset.isColorTransformed(nextFrame), !this.hasModelTransforms);
 		}
-		if (GlRenderer.enabled && this.aBoolean278) {
-			if (local39 == 1) {
-				((GlModel) local124).method4093();
-			} else if (local39 == 2) {
-				((GlModel) local124).method4102();
-			} else if (local39 == 3) {
-				((GlModel) local124).method4116();
+		if (GlRenderer.enabled && this.hasModelTransforms) {
+			if (rotation == 1) {
+				((GlModel) copy).rotateClockwiseAll();
+			} else if (rotation == 2) {
+				((GlModel) copy).rotate180All();
+			} else if (rotation == 3) {
+				((GlModel) copy).rotateCounterClockwiseAll();
 			}
-		} else if (local39 == 1) {
-			local124.method4578();
-		} else if (local39 == 2) {
-			local124.method4552();
-		} else if (local39 == 3) {
-			local124.rotateCounterClockwise();
+		} else if (rotation == 1) {
+			copy.rotateClockwise();
+		} else if (rotation == 2) {
+			copy.rotate180();
+		} else if (rotation == 3) {
+			copy.rotateCounterClockwise();
 		}
-		local124.method4558(local23, local27, local41, arg1, arg4 - 1, local10, this.aBoolean278);
-		if (GlRenderer.enabled && this.aBoolean278) {
-			if (local39 == 1) {
-				((GlModel) local124).method4116();
-			} else if (local39 == 2) {
-				((GlModel) local124).method4102();
-			} else if (local39 == 3) {
-				((GlModel) local124).method4093();
+		copy.applyAnimation(animFrameset, frameIdx, nextAnimFrameset, nextFrame, tweenDelta - 1, delay, this.hasModelTransforms);
+		if (GlRenderer.enabled && this.hasModelTransforms) {
+			if (rotation == 1) {
+				((GlModel) copy).rotateCounterClockwiseAll();
+			} else if (rotation == 2) {
+				((GlModel) copy).rotate180All();
+			} else if (rotation == 3) {
+				((GlModel) copy).rotateClockwiseAll();
 			}
-		} else if (local39 == 1) {
-			local124.rotateCounterClockwise();
-		} else if (local39 == 2) {
-			local124.method4552();
-		} else if (local39 == 3) {
-			local124.method4578();
+		} else if (rotation == 1) {
+			copy.rotateCounterClockwise();
+		} else if (rotation == 2) {
+			copy.rotate180();
+		} else if (rotation == 3) {
+			copy.rotateClockwise();
 		}
-		return local124;
+		return copy;
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(Lclient!ak;BIII)Lclient!ak;")
-	public Model method4215(@OriginalArg(0) Model arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		@Pc(8) int local8 = this.frames[arg3];
-		@Pc(13) int local13 = this.frameDelay[arg3];
-		@Pc(19) AnimFrameset local19 = SeqTypeList.getAnimFrameset(local8 >> 16);
-		@Pc(23) int local23 = local8 & 0xFFFF;
-		if (local19 == null) {
-			return arg0.method4572(true, true, true);
+	public Model animateEntity(@OriginalArg(0) Model model, @OriginalArg(2) int nextFrame, @OriginalArg(3) int tweenDelta, @OriginalArg(4) int frame) {
+		@Pc(8) int frameId = this.frames[frame];
+		@Pc(13) int delay = this.frameDelay[frame];
+		@Pc(19) AnimFrameset animFrameset = SeqTypeList.getAnimFrameset(frameId >> 16);
+		@Pc(23) int frameIdx = frameId & 0xFFFF;
+		if (animFrameset == null) {
+			return model.copyForEntity(true, true, true);
 		}
-		@Pc(34) AnimFrameset local34 = null;
-		if ((this.tween || applyTweening) && arg1 != -1 && arg1 < this.frames.length) {
-			@Pc(59) int local59 = this.frames[arg1];
-			local34 = SeqTypeList.getAnimFrameset(local59 >> 16);
-			arg1 = local59 & 0xFFFF;
+		@Pc(34) AnimFrameset nextAnimFrameset = null;
+		if ((this.tween || applyTweening) && nextFrame != -1 && nextFrame < this.frames.length) {
+			@Pc(59) int nextFrameId = this.frames[nextFrame];
+			nextAnimFrameset = SeqTypeList.getAnimFrameset(nextFrameId >> 16);
+			nextFrame = nextFrameId & 0xFFFF;
 		}
-		@Pc(71) AnimFrameset local71 = null;
-		@Pc(81) AnimFrameset local81 = null;
-		@Pc(83) int local83 = 0;
-		@Pc(85) int local85 = 0;
+		@Pc(71) AnimFrameset secondaryFrameset = null;
+		@Pc(81) AnimFrameset secondaryNextFrameset = null;
+		@Pc(83) int secondaryFrameIdx = 0;
+		@Pc(85) int secondaryNextFrameIdx = 0;
 		if (this.frameset != null) {
-			if (this.frameset.length > arg3) {
-				local83 = this.frameset[arg3];
-				if (local83 != 65535) {
-					local71 = SeqTypeList.getAnimFrameset(local83 >> 16);
-					local83 &= 0xFFFF;
+			if (this.frameset.length > frame) {
+				secondaryFrameIdx = this.frameset[frame];
+				if (secondaryFrameIdx != 65535) {
+					secondaryFrameset = SeqTypeList.getAnimFrameset(secondaryFrameIdx >> 16);
+					secondaryFrameIdx &= 0xFFFF;
 				}
 			}
-			if ((this.tween || applyTweening) && arg1 != -1 && this.frameset.length > arg1) {
-				local85 = this.frameset[arg1];
-				if (local85 != 65535) {
-					local81 = SeqTypeList.getAnimFrameset(local85 >> 16);
-					local85 &= 0xFFFF;
+			if ((this.tween || applyTweening) && nextFrame != -1 && this.frameset.length > nextFrame) {
+				secondaryNextFrameIdx = this.frameset[nextFrame];
+				if (secondaryNextFrameIdx != 65535) {
+					secondaryNextFrameset = SeqTypeList.getAnimFrameset(secondaryNextFrameIdx >> 16);
+					secondaryNextFrameIdx &= 0xFFFF;
 				}
 			}
 		}
-		@Pc(163) boolean local163 = !local19.isAlphaTransformed(local23);
-		@Pc(172) boolean local172 = !local19.isColorTransformed(local23);
-		if (local71 != null) {
-			local163 &= !local71.isAlphaTransformed(local83);
-			local172 &= !local71.isColorTransformed(local83);
+		@Pc(163) boolean noAlpha = !animFrameset.isAlphaTransformed(frameIdx);
+		@Pc(172) boolean noColor = !animFrameset.isColorTransformed(frameIdx);
+		if (secondaryFrameset != null) {
+			noAlpha &= !secondaryFrameset.isAlphaTransformed(secondaryFrameIdx);
+			noColor &= !secondaryFrameset.isColorTransformed(secondaryFrameIdx);
 		}
-		if (local34 != null) {
-			local163 &= !local34.isAlphaTransformed(arg1);
-			local172 &= !local34.isColorTransformed(arg1);
+		if (nextAnimFrameset != null) {
+			noAlpha &= !nextAnimFrameset.isAlphaTransformed(nextFrame);
+			noColor &= !nextAnimFrameset.isColorTransformed(nextFrame);
 		}
-		if (local81 != null) {
-			local163 &= !local81.isAlphaTransformed(local85);
-			local172 &= !local81.isColorTransformed(local85);
+		if (secondaryNextFrameset != null) {
+			noAlpha &= !secondaryNextFrameset.isAlphaTransformed(secondaryNextFrameIdx);
+			noColor &= !secondaryNextFrameset.isColorTransformed(secondaryNextFrameIdx);
 		}
-		@Pc(258) Model local258 = arg0.method4572(local163, local172, !this.aBoolean278);
-		local258.method4558(local19, local23, local34, arg1, arg2 - 1, local13, this.aBoolean278);
-		if (local71 != null) {
-			local258.method4558(local71, local83, local81, local85, arg2 - 1, local13, this.aBoolean278);
+		@Pc(258) Model copy = model.copyForEntity(noAlpha, noColor, !this.hasModelTransforms);
+		copy.applyAnimation(animFrameset, frameIdx, nextAnimFrameset, nextFrame, tweenDelta - 1, delay, this.hasModelTransforms);
+		if (secondaryFrameset != null) {
+			copy.applyAnimation(secondaryFrameset, secondaryFrameIdx, secondaryNextFrameset, secondaryNextFrameIdx, tweenDelta - 1, delay, this.hasModelTransforms);
 		}
-		return local258;
+		return copy;
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(IIIILclient!ak;I)Lclient!ak;")
-	public Model method4216(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) Model arg4) {
-		@Pc(6) int local6 = this.frameDelay[arg1];
-		@Pc(11) int local11 = this.frames[arg1];
-		@Pc(19) AnimFrameset local19 = SeqTypeList.getAnimFrameset(local11 >> 16);
-		@Pc(27) int local27 = local11 & 0xFFFF;
-		if (local19 == null) {
-			return arg4.method4572(true, true, true);
+	public Model animateLocGl(@OriginalArg(0) int nextFrame, @OriginalArg(1) int frame, @OriginalArg(2) int tweenDelta, @OriginalArg(3) int locInfo, @OriginalArg(4) Model model) {
+		@Pc(6) int delay = this.frameDelay[frame];
+		@Pc(11) int frameId = this.frames[frame];
+		@Pc(19) AnimFrameset animFrameset = SeqTypeList.getAnimFrameset(frameId >> 16);
+		@Pc(27) int frameIdx = frameId & 0xFFFF;
+		if (animFrameset == null) {
+			return model.copyForEntity(true, true, true);
 		}
-		@Pc(40) int local40 = arg3 & 0x3;
-		@Pc(42) AnimFrameset local42 = null;
-		if ((this.tween || applyTweening) && arg0 != -1 && arg0 < this.frames.length) {
-			@Pc(66) int local66 = this.frames[arg0];
-			local42 = SeqTypeList.getAnimFrameset(local66 >> 16);
-			arg0 = local66 & 0xFFFF;
+		@Pc(40) int rotation = locInfo & 0x3;
+		@Pc(42) AnimFrameset nextAnimFrameset = null;
+		if ((this.tween || applyTweening) && nextFrame != -1 && nextFrame < this.frames.length) {
+			@Pc(66) int nextFrameId = this.frames[nextFrame];
+			nextAnimFrameset = SeqTypeList.getAnimFrameset(nextFrameId >> 16);
+			nextFrame = nextFrameId & 0xFFFF;
 		}
-		@Pc(106) Model local106;
-		if (local42 == null) {
-			local106 = arg4.method4572(!local19.isAlphaTransformed(local27), !local19.isColorTransformed(local27), !this.aBoolean278);
+		@Pc(106) Model copy;
+		if (nextAnimFrameset == null) {
+			copy = model.copyForEntity(!animFrameset.isAlphaTransformed(frameIdx), !animFrameset.isColorTransformed(frameIdx), !this.hasModelTransforms);
 		} else {
-			local106 = arg4.method4572(!local19.isAlphaTransformed(local27) & !local42.isAlphaTransformed(arg0), !local19.isColorTransformed(local27) & !local42.isColorTransformed(arg0), !this.aBoolean278);
+			copy = model.copyForEntity(!animFrameset.isAlphaTransformed(frameIdx) & !nextAnimFrameset.isAlphaTransformed(nextFrame), !animFrameset.isColorTransformed(frameIdx) & !nextAnimFrameset.isColorTransformed(nextFrame), !this.hasModelTransforms);
 		}
-		if (this.aBoolean278 && GlRenderer.enabled) {
-			if (local40 == 1) {
-				((GlModel) local106).method4093();
-			} else if (local40 == 2) {
-				((GlModel) local106).method4102();
-			} else if (local40 == 3) {
-				((GlModel) local106).method4116();
+		if (this.hasModelTransforms && GlRenderer.enabled) {
+			if (rotation == 1) {
+				((GlModel) copy).rotateClockwiseAll();
+			} else if (rotation == 2) {
+				((GlModel) copy).rotate180All();
+			} else if (rotation == 3) {
+				((GlModel) copy).rotateCounterClockwiseAll();
 			}
-		} else if (local40 == 1) {
-			local106.method4578();
-		} else if (local40 == 2) {
-			local106.method4552();
-		} else if (local40 == 3) {
-			local106.rotateCounterClockwise();
+		} else if (rotation == 1) {
+			copy.rotateClockwise();
+		} else if (rotation == 2) {
+			copy.rotate180();
+		} else if (rotation == 3) {
+			copy.rotateCounterClockwise();
 		}
-		local106.method4558(local19, local27, local42, arg0, arg2 - 1, local6, this.aBoolean278);
-		if (this.aBoolean278 && GlRenderer.enabled) {
-			if (local40 == 1) {
-				((GlModel) local106).method4116();
-			} else if (local40 == 2) {
-				((GlModel) local106).method4102();
-			} else if (local40 == 3) {
-				((GlModel) local106).method4093();
+		copy.applyAnimation(animFrameset, frameIdx, nextAnimFrameset, nextFrame, tweenDelta - 1, delay, this.hasModelTransforms);
+		if (this.hasModelTransforms && GlRenderer.enabled) {
+			if (rotation == 1) {
+				((GlModel) copy).rotateCounterClockwiseAll();
+			} else if (rotation == 2) {
+				((GlModel) copy).rotate180All();
+			} else if (rotation == 3) {
+				((GlModel) copy).rotateClockwiseAll();
 			}
-		} else if (local40 == 1) {
-			local106.rotateCounterClockwise();
-		} else if (local40 == 2) {
-			local106.method4552();
-		} else if (local40 == 3) {
-			local106.method4578();
+		} else if (rotation == 1) {
+			copy.rotateCounterClockwise();
+		} else if (rotation == 2) {
+			copy.rotate180();
+		} else if (rotation == 3) {
+			copy.rotateClockwise();
 		}
-		return local106;
+		return copy;
 	}
 
 	@OriginalMember(owner = "client!tk", name = "b", descriptor = "(B)V")
@@ -265,28 +265,28 @@ public final class SeqType {
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(IIIBLclient!ak;)Lclient!ak;")
-	public Model method4219(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) Model arg3) {
-		@Pc(16) int local16 = this.frameDelay[arg2];
-		@Pc(21) int local21 = this.frames[arg2];
-		@Pc(27) AnimFrameset local27 = SeqTypeList.getAnimFrameset(local21 >> 16);
-		@Pc(31) int local31 = local21 & 0xFFFF;
-		if (local27 == null) {
-			return arg3.method4560(true, true, true);
+	public Model animateSpotAnim(@OriginalArg(0) int nextFrame, @OriginalArg(1) int tweenDelta, @OriginalArg(2) int frame, @OriginalArg(4) Model model) {
+		@Pc(16) int delay = this.frameDelay[frame];
+		@Pc(21) int frameId = this.frames[frame];
+		@Pc(27) AnimFrameset animFrameset = SeqTypeList.getAnimFrameset(frameId >> 16);
+		@Pc(31) int frameIdx = frameId & 0xFFFF;
+		if (animFrameset == null) {
+			return model.copyForAnimation(true, true, true);
 		}
-		@Pc(42) AnimFrameset local42 = null;
-		if ((this.tween || applyTweening) && arg0 != -1 && this.frames.length > arg0) {
-			@Pc(65) int local65 = this.frames[arg0];
-			local42 = SeqTypeList.getAnimFrameset(local65 >> 16);
-			arg0 = local65 & 0xFFFF;
+		@Pc(42) AnimFrameset nextAnimFrameset = null;
+		if ((this.tween || applyTweening) && nextFrame != -1 && this.frames.length > nextFrame) {
+			@Pc(65) int nextFrameId = this.frames[nextFrame];
+			nextAnimFrameset = SeqTypeList.getAnimFrameset(nextFrameId >> 16);
+			nextFrame = nextFrameId & 0xFFFF;
 		}
-		@Pc(103) Model local103;
-		if (local42 == null) {
-			local103 = arg3.method4560(!local27.isAlphaTransformed(local31), !local27.isColorTransformed(local31), !this.aBoolean278);
+		@Pc(103) Model copy;
+		if (nextAnimFrameset == null) {
+			copy = model.copyForAnimation(!animFrameset.isAlphaTransformed(frameIdx), !animFrameset.isColorTransformed(frameIdx), !this.hasModelTransforms);
 		} else {
-			local103 = arg3.method4560(!local27.isAlphaTransformed(local31) & !local42.isAlphaTransformed(arg0), !local27.isColorTransformed(local31) & !local42.isColorTransformed(arg0), !this.aBoolean278);
+			copy = model.copyForAnimation(!animFrameset.isAlphaTransformed(frameIdx) & !nextAnimFrameset.isAlphaTransformed(nextFrame), !animFrameset.isColorTransformed(frameIdx) & !nextAnimFrameset.isColorTransformed(nextFrame), !this.hasModelTransforms);
 		}
-		local103.method4558(local27, local31, local42, arg0, arg1 - 1, local16, this.aBoolean278);
-		return local103;
+		copy.applyAnimation(animFrameset, frameIdx, nextAnimFrameset, nextFrame, tweenDelta - 1, delay, this.hasModelTransforms);
+		return copy;
 	}
 
 	@OriginalMember(owner = "client!tk", name = "a", descriptor = "(IBLclient!wa;)V")
@@ -344,21 +344,21 @@ public final class SeqType {
 			count = buffer.g2();
 			this.soundeffect = new int[count][];
 			for (i = 0; i < count; i++) {
-				@Pc(163) int count2 = buffer.g1();
-				if (count2 > 0) {
-					this.soundeffect[i] = new int[count2];
+				@Pc(163) int soundCount = buffer.g1();
+				if (soundCount > 0) {
+					this.soundeffect[i] = new int[soundCount];
 					this.soundeffect[i][0] = buffer.g3();
-					for (@Pc(182) int j = 1; j < count2; j++) {
+					for (@Pc(182) int j = 1; j < soundCount; j++) {
 						this.soundeffect[i][j] = buffer.g2();
 					}
 				}
 			}
 		} else if (opcode == 14) {
-			this.aBoolean278 = true;
+			this.hasModelTransforms = true;
 		} else if (opcode == 15) { // TODO: (probably) not an authentic name
 			this.tween = true;
 		} else if (opcode == 16) {
-			this.aBoolean280 = true;
+			this.updateShadows = true;
 		}
 	}
 }

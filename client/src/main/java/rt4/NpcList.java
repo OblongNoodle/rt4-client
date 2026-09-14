@@ -13,605 +13,605 @@ public class NpcList {
 	public static int size = 0;
 
 	@OriginalMember(owner = "client!ig", name = "a", descriptor = "(I)V")
-	public static void method2274() {
-		for (@Pc(7) int local7 = 0; local7 < size; local7++) {
-			@Pc(18) int local18 = ids[local7];
-			@Pc(22) Npc local22 = npcs[local18];
-			if (local22 != null) {
-				method4514(local22.type.size, local22);
+	public static void processAllNpcs() {
+		for (@Pc(7) int i = 0; i < size; i++) {
+			@Pc(18) int npcId = ids[i];
+			@Pc(22) Npc npc = npcs[npcId];
+			if (npc != null) {
+				processEntity(npc.type.size, npc);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!vg", name = "a", descriptor = "(IILclient!fe;)V")
-	public static void method4514(@OriginalArg(0) int arg0, @OriginalArg(2) PathingEntity arg1) {
-		if (client.loop < arg1.forceMoveCyclesToStart) {
-			lerpToForceMoveStart(arg1);
-		} else if (arg1.forceMoveCyclesToDest >= client.loop) {
-			lerpToForceMoveDest(arg1);
+	public static void processEntity(@OriginalArg(0) int entitySize, @OriginalArg(2) PathingEntity entity) {
+		if (client.loop < entity.forceMoveCyclesToStart) {
+			lerpToForceMoveStart(entity);
+		} else if (entity.forceMoveCyclesToDest >= client.loop) {
+			lerpToForceMoveDest(entity);
 		} else {
-			method2247(arg1);
+			processMovement(entity);
 		}
-		if (arg1.xFine < 128 || arg1.zFine < 128 || arg1.xFine >= 13184 || arg1.zFine >= 13184) {
-			arg1.seqId = -1;
-			arg1.spotAnimId = -1;
-			arg1.forceMoveCyclesToStart = 0;
-			arg1.forceMoveCyclesToDest = 0;
-			arg1.xFine = arg1.movementQueueX[0] * 128 + arg1.getSize() * 64;
-			arg1.zFine = arg1.movementQueueZ[0] * 128 + arg1.getSize() * 64;
-			arg1.method2689();
+		if (entity.xFine < 128 || entity.yFine < 128 || entity.xFine >= 13184 || entity.yFine >= 13184) {
+			entity.seqId = -1;
+			entity.spotAnimId = -1;
+			entity.forceMoveCyclesToStart = 0;
+			entity.forceMoveCyclesToDest = 0;
+			entity.xFine = entity.movementQueueX[0] * 128 + entity.getSize() * 64;
+			entity.yFine = entity.movementQueueY[0] * 128 + entity.getSize() * 64;
+			entity.resetMovementQueue();
 		}
-		if (arg1 == PlayerList.self && (arg1.xFine < 1536 || arg1.zFine < 1536 || arg1.xFine >= 11776 || arg1.zFine >= 11776)) {
-			arg1.spotAnimId = -1;
-			arg1.forceMoveCyclesToStart = 0;
-			arg1.forceMoveCyclesToDest = 0;
-			arg1.seqId = -1;
-			arg1.xFine = arg1.movementQueueX[0] * 128 + arg1.getSize() * 64;
-			arg1.zFine = arg1.movementQueueZ[0] * 128 + arg1.getSize() * 64;
-			arg1.method2689();
+		if (entity == PlayerList.self && (entity.xFine < 1536 || entity.yFine < 1536 || entity.xFine >= 11776 || entity.yFine >= 11776)) {
+			entity.spotAnimId = -1;
+			entity.forceMoveCyclesToStart = 0;
+			entity.forceMoveCyclesToDest = 0;
+			entity.seqId = -1;
+			entity.xFine = entity.movementQueueX[0] * 128 + entity.getSize() * 64;
+			entity.yFine = entity.movementQueueY[0] * 128 + entity.getSize() * 64;
+			entity.resetMovementQueue();
 		}
-		method949(arg1);
-		method879(arg1);
+		processFacing(entity);
+		processAnimations(entity);
 	}
 
 	@OriginalMember(owner = "client!bh", name = "a", descriptor = "(Lclient!fe;Z)V")
-	public static void lerpToForceMoveStart(@OriginalArg(0) PathingEntity arg0) {
-		@Pc(8) int toStartCyclesLeft = arg0.forceMoveCyclesToStart - client.loop;
-		@Pc(20) int startXFine = arg0.forceMoveStartX * 128 + arg0.getSize() * 64;
-		@Pc(36) int startYFine = arg0.forceMoveStartY * 128 + arg0.getSize() * 64;
-		if (arg0.forceMoveDirection == 0) {
-			arg0.anInt3400 = 1024;
+	public static void lerpToForceMoveStart(@OriginalArg(0) PathingEntity entity) {
+		@Pc(8) int toStartCyclesLeft = entity.forceMoveCyclesToStart - client.loop;
+		@Pc(20) int startXFine = entity.forceMoveStartX * 128 + entity.getSize() * 64;
+		@Pc(36) int startYFine = entity.forceMoveStartY * 128 + entity.getSize() * 64;
+		if (entity.forceMoveDirection == 0) {
+			entity.targetAngle = 1024;
 		}
-		arg0.xFine += (startXFine - arg0.xFine) / toStartCyclesLeft;
-		arg0.zFine += (startYFine - arg0.zFine) / toStartCyclesLeft;
-		if (arg0.forceMoveDirection == 1) {
-			arg0.anInt3400 = 1536;
+		entity.xFine += (startXFine - entity.xFine) / toStartCyclesLeft;
+		entity.yFine += (startYFine - entity.yFine) / toStartCyclesLeft;
+		if (entity.forceMoveDirection == 1) {
+			entity.targetAngle = 1536;
 		}
-		arg0.anInt3417 = 0;
-		if (arg0.forceMoveDirection == 2) {
-			arg0.anInt3400 = 0;
+		entity.movementCatchupTicks = 0;
+		if (entity.forceMoveDirection == 2) {
+			entity.targetAngle = 0;
 		}
-		if (arg0.forceMoveDirection == 3) {
-			arg0.anInt3400 = 512;
+		if (entity.forceMoveDirection == 3) {
+			entity.targetAngle = 512;
 		}
 	}
 
 	@OriginalMember(owner = "client!wl", name = "a", descriptor = "(Lclient!fe;B)V")
-	public static void lerpToForceMoveDest(@OriginalArg(0) PathingEntity arg0) {
-		if (client.loop == arg0.forceMoveCyclesToDest || arg0.seqId == -1 || arg0.anInt3420 != 0 || arg0.anInt3360 + 1 > SeqTypeList.get(arg0.seqId).frameDelay[arg0.anInt3425]) {
-			@Pc(35) int cyclesDiff = arg0.forceMoveCyclesToDest - arg0.forceMoveCyclesToStart;
-			@Pc(41) int lerpCyclesRemaining = client.loop - arg0.forceMoveCyclesToStart;
-			@Pc(52) int startXFine = arg0.forceMoveStartX * 128 + arg0.getSize() * 64;
-			@Pc(64) int startYFine = arg0.forceMoveStartY * 128 + arg0.getSize() * 64;
-			@Pc(75) int destXFine = arg0.forceMoveDestX * 128 + arg0.getSize() * 64;
-			@Pc(86) int destYFine = arg0.forceMoveDestY * 128 + arg0.getSize() * 64;
-			arg0.xFine = (lerpCyclesRemaining * destXFine + startXFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
-			arg0.zFine = (destYFine * lerpCyclesRemaining + startYFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
+	public static void lerpToForceMoveDest(@OriginalArg(0) PathingEntity entity) {
+		if (client.loop == entity.forceMoveCyclesToDest || entity.seqId == -1 || entity.seqDelay != 0 || entity.seqDelayClock + 1 > SeqTypeList.get(entity.seqId).frameDelay[entity.seqFrame]) {
+			@Pc(35) int cyclesDiff = entity.forceMoveCyclesToDest - entity.forceMoveCyclesToStart;
+			@Pc(41) int lerpCyclesRemaining = client.loop - entity.forceMoveCyclesToStart;
+			@Pc(52) int startXFine = entity.forceMoveStartX * 128 + entity.getSize() * 64;
+			@Pc(64) int startYFine = entity.forceMoveStartY * 128 + entity.getSize() * 64;
+			@Pc(75) int destXFine = entity.forceMoveDestX * 128 + entity.getSize() * 64;
+			@Pc(86) int destYFine = entity.forceMoveDestY * 128 + entity.getSize() * 64;
+			entity.xFine = (lerpCyclesRemaining * destXFine + startXFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
+			entity.yFine = (destYFine * lerpCyclesRemaining + startYFine * (cyclesDiff - lerpCyclesRemaining)) / cyclesDiff;
 		}
-		arg0.anInt3417 = 0;
-		if (arg0.forceMoveDirection == 0) {
-			arg0.anInt3400 = 1024;
+		entity.movementCatchupTicks = 0;
+		if (entity.forceMoveDirection == 0) {
+			entity.targetAngle = 1024;
 		}
-		if (arg0.forceMoveDirection == 1) {
-			arg0.anInt3400 = 1536;
+		if (entity.forceMoveDirection == 1) {
+			entity.targetAngle = 1536;
 		}
-		if (arg0.forceMoveDirection == 2) {
-			arg0.anInt3400 = 0;
+		if (entity.forceMoveDirection == 2) {
+			entity.targetAngle = 0;
 		}
-		if (arg0.forceMoveDirection == 3) {
-			arg0.anInt3400 = 512;
+		if (entity.forceMoveDirection == 3) {
+			entity.targetAngle = 512;
 		}
-		arg0.anInt3381 = arg0.anInt3400;
+		entity.currentAngle = entity.targetAngle;
 	}
 
 	@OriginalMember(owner = "client!ia", name = "a", descriptor = "(BLclient!fe;)V")
-	public static void method2247(@OriginalArg(1) PathingEntity arg0) {
-		@Pc(9) BasType local9 = arg0.getBasType();
-		arg0.movementSeqId = local9.idleAnimationId;
-		if (arg0.movementQueueSize == 0) {
-			arg0.anInt3417 = 0;
+	public static void processMovement(@OriginalArg(1) PathingEntity entity) {
+		@Pc(9) BasType bas = entity.getBasType();
+		entity.movementSeqId = bas.idleAnimationId;
+		if (entity.movementQueueSize == 0) {
+			entity.movementCatchupTicks = 0;
 			return;
 		}
-		if (arg0.seqId != -1 && arg0.anInt3420 == 0) {
-			@Pc(40) SeqType local40 = SeqTypeList.get(arg0.seqId);
-			if (arg0.anInt3405 > 0 && local40.looptype == 0) {
-				arg0.anInt3417++;
+		if (entity.seqId != -1 && entity.seqDelay == 0) {
+			@Pc(40) SeqType seq = SeqTypeList.get(entity.seqId);
+			if (entity.seqMovementSteps > 0 && seq.looptype == 0) {
+				entity.movementCatchupTicks++;
 				return;
 			}
-			if (arg0.anInt3405 <= 0 && local40.movetype == 0) {
-				arg0.anInt3417++;
+			if (entity.seqMovementSteps <= 0 && seq.movetype == 0) {
+				entity.movementCatchupTicks++;
 				return;
 			}
 		}
-		@Pc(79) int local79 = arg0.xFine;
-		@Pc(82) int local82 = arg0.zFine;
-		@Pc(99) int local99 = arg0.movementQueueX[arg0.movementQueueSize - 1] * 128 + arg0.getSize() * 64;
-		@Pc(116) int local116 = arg0.movementQueueZ[arg0.movementQueueSize - 1] * 128 + arg0.getSize() * 64;
-		if (local99 - local79 > 256 || local99 - local79 < -256 || local116 - local82 > 256 || local116 - local82 < -256) {
-			arg0.xFine = local99;
-			arg0.zFine = local116;
+		@Pc(79) int startX = entity.xFine;
+		@Pc(82) int startY = entity.yFine;
+		@Pc(99) int destX = entity.movementQueueX[entity.movementQueueSize - 1] * 128 + entity.getSize() * 64;
+		@Pc(116) int destY = entity.movementQueueY[entity.movementQueueSize - 1] * 128 + entity.getSize() * 64;
+		if (destX - startX > 256 || destX - startX < -256 || destY - startY > 256 || destY - startY < -256) {
+			entity.xFine = destX;
+			entity.yFine = destY;
 			return;
 		}
-		if (local99 <= local79) {
-			if (local79 <= local99) {
-				if (local116 > local82) {
-					arg0.anInt3400 = 1024;
-				} else if (local82 > local116) {
-					arg0.anInt3400 = 0;
+		if (destX <= startX) {
+			if (startX <= destX) {
+				if (destY > startY) {
+					entity.targetAngle = 1024;
+				} else if (startY > destY) {
+					entity.targetAngle = 0;
 				}
-			} else if (local116 > local82) {
-				arg0.anInt3400 = 768;
-			} else if (local116 < local82) {
-				arg0.anInt3400 = 256;
+			} else if (destY > startY) {
+				entity.targetAngle = 768;
+			} else if (destY < startY) {
+				entity.targetAngle = 256;
 			} else {
-				arg0.anInt3400 = 512;
+				entity.targetAngle = 512;
 			}
-		} else if (local116 > local82) {
-			arg0.anInt3400 = 1280;
-		} else if (local82 > local116) {
-			arg0.anInt3400 = 1792;
+		} else if (destY > startY) {
+			entity.targetAngle = 1280;
+		} else if (startY > destY) {
+			entity.targetAngle = 1792;
 		} else {
-			arg0.anInt3400 = 1536;
+			entity.targetAngle = 1536;
 		}
-		@Pc(224) int local224 = arg0.anInt3400 - arg0.anInt3381 & 0x7FF;
-		@Pc(227) int local227 = local9.walkFullTurnAnimationId;
-		if (local224 > 1024) {
-			local224 -= 2048;
+		@Pc(224) int angleDiff = entity.targetAngle - entity.currentAngle & 0x7FF;
+		@Pc(227) int walkAnimId = bas.walkFullTurnAnimationId;
+		if (angleDiff > 1024) {
+			angleDiff -= 2048;
 		}
-		@Pc(233) boolean local233 = true;
-		@Pc(235) byte local235 = 1;
-		if (local224 >= -256 && local224 <= 256) {
-			local227 = local9.walkAnimation;
-		} else if (local224 >= 256 && local224 < 768) {
-			local227 = local9.walkCWTurnAnimationId;
-		} else if (local224 >= -768 && local224 <= -256) {
-			local227 = local9.walkCCWTurnAnimationId;
+		@Pc(233) boolean rotateOnMove = true;
+		@Pc(235) byte speedMultiplier = 1;
+		if (angleDiff >= -256 && angleDiff <= 256) {
+			walkAnimId = bas.walkAnimation;
+		} else if (angleDiff >= 256 && angleDiff < 768) {
+			walkAnimId = bas.walkCWTurnAnimationId;
+		} else if (angleDiff >= -768 && angleDiff <= -256) {
+			walkAnimId = bas.walkCCWTurnAnimationId;
 		}
-		@Pc(273) int local273 = 4;
-		if (local227 == -1) {
-			local227 = local9.walkAnimation;
+		@Pc(273) int speed = 4;
+		if (walkAnimId == -1) {
+			walkAnimId = bas.walkAnimation;
 		}
-		arg0.movementSeqId = local227;
-		if (arg0 instanceof Npc) {
-			local233 = ((Npc) arg0).type.rotationflag;
+		entity.movementSeqId = walkAnimId;
+		if (entity instanceof Npc) {
+			rotateOnMove = ((Npc) entity).type.rotationflag;
 		}
-		if (local233) {
-			if (arg0.anInt3381 != arg0.anInt3400 && arg0.faceEntity == -1 && arg0.anInt3376 != 0) {
-				local273 = 2;
+		if (rotateOnMove) {
+			if (entity.currentAngle != entity.targetAngle && entity.faceEntity == -1 && entity.turnSpeed != 0) {
+				speed = 2;
 			}
-			if (arg0.movementQueueSize > 2) {
-				local273 = 6;
+			if (entity.movementQueueSize > 2) {
+				speed = 6;
 			}
-			if (arg0.movementQueueSize > 3) {
-				local273 = 8;
+			if (entity.movementQueueSize > 3) {
+				speed = 8;
 			}
-			if (arg0.anInt3417 > 0 && arg0.movementQueueSize > 1) {
-				local273 = 8;
-				arg0.anInt3417--;
+			if (entity.movementCatchupTicks > 0 && entity.movementQueueSize > 1) {
+				speed = 8;
+				entity.movementCatchupTicks--;
 			}
 		} else {
-			if (arg0.movementQueueSize > 1) {
-				local273 = 6;
+			if (entity.movementQueueSize > 1) {
+				speed = 6;
 			}
-			if (arg0.movementQueueSize > 2) {
-				local273 = 8;
+			if (entity.movementQueueSize > 2) {
+				speed = 8;
 			}
-			if (arg0.anInt3417 > 0 && arg0.movementQueueSize > 1) {
-				arg0.anInt3417--;
-				local273 = 8;
+			if (entity.movementCatchupTicks > 0 && entity.movementQueueSize > 1) {
+				entity.movementCatchupTicks--;
+				speed = 8;
 			}
 		}
-		if (arg0.movementQueueSpeed[arg0.movementQueueSize - 1] == 2) {
-			local273 <<= 0x1;
-			local235 = 2;
-		} else if (arg0.movementQueueSpeed[arg0.movementQueueSize - 1] == 0) {
-			local235 = 0;
-			local273 >>= 0x1;
+		if (entity.movementQueueSpeed[entity.movementQueueSize - 1] == 2) {
+			speed <<= 0x1;
+			speedMultiplier = 2;
+		} else if (entity.movementQueueSpeed[entity.movementQueueSize - 1] == 0) {
+			speedMultiplier = 0;
+			speed >>= 0x1;
 		}
-		if (local273 < 8 || local9.runAnimationId == -1) {
-			if (local9.slowWalkAnimationId != -1 && local235 == 0) {
-				if (local9.walkFullTurnAnimationId == arg0.movementSeqId && local9.slowWalkFullTurnAnimationId != -1) {
-					arg0.movementSeqId = local9.slowWalkFullTurnAnimationId;
-				} else if (local9.walkCCWTurnAnimationId == arg0.movementSeqId && local9.slowWalkCCWTurnAnimationId != -1) {
-					arg0.movementSeqId = local9.slowWalkCCWTurnAnimationId;
-				} else if (local9.walkCWTurnAnimationId == arg0.movementSeqId && local9.slowWalkCWTurnAnimationId != -1) {
-					arg0.movementSeqId = local9.slowWalkCWTurnAnimationId;
+		if (speed < 8 || bas.runAnimationId == -1) {
+			if (bas.slowWalkAnimationId != -1 && speedMultiplier == 0) {
+				if (bas.walkFullTurnAnimationId == entity.movementSeqId && bas.slowWalkFullTurnAnimationId != -1) {
+					entity.movementSeqId = bas.slowWalkFullTurnAnimationId;
+				} else if (bas.walkCCWTurnAnimationId == entity.movementSeqId && bas.slowWalkCCWTurnAnimationId != -1) {
+					entity.movementSeqId = bas.slowWalkCCWTurnAnimationId;
+				} else if (bas.walkCWTurnAnimationId == entity.movementSeqId && bas.slowWalkCWTurnAnimationId != -1) {
+					entity.movementSeqId = bas.slowWalkCWTurnAnimationId;
 				} else {
-					arg0.movementSeqId = local9.slowWalkAnimationId;
+					entity.movementSeqId = bas.slowWalkAnimationId;
 				}
 			}
-		} else if (local9.walkFullTurnAnimationId == arg0.movementSeqId && local9.runFullTurnAnimationId != -1) {
-			arg0.movementSeqId = local9.runFullTurnAnimationId;
-		} else if (arg0.movementSeqId == local9.walkCCWTurnAnimationId && local9.runCCWTurnAnimationId != -1) {
-			arg0.movementSeqId = local9.runCCWTurnAnimationId;
-		} else if (arg0.movementSeqId == local9.walkCWTurnAnimationId && local9.runCWTurnAnimationId != -1) {
-			arg0.movementSeqId = local9.runCWTurnAnimationId;
+		} else if (bas.walkFullTurnAnimationId == entity.movementSeqId && bas.runFullTurnAnimationId != -1) {
+			entity.movementSeqId = bas.runFullTurnAnimationId;
+		} else if (entity.movementSeqId == bas.walkCCWTurnAnimationId && bas.runCCWTurnAnimationId != -1) {
+			entity.movementSeqId = bas.runCCWTurnAnimationId;
+		} else if (entity.movementSeqId == bas.walkCWTurnAnimationId && bas.runCWTurnAnimationId != -1) {
+			entity.movementSeqId = bas.runCWTurnAnimationId;
 		} else {
-			arg0.movementSeqId = local9.runAnimationId;
+			entity.movementSeqId = bas.runAnimationId;
 		}
-		if (local9.movementAcceleration != -1) {
-			local273 <<= 0x7;
-			if (arg0.movementQueueSize == 1) {
-				@Pc(594) int local594 = (local99 >= arg0.xFine ? local99 - arg0.xFine : -local99 + arg0.xFine) << 7;
-				@Pc(600) int local600 = arg0.anInt3358 * arg0.anInt3358;
-				@Pc(622) int local622 = (local116 < arg0.zFine ? arg0.zFine - local116 : -arg0.zFine + local116) << 7;
-				@Pc(629) int local629 = local594 > local622 ? local594 : local622;
-				@Pc(636) int local636 = local9.movementAcceleration * 2 * local629;
-				if (local636 < local600) {
-					arg0.anInt3358 /= 2;
-				} else if (local629 < local600 / 2) {
-					arg0.anInt3358 -= local9.movementAcceleration;
-					if (arg0.anInt3358 < 0) {
-						arg0.anInt3358 = 0;
+		if (bas.movementAcceleration != -1) {
+			speed <<= 0x7;
+			if (entity.movementQueueSize == 1) {
+				@Pc(594) int distX = (destX >= entity.xFine ? destX - entity.xFine : -destX + entity.xFine) << 7;
+				@Pc(600) int speedSq = entity.movementSpeed * entity.movementSpeed;
+				@Pc(622) int distY = (destY < entity.yFine ? entity.yFine - destY : -entity.yFine + destY) << 7;
+				@Pc(629) int maxDist = distX > distY ? distX : distY;
+				@Pc(636) int decelDist = bas.movementAcceleration * 2 * maxDist;
+				if (decelDist < speedSq) {
+					entity.movementSpeed /= 2;
+				} else if (maxDist < speedSq / 2) {
+					entity.movementSpeed -= bas.movementAcceleration;
+					if (entity.movementSpeed < 0) {
+						entity.movementSpeed = 0;
 					}
-				} else if (arg0.anInt3358 < local273) {
-					arg0.anInt3358 += local9.movementAcceleration;
-					if (arg0.anInt3358 > local273) {
-						arg0.anInt3358 = local273;
+				} else if (entity.movementSpeed < speed) {
+					entity.movementSpeed += bas.movementAcceleration;
+					if (entity.movementSpeed > speed) {
+						entity.movementSpeed = speed;
 					}
 				}
-			} else if (local273 > arg0.anInt3358) {
-				arg0.anInt3358 += local9.movementAcceleration;
-				if (local273 < arg0.anInt3358) {
-					arg0.anInt3358 = local273;
+			} else if (speed > entity.movementSpeed) {
+				entity.movementSpeed += bas.movementAcceleration;
+				if (speed < entity.movementSpeed) {
+					entity.movementSpeed = speed;
 				}
-			} else if (arg0.anInt3358 > 0) {
-				arg0.anInt3358 -= local9.movementAcceleration;
-				if (arg0.anInt3358 < 0) {
-					arg0.anInt3358 = 0;
+			} else if (entity.movementSpeed > 0) {
+				entity.movementSpeed -= bas.movementAcceleration;
+				if (entity.movementSpeed < 0) {
+					entity.movementSpeed = 0;
 				}
 			}
-			local273 = arg0.anInt3358 >> 7;
-			if (local273 < 1) {
-				local273 = 1;
+			speed = entity.movementSpeed >> 7;
+			if (speed < 1) {
+				speed = 1;
 			}
 		}
-		if (local79 < local99) {
-			arg0.xFine += local273;
-			if (local99 < arg0.xFine) {
-				arg0.xFine = local99;
+		if (startX < destX) {
+			entity.xFine += speed;
+			if (destX < entity.xFine) {
+				entity.xFine = destX;
 			}
-		} else if (local79 > local99) {
-			arg0.xFine -= local273;
-			if (local99 > arg0.xFine) {
-				arg0.xFine = local99;
-			}
-		}
-		if (local82 < local116) {
-			arg0.zFine += local273;
-			if (arg0.zFine > local116) {
-				arg0.zFine = local116;
-			}
-		} else if (local116 < local82) {
-			arg0.zFine -= local273;
-			if (local116 > arg0.zFine) {
-				arg0.zFine = local116;
+		} else if (startX > destX) {
+			entity.xFine -= speed;
+			if (destX > entity.xFine) {
+				entity.xFine = destX;
 			}
 		}
-		if (arg0.xFine == local99 && local116 == arg0.zFine) {
-			arg0.movementQueueSize--;
-			if (arg0.anInt3405 > 0) {
-				arg0.anInt3405--;
+		if (startY < destY) {
+			entity.yFine += speed;
+			if (entity.yFine > destY) {
+				entity.yFine = destY;
+			}
+		} else if (destY < startY) {
+			entity.yFine -= speed;
+			if (destY > entity.yFine) {
+				entity.yFine = destY;
+			}
+		}
+		if (entity.xFine == destX && destY == entity.yFine) {
+			entity.movementQueueSize--;
+			if (entity.seqMovementSteps > 0) {
+				entity.seqMovementSteps--;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!cm", name = "a", descriptor = "(ILclient!fe;)V")
-	public static void method949(@OriginalArg(1) PathingEntity arg0) {
-		if (arg0.anInt3376 == 0) {
+	public static void processFacing(@OriginalArg(1) PathingEntity entity) {
+		if (entity.turnSpeed == 0) {
 			return;
 		}
-		@Pc(13) BasType local13 = arg0.getBasType();
-		@Pc(43) int local43;
-		@Pc(36) int local36;
-		if (arg0.faceEntity != -1 && arg0.faceEntity < 32768) {
-			@Pc(26) Npc local26 = npcs[arg0.faceEntity];
-			if (local26 != null) {
-				local36 = arg0.zFine - local26.zFine;
-				local43 = arg0.xFine - local26.xFine;
-				if (local43 != 0 || local36 != 0) {
-					arg0.anInt3400 = (int) (Math.atan2(local43, local36) * 325.949D) & 0x7FF;
+		@Pc(13) BasType bas = entity.getBasType();
+		@Pc(43) int dx;
+		@Pc(36) int dy;
+		if (entity.faceEntity != -1 && entity.faceEntity < 32768) {
+			@Pc(26) Npc npc = npcs[entity.faceEntity];
+			if (npc != null) {
+				dy = entity.yFine - npc.yFine;
+				dx = entity.xFine - npc.xFine;
+				if (dx != 0 || dy != 0) {
+					entity.targetAngle = (int) (Math.atan2(dx, dy) * 325.949D) & 0x7FF;
 				}
 			}
 		}
-		@Pc(94) int local94;
-		@Pc(70) int local70;
-		if (arg0.faceEntity >= 32768) {
-			local70 = arg0.faceEntity - 32768;
-			if (local70 == PlayerList.selfId) {
-				local70 = 2047;
+		@Pc(94) int dy2;
+		@Pc(70) int idx;
+		if (entity.faceEntity >= 32768) {
+			idx = entity.faceEntity - 32768;
+			if (idx == PlayerList.selfId) {
+				idx = 2047;
 			}
-			@Pc(83) Player local83 = PlayerList.players[local70];
-			if (local83 != null) {
-				local94 = arg0.zFine - local83.zFine;
-				local36 = arg0.xFine - local83.xFine;
-				if (local36 != 0 || local94 != 0) {
-					arg0.anInt3400 = (int) (Math.atan2(local36, local94) * 325.949D) & 0x7FF;
+			@Pc(83) Player player = PlayerList.players[idx];
+			if (player != null) {
+				dy2 = entity.yFine - player.yFine;
+				dy = entity.xFine - player.xFine;
+				if (dy != 0 || dy2 != 0) {
+					entity.targetAngle = (int) (Math.atan2(dy, dy2) * 325.949D) & 0x7FF;
 				}
 			}
 		}
-		if ((arg0.faceX != 0 || arg0.faceY != 0) && (arg0.movementQueueSize == 0 || arg0.anInt3417 > 0)) {
-			local70 = arg0.xFine - (arg0.faceX - Camera.originX - Camera.originX) * 64;
-			local43 = arg0.zFine - (arg0.faceY - Camera.originZ - Camera.originZ) * 64;
-			if (local70 != 0 || local43 != 0) {
-				arg0.anInt3400 = (int) (Math.atan2(local70, local43) * 325.949D) & 0x7FF;
+		if ((entity.faceX != 0 || entity.faceY != 0) && (entity.movementQueueSize == 0 || entity.movementCatchupTicks > 0)) {
+			idx = entity.xFine - (entity.faceX - Camera.originX - Camera.originX) * 64;
+			dx = entity.yFine - (entity.faceY - Camera.originY - Camera.originY) * 64;
+			if (idx != 0 || dx != 0) {
+				entity.targetAngle = (int) (Math.atan2(idx, dx) * 325.949D) & 0x7FF;
 			}
-			arg0.faceY = 0;
-			arg0.faceX = 0;
+			entity.faceY = 0;
+			entity.faceX = 0;
 		}
-		local70 = arg0.anInt3400 - arg0.anInt3381 & 0x7FF;
-		if (local70 == 0) {
-			arg0.anInt3385 = 0;
-			arg0.anInt3414 = 0;
-		} else if (local13.yawAcceleration == 0) {
-			arg0.anInt3385++;
-			@Pc(226) boolean local226;
-			if (local70 > 1024) {
-				arg0.anInt3381 -= arg0.anInt3376;
-				local226 = true;
-				if (local70 < arg0.anInt3376 || local70 > 2048 - arg0.anInt3376) {
-					arg0.anInt3381 = arg0.anInt3400;
-					local226 = false;
+		idx = entity.targetAngle - entity.currentAngle & 0x7FF;
+		if (idx == 0) {
+			entity.standingTurnCounter = 0;
+			entity.yawVelocity = 0;
+		} else if (bas.yawAcceleration == 0) {
+			entity.standingTurnCounter++;
+			@Pc(226) boolean turning;
+			if (idx > 1024) {
+				entity.currentAngle -= entity.turnSpeed;
+				turning = true;
+				if (idx < entity.turnSpeed || idx > 2048 - entity.turnSpeed) {
+					entity.currentAngle = entity.targetAngle;
+					turning = false;
 				}
-				if (local13.idleAnimationId == arg0.movementSeqId && (arg0.anInt3385 > 25 || local226)) {
-					if (local13.standingCCWTurn == -1) {
-						arg0.movementSeqId = local13.walkAnimation;
+				if (bas.idleAnimationId == entity.movementSeqId && (entity.standingTurnCounter > 25 || turning)) {
+					if (bas.standingCCWTurn == -1) {
+						entity.movementSeqId = bas.walkAnimation;
 					} else {
-						arg0.movementSeqId = local13.standingCCWTurn;
+						entity.movementSeqId = bas.standingCCWTurn;
 					}
 				}
 			} else {
-				local226 = true;
-				arg0.anInt3381 += arg0.anInt3376;
-				if (arg0.anInt3376 > local70 || local70 > 2048 - arg0.anInt3376) {
-					local226 = false;
-					arg0.anInt3381 = arg0.anInt3400;
+				turning = true;
+				entity.currentAngle += entity.turnSpeed;
+				if (entity.turnSpeed > idx || idx > 2048 - entity.turnSpeed) {
+					turning = false;
+					entity.currentAngle = entity.targetAngle;
 				}
-				if (local13.idleAnimationId == arg0.movementSeqId && (arg0.anInt3385 > 25 || local226)) {
-					if (local13.standingCWTurn == -1) {
-						arg0.movementSeqId = local13.walkAnimation;
+				if (bas.idleAnimationId == entity.movementSeqId && (entity.standingTurnCounter > 25 || turning)) {
+					if (bas.standingCWTurn == -1) {
+						entity.movementSeqId = bas.walkAnimation;
 					} else {
-						arg0.movementSeqId = local13.standingCWTurn;
+						entity.movementSeqId = bas.standingCWTurn;
 					}
 				}
 			}
-			arg0.anInt3381 &= 0x7FF;
+			entity.currentAngle &= 0x7FF;
 		} else {
-			if (local13.idleAnimationId == arg0.movementSeqId && arg0.anInt3385 > 25) {
-				if (local13.standingCWTurn == -1) {
-					arg0.movementSeqId = local13.walkAnimation;
+			if (bas.idleAnimationId == entity.movementSeqId && entity.standingTurnCounter > 25) {
+				if (bas.standingCWTurn == -1) {
+					entity.movementSeqId = bas.walkAnimation;
 				} else {
-					arg0.movementSeqId = local13.standingCWTurn;
+					entity.movementSeqId = bas.standingCWTurn;
 				}
 			}
-			local43 = arg0.anInt3400 << 5;
-			if (local43 != arg0.anInt3402) {
-				arg0.anInt3387 = 0;
-				arg0.anInt3402 = local43;
-				local36 = local43 - arg0.anInt3377 & 0xFFFF;
-				local94 = arg0.anInt3414 * arg0.anInt3414 / (local13.yawAcceleration * 2);
-				@Pc(471) int local471;
-				if (arg0.anInt3414 > 0 && local36 >= local94 && local36 - local94 < 32768) {
-					arg0.anInt3397 = local36 / 2;
-					arg0.aBoolean167 = true;
-					local471 = local13.yawMaxSpeed * local13.yawMaxSpeed / (local13.yawAcceleration * 2);
-					if (local471 > 32767) {
-						local471 = 32767;
+			dx = entity.targetAngle << 5;
+			if (dx != entity.preciseTargetYaw) {
+				entity.yawDistanceTraveled = 0;
+				entity.preciseTargetYaw = dx;
+				dy = dx - entity.preciseYaw & 0xFFFF;
+				dy2 = entity.yawVelocity * entity.yawVelocity / (bas.yawAcceleration * 2);
+				@Pc(471) int maxDecel;
+				if (entity.yawVelocity > 0 && dy >= dy2 && dy - dy2 < 32768) {
+					entity.yawDecelThreshold = dy / 2;
+					entity.yawAccelerating = true;
+					maxDecel = bas.yawMaxSpeed * bas.yawMaxSpeed / (bas.yawAcceleration * 2);
+					if (maxDecel > 32767) {
+						maxDecel = 32767;
 					}
-					if (local471 < arg0.anInt3397) {
-						arg0.anInt3397 = local36 - local471;
+					if (maxDecel < entity.yawDecelThreshold) {
+						entity.yawDecelThreshold = dy - maxDecel;
 					}
-				} else if (arg0.anInt3414 < 0 && local94 <= 65536 - local36 && 65536 - local36 - local94 < 32768) {
-					arg0.anInt3397 = (65536 - local36) / 2;
-					arg0.aBoolean167 = true;
-					local471 = local13.yawMaxSpeed * local13.yawMaxSpeed / (local13.yawAcceleration * 2);
-					if (local471 > 32767) {
-						local471 = 32767;
+				} else if (entity.yawVelocity < 0 && dy2 <= 65536 - dy && 65536 - dy - dy2 < 32768) {
+					entity.yawDecelThreshold = (65536 - dy) / 2;
+					entity.yawAccelerating = true;
+					maxDecel = bas.yawMaxSpeed * bas.yawMaxSpeed / (bas.yawAcceleration * 2);
+					if (maxDecel > 32767) {
+						maxDecel = 32767;
 					}
-					if (local471 < arg0.anInt3397) {
-						arg0.anInt3397 = 65536 - local36 - local471;
+					if (maxDecel < entity.yawDecelThreshold) {
+						entity.yawDecelThreshold = 65536 - dy - maxDecel;
 					}
 				} else {
-					arg0.aBoolean167 = false;
+					entity.yawAccelerating = false;
 				}
 			}
-			if (arg0.anInt3414 == 0) {
-				local36 = arg0.anInt3402 - arg0.anInt3377 & 0xFFFF;
-				if (local36 < local13.yawAcceleration) {
-					arg0.anInt3377 = arg0.anInt3402;
+			if (entity.yawVelocity == 0) {
+				dy = entity.preciseTargetYaw - entity.preciseYaw & 0xFFFF;
+				if (dy < bas.yawAcceleration) {
+					entity.preciseYaw = entity.preciseTargetYaw;
 				} else {
-					arg0.anInt3387 = 0;
-					local94 = local13.yawMaxSpeed * local13.yawMaxSpeed / (local13.yawAcceleration * 2);
-					arg0.aBoolean167 = true;
-					if (local94 > 32767) {
-						local94 = 32767;
+					entity.yawDistanceTraveled = 0;
+					dy2 = bas.yawMaxSpeed * bas.yawMaxSpeed / (bas.yawAcceleration * 2);
+					entity.yawAccelerating = true;
+					if (dy2 > 32767) {
+						dy2 = 32767;
 					}
-					if (local36 >= 32768) {
-						arg0.anInt3414 = -local13.yawAcceleration;
-						arg0.anInt3397 = (65536 - local36) / 2;
-						if (local94 < arg0.anInt3397) {
-							arg0.anInt3397 = 65536 - local36 - local94;
+					if (dy >= 32768) {
+						entity.yawVelocity = -bas.yawAcceleration;
+						entity.yawDecelThreshold = (65536 - dy) / 2;
+						if (dy2 < entity.yawDecelThreshold) {
+							entity.yawDecelThreshold = 65536 - dy - dy2;
 						}
 					} else {
-						arg0.anInt3414 = local13.yawAcceleration;
-						arg0.anInt3397 = local36 / 2;
-						if (local94 < arg0.anInt3397) {
-							arg0.anInt3397 = local36 - local94;
+						entity.yawVelocity = bas.yawAcceleration;
+						entity.yawDecelThreshold = dy / 2;
+						if (dy2 < entity.yawDecelThreshold) {
+							entity.yawDecelThreshold = dy - dy2;
 						}
 					}
 				}
-			} else if (arg0.anInt3414 <= 0) {
-				if (arg0.anInt3387 >= arg0.anInt3397) {
-					arg0.aBoolean167 = false;
+			} else if (entity.yawVelocity <= 0) {
+				if (entity.yawDistanceTraveled >= entity.yawDecelThreshold) {
+					entity.yawAccelerating = false;
 				}
-				if (!arg0.aBoolean167) {
-					arg0.anInt3414 += local13.yawAcceleration;
-					if (arg0.anInt3414 > 0) {
-						arg0.anInt3414 = 0;
+				if (!entity.yawAccelerating) {
+					entity.yawVelocity += bas.yawAcceleration;
+					if (entity.yawVelocity > 0) {
+						entity.yawVelocity = 0;
 					}
-				} else if (-local13.yawMaxSpeed < arg0.anInt3414) {
-					arg0.anInt3414 -= local13.yawAcceleration;
+				} else if (-bas.yawMaxSpeed < entity.yawVelocity) {
+					entity.yawVelocity -= bas.yawAcceleration;
 				}
 			} else {
-				if (arg0.anInt3397 <= arg0.anInt3387) {
-					arg0.aBoolean167 = false;
+				if (entity.yawDecelThreshold <= entity.yawDistanceTraveled) {
+					entity.yawAccelerating = false;
 				}
-				if (!arg0.aBoolean167) {
-					arg0.anInt3414 -= local13.yawAcceleration;
-					if (arg0.anInt3414 < 0) {
-						arg0.anInt3414 = 0;
+				if (!entity.yawAccelerating) {
+					entity.yawVelocity -= bas.yawAcceleration;
+					if (entity.yawVelocity < 0) {
+						entity.yawVelocity = 0;
 					}
-				} else if (arg0.anInt3414 < local13.yawMaxSpeed) {
-					arg0.anInt3414 += local13.yawAcceleration;
+				} else if (entity.yawVelocity < bas.yawMaxSpeed) {
+					entity.yawVelocity += bas.yawAcceleration;
 				}
 			}
-			arg0.anInt3377 += arg0.anInt3414;
-			arg0.anInt3377 &= 0xFFFF;
-			if (arg0.anInt3414 <= 0) {
-				arg0.anInt3387 -= arg0.anInt3414;
+			entity.preciseYaw += entity.yawVelocity;
+			entity.preciseYaw &= 0xFFFF;
+			if (entity.yawVelocity <= 0) {
+				entity.yawDistanceTraveled -= entity.yawVelocity;
 			} else {
-				arg0.anInt3387 += arg0.anInt3414;
+				entity.yawDistanceTraveled += entity.yawVelocity;
 			}
-			arg0.anInt3381 = arg0.anInt3377 >> 5;
+			entity.currentAngle = entity.preciseYaw >> 5;
 		}
 	}
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "(Lclient!fe;I)V")
-	public static void method879(@OriginalArg(0) PathingEntity entity) {
-		entity.aBoolean171 = false;
-		@Pc(18) SeqType local18;
+	public static void processAnimations(@OriginalArg(0) PathingEntity entity) {
+		entity.seqStretches = false;
+		@Pc(18) SeqType seq;
 		if (entity.movementSeqId != -1) {
-			local18 = SeqTypeList.get(entity.movementSeqId);
-			if (local18 == null || local18.frames == null) {
+			seq = SeqTypeList.get(entity.movementSeqId);
+			if (seq == null || seq.frames == null) {
 				entity.movementSeqId = -1;
 			} else {
-				entity.anInt3396++;
-				if (local18.frames.length > entity.anInt3407 && entity.anInt3396 > local18.frameDelay[entity.anInt3407]) {
-					entity.anInt3396 = 1;
-					entity.anInt3407++;
-					entity.anInt3388++;
-					SoundPlayer.playSeqSound(entity.zFine, local18, entity.xFine, entity == PlayerList.self, entity.anInt3407);
+				entity.movementSeqDelayClock++;
+				if (seq.frames.length > entity.movementSeqFrame && entity.movementSeqDelayClock > seq.frameDelay[entity.movementSeqFrame]) {
+					entity.movementSeqDelayClock = 1;
+					entity.movementSeqFrame++;
+					entity.movementSeqNextFrame++;
+					SoundPlayer.playSeqSound(entity.yFine, seq, entity.xFine, entity == PlayerList.self, entity.movementSeqFrame);
 				}
-				if (entity.anInt3407 >= local18.frames.length) {
-					entity.anInt3407 = 0;
-					entity.anInt3396 = 0;
-					SoundPlayer.playSeqSound(entity.zFine, local18, entity.xFine, PlayerList.self == entity, entity.anInt3407);
+				if (entity.movementSeqFrame >= seq.frames.length) {
+					entity.movementSeqFrame = 0;
+					entity.movementSeqDelayClock = 0;
+					SoundPlayer.playSeqSound(entity.yFine, seq, entity.xFine, PlayerList.self == entity, entity.movementSeqFrame);
 				}
-				entity.anInt3388 = entity.anInt3407 + 1;
-				if (entity.anInt3388 >= local18.frames.length) {
-					entity.anInt3388 = 0;
+				entity.movementSeqNextFrame = entity.movementSeqFrame + 1;
+				if (entity.movementSeqNextFrame >= seq.frames.length) {
+					entity.movementSeqNextFrame = 0;
 				}
 			}
 		}
-		@Pc(156) int local156;
+		@Pc(156) int i;
 		if (entity.spotAnimId != -1 && client.loop >= entity.spotAnimStart) {
-			local156 = SpotAnimTypeList.get(entity.spotAnimId).seqId;
-			if (local156 == -1) {
+			i = SpotAnimTypeList.get(entity.spotAnimId).seqId;
+			if (i == -1) {
 				entity.spotAnimId = -1;
 			} else {
-				@Pc(165) SeqType local165 = SeqTypeList.get(local156);
-				if (local165 == null || local165.frames == null) {
+				@Pc(165) SeqType spotSeq = SeqTypeList.get(i);
+				if (spotSeq == null || spotSeq.frames == null) {
 					entity.spotAnimId = -1;
 				} else {
-					if (entity.anInt3399 < 0) {
-						entity.anInt3399 = 0;
-						SoundPlayer.playSeqSound(entity.zFine, local165, entity.xFine, PlayerList.self == entity, 0);
+					if (entity.spotAnimFrame < 0) {
+						entity.spotAnimFrame = 0;
+						SoundPlayer.playSeqSound(entity.yFine, spotSeq, entity.xFine, PlayerList.self == entity, 0);
 					}
-					entity.anInt3361++;
-					if (entity.anInt3399 < local165.frames.length && local165.frameDelay[entity.anInt3399] < entity.anInt3361) {
-						entity.anInt3399++;
-						entity.anInt3361 = 1;
-						SoundPlayer.playSeqSound(entity.zFine, local165, entity.xFine, PlayerList.self == entity, entity.anInt3399);
+					entity.spotAnimDelayClock++;
+					if (entity.spotAnimFrame < spotSeq.frames.length && spotSeq.frameDelay[entity.spotAnimFrame] < entity.spotAnimDelayClock) {
+						entity.spotAnimFrame++;
+						entity.spotAnimDelayClock = 1;
+						SoundPlayer.playSeqSound(entity.yFine, spotSeq, entity.xFine, PlayerList.self == entity, entity.spotAnimFrame);
 					}
-					if (entity.anInt3399 >= local165.frames.length) {
+					if (entity.spotAnimFrame >= spotSeq.frames.length) {
 						entity.spotAnimId = -1;
 					}
-					entity.anInt3418 = entity.anInt3399 + 1;
-					if (local165.frames.length <= entity.anInt3418) {
-						entity.anInt3418 = -1;
+					entity.spotAnimNextFrame = entity.spotAnimFrame + 1;
+					if (spotSeq.frames.length <= entity.spotAnimNextFrame) {
+						entity.spotAnimNextFrame = -1;
 					}
 				}
 			}
 		}
-		if (entity.seqId != -1 && entity.anInt3420 <= 1) {
-			local18 = SeqTypeList.get(entity.seqId);
-			if (local18.looptype == 1 && entity.anInt3405 > 0 && client.loop >= entity.forceMoveCyclesToStart && client.loop > entity.forceMoveCyclesToDest) {
-				entity.anInt3420 = 1;
+		if (entity.seqId != -1 && entity.seqDelay <= 1) {
+			seq = SeqTypeList.get(entity.seqId);
+			if (seq.looptype == 1 && entity.seqMovementSteps > 0 && client.loop >= entity.forceMoveCyclesToStart && client.loop > entity.forceMoveCyclesToDest) {
+				entity.seqDelay = 1;
 				return;
 			}
 		}
-		if (entity.seqId != -1 && entity.anInt3420 == 0) {
-			local18 = SeqTypeList.get(entity.seqId);
-			if (local18 == null || local18.frames == null) {
+		if (entity.seqId != -1 && entity.seqDelay == 0) {
+			seq = SeqTypeList.get(entity.seqId);
+			if (seq == null || seq.frames == null) {
 				entity.seqId = -1;
 			} else {
-				entity.anInt3360++;
-				if (entity.anInt3425 < local18.frames.length && entity.anInt3360 > local18.frameDelay[entity.anInt3425]) {
-					entity.anInt3360 = 1;
-					entity.anInt3425++;
-					SoundPlayer.playSeqSound(entity.zFine, local18, entity.xFine, entity == PlayerList.self, entity.anInt3425);
+				entity.seqDelayClock++;
+				if (entity.seqFrame < seq.frames.length && entity.seqDelayClock > seq.frameDelay[entity.seqFrame]) {
+					entity.seqDelayClock = 1;
+					entity.seqFrame++;
+					SoundPlayer.playSeqSound(entity.yFine, seq, entity.xFine, entity == PlayerList.self, entity.seqFrame);
 				}
-				if (local18.frames.length <= entity.anInt3425) {
-					entity.anInt3425 -= local18.replayoff;
-					entity.anInt3371++;
-					if (entity.anInt3371 >= local18.replaycount) {
+				if (seq.frames.length <= entity.seqFrame) {
+					entity.seqFrame -= seq.replayoff;
+					entity.seqReplayCount++;
+					if (entity.seqReplayCount >= seq.replaycount) {
 						entity.seqId = -1;
-					} else if (entity.anInt3425 >= 0 && local18.frames.length > entity.anInt3425) {
-						SoundPlayer.playSeqSound(entity.zFine, local18, entity.xFine, PlayerList.self == entity, entity.anInt3425);
+					} else if (entity.seqFrame >= 0 && seq.frames.length > entity.seqFrame) {
+						SoundPlayer.playSeqSound(entity.yFine, seq, entity.xFine, PlayerList.self == entity, entity.seqFrame);
 					} else {
 						entity.seqId = -1;
 					}
 				}
-				entity.anInt3373 = entity.anInt3425 + 1;
-				if (entity.anInt3373 >= local18.frames.length) {
-					entity.anInt3373 -= local18.replayoff;
-					if (local18.replaycount <= entity.anInt3371 + 1) {
-						entity.anInt3373 = -1;
-					} else if (entity.anInt3373 < 0 || entity.anInt3373 >= local18.frames.length) {
-						entity.anInt3373 = -1;
+				entity.seqNextFrame = entity.seqFrame + 1;
+				if (entity.seqNextFrame >= seq.frames.length) {
+					entity.seqNextFrame -= seq.replayoff;
+					if (seq.replaycount <= entity.seqReplayCount + 1) {
+						entity.seqNextFrame = -1;
+					} else if (entity.seqNextFrame < 0 || entity.seqNextFrame >= seq.frames.length) {
+						entity.seqNextFrame = -1;
 					}
 				}
-				entity.aBoolean171 = local18.stretches;
+				entity.seqStretches = seq.stretches;
 			}
 		}
-		if (entity.anInt3420 > 0) {
-			entity.anInt3420--;
+		if (entity.seqDelay > 0) {
+			entity.seqDelay--;
 		}
 
-		for (local156 = 0; local156 < entity.aClass147Array3.length; local156++) {
-			@Pc(545) PathingEntity_Class147 c147 = entity.aClass147Array3[local156];
-			if (c147 != null) {
-				if (c147.anInt5408 > 0) {
-					c147.anInt5408--;
+		for (i = 0; i < entity.slotAnimations.length; i++) {
+			@Pc(545) SlotAnimation slotAnim = entity.slotAnimations[i];
+			if (slotAnim != null) {
+				if (slotAnim.startDelay > 0) {
+					slotAnim.startDelay--;
 				} else {
-					@Pc(570) SeqType local570 = SeqTypeList.get(c147.anInt5396);
-					if (local570 == null || local570.frames == null) {
-						entity.aClass147Array3[local156] = null;
+					@Pc(570) SeqType slotSeq = SeqTypeList.get(slotAnim.seqId);
+					if (slotSeq == null || slotSeq.frames == null) {
+						entity.slotAnimations[i] = null;
 					} else {
-						c147.anInt5404++;
-						if (c147.anInt5399 < local570.frames.length && c147.anInt5404 > local570.frameDelay[c147.anInt5399]) {
-							c147.anInt5399++;
-							c147.anInt5404 = 1;
-							SoundPlayer.playSeqSound(entity.zFine, local570, entity.xFine, entity == PlayerList.self, c147.anInt5399);
+						slotAnim.delayClock++;
+						if (slotAnim.currentFrame < slotSeq.frames.length && slotAnim.delayClock > slotSeq.frameDelay[slotAnim.currentFrame]) {
+							slotAnim.currentFrame++;
+							slotAnim.delayClock = 1;
+							SoundPlayer.playSeqSound(entity.yFine, slotSeq, entity.xFine, entity == PlayerList.self, slotAnim.currentFrame);
 						}
-						if (local570.frames.length <= c147.anInt5399) {
-							c147.anInt5400++;
-							c147.anInt5399 -= local570.replayoff;
-							if (local570.replaycount <= c147.anInt5400) {
-								entity.aClass147Array3[local156] = null;
-							} else if (c147.anInt5399 >= 0 && c147.anInt5399 < local570.frames.length) {
-								SoundPlayer.playSeqSound(entity.zFine, local570, entity.xFine, PlayerList.self == entity, c147.anInt5399);
+						if (slotSeq.frames.length <= slotAnim.currentFrame) {
+							slotAnim.replayCount++;
+							slotAnim.currentFrame -= slotSeq.replayoff;
+							if (slotSeq.replaycount <= slotAnim.replayCount) {
+								entity.slotAnimations[i] = null;
+							} else if (slotAnim.currentFrame >= 0 && slotAnim.currentFrame < slotSeq.frames.length) {
+								SoundPlayer.playSeqSound(entity.yFine, slotSeq, entity.xFine, PlayerList.self == entity, slotAnim.currentFrame);
 							} else {
-								entity.aClass147Array3[local156] = null;
+								entity.slotAnimations[i] = null;
 							}
 						}
-						c147.anInt5398 = c147.anInt5399 + 1;
-						if (local570.frames.length <= c147.anInt5398) {
-							c147.anInt5398 -= local570.replayoff;
-							if (c147.anInt5400 + 1 >= local570.replaycount) {
-								c147.anInt5398 = -1;
-							} else if (c147.anInt5398 < 0 || local570.frames.length <= c147.anInt5398) {
-								c147.anInt5398 = -1;
+						slotAnim.nextFrame = slotAnim.currentFrame + 1;
+						if (slotSeq.frames.length <= slotAnim.nextFrame) {
+							slotAnim.nextFrame -= slotSeq.replayoff;
+							if (slotAnim.replayCount + 1 >= slotSeq.replaycount) {
+								slotAnim.nextFrame = -1;
+							} else if (slotAnim.nextFrame < 0 || slotSeq.frames.length <= slotAnim.nextFrame) {
+								slotAnim.nextFrame = -1;
 							}
 						}
 					}

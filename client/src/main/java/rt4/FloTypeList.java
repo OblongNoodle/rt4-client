@@ -13,13 +13,13 @@ public class FloTypeList {
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!qc", name = "a", descriptor = "(ZLclient!ve;)V")
-	public static void init(@OriginalArg(1) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(1) Js5 floArchive) {
+		archive = floArchive;
 		capacity = archive.getGroupCapacity(4);
 	}
 
 	@OriginalMember(owner = "client!um", name = "a", descriptor = "(BI)Lclient!wl;")
-	public static FloType method4395(@OriginalArg(1) int id) {
+	public static FloType get(@OriginalArg(1) int id) {
 		@Pc(6) FloType floorOverlay = (FloType) types.get(id);
 		if (floorOverlay != null) {
 			return floorOverlay;

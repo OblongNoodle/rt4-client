@@ -11,7 +11,7 @@ public class PlayerList {
 	@OriginalMember(owner = "client!ib", name = "f", descriptor = "[I")
 	public static final int[] ids = new int[2048];
 	@OriginalMember(owner = "client!ke", name = "Y", descriptor = "[I")
-	public static final int[] anIntArray309 = new int[]{1, 4};
+	public static final int[] nameSlotCounts = new int[]{1, 4};
 	@OriginalMember(owner = "client!nk", name = "O", descriptor = "Lclient!e;")
 	public static Player self;
 	@OriginalMember(owner = "client!bf", name = "E", descriptor = "I")
@@ -24,17 +24,17 @@ public class PlayerList {
 	public static JagString[] playerNames2;
 
 	@OriginalMember(owner = "client!fk", name = "b", descriptor = "(I)V")
-	public static void method1444() {
-		for (@Pc(7) int local7 = -1; local7 < size; local7++) {
-			@Pc(21) int local21;
-			if (local7 == -1) {
-				local21 = 2047;
+	public static void processAllPlayers() {
+		for (@Pc(7) int i = -1; i < size; i++) {
+			@Pc(21) int playerId;
+			if (i == -1) {
+				playerId = 2047;
 			} else {
-				local21 = ids[local7];
+				playerId = ids[i];
 			}
-			@Pc(31) Player local31 = players[local21];
-			if (local31 != null) {
-				NpcList.method4514(local31.getSize(), local31);
+			@Pc(31) Player player = players[playerId];
+			if (player != null) {
+				NpcList.processEntity(player.getSize(), player);
 			}
 		}
 	}

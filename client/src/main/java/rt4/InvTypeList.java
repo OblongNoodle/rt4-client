@@ -11,8 +11,8 @@ public class InvTypeList {
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!je", name = "a", descriptor = "(ILclient!ve;)V")
-	public static void init(@OriginalArg(1) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(1) Js5 invArchive) {
+		archive = invArchive;
 	}
 
 	@OriginalMember(owner = "client!u", name = "a", descriptor = "(II)Lclient!md;")

@@ -20,28 +20,28 @@ public final class JavaMouseWheel extends MouseWheel implements MouseWheelListen
 
 	@OriginalMember(owner = "client!o", name = "a", descriptor = "(ZLjava/awt/Component;)V")
 	@Override
-	public final void stop(@OriginalArg(1) Component arg0) {
-		arg0.removeMouseWheelListener(this);
+	public final void stop(@OriginalArg(1) Component component) {
+		component.removeMouseWheelListener(this);
 	}
 
 	@OriginalMember(owner = "client!o", name = "a", descriptor = "(I)I")
 	@Override
 	public final synchronized int getRotation() {
-		@Pc(2) int local2 = this.currentRotation;
+		@Pc(2) int rotation = this.currentRotation;
 		this.currentRotation = 0;
-		return local2;
+		return rotation;
 	}
 
 	@OriginalMember(owner = "client!o", name = "mouseWheelMoved", descriptor = "(Ljava/awt/event/MouseWheelEvent;)V")
 	@Override
-	public final synchronized void mouseWheelMoved(@OriginalArg(0) MouseWheelEvent arg0) {
+	public final synchronized void mouseWheelMoved(@OriginalArg(0) MouseWheelEvent event) {
 		this.previousRotation = this.currentRotation;
-		this.currentRotation += arg0.getWheelRotation();
+		this.currentRotation += event.getWheelRotation();
 	}
 
 	@OriginalMember(owner = "client!o", name = "a", descriptor = "(Ljava/awt/Component;I)V")
 	@Override
-	public final void start(@OriginalArg(0) Component arg0) {
-		arg0.addMouseWheelListener(this);
+	public final void start(@OriginalArg(0) Component component) {
+		component.addMouseWheelListener(this);
 	}
 }

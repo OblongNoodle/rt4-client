@@ -18,10 +18,10 @@ public final class LangUtils {
 	public static final JagString[] LANGUAGES = new JagString[]{LANG_EN, LANG_DE, LANG_FR, LANG_PT};
 
 	@OriginalMember(owner = "client!hm", name = "a", descriptor = "(Lclient!na;B)I")
-	public static int method2053(@OriginalArg(0) JagString arg0) {
-		for (@Pc(12) int local12 = 0; local12 < LANGUAGES.length; local12++) {
-			if (LANGUAGES[local12].equalsIgnoreCase(arg0)) {
-				return local12;
+	public static int getLanguageId(@OriginalArg(0) JagString language) {
+		for (@Pc(12) int i = 0; i < LANGUAGES.length; i++) {
+			if (LANGUAGES[i].equalsIgnoreCase(language)) {
+				return i;
 			}
 		}
 		return -1;

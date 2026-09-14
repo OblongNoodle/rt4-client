@@ -58,7 +58,7 @@ class plugin : Plugin() {
 
     fun toggleResizableSd() {
         //We only want to toggle resizable SD when we are logged in and the lobby/welcome interface is not open.
-        if (InterfaceList.aClass13_26 == null || client.gameState != 30) {
+        if (InterfaceList.gameViewportComponent == null || client.gameState != 30) {
             return
         }
 

@@ -38,124 +38,124 @@ public final class IsaacRandom {
 
 	@OriginalMember(owner = "client!ij", name = "a", descriptor = "(Z)V")
 	private void init() {
-		@Pc(14) int local14 = GOLDEN_RATIO;
-		@Pc(16) int local16 = GOLDEN_RATIO;
-		@Pc(18) int local18 = GOLDEN_RATIO;
-		@Pc(20) int local20 = GOLDEN_RATIO;
-		@Pc(22) int local22 = GOLDEN_RATIO;
-		@Pc(24) int local24 = GOLDEN_RATIO;
-		@Pc(26) int local26 = GOLDEN_RATIO;
-		@Pc(27) int local27 = GOLDEN_RATIO;
-		@Pc(29) int local29;
-		for (local29 = 0; local29 < 4; local29++) {
-			local27 ^= local26 << 11;
-			local22 += local27;
-			local26 += local24;
-			local26 ^= local24 >>> 2;
-			local24 += local22;
-			local24 ^= local22 << 8;
-			local18 += local24;
-			local20 += local26;
-			local22 += local20;
-			local22 ^= local20 >>> 16;
-			local20 += local18;
-			local16 += local22;
-			local20 ^= local18 << 10;
-			local14 += local20;
-			local18 += local16;
-			local18 ^= local16 >>> 4;
-			local16 += local14;
-			local16 ^= local14 << 8;
-			local26 += local16;
-			local27 += local18;
-			local14 += local27;
-			local14 ^= local27 >>> 9;
-			local24 += local14;
-			local27 += local26;
+		@Pc(14) int s0 = GOLDEN_RATIO;
+		@Pc(16) int s1 = GOLDEN_RATIO;
+		@Pc(18) int s2 = GOLDEN_RATIO;
+		@Pc(20) int s3 = GOLDEN_RATIO;
+		@Pc(22) int s4 = GOLDEN_RATIO;
+		@Pc(24) int s5 = GOLDEN_RATIO;
+		@Pc(26) int s6 = GOLDEN_RATIO;
+		@Pc(27) int s7 = GOLDEN_RATIO;
+		@Pc(29) int i;
+		for (i = 0; i < 4; i++) {
+			s7 ^= s6 << 11;
+			s4 += s7;
+			s6 += s5;
+			s6 ^= s5 >>> 2;
+			s5 += s4;
+			s5 ^= s4 << 8;
+			s2 += s5;
+			s3 += s6;
+			s4 += s3;
+			s4 ^= s3 >>> 16;
+			s3 += s2;
+			s1 += s4;
+			s3 ^= s2 << 10;
+			s0 += s3;
+			s2 += s1;
+			s2 ^= s1 >>> 4;
+			s1 += s0;
+			s1 ^= s0 << 8;
+			s6 += s1;
+			s7 += s2;
+			s0 += s7;
+			s0 ^= s7 >>> 9;
+			s5 += s0;
+			s7 += s6;
 		}
-		for (local29 = 0; local29 < 256; local29 += 8) {
-			local22 += this.rsl[local29 + 3];
-			local20 += this.rsl[local29 + 4];
-			local16 += this.rsl[local29 + 6];
-			local27 += this.rsl[local29];
-			local24 += this.rsl[local29 + 2];
-			local18 += this.rsl[local29 + 5];
-			local14 += this.rsl[local29 + 7];
-			local26 += this.rsl[local29 + 1];
-			local27 ^= local26 << 11;
-			local26 += local24;
-			local26 ^= local24 >>> 2;
-			local22 += local27;
-			local24 += local22;
-			local24 ^= local22 << 8;
-			local20 += local26;
-			local22 += local20;
-			local22 ^= local20 >>> 16;
-			local18 += local24;
-			local20 += local18;
-			local20 ^= local18 << 10;
-			local14 += local20;
-			local16 += local22;
-			local18 += local16;
-			local18 ^= local16 >>> 4;
-			local16 += local14;
-			local16 ^= local14 << 8;
-			local27 += local18;
-			local14 += local27;
-			local26 += local16;
-			local14 ^= local27 >>> 9;
-			local27 += local26;
-			this.mem[local29] = local27;
-			this.mem[local29 + 1] = local26;
-			local24 += local14;
-			this.mem[local29 + 2] = local24;
-			this.mem[local29 + 3] = local22;
-			this.mem[local29 + 4] = local20;
-			this.mem[local29 + 5] = local18;
-			this.mem[local29 + 6] = local16;
-			this.mem[local29 + 7] = local14;
+		for (i = 0; i < 256; i += 8) {
+			s4 += this.rsl[i + 3];
+			s3 += this.rsl[i + 4];
+			s1 += this.rsl[i + 6];
+			s7 += this.rsl[i];
+			s5 += this.rsl[i + 2];
+			s2 += this.rsl[i + 5];
+			s0 += this.rsl[i + 7];
+			s6 += this.rsl[i + 1];
+			s7 ^= s6 << 11;
+			s6 += s5;
+			s6 ^= s5 >>> 2;
+			s4 += s7;
+			s5 += s4;
+			s5 ^= s4 << 8;
+			s3 += s6;
+			s4 += s3;
+			s4 ^= s3 >>> 16;
+			s2 += s5;
+			s3 += s2;
+			s3 ^= s2 << 10;
+			s0 += s3;
+			s1 += s4;
+			s2 += s1;
+			s2 ^= s1 >>> 4;
+			s1 += s0;
+			s1 ^= s0 << 8;
+			s7 += s2;
+			s0 += s7;
+			s6 += s1;
+			s0 ^= s7 >>> 9;
+			s7 += s6;
+			this.mem[i] = s7;
+			this.mem[i + 1] = s6;
+			s5 += s0;
+			this.mem[i + 2] = s5;
+			this.mem[i + 3] = s4;
+			this.mem[i + 4] = s3;
+			this.mem[i + 5] = s2;
+			this.mem[i + 6] = s1;
+			this.mem[i + 7] = s0;
 		}
-		for (local29 = 0; local29 < 256; local29 += 8) {
-			local16 += this.mem[local29 + 6];
-			local18 += this.mem[local29 + 5];
-			local20 += this.mem[local29 + 4];
-			local26 += this.mem[local29 + 1];
-			local24 += this.mem[local29 + 2];
-			local27 += this.mem[local29];
-			local27 ^= local26 << 11;
-			local22 += this.mem[local29 + 3];
-			local14 += this.mem[local29 + 7];
-			local22 += local27;
-			local26 += local24;
-			local26 ^= local24 >>> 2;
-			local24 += local22;
-			local20 += local26;
-			local24 ^= local22 << 8;
-			local18 += local24;
-			local22 += local20;
-			local22 ^= local20 >>> 16;
-			local20 += local18;
-			local20 ^= local18 << 10;
-			local16 += local22;
-			local18 += local16;
-			local18 ^= local16 >>> 4;
-			local14 += local20;
-			local16 += local14;
-			local27 += local18;
-			local16 ^= local14 << 8;
-			local26 += local16;
-			local14 += local27;
-			local14 ^= local27 >>> 9;
-			local24 += local14;
-			local27 += local26;
-			this.mem[local29] = local27;
-			this.mem[local29 + 1] = local26;
-			this.mem[local29 + 2] = local24;
-			this.mem[local29 + 3] = local22;
-			this.mem[local29 + 4] = local20;
-			this.mem[local29 + 5] = local18;
-			this.mem[local29 + 6] = local16;
-			this.mem[local29 + 7] = local14;
+		for (i = 0; i < 256; i += 8) {
+			s1 += this.mem[i + 6];
+			s2 += this.mem[i + 5];
+			s3 += this.mem[i + 4];
+			s6 += this.mem[i + 1];
+			s5 += this.mem[i + 2];
+			s7 += this.mem[i];
+			s7 ^= s6 << 11;
+			s4 += this.mem[i + 3];
+			s0 += this.mem[i + 7];
+			s4 += s7;
+			s6 += s5;
+			s6 ^= s5 >>> 2;
+			s5 += s4;
+			s3 += s6;
+			s5 ^= s4 << 8;
+			s2 += s5;
+			s4 += s3;
+			s4 ^= s3 >>> 16;
+			s3 += s2;
+			s3 ^= s2 << 10;
+			s1 += s4;
+			s2 += s1;
+			s2 ^= s1 >>> 4;
+			s0 += s3;
+			s1 += s0;
+			s7 += s2;
+			s1 ^= s0 << 8;
+			s6 += s1;
+			s0 += s7;
+			s0 ^= s7 >>> 9;
+			s5 += s0;
+			s7 += s6;
+			this.mem[i] = s7;
+			this.mem[i + 1] = s6;
+			this.mem[i + 2] = s5;
+			this.mem[i + 3] = s4;
+			this.mem[i + 4] = s3;
+			this.mem[i + 5] = s2;
+			this.mem[i + 6] = s1;
+			this.mem[i + 7] = s0;
 		}
 		this.isaac();
 		this.count = 256;
@@ -177,23 +177,23 @@ public final class IsaacRandom {
 	@OriginalMember(owner = "client!ij", name = "b", descriptor = "(I)V")
 	private void isaac() {
 		this.b += ++this.c;
-		for (@Pc(17) int local17 = 0; local17 < 256; local17++) {
-			@Pc(33) int local33 = this.mem[local17];
-			if ((local17 & 0x2) == 0) {
-				if ((local17 & 0x1) == 0) {
+		for (@Pc(17) int i = 0; i < 256; i++) {
+			@Pc(33) int x = this.mem[i];
+			if ((i & 0x2) == 0) {
+				if ((i & 0x1) == 0) {
 					this.a ^= this.a << 13;
 				} else {
 					this.a ^= this.a >>> 6;
 				}
-			} else if ((local17 & 0x1) == 0) {
+			} else if ((i & 0x1) == 0) {
 				this.a ^= this.a << 2;
 			} else {
 				this.a ^= this.a >>> 16;
 			}
-			this.a += this.mem[local17 + 128 & 0xFF];
-			@Pc(119) int local119;
-			this.mem[local17] = local119 = this.b + this.a + this.mem[local33 >> 2 & 0xFF];
-			this.rsl[local17] = this.b = local33 + this.mem[local119 >> 8 >> 2 & 0xFF];
+			this.a += this.mem[i + 128 & 0xFF];
+			@Pc(119) int y;
+			this.mem[i] = y = this.b + this.a + this.mem[x >> 2 & 0xFF];
+			this.rsl[i] = this.b = x + this.mem[y >> 8 >> 2 & 0xFF];
 		}
 	}
 }

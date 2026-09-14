@@ -15,11 +15,11 @@ public abstract class Js5ResourceProvider {
 	public abstract Js5Index fetchIndex();
 
 	@OriginalMember(owner = "client!v", name = "a", descriptor = "(II)V")
-	public abstract void prefetchGroup(@OriginalArg(0) int arg0);
+	public abstract void prefetchGroup(@OriginalArg(0) int group);
 
 	@OriginalMember(owner = "client!v", name = "b", descriptor = "(II)I")
-	public abstract int getPercentageComplete(@OriginalArg(0) int arg0);
+	public abstract int getPercentageComplete(@OriginalArg(0) int group);
 
 	@OriginalMember(owner = "client!v", name = "c", descriptor = "(II)[B")
-	public abstract byte[] fetchGroup(@OriginalArg(0) int arg0);
+	public abstract byte[] fetchGroup(@OriginalArg(0) int group);
 }

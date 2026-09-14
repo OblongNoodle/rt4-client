@@ -11,8 +11,8 @@ public final class HardReferenceNode extends ReferenceNode {
 	private final Object referent;
 
 	@OriginalMember(owner = "client!he", name = "<init>", descriptor = "(Ljava/lang/Object;)V")
-	public HardReferenceNode(@OriginalArg(0) Object arg0) {
-		this.referent = arg0;
+	public HardReferenceNode(@OriginalArg(0) Object referent) {
+		this.referent = referent;
 	}
 
 	@OriginalMember(owner = "client!he", name = "a", descriptor = "(Z)Ljava/lang/Object;")

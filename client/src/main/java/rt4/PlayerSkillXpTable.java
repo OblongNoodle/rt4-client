@@ -27,12 +27,12 @@ public class PlayerSkillXpTable {
 	public static int updatedStatsWriterIndex = 0;
 
 	static {
-		@Pc(4) int local4 = 0;
-		for (@Pc(6) int local6 = 0; local6 < 99; local6++) {
-			@Pc(13) int local13 = local6 + 1;
-			@Pc(26) int local26 = (int) (Math.pow(2.0D, (double) local13 / 7.0D) * 300.0D + (double) local13);
-			local4 += local26;
-			PlayerSkillXpTable.xpLevelLookup[local6] = local4 / 4;
+		@Pc(4) int totalXp = 0;
+		for (@Pc(6) int level = 0; level < 99; level++) {
+			@Pc(13) int nextLevel = level + 1;
+			@Pc(26) int xpForLevel = (int) (Math.pow(2.0D, (double) nextLevel / 7.0D) * 300.0D + (double) nextLevel);
+			totalXp += xpForLevel;
+			PlayerSkillXpTable.xpLevelLookup[level] = totalXp / 4;
 		}
 	}
 

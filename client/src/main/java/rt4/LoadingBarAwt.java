@@ -18,7 +18,7 @@ public class LoadingBarAwt {
 	public static Font font;
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(Ljava/awt/Color;ZZLclient!na;I)V")
-	public static void render(@OriginalArg(0) Color color, @OriginalArg(2) boolean redraw, @OriginalArg(3) JagString text, @OriginalArg(4) int arg3) {
+	public static void render(@OriginalArg(0) Color color, @OriginalArg(2) boolean redraw, @OriginalArg(3) JagString text, @OriginalArg(4) int progress) {
 		try {
 			@Pc(6) Graphics g = GameShell.canvas.getGraphics();
 			if (font == null) {
@@ -39,10 +39,10 @@ public class LoadingBarAwt {
 				@Pc(56) Graphics loadingBarGraphics = loadingBar.getGraphics();
 				loadingBarGraphics.setColor(color);
 				loadingBarGraphics.drawRect(0, 0, 303, 33);
-				loadingBarGraphics.fillRect(2, 2, arg3 * 3, 30);
+				loadingBarGraphics.fillRect(2, 2, progress * 3, 30);
 				loadingBarGraphics.setColor(Color.black);
 				loadingBarGraphics.drawRect(1, 1, 301, 31);
-				loadingBarGraphics.fillRect(arg3 * 3 + 2, 2, 300 - arg3 * 3, 30);
+				loadingBarGraphics.fillRect(progress * 3 + 2, 2, 300 - progress * 3, 30);
 				loadingBarGraphics.setFont(font);
 				loadingBarGraphics.setColor(Color.white);
 				text.drawString(22, (304 - text.stringWidth(fontMetrics)) / 2, loadingBarGraphics);
@@ -52,10 +52,10 @@ public class LoadingBarAwt {
 				@Pc(146) int y = GameShell.canvasHeight / 2 - 18;
 				g.setColor(color);
 				g.drawRect(x, y, 303, 33);
-				g.fillRect(x + 2, y + 2, arg3 * 3, 30);
+				g.fillRect(x + 2, y + 2, progress * 3, 30);
 				g.setColor(Color.black);
 				g.drawRect(x + 1, y - -1, 301, 31);
-				g.fillRect(arg3 * 3 + x + 2, y + 2, 300 - arg3 * 3, 30);
+				g.fillRect(progress * 3 + x + 2, y + 2, 300 - progress * 3, 30);
 				g.setFont(font);
 				g.setColor(Color.white);
 				text.drawString(y + 22, x + (-text.stringWidth(fontMetrics) + 304) / 2, g);

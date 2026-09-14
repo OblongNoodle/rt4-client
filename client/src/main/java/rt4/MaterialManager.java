@@ -19,27 +19,27 @@ public class MaterialManager {
 	@OriginalMember(owner = "client!mh", name = "eb", descriptor = "I")
 	public static int currentArg = 0;
 	@OriginalMember(owner = "client!sj", name = "D", descriptor = "I")
-	public static int anInt5158;
+	public static int cameraRenderY;
 	@OriginalMember(owner = "client!ej", name = "X", descriptor = "I")
-	public static int anInt1815;
+	public static int cameraYaw;
 	@OriginalMember(owner = "client!uj", name = "H", descriptor = "I")
-	public static int anInt5559;
+	public static int cameraPitch;
 	@OriginalMember(owner = "client!bb", name = "M", descriptor = "I")
-	public static int anInt406;
+	public static int cameraRenderX;
 	@OriginalMember(owner = "client!qc", name = "cb", descriptor = "I")
-	public static int anInt4675;
+	public static int cameraRenderZ;
 	@OriginalMember(owner = "client!lm", name = "e", descriptor = "Z")
 	public static boolean allows3DTextureMapping;
 	@OriginalMember(owner = "client!lm", name = "a", descriptor = "[I")
 	public static int[] waterfallTextures = null;
 	@OriginalMember(owner = "client!lm", name = "b", descriptor = "[I")
-	public static int[] anIntArray341 = null;
+	public static int[] noise2DTextures = null;
 	@OriginalMember(owner = "client!lm", name = "f", descriptor = "I")
 	public static int texture3D = -1;
 	@OriginalMember(owner = "client!lm", name = "g", descriptor = "I")
 	public static int waterfallTextureId = -1;
 	@OriginalMember(owner = "client!lm", name = "c", descriptor = "Ljava/nio/ByteBuffer;")
-	private static ByteBuffer aByteBuffer6;
+	private static ByteBuffer waterfallNoiseBuffer;
 	@OriginalMember(owner = "client!lm", name = "d", descriptor = "Ljava/nio/ByteBuffer;")
 	private static ByteBuffer textureBuffer;
 
@@ -70,10 +70,10 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!ka", name = "b", descriptor = "(II)V")
-	public static void resetArgument(@OriginalArg(1) int arg0) {
-		if (arg0 == currentType) {
-			@Pc(12) MaterialRenderer local12 = renderers[arg0];
-			local12.setArgument(currentArg);
+	public static void resetArgument(@OriginalArg(1) int type) {
+		if (type == currentType) {
+			@Pc(12) MaterialRenderer renderer = renderers[type];
+			renderer.setArgument(currentArg);
 		}
 	}
 
@@ -85,12 +85,12 @@ public class MaterialManager {
 	@OriginalMember(owner = "client!nj", name = "a", descriptor = "(I)V")
 	public static void quit() {
 		renderers = null;
-		method2808();
+		deleteNoiseTextures();
 	}
 
 	@OriginalMember(owner = "client!te", name = "e", descriptor = "(I)V")
 	public static void init() {
-		method2809();
+		createNoiseTextures();
 		renderers = new MaterialRenderer[7];
 		renderers[1] = new SpecularMaterialRenderer();
 		renderers[2] = new LiquidMaterialRenderer();
@@ -101,94 +101,94 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!ld", name = "a", descriptor = "(IIIIZI)V")
-	public static void method2731(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg4) {
-		anInt5158 = arg1;
-		anInt1815 = arg4;
-		anInt5559 = arg0;
-		anInt406 = arg3;
-		anInt4675 = arg2;
+	public static void setCameraTransform(@OriginalArg(0) int pitch, @OriginalArg(1) int renderY, @OriginalArg(2) int renderZ, @OriginalArg(3) int renderX, @OriginalArg(5) int yaw) {
+		cameraRenderY = renderY;
+		cameraYaw = yaw;
+		cameraPitch = pitch;
+		cameraRenderX = renderX;
+		cameraRenderZ = renderZ;
 	}
 
 	@OriginalMember(owner = "client!lm", name = "a", descriptor = "()V")
-	public static void method2807() {
-		@Pc(11) byte[] local11;
+	public static void initNoiseTextures() {
+		@Pc(11) byte[] texData;
 		if (textureBuffer == null) {
-			@Pc(5) MaterialManager_Class106_Sub1_Sub1 local5 = new MaterialManager_Class106_Sub1_Sub1();
-			local11 = local5.method3215();
-			textureBuffer = ByteBuffer.allocateDirect(local11.length);
+			@Pc(5) RidgedNoiseTexture ridgedNoise = new RidgedNoiseTexture();
+			texData = ridgedNoise.generateTexture();
+			textureBuffer = ByteBuffer.allocateDirect(texData.length);
 			textureBuffer.position(0);
-			textureBuffer.put(local11);
+			textureBuffer.put(texData);
 			textureBuffer.flip();
 		}
-		if (aByteBuffer6 == null) {
-			@Pc(32) MaterialManager_Class106_Sub2_Sub1 local32 = new MaterialManager_Class106_Sub2_Sub1();
-			local11 = local32.method3854();
-			aByteBuffer6 = ByteBuffer.allocateDirect(local11.length);
-			aByteBuffer6.position(0);
-			aByteBuffer6.put(local11);
-			aByteBuffer6.flip();
+		if (waterfallNoiseBuffer == null) {
+			@Pc(32) FractalNoiseTexture fractalNoise = new FractalNoiseTexture();
+			texData = fractalNoise.generateTexture();
+			waterfallNoiseBuffer = ByteBuffer.allocateDirect(texData.length);
+			waterfallNoiseBuffer.position(0);
+			waterfallNoiseBuffer.put(texData);
+			waterfallNoiseBuffer.flip();
 		}
 	}
 
 	@OriginalMember(owner = "client!lm", name = "b", descriptor = "()V")
-	public static void method2808() {
+	public static void deleteNoiseTextures() {
 		@Pc(4) GL2 gl;
-		@Pc(11) int[] local11;
+		@Pc(11) int[] ids;
 		if (texture3D != -1) {
 			gl = GlRenderer.gl;
-			local11 = new int[]{texture3D};
-			gl.glDeleteTextures(1, local11, 0);
+			ids = new int[]{texture3D};
+			gl.glDeleteTextures(1, ids, 0);
 			texture3D = -1;
 			GlCleaner.onCardTexture -= textureBuffer.limit() * 2;
 		}
-		if (anIntArray341 != null) {
+		if (noise2DTextures != null) {
 			gl = GlRenderer.gl;
-			gl.glDeleteTextures(64, anIntArray341, 0);
-			anIntArray341 = null;
+			gl.glDeleteTextures(64, noise2DTextures, 0);
+			noise2DTextures = null;
 			GlCleaner.onCardTexture -= textureBuffer.limit() * 2;
 		}
 		if (waterfallTextureId != -1) {
 			gl = GlRenderer.gl;
-			local11 = new int[]{waterfallTextureId};
-			gl.glDeleteTextures(1, local11, 0);
+			ids = new int[]{waterfallTextureId};
+			gl.glDeleteTextures(1, ids, 0);
 			waterfallTextureId = -1;
-			GlCleaner.onCardTexture -= aByteBuffer6.limit() * 2;
+			GlCleaner.onCardTexture -= waterfallNoiseBuffer.limit() * 2;
 		}
 		if (waterfallTextures != null) {
 			gl = GlRenderer.gl;
 			gl.glDeleteTextures(64, waterfallTextures, 0);
 			waterfallTextures = null;
-			GlCleaner.onCardTexture -= aByteBuffer6.limit() * 2;
+			GlCleaner.onCardTexture -= waterfallNoiseBuffer.limit() * 2;
 		}
 	}
 
 	@OriginalMember(owner = "client!lm", name = "c", descriptor = "()V")
-	public static void method2809() {
+	public static void createNoiseTextures() {
 		allows3DTextureMapping = GlRenderer.extTexture3dSupported;
-		method2807();
-		method2811();
-		method2812();
+		initNoiseTextures();
+		uploadNoiseTexture();
+		uploadWaterfallNoiseTexture();
 	}
 
 	@OriginalMember(owner = "client!lm", name = "e", descriptor = "()V")
-	private static void method2811() {
+	private static void uploadNoiseTexture() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		if (allows3DTextureMapping) {
-			@Pc(6) int[] local6 = new int[1];
-			gl.glGenTextures(1, local6, 0);
-			gl.glBindTexture(GL2.GL_TEXTURE_3D, local6[0]);
+			@Pc(6) int[] texId = new int[1];
+			gl.glGenTextures(1, texId, 0);
+			gl.glBindTexture(GL2.GL_TEXTURE_3D, texId[0]);
 			textureBuffer.position(0);
 			gl.glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL2.GL_LUMINANCE_ALPHA, 64, 64, 64, 0, GL2.GL_LUMINANCE_ALPHA, GL2.GL_UNSIGNED_BYTE, textureBuffer);
 			gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
-			texture3D = local6[0];
+			texture3D = texId[0];
 			GlCleaner.onCardTexture += textureBuffer.limit() * 2;
 		} else {
-			anIntArray341 = new int[64];
-			gl.glGenTextures(64, anIntArray341, 0);
-			for (@Pc(65) int local65 = 0; local65 < 64; local65++) {
-				GlRenderer.setTextureId(anIntArray341[local65]);
-				textureBuffer.position(local65 * 64 * 64 * 2);
+			noise2DTextures = new int[64];
+			gl.glGenTextures(64, noise2DTextures, 0);
+			for (@Pc(65) int i = 0; i < 64; i++) {
+				GlRenderer.setTextureId(noise2DTextures[i]);
+				textureBuffer.position(i * 64 * 64 * 2);
 				gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_LUMINANCE_ALPHA, 64, 64, 0, GL2.GL_LUMINANCE_ALPHA, GL2.GL_UNSIGNED_BYTE, textureBuffer);
 				gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 				gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
@@ -198,35 +198,35 @@ public class MaterialManager {
 	}
 
 	@OriginalMember(owner = "client!lm", name = "f", descriptor = "()V")
-	private static void method2812() {
+	private static void uploadWaterfallNoiseTexture() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		if (allows3DTextureMapping) {
-			@Pc(6) int[] local6 = new int[1];
-			gl.glGenTextures(1, local6, 0);
-			gl.glBindTexture(GL2.GL_TEXTURE_3D, local6[0]);
-			aByteBuffer6.position(0);
-			gl.glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL2.GL_LUMINANCE_ALPHA, 64, 64, 64, 0, GL2.GL_LUMINANCE_ALPHA, GL2.GL_UNSIGNED_BYTE, aByteBuffer6);
+			@Pc(6) int[] texId = new int[1];
+			gl.glGenTextures(1, texId, 0);
+			gl.glBindTexture(GL2.GL_TEXTURE_3D, texId[0]);
+			waterfallNoiseBuffer.position(0);
+			gl.glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL2.GL_LUMINANCE_ALPHA, 64, 64, 64, 0, GL2.GL_LUMINANCE_ALPHA, GL2.GL_UNSIGNED_BYTE, waterfallNoiseBuffer);
 			gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
-			waterfallTextureId = local6[0];
-			GlCleaner.onCardTexture += aByteBuffer6.limit() * 2;
+			waterfallTextureId = texId[0];
+			GlCleaner.onCardTexture += waterfallNoiseBuffer.limit() * 2;
 			return;
 		}
 		waterfallTextures = new int[64];
 		gl.glGenTextures(64, waterfallTextures, 0);
-		for (@Pc(65) int local65 = 0; local65 < 64; local65++) {
-			GlRenderer.setTextureId(waterfallTextures[local65]);
-			aByteBuffer6.position(local65 * 64 * 64 * 2);
-			gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_LUMINANCE_ALPHA, 64, 64, 0, GL2.GL_LUMINANCE_ALPHA, GL2.GL_UNSIGNED_BYTE, aByteBuffer6);
+		for (@Pc(65) int i = 0; i < 64; i++) {
+			GlRenderer.setTextureId(waterfallTextures[i]);
+			waterfallNoiseBuffer.position(i * 64 * 64 * 2);
+			gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_LUMINANCE_ALPHA, 64, 64, 0, GL2.GL_LUMINANCE_ALPHA, GL2.GL_UNSIGNED_BYTE, waterfallNoiseBuffer);
 			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 		}
-		GlCleaner.onCardTexture += aByteBuffer6.limit() * 2;
+		GlCleaner.onCardTexture += waterfallNoiseBuffer.limit() * 2;
 	}
 
 	@OriginalMember(owner = "client!lh", name = "b", descriptor = "(II)V")
-	public static void method2761(@OriginalArg(0) int arg0) {
-		UnderwaterMaterialRenderer.anInt3241 = arg0;
+	public static void setUnderwaterFogRange(@OriginalArg(0) int range) {
+		UnderwaterMaterialRenderer.underwaterDepthRange = range;
 		resetArgument(3);
 		resetArgument(4);
 	}

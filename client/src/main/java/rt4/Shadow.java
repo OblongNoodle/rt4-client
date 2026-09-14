@@ -15,34 +15,34 @@ public final class Shadow {
 	@OriginalMember(owner = "client!wm", name = "g", descriptor = "[B")
 	public static final byte[] pixels = new byte[16384];
 	@OriginalMember(owner = "client!wm", name = "a", descriptor = "Lclient!vi;")
-	private GlVertexBufferObject aClass155_6;
+	private GlVertexBufferObject indexVbo;
 
 	@OriginalMember(owner = "client!wm", name = "c", descriptor = "Ljava/nio/ByteBuffer;")
-	private ByteBuffer aByteBuffer11;
+	private ByteBuffer indexBuffer;
 
 	@OriginalMember(owner = "client!wm", name = "e", descriptor = "Ljava/nio/ByteBuffer;")
-	private ByteBuffer aByteBuffer12;
+	private ByteBuffer vertexBuffer;
 
 	@OriginalMember(owner = "client!wm", name = "f", descriptor = "Lclient!vi;")
-	private GlVertexBufferObject aClass155_7;
+	private GlVertexBufferObject vertexVbo;
 
 	@OriginalMember(owner = "client!wm", name = "b", descriptor = "Z")
 	public boolean outputToSprite = true;
 
 	@OriginalMember(owner = "client!wm", name = "h", descriptor = "I")
-	private int anInt5902 = -1;
+	private int pixelHash = -1;
 
 	@OriginalMember(owner = "client!wm", name = "d", descriptor = "I")
-	private final int anInt5901;
+	private final int textureId;
 
 	@OriginalMember(owner = "client!wm", name = "<init>", descriptor = "()V")
 	public Shadow() {
 		@Pc(9) GL2 gl = GlRenderer.gl;
-		@Pc(12) int[] local12 = new int[1];
-		gl.glGenTextures(1, local12, 0);
-		this.anInt5901 = local12[0];
+		@Pc(12) int[] texIds = new int[1];
+		gl.glGenTextures(1, texIds, 0);
+		this.textureId = texIds[0];
 		GlCleaner.onCardTexture += 16384;
-		GlRenderer.setTextureId(this.anInt5901);
+		GlRenderer.setTextureId(this.textureId);
 		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
@@ -50,143 +50,143 @@ public final class Shadow {
 	}
 
 	@OriginalMember(owner = "client!wm", name = "a", descriptor = "([[III)V")
-	public final void method4676(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(4) Buffer local4 = new Buffer(1620);
-		@Pc(11) int local11;
-		for (@Pc(6) int local6 = 0; local6 <= 8; local6++) {
-			for (local11 = 0; local11 <= 8; local11++) {
+	public final void buildShadowMesh(@OriginalArg(0) int[][] heightmap, @OriginalArg(1) int tileX, @OriginalArg(2) int tileY) {
+		@Pc(4) Buffer vtxBuf = new Buffer(1620);
+		@Pc(11) int x;
+		for (@Pc(6) int y = 0; y <= 8; y++) {
+			for (x = 0; x <= 8; x++) {
 				if (GlRenderer.bigEndian) {
-					local4.pFloat((float) local11 / 8.0F);
-					local4.pFloat((float) local6 / 8.0F);
-					local4.pFloat((float) (local11 * 128));
-					local4.pFloat((float) arg0[local11 + arg1][local6 + arg2]);
-					local4.pFloat((float) (local6 * 128));
+					vtxBuf.pFloat((float) x / 8.0F);
+					vtxBuf.pFloat((float) y / 8.0F);
+					vtxBuf.pFloat((float) (x * 128));
+					vtxBuf.pFloat((float) heightmap[x + tileX][y + tileY]);
+					vtxBuf.pFloat((float) (y * 128));
 				} else {
-					local4.gFloat((float) local11 / 8.0F);
-					local4.gFloat((float) local6 / 8.0F);
-					local4.gFloat((float) (local11 * 128));
-					local4.gFloat((float) arg0[local11 + arg1][local6 + arg2]);
-					local4.gFloat((float) (local6 * 128));
+					vtxBuf.gFloat((float) x / 8.0F);
+					vtxBuf.gFloat((float) y / 8.0F);
+					vtxBuf.gFloat((float) (x * 128));
+					vtxBuf.gFloat((float) heightmap[x + tileX][y + tileY]);
+					vtxBuf.gFloat((float) (y * 128));
 				}
 			}
 		}
 		if (GlRenderer.arbVboSupported) {
-			@Pc(112) ByteBuffer local112 = ByteBuffer.wrap(local4.data, 0, local4.offset);
-			this.aClass155_7 = new GlVertexBufferObject();
-			this.aClass155_7.setArrayBuffer(local112);
+			@Pc(112) ByteBuffer vtxData = ByteBuffer.wrap(vtxBuf.data, 0, vtxBuf.offset);
+			this.vertexVbo = new GlVertexBufferObject();
+			this.vertexVbo.setArrayBuffer(vtxData);
 		} else {
-			this.aByteBuffer12 = ByteBuffer.allocateDirect(local4.offset).order(ByteOrder.nativeOrder());
-			this.aByteBuffer12.put(local4.data, 0, local4.offset);
-			this.aByteBuffer12.flip();
+			this.vertexBuffer = ByteBuffer.allocateDirect(vtxBuf.offset).order(ByteOrder.nativeOrder());
+			this.vertexBuffer.put(vtxBuf.data, 0, vtxBuf.offset);
+			this.vertexBuffer.flip();
 		}
-		@Pc(147) Buffer local147 = new Buffer(1536);
-		for (local11 = 0; local11 < 8; local11++) {
-			for (@Pc(154) int local154 = 0; local154 < 8; local154++) {
+		@Pc(147) Buffer idxBuf = new Buffer(1536);
+		for (x = 0; x < 8; x++) {
+			for (@Pc(154) int col = 0; col < 8; col++) {
 				if (GlRenderer.bigEndian) {
-					local147.p4(local154 + (local11 + 1) * 9);
-					local147.p4(local154 + local11 * 9);
-					local147.p4(local154 + local11 * 9 + 1);
-					local147.p4(local154 + (local11 + 1) * 9);
-					local147.p4(local154 + local11 * 9 + 1);
-					local147.p4(local154 + (local11 + 1) * 9 + 1);
+					idxBuf.p4(col + (x + 1) * 9);
+					idxBuf.p4(col + x * 9);
+					idxBuf.p4(col + x * 9 + 1);
+					idxBuf.p4(col + (x + 1) * 9);
+					idxBuf.p4(col + x * 9 + 1);
+					idxBuf.p4(col + (x + 1) * 9 + 1);
 				} else {
-					local147.ip4(local154 + (local11 + 1) * 9);
-					local147.ip4(local154 + local11 * 9);
-					local147.ip4(local154 + local11 * 9 + 1);
-					local147.ip4(local154 + (local11 + 1) * 9);
-					local147.ip4(local154 + local11 * 9 + 1);
-					local147.ip4(local154 + (local11 + 1) * 9 + 1);
+					idxBuf.ip4(col + (x + 1) * 9);
+					idxBuf.ip4(col + x * 9);
+					idxBuf.ip4(col + x * 9 + 1);
+					idxBuf.ip4(col + (x + 1) * 9);
+					idxBuf.ip4(col + x * 9 + 1);
+					idxBuf.ip4(col + (x + 1) * 9 + 1);
 				}
 			}
 		}
 		if (GlRenderer.arbVboSupported) {
-			@Pc(293) ByteBuffer local293 = ByteBuffer.wrap(local147.data, 0, local147.offset);
-			this.aClass155_6 = new GlVertexBufferObject();
-			this.aClass155_6.setElementArrayBuffer(local293);
+			@Pc(293) ByteBuffer idxData = ByteBuffer.wrap(idxBuf.data, 0, idxBuf.offset);
+			this.indexVbo = new GlVertexBufferObject();
+			this.indexVbo.setElementArrayBuffer(idxData);
 		} else {
-			this.aByteBuffer11 = ByteBuffer.allocateDirect(local147.offset).order(ByteOrder.nativeOrder());
-			this.aByteBuffer11.put(local147.data, 0, local147.offset);
-			this.aByteBuffer11.flip();
+			this.indexBuffer = ByteBuffer.allocateDirect(idxBuf.offset).order(ByteOrder.nativeOrder());
+			this.indexBuffer.put(idxBuf.data, 0, idxBuf.offset);
+			this.indexBuffer.flip();
 		}
 	}
 
 	@OriginalMember(owner = "client!wm", name = "a", descriptor = "(Lclient!ek;II)Z")
-	public final boolean method4677(@OriginalArg(0) SoftwareIndexedSprite arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(2) byte[] local2 = arg0.pixels;
-		@Pc(5) int local5 = arg0.width;
-		@Pc(19) int local19 = arg1 * 128 + (arg2 * 128 + 1) * local5 + 1;
-		@Pc(21) int local21 = 0;
-		@Pc(23) int local23;
-		@Pc(33) int local33;
-		for (local23 = -128; local23 < 0; local23++) {
-			local21 = (local21 << 8) - local21;
-			for (local33 = -128; local33 < 0; local33++) {
-				if (local2[local19++] != 0) {
-					local21++;
+	public final boolean updateShadowTexture(@OriginalArg(0) SoftwareIndexedSprite sprite, @OriginalArg(1) int offsetX, @OriginalArg(2) int offsetY) {
+		@Pc(2) byte[] src = sprite.pixels;
+		@Pc(5) int stride = sprite.width;
+		@Pc(19) int idx = offsetX * 128 + (offsetY * 128 + 1) * stride + 1;
+		@Pc(21) int hash = 0;
+		@Pc(23) int row;
+		@Pc(33) int col;
+		for (row = -128; row < 0; row++) {
+			hash = (hash << 8) - hash;
+			for (col = -128; col < 0; col++) {
+				if (src[idx++] != 0) {
+					hash++;
 				}
 			}
-			local19 += local5 - 128;
+			idx += stride - 128;
 		}
-		if (local21 == this.anInt5902) {
+		if (hash == this.pixelHash) {
 			return false;
 		}
-		this.anInt5902 = local21;
-		local19 = arg1 * 128 + (arg2 * 128 + 1) * local5 + 1;
-		local23 = 0;
-		for (local33 = -128; local33 < 0; local33++) {
-			for (@Pc(82) int local82 = -128; local82 < 0; local82++) {
-				if (local2[local19] == 0) {
-					@Pc(96) int local96 = 0;
-					if (local2[local19 - 1] != 0) {
-						local96++;
+		this.pixelHash = hash;
+		idx = offsetX * 128 + (offsetY * 128 + 1) * stride + 1;
+		row = 0;
+		for (col = -128; col < 0; col++) {
+			for (@Pc(82) int x = -128; x < 0; x++) {
+				if (src[idx] == 0) {
+					@Pc(96) int neighbors = 0;
+					if (src[idx - 1] != 0) {
+						neighbors++;
 					}
-					if (local2[local19 + 1] != 0) {
-						local96++;
+					if (src[idx + 1] != 0) {
+						neighbors++;
 					}
-					if (local2[local19 - local5] != 0) {
-						local96++;
+					if (src[idx - stride] != 0) {
+						neighbors++;
 					}
-					if (local2[local19 + local5] != 0) {
-						local96++;
+					if (src[idx + stride] != 0) {
+						neighbors++;
 					}
-					pixels[local23++] = (byte) (local96 * 17);
+					pixels[row++] = (byte) (neighbors * 17);
 				} else {
-					pixels[local23++] = 68;
+					pixels[row++] = 68;
 				}
-				local19++;
+				idx++;
 			}
-			local19 += local5 - 128;
+			idx += stride - 128;
 		}
 		@Pc(145) GL2 gl = GlRenderer.gl;
-		@Pc(148) ByteBuffer local148 = ByteBuffer.wrap(pixels);
-		local148.limit(16384);
-		GlRenderer.setTextureId(this.anInt5901);
-		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_ALPHA, 128, 128, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, local148);
+		@Pc(148) ByteBuffer texData = ByteBuffer.wrap(pixels);
+		texData.limit(16384);
+		GlRenderer.setTextureId(this.textureId);
+		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_ALPHA, 128, 128, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, texData);
 		return true;
 	}
 
 	@OriginalMember(owner = "client!wm", name = "b", descriptor = "()V")
-	public final void method4679() {
+	public final void renderShadow() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		GlRenderer.setTextureId(this.anInt5901);
-		if (this.aClass155_7 == null) {
+		GlRenderer.setTextureId(this.textureId);
+		if (this.vertexVbo == null) {
 			if (GlRenderer.arbVboSupported) {
 				gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
 			}
-			gl.glInterleavedArrays(GL2.GL_T2F_V3F, 20, this.aByteBuffer12);
+			gl.glInterleavedArrays(GL2.GL_T2F_V3F, 20, this.vertexBuffer);
 			GlRenderer.normalArrayEnabled = false;
 		} else {
-			this.aClass155_7.bindArray();
+			this.vertexVbo.bindArray();
 			gl.glInterleavedArrays(GL2.GL_T2F_V3F, 20, 0L);
 			GlRenderer.normalArrayEnabled = false;
 		}
-		if (this.aClass155_6 == null) {
+		if (this.indexVbo == null) {
 			if (GlRenderer.arbVboSupported) {
 				gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
 			}
-			gl.glDrawElements(GL2.GL_TRIANGLES, 384, GL2.GL_UNSIGNED_INT, this.aByteBuffer11);
+			gl.glDrawElements(GL2.GL_TRIANGLES, 384, GL2.GL_UNSIGNED_INT, this.indexBuffer);
 		} else {
-			this.aClass155_6.bindElementArray();
+			this.indexVbo.bindElementArray();
 			gl.glDrawElements(GL2.GL_TRIANGLES, 384, GL2.GL_UNSIGNED_INT, 0L);
 		}
 	}

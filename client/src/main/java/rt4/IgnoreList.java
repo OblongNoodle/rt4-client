@@ -13,12 +13,12 @@ public class IgnoreList {
 	public static int size = 0;
 
 	@OriginalMember(owner = "client!te", name = "b", descriptor = "(Lclient!na;I)Z")
-	public static boolean contains(@OriginalArg(0) JagString arg0) {
-		if (arg0 == null) {
+	public static boolean contains(@OriginalArg(0) JagString username) {
+		if (username == null) {
 			return false;
 		}
-		for (@Pc(11) int local11 = 0; local11 < size; local11++) {
-			if (arg0.equalsIgnoreCase(usernames[local11])) {
+		for (@Pc(11) int i = 0; i < size; i++) {
+			if (username.equalsIgnoreCase(usernames[i])) {
 				return true;
 			}
 		}
@@ -26,54 +26,54 @@ public class IgnoreList {
 	}
 
 	@OriginalMember(owner = "client!la", name = "a", descriptor = "(IJ)V")
-	public static void add(@OriginalArg(1) long arg0) {
-		if (arg0 == 0L) {
+	public static void add(@OriginalArg(1) long encodedUsername) {
+		if (encodedUsername == 0L) {
 			return;
 		}
 		if (size >= 100) {
 			Chat.add(JagString.EMPTY, 0, LocalizedText.IGNORELISTFULL);
 			return;
 		}
-		@Pc(34) JagString local34 = Base37.decode37(arg0).toTitleCase();
-		@Pc(36) int local36;
-		for (local36 = 0; local36 < size; local36++) {
-			if (encodedUsernames[local36] == arg0) {
-				Chat.add(JagString.EMPTY, 0, JagString.concatenate(new JagString[]{local34, LocalizedText.IGNORELISTDUPE}));
+		@Pc(34) JagString name = Base37.decode37(encodedUsername).toTitleCase();
+		@Pc(36) int i;
+		for (i = 0; i < size; i++) {
+			if (encodedUsernames[i] == encodedUsername) {
+				Chat.add(JagString.EMPTY, 0, JagString.concatenate(new JagString[]{name, LocalizedText.IGNORELISTDUPE}));
 				return;
 			}
 		}
-		for (local36 = 0; local36 < FriendsList.size; local36++) {
-			if (FriendsList.encodedUsernames[local36] == arg0) {
-				Chat.add(JagString.EMPTY, 0, JagString.concatenate(new JagString[]{LocalizedText.REMOVESOCIAL2, local34, LocalizedText.REMOVEFRIEND}));
+		for (i = 0; i < FriendsList.size; i++) {
+			if (FriendsList.encodedUsernames[i] == encodedUsername) {
+				Chat.add(JagString.EMPTY, 0, JagString.concatenate(new JagString[]{LocalizedText.REMOVESOCIAL2, name, LocalizedText.REMOVEFRIEND}));
 				return;
 			}
 		}
-		if (local34.strEquals(PlayerList.self.username)) {
+		if (name.strEquals(PlayerList.self.username)) {
 			Chat.add(JagString.EMPTY, 0, LocalizedText.IGNORECANTADDSELF);
 			return;
 		}
-		encodedUsernames[size] = arg0;
-		usernames[size++] = Base37.decode37(arg0);
+		encodedUsernames[size] = encodedUsername;
+		usernames[size++] = Base37.decode37(encodedUsername);
 		FriendsList.transmitAt = InterfaceList.transmitTimer;
 		Protocol.outboundBuffer.p1isaac(ClientProt.IGNORELIST_ADD);
-		Protocol.outboundBuffer.p8(arg0);
+		Protocol.outboundBuffer.p8(encodedUsername);
 	}
 
 	@OriginalMember(owner = "client!fh", name = "a", descriptor = "(JI)V")
-	public static void remove(@OriginalArg(0) long arg0) {
-		if (arg0 == 0L) {
+	public static void remove(@OriginalArg(0) long encodedUsername) {
+		if (encodedUsername == 0L) {
 			return;
 		}
-		for (@Pc(12) int local12 = 0; local12 < size; local12++) {
-			if (encodedUsernames[local12] == arg0) {
+		for (@Pc(12) int i = 0; i < size; i++) {
+			if (encodedUsernames[i] == encodedUsername) {
 				size--;
-				for (@Pc(36) int local36 = local12; local36 < size; local36++) {
-					encodedUsernames[local36] = encodedUsernames[local36 + 1];
-					usernames[local36] = usernames[local36 + 1];
+				for (@Pc(36) int j = i; j < size; j++) {
+					encodedUsernames[j] = encodedUsernames[j + 1];
+					usernames[j] = usernames[j + 1];
 				}
 				FriendsList.transmitAt = InterfaceList.transmitTimer;
 				Protocol.outboundBuffer.p1isaac(ClientProt.IGNORELIST_DEL);
-				Protocol.outboundBuffer.p8(arg0);
+				Protocol.outboundBuffer.p8(encodedUsername);
 				break;
 			}
 		}

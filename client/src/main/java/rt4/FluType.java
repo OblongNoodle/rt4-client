@@ -27,65 +27,65 @@ public final class FluType {
 	public int texture = -1;
 
 	@OriginalMember(owner = "client!ni", name = "o", descriptor = "I")
-	public int anInt4156 = 128;
+	public int textureScale = 128;
 
 	@OriginalMember(owner = "client!ni", name = "l", descriptor = "Z")
 	public boolean blockShadow = true;
 
 	@OriginalMember(owner = "client!ni", name = "a", descriptor = "(IB)V")
-	private void rgbToHsl(@OriginalArg(0) int arg0) {
-		@Pc(8) double local8 = (double) (arg0 >> 16 & 0xFF) / 256.0D;
-		@Pc(21) double local21 = (double) (arg0 >> 8 & 0xFF) / 256.0D;
-		@Pc(23) double local23 = local8;
-		@Pc(30) double local30 = (double) (arg0 & 0xFF) / 256.0D;
-		if (local21 < local8) {
-			local23 = local21;
+	private void rgbToHsl(@OriginalArg(0) int rgb) {
+		@Pc(8) double red = (double) (rgb >> 16 & 0xFF) / 256.0D;
+		@Pc(21) double green = (double) (rgb >> 8 & 0xFF) / 256.0D;
+		@Pc(23) double min = red;
+		@Pc(30) double blue = (double) (rgb & 0xFF) / 256.0D;
+		if (green < red) {
+			min = green;
 		}
-		if (local30 < local23) {
-			local23 = local30;
+		if (blue < min) {
+			min = blue;
 		}
-		@Pc(44) double local44 = local8;
-		@Pc(54) double local54 = 0.0D;
-		if (local21 > local8) {
-			local44 = local21;
+		@Pc(44) double max = red;
+		@Pc(54) double hue = 0.0D;
+		if (green > red) {
+			max = green;
 		}
-		if (local30 > local44) {
-			local44 = local30;
+		if (blue > max) {
+			max = blue;
 		}
-		@Pc(68) double local68 = 0.0D;
-		@Pc(74) double local74 = (local44 + local23) / 2.0D;
-		if (local23 != local44) {
-			if (local74 < 0.5D) {
-				local68 = (local44 - local23) / (local44 + local23);
+		@Pc(68) double sat = 0.0D;
+		@Pc(74) double lum = (max + min) / 2.0D;
+		if (min != max) {
+			if (lum < 0.5D) {
+				sat = (max - min) / (max + min);
 			}
-			if (local44 == local8) {
-				local54 = (local21 - local30) / (-local23 + local44);
-			} else if (local21 == local44) {
-				local54 = (local30 - local8) / (local44 - local23) + 2.0D;
-			} else if (local30 == local44) {
-				local54 = (local8 - local21) / (-local23 + local44) + 4.0D;
+			if (max == red) {
+				hue = (green - blue) / (-min + max);
+			} else if (green == max) {
+				hue = (blue - red) / (max - min) + 2.0D;
+			} else if (blue == max) {
+				hue = (red - green) / (-min + max) + 4.0D;
 			}
-			if (local74 >= 0.5D) {
-				local68 = (local44 - local23) / ((2.0D - local44) - local23);
+			if (lum >= 0.5D) {
+				sat = (max - min) / ((2.0D - max) - min);
 			}
 		}
-		if (local74 > 0.5D) {
-			this.chroma = (int) (local68 * (1.0D - local74) * 512.0D);
+		if (lum > 0.5D) {
+			this.chroma = (int) (sat * (1.0D - lum) * 512.0D);
 		} else {
-			this.chroma = (int) (local68 * local74 * 512.0D);
+			this.chroma = (int) (sat * lum * 512.0D);
 		}
 		if (this.chroma < 1) {
 			this.chroma = 1;
 		}
-		this.saturation = (int) (local68 * 256.0D);
-		this.lightness = (int) (local74 * 256.0D);
+		this.saturation = (int) (sat * 256.0D);
+		this.lightness = (int) (lum * 256.0D);
 		if (this.lightness < 0) {
 			this.lightness = 0;
 		} else if (this.lightness > 255) {
 			this.lightness = 255;
 		}
-		local54 /= 6.0D;
-		this.weightedHue = (int) ((double) this.chroma * local54);
+		hue /= 6.0D;
+		this.weightedHue = (int) ((double) this.chroma * hue);
 		if (this.saturation < 0) {
 			this.saturation = 0;
 		} else if (this.saturation > 255) {
@@ -105,7 +105,7 @@ public final class FluType {
 	}
 
 	@OriginalMember(owner = "client!ni", name = "a", descriptor = "(BILclient!wa;I)V")
-	private void decode(@OriginalArg(1) int opcode, @OriginalArg(2) Buffer buffer, @OriginalArg(3) int arg2) {
+	private void decode(@OriginalArg(1) int opcode, @OriginalArg(2) Buffer buffer, @OriginalArg(3) int id) {
 		if (opcode == 1) {
 			this.color = buffer.g3();
 			this.rgbToHsl(this.color);
@@ -115,7 +115,7 @@ public final class FluType {
 				this.texture = -1;
 			}
 		} else if (opcode == 3) {
-			this.anInt4156 = buffer.g2();
+			this.textureScale = buffer.g2();
 		} else if (opcode == 4) {
 			this.blockShadow = false;
 		}

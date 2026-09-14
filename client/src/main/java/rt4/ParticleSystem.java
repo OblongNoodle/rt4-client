@@ -39,6 +39,6 @@ public final class ParticleSystem extends ParticleNode {
 	}
 
 	@OriginalMember(owner = "client!ga", name = "d", descriptor = "()V")
-	public final void method1646() {
+	public final void update() {
 	}
 }

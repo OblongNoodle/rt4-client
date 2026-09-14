@@ -13,70 +13,70 @@ import java.nio.ByteBuffer;
 public final class WaterMaterialRenderer implements MaterialRenderer {
 
 	@OriginalMember(owner = "client!v", name = "c", descriptor = "[F")
-	public static final float[] aFloatArray2 = new float[]{0.073F, 0.169F, 0.24F, 1.0F};
+	public static final float[] waterColor = new float[]{0.073F, 0.169F, 0.24F, 1.0F};
 	@OriginalMember(owner = "client!pd", name = "b", descriptor = "[F")
-	public static final float[] aFloatArray22 = new float[]{0.1F, 0.1F, 0.15F, 0.1F};
+	public static final float[] waterSpecularColor = new float[]{0.1F, 0.1F, 0.15F, 0.1F};
 	@OriginalMember(owner = "client!pd", name = "a", descriptor = "I")
-	private int anInt4440 = -1;
+	private int displayListId = -1;
 
 	@OriginalMember(owner = "client!pd", name = "c", descriptor = "[F")
-	private final float[] aFloatArray23 = new float[4];
+	private final float[] texGenParams = new float[4];
 
 	@OriginalMember(owner = "client!pd", name = "d", descriptor = "I")
-	private int anInt4441 = -1;
+	private int alphaTextureId = -1;
 
 	@OriginalMember(owner = "client!pd", name = "e", descriptor = "I")
-	private int anInt4442 = -1;
+	private int lastAnimationClock = -1;
 
 	@OriginalMember(owner = "client!pd", name = "<init>", descriptor = "()V")
 	public WaterMaterialRenderer() {
-		this.method3435();
-		this.method3437();
+		this.createAlphaTexture();
+		this.initDisplayLists();
 	}
 
 	@OriginalMember(owner = "client!jj", name = "a", descriptor = "(B)[F")
-	public static float[] method2422() {
-		@Pc(3) float local3 = FogManager.getLightingModelAmbient() + FogManager.getLight0Diffuse();
-		@Pc(9) int local9 = FogManager.getLightColor();
-		@Pc(18) float local18 = (float) (local9 >> 16 & 0xFF) / 255.0F;
-		ColorUtils.aFloatArray28[3] = 1.0F;
-		@Pc(37) float local37 = (float) (local9 >> 8 & 0xFF) / 255.0F;
-		@Pc(39) float local39 = 0.58823526F;
-		@Pc(46) float local46 = (float) (local9 & 0xFF) / 255.0F;
-		ColorUtils.aFloatArray28[2] = aFloatArray2[2] * local46 * local39 * local3;
-		ColorUtils.aFloatArray28[0] = aFloatArray2[0] * local18 * local39 * local3;
-		ColorUtils.aFloatArray28[1] = local3 * local39 * local37 * aFloatArray2[1];
-		return ColorUtils.aFloatArray28;
+	public static float[] getWaterFogColor() {
+		@Pc(3) float ambient = FogManager.getLightingModelAmbient() + FogManager.getLight0Diffuse();
+		@Pc(9) int lightColor = FogManager.getLightColor();
+		@Pc(18) float r = (float) (lightColor >> 16 & 0xFF) / 255.0F;
+		ColorUtils.rgbaBuffer[3] = 1.0F;
+		@Pc(37) float g = (float) (lightColor >> 8 & 0xFF) / 255.0F;
+		@Pc(39) float scale = 0.58823526F;
+		@Pc(46) float b = (float) (lightColor & 0xFF) / 255.0F;
+		ColorUtils.rgbaBuffer[2] = waterColor[2] * b * scale * ambient;
+		ColorUtils.rgbaBuffer[0] = waterColor[0] * r * scale * ambient;
+		ColorUtils.rgbaBuffer[1] = ambient * scale * g * waterColor[1];
+		return ColorUtils.rgbaBuffer;
 	}
 
 	@OriginalMember(owner = "client!bk", name = "a", descriptor = "(BI)V")
-	public static void method619(@OriginalArg(1) int color) {
-		aFloatArray2[0] = (float) (color >> 16 & 0xFF) / 255.0F;
-		aFloatArray2[1] = (float) (color >> 8 & 0xFF) / 255.0F;
-		aFloatArray2[2] = (float) (color & 0xFF) / 255.0F;
+	public static void setUnderwaterColor(@OriginalArg(1) int color) {
+		waterColor[0] = (float) (color >> 16 & 0xFF) / 255.0F;
+		waterColor[1] = (float) (color >> 8 & 0xFF) / 255.0F;
+		waterColor[2] = (float) (color & 0xFF) / 255.0F;
 		MaterialManager.resetArgument(3);
 		MaterialManager.resetArgument(4);
 	}
 
 	@OriginalMember(owner = "client!pd", name = "d", descriptor = "()V")
-	private void method3435() {
-		@Pc(2) byte[] local2 = new byte[]{0, -1};
+	private void createAlphaTexture() {
+		@Pc(2) byte[] alphaData = new byte[]{0, -1};
 		@Pc(12) GL2 gl = GlRenderer.gl;
-		@Pc(15) int[] local15 = new int[1];
-		gl.glGenTextures(1, local15, 0);
-		gl.glBindTexture(GL2.GL_TEXTURE_1D, local15[0]);
-		gl.glTexImage1D(GL2.GL_TEXTURE_1D, 0, GL2.GL_ALPHA, 2, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(local2));
+		@Pc(15) int[] texIds = new int[1];
+		gl.glGenTextures(1, texIds, 0);
+		gl.glBindTexture(GL2.GL_TEXTURE_1D, texIds[0]);
+		gl.glTexImage1D(GL2.GL_TEXTURE_1D, 0, GL2.GL_ALPHA, 2, 0, GL2.GL_ALPHA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(alphaData));
 		gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 		gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 		gl.glTexParameteri(GL2.GL_TEXTURE_1D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
-		this.anInt4441 = local15[0];
+		this.alphaTextureId = texIds[0];
 	}
 
 	@OriginalMember(owner = "client!pd", name = "f", descriptor = "()V")
-	private void method3437() {
+	private void initDisplayLists() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
-		this.anInt4440 = gl.glGenLists(2);
-		gl.glNewList(this.anInt4440, GL2.GL_COMPILE);
+		this.displayListId = gl.glGenLists(2);
+		gl.glNewList(this.displayListId, GL2.GL_COMPILE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_COLOR);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC1_RGB, GL2.GL_CONSTANT);
 		gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_RGB_SCALE, 2.0F);
@@ -98,7 +98,7 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glEnable(GL2.GL_TEXTURE_1D);
-		gl.glBindTexture(GL2.GL_TEXTURE_1D, this.anInt4441);
+		gl.glBindTexture(GL2.GL_TEXTURE_1D, this.alphaTextureId);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_INTERPOLATE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_CONSTANT);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC2_RGB, GL2.GL_TEXTURE);
@@ -110,7 +110,7 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		gl.glEndList();
-		gl.glNewList(this.anInt4440 + 1, GL2.GL_COMPILE);
+		gl.glNewList(this.displayListId + 1, GL2.GL_COMPILE);
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glDisable(GL2.GL_TEXTURE_1D);
 		gl.glDisable(GL2.GL_TEXTURE_GEN_S);
@@ -138,35 +138,35 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 	@OriginalMember(owner = "client!pd", name = "a", descriptor = "()V")
 	@Override
 	public final void unbind() {
-		GlRenderer.gl.glCallList(this.anInt4440 + 1);
+		GlRenderer.gl.glCallList(this.displayListId + 1);
 	}
 
 	@OriginalMember(owner = "client!pd", name = "a", descriptor = "(I)V")
 	@Override
-	public final void setArgument(@OriginalArg(0) int arg0) {
+	public final void setArgument(@OriginalArg(0) int flags) {
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
-		gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, aFloatArray2, 0);
+		gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, waterColor, 0);
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
-		if ((arg0 & 0x1) == 1) {
+		if ((flags & 0x1) == 1) {
 			if (!MaterialManager.allows3DTextureMapping) {
-				GlRenderer.setTextureId(MaterialManager.anIntArray341[GlRenderer.anInt5323 * 64 / 100 % 64]);
-			} else if (this.anInt4442 != GlRenderer.anInt5323) {
-				this.aFloatArray23[0] = 0.0F;
-				this.aFloatArray23[1] = 0.0F;
-				this.aFloatArray23[2] = 0.0F;
-				this.aFloatArray23[3] = (float) GlRenderer.anInt5323 * 0.005F;
-				gl.glTexGenfv(GL2.GL_R, GL2.GL_OBJECT_PLANE, this.aFloatArray23, 0);
-				this.anInt4442 = GlRenderer.anInt5323;
+				GlRenderer.setTextureId(MaterialManager.noise2DTextures[GlRenderer.animationClock * 64 / 100 % 64]);
+			} else if (this.lastAnimationClock != GlRenderer.animationClock) {
+				this.texGenParams[0] = 0.0F;
+				this.texGenParams[1] = 0.0F;
+				this.texGenParams[2] = 0.0F;
+				this.texGenParams[3] = (float) GlRenderer.animationClock * 0.005F;
+				gl.glTexGenfv(GL2.GL_R, GL2.GL_OBJECT_PLANE, this.texGenParams, 0);
+				this.lastAnimationClock = GlRenderer.animationClock;
 			}
 		} else if (MaterialManager.allows3DTextureMapping) {
-			this.aFloatArray23[0] = 0.0F;
-			this.aFloatArray23[1] = 0.0F;
-			this.aFloatArray23[2] = 0.0F;
-			this.aFloatArray23[3] = 0.0F;
-			gl.glTexGenfv(GL2.GL_R, GL2.GL_OBJECT_PLANE, this.aFloatArray23, 0);
+			this.texGenParams[0] = 0.0F;
+			this.texGenParams[1] = 0.0F;
+			this.texGenParams[2] = 0.0F;
+			this.texGenParams[3] = 0.0F;
+			gl.glTexGenfv(GL2.GL_R, GL2.GL_OBJECT_PLANE, this.texGenParams, 0);
 		} else {
-			GlRenderer.setTextureId(MaterialManager.anIntArray341[0]);
+			GlRenderer.setTextureId(MaterialManager.noise2DTextures[0]);
 		}
 	}
 
@@ -177,21 +177,21 @@ public final class WaterMaterialRenderer implements MaterialRenderer {
 		GlRenderer.setTextureCombineRgbMode(2);
 		GlRenderer.setTextureCombineAlphaMode(2);
 		GlRenderer.resetTextureMatrix();
-		gl.glCallList(this.anInt4440);
-		@Pc(12) float local12 = 2662.4001F;
-		local12 += (float) (MaterialManager.anInt5559 - 128) * 0.5F;
+		gl.glCallList(this.displayListId);
+		@Pc(12) float nearDist = 2662.4001F;
+		nearDist += (float) (MaterialManager.cameraPitch - 128) * 0.5F;
 		float max = (float) GlobalConfig.VIEW_DISTANCE - GlobalConfig.VIEW_FADE_DISTANCE;
-		if (local12 >= max) {
-			local12 = max - 1.0f;
+		if (nearDist >= max) {
+			nearDist = max - 1.0f;
 		}
-		this.aFloatArray23[0] = 0.0F;
-		this.aFloatArray23[1] = 0.0F;
-		this.aFloatArray23[2] = 1.0F / (local12 - max);
-		this.aFloatArray23[3] = local12 / (local12 - max);
-		gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.aFloatArray23, 0);
+		this.texGenParams[0] = 0.0F;
+		this.texGenParams[1] = 0.0F;
+		this.texGenParams[2] = 1.0F / (nearDist - max);
+		this.texGenParams[3] = nearDist / (nearDist - max);
+		gl.glTexGenfv(GL2.GL_S, GL2.GL_EYE_PLANE, this.texGenParams, 0);
 		gl.glPopMatrix();
 		gl.glActiveTexture(GL2.GL_TEXTURE0);
-		gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, aFloatArray22, 0);
+		gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, waterSpecularColor, 0);
 	}
 
 	@OriginalMember(owner = "client!pd", name = "c", descriptor = "()I")

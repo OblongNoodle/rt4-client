@@ -33,7 +33,7 @@ public final class BasType {
 	public int yawMaxSpeed = 0;
 
 	@OriginalMember(owner = "client!ck", name = "G", descriptor = "I")
-	public int anInt1050 = 0;
+	public int terrainAlignDepth = 0;
 
 	@OriginalMember(owner = "client!ck", name = "E", descriptor = "I")
 	public int slowWalkCWTurnAnimationId = -1;
@@ -57,7 +57,7 @@ public final class BasType {
 	public int walkAnimation = -1;
 
 	@OriginalMember(owner = "client!ck", name = "W", descriptor = "I")
-	public int anInt1059 = 0;
+	public int terrainAlignWidth = 0;
 
 	@OriginalMember(owner = "client!ck", name = "z", descriptor = "I")
 	public int runCWTurnAnimationId = -1;
@@ -93,7 +93,7 @@ public final class BasType {
 	public int rollTargetAngle = 0;
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "(I)V")
-	public final void method878() {
+	public final void postDecode() {
 	}
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "(ILclient!wa;)V")
@@ -135,8 +135,8 @@ public final class BasType {
 		} else if (opcode == 9) {
 			this.runCWTurnAnimationId = buffer.g2();
 		} else if (opcode == 26) {
-			this.anInt1059 = (short) (buffer.g1() * 4);
-			this.anInt1050 = (short) (buffer.g1() * 4);
+			this.terrainAlignWidth = (short) (buffer.g1() * 4);
+			this.terrainAlignDepth = (short) (buffer.g1() * 4);
 		} else if (opcode == 27) {
 			if (this.modelRotateTranslate == null) {
 				this.modelRotateTranslate = new int[12][];

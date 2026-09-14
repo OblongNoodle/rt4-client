@@ -11,23 +11,23 @@ public class LightTypeList {
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!id", name = "a", descriptor = "(Lclient!ve;B)V")
-	public static void init(@OriginalArg(0) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(0) Js5 js5) {
+		archive = js5;
 	}
 
 	@OriginalMember(owner = "client!la", name = "a", descriptor = "(II)Lclient!ic;")
-	public static LightType get(@OriginalArg(1) int arg0) {
-		@Pc(10) LightType local10 = (LightType) types.get(arg0);
-		if (local10 != null) {
-			return local10;
+	public static LightType get(@OriginalArg(1) int id) {
+		@Pc(10) LightType type = (LightType) types.get(id);
+		if (type != null) {
+			return type;
 		}
-		@Pc(26) byte[] local26 = archive.fetchFile(31, arg0);
-		local10 = new LightType();
-		if (local26 != null) {
-			local10.decode(new Buffer(local26), arg0);
+		@Pc(26) byte[] data = archive.fetchFile(31, id);
+		type = new LightType();
+		if (data != null) {
+			type.decode(new Buffer(data), id);
 		}
-		types.put(local10, arg0);
-		return local10;
+		types.put(type, id);
+		return type;
 	}
 
 	@OriginalMember(owner = "client!c", name = "c", descriptor = "(II)V")

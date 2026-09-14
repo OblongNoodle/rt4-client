@@ -7,19 +7,19 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class MapMarker {
 
 	@OriginalMember(owner = "client!nc", name = "b", descriptor = "I")
-	public int anInt4045;
+	public int targetXFine;
 
 	@OriginalMember(owner = "client!nc", name = "c", descriptor = "I")
-	public int anInt4046;
+	public int targetY;
 
 	@OriginalMember(owner = "client!nc", name = "f", descriptor = "I")
-	public int anInt4047;
+	public int targetYFine;
 
 	@OriginalMember(owner = "client!nc", name = "g", descriptor = "I")
-	public int anInt4048;
+	public int arrowSpriteId;
 
 	@OriginalMember(owner = "client!nc", name = "i", descriptor = "I")
-	public int anInt4050;
+	public int targetHeight;
 
 	@OriginalMember(owner = "client!nc", name = "l", descriptor = "I")
 	public int targetX;

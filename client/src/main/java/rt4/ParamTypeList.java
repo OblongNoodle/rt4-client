@@ -11,8 +11,8 @@ public class ParamTypeList {
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!sf", name = "a", descriptor = "(BLclient!ve;)V")
-	public static void init(@OriginalArg(1) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(1) Js5 paramArchive) {
+		archive = paramArchive;
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(II)Lclient!hn;")

@@ -11,32 +11,32 @@ public class EnumTypeList {
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!gl", name = "a", descriptor = "(Lclient!ve;I)V")
-	public static void init(@OriginalArg(0) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(0) Js5 js5) {
+		archive = js5;
 	}
 
 	@OriginalMember(owner = "client!ui", name = "a", descriptor = "(IZ)Lclient!ml;")
-	public static EnumType get(@OriginalArg(0) int arg0) {
-		@Pc(10) EnumType local10 = (EnumType) types.get(arg0);
-		if (local10 != null) {
-			return local10;
+	public static EnumType get(@OriginalArg(0) int id) {
+		@Pc(10) EnumType type = (EnumType) types.get(id);
+		if (type != null) {
+			return type;
 		}
-		@Pc(24) byte[] local24 = archive.fetchFile(getGroupId(arg0), getFileId(arg0));
-		local10 = new EnumType();
-		if (local24 != null) {
-			local10.decode(new Buffer(local24));
+		@Pc(24) byte[] data = archive.fetchFile(getGroupId(id), getFileId(id));
+		type = new EnumType();
+		if (data != null) {
+			type.decode(new Buffer(data));
 		}
-		types.put(local10, arg0);
-		return local10;
+		types.put(type, id);
+		return type;
 	}
 
 	@OriginalMember(owner = "client!i", name = "e", descriptor = "(BI)I")
-	public static int getFileId(@OriginalArg(1) int arg0) {
-		return arg0 & 0xFF;
+	public static int getFileId(@OriginalArg(1) int id) {
+		return id & 0xFF;
 	}
 
 	@OriginalMember(owner = "client!hi", name = "a", descriptor = "(BI)I")
-	public static int getGroupId(@OriginalArg(1) int arg0) {
-		return arg0 >>> 8;
+	public static int getGroupId(@OriginalArg(1) int id) {
+		return id >>> 8;
 	}
 }

@@ -12,13 +12,13 @@ import java.awt.*;
 public final class DisplayMode {
 
 	@OriginalMember(owner = "client!ib", name = "i", descriptor = "[Lclient!od;")
-	public static DisplayMode[] aClass114Array1;
+	public static DisplayMode[] cachedDisplayModes;
 	@OriginalMember(owner = "client!rc", name = "M", descriptor = "Z")
 	public static boolean start_GLRenderer = false;
 	@OriginalMember(owner = "client!jk", name = "y", descriptor = "Z")
 	public static boolean resizable = false;
 	@OriginalMember(owner = "client!hi", name = "f", descriptor = "J")
-	public static long aLong89 = 0L;
+	public static long canvasReplaceTime = 0L;
 
 	@OriginalMember(owner = "client!od", name = "j", descriptor = "I")
 	public int width;
@@ -52,7 +52,7 @@ public final class DisplayMode {
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(ZIIII)V")
 	public static void setWindowMode(@OriginalArg(0) boolean replaceCanvas, @OriginalArg(1) int newMode, @OriginalArg(3) int width, @OriginalArg(4) int height) {
-		aLong89 = 0L;
+		canvasReplaceTime = 0L;
 		@Pc(4) int currentMode = getWindowMode();
 		if (newMode == 3 || currentMode == 3) {
 			replaceCanvas = true;
@@ -182,9 +182,9 @@ public final class DisplayMode {
 				try {
 					@Pc(269) Graphics graphics = GameShell.canvas.getGraphics();
 					SoftwareRaster.frameBuffer.draw(graphics);
-				} catch (@Pc(277) Exception local277) {
+				} catch (@Pc(277) Exception ignored) {
 				}
-				GameShell.method2704(); // Creates a black background for SD Mode window, gameplay frame will render on top of.
+				GameShell.paintFrameLetterbox(); // Creates a black background for SD Mode window, gameplay frame will render on top of.
 				if (currentMode == 0) {
 					if(resizableSD)
 						SoftwareRaster.frameBuffer = FrameBuffer.create(GameShell.frameHeight, GameShell.frameWidth, GameShell.canvas);
@@ -199,7 +199,7 @@ public final class DisplayMode {
 				 * for its turn. This along with the while loop waits long enough to cause a de-sync in the start process which causes
 				 * lag and delay when switching to HD Mode and when launching the client in HD Mode.
 				 * GLProfile.initSingleton() is automatically run starting with jogl 2.0 and later. So no need to execute it.
-				 * After it returns status code 1, it also sets an important variable aBoolean73(Start_Renderer) to true.
+				 * After it returns status code 1, it also sets an important variable start_GLRenderer to true.
 				 * This triggers the needed GLRenderer.init() function which we can control to be true manually as intended.
 				 **/
 
@@ -230,21 +230,21 @@ public final class DisplayMode {
 		if (newMode > 0 && currentMode == 0) {
 			GameShell.thread.setPriority(5);
 			SoftwareRaster.frameBuffer = null;
-			SoftwareModel.method4580();
-			((Js5GlTextureProvider) Rasteriser.textureProvider).method3248(200);
+			SoftwareModel.enableDepthSortMode();
+			((Js5GlTextureProvider) Rasteriser.textureProvider).setCapacity(200);
 			if (Preferences.highDetailLighting) {
 				Rasteriser.setBrightness(0.7F);
 			}
-			LoginManager.method4637();
+			LoginManager.clearLoginScreenSprites();
 		} else if (newMode == 0 && currentMode > 0) { // This is when client switches from any other mode to SD Mode
 			GameShell.thread.setPriority(1);
 			if(resizableSD)
 				SoftwareRaster.frameBuffer = FrameBuffer.create(GameShell.frameHeight, GameShell.frameWidth, GameShell.canvas);
 			else
 				SoftwareRaster.frameBuffer = FrameBuffer.create(503, 765, GameShell.canvas);
-			SoftwareModel.method4583();
+			SoftwareModel.enableBucketSortMode();
 			ParticleSystem.quit();
-			((Js5GlTextureProvider) Rasteriser.textureProvider).method3248(20);
+			((Js5GlTextureProvider) Rasteriser.textureProvider).setCapacity(20);
 			if (Preferences.highDetailLighting) {
 				if (Preferences.brightness == 1) {
 					Rasteriser.setBrightness(0.9F);
@@ -259,22 +259,22 @@ public final class DisplayMode {
 					Rasteriser.setBrightness(0.6F);
 				}
 			}
-			GlTile.method1939();
-			LoginManager.method4637();
+			GlTile.resetStaticBuffers();
+			LoginManager.clearLoginScreenSprites();
 		}
-		SceneGraph.aBoolean130 = !SceneGraph.allLevelsAreVisible();
+		SceneGraph.levelsHidden = !SceneGraph.allLevelsAreVisible();
 		if (useHD) {
-			client.method2721();
+			client.reloadResourcesOnDisplayModeChange();
 		}
 		resizable = newMode == 2; // resizeable should only be done in HD-Resizeable mode and not full screen mode.
 		if (InterfaceList.topLevelInterface != -1) {
-			InterfaceList.method3712(true);
+			InterfaceList.layoutTopLevel(true);
 		}
 		if (Protocol.socket != null && (client.gameState == 30 || client.gameState == 25)) {
 			ClientProt.sendWindowDetails();
 		}
-		for (@Pc(466) int local466 = 0; local466 < 100; local466++) {
-			InterfaceList.aBooleanArray100[local466] = true;
+		for (@Pc(466) int i = 0; i < 100; i++) {
+			InterfaceList.rectangleDirty[i] = true;
 		}
 		GameShell.fullRedraw = true;
 		PluginRepository.reloadPlugins();
@@ -282,62 +282,62 @@ public final class DisplayMode {
 
 	@OriginalMember(owner = "client!ab", name = "c", descriptor = "(B)[Lclient!od;")
 	public static DisplayMode[] getDisplayModes() {
-		if (aClass114Array1 == null) {
-			@Pc(16) DisplayMode[] local16 = method3558(GameShell.signLink);
-			@Pc(20) DisplayMode[] local20 = new DisplayMode[local16.length];
-			@Pc(22) int local22 = 0;
-			label52:
-			for (@Pc(24) int local24 = 0; local24 < local16.length; local24++) {
-				@Pc(32) DisplayMode local32 = local16[local24];
-				if ((local32.bitDepth <= 0 || local32.bitDepth >= 24) && local32.width >= 800 && local32.height >= 600) {
-					for (@Pc(52) int local52 = 0; local52 < local22; local52++) {
-						@Pc(59) DisplayMode local59 = local20[local52];
-						if (local32.width == local59.width && local59.height == local32.height) {
-							if (local32.bitDepth > local59.bitDepth) {
-								local20[local52] = local32;
+		if (cachedDisplayModes == null) {
+			@Pc(16) DisplayMode[] available = getAvailableDisplayModes(GameShell.signLink);
+			@Pc(20) DisplayMode[] filtered = new DisplayMode[available.length];
+			@Pc(22) int count = 0;
+			nextMode:
+			for (@Pc(24) int i = 0; i < available.length; i++) {
+				@Pc(32) DisplayMode mode = available[i];
+				if ((mode.bitDepth <= 0 || mode.bitDepth >= 24) && mode.width >= 800 && mode.height >= 600) {
+					for (@Pc(52) int j = 0; j < count; j++) {
+						@Pc(59) DisplayMode existing = filtered[j];
+						if (mode.width == existing.width && existing.height == mode.height) {
+							if (mode.bitDepth > existing.bitDepth) {
+								filtered[j] = mode;
 							}
-							continue label52;
+							continue nextMode;
 						}
 					}
-					local20[local22] = local32;
-					local22++;
+					filtered[count] = mode;
+					count++;
 				}
 			}
-			aClass114Array1 = new DisplayMode[local22];
-			ArrayUtils.copy(local20, 0, aClass114Array1, 0, local22);
-			@Pc(112) int[] local112 = new int[aClass114Array1.length];
-			for (@Pc(114) int local114 = 0; local114 < aClass114Array1.length; local114++) {
-				@Pc(122) DisplayMode local122 = aClass114Array1[local114];
-				local112[local114] = local122.height * local122.width;
+			cachedDisplayModes = new DisplayMode[count];
+			ArrayUtils.copy(filtered, 0, cachedDisplayModes, 0, count);
+			@Pc(112) int[] sortKeys = new int[cachedDisplayModes.length];
+			for (@Pc(114) int i = 0; i < cachedDisplayModes.length; i++) {
+				@Pc(122) DisplayMode mode = cachedDisplayModes[i];
+				sortKeys[i] = mode.height * mode.width;
 			}
-			ArrayUtils.sort(local112, aClass114Array1);
+			ArrayUtils.sort(sortKeys, cachedDisplayModes);
 		}
-		return aClass114Array1;
+		return cachedDisplayModes;
 	}
 
 	@OriginalMember(owner = "client!pm", name = "a", descriptor = "(ILsignlink!ll;)[Lclient!od;")
-	public static DisplayMode[] method3558(@OriginalArg(1) SignLink arg0) {
-		if (!arg0.isFullScreenSupported()) {
+	public static DisplayMode[] getAvailableDisplayModes(@OriginalArg(1) SignLink signLink) {
+		if (!signLink.isFullScreenSupported()) {
 			return new DisplayMode[0];
 		}
-		@Pc(17) PrivilegedRequest local17 = arg0.getDisplayModes();
-		while (local17.status == 0) {
+		@Pc(17) PrivilegedRequest request = signLink.getDisplayModes();
+		while (request.status == 0) {
 			ThreadUtils.sleep(10L);
 		}
-		if (local17.status == 2) {
+		if (request.status == 2) {
 			return new DisplayMode[0];
 		}
-		@Pc(39) int[] local39 = (int[]) local17.result;
-		@Pc(45) DisplayMode[] local45 = new DisplayMode[local39.length >> 2];
-		for (@Pc(47) int local47 = 0; local47 < local45.length; local47++) {
-			@Pc(59) DisplayMode local59 = new DisplayMode();
-			local45[local47] = local59;
-			local59.width = local39[local47 << 2];
-			local59.height = local39[(local47 << 2) + 1];
-			local59.bitDepth = local39[(local47 << 2) + 2];
-			local59.refreshRate = local39[(local47 << 2) + 3];
+		@Pc(39) int[] data = (int[]) request.result;
+		@Pc(45) DisplayMode[] modes = new DisplayMode[data.length >> 2];
+		for (@Pc(47) int i = 0; i < modes.length; i++) {
+			@Pc(59) DisplayMode mode = new DisplayMode();
+			modes[i] = mode;
+			mode.width = data[i << 2];
+			mode.height = data[(i << 2) + 1];
+			mode.bitDepth = data[(i << 2) + 2];
+			mode.refreshRate = data[(i << 2) + 3];
 		}
-		return local45;
+		return modes;
 	}
 
 	@OriginalMember(owner = "client!nf", name = "a", descriptor = "(IIIIILsignlink!ll;)Ljava/awt/Frame;")
@@ -345,18 +345,18 @@ public final class DisplayMode {
 		if (!signLink.isFullScreenSupported()) {
 			return null;
 		}
-		@Pc(20) DisplayMode[] displayModes = method3558(signLink);
+		@Pc(20) DisplayMode[] displayModes = getAvailableDisplayModes(signLink);
 		if (displayModes == null) {
 			return null;
 		}
-		@Pc(27) boolean local27 = false;
-		for (@Pc(29) int local29 = 0; local29 < displayModes.length; local29++) {
-			if (width == displayModes[local29].width && height == displayModes[local29].height && (!local27 || displayModes[local29].bitDepth > bitDepth)) {
-				bitDepth = displayModes[local29].bitDepth;
-				local27 = true;
+		@Pc(27) boolean found = false;
+		for (@Pc(29) int i = 0; i < displayModes.length; i++) {
+			if (width == displayModes[i].width && height == displayModes[i].height && (!found || displayModes[i].bitDepth > bitDepth)) {
+				bitDepth = displayModes[i].bitDepth;
+				found = true;
 			}
 		}
-		if (!local27) {
+		if (!found) {
 			return null;
 		}
 		@Pc(90) PrivilegedRequest request = signLink.enterFullScreen(bitDepth, height, width);

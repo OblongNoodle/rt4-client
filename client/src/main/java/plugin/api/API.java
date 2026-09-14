@@ -254,7 +254,7 @@ public class API {
         if (LoginManager.mapFlagX == 0) {
             return null;
         }
-        return new int[]{LoginManager.mapFlagX, LoginManager.mapFlagZ};
+        return new int[]{LoginManager.mapFlagX, LoginManager.mapFlagY};
     }
 
     public static void SetRoofVisibilityHandler(RoofVisibilityHandler handler) {
@@ -308,9 +308,9 @@ public class API {
         return roofVisibilityHandler == null ? 0 : roofVisibilityHandler.getPickScreenY();
     }
 
-    public static void ReportRoofVisibilityTile(int sceneX, int sceneZ, int plane) {
+    public static void ReportRoofVisibilityTile(int sceneX, int sceneY, int plane) {
         if (roofVisibilityHandler != null) {
-            roofVisibilityHandler.reportTile(sceneX, sceneZ, plane);
+            roofVisibilityHandler.reportTile(sceneX, sceneY, plane);
         }
     }
 
@@ -330,15 +330,15 @@ public class API {
         }
     }
 
-    public static void AddRoofVisibilityGroupTile(int group, int plane, int sceneX, int sceneZ) {
+    public static void AddRoofVisibilityGroupTile(int group, int plane, int sceneX, int sceneY) {
         if (roofVisibilityHandler != null) {
-            roofVisibilityHandler.addGroupTile(group, plane, sceneX, sceneZ);
+            roofVisibilityHandler.addGroupTile(group, plane, sceneX, sceneY);
         }
     }
 
-    public static void SetDestinationRoofTarget(int sceneX, int sceneZ) {
+    public static void SetDestinationRoofTarget(int sceneX, int sceneY) {
         if (roofVisibilityHandler != null) {
-            roofVisibilityHandler.setDestinationTarget(sceneX, sceneZ);
+            roofVisibilityHandler.setDestinationTarget(sceneX, sceneY);
         }
     }
 

@@ -50,7 +50,7 @@ public final class GlSolidColorTexture extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!sd", name = "g", descriptor = "(B)V")
-	public final void method3887() {
+	public final void bind() {
 		@Pc(8) int flags = MaterialManager.getFlags();
 		if ((flags & 0x1) == 0) {
 			GlRenderer.setTextureId(this.textureId);

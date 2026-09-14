@@ -9,54 +9,54 @@ import org.openrs2.deob.annotation.Pc;
 public final class MsiType {
 
 	@OriginalMember(owner = "client!aa", name = "f", descriptor = "I")
-	public int anInt11;
+	public int tintColor;
 
 	@OriginalMember(owner = "client!aa", name = "i", descriptor = "I")
 	public int spriteId;
 
 	@OriginalMember(owner = "client!aa", name = "s", descriptor = "Z")
-	public boolean aBoolean2 = false;
+	public boolean stretchToTile = false;
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(BLclient!wa;I)V")
-	public final void decode(@OriginalArg(1) Buffer arg0, @OriginalArg(2) int arg1) {
+	public final void decode(@OriginalArg(1) Buffer buf, @OriginalArg(2) int id) {
 		while (true) {
-			@Pc(5) int local5 = arg0.g1();
-			if (local5 == 0) {
+			@Pc(5) int opcode = buf.g1();
+			if (opcode == 0) {
 				return;
 			}
-			this.method11(local5, arg0, arg1);
+			this.decodeOpcode(opcode, buf, id);
 		}
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(IB)Lclient!ek;")
-	public final SoftwareIndexedSprite getSprite(@OriginalArg(0) int arg0) {
-		@Pc(17) SoftwareIndexedSprite local17 = (SoftwareIndexedSprite) MsiTypeList.sprites.get(arg0 << 16 | this.spriteId);
-		if (local17 != null) {
-			return local17;
+	public final SoftwareIndexedSprite getSprite(@OriginalArg(0) int rotation) {
+		@Pc(17) SoftwareIndexedSprite sprite = (SoftwareIndexedSprite) MsiTypeList.sprites.get(rotation << 16 | this.spriteId);
+		if (sprite != null) {
+			return sprite;
 		}
 		MsiTypeList.spritesArchive.isFileReady(this.spriteId);
-		local17 = SpriteLoader.loadSoftwareIndexedSprite(this.spriteId, MsiTypeList.spritesArchive);
-		if (local17 != null) {
-			local17.adjustPalette(MsiTypeList.redDelta, MsiTypeList.greenDelta, MsiTypeList.blueDelta);
-			local17.innerWidth = local17.width;
-			local17.innerHeight = local17.height;
-			for (@Pc(59) int local59 = 0; local59 < arg0; local59++) {
-				local17.flipVertical();
+		sprite = SpriteLoader.loadSoftwareIndexedSprite(this.spriteId, MsiTypeList.spritesArchive);
+		if (sprite != null) {
+			sprite.adjustPalette(MsiTypeList.redDelta, MsiTypeList.greenDelta, MsiTypeList.blueDelta);
+			sprite.innerWidth = sprite.width;
+			sprite.innerHeight = sprite.height;
+			for (@Pc(59) int i = 0; i < rotation; i++) {
+				sprite.flipVertical();
 			}
-			MsiTypeList.sprites.put(local17, arg0 << 16 | this.spriteId);
+			MsiTypeList.sprites.put(sprite, rotation << 16 | this.spriteId);
 		}
-		return local17;
+		return sprite;
 	}
 
 	@OriginalMember(owner = "client!aa", name = "a", descriptor = "(ILclient!wa;II)V")
-	private void method11(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
-		if (arg0 == 1) {
-			this.spriteId = arg1.g2();
-		} else if (arg0 == 2) {
-			this.anInt11 = arg1.g3();
-		} else if (arg0 == 3) {
-			this.aBoolean2 = true;
-		} else if (arg0 == 4) {
+	private void decodeOpcode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf, @OriginalArg(2) int id) {
+		if (opcode == 1) {
+			this.spriteId = buf.g2();
+		} else if (opcode == 2) {
+			this.tintColor = buf.g3();
+		} else if (opcode == 3) {
+			this.stretchToTile = true;
+		} else if (opcode == 4) {
 			this.spriteId = -1;
 		}
 	}

@@ -29,51 +29,51 @@ public final class EnumType extends SecondaryNode {
 	private JagString defaultString = NULL;
 
 	@OriginalMember(owner = "client!ml", name = "a", descriptor = "(ILclient!wa;B)V")
-	private void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 1) {
-			this.keyType = arg1.g1();
-		} else if (arg0 == 2) {
-			this.valueType = arg1.g1();
-		} else if (arg0 == 3) {
-			this.defaultString = arg1.gjstr();
-		} else if (arg0 == 4) {
-			this.defaultInt = arg1.g4();
-		} else if (arg0 == 5 || arg0 == 6) {
-			@Pc(41) int size = arg1.g2();
+	private void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 1) {
+			this.keyType = buf.g1();
+		} else if (opcode == 2) {
+			this.valueType = buf.g1();
+		} else if (opcode == 3) {
+			this.defaultString = buf.gjstr();
+		} else if (opcode == 4) {
+			this.defaultInt = buf.g4();
+		} else if (opcode == 5 || opcode == 6) {
+			@Pc(41) int size = buf.g2();
 			this.table = new HashTable(IntUtils.clp2(size));
-			for (@Pc(51) int local51 = 0; local51 < size; local51++) {
-				@Pc(58) int local58 = arg1.g4();
-				@Pc(70) Node local70;
-				if (arg0 == 5) {
-					local70 = new StringNode(arg1.gjstr());
+			for (@Pc(51) int i = 0; i < size; i++) {
+				@Pc(58) int key = buf.g4();
+				@Pc(70) Node node;
+				if (opcode == 5) {
+					node = new StringNode(buf.gjstr());
 				} else {
-					local70 = new IntNode(arg1.g4());
+					node = new IntNode(buf.g4());
 				}
-				this.table.put(local70, local58);
+				this.table.put(node, key);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ml", name = "a", descriptor = "(IB)Lclient!na;")
-	public final JagString getString(@OriginalArg(0) int arg0) {
+	public final JagString getString(@OriginalArg(0) int key) {
 		if (this.table == null) {
 			return this.defaultString;
 		} else {
-			@Pc(26) StringNode local26 = (StringNode) this.table.get(arg0);
-			return local26 == null ? this.defaultString : local26.value;
+			@Pc(26) StringNode node = (StringNode) this.table.get(key);
+			return node == null ? this.defaultString : node.value;
 		}
 	}
 
 	@OriginalMember(owner = "client!ml", name = "b", descriptor = "(Lclient!na;I)Z")
-	public final boolean containsValue(@OriginalArg(0) JagString arg0) {
+	public final boolean containsValue(@OriginalArg(0) JagString value) {
 		if (this.table == null) {
 			return false;
 		}
 		if (this.inverseTable == null) {
 			this.inverseStrings();
 		}
-		for (@Pc(38) EnumStringEntry node = (EnumStringEntry) this.inverseTable.get(arg0.longHashCode()); node != null; node = (EnumStringEntry) this.inverseTable.nextWithKey()) {
-			if (node.value.strEquals(arg0)) {
+		for (@Pc(38) EnumStringEntry node = (EnumStringEntry) this.inverseTable.get(value.longHashCode()); node != null; node = (EnumStringEntry) this.inverseTable.nextWithKey()) {
+			if (node.value.strEquals(value)) {
 				return true;
 			}
 		}
@@ -90,24 +90,24 @@ public final class EnumType extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!ml", name = "c", descriptor = "(II)I")
-	public final int getInt(@OriginalArg(1) int arg0) {
+	public final int getInt(@OriginalArg(1) int key) {
 		if (this.table == null) {
 			return this.defaultInt;
 		} else {
-			@Pc(18) IntNode local18 = (IntNode) this.table.get(arg0);
-			return local18 == null ? this.defaultInt : local18.value;
+			@Pc(18) IntNode node = (IntNode) this.table.get(key);
+			return node == null ? this.defaultInt : node.value;
 		}
 	}
 
 	@OriginalMember(owner = "client!ml", name = "d", descriptor = "(II)Z")
-	public final boolean containsValue(@OriginalArg(1) int arg0) {
+	public final boolean containsValue(@OriginalArg(1) int value) {
 		if (this.table == null) {
 			return false;
 		}
 		if (this.inverseTable == null) {
 			this.inverseInts();
 		}
-		@Pc(34) IntNode node = (IntNode) this.inverseTable.get(arg0);
+		@Pc(34) IntNode node = (IntNode) this.inverseTable.get(value);
 		return node != null;
 	}
 
@@ -121,13 +121,13 @@ public final class EnumType extends SecondaryNode {
 	}
 
 	@OriginalMember(owner = "client!ml", name = "a", descriptor = "(Lclient!wa;I)V")
-	public final void decode(@OriginalArg(0) Buffer arg0) {
+	public final void decode(@OriginalArg(0) Buffer buf) {
 		while (true) {
-			@Pc(9) int local9 = arg0.g1();
-			if (local9 == 0) {
+			@Pc(9) int opcode = buf.g1();
+			if (opcode == 0) {
 				return;
 			}
-			this.decode(local9, arg0);
+			this.decode(opcode, buf);
 		}
 	}
 }

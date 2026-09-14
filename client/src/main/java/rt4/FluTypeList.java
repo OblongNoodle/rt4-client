@@ -26,8 +26,8 @@ public class FluTypeList {
 	}
 
 	@OriginalMember(owner = "client!hc", name = "a", descriptor = "(Lclient!ve;I)V")
-	public static void init(@OriginalArg(0) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(0) Js5 fluArchive) {
+		archive = fluArchive;
 	}
 
 	@OriginalMember(owner = "client!sd", name = "f", descriptor = "(B)V")

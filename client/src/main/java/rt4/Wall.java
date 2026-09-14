@@ -19,13 +19,13 @@ public final class Wall {
 	public int xFine;
 
 	@OriginalMember(owner = "client!jh", name = "l", descriptor = "I")
-	public int anInt3049;
+	public int primaryFlags;
 
 	@OriginalMember(owner = "client!jh", name = "o", descriptor = "I")
-	public int anInt3051;
+	public int yFine;
 
 	@OriginalMember(owner = "client!jh", name = "q", descriptor = "I")
-	public int anInt3052;
+	public int secondaryFlags;
 
 	@OriginalMember(owner = "client!jh", name = "d", descriptor = "J")
 	public long key = 0L;

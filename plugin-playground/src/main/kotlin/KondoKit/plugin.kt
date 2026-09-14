@@ -220,7 +220,7 @@ class plugin : Plugin() {
         }
 
         if (reloadInterfaces){
-            InterfaceList.method3712(true) // Gets the resize working correctly
+            InterfaceList.layoutTopLevel(true) // Gets the resize working correctly
             reloadInterfaces = false
         }
 

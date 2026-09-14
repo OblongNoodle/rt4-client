@@ -9,40 +9,40 @@ import org.openrs2.deob.annotation.Pc;
 public final class HashTableIterator {
 
 	@OriginalMember(owner = "client!l", name = "a", descriptor = "Lclient!ab;")
-	private Node aClass3_135;
+	private Node cursor;
 
 	@OriginalMember(owner = "client!l", name = "c", descriptor = "I")
-	private int anInt3447 = 0;
+	private int bucketIndex = 0;
 
 	@OriginalMember(owner = "client!l", name = "e", descriptor = "Lclient!sc;")
-	private final HashTable aClass133_10;
+	private final HashTable table;
 
 	@OriginalMember(owner = "client!l", name = "<init>", descriptor = "(Lclient!sc;)V")
-	public HashTableIterator(@OriginalArg(0) HashTable arg0) {
-		this.aClass133_10 = arg0;
+	public HashTableIterator(@OriginalArg(0) HashTable table) {
+		this.table = table;
 	}
 
 	@OriginalMember(owner = "client!l", name = "a", descriptor = "(I)Lclient!ab;")
-	public final Node method2700() {
-		@Pc(30) Node local30;
-		if (this.anInt3447 > 0 && this.aClass133_10.nodes[this.anInt3447 - 1] != this.aClass3_135) {
-			local30 = this.aClass3_135;
-			this.aClass3_135 = local30.nextNode;
-			return local30;
+	public final Node next() {
+		@Pc(30) Node node;
+		if (this.bucketIndex > 0 && this.table.nodes[this.bucketIndex - 1] != this.cursor) {
+			node = this.cursor;
+			this.cursor = node.nextNode;
+			return node;
 		}
 		do {
-			if (this.aClass133_10.anInt5023 <= this.anInt3447) {
+			if (this.table.bucketCount <= this.bucketIndex) {
 				return null;
 			}
-			local30 = this.aClass133_10.nodes[this.anInt3447++].nextNode;
-		} while (local30 == this.aClass133_10.nodes[this.anInt3447 - 1]);
-		this.aClass3_135 = local30.nextNode;
-		return local30;
+			node = this.table.nodes[this.bucketIndex++].nextNode;
+		} while (node == this.table.nodes[this.bucketIndex - 1]);
+		this.cursor = node.nextNode;
+		return node;
 	}
 
 	@OriginalMember(owner = "client!l", name = "a", descriptor = "(B)Lclient!ab;")
-	public final Node method2701() {
-		this.anInt3447 = 0;
-		return this.method2700();
+	public final Node first() {
+		this.bucketIndex = 0;
+		return this.next();
 	}
 }

@@ -17,35 +17,35 @@ public final class JagString implements StringInterface {
 	@OriginalMember(owner = "client!pa", name = "O", descriptor = "Lclient!na;")
 	public static final JagString EMPTY = parse("");
 	@OriginalMember(owner = "client!pi", name = "Q", descriptor = "Lclient!na;")
-	public static final JagString aClass100_853 = parse("null");
+	public static final JagString NULL_STRING = parse("null");
 	@OriginalMember(owner = "client!t", name = "C", descriptor = "Lclient!na;")
 	public static final JagString PERIOD = parse(")3");
 	@OriginalMember(owner = "client!vk", name = "a", descriptor = "[I")
-	public static final int[] anIntArray471 = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 73, 74, 76, 78, 83, 84, 85, 86, 91, 92, 93, 94, 95, 97, 103, 104, 105, 106, 107, 108, 113, 114, 115, 116, 118, 119, 120, 121, 122, 123, 124, 125, 133, 134, 136, 138, 143, 144, 145, 146, 151, 152, 153, 154, 155, 157, 163, 164, 165, 166, 168, 169, 174, 175, 176, 177, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 97, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 157, 215, 216, 117, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 66, 66, 66, 66, 66, 66, 65, 75, 79, 79, 79, 79, 87, 87, 87, 87, 77, 96, 98, 98, 98, 98, 98, 250, 251, 109, 109, 109, 109, 117, 252, 167, 126, 126, 126, 126, 126, 126, 125, 135, 139, 139, 139, 139, 147, 147, 147, 147, 137, 156, 158, 158, 158, 158, 158, 253, 254, 170, 170, 170, 170, 178, 255, 178};
+	public static final int[] CHAR_SORT_ORDER = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 73, 74, 76, 78, 83, 84, 85, 86, 91, 92, 93, 94, 95, 97, 103, 104, 105, 106, 107, 108, 113, 114, 115, 116, 118, 119, 120, 121, 122, 123, 124, 125, 133, 134, 136, 138, 143, 144, 145, 146, 151, 152, 153, 154, 155, 157, 163, 164, 165, 166, 168, 169, 174, 175, 176, 177, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 97, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 157, 215, 216, 117, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 66, 66, 66, 66, 66, 66, 65, 75, 79, 79, 79, 79, 87, 87, 87, 87, 77, 96, 98, 98, 98, 98, 98, 250, 251, 109, 109, 109, 109, 117, 252, 167, 126, 126, 126, 126, 126, 126, 125, 135, 139, 139, 139, 139, 147, 147, 147, 147, 137, 156, 158, 158, 158, 158, 158, 253, 254, 170, 170, 170, 170, 178, 255, 178};
 	@OriginalMember(owner = "client!sh", name = "e", descriptor = "Lclient!na;")
-	public static final JagString aClass100_967 = parse("");
+	public static final JagString EMPTY_NAME = parse("");
 	@OriginalMember(owner = "client!dm", name = "n", descriptor = "Lclient!na;")
 	public static final JagString PERCENT_SIGN = parse("(U");
 	@OriginalMember(owner = "client!wa", name = "pb", descriptor = "Lclient!na;")
-	public static final JagString aClass100_556 = parse("<br>");
+	public static final JagString LINE_BREAK = parse("<br>");
 	@OriginalMember(owner = "client!ed", name = "H", descriptor = "Lclient!na;")
-	public static final JagString aClass100_375 = parse("<)4col> x");
+	public static final JagString CLOSE_COLOR_TIMES = parse("<)4col> x");
 	@OriginalMember(owner = "client!je", name = "db", descriptor = "Lclient!na;")
-	public static final JagString aClass100_589 = parse(" <col=ffffff>");
+	public static final JagString WHITE_COLOR_PREFIX = parse(" <col=ffffff>");
 	@OriginalMember(owner = "client!uf", name = "s", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1043 = parse(" <col=00ff80>");
+	public static final JagString GREEN_COLOR_PREFIX = parse(" <col=00ff80>");
 	@OriginalMember(owner = "client!wj", name = "b", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1101 = parse(" <col=ffff00>");
+	public static final JagString YELLOW_COLOR_PREFIX = parse(" <col=ffff00>");
 	@OriginalMember(owner = "client!mi", name = "R", descriptor = "Lclient!na;")
-	public static final JagString aClass100_760 = parse(")1");
+	public static final JagString COMMA = parse(")1");
 	@OriginalMember(owner = "client!sj", name = "w", descriptor = "Lclient!na;")
-	public static final JagString aClass100_978 = parse("<)4col>");
+	public static final JagString CLOSE_COLOR = parse("<)4col>");
 	@OriginalMember(owner = "client!jb", name = "c", descriptor = "Lclient!na;")
-	public static final JagString aClass100_583 = parse("(Y<)4col>");
+	public static final JagString CLOSE_PAREN_CLOSE_COLOR = parse("(Y<)4col>");
 	@OriginalMember(owner = "client!fn", name = "Z", descriptor = "Lclient!na;")
-	public static final JagString aClass100_461 = parse(")1 ");
+	public static final JagString COMMA_SPACE = parse(")1 ");
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "Lclient!na;")
-	public static final JagString aClass100_1089 = parse(")2");
+	public static final JagString HYPHEN = parse(")2");
 	@OriginalMember(owner = "client!dm", name = "j", descriptor = "Lclient!na;")
 	public static final JagString SPACE = parse(" ");
 	@OriginalMember(owner = "client!vh", name = "c", descriptor = "Lclient!na;")
@@ -53,7 +53,7 @@ public final class JagString implements StringInterface {
 	@OriginalMember(owner = "client!ee", name = "a", descriptor = "Lclient!na;")
 	public static final JagString TIMEZONE = parse(" GMT");
 	@OriginalMember(owner = "client!li", name = "w", descriptor = "Lclient!sc;")
-	public static HashTable aClass133_13;
+	public static HashTable internCache;
 	@OriginalMember(owner = "client!na", name = "T", descriptor = "[B")
 	public byte[] chars;
 
@@ -61,175 +61,175 @@ public final class JagString implements StringInterface {
 	public int length;
 
 	@OriginalMember(owner = "client!na", name = "N", descriptor = "Z")
-	private boolean aBoolean193 = true;
+	private boolean mutable = true;
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "([Lclient!na;B)Lclient!na;")
-	public static JagString concatenate(@OriginalArg(0) JagString[] arg0) {
-		if (arg0.length < 2) {
+	public static JagString concatenate(@OriginalArg(0) JagString[] parts) {
+		if (parts.length < 2) {
 			throw new IllegalArgumentException();
 		}
-		return method2355(0, arg0.length, arg0);
+		return concatenateRange(0, parts.length, parts);
 	}
 
 	@OriginalMember(owner = "client!jd", name = "a", descriptor = "(II[Lclient!na;I)Lclient!na;")
-	public static JagString method2355(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) JagString[] arg2) {
-		@Pc(5) int local5 = 0;
-		for (@Pc(7) int local7 = 0; local7 < arg1; local7++) {
-			if (arg2[arg0 + local7] == null) {
-				arg2[local7 + arg0] = aClass100_853;
+	public static JagString concatenateRange(@OriginalArg(0) int start, @OriginalArg(1) int count, @OriginalArg(2) JagString[] parts) {
+		@Pc(5) int totalLen = 0;
+		for (@Pc(7) int i = 0; i < count; i++) {
+			if (parts[start + i] == null) {
+				parts[i + start] = NULL_STRING;
 			}
-			local5 += arg2[local7 + arg0].length;
+			totalLen += parts[i + start].length;
 		}
-		@Pc(39) byte[] local39 = new byte[local5];
-		@Pc(41) int local41 = 0;
-		for (@Pc(43) int local43 = 0; local43 < arg1; local43++) {
-			@Pc(52) JagString local52 = arg2[local43 + arg0];
-			copy(local52.chars, 0, local39, local41, local52.length);
-			local41 += local52.length;
+		@Pc(39) byte[] buf = new byte[totalLen];
+		@Pc(41) int pos = 0;
+		for (@Pc(43) int i = 0; i < count; i++) {
+			@Pc(52) JagString part = parts[i + start];
+			copy(part.chars, 0, buf, pos, part.length);
+			pos += part.length;
 		}
-		@Pc(71) JagString local71 = new JagString();
-		local71.length = local5;
-		local71.chars = local39;
-		return local71;
+		@Pc(71) JagString result = new JagString();
+		result.length = totalLen;
+		result.chars = buf;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!kg", name = "a", descriptor = "([BI[BII)V")
-	public static void copy(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(15) int local15;
-		if (arg0 == arg2) {
-			if (arg1 == arg3) {
+	public static void copy(@OriginalArg(0) byte[] src, @OriginalArg(1) int srcOff, @OriginalArg(2) byte[] dst, @OriginalArg(3) int dstOff, @OriginalArg(4) int len) {
+		@Pc(15) int end;
+		if (src == dst) {
+			if (srcOff == dstOff) {
 				return;
 			}
-			if (arg3 > arg1 && arg3 < arg1 + arg4) {
-				local15 = arg4 - 1;
-				@Pc(19) int local19 = arg1 + local15;
-				@Pc(23) int local23 = arg3 + local15;
-				local15 = local19 - local15;
-				local15 += 7;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
+			if (dstOff > srcOff && dstOff < srcOff + len) {
+				end = len - 1;
+				@Pc(19) int srcEnd = srcOff + end;
+				@Pc(23) int dstEnd = dstOff + end;
+				end = srcEnd - end;
+				end += 7;
+				while (srcEnd >= end) {
+					dst[dstEnd--] = src[srcEnd--];
+					dst[dstEnd--] = src[srcEnd--];
+					dst[dstEnd--] = src[srcEnd--];
+					dst[dstEnd--] = src[srcEnd--];
+					dst[dstEnd--] = src[srcEnd--];
+					dst[dstEnd--] = src[srcEnd--];
+					dst[dstEnd--] = src[srcEnd--];
+					dst[dstEnd--] = src[srcEnd--];
 				}
-				local15 -= 7;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
+				end -= 7;
+				while (srcEnd >= end) {
+					dst[dstEnd--] = src[srcEnd--];
 				}
 				return;
 			}
 		}
-		local15 = arg4 + arg1;
-		@Pc(115) int local115 = local15 - 7;
-		while (arg1 < local115) {
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
+		end = len + srcOff;
+		@Pc(115) int unrolledEnd = end - 7;
+		while (srcOff < unrolledEnd) {
+			dst[dstOff++] = src[srcOff++];
+			dst[dstOff++] = src[srcOff++];
+			dst[dstOff++] = src[srcOff++];
+			dst[dstOff++] = src[srcOff++];
+			dst[dstOff++] = src[srcOff++];
+			dst[dstOff++] = src[srcOff++];
+			dst[dstOff++] = src[srcOff++];
+			dst[dstOff++] = src[srcOff++];
 		}
-		local15 = local115 + 7;
-		while (arg1 < local15) {
-			arg2[arg3++] = arg0[arg1++];
+		end = unrolledEnd + 7;
+		while (srcOff < end) {
+			dst[dstOff++] = src[srcOff++];
 		}
 	}
 
 	@OriginalMember(owner = "client!cd", name = "a", descriptor = "(Ljava/lang/String;B)Lclient!na;")
-	public static JagString parse(@OriginalArg(0) String arg0) {
-		@Pc(6) byte[] local6 = arg0.getBytes();
-		@Pc(9) int local9 = local6.length;
-		@Pc(13) JagString local13 = new JagString();
-		@Pc(15) int local15 = 0;
-		local13.chars = new byte[local9];
-		while (local9 > local15) {
-			@Pc(29) int local29 = local6[local15++] & 0xFF;
-			if (local29 <= 45 && local29 >= 40) {
-				if (local15 >= local9) {
+	public static JagString parse(@OriginalArg(0) String str) {
+		@Pc(6) byte[] bytes = str.getBytes();
+		@Pc(9) int len = bytes.length;
+		@Pc(13) JagString result = new JagString();
+		@Pc(15) int pos = 0;
+		result.chars = new byte[len];
+		while (len > pos) {
+			@Pc(29) int b = bytes[pos++] & 0xFF;
+			if (b <= 45 && b >= 40) {
+				if (pos >= len) {
 					break;
 				}
-				@Pc(51) int local51 = local6[local15++] & 0xFF;
-				local13.chars[local13.length++] = (byte) (local51 + (local29 + -40) * 43 - 48);
-			} else if (local29 != 0) {
-				local13.chars[local13.length++] = (byte) local29;
+				@Pc(51) int b2 = bytes[pos++] & 0xFF;
+				result.chars[result.length++] = (byte) (b2 + (b + -40) * 43 - 48);
+			} else if (b != 0) {
+				result.chars[result.length++] = (byte) b;
 			}
 		}
-		local13.method3156();
-		return local13.method3151();
+		result.compact();
+		return result.intern();
 	}
 
 	@OriginalMember(owner = "client!jj", name = "b", descriptor = "(BI)Lclient!na;")
-	public static JagString parseInt(@OriginalArg(1) int arg0) {
-		return parseInt(false, arg0);
+	public static JagString parseInt(@OriginalArg(1) int value) {
+		return parseInt(false, value);
 	}
 
 	@OriginalMember(owner = "client!q", name = "a", descriptor = "(BZII)Lclient!na;")
-	public static JagString parseInt(@OriginalArg(1) boolean arg0, @OriginalArg(3) int arg1) {
-		@Pc(23) int local23 = 1;
-		@Pc(27) int local27 = arg1 / 10;
-		while (local27 != 0) {
-			local27 /= 10;
-			local23++;
+	public static JagString parseInt(@OriginalArg(1) boolean showSign, @OriginalArg(3) int value) {
+		@Pc(23) int digitCount = 1;
+		@Pc(27) int tmp = value / 10;
+		while (tmp != 0) {
+			tmp /= 10;
+			digitCount++;
 		}
-		@Pc(38) int local38 = local23;
-		if (arg1 < 0 || arg0) {
-			local38 = local23 + 1;
+		@Pc(38) int bufLen = digitCount;
+		if (value < 0 || showSign) {
+			bufLen = digitCount + 1;
 		}
-		@Pc(46) byte[] local46 = new byte[local38];
-		if (arg1 < 0) {
-			local46[0] = 45;
-		} else if (arg0) {
-			local46[0] = 43;
+		@Pc(46) byte[] buf = new byte[bufLen];
+		if (value < 0) {
+			buf[0] = 45;
+		} else if (showSign) {
+			buf[0] = 43;
 		}
-		for (@Pc(61) int local61 = 0; local61 < local23; local61++) {
-			@Pc(68) int local68 = arg1 % 10;
-			if (local68 < 0) {
-				local68 = -local68;
+		for (@Pc(61) int i = 0; i < digitCount; i++) {
+			@Pc(68) int digit = value % 10;
+			if (digit < 0) {
+				digit = -digit;
 			}
-			if (local68 > 9) {
-				local68 += 39;
+			if (digit > 9) {
+				digit += 39;
 			}
-			local46[local38 - local61 - 1] = (byte) (local68 + 48);
-			arg1 /= 10;
+			buf[bufLen - i - 1] = (byte) (digit + 48);
+			value /= 10;
 		}
-		@Pc(112) JagString local112 = new JagString();
-		local112.chars = local46;
-		local112.length = local38;
-		return local112;
+		@Pc(112) JagString result = new JagString();
+		result.chars = buf;
+		result.length = bufLen;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!an", name = "a", descriptor = "([BIII)Lclient!na;")
-	public static JagString decodeString(@OriginalArg(0) byte[] arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
-		@Pc(7) JagString local7 = new JagString();
-		local7.chars = new byte[arg1];
-		local7.length = 0;
-		for (@Pc(22) int local22 = arg2; local22 < arg1 + arg2; local22++) {
-			if (arg0[local22] != 0) {
-				local7.chars[local7.length++] = arg0[local22];
+	public static JagString decodeString(@OriginalArg(0) byte[] data, @OriginalArg(2) int len, @OriginalArg(3) int off) {
+		@Pc(7) JagString result = new JagString();
+		result.chars = new byte[len];
+		result.length = 0;
+		for (@Pc(22) int i = off; i < len + off; i++) {
+			if (data[i] != 0) {
+				result.chars[result.length++] = data[i];
 			}
 		}
-		return local7;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!bg", name = "d", descriptor = "(II)Z")
-	public static boolean method530(@OriginalArg(0) int arg0) {
-		return arg0 == 198 || arg0 == 230 || arg0 == 156 || arg0 == 140 || arg0 == 223;
+	public static boolean isLigature(@OriginalArg(0) int ch) {
+		return ch == 198 || ch == 230 || ch == 156 || ch == 140 || ch == 223;
 	}
 
 	@OriginalMember(owner = "client!ih", name = "a", descriptor = "(ZII)Lclient!na;")
-	public static JagString parseIntTrue(@OriginalArg(2) int arg0) {
-		return parseInt(true, arg0);
+	public static JagString parseIntTrue(@OriginalArg(2) int value) {
+		return parseInt(true, value);
 	}
 
 	@OriginalMember(owner = "client!oi", name = "a", descriptor = "(II)Lclient!na;")
-	public static JagString formatIp(@OriginalArg(0) int arg0) {
-		return concatenate(new JagString[]{parseInt(arg0 >> 24 & 0xFF), PERIOD, parseInt(arg0 >> 16 & 0xFF), PERIOD, parseInt(arg0 >> 8 & 0xFF), PERIOD, parseInt(arg0 & 0xFF)});
+	public static JagString formatIp(@OriginalArg(0) int ip) {
+		return concatenate(new JagString[]{parseInt(ip >> 24 & 0xFF), PERIOD, parseInt(ip >> 16 & 0xFF), PERIOD, parseInt(ip >> 8 & 0xFF), PERIOD, parseInt(ip & 0xFF)});
 	}
 
 	@OriginalMember(owner = "client!nb", name = "a", descriptor = "(II)Lclient!na;")
@@ -259,67 +259,67 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!gn", name = "a", descriptor = "(BI)Lclient!na;")
-	public static JagString allocate(@OriginalArg(1) int arg0) {
-		@Pc(13) JagString local13 = new JagString();
-		local13.length = 0;
-		local13.chars = new byte[arg0];
-		return local13;
+	public static JagString allocate(@OriginalArg(1) int capacity) {
+		@Pc(13) JagString result = new JagString();
+		result.length = 0;
+		result.chars = new byte[capacity];
+		return result;
 	}
 
 	@OriginalMember(owner = "client!md", name = "a", descriptor = "(JB)Lclient!na;")
-	public static JagString method2929(@OriginalArg(0) long arg0) {
-		return method1376(arg0);
+	public static JagString parseLong(@OriginalArg(0) long value) {
+		return parseLongImpl(value);
 	}
 
 	@OriginalMember(owner = "client!ej", name = "a", descriptor = "(IZIJ)Lclient!na;")
-	public static JagString method1376(@OriginalArg(3) long arg0) {
-		@Pc(35) long local35 = arg0 / (long) 10;
-		@Pc(37) int local37 = 1;
-		while (local35 != 0L) {
-			local37++;
-			local35 /= 10;
+	public static JagString parseLongImpl(@OriginalArg(3) long value) {
+		@Pc(35) long tmp = value / (long) 10;
+		@Pc(37) int digitCount = 1;
+		while (tmp != 0L) {
+			digitCount++;
+			tmp /= 10;
 		}
-		@Pc(51) int local51 = local37;
-		if (arg0 < 0L) {
-			local51 = local37 + 1;
+		@Pc(51) int bufLen = digitCount;
+		if (value < 0L) {
+			bufLen = digitCount + 1;
 		}
-		@Pc(61) byte[] local61 = new byte[local51];
-		if (arg0 < 0L) {
-			local61[0] = 45;
+		@Pc(61) byte[] buf = new byte[bufLen];
+		if (value < 0L) {
+			buf[0] = 45;
 		}
-		for (@Pc(79) int local79 = 0; local79 < local37; local79++) {
-			@Pc(92) int local92 = (int) (arg0 % (long) 10);
-			arg0 /= 10;
-			if (local92 < 0) {
-				local92 = -local92;
+		for (@Pc(79) int i = 0; i < digitCount; i++) {
+			@Pc(92) int digit = (int) (value % (long) 10);
+			value /= 10;
+			if (digit < 0) {
+				digit = -digit;
 			}
-			if (local92 > 9) {
-				local92 += 39;
+			if (digit > 9) {
+				digit += 39;
 			}
-			local61[local51 - local79 - 1] = (byte) (local92 + 48);
+			buf[bufLen - i - 1] = (byte) (digit + 48);
 		}
-		@Pc(126) JagString local126 = new JagString();
-		local126.chars = local61;
-		local126.length = local51;
-		return local126;
+		@Pc(126) JagString result = new JagString();
+		result.chars = buf;
+		result.length = bufLen;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Z)Ljava/net/URL;")
-	public final URL method3107() throws MalformedURLException {
+	public final URL toUrl() throws MalformedURLException {
 		return new URL(new String(this.chars, 0, this.length));
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(BLclient!na;)Z")
-	public final boolean strEquals(@OriginalArg(1) JagString arg0) {
-		if (arg0 == null) {
+	public final boolean strEquals(@OriginalArg(1) JagString other) {
+		if (other == null) {
 			return false;
-		} else if (arg0 == this) {
+		} else if (other == this) {
 			return true;
-		} else if (this.length == arg0.length) {
-			@Pc(29) byte[] local29 = arg0.chars;
-			@Pc(32) byte[] local32 = this.chars;
-			for (@Pc(34) int local34 = 0; local34 < this.length; local34++) {
-				if (local32[local34] != local29[local34]) {
+		} else if (this.length == other.length) {
+			@Pc(29) byte[] otherChars = other.chars;
+			@Pc(32) byte[] thisChars = this.chars;
+			for (@Pc(34) int i = 0; i < this.length; i++) {
+				if (thisChars[i] != otherChars[i]) {
 					return false;
 				}
 			}
@@ -330,64 +330,64 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(BI)I")
-	public final int parseHexString(@OriginalArg(1) int arg0) {
-		@Pc(14) boolean local14 = false;
-		@Pc(20) boolean local20 = false;
-		@Pc(22) int local22 = 0;
-		for (@Pc(24) int local24 = 0; local24 < this.length; local24++) {
-			@Pc(43) int local43 = this.chars[local24] & 0xFF;
-			if (local24 == 0) {
-				if (local43 == 45) {
-					local14 = true;
+	public final int parseHexString(@OriginalArg(1) int radix) {
+		@Pc(14) boolean negative = false;
+		@Pc(20) boolean hasDigit = false;
+		@Pc(22) int result = 0;
+		for (@Pc(24) int i = 0; i < this.length; i++) {
+			@Pc(43) int digit = this.chars[i] & 0xFF;
+			if (i == 0) {
+				if (digit == 45) {
+					negative = true;
 					continue;
 				}
-				if (local43 == 43) {
+				if (digit == 43) {
 					continue;
 				}
 			}
-			if (local43 >= 48 && local43 <= 57) {
-				local43 -= 48;
-			} else if (local43 >= 65 && local43 <= 90) {
-				local43 -= 55;
-			} else if (local43 >= 97 && local43 <= 122) {
-				local43 -= 87;
+			if (digit >= 48 && digit <= 57) {
+				digit -= 48;
+			} else if (digit >= 65 && digit <= 90) {
+				digit -= 55;
+			} else if (digit >= 97 && digit <= 122) {
+				digit -= 87;
 			} else {
 				throw new NumberFormatException();
 			}
-			if (arg0 <= local43) {
+			if (radix <= digit) {
 				throw new NumberFormatException();
 			}
-			if (local14) {
-				local43 = -local43;
+			if (negative) {
+				digit = -digit;
 			}
-			@Pc(117) int local117 = local43 + local22 * arg0;
-			if (local117 / arg0 != local22) {
+			@Pc(117) int next = digit + result * radix;
+			if (next / radix != result) {
 				throw new NumberFormatException();
 			}
-			local22 = local117;
-			local20 = true;
+			result = next;
+			hasDigit = true;
 		}
-		if (!local20) {
+		if (!hasDigit) {
 			throw new NumberFormatException();
 		}
-		return local22;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(ILclient!na;)Z")
-	public final boolean equalsIgnoreCase(@OriginalArg(1) JagString arg0) {
-		if (arg0 == null) {
+	public final boolean equalsIgnoreCase(@OriginalArg(1) JagString other) {
+		if (other == null) {
 			return false;
-		} else if (this.length == arg0.length) {
-			for (@Pc(28) int local28 = 0; local28 < this.length; local28++) {
-				@Pc(41) byte local41 = this.chars[local28];
-				if (local41 >= 65 && local41 <= 90 || local41 >= -64 && local41 <= -34 && local41 != -41) {
-					local41 = (byte) (local41 + 32);
+		} else if (this.length == other.length) {
+			for (@Pc(28) int i = 0; i < this.length; i++) {
+				@Pc(41) byte c1 = this.chars[i];
+				if (c1 >= 65 && c1 <= 90 || c1 >= -64 && c1 <= -34 && c1 != -41) {
+					c1 = (byte) (c1 + 32);
 				}
-				@Pc(75) byte local75 = arg0.chars[local28];
-				if (local75 >= 65 && local75 <= 90 || local75 >= -64 && local75 <= -34 && local75 != -41) {
-					local75 = (byte) (local75 + 32);
+				@Pc(75) byte c2 = other.chars[i];
+				if (c2 >= 65 && c2 <= 90 || c2 >= -64 && c2 <= -34 && c2 != -41) {
+					c2 = (byte) (c2 + 32);
 				}
-				if (local41 != local75) {
+				if (c1 != c2) {
 					return false;
 				}
 			}
@@ -398,81 +398,81 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(IILjava/awt/Graphics;B)V")
-	public final void drawString(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Graphics arg2) {
-		@Pc(17) String local17 = new String(this.chars, 0, this.length, StandardCharsets.ISO_8859_1);
-		arg2.drawString(local17, arg1, arg0);
+	public final void drawString(@OriginalArg(0) int y, @OriginalArg(1) int x, @OriginalArg(2) Graphics g) {
+		@Pc(17) String str = new String(this.chars, 0, this.length, StandardCharsets.ISO_8859_1);
+		g.drawString(str, x, y);
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!na;Z)Lclient!na;")
-	public final JagString method3113(@OriginalArg(0) JagString arg0) {
-		if (!this.aBoolean193) {
+	public final JagString appendString(@OriginalArg(0) JagString other) {
+		if (!this.mutable) {
 			throw new IllegalArgumentException();
 		}
-		if (arg0.length + this.length > this.chars.length) {
-			@Pc(31) int local31;
-			for (local31 = 1; local31 < arg0.length + this.length; local31 += local31) {
+		if (other.length + this.length > this.chars.length) {
+			@Pc(31) int newCapacity;
+			for (newCapacity = 1; newCapacity < other.length + this.length; newCapacity += newCapacity) {
 			}
-			@Pc(51) byte[] local51 = new byte[local31];
-			copy(this.chars, 0, local51, 0, this.length);
-			this.chars = local51;
+			@Pc(51) byte[] newChars = new byte[newCapacity];
+			copy(this.chars, 0, newChars, 0, this.length);
+			this.chars = newChars;
 		}
-		copy(arg0.chars, 0, this.chars, this.length, arg0.length);
-		this.length += arg0.length;
+		copy(other.chars, 0, this.chars, this.length, other.length);
+		this.length += other.length;
 		return this;
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(I)Lclient!na;")
 	public final JagString toLowerCase() {
-		@Pc(14) JagString local14 = new JagString();
-		local14.length = this.length;
-		local14.chars = new byte[this.length];
-		for (@Pc(29) int local29 = 0; local29 < this.length; local29++) {
-			@Pc(42) byte local42 = this.chars[local29];
-			if (local42 >= 65 && local42 <= 90 || local42 >= -64 && local42 <= -34 && local42 != -41) {
-				local42 = (byte) (local42 + 32);
+		@Pc(14) JagString result = new JagString();
+		result.length = this.length;
+		result.chars = new byte[this.length];
+		for (@Pc(29) int i = 0; i < this.length; i++) {
+			@Pc(42) byte c = this.chars[i];
+			if (c >= 65 && c <= 90 || c >= -64 && c <= -34 && c != -41) {
+				c = (byte) (c + 32);
 			}
-			local14.chars[local29] = local42;
+			result.chars[i] = c;
 		}
-		return local14;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(I)Lclient!na;")
 	public final JagString encodeMessage() {
-		@Pc(7) byte local7 = 2;
-		@Pc(11) JagString local11 = new JagString();
-		local11.length = this.length;
-		local11.chars = new byte[this.length];
-		for (@Pc(28) int local28 = 0; local28 < this.length; local28++) {
-			@Pc(41) byte local41 = this.chars[local28];
-			if (local41 >= 97 && local41 <= 122 || !(local41 < -32 || local41 > -2 || local41 == -9)) {
-				if (local7 == 2) {
-					local41 = (byte) (local41 - 32);
+		@Pc(7) byte state = 2;
+		@Pc(11) JagString result = new JagString();
+		result.length = this.length;
+		result.chars = new byte[this.length];
+		for (@Pc(28) int i = 0; i < this.length; i++) {
+			@Pc(41) byte c = this.chars[i];
+			if (c >= 97 && c <= 122 || !(c < -32 || c > -2 || c == -9)) {
+				if (state == 2) {
+					c = (byte) (c - 32);
 				}
-				local7 = 0;
-			} else if (local41 >= 65 && local41 <= 90 || !(local41 < -64 || local41 > -34 || local41 == -41)) {
-				if (local7 == 0) {
-					local41 = (byte) (local41 + 32);
+				state = 0;
+			} else if (c >= 65 && c <= 90 || !(c < -64 || c > -34 || c == -41)) {
+				if (state == 0) {
+					c = (byte) (c + 32);
 				}
-				local7 = 0;
-			} else if (local41 == 46 || local41 == 33 || local41 == 63) {
-				local7 = 2;
-			} else if (local41 != 32) {
-				local7 = 1;
-			} else if (local7 != 2) {
-				local7 = 1;
+				state = 0;
+			} else if (c == 46 || c == 33 || c == 63) {
+				state = 2;
+			} else if (c != 32) {
+				state = 1;
+			} else if (state != 2) {
+				state = 1;
 			}
-			local11.chars[local28] = local41;
+			result.chars[i] = c;
 		}
-		return local11;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(I)J")
 	public final long longHashCode() {
-		@Pc(1) long local1 = 0L;
-		for (@Pc(9) int local9 = 0; local9 < this.length; local9++) {
-			local1 = (long) (this.chars[local9] & 0xFF) + (local1 << 5) - local1;
+		@Pc(1) long hash = 0L;
+		for (@Pc(9) int i = 0; i < this.length; i++) {
+			hash = (long) (this.chars[i] & 0xFF) + (hash << 5) - hash;
 		}
-		return local1;
+		return hash;
 	}
 
 	@OriginalMember(owner = "client!na", name = "d", descriptor = "(I)I")
@@ -481,20 +481,20 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(ILclient!na;II)Lclient!na;")
-	public final JagString method3122(@OriginalArg(1) JagString arg0, @OriginalArg(2) int arg1, @OriginalArg(3) int arg2) {
-		if (!this.aBoolean193) {
+	public final JagString appendSubstring(@OriginalArg(1) JagString src, @OriginalArg(2) int from, @OriginalArg(3) int to) {
+		if (!this.mutable) {
 			throw new IllegalArgumentException();
-		} else if (arg1 >= 0 && arg1 <= arg2 && arg2 <= arg0.length) {
-			if (this.length + arg2 - arg1 > this.chars.length) {
-				@Pc(43) int local43;
-				for (local43 = 1; local43 < this.length + arg0.length; local43 += local43) {
+		} else if (from >= 0 && from <= to && to <= src.length) {
+			if (this.length + to - from > this.chars.length) {
+				@Pc(43) int newCapacity;
+				for (newCapacity = 1; newCapacity < this.length + src.length; newCapacity += newCapacity) {
 				}
-				@Pc(63) byte[] local63 = new byte[local43];
-				copy(this.chars, 0, local63, 0, this.length);
-				this.chars = local63;
+				@Pc(63) byte[] newChars = new byte[newCapacity];
+				copy(this.chars, 0, newChars, 0, this.length);
+				this.chars = newChars;
 			}
-			copy(arg0.chars, arg1, this.chars, this.length, arg2 - arg1);
-			this.length += arg2 - arg1;
+			copy(src.chars, from, this.chars, this.length, to - from);
+			this.length += to - from;
 			return this;
 		} else {
 			throw new IllegalArgumentException();
@@ -503,129 +503,129 @@ public final class JagString implements StringInterface {
 
 	@OriginalMember(owner = "client!na", name = "f", descriptor = "(I)Z")
 	public final boolean isInt() {
-		return this.method3141();
+		return this.isValidInt();
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(Z)Lclient!na;")
-	public final JagString method3124() {
-		@Pc(7) JagString local7 = new JagString();
-		local7.length = this.length;
-		local7.chars = new byte[local7.length];
-		for (@Pc(24) int local24 = 0; local24 < this.length; local24++) {
-			local7.chars[this.length - local24 - 1] = this.chars[local24];
+	public final JagString reverse() {
+		@Pc(7) JagString result = new JagString();
+		result.length = this.length;
+		result.chars = new byte[result.length];
+		for (@Pc(24) int i = 0; i < this.length; i++) {
+			result.chars[this.length - i - 1] = this.chars[i];
 		}
-		return local7;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(B)Lclient!na;")
 	public final JagString toTitleCase() {
-		@Pc(9) JagString local9 = new JagString();
-		local9.length = this.length;
-		local9.chars = new byte[this.length];
-		@Pc(20) boolean local20 = true;
-		for (@Pc(22) int local22 = 0; local22 < this.length; local22++) {
-			@Pc(41) byte local41 = this.chars[local22];
-			if (local41 == 95) {
-				local20 = true;
-				local9.chars[local22] = 32;
-			} else if (local41 >= 97 && local41 <= 122 && local20) {
-				local20 = false;
-				local9.chars[local22] = (byte) (local41 - 32);
+		@Pc(9) JagString result = new JagString();
+		result.length = this.length;
+		result.chars = new byte[this.length];
+		@Pc(20) boolean capitalize = true;
+		for (@Pc(22) int i = 0; i < this.length; i++) {
+			@Pc(41) byte c = this.chars[i];
+			if (c == 95) {
+				capitalize = true;
+				result.chars[i] = 32;
+			} else if (c >= 97 && c <= 122 && capitalize) {
+				capitalize = false;
+				result.chars[i] = (byte) (c - 32);
 			} else {
-				local9.chars[local22] = local41;
-				local20 = false;
+				result.chars[i] = c;
+				capitalize = false;
 			}
 		}
-		return local9;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(BLclient!na;)I")
-	public final int compare(@OriginalArg(1) JagString arg0) {
-		@Pc(12) int local12 = 0;
-		@Pc(14) int local14 = 0;
-		@Pc(17) int local17 = arg0.length;
-		@Pc(20) int local20 = this.length;
-		@Pc(23) int local23 = this.length;
-		@Pc(26) int local26 = arg0.length;
-		@Pc(28) int local28 = 0;
-		@Pc(30) int local30 = 0;
-		while (local20 != 0 && local17 != 0) {
-			if (local12 == 156 || local12 == 230) {
-				local12 = 101;
-			} else if (local12 == 140 || local12 == 198) {
-				local12 = 69;
-			} else if (local12 == 223) {
-				local12 = 115;
+	public final int compare(@OriginalArg(1) JagString other) {
+		@Pc(12) int c1 = 0;
+		@Pc(14) int c2 = 0;
+		@Pc(17) int otherLen = other.length;
+		@Pc(20) int thisLen = this.length;
+		@Pc(23) int thisTotal = this.length;
+		@Pc(26) int otherTotal = other.length;
+		@Pc(28) int thisIdx = 0;
+		@Pc(30) int otherIdx = 0;
+		while (thisLen != 0 && otherLen != 0) {
+			if (c1 == 156 || c1 == 230) {
+				c1 = 101;
+			} else if (c1 == 140 || c1 == 198) {
+				c1 = 69;
+			} else if (c1 == 223) {
+				c1 = 115;
 			} else {
-				local12 = this.chars[local28] & 0xFF;
-				local28++;
+				c1 = this.chars[thisIdx] & 0xFF;
+				thisIdx++;
 			}
-			if (method530(local12)) {
-				local23++;
+			if (isLigature(c1)) {
+				thisTotal++;
 			} else {
-				local20--;
+				thisLen--;
 			}
-			if (local14 == 156 || local14 == 230) {
-				local14 = 101;
-			} else if (local14 == 140 || local14 == 198) {
-				local14 = 69;
-			} else if (local14 == 223) {
-				local14 = 115;
+			if (c2 == 156 || c2 == 230) {
+				c2 = 101;
+			} else if (c2 == 140 || c2 == 198) {
+				c2 = 69;
+			} else if (c2 == 223) {
+				c2 = 115;
 			} else {
-				local14 = arg0.chars[local30] & 0xFF;
-				local30++;
+				c2 = other.chars[otherIdx] & 0xFF;
+				otherIdx++;
 			}
-			if (method530(local14)) {
-				local26++;
+			if (isLigature(c2)) {
+				otherTotal++;
 			} else {
-				local17--;
+				otherLen--;
 			}
-			if (anIntArray471[local12] < anIntArray471[local14]) {
+			if (CHAR_SORT_ORDER[c1] < CHAR_SORT_ORDER[c2]) {
 				return -1;
 			}
-			if (anIntArray471[local14] < anIntArray471[local12]) {
+			if (CHAR_SORT_ORDER[c2] < CHAR_SORT_ORDER[c1]) {
 				return 1;
 			}
 		}
-		if (local26 <= local23) {
-			return local23 > local26 ? 1 : 0;
+		if (otherTotal <= thisTotal) {
+			return thisTotal > otherTotal ? 1 : 0;
 		} else {
 			return -1;
 		}
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Ljava/net/URL;Z)Ljava/net/URL;")
-	public final URL method3127(@OriginalArg(0) URL arg0) throws MalformedURLException {
-		return new URL(arg0, new String(this.chars, 0, this.length));
+	public final URL toRelativeUrl(@OriginalArg(0) URL baseUrl) throws MalformedURLException {
+		return new URL(baseUrl, new String(this.chars, 0, this.length));
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(ZI)Lclient!na;")
-	public final JagString concatChar(@OriginalArg(1) int arg0) {
-		if (arg0 <= 0 || arg0 > 255) {
+	public final JagString concatChar(@OriginalArg(1) int ch) {
+		if (ch <= 0 || ch > 255) {
 			throw new IllegalArgumentException("invalid char");
 		}
-		@Pc(23) JagString local23 = new JagString();
-		local23.chars = new byte[this.length + 1];
-		local23.length = this.length + 1;
-		copy(this.chars, 0, local23.chars, 0, this.length);
-		local23.chars[this.length] = (byte) arg0;
-		return local23;
+		@Pc(23) JagString result = new JagString();
+		result.chars = new byte[this.length + 1];
+		result.length = this.length + 1;
+		copy(this.chars, 0, result.chars, 0, this.length);
+		result.chars[this.length] = (byte) ch;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(Z)V")
 	public final void print() {
-		@Pc(16) String local16 = new String(this.chars, 0, this.length, StandardCharsets.ISO_8859_1);
-		System.out.println(local16);
+		@Pc(16) String str = new String(this.chars, 0, this.length, StandardCharsets.ISO_8859_1);
+		System.out.println(str);
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(BLclient!na;)Z")
-	public final boolean endsWith(@OriginalArg(1) JagString arg0) {
-		if (arg0.length > this.length) {
+	public final boolean endsWith(@OriginalArg(1) JagString suffix) {
+		if (suffix.length > this.length) {
 			return false;
 		}
-		@Pc(19) int local19 = this.length - arg0.length;
-		for (@Pc(27) int local27 = 0; local27 < arg0.length; local27++) {
-			if (this.chars[local19 + local27] != arg0.chars[local27]) {
+		@Pc(19) int start = this.length - suffix.length;
+		for (@Pc(27) int i = 0; i < suffix.length; i++) {
+			if (this.chars[start + i] != suffix.chars[i]) {
 				return false;
 			}
 		}
@@ -633,8 +633,8 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!na;I)I")
-	public final int indexOf(@OriginalArg(0) JagString arg0) {
-		return this.indexOf(arg0, 0);
+	public final int indexOf(@OriginalArg(0) JagString needle) {
+		return this.indexOf(needle, 0);
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(B)I")
@@ -643,24 +643,24 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(IZ)V")
-	public final void method3133(@OriginalArg(0) int arg0) {
-		if (!this.aBoolean193) {
+	public final void setLength(@OriginalArg(0) int newLength) {
+		if (!this.mutable) {
 			throw new IllegalArgumentException();
-		} else if (arg0 < 0) {
+		} else if (newLength < 0) {
 			throw new IllegalArgumentException();
 		} else {
-			@Pc(30) int local30;
-			if (arg0 > this.chars.length) {
-				for (local30 = 1; local30 < arg0; local30 += local30) {
+			@Pc(30) int i;
+			if (newLength > this.chars.length) {
+				for (i = 1; i < newLength; i += i) {
 				}
-				@Pc(45) byte[] local45 = new byte[local30];
-				copy(this.chars, 0, local45, 0, this.length);
-				this.chars = local45;
+				@Pc(45) byte[] newChars = new byte[i];
+				copy(this.chars, 0, newChars, 0, this.length);
+				this.chars = newChars;
 			}
-			for (local30 = this.length; local30 < arg0; local30++) {
-				this.chars[local30] = 32;
+			for (i = this.length; i < newLength; i++) {
+				this.chars[i] = 32;
 			}
-			this.length = arg0;
+			this.length = newLength;
 		}
 	}
 
@@ -671,43 +671,43 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(ZLjava/applet/Applet;)V")
-	public final void method3134(@OriginalArg(1) Applet arg0) throws Throwable {
-		@Pc(16) String local16 = new String(this.chars, 0, this.length);
-		BrowserControl.eval(arg0, local16);
+	public final void evalInBrowser(@OriginalArg(1) Applet applet) throws Throwable {
+		@Pc(16) String str = new String(this.chars, 0, this.length);
+		BrowserControl.eval(applet, str);
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(III)I")
-	public final int indexOf(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(4) byte local4 = (byte) arg0;
-		for (@Pc(15) int local15 = arg1; local15 < this.length; local15++) {
-			if (this.chars[local15] == local4) {
-				return local15;
+	public final int indexOf(@OriginalArg(0) int ch, @OriginalArg(1) int fromIndex) {
+		@Pc(4) byte b = (byte) ch;
+		for (@Pc(15) int i = fromIndex; i < this.length; i++) {
+			if (this.chars[i] == b) {
+				return i;
 			}
 		}
 		return -1;
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(IB)Lclient!na;")
-	public final JagString substring(@OriginalArg(0) int arg0) {
-		return this.substring(this.length, arg0);
+	public final JagString substring(@OriginalArg(0) int from) {
+		return this.substring(this.length, from);
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(III)Lclient!na;")
-	public final JagString substring(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(7) JagString local7 = new JagString();
-		local7.length = arg0 - arg1;
-		local7.chars = new byte[arg0 - arg1];
-		copy(this.chars, arg1, local7.chars, 0, local7.length);
-		return local7;
+	public final JagString substring(@OriginalArg(0) int to, @OriginalArg(2) int from) {
+		@Pc(7) JagString result = new JagString();
+		result.length = to - from;
+		result.chars = new byte[to - from];
+		copy(this.chars, from, result.chars, 0, result.length);
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(Lclient!na;I)Z")
-	public final boolean startsWith(@OriginalArg(0) JagString arg0) {
-		if (this.length < arg0.length) {
+	public final boolean startsWith(@OriginalArg(0) JagString prefix) {
+		if (this.length < prefix.length) {
 			return false;
 		}
-		for (@Pc(19) int local19 = 0; local19 < arg0.length; local19++) {
-			if (this.chars[local19] != arg0.chars[local19]) {
+		for (@Pc(19) int i = 0; i < prefix.length; i++) {
+			if (this.chars[i] != prefix.chars[i]) {
 				return false;
 			}
 		}
@@ -716,32 +716,32 @@ public final class JagString implements StringInterface {
 
 	@OriginalMember(owner = "client!na", name = "equals", descriptor = "(Ljava/lang/Object;)Z")
 	@Override
-	public final boolean equals(@OriginalArg(0) Object arg0) {
-		if (!(arg0 instanceof JagString)) {
+	public final boolean equals(@OriginalArg(0) Object obj) {
+		if (!(obj instanceof JagString)) {
 			throw new IllegalArgumentException();
 		}
-		return this.strEquals((JagString) arg0);
+		return this.strEquals((JagString) obj);
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(Lclient!na;I)I")
-	public final int method3139(@OriginalArg(0) JagString arg0) {
-		@Pc(20) int local20;
-		if (arg0.length < this.length) {
-			local20 = arg0.length;
+	public final int compareTo(@OriginalArg(0) JagString other) {
+		@Pc(20) int minLen;
+		if (other.length < this.length) {
+			minLen = other.length;
 		} else {
-			local20 = this.length;
+			minLen = this.length;
 		}
-		for (@Pc(27) int local27 = 0; local27 < local20; local27++) {
-			if ((this.chars[local27] & 0xFF) < (arg0.chars[local27] & 0xFF)) {
+		for (@Pc(27) int i = 0; i < minLen; i++) {
+			if ((this.chars[i] & 0xFF) < (other.chars[i] & 0xFF)) {
 				return -1;
 			}
-			if ((arg0.chars[local27] & 0xFF) < (this.chars[local27] & 0xFF)) {
+			if ((other.chars[i] & 0xFF) < (this.chars[i] & 0xFF)) {
 				return 1;
 			}
 		}
-		if (arg0.length > this.length) {
+		if (other.length > this.length) {
 			return -1;
-		} else if (arg0.length >= this.length) {
+		} else if (other.length >= this.length) {
 			return 0;
 		} else {
 			return 1;
@@ -749,32 +749,32 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!na;ZLclient!na;)Lclient!na;")
-	public final JagString method3140(@OriginalArg(0) JagString arg0, @OriginalArg(2) JagString arg1) {
-		@Pc(8) int local8 = this.length;
-		@Pc(14) int local14 = arg0.length - arg1.length;
-		@Pc(16) int local16 = 0;
+	public final JagString replaceAll(@OriginalArg(0) JagString replacement, @OriginalArg(2) JagString search) {
+		@Pc(8) int newLen = this.length;
+		@Pc(14) int lenDiff = replacement.length - search.length;
+		@Pc(16) int pos = 0;
 		while (true) {
-			@Pc(22) int local22 = this.indexOf(arg1, local16);
-			if (local22 < 0) {
-				local16 = 0;
-				@Pc(45) JagString local45 = allocate(local8);
+			@Pc(22) int idx = this.indexOf(search, pos);
+			if (idx < 0) {
+				pos = 0;
+				@Pc(45) JagString result = allocate(newLen);
 				while (true) {
-					@Pc(51) int local51 = this.indexOf(arg1, local16);
-					if (local51 < 0) {
-						while (local16 < this.length) {
-							local45.append(this.chars[local16++] & 0xFF);
+					@Pc(51) int foundIdx = this.indexOf(search, pos);
+					if (foundIdx < 0) {
+						while (pos < this.length) {
+							result.append(this.chars[pos++] & 0xFF);
 						}
-						return local45;
+						return result;
 					}
-					while (local16 < local51) {
-						local45.append(this.chars[local16++] & 0xFF);
+					while (pos < foundIdx) {
+						result.append(this.chars[pos++] & 0xFF);
 					}
-					local45.method3113(arg0);
-					local16 += arg1.length;
+					result.appendString(replacement);
+					pos += search.length;
 				}
 			}
-			local16 = local22 + arg1.length;
-			local8 += local14;
+			pos = idx + search.length;
+			newLen += lenDiff;
 		}
 	}
 
@@ -785,61 +785,61 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "b", descriptor = "(IZ)Z")
-	private boolean method3141() {
-		@Pc(18) boolean local18 = false;
-		@Pc(24) boolean local24 = false;
-		@Pc(26) int local26 = 0;
-		for (@Pc(28) int local28 = 0; local28 < this.length; local28++) {
-			@Pc(39) int local39 = this.chars[local28] & 0xFF;
-			if (local28 == 0) {
-				if (local39 == 45) {
-					local24 = true;
+	private boolean isValidInt() {
+		@Pc(18) boolean hasDigit = false;
+		@Pc(24) boolean negative = false;
+		@Pc(26) int result = 0;
+		for (@Pc(28) int i = 0; i < this.length; i++) {
+			@Pc(39) int digit = this.chars[i] & 0xFF;
+			if (i == 0) {
+				if (digit == 45) {
+					negative = true;
 					continue;
 				}
-				if (local39 == 43) {
+				if (digit == 43) {
 					continue;
 				}
 			}
-			if (local39 >= 48 && local39 <= 57) {
-				local39 -= 48;
-			} else if (local39 >= 65 && local39 <= 90) {
-				local39 -= 55;
-			} else if (local39 >= 97 && local39 <= 122) {
-				local39 -= 87;
+			if (digit >= 48 && digit <= 57) {
+				digit -= 48;
+			} else if (digit >= 65 && digit <= 90) {
+				digit -= 55;
+			} else if (digit >= 97 && digit <= 122) {
+				digit -= 87;
 			} else {
 				return false;
 			}
-			if (local39 >= 10) {
+			if (digit >= 10) {
 				return false;
 			}
-			if (local24) {
-				local39 = -local39;
+			if (negative) {
+				digit = -digit;
 			}
-			@Pc(110) int local110 = local39 + local26 * 10;
-			if (local26 != local110 / 10) {
+			@Pc(110) int next = digit + result * 10;
+			if (result != next / 10) {
 				return false;
 			}
-			local26 = local110;
-			local18 = true;
+			result = next;
+			hasDigit = true;
 		}
-		return local18;
+		return hasDigit;
 	}
 
 	@OriginalMember(owner = "client!na", name = "d", descriptor = "(BLclient!na;)Z")
-	public final boolean method3142(@OriginalArg(1) JagString arg0) {
-		if (this.length < arg0.length) {
+	public final boolean startsWithIgnoreCase(@OriginalArg(1) JagString prefix) {
+		if (this.length < prefix.length) {
 			return false;
 		}
-		for (@Pc(21) int local21 = 0; local21 < arg0.length; local21++) {
-			@Pc(30) byte local30 = this.chars[local21];
-			@Pc(35) byte local35 = arg0.chars[local21];
-			if (local35 >= 65 && local35 <= 90 || local35 >= -64 && local35 <= -34 && local35 != -41) {
-				local35 = (byte) (local35 + 32);
+		for (@Pc(21) int i = 0; i < prefix.length; i++) {
+			@Pc(30) byte c1 = this.chars[i];
+			@Pc(35) byte c2 = prefix.chars[i];
+			if (c2 >= 65 && c2 <= 90 || c2 >= -64 && c2 <= -34 && c2 != -41) {
+				c2 = (byte) (c2 + 32);
 			}
-			if (local30 >= 65 && local30 <= 90 || local30 >= -64 && local30 <= -34 && local30 != -41) {
-				local30 = (byte) (local30 + 32);
+			if (c1 >= 65 && c1 <= 90 || c1 >= -64 && c1 <= -34 && c1 != -41) {
+				c1 = (byte) (c1 + 32);
 			}
-			if (local30 != local35) {
+			if (c1 != c2) {
 				return false;
 			}
 		}
@@ -853,22 +853,22 @@ public final class JagString implements StringInterface {
 
 	@OriginalMember(owner = "client!na", name = "h", descriptor = "(I)Lclient!na;")
 	public final JagString trim() {
-		@Pc(17) int local17;
-		for (local17 = 0; local17 < this.length && (this.chars[local17] >= 0 && this.chars[local17] <= 32 || (this.chars[local17] & 0xFF) == 160); local17++) {
+		@Pc(17) int start;
+		for (start = 0; start < this.length && (this.chars[start] >= 0 && this.chars[start] <= 32 || (this.chars[start] & 0xFF) == 160); start++) {
 		}
-		@Pc(53) int local53;
-		for (local53 = this.length; local53 > local17 && (this.chars[local53 - 1] >= 0 && this.chars[local53 - 1] <= 32 || (this.chars[local53 - 1] & 0xFF) == 160); local53--) {
+		@Pc(53) int end;
+		for (end = this.length; end > start && (this.chars[end - 1] >= 0 && this.chars[end - 1] <= 32 || (this.chars[end - 1] & 0xFF) == 160); end--) {
 		}
-		if (local17 == 0 && this.length == local53) {
+		if (start == 0 && this.length == end) {
 			return this;
 		}
-		@Pc(111) JagString local111 = new JagString();
-		local111.length = local53 - local17;
-		local111.chars = new byte[local111.length];
-		for (@Pc(124) int local124 = 0; local124 < local111.length; local124++) {
-			local111.chars[local124] = this.chars[local17 + local124];
+		@Pc(111) JagString result = new JagString();
+		result.length = end - start;
+		result.chars = new byte[result.length];
+		for (@Pc(124) int i = 0; i < result.length; i++) {
+			result.chars[i] = this.chars[start + i];
 		}
-		return local111;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(III)Lclient!na;")
@@ -888,40 +888,40 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Lclient!na;II)I")
-	public final int indexOf(@OriginalArg(0) JagString arg0, @OriginalArg(1) int arg1) {
-		@Pc(8) int local8 = arg0.length;
-		if (arg1 >= this.length) {
-			return local8 == 0 ? this.length : -1;
+	public final int indexOf(@OriginalArg(0) JagString needle, @OriginalArg(1) int fromIndex) {
+		@Pc(8) int needleLen = needle.length;
+		if (fromIndex >= this.length) {
+			return needleLen == 0 ? this.length : -1;
 		}
-		if (arg1 < 0) {
-			arg1 = 0;
+		if (fromIndex < 0) {
+			fromIndex = 0;
 		}
-		if (local8 == 0) {
-			return arg1;
+		if (needleLen == 0) {
+			return fromIndex;
 		}
-		@Pc(41) int local41 = this.length - local8;
-		@Pc(44) byte[] local44 = arg0.chars;
-		@Pc(48) byte local48 = local44[0];
-		for (@Pc(50) int local50 = arg1; local50 <= local41; local50++) {
-			if (local48 != this.chars[local50]) {
+		@Pc(41) int lastStart = this.length - needleLen;
+		@Pc(44) byte[] needleChars = needle.chars;
+		@Pc(48) byte firstChar = needleChars[0];
+		for (@Pc(50) int i = fromIndex; i <= lastStart; i++) {
+			if (firstChar != this.chars[i]) {
 				do {
-					local50++;
-					if (local50 > local41) {
+					i++;
+					if (i > lastStart) {
 						return -1;
 					}
-				} while (local48 != this.chars[local50]);
+				} while (firstChar != this.chars[i]);
 			}
-			@Pc(88) boolean local88 = true;
-			@Pc(92) int local92 = local50 + 1;
-			for (@Pc(94) int local94 = 1; local94 < local8; local94++) {
-				if (local44[local94] != this.chars[local92]) {
-					local88 = false;
+			@Pc(88) boolean matched = true;
+			@Pc(92) int j = i + 1;
+			for (@Pc(94) int k = 1; k < needleLen; k++) {
+				if (needleChars[k] != this.chars[j]) {
+					matched = false;
 					break;
 				}
-				local92++;
+				j++;
 			}
-			if (local88) {
-				return local50;
+			if (matched) {
+				return i;
 			}
 		}
 		return -1;
@@ -954,54 +954,54 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "i", descriptor = "(I)[B")
-	public final byte[] method3148() {
-		@Pc(7) byte[] local7 = new byte[this.length];
-		copy(this.chars, 0, local7, 0, this.length);
-		return local7;
+	public final byte[] toByteArray() {
+		@Pc(7) byte[] bytes = new byte[this.length];
+		copy(this.chars, 0, bytes, 0, this.length);
+		return bytes;
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(IB)I")
-	public final int charAt(@OriginalArg(0) int arg0) {
-		return this.chars[arg0] & 0xFF;
+	public final int charAt(@OriginalArg(0) int index) {
+		return this.chars[index] & 0xFF;
 	}
 
 	@OriginalMember(owner = "client!na", name = "c", descriptor = "(B)Lclient!na;")
-	public final JagString method3151() {
-		@Pc(9) long local9 = this.longHashCode();
-		@Pc(19) Class local19 = JagString.class;
-		synchronized (local19) {
-			@Pc(30) StringNode local30;
-			if (aClass133_13 == null) {
-				aClass133_13 = new HashTable(4096);
+	public final JagString intern() {
+		@Pc(9) long hash = this.longHashCode();
+		@Pc(19) Class lock = JagString.class;
+		synchronized (lock) {
+			@Pc(30) StringNode node;
+			if (internCache == null) {
+				internCache = new HashTable(4096);
 			} else {
-				for (local30 = (StringNode) aClass133_13.get(local9); local30 != null; local30 = (StringNode) aClass133_13.nextWithKey()) {
-					if (this.strEquals(local30.value)) {
-						return local30.value;
+				for (node = (StringNode) internCache.get(hash); node != null; node = (StringNode) internCache.nextWithKey()) {
+					if (this.strEquals(node.value)) {
+						return node.value;
 					}
 				}
 			}
-			local30 = new StringNode();
-			local30.value = this;
-			this.aBoolean193 = false;
-			aClass133_13.put(local30, local9);
+			node = new StringNode();
+			node.value = this;
+			this.mutable = false;
+			internCache.put(node, hash);
 			return this;
 		}
 	}
 
 	@OriginalMember(owner = "client!na", name = "d", descriptor = "(IB)Lclient!na;")
-	public final JagString append(@OriginalArg(0) int arg0) {
-		if (arg0 <= 0 || arg0 > 255) {
-			throw new IllegalArgumentException("invalid char:" + arg0);
-		} else if (this.aBoolean193) {
+	public final JagString append(@OriginalArg(0) int ch) {
+		if (ch <= 0 || ch > 255) {
+			throw new IllegalArgumentException("invalid char:" + ch);
+		} else if (this.mutable) {
 			if (this.length == this.chars.length) {
-				@Pc(44) int local44;
-				for (local44 = 1; local44 <= this.length; local44 += local44) {
+				@Pc(44) int newCapacity;
+				for (newCapacity = 1; newCapacity <= this.length; newCapacity += newCapacity) {
 				}
-				@Pc(61) byte[] local61 = new byte[local44];
-				copy(this.chars, 0, local61, 0, this.length);
-				this.chars = local61;
+				@Pc(61) byte[] newChars = new byte[newCapacity];
+				copy(this.chars, 0, newChars, 0, this.length);
+				this.chars = newChars;
 			}
-			this.chars[this.length++] = (byte) arg0;
+			this.chars[this.length++] = (byte) ch;
 			return this;
 		} else {
 			throw new IllegalArgumentException();
@@ -1009,10 +1009,10 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(BLjava/applet/Applet;)Lclient!na;")
-	public final JagString fromParameters(@OriginalArg(1) Applet arg0) {
-		@Pc(19) String local19 = new String(this.chars, 0, this.length);
-		@Pc(23) String local23 = arg0.getParameter(local19);
-		return local23 == null ? null : of(local23);
+	public final JagString fromParameters(@OriginalArg(1) Applet applet) {
+		@Pc(19) String key = new String(this.chars, 0, this.length);
+		@Pc(23) String value = applet.getParameter(key);
+		return value == null ? null : of(value);
 	}
 
 	@OriginalMember(owner = "client!na", name = "d", descriptor = "(Z)I")
@@ -1025,64 +1025,64 @@ public final class JagString implements StringInterface {
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(ILjava/awt/FontMetrics;)I")
-	public final int stringWidth(@OriginalArg(1) FontMetrics arg0) {
-		@Pc(14) String local14 = new String(this.chars, 0, this.length, StandardCharsets.ISO_8859_1);
-		return arg0.stringWidth(local14);
+	public final int stringWidth(@OriginalArg(1) FontMetrics metrics) {
+		@Pc(14) String str = new String(this.chars, 0, this.length, StandardCharsets.ISO_8859_1);
+		return metrics.stringWidth(str);
 	}
 
 	@OriginalMember(owner = "client!na", name = "d", descriptor = "(B)Lclient!na;")
-	public final JagString method3156() {
-		if (!this.aBoolean193) {
+	public final JagString compact() {
+		if (!this.mutable) {
 			throw new IllegalArgumentException();
 		}
 		if (this.chars.length != this.length) {
-			@Pc(26) byte[] local26 = new byte[this.length];
-			copy(this.chars, 0, local26, 0, this.length);
-			this.chars = local26;
+			@Pc(26) byte[] newChars = new byte[this.length];
+			copy(this.chars, 0, newChars, 0, this.length);
+			this.chars = newChars;
 		}
 		return this;
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(ILjava/applet/Applet;)Ljava/lang/Object;")
-	public final Object browserControlCall(@OriginalArg(1) Applet arg0) throws Throwable {
-		@Pc(12) String local12 = new String(this.chars, 0, this.length);
-		@Pc(17) Object local17 = BrowserControl.call(local12, arg0);
-		if (local17 instanceof String) {
-			@Pc(24) byte[] local24 = ((String) local17).getBytes();
-			local17 = decodeString(local24, local24.length, 0);
+	public final Object browserControlCall(@OriginalArg(1) Applet applet) throws Throwable {
+		@Pc(12) String str = new String(this.chars, 0, this.length);
+		@Pc(17) Object result = BrowserControl.call(str, applet);
+		if (result instanceof String) {
+			@Pc(24) byte[] bytes = ((String) result).getBytes();
+			result = decodeString(bytes, bytes.length, 0);
 		}
-		return local17;
+		return result;
 	}
 
 	@OriginalMember(owner = "client!na", name = "j", descriptor = "(I)J")
 	public final long encode37() {
-		@Pc(7) long local7 = 0L;
-		for (@Pc(14) int local14 = 0; this.length > local14 && local14 < 12; local14++) {
-			@Pc(32) byte local32 = this.chars[local14];
-			local7 *= 37L;
-			if (local32 >= 65 && local32 <= 90) {
-				local7 += local32 + 1 - 65;
-			} else if (local32 >= 97 && local32 <= 122) {
-				local7 += local32 + 1 - 97;
-			} else if (local32 >= 48 && local32 <= 57) {
-				local7 += local32 + 27 - 48;
+		@Pc(7) long hash = 0L;
+		for (@Pc(14) int i = 0; this.length > i && i < 12; i++) {
+			@Pc(32) byte c = this.chars[i];
+			hash *= 37L;
+			if (c >= 65 && c <= 90) {
+				hash += c + 1 - 65;
+			} else if (c >= 97 && c <= 122) {
+				hash += c + 1 - 97;
+			} else if (c >= 48 && c <= 57) {
+				hash += c + 27 - 48;
 			}
 		}
-		while (local7 % 37L == 0L && local7 != 0L) {
-			local7 /= 37L;
+		while (hash % 37L == 0L && hash != 0L) {
+			hash /= 37L;
 		}
-		return local7;
+		return hash;
 	}
 
 	@OriginalMember(owner = "client!na", name = "k", descriptor = "(I)Lclient!na;")
-	public final JagString method3159() {
-		@Pc(9) JagString local9 = Base37.decode37(this.encode37());
-		return local9 == null ? aClass100_967 : local9;
+	public final JagString toBase37Name() {
+		@Pc(9) JagString name = Base37.decode37(this.encode37());
+		return name == null ? EMPTY_NAME : name;
 	}
 
 	@OriginalMember(owner = "client!na", name = "a", descriptor = "(Z[BIII)I")
-	public final int encodeString(@OriginalArg(1) byte[] arg0, @OriginalArg(2) int arg1, @OriginalArg(4) int arg2) {
-		copy(this.chars, 0, arg0, arg1, arg2);
-		return arg2;
+	public final int encodeString(@OriginalArg(1) byte[] dest, @OriginalArg(2) int destOff, @OriginalArg(4) int len) {
+		copy(this.chars, 0, dest, destOff, len);
+		return len;
 	}
 }

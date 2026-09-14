@@ -9,10 +9,10 @@ import org.openrs2.deob.annotation.Pc;
 public final class TextureOpClamp extends TextureOp {
 
 	@OriginalMember(owner = "client!aj", name = "V", descriptor = "I")
-	private int anInt148 = 0;
+	private int lowerBound = 0;
 
 	@OriginalMember(owner = "client!aj", name = "ab", descriptor = "I")
-	private int anInt151 = 4096;
+	private int upperBound = 4096;
 
 	@OriginalMember(owner = "client!aj", name = "<init>", descriptor = "()V")
 	public TextureOpClamp() {
@@ -21,75 +21,75 @@ public final class TextureOpClamp extends TextureOp {
 
 	@OriginalMember(owner = "client!aj", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.anInt148 = arg1.g2();
-		} else if (arg0 == 1) {
-			this.anInt151 = arg1.g2();
-		} else if (arg0 == 2) {
-			this.monochrome = arg1.g1() == 1;
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buf) {
+		if (opcode == 0) {
+			this.lowerBound = buf.g2();
+		} else if (opcode == 1) {
+			this.upperBound = buf.g2();
+		} else if (opcode == 2) {
+			this.monochrome = buf.g1() == 1;
 		}
 	}
 
 	@OriginalMember(owner = "client!aj", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(22) int[][] local22 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(22) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(32) int[][] local32 = this.getChildColorOutput(arg0, 0);
-			@Pc(36) int[] local36 = local32[1];
-			@Pc(40) int[] local40 = local32[2];
-			@Pc(44) int[] local44 = local32[0];
-			@Pc(48) int[] local48 = local22[0];
-			@Pc(52) int[] local52 = local22[1];
-			@Pc(56) int[] local56 = local22[2];
-			for (@Pc(58) int local58 = 0; local58 < Texture.width; local58++) {
-				@Pc(69) int local69 = local36[local58];
-				@Pc(73) int local73 = local44[local58];
-				@Pc(77) int local77 = local40[local58];
-				if (this.anInt148 > local73) {
-					local48[local58] = this.anInt148;
-				} else if (local73 > this.anInt151) {
-					local48[local58] = this.anInt151;
+			@Pc(32) int[][] input = this.getChildColorOutput(row, 0);
+			@Pc(36) int[] srcG = input[1];
+			@Pc(40) int[] srcB = input[2];
+			@Pc(44) int[] srcR = input[0];
+			@Pc(48) int[] destR = output[0];
+			@Pc(52) int[] destG = output[1];
+			@Pc(56) int[] destB = output[2];
+			for (@Pc(58) int i = 0; i < Texture.width; i++) {
+				@Pc(69) int g = srcG[i];
+				@Pc(73) int r = srcR[i];
+				@Pc(77) int b = srcB[i];
+				if (this.lowerBound > r) {
+					destR[i] = this.lowerBound;
+				} else if (r > this.upperBound) {
+					destR[i] = this.upperBound;
 				} else {
-					local48[local58] = local73;
+					destR[i] = r;
 				}
-				if (this.anInt148 > local69) {
-					local52[local58] = this.anInt148;
-				} else if (local69 <= this.anInt151) {
-					local52[local58] = local69;
+				if (this.lowerBound > g) {
+					destG[i] = this.lowerBound;
+				} else if (g <= this.upperBound) {
+					destG[i] = g;
 				} else {
-					local52[local58] = this.anInt151;
+					destG[i] = this.upperBound;
 				}
-				if (local77 < this.anInt148) {
-					local56[local58] = this.anInt148;
-				} else if (this.anInt151 >= local77) {
-					local56[local58] = local77;
+				if (b < this.lowerBound) {
+					destB[i] = this.lowerBound;
+				} else if (this.upperBound >= b) {
+					destB[i] = b;
 				} else {
-					local56[local58] = this.anInt151;
+					destB[i] = this.upperBound;
 				}
 			}
 		}
-		return local22;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!aj", name = "a", descriptor = "(IB)[I")
 	@Override
-	public final int[] getMonochromeOutput(@OriginalArg(0) int arg0) {
-		@Pc(19) int[] local19 = this.monochromeImageCache.get(arg0);
+	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
+		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(29) int[] local29 = this.getChildMonochromeOutput(0, arg0);
-			for (@Pc(31) int local31 = 0; local31 < Texture.width; local31++) {
-				@Pc(38) int local38 = local29[local31];
-				if (this.anInt148 > local38) {
-					local19[local31] = this.anInt148;
-				} else if (this.anInt151 >= local38) {
-					local19[local31] = local38;
+			@Pc(29) int[] input = this.getChildMonochromeOutput(0, row);
+			for (@Pc(31) int i = 0; i < Texture.width; i++) {
+				@Pc(38) int value = input[i];
+				if (this.lowerBound > value) {
+					output[i] = this.lowerBound;
+				} else if (this.upperBound >= value) {
+					output[i] = value;
 				} else {
-					local19[local31] = this.anInt151;
+					output[i] = this.upperBound;
 				}
 			}
 		}
-		return local19;
+		return output;
 	}
 }

@@ -11,22 +11,22 @@ public class StructTypeList {
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!eh", name = "a", descriptor = "(Lclient!ve;I)V")
-	public static void init(@OriginalArg(0) Js5 arg0) {
-		archive = arg0;
+	public static void init(@OriginalArg(0) Js5 js5) {
+		archive = js5;
 	}
 
 	@OriginalMember(owner = "client!jj", name = "a", descriptor = "(BI)Lclient!lk;")
-	public static StructType get(@OriginalArg(1) int arg0) {
-		@Pc(10) StructType local10 = (StructType) types.get(arg0);
-		if (local10 != null) {
-			return local10;
+	public static StructType get(@OriginalArg(1) int id) {
+		@Pc(10) StructType type = (StructType) types.get(id);
+		if (type != null) {
+			return type;
 		}
-		@Pc(26) byte[] local26 = archive.fetchFile(26, arg0);
-		local10 = new StructType();
-		if (local26 != null) {
-			local10.decode(new Buffer(local26));
+		@Pc(26) byte[] data = archive.fetchFile(26, id);
+		type = new StructType();
+		if (data != null) {
+			type.decode(new Buffer(data));
 		}
-		types.put(local10, arg0);
-		return local10;
+		types.put(type, id);
+		return type;
 	}
 }

@@ -14,7 +14,7 @@ public interface MaterialRenderer {
 	void bind();
 
 	@OriginalMember(owner = "client!pc", name = "a", descriptor = "(I)V")
-	void setArgument(@OriginalArg(0) int arg0);
+	void setArgument(@OriginalArg(0) int argument);
 
 	@OriginalMember(owner = "client!pc", name = "c", descriptor = "()I")
 	int getFlags();

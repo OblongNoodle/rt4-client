@@ -12,214 +12,214 @@ public final class SoftwareFont extends Font {
 	private byte[][] pixels = new byte[256][];
 
 	@OriginalMember(owner = "client!dd", name = "<init>", descriptor = "([B)V")
-	public SoftwareFont(@OriginalArg(0) byte[] arg0) {
-		super(arg0);
+	public SoftwareFont(@OriginalArg(0) byte[] data) {
+		super(data);
 	}
 
 	@OriginalMember(owner = "client!dd", name = "<init>", descriptor = "([B[I[I[I[I[[B)V")
-	public SoftwareFont(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int[] arg3, @OriginalArg(4) int[] arg4, @OriginalArg(5) byte[][] arg5) {
-		super(arg0, arg1, arg2, arg3, arg4);
-		this.pixels = arg5;
+	public SoftwareFont(@OriginalArg(0) byte[] data, @OriginalArg(1) int[] xOffsets, @OriginalArg(2) int[] yOffsets, @OriginalArg(3) int[] innerWidths, @OriginalArg(4) int[] innerHeights, @OriginalArg(5) byte[][] pixels) {
+		super(data, xOffsets, yOffsets, innerWidths, innerHeights);
+		this.pixels = pixels;
 	}
 
 	@OriginalMember(owner = "client!dd", name = "a", descriptor = "([I[BIIIIIII)V")
-	public static void blit(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
-		@Pc(4) int local4 = -(arg5 >> 2);
-		@Pc(9) int local9 = -(arg5 & 0x3);
-		for (@Pc(12) int local12 = -arg6; local12 < 0; local12++) {
-			@Pc(16) int local16;
-			for (local16 = local4; local16 < 0; local16++) {
-				if (arg1[arg3++] == 0) {
-					arg4++;
+	public static void blit(@OriginalArg(0) int[] dest, @OriginalArg(1) byte[] glyphPixels, @OriginalArg(2) int color, @OriginalArg(3) int srcOff, @OriginalArg(4) int destOff, @OriginalArg(5) int width, @OriginalArg(6) int height, @OriginalArg(7) int destStep, @OriginalArg(8) int srcStep) {
+		@Pc(4) int widthQuads = -(width >> 2);
+		@Pc(9) int widthRemainder = -(width & 0x3);
+		for (@Pc(12) int y = -height; y < 0; y++) {
+			@Pc(16) int q;
+			for (q = widthQuads; q < 0; q++) {
+				if (glyphPixels[srcOff++] == 0) {
+					destOff++;
 				} else {
-					arg0[arg4++] = arg2;
+					dest[destOff++] = color;
 				}
-				if (arg1[arg3++] == 0) {
-					arg4++;
+				if (glyphPixels[srcOff++] == 0) {
+					destOff++;
 				} else {
-					arg0[arg4++] = arg2;
+					dest[destOff++] = color;
 				}
-				if (arg1[arg3++] == 0) {
-					arg4++;
+				if (glyphPixels[srcOff++] == 0) {
+					destOff++;
 				} else {
-					arg0[arg4++] = arg2;
+					dest[destOff++] = color;
 				}
-				if (arg1[arg3++] == 0) {
-					arg4++;
+				if (glyphPixels[srcOff++] == 0) {
+					destOff++;
 				} else {
-					arg0[arg4++] = arg2;
-				}
-			}
-			for (local16 = local9; local16 < 0; local16++) {
-				if (arg1[arg3++] == 0) {
-					arg4++;
-				} else {
-					arg0[arg4++] = arg2;
+					dest[destOff++] = color;
 				}
 			}
-			arg4 += arg7;
-			arg3 += arg8;
+			for (q = widthRemainder; q < 0; q++) {
+				if (glyphPixels[srcOff++] == 0) {
+					destOff++;
+				} else {
+					dest[destOff++] = color;
+				}
+			}
+			destOff += destStep;
+			srcOff += srcStep;
 		}
 	}
 
 	@OriginalMember(owner = "client!dd", name = "a", descriptor = "([I[BIIIIIIIII[I[I)V")
-	public static void blitMasked(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int[] arg11, @OriginalArg(12) int[] arg12) {
-		@Pc(3) int local3 = arg2 - SoftwareRaster.clipLeft;
-		@Pc(7) int local7 = arg3 - SoftwareRaster.clipTop;
-		for (@Pc(9) int local9 = local7; local9 < local7 + arg5; local9++) {
-			@Pc(18) int local18 = arg11[local9];
-			@Pc(22) int local22 = arg12[local9];
-			@Pc(24) int local24 = arg4;
-			@Pc(31) int local31;
-			if (local3 > local18) {
-				local31 = local3 - local18;
-				if (local31 >= local22) {
-					arg7 += arg4 + arg10;
-					arg8 += arg4 + arg9;
+	public static void blitMasked(@OriginalArg(0) int[] dest, @OriginalArg(1) byte[] glyphPixels, @OriginalArg(2) int glyphX, @OriginalArg(3) int glyphY, @OriginalArg(4) int width, @OriginalArg(5) int height, @OriginalArg(6) int color, @OriginalArg(7) int srcOff, @OriginalArg(8) int destOff, @OriginalArg(9) int destStep, @OriginalArg(10) int srcStep, @OriginalArg(11) int[] maskStarts, @OriginalArg(12) int[] maskWidths) {
+		@Pc(3) int relX = glyphX - SoftwareRaster.clipLeft;
+		@Pc(7) int relY = glyphY - SoftwareRaster.clipTop;
+		for (@Pc(9) int row = relY; row < relY + height; row++) {
+			@Pc(18) int maskStart = maskStarts[row];
+			@Pc(22) int maskWidth = maskWidths[row];
+			@Pc(24) int rowWidth = width;
+			@Pc(31) int skip;
+			if (relX > maskStart) {
+				skip = relX - maskStart;
+				if (skip >= maskWidth) {
+					srcOff += width + srcStep;
+					destOff += width + destStep;
 					continue;
 				}
-				local22 -= local31;
+				maskWidth -= skip;
 			} else {
-				local31 = local18 - local3;
-				if (local31 >= arg4) {
-					arg7 += arg4 + arg10;
-					arg8 += arg4 + arg9;
+				skip = maskStart - relX;
+				if (skip >= width) {
+					srcOff += width + srcStep;
+					destOff += width + destStep;
 					continue;
 				}
-				arg7 += local31;
-				local24 = arg4 - local31;
-				arg8 += local31;
+				srcOff += skip;
+				rowWidth = width - skip;
+				destOff += skip;
 			}
-			local31 = 0;
-			if (local24 < local22) {
-				local22 = local24;
+			skip = 0;
+			if (rowWidth < maskWidth) {
+				maskWidth = rowWidth;
 			} else {
-				local31 = local24 - local22;
+				skip = rowWidth - maskWidth;
 			}
-			for (@Pc(99) int local99 = -local22; local99 < 0; local99++) {
-				if (arg1[arg7++] == 0) {
-					arg8++;
+			for (@Pc(99) int col = -maskWidth; col < 0; col++) {
+				if (glyphPixels[srcOff++] == 0) {
+					destOff++;
 				} else {
-					SoftwareRaster.pixels[arg8++] = arg6;
+					SoftwareRaster.pixels[destOff++] = color;
 				}
 			}
-			arg7 += local31 + arg10;
-			arg8 += local31 + arg9;
+			srcOff += skip + srcStep;
+			destOff += skip + destStep;
 		}
 	}
 
 	@OriginalMember(owner = "client!dd", name = "a", descriptor = "([I[BIIIIIIII)V")
-	public static void blitTransparent(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
-		@Pc(17) int local17 = ((arg2 & 0xFF00FF) * arg9 & 0xFF00FF00) + ((arg2 & 0xFF00) * arg9 & 0xFF0000) >> 8;
-		@Pc(21) int local21 = 256 - arg9;
-		for (@Pc(24) int local24 = -arg6; local24 < 0; local24++) {
-			for (@Pc(29) int local29 = -arg5; local29 < 0; local29++) {
-				if (arg1[arg3++] == 0) {
-					arg4++;
+	public static void blitTransparent(@OriginalArg(0) int[] dest, @OriginalArg(1) byte[] glyphPixels, @OriginalArg(2) int color, @OriginalArg(3) int srcOff, @OriginalArg(4) int destOff, @OriginalArg(5) int width, @OriginalArg(6) int height, @OriginalArg(7) int destStep, @OriginalArg(8) int srcStep, @OriginalArg(9) int alpha) {
+		@Pc(17) int srcColor = ((color & 0xFF00FF) * alpha & 0xFF00FF00) + ((color & 0xFF00) * alpha & 0xFF0000) >> 8;
+		@Pc(21) int invAlpha = 256 - alpha;
+		for (@Pc(24) int y = -height; y < 0; y++) {
+			for (@Pc(29) int x = -width; x < 0; x++) {
+				if (glyphPixels[srcOff++] == 0) {
+					destOff++;
 				} else {
-					@Pc(40) int local40 = arg0[arg4];
-					arg0[arg4++] = (((local40 & 0xFF00FF) * local21 & 0xFF00FF00) + ((local40 & 0xFF00) * local21 & 0xFF0000) >> 8) + local17;
+					@Pc(40) int destColor = dest[destOff];
+					dest[destOff++] = (((destColor & 0xFF00FF) * invAlpha & 0xFF00FF00) + ((destColor & 0xFF00) * invAlpha & 0xFF0000) >> 8) + srcColor;
 				}
 			}
-			arg4 += arg7;
-			arg3 += arg8;
+			destOff += destStep;
+			srcOff += srcStep;
 		}
 	}
 
 	@OriginalMember(owner = "client!jh", name = "a", descriptor = "(IILclient!ve;Lclient!ve;I)Lclient!dd;")
-	public static SoftwareFont method2412(@OriginalArg(0) int arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) Js5 arg2) {
-		return SpriteLoader.decode(arg2, 0, arg0) ? method4635(arg1.fetchFile(arg0, 0)) : null;
+	public static SoftwareFont load(@OriginalArg(0) int fileId, @OriginalArg(2) Js5 fontJs5, @OriginalArg(3) Js5 spriteJs5) {
+		return SpriteLoader.decode(spriteJs5, 0, fileId) ? createFont(fontJs5.fetchFile(fileId, 0)) : null;
 	}
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "([BI)Lclient!dd;")
-	public static SoftwareFont method4635(@OriginalArg(0) byte[] arg0) {
-		if (arg0 == null) {
+	public static SoftwareFont createFont(@OriginalArg(0) byte[] data) {
+		if (data == null) {
 			return null;
 		} else {
-			@Pc(22) SoftwareFont local22 = new SoftwareFont(arg0, SpriteLoader.xOffsets, SpriteLoader.yOffsets, SpriteLoader.innerWidths, SpriteLoader.innerHeights, SpriteLoader.pixels);
+			@Pc(22) SoftwareFont font = new SoftwareFont(data, SpriteLoader.xOffsets, SpriteLoader.yOffsets, SpriteLoader.innerWidths, SpriteLoader.innerHeights, SpriteLoader.pixels);
 			SpriteLoader.clear();
-			return local22;
+			return font;
 		}
 	}
 
 	@OriginalMember(owner = "client!dd", name = "a", descriptor = "(IIIIIIIZ)V")
 	@Override
-	protected final void renderGlyphTransparent(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		@Pc(5) int local5 = arg1 + arg2 * SoftwareRaster.width;
-		@Pc(9) int local9 = SoftwareRaster.width - arg3;
-		@Pc(11) int local11 = 0;
-		@Pc(13) int local13 = 0;
-		@Pc(20) int local20;
-		if (arg2 < SoftwareRaster.clipTop) {
-			local20 = SoftwareRaster.clipTop - arg2;
-			arg4 -= local20;
-			arg2 = SoftwareRaster.clipTop;
-			local13 = local20 * arg3;
-			local5 += local20 * SoftwareRaster.width;
+	protected final void renderGlyphTransparent(@OriginalArg(0) int glyphId, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int width, @OriginalArg(4) int height, @OriginalArg(5) int color, @OriginalArg(6) int alpha) {
+		@Pc(5) int destOff = x + y * SoftwareRaster.width;
+		@Pc(9) int destStep = SoftwareRaster.width - width;
+		@Pc(11) int srcStep = 0;
+		@Pc(13) int srcOff = 0;
+		@Pc(20) int clip;
+		if (y < SoftwareRaster.clipTop) {
+			clip = SoftwareRaster.clipTop - y;
+			height -= clip;
+			y = SoftwareRaster.clipTop;
+			srcOff = clip * width;
+			destOff += clip * SoftwareRaster.width;
 		}
-		if (arg2 + arg4 > SoftwareRaster.clipBottom) {
-			arg4 -= arg2 + arg4 - SoftwareRaster.clipBottom;
+		if (y + height > SoftwareRaster.clipBottom) {
+			height -= y + height - SoftwareRaster.clipBottom;
 		}
-		if (arg1 < SoftwareRaster.clipLeft) {
-			local20 = SoftwareRaster.clipLeft - arg1;
-			arg3 -= local20;
-			arg1 = SoftwareRaster.clipLeft;
-			local13 += local20;
-			local5 += local20;
-			local11 = local20;
-			local9 += local20;
+		if (x < SoftwareRaster.clipLeft) {
+			clip = SoftwareRaster.clipLeft - x;
+			width -= clip;
+			x = SoftwareRaster.clipLeft;
+			srcOff += clip;
+			destOff += clip;
+			srcStep = clip;
+			destStep += clip;
 		}
-		if (arg1 + arg3 > SoftwareRaster.clipRight) {
-			local20 = arg1 + arg3 - SoftwareRaster.clipRight;
-			arg3 -= local20;
-			local11 += local20;
-			local9 += local20;
+		if (x + width > SoftwareRaster.clipRight) {
+			clip = x + width - SoftwareRaster.clipRight;
+			width -= clip;
+			srcStep += clip;
+			destStep += clip;
 		}
-		if (arg3 > 0 && arg4 > 0) {
-			blitTransparent(SoftwareRaster.pixels, this.pixels[arg0], arg5, local13, local5, arg3, arg4, local9, local11, arg6);
+		if (width > 0 && height > 0) {
+			blitTransparent(SoftwareRaster.pixels, this.pixels[glyphId], color, srcOff, destOff, width, height, destStep, srcStep, alpha);
 		}
 	}
 
 	@OriginalMember(owner = "client!dd", name = "a", descriptor = "(IIIIIIZ)V")
 	@Override
-	protected final void renderGlyph(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		@Pc(5) int local5 = arg1 + arg2 * SoftwareRaster.width;
-		@Pc(9) int local9 = SoftwareRaster.width - arg3;
-		@Pc(11) int local11 = 0;
-		@Pc(13) int local13 = 0;
-		@Pc(20) int local20;
-		if (arg2 < SoftwareRaster.clipTop) {
-			local20 = SoftwareRaster.clipTop - arg2;
-			arg4 -= local20;
-			arg2 = SoftwareRaster.clipTop;
-			local13 = local20 * arg3;
-			local5 += local20 * SoftwareRaster.width;
+	protected final void renderGlyph(@OriginalArg(0) int glyphId, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int width, @OriginalArg(4) int height, @OriginalArg(5) int color) {
+		@Pc(5) int destOff = x + y * SoftwareRaster.width;
+		@Pc(9) int destStep = SoftwareRaster.width - width;
+		@Pc(11) int srcStep = 0;
+		@Pc(13) int srcOff = 0;
+		@Pc(20) int clip;
+		if (y < SoftwareRaster.clipTop) {
+			clip = SoftwareRaster.clipTop - y;
+			height -= clip;
+			y = SoftwareRaster.clipTop;
+			srcOff = clip * width;
+			destOff += clip * SoftwareRaster.width;
 		}
-		if (arg2 + arg4 > SoftwareRaster.clipBottom) {
-			arg4 -= arg2 + arg4 - SoftwareRaster.clipBottom;
+		if (y + height > SoftwareRaster.clipBottom) {
+			height -= y + height - SoftwareRaster.clipBottom;
 		}
-		if (arg1 < SoftwareRaster.clipLeft) {
-			local20 = SoftwareRaster.clipLeft - arg1;
-			arg3 -= local20;
-			arg1 = SoftwareRaster.clipLeft;
-			local13 += local20;
-			local5 += local20;
-			local11 = local20;
-			local9 += local20;
+		if (x < SoftwareRaster.clipLeft) {
+			clip = SoftwareRaster.clipLeft - x;
+			width -= clip;
+			x = SoftwareRaster.clipLeft;
+			srcOff += clip;
+			destOff += clip;
+			srcStep = clip;
+			destStep += clip;
 		}
-		if (arg1 + arg3 > SoftwareRaster.clipRight) {
-			local20 = arg1 + arg3 - SoftwareRaster.clipRight;
-			arg3 -= local20;
-			local11 += local20;
-			local9 += local20;
+		if (x + width > SoftwareRaster.clipRight) {
+			clip = x + width - SoftwareRaster.clipRight;
+			width -= clip;
+			srcStep += clip;
+			destStep += clip;
 		}
-		if (arg3 <= 0 || arg4 <= 0) {
+		if (width <= 0 || height <= 0) {
 			return;
 		}
-		if (SoftwareRaster.anIntArray295 == null) {
-			blit(SoftwareRaster.pixels, this.pixels[arg0], arg5, local13, local5, arg3, arg4, local9, local11);
+		if (SoftwareRaster.lineMaskStarts == null) {
+			blit(SoftwareRaster.pixels, this.pixels[glyphId], color, srcOff, destOff, width, height, destStep, srcStep);
 		} else {
-			blitMasked(SoftwareRaster.pixels, this.pixels[arg0], arg1, arg2, arg3, arg4, arg5, local13, local5, local9, local11, SoftwareRaster.anIntArray295, SoftwareRaster.anIntArray296);
+			blitMasked(SoftwareRaster.pixels, this.pixels[glyphId], x, y, width, height, color, srcOff, destOff, destStep, srcStep, SoftwareRaster.lineMaskStarts, SoftwareRaster.lineMaskWidths);
 		}
 	}
 }

@@ -29,7 +29,7 @@ public final class ImageProducerFrameBuffer extends FrameBuffer implements Image
 	}
 
 	@OriginalMember(owner = "client!di", name = "a", descriptor = "(IIIBI)V")
-	private synchronized void method1168(@OriginalArg(0) int width, @OriginalArg(1) int height, @OriginalArg(2) int x, @OriginalArg(4) int y) {
+	private synchronized void flushPixels(@OriginalArg(0) int width, @OriginalArg(1) int height, @OriginalArg(2) int x, @OriginalArg(4) int y) {
 		if (this.imageConsumer != null) {
 			this.imageConsumer.setPixels(x, y, width, height, this.colorModel, this.pixels, y * this.width + x, this.width);
 			this.imageConsumer.imageComplete(2);
@@ -47,7 +47,7 @@ public final class ImageProducerFrameBuffer extends FrameBuffer implements Image
 	@OriginalMember(owner = "client!di", name = "a", descriptor = "(IIIILjava/awt/Graphics;I)V")
 	@Override
 	public final void drawAt(@OriginalArg(0) int width, @OriginalArg(1) int x, @OriginalArg(3) int height, @OriginalArg(4) Graphics graphics, @OriginalArg(5) int y) {
-		this.method1168(width, height, x, y);
+		this.flushPixels(width, height, x, y);
 		@Pc(17) Shape shape = graphics.getClip();
 		graphics.clipRect(x, y, width, height);
 		graphics.drawImage(this.image, 0, 0, this);
@@ -100,7 +100,7 @@ public final class ImageProducerFrameBuffer extends FrameBuffer implements Image
 
 	@OriginalMember(owner = "client!di", name = "imageUpdate", descriptor = "(Ljava/awt/Image;IIIII)Z")
 	@Override
-	public final boolean imageUpdate(@OriginalArg(0) Image image, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	public final boolean imageUpdate(@OriginalArg(0) Image image, @OriginalArg(1) int flags, @OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(4) int width, @OriginalArg(5) int height) {
 		return true;
 	}
 

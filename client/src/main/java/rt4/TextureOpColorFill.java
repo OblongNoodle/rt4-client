@@ -18,9 +18,9 @@ public final class TextureOpColorFill extends TextureOp {
 	private int blue;
 
 	@OriginalMember(owner = "client!fm", name = "<init>", descriptor = "(I)V")
-	private TextureOpColorFill(@OriginalArg(0) int arg0) {
+	private TextureOpColorFill(@OriginalArg(0) int color) {
 		super(0, false);
-		this.setColor(arg0);
+		this.setColor(color);
 	}
 
 	@OriginalMember(owner = "client!fm", name = "<init>", descriptor = "()V")
@@ -29,34 +29,34 @@ public final class TextureOpColorFill extends TextureOp {
 	}
 
 	@OriginalMember(owner = "client!fm", name = "a", descriptor = "(BI)V")
-	private void setColor(@OriginalArg(1) int arg0) {
-		this.green = arg0 >> 4 & 0xFF0;
-		this.blue = (arg0 & 0xFF) << 4;
-		this.red = arg0 >> 12 & 0xFF0;
+	private void setColor(@OriginalArg(1) int color) {
+		this.green = color >> 4 & 0xFF0;
+		this.blue = (color & 0xFF) << 4;
+		this.red = color >> 12 & 0xFF0;
 	}
 
 	@OriginalMember(owner = "client!fm", name = "b", descriptor = "(II)[[I")
 	@Override
-	public final int[][] getColorOutput(@OriginalArg(1) int arg0) {
-		@Pc(22) int[][] local22 = this.colorImageCache.get(arg0);
+	public final int[][] getColorOutput(@OriginalArg(1) int row) {
+		@Pc(22) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(31) int[] local31 = local22[0];
-			@Pc(35) int[] local35 = local22[1];
-			@Pc(39) int[] local39 = local22[2];
-			for (@Pc(41) int local41 = 0; local41 < Texture.width; local41++) {
-				local31[local41] = this.red;
-				local35[local41] = this.green;
-				local39[local41] = this.blue;
+			@Pc(31) int[] redChannel = output[0];
+			@Pc(35) int[] greenChannel = output[1];
+			@Pc(39) int[] blueChannel = output[2];
+			for (@Pc(41) int i = 0; i < Texture.width; i++) {
+				redChannel[i] = this.red;
+				greenChannel[i] = this.green;
+				blueChannel[i] = this.blue;
 			}
 		}
-		return local22;
+		return output;
 	}
 
 	@OriginalMember(owner = "client!fm", name = "a", descriptor = "(ILclient!wa;Z)V")
 	@Override
-	public final void decode(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
-		if (arg0 == 0) {
-			this.setColor(arg1.g3());
+	public final void decode(@OriginalArg(0) int opcode, @OriginalArg(1) Buffer buffer) {
+		if (opcode == 0) {
+			this.setColor(buffer.g3());
 		}
 	}
 }

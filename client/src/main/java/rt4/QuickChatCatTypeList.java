@@ -13,9 +13,9 @@ public class QuickChatCatTypeList {
 	public static Js5 archive2;
 
 	@OriginalMember(owner = "client!ja", name = "a", descriptor = "(Lclient!ve;Lclient!ve;I)V")
-	public static void init(@OriginalArg(0) Js5 arg0, @OriginalArg(1) Js5 arg1) {
-		archive1 = arg1;
-		archive2 = arg0;
+	public static void init(@OriginalArg(0) Js5 quickChatArchive2, @OriginalArg(1) Js5 quickChatArchive1) {
+		archive1 = quickChatArchive1;
+		archive2 = quickChatArchive2;
 	}
 
 	@OriginalMember(owner = "client!tb", name = "b", descriptor = "(IB)Lclient!bc;")
@@ -35,7 +35,7 @@ public class QuickChatCatTypeList {
 			quickChatCat.decode(new Buffer(data));
 		}
 		if (id >= 32768) {
-			quickChatCat.method465();
+			quickChatCat.postDecode();
 		}
 		types.put(quickChatCat, id);
 		return quickChatCat;

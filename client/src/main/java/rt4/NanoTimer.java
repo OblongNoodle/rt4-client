@@ -9,51 +9,51 @@ import org.openrs2.deob.annotation.Pc;
 public final class NanoTimer extends Timer {
 
 	@OriginalMember(owner = "client!om", name = "k", descriptor = "J")
-	private long aLong142 = System.nanoTime();
+	private long nextTickNano = System.nanoTime();
 
 	@OriginalMember(owner = "client!om", name = "b", descriptor = "(I)V")
 	@Override
 	public final void reset() {
-		this.aLong142 = System.nanoTime();
+		this.nextTickNano = System.nanoTime();
 	}
 
 	@OriginalMember(owner = "client!om", name = "a", descriptor = "(III)I")
 	@Override
-	public final int sleep(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1) {
-		@Pc(9) long local9 = (long) arg0 * 1000000L;
-		@Pc(14) long local14 = this.aLong142 - System.nanoTime();
-		if (local9 > local14) {
-			local14 = local9;
+	public final int sleep(@OriginalArg(1) int minSleep, @OriginalArg(2) int tickInterval) {
+		@Pc(9) long minSleepNano = (long) minSleep * 1000000L;
+		@Pc(14) long sleepNano = this.nextTickNano - System.nanoTime();
+		if (minSleepNano > sleepNano) {
+			sleepNano = minSleepNano;
 		}
-		ThreadUtils.sleep(local14 / 1000000L);
-		@Pc(31) int local31 = 0;
-		@Pc(33) long local33 = System.nanoTime();
-		while (local31 < 10 && (local31 < 1 || this.aLong142 < local33)) {
-			local31++;
-			this.aLong142 += (long) arg1 * 1000000L;
+		ThreadUtils.sleep(sleepNano / 1000000L);
+		@Pc(31) int ticks = 0;
+		@Pc(33) long now = System.nanoTime();
+		while (ticks < 10 && (ticks < 1 || this.nextTickNano < now)) {
+			ticks++;
+			this.nextTickNano += (long) tickInterval * 1000000L;
 		}
-		if (local33 > this.aLong142) {
-			this.aLong142 = local33;
+		if (now > this.nextTickNano) {
+			this.nextTickNano = now;
 		}
-		return local31;
+		return ticks;
 	}
 
 	@Override
-	public int count(int arg0, int arg1) {
-		@Pc(9) long local9 = (long) arg0 * 1000000L;
-		@Pc(14) long local14 = this.aLong142 - System.nanoTime();
-		if (local9 > local14) {
-			local14 = local9;
+	public int count(int minSleep, int tickInterval) {
+		@Pc(9) long minSleepNano = (long) minSleep * 1000000L;
+		@Pc(14) long sleepNano = this.nextTickNano - System.nanoTime();
+		if (minSleepNano > sleepNano) {
+			sleepNano = minSleepNano;
 		}
-		@Pc(31) int local31 = 0;
-		@Pc(33) long local33 = System.nanoTime();
-		while (local31 < 10 && (local31 < 1 || this.aLong142 < local33)) {
-			local31++;
-			this.aLong142 += (long) arg1 * 1000000L;
+		@Pc(31) int ticks = 0;
+		@Pc(33) long now = System.nanoTime();
+		while (ticks < 10 && (ticks < 1 || this.nextTickNano < now)) {
+			ticks++;
+			this.nextTickNano += (long) tickInterval * 1000000L;
 		}
-		if (local33 > this.aLong142) {
-			this.aLong142 = local33;
+		if (now > this.nextTickNano) {
+			this.nextTickNano = now;
 		}
-		return local31;
+		return ticks;
 	}
 }

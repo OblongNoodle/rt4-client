@@ -8,11 +8,11 @@ import org.openrs2.deob.annotation.OriginalMember;
 public abstract class MixerListener extends Node {
 
 	@OriginalMember(owner = "client!cc", name = "p", descriptor = "I")
-	public int anInt905;
+	public int delay;
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(Lclient!ei;)I")
-	public abstract int method779(@OriginalArg(0) MixerPcmStream arg0);
+	public abstract int process(@OriginalArg(0) MixerPcmStream stream);
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "()V")
-	public abstract void method780();
+	public abstract void onRemoved();
 }

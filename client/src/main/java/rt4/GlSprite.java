@@ -18,10 +18,10 @@ public class GlSprite extends Sprite {
 	public int powerOfTwoHeight;
 
 	@OriginalMember(owner = "client!cf", name = "db", descriptor = "I")
-	private int anInt1875;
+	private int contextId;
 
 	@OriginalMember(owner = "client!cf", name = "L", descriptor = "I")
-	protected int anInt1869 = 0;
+	protected int textureDataSize = 0;
 
 	@OriginalMember(owner = "client!cf", name = "ab", descriptor = "I")
 	public int textureId = -1;
@@ -29,45 +29,45 @@ public class GlSprite extends Sprite {
 	public int[] pixels;
 
 	@OriginalMember(owner = "client!cf", name = "Z", descriptor = "I")
-	private int anInt1871 = -1;
+	private int displayListId = -1;
 
 	@OriginalMember(owner = "client!cf", name = "bb", descriptor = "I")
-	private int anInt1873 = 0;
+	private int filterMode = 0;
 
 	@OriginalMember(owner = "client!cf", name = "<init>", descriptor = "(IIIIII[I)V")
-	public GlSprite(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int[] arg6) {
-		this.anInt1860 = arg0;
-		this.anInt1866 = arg1;
-		this.anInt1863 = arg2;
-		this.anInt1861 = arg3;
-		this.width = arg4;
-		this.height = arg5;
-		this.pixels = arg6;
-		this.method1430(arg6);
-		this.method1431();
+	public GlSprite(@OriginalArg(0) int innerWidth, @OriginalArg(1) int innerHeight, @OriginalArg(2) int xOffset, @OriginalArg(3) int yOffset, @OriginalArg(4) int width, @OriginalArg(5) int height, @OriginalArg(6) int[] pixels) {
+		this.innerWidth = innerWidth;
+		this.innerHeight = innerHeight;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		this.width = width;
+		this.height = height;
+		this.pixels = pixels;
+		this.uploadPixels(pixels);
+		this.compileDisplayList();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "<init>", descriptor = "(Lclient!mm;)V")
-	public GlSprite(@OriginalArg(0) SoftwareSprite arg0) {
-		this.anInt1860 = arg0.anInt1860;
-		this.anInt1866 = arg0.anInt1866;
-		this.anInt1863 = arg0.anInt1863;
-		this.anInt1861 = arg0.anInt1861;
-		this.width = arg0.width;
-		this.height = arg0.height;
-		this.pixels = arg0.pixels;
-		this.method1430(arg0.pixels);
-		this.method1431();
+	public GlSprite(@OriginalArg(0) SoftwareSprite src) {
+		this.innerWidth = src.innerWidth;
+		this.innerHeight = src.innerHeight;
+		this.xOffset = src.xOffset;
+		this.yOffset = src.yOffset;
+		this.width = src.width;
+		this.height = src.height;
+		this.pixels = src.pixels;
+		this.uploadPixels(src.pixels);
+		this.compileDisplayList();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "d", descriptor = "(I)V")
-	private void method1424(@OriginalArg(0) int arg0) {
-		if (this.anInt1873 == arg0) {
+	private void setTextureFilter(@OriginalArg(0) int mode) {
+		if (this.filterMode == mode) {
 			return;
 		}
-		this.anInt1873 = arg0;
+		this.filterMode = mode;
 		@Pc(9) GL2 gl = GlRenderer.gl;
-		if (arg0 == 2) {
+		if (mode == 2) {
 			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 		} else {
@@ -77,43 +77,43 @@ public class GlSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "(IILclient!cf;)V")
-	public final void method1425(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) GlSprite arg2) {
-		if (arg2 == null) {
+	public final void renderClipped(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) GlSprite clipMask) {
+		if (clipMask == null) {
 			return;
 		}
-		GlRenderer.method4149();
-		GlRenderer.setTextureId(arg2.textureId);
-		arg2.method1424(1);
+		GlRenderer.begin2DReplace();
+		GlRenderer.setTextureId(clipMask.textureId);
+		clipMask.setTextureFilter(1);
 		@Pc(11) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
+		this.setTextureFilter(1);
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glEnable(GL2.GL_TEXTURE_2D);
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, arg2.textureId);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, clipMask.textureId);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_REPLACE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_PREVIOUS);
-		@Pc(47) float local47 = (float) (arg0 - GlRaster.clipLeft) / (float) arg2.powerOfTwoWidth;
-		@Pc(56) float local56 = (float) (arg1 - GlRaster.clipTop) / (float) arg2.powerOfTwoHeight;
-		@Pc(68) float local68 = (float) (arg0 + this.width - GlRaster.clipLeft) / (float) arg2.powerOfTwoWidth;
-		@Pc(80) float local80 = (float) (arg1 + this.height - GlRaster.clipTop) / (float) arg2.powerOfTwoHeight;
-		@Pc(85) int local85 = arg0 + this.anInt1863;
-		@Pc(90) int local90 = arg1 + this.anInt1861;
+		@Pc(47) float clipU0 = (float) (x - GlRaster.clipLeft) / (float) clipMask.powerOfTwoWidth;
+		@Pc(56) float clipV0 = (float) (y - GlRaster.clipTop) / (float) clipMask.powerOfTwoHeight;
+		@Pc(68) float clipU1 = (float) (x + this.width - GlRaster.clipLeft) / (float) clipMask.powerOfTwoWidth;
+		@Pc(80) float clipV1 = (float) (y + this.height - GlRaster.clipTop) / (float) clipMask.powerOfTwoHeight;
+		@Pc(85) int drawX = x + this.xOffset;
+		@Pc(90) int drawY = y + this.yOffset;
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 		gl.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		@Pc(107) float local107 = (float) this.width / (float) this.powerOfTwoWidth;
-		@Pc(115) float local115 = (float) this.height / (float) this.powerOfTwoHeight;
-		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, local68, local56);
-		gl.glTexCoord2f(local107, 0.0F);
-		gl.glVertex2f((float) (local85 + this.width), (float) (GlRenderer.canvasHeight - local90));
-		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, local47, local56);
+		@Pc(107) float texU = (float) this.width / (float) this.powerOfTwoWidth;
+		@Pc(115) float texV = (float) this.height / (float) this.powerOfTwoHeight;
+		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, clipU1, clipV0);
+		gl.glTexCoord2f(texU, 0.0F);
+		gl.glVertex2f((float) (drawX + this.width), (float) (GlRenderer.canvasHeight - drawY));
+		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, clipU0, clipV0);
 		gl.glTexCoord2f(0.0F, 0.0F);
-		gl.glVertex2f((float) local85, (float) (GlRenderer.canvasHeight - local90));
-		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, local47, local80);
-		gl.glTexCoord2f(0.0F, local115);
-		gl.glVertex2f((float) local85, (float) (GlRenderer.canvasHeight - local90 - this.height));
-		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, local68, local80);
-		gl.glTexCoord2f(local107, local115);
-		gl.glVertex2f((float) (local85 + this.width), (float) (GlRenderer.canvasHeight - local90 - this.height));
+		gl.glVertex2f((float) drawX, (float) (GlRenderer.canvasHeight - drawY));
+		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, clipU0, clipV1);
+		gl.glTexCoord2f(0.0F, texV);
+		gl.glVertex2f((float) drawX, (float) (GlRenderer.canvasHeight - drawY - this.height));
+		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, clipU1, clipV1);
+		gl.glTexCoord2f(texU, texV);
+		gl.glVertex2f((float) (drawX + this.width), (float) (GlRenderer.canvasHeight - drawY - this.height));
 		gl.glEnd();
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_MODULATE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_TEXTURE);
@@ -122,87 +122,87 @@ public class GlSprite extends Sprite {
 	}
 
 	@OriginalMember(owner = "client!cf", name = "c", descriptor = "(IIIII)V")
-	public final void method1426(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		GlRenderer.method4155();
+	public final void renderTiledAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int alpha, @OriginalArg(3) int tilesX, @OriginalArg(4) int tilesY) {
+		GlRenderer.begin2DModulateAlt();
 		@Pc(2) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
-		@Pc(16) float local16 = (float) this.width / (float) this.powerOfTwoWidth;
-		@Pc(24) float local24 = (float) this.height / (float) this.powerOfTwoHeight;
-		@Pc(29) float local29 = local16 * (float) arg3;
-		@Pc(34) float local34 = local24 * (float) arg4;
-		@Pc(39) int local39 = arg0 + this.anInt1863;
-		@Pc(46) int local46 = local39 + this.width * arg3;
-		@Pc(53) int local53 = GlRenderer.canvasHeight - arg1 - this.anInt1861;
-		@Pc(60) int local60 = local53 - this.height * arg4;
-		@Pc(65) float local65 = (float) arg2 / 256.0F;
+		this.setTextureFilter(1);
+		@Pc(16) float texU = (float) this.width / (float) this.powerOfTwoWidth;
+		@Pc(24) float texV = (float) this.height / (float) this.powerOfTwoHeight;
+		@Pc(29) float totalU = texU * (float) tilesX;
+		@Pc(34) float totalV = texV * (float) tilesY;
+		@Pc(39) int left = x + this.xOffset;
+		@Pc(46) int right = left + this.width * tilesX;
+		@Pc(53) int top = GlRenderer.canvasHeight - y - this.yOffset;
+		@Pc(60) int bottom = top - this.height * tilesY;
+		@Pc(65) float alphaF = (float) alpha / 256.0F;
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		gl.glColor4f(1.0F, 1.0F, 1.0F, local65);
-		gl.glTexCoord2f(local29, 0.0F);
-		gl.glVertex2f((float) local46, (float) local53);
+		gl.glColor4f(1.0F, 1.0F, 1.0F, alphaF);
+		gl.glTexCoord2f(totalU, 0.0F);
+		gl.glVertex2f((float) right, (float) top);
 		gl.glTexCoord2f(0.0F, 0.0F);
-		gl.glVertex2f((float) local39, (float) local53);
-		gl.glTexCoord2f(0.0F, local34);
-		gl.glVertex2f((float) local39, (float) local60);
-		gl.glTexCoord2f(local29, local34);
-		gl.glVertex2f((float) local46, (float) local60);
+		gl.glVertex2f((float) left, (float) top);
+		gl.glTexCoord2f(0.0F, totalV);
+		gl.glVertex2f((float) left, (float) bottom);
+		gl.glTexCoord2f(totalU, totalV);
+		gl.glVertex2f((float) right, (float) bottom);
 		gl.glEnd();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "(IIIIIIIILclient!cf;)V")
-	public final void renderRotatedTransparent(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) GlSprite arg8) {
-		if (arg8 == null) {
+	public final void renderRotatedTransparent(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int destWidth, @OriginalArg(3) int destHeight, @OriginalArg(4) int srcX, @OriginalArg(5) int srcY, @OriginalArg(6) int angle, @OriginalArg(7) int zoom, @OriginalArg(8) GlSprite clipMask) {
+		if (clipMask == null) {
 			return;
 		}
-		GlRenderer.method4149();
-		GlRenderer.setTextureId(arg8.textureId);
-		arg8.method1424(1);
+		GlRenderer.begin2DReplace();
+		GlRenderer.setTextureId(clipMask.textureId);
+		clipMask.setTextureFilter(1);
 		@Pc(11) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
 		if (GlobalConfig.BILINEAR_MINIMAP) {
-			this.method1424(2);
+			this.setTextureFilter(2);
 		} else {
-			this.method1424(1);
+			this.setTextureFilter(1);
 		}
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glEnable(GL2.GL_TEXTURE_2D);
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, arg8.textureId);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, clipMask.textureId);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_REPLACE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_PREVIOUS);
-		@Pc(43) int local43 = -arg2 / 2;
-		@Pc(48) int local48 = -arg3 / 2;
-		@Pc(51) int local51 = -local43;
-		@Pc(54) int local54 = -local48;
-		@Pc(63) int local63 = (int) (Math.sin((double) arg6 / 326.11D) * 65536.0D);
-		@Pc(72) int local72 = (int) (Math.cos((double) arg6 / 326.11D) * 65536.0D);
-		@Pc(78) int local78 = local63 * arg7 >> 8;
-		@Pc(84) int local84 = local72 * arg7 >> 8;
-		@Pc(96) int local96 = (arg4 << 16) + local48 * local78 + local43 * local84;
-		@Pc(108) int local108 = (arg5 << 16) + (local48 * local84 - local43 * local78);
-		@Pc(120) int local120 = (arg4 << 16) + local48 * local78 + local51 * local84;
-		@Pc(132) int local132 = (arg5 << 16) + (local48 * local84 - local51 * local78);
-		@Pc(144) int local144 = (arg4 << 16) + local54 * local78 + local43 * local84;
-		@Pc(156) int local156 = (arg5 << 16) + (local54 * local84 - local43 * local78);
-		@Pc(168) int local168 = (arg4 << 16) + local54 * local78 + local51 * local84;
-		@Pc(180) int local180 = (arg5 << 16) + (local54 * local84 - local51 * local78);
-		@Pc(188) float local188 = (float) arg8.width / (float) arg8.powerOfTwoWidth;
-		@Pc(196) float local196 = (float) arg8.height / (float) arg8.powerOfTwoHeight;
+		@Pc(43) int halfW = -destWidth / 2;
+		@Pc(48) int halfH = -destHeight / 2;
+		@Pc(51) int halfWPos = -halfW;
+		@Pc(54) int halfHPos = -halfH;
+		@Pc(63) int sinAngle = (int) (Math.sin((double) angle / 326.11D) * 65536.0D);
+		@Pc(72) int cosAngle = (int) (Math.cos((double) angle / 326.11D) * 65536.0D);
+		@Pc(78) int scaledSin = sinAngle * zoom >> 8;
+		@Pc(84) int scaledCos = cosAngle * zoom >> 8;
+		@Pc(96) int tlX = (srcX << 16) + halfH * scaledSin + halfW * scaledCos;
+		@Pc(108) int tlY = (srcY << 16) + (halfH * scaledCos - halfW * scaledSin);
+		@Pc(120) int trX = (srcX << 16) + halfH * scaledSin + halfWPos * scaledCos;
+		@Pc(132) int trY = (srcY << 16) + (halfH * scaledCos - halfWPos * scaledSin);
+		@Pc(144) int blX = (srcX << 16) + halfHPos * scaledSin + halfW * scaledCos;
+		@Pc(156) int blY = (srcY << 16) + (halfHPos * scaledCos - halfW * scaledSin);
+		@Pc(168) int brX = (srcX << 16) + halfHPos * scaledSin + halfWPos * scaledCos;
+		@Pc(180) int brY = (srcY << 16) + (halfHPos * scaledCos - halfWPos * scaledSin);
+		@Pc(188) float maskU = (float) clipMask.width / (float) clipMask.powerOfTwoWidth;
+		@Pc(196) float maskV = (float) clipMask.height / (float) clipMask.powerOfTwoHeight;
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 		gl.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		@Pc(211) float local211 = (float) this.powerOfTwoWidth * 65536.0F;
-		@Pc(217) float local217 = (float) (this.powerOfTwoHeight * 65536);
-		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, local188, 0.0F);
-		gl.glTexCoord2f((float) local120 / local211, (float) local132 / local217);
-		gl.glVertex2f((float) (arg0 + arg2), (float) (GlRenderer.canvasHeight - arg1));
+		@Pc(211) float texWidthF = (float) this.powerOfTwoWidth * 65536.0F;
+		@Pc(217) float texHeightF = (float) (this.powerOfTwoHeight * 65536);
+		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, maskU, 0.0F);
+		gl.glTexCoord2f((float) trX / texWidthF, (float) trY / texHeightF);
+		gl.glVertex2f((float) (x + destWidth), (float) (GlRenderer.canvasHeight - y));
 		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, 0.0F, 0.0F);
-		gl.glTexCoord2f((float) local96 / local211, (float) local108 / local217);
-		gl.glVertex2f((float) arg0, (float) (GlRenderer.canvasHeight - arg1));
-		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, 0.0F, local196);
-		gl.glTexCoord2f((float) local144 / local211, (float) local156 / local217);
-		gl.glVertex2f((float) arg0, (float) (GlRenderer.canvasHeight - arg1 - arg3));
-		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, local188, local196);
-		gl.glTexCoord2f((float) local168 / local211, (float) local180 / local217);
-		gl.glVertex2f((float) (arg0 + arg2), (float) (GlRenderer.canvasHeight - arg1 - arg3));
+		gl.glTexCoord2f((float) tlX / texWidthF, (float) tlY / texHeightF);
+		gl.glVertex2f((float) x, (float) (GlRenderer.canvasHeight - y));
+		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, 0.0F, maskV);
+		gl.glTexCoord2f((float) blX / texWidthF, (float) blY / texHeightF);
+		gl.glVertex2f((float) x, (float) (GlRenderer.canvasHeight - y - destHeight));
+		gl.glMultiTexCoord2f(GL2.GL_TEXTURE1, maskU, maskV);
+		gl.glTexCoord2f((float) brX / texWidthF, (float) brY / texHeightF);
+		gl.glVertex2f((float) (x + destWidth), (float) (GlRenderer.canvasHeight - y - destHeight));
 		gl.glEnd();
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_MODULATE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_TEXTURE);
@@ -212,24 +212,24 @@ public class GlSprite extends Sprite {
 
 	@OriginalMember(owner = "client!cf", name = "d", descriptor = "(II)V")
 	@Override
-	public final void renderHorizontalFlip(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		GlRenderer.method4149();
-		@Pc(5) int local5 = arg0 + this.anInt1863;
-		@Pc(10) int local10 = arg1 + this.anInt1861;
+	public final void renderHorizontalFlip(@OriginalArg(0) int x, @OriginalArg(1) int y) {
+		GlRenderer.begin2DReplace();
+		@Pc(5) int drawX = x + this.xOffset;
+		@Pc(10) int drawY = y + this.yOffset;
 		@Pc(12) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
-		gl.glTranslatef((float) local5, (float) (GlRenderer.canvasHeight - local10), 0.0F);
-		@Pc(35) float local35 = (float) this.width / (float) this.powerOfTwoWidth;
-		@Pc(43) float local43 = (float) this.height / (float) this.powerOfTwoHeight;
+		this.setTextureFilter(1);
+		gl.glTranslatef((float) drawX, (float) (GlRenderer.canvasHeight - drawY), 0.0F);
+		@Pc(35) float texU = (float) this.width / (float) this.powerOfTwoWidth;
+		@Pc(43) float texV = (float) this.height / (float) this.powerOfTwoHeight;
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 		gl.glTexCoord2f(0.0F, 0.0F);
 		gl.glVertex2f((float) this.width, 0.0F);
-		gl.glTexCoord2f(local35, 0.0F);
+		gl.glTexCoord2f(texU, 0.0F);
 		gl.glVertex2f(0.0F, 0.0F);
-		gl.glTexCoord2f(local35, local43);
+		gl.glTexCoord2f(texU, texV);
 		gl.glVertex2f(0.0F, (float) -this.height);
-		gl.glTexCoord2f(0.0F, local43);
+		gl.glTexCoord2f(0.0F, texV);
 		gl.glVertex2f((float) this.width, (float) -this.height);
 		gl.glEnd();
 		gl.glLoadIdentity();
@@ -237,97 +237,97 @@ public class GlSprite extends Sprite {
 
 	@OriginalMember(owner = "client!cf", name = "e", descriptor = "(II)V")
 	@Override
-	public final void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		GlRenderer.method4149();
-		@Pc(5) int local5 = arg0 + this.anInt1863;
-		@Pc(10) int local10 = arg1 + this.anInt1861;
+	public final void render(@OriginalArg(0) int x, @OriginalArg(1) int y) {
+		GlRenderer.begin2DReplace();
+		@Pc(5) int drawX = x + this.xOffset;
+		@Pc(10) int drawY = y + this.yOffset;
 		@Pc(12) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
-		gl.glTranslatef((float) local5, (float) (GlRenderer.canvasHeight - local10), 0.0F);
-		gl.glCallList(this.anInt1871);
+		this.setTextureFilter(1);
+		gl.glTranslatef((float) drawX, (float) (GlRenderer.canvasHeight - drawY), 0.0F);
+		gl.glCallList(this.displayListId);
 		gl.glLoadIdentity();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "b", descriptor = "(IIIIII)V")
-	public final void method1428(@OriginalArg(2) int arg0, @OriginalArg(3) int arg1, @OriginalArg(4) int arg2) {
-		GlRenderer.method4149();
+	public final void renderRotatedFixed(@OriginalArg(2) int centerX, @OriginalArg(3) int centerY, @OriginalArg(4) int angle) {
+		GlRenderer.begin2DReplace();
 		@Pc(2) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(2);
-		@Pc(15) int local15 = 240 - (this.anInt1863 << 4);
-		@Pc(22) int local22 = 240 - (this.anInt1861 << 4);
-		gl.glTranslatef((float) arg0 / 16.0F, (float) GlRenderer.canvasHeight - (float) arg1 / 16.0F, 0.0F);
-		gl.glRotatef((float) -arg2 * 0.005493164F, 0.0F, 0.0F, 1.0F);
-		gl.glTranslatef((float) -local15 / 16.0F, (float) local22 / 16.0F, 0.0F);
-		gl.glCallList(this.anInt1871);
+		this.setTextureFilter(2);
+		@Pc(15) int originX = 240 - (this.xOffset << 4);
+		@Pc(22) int originY = 240 - (this.yOffset << 4);
+		gl.glTranslatef((float) centerX / 16.0F, (float) GlRenderer.canvasHeight - (float) centerY / 16.0F, 0.0F);
+		gl.glRotatef((float) -angle * 0.005493164F, 0.0F, 0.0F, 1.0F);
+		gl.glTranslatef((float) -originX / 16.0F, (float) originY / 16.0F, 0.0F);
+		gl.glCallList(this.displayListId);
 		gl.glLoadIdentity();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "(IIII)V")
 	@Override
-	public final void renderResized(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		if (arg2 <= 0 || arg3 <= 0) {
+	public final void renderResized(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int destWidth, @OriginalArg(3) int destHeight) {
+		if (destWidth <= 0 || destHeight <= 0) {
 			return;
 		}
-		GlRenderer.method4149();
-		@Pc(8) int local8 = this.width;
-		@Pc(11) int local11 = this.height;
-		@Pc(13) int local13 = 0;
-		@Pc(15) int local15 = 0;
-		@Pc(18) int local18 = this.anInt1860;
-		@Pc(21) int local21 = this.anInt1866;
-		@Pc(27) int local27 = (local18 << 16) / arg2;
-		@Pc(33) int local33 = (local21 << 16) / arg3;
-		@Pc(47) int local47;
-		if (this.anInt1863 > 0) {
-			local47 = ((this.anInt1863 << 16) + local27 - 1) / local27;
-			arg0 += local47;
-			local13 = local47 * local27 - (this.anInt1863 << 16);
+		GlRenderer.begin2DReplace();
+		@Pc(8) int srcWidth = this.width;
+		@Pc(11) int srcHeight = this.height;
+		@Pc(13) int srcOffX = 0;
+		@Pc(15) int srcOffY = 0;
+		@Pc(18) int totalWidth = this.innerWidth;
+		@Pc(21) int totalHeight = this.innerHeight;
+		@Pc(27) int scaleX = (totalWidth << 16) / destWidth;
+		@Pc(33) int scaleY = (totalHeight << 16) / destHeight;
+		@Pc(47) int adj;
+		if (this.xOffset > 0) {
+			adj = ((this.xOffset << 16) + scaleX - 1) / scaleX;
+			x += adj;
+			srcOffX = adj * scaleX - (this.xOffset << 16);
 		}
-		if (this.anInt1861 > 0) {
-			local47 = ((this.anInt1861 << 16) + local33 - 1) / local33;
-			arg1 += local47;
-			local15 = local47 * local33 - (this.anInt1861 << 16);
+		if (this.yOffset > 0) {
+			adj = ((this.yOffset << 16) + scaleY - 1) / scaleY;
+			y += adj;
+			srcOffY = adj * scaleY - (this.yOffset << 16);
 		}
-		if (local8 < local18) {
-			arg2 = ((local8 << 16) + local27 - local13 - 1) / local27;
+		if (srcWidth < totalWidth) {
+			destWidth = ((srcWidth << 16) + scaleX - srcOffX - 1) / scaleX;
 		}
-		if (local11 < local21) {
-			arg3 = ((local11 << 16) + local33 - local15 - 1) / local33;
+		if (srcHeight < totalHeight) {
+			destHeight = ((srcHeight << 16) + scaleY - srcOffY - 1) / scaleY;
 		}
 		@Pc(123) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(2);
-		@Pc(132) float local132 = (float) arg0;
-		@Pc(137) float local137 = local132 + (float) arg2;
-		@Pc(142) float local142 = (float) (GlRenderer.canvasHeight - arg1);
-		@Pc(147) float local147 = local142 - (float) arg3;
-		@Pc(155) float local155 = (float) this.width / (float) this.powerOfTwoWidth;
-		@Pc(163) float local163 = (float) this.height / (float) this.powerOfTwoHeight;
+		this.setTextureFilter(2);
+		@Pc(132) float left = (float) x;
+		@Pc(137) float right = left + (float) destWidth;
+		@Pc(142) float top = (float) (GlRenderer.canvasHeight - y);
+		@Pc(147) float bottom = top - (float) destHeight;
+		@Pc(155) float texU = (float) this.width / (float) this.powerOfTwoWidth;
+		@Pc(163) float texV = (float) this.height / (float) this.powerOfTwoHeight;
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		gl.glTexCoord2f(local155, 0.0F);
-		gl.glVertex2f(local137, local142);
+		gl.glTexCoord2f(texU, 0.0F);
+		gl.glVertex2f(right, top);
 		gl.glTexCoord2f(0.0F, 0.0F);
-		gl.glVertex2f(local132, local142);
-		gl.glTexCoord2f(0.0F, local163);
-		gl.glVertex2f(local132, local147);
-		gl.glTexCoord2f(local155, local163);
-		gl.glVertex2f(local137, local147);
+		gl.glVertex2f(left, top);
+		gl.glTexCoord2f(0.0F, texV);
+		gl.glVertex2f(left, bottom);
+		gl.glTexCoord2f(texU, texV);
+		gl.glVertex2f(right, bottom);
 		gl.glEnd();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "c", descriptor = "(II)V")
 	@Override
-	public final void drawPixels(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		GlRenderer.method4149();
-		@Pc(5) int local5 = arg0 + this.anInt1863;
-		@Pc(10) int local10 = arg1 + this.anInt1861;
+	public final void drawPixels(@OriginalArg(0) int x, @OriginalArg(1) int y) {
+		GlRenderer.begin2DReplace();
+		@Pc(5) int drawX = x + this.xOffset;
+		@Pc(10) int drawY = y + this.yOffset;
 		@Pc(12) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
-		gl.glTranslatef((float) local5, (float) (GlRenderer.canvasHeight - local10), 0.0F);
-		gl.glCallList(this.anInt1871);
+		this.setTextureFilter(1);
+		gl.glTranslatef((float) drawX, (float) (GlRenderer.canvasHeight - drawY), 0.0F);
+		gl.glCallList(this.displayListId);
 		gl.glLoadIdentity();
 	}
 
@@ -335,186 +335,186 @@ public class GlSprite extends Sprite {
 	@Override
 	public final void finalize() throws Throwable {
 		if (this.textureId != -1) {
-			GlCleaner.deleteTexture2d(this.textureId, this.anInt1869, this.anInt1875);
+			GlCleaner.deleteTexture2d(this.textureId, this.textureDataSize, this.contextId);
 			this.textureId = -1;
-			this.anInt1869 = 0;
+			this.textureDataSize = 0;
 		}
-		if (this.anInt1871 != -1) {
-			GlCleaner.deleteList(this.anInt1871, this.anInt1875);
-			this.anInt1871 = -1;
+		if (this.displayListId != -1) {
+			GlCleaner.deleteList(this.displayListId, this.contextId);
+			this.displayListId = -1;
 		}
 		super.finalize();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "(IIIIII)V")
 	@Override
-	protected final void method1416(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		GlRenderer.method4149();
+	protected final void drawRotatedScaled(@OriginalArg(0) int pivotX, @OriginalArg(1) int pivotY, @OriginalArg(2) int centerX, @OriginalArg(3) int centerY, @OriginalArg(4) int angle, @OriginalArg(5) int scale) {
+		GlRenderer.begin2DReplace();
 		@Pc(2) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
-		@Pc(15) int local15 = arg0 - (this.anInt1863 << 4);
-		@Pc(22) int local22 = arg1 - (this.anInt1861 << 4);
-		gl.glTranslatef((float) arg2 / 16.0F, (float) GlRenderer.canvasHeight - (float) arg3 / 16.0F, 0.0F);
-		gl.glRotatef((float) arg4 * 0.005493164F, 0.0F, 0.0F, 1.0F);
-		if (arg5 != 4096) {
-			gl.glScalef((float) arg5 / 4096.0F, (float) arg5 / 4096.0F, 0.0F);
+		this.setTextureFilter(1);
+		@Pc(15) int originX = pivotX - (this.xOffset << 4);
+		@Pc(22) int originY = pivotY - (this.yOffset << 4);
+		gl.glTranslatef((float) centerX / 16.0F, (float) GlRenderer.canvasHeight - (float) centerY / 16.0F, 0.0F);
+		gl.glRotatef((float) angle * 0.005493164F, 0.0F, 0.0F, 1.0F);
+		if (scale != 4096) {
+			gl.glScalef((float) scale / 4096.0F, (float) scale / 4096.0F, 0.0F);
 		}
-		gl.glTranslatef((float) -local15 / 16.0F, (float) local22 / 16.0F, 0.0F);
-		gl.glCallList(this.anInt1871);
+		gl.glTranslatef((float) -originX / 16.0F, (float) originY / 16.0F, 0.0F);
+		gl.glCallList(this.displayListId);
 		gl.glLoadIdentity();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "b", descriptor = "(IIIII)V")
 	@Override
-	public final void renderAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg2 <= 0 || arg3 <= 0) {
+	public final void renderAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int destWidth, @OriginalArg(3) int destHeight, @OriginalArg(4) int alpha) {
+		if (destWidth <= 0 || destHeight <= 0) {
 			return;
 		}
-		GlRenderer.method4155();
-		@Pc(8) int local8 = this.width;
-		@Pc(11) int local11 = this.height;
-		@Pc(13) int local13 = 0;
-		@Pc(15) int local15 = 0;
-		@Pc(18) int local18 = this.anInt1860;
-		@Pc(21) int local21 = this.anInt1866;
-		@Pc(27) int local27 = (local18 << 16) / arg2;
-		@Pc(33) int local33 = (local21 << 16) / arg3;
-		@Pc(47) int local47;
-		if (this.anInt1863 > 0) {
-			local47 = ((this.anInt1863 << 16) + local27 - 1) / local27;
-			arg0 += local47;
-			local13 = local47 * local27 - (this.anInt1863 << 16);
+		GlRenderer.begin2DModulateAlt();
+		@Pc(8) int srcWidth = this.width;
+		@Pc(11) int srcHeight = this.height;
+		@Pc(13) int srcOffX = 0;
+		@Pc(15) int srcOffY = 0;
+		@Pc(18) int totalWidth = this.innerWidth;
+		@Pc(21) int totalHeight = this.innerHeight;
+		@Pc(27) int scaleX = (totalWidth << 16) / destWidth;
+		@Pc(33) int scaleY = (totalHeight << 16) / destHeight;
+		@Pc(47) int adj;
+		if (this.xOffset > 0) {
+			adj = ((this.xOffset << 16) + scaleX - 1) / scaleX;
+			x += adj;
+			srcOffX = adj * scaleX - (this.xOffset << 16);
 		}
-		if (this.anInt1861 > 0) {
-			local47 = ((this.anInt1861 << 16) + local33 - 1) / local33;
-			arg1 += local47;
-			local15 = local47 * local33 - (this.anInt1861 << 16);
+		if (this.yOffset > 0) {
+			adj = ((this.yOffset << 16) + scaleY - 1) / scaleY;
+			y += adj;
+			srcOffY = adj * scaleY - (this.yOffset << 16);
 		}
-		if (local8 < local18) {
-			arg2 = ((local8 << 16) + local27 - local13 - 1) / local27;
+		if (srcWidth < totalWidth) {
+			destWidth = ((srcWidth << 16) + scaleX - srcOffX - 1) / scaleX;
 		}
-		if (local11 < local21) {
-			arg3 = ((local11 << 16) + local33 - local15 - 1) / local33;
+		if (srcHeight < totalHeight) {
+			destHeight = ((srcHeight << 16) + scaleY - srcOffY - 1) / scaleY;
 		}
 		@Pc(123) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
-		@Pc(132) float local132 = (float) arg0;
-		@Pc(137) float local137 = local132 + (float) arg2;
-		@Pc(142) float local142 = (float) (GlRenderer.canvasHeight - arg1);
-		@Pc(147) float local147 = local142 - (float) arg3;
-		@Pc(155) float local155 = (float) this.width / (float) this.powerOfTwoWidth;
-		@Pc(163) float local163 = (float) this.height / (float) this.powerOfTwoHeight;
-		@Pc(168) float local168 = (float) arg4 / 256.0F;
+		this.setTextureFilter(1);
+		@Pc(132) float left = (float) x;
+		@Pc(137) float right = left + (float) destWidth;
+		@Pc(142) float top = (float) (GlRenderer.canvasHeight - y);
+		@Pc(147) float bottom = top - (float) destHeight;
+		@Pc(155) float texU = (float) this.width / (float) this.powerOfTwoWidth;
+		@Pc(163) float texV = (float) this.height / (float) this.powerOfTwoHeight;
+		@Pc(168) float alphaF = (float) alpha / 256.0F;
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		gl.glColor4f(1.0F, 1.0F, 1.0F, local168);
-		gl.glTexCoord2f(local155, 0.0F);
-		gl.glVertex2f(local137, local142);
+		gl.glColor4f(1.0F, 1.0F, 1.0F, alphaF);
+		gl.glTexCoord2f(texU, 0.0F);
+		gl.glVertex2f(right, top);
 		gl.glTexCoord2f(0.0F, 0.0F);
-		gl.glVertex2f(local132, local142);
-		gl.glTexCoord2f(0.0F, local163);
-		gl.glVertex2f(local132, local147);
-		gl.glTexCoord2f(local155, local163);
-		gl.glVertex2f(local137, local147);
+		gl.glVertex2f(left, top);
+		gl.glTexCoord2f(0.0F, texV);
+		gl.glVertex2f(left, bottom);
+		gl.glTexCoord2f(texU, texV);
+		gl.glVertex2f(right, bottom);
 		gl.glEnd();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "b", descriptor = "(IIII)V")
-	public final void method1429(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		GlRenderer.method4149();
+	public final void renderTiled(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int tilesX, @OriginalArg(3) int tilesY) {
+		GlRenderer.begin2DReplace();
 		@Pc(2) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
-		@Pc(16) float local16 = (float) this.width / (float) this.powerOfTwoWidth;
-		@Pc(24) float local24 = (float) this.height / (float) this.powerOfTwoHeight;
-		@Pc(29) float local29 = local16 * (float) arg2;
-		@Pc(34) float local34 = local24 * (float) arg3;
-		@Pc(39) int local39 = arg0 + this.anInt1863;
-		@Pc(46) int local46 = local39 + this.width * arg2;
-		@Pc(53) int local53 = GlRenderer.canvasHeight - arg1 - this.anInt1861;
-		@Pc(60) int local60 = local53 - this.height * arg3;
+		this.setTextureFilter(1);
+		@Pc(16) float texU = (float) this.width / (float) this.powerOfTwoWidth;
+		@Pc(24) float texV = (float) this.height / (float) this.powerOfTwoHeight;
+		@Pc(29) float totalU = texU * (float) tilesX;
+		@Pc(34) float totalV = texV * (float) tilesY;
+		@Pc(39) int left = x + this.xOffset;
+		@Pc(46) int right = left + this.width * tilesX;
+		@Pc(53) int top = GlRenderer.canvasHeight - y - this.yOffset;
+		@Pc(60) int bottom = top - this.height * tilesY;
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		gl.glTexCoord2f(local29, 0.0F);
-		gl.glVertex2f((float) local46, (float) local53);
+		gl.glTexCoord2f(totalU, 0.0F);
+		gl.glVertex2f((float) right, (float) top);
 		gl.glTexCoord2f(0.0F, 0.0F);
-		gl.glVertex2f((float) local39, (float) local53);
-		gl.glTexCoord2f(0.0F, local34);
-		gl.glVertex2f((float) local39, (float) local60);
-		gl.glTexCoord2f(local29, local34);
-		gl.glVertex2f((float) local46, (float) local60);
+		gl.glVertex2f((float) left, (float) top);
+		gl.glTexCoord2f(0.0F, totalV);
+		gl.glVertex2f((float) left, (float) bottom);
+		gl.glTexCoord2f(totalU, totalV);
+		gl.glVertex2f((float) right, (float) bottom);
 		gl.glEnd();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "([I)V")
-	protected void method1430(@OriginalArg(0) int[] arg0) {
+	protected void uploadPixels(@OriginalArg(0) int[] srcPixels) {
 		this.powerOfTwoWidth = IntUtils.clp2(this.width);
 		this.powerOfTwoHeight = IntUtils.clp2(this.height);
-		@Pc(20) byte[] local20 = new byte[this.powerOfTwoWidth * this.powerOfTwoHeight * 4];
-		@Pc(22) int local22 = 0;
-		@Pc(24) int local24 = 0;
-		@Pc(32) int local32 = (this.powerOfTwoWidth - this.width) * 4;
-		for (@Pc(34) int local34 = 0; local34 < this.height; local34++) {
-			for (@Pc(40) int local40 = 0; local40 < this.width; local40++) {
-				@Pc(49) int local49 = arg0[local24++];
-				if (local49 == 0) {
-					local22 += 4;
+		@Pc(20) byte[] rgba = new byte[this.powerOfTwoWidth * this.powerOfTwoHeight * 4];
+		@Pc(22) int destOff = 0;
+		@Pc(24) int srcOff = 0;
+		@Pc(32) int rowPadding = (this.powerOfTwoWidth - this.width) * 4;
+		for (@Pc(34) int y = 0; y < this.height; y++) {
+			for (@Pc(40) int x = 0; x < this.width; x++) {
+				@Pc(49) int pixel = srcPixels[srcOff++];
+				if (pixel == 0) {
+					destOff += 4;
 				} else {
-					local20[local22++] = (byte) (local49 >> 16);
-					local20[local22++] = (byte) (local49 >> 8);
-					local20[local22++] = (byte) local49;
-					local20[local22++] = -1;
+					rgba[destOff++] = (byte) (pixel >> 16);
+					rgba[destOff++] = (byte) (pixel >> 8);
+					rgba[destOff++] = (byte) pixel;
+					rgba[destOff++] = -1;
 				}
 			}
-			local22 += local32;
+			destOff += rowPadding;
 		}
-		@Pc(91) ByteBuffer local91 = ByteBuffer.wrap(local20);
+		@Pc(91) ByteBuffer buffer = ByteBuffer.wrap(rgba);
 		@Pc(93) GL2 gl = GlRenderer.gl;
 		if (this.textureId == -1) {
-			@Pc(100) int[] local100 = new int[1];
-			gl.glGenTextures(1, local100, 0);
-			this.textureId = local100[0];
-			this.anInt1875 = GlCleaner.contextId;
+			@Pc(100) int[] texIds = new int[1];
+			gl.glGenTextures(1, texIds, 0);
+			this.textureId = texIds[0];
+			this.contextId = GlCleaner.contextId;
 		}
 		GlRenderer.setTextureId(this.textureId);
-		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, this.powerOfTwoWidth, this.powerOfTwoHeight, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, local91);
-		GlCleaner.onCard2d += local91.limit() - this.anInt1869;
-		this.anInt1869 = local91.limit();
+		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, this.powerOfTwoWidth, this.powerOfTwoHeight, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, buffer);
+		GlCleaner.onCard2d += buffer.limit() - this.textureDataSize;
+		this.textureDataSize = buffer.limit();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "(III)V")
 	@Override
-	public final void renderAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		GlRenderer.method4155();
-		@Pc(5) int local5 = arg0 + this.anInt1863;
-		@Pc(10) int local10 = arg1 + this.anInt1861;
+	public final void renderAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int alpha) {
+		GlRenderer.begin2DModulateAlt();
+		@Pc(5) int drawX = x + this.xOffset;
+		@Pc(10) int drawY = y + this.yOffset;
 		@Pc(12) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
-		this.method1424(1);
-		gl.glColor4f(1.0F, 1.0F, 1.0F, (float) arg2 / 256.0F);
-		gl.glTranslatef((float) local5, (float) (GlRenderer.canvasHeight - local10), 0.0F);
-		gl.glCallList(this.anInt1871);
+		this.setTextureFilter(1);
+		gl.glColor4f(1.0F, 1.0F, 1.0F, (float) alpha / 256.0F);
+		gl.glTranslatef((float) drawX, (float) (GlRenderer.canvasHeight - drawY), 0.0F);
+		gl.glCallList(this.displayListId);
 		gl.glLoadIdentity();
 	}
 
 	@OriginalMember(owner = "client!cf", name = "a", descriptor = "()V")
-	private void method1431() {
-		@Pc(7) float local7 = (float) this.width / (float) this.powerOfTwoWidth;
-		@Pc(15) float local15 = (float) this.height / (float) this.powerOfTwoHeight;
+	private void compileDisplayList() {
+		@Pc(7) float texU = (float) this.width / (float) this.powerOfTwoWidth;
+		@Pc(15) float texV = (float) this.height / (float) this.powerOfTwoHeight;
 		@Pc(17) GL2 gl = GlRenderer.gl;
-		if (this.anInt1871 == -1) {
-			this.anInt1871 = gl.glGenLists(1);
-			this.anInt1875 = GlCleaner.contextId;
+		if (this.displayListId == -1) {
+			this.displayListId = gl.glGenLists(1);
+			this.contextId = GlCleaner.contextId;
 		}
-		gl.glNewList(this.anInt1871, GL2.GL_COMPILE);
+		gl.glNewList(this.displayListId, GL2.GL_COMPILE);
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		gl.glTexCoord2f(local7, 0.0F);
+		gl.glTexCoord2f(texU, 0.0F);
 		gl.glVertex2f((float) this.width, 0.0F);
 		gl.glTexCoord2f(0.0F, 0.0F);
 		gl.glVertex2f(0.0F, 0.0F);
-		gl.glTexCoord2f(0.0F, local15);
+		gl.glTexCoord2f(0.0F, texV);
 		gl.glVertex2f(0.0F, (float) -this.height);
-		gl.glTexCoord2f(local7, local15);
+		gl.glTexCoord2f(texU, texV);
 		gl.glVertex2f((float) this.width, (float) -this.height);
 		gl.glEnd();
 		gl.glEndList();

@@ -24,10 +24,10 @@ public final class VertexNormal {
 	}
 
 	@OriginalMember(owner = "client!hd", name = "<init>", descriptor = "(Lclient!hd;)V")
-	public VertexNormal(@OriginalArg(0) VertexNormal arg0) {
-		this.magnitude = arg0.magnitude;
-		this.x = arg0.x;
-		this.y = arg0.y;
-		this.z = arg0.z;
+	public VertexNormal(@OriginalArg(0) VertexNormal other) {
+		this.magnitude = other.magnitude;
+		this.x = other.x;
+		this.y = other.y;
+		this.z = other.z;
 	}
 }

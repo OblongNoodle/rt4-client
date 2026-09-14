@@ -13,106 +13,106 @@ public class Find {
 	public static int index;
 
 	@OriginalMember(owner = "client!bn", name = "a", descriptor = "(BZLclient!na;)V")
-	public static void findQuickChatPhrases(@OriginalArg(1) boolean arg0, @OriginalArg(2) JagString arg1) {
-		@Pc(9) JagString local9 = arg1.toLowerCase();
-		@Pc(11) int local11 = 0;
-		@Pc(22) short[] local22 = new short[16];
-		@Pc(28) int local28 = arg0 ? 32768 : 0;
-		@Pc(36) int local36 = (arg0 ? QuickChatPhraseTypeList.anInt1047 : QuickChatPhraseTypeList.anInt3490) + local28;
-		for (@Pc(38) int local38 = local28; local38 < local36; local38++) {
-			@Pc(45) QuickChatPhraseType local45 = QuickChatPhraseTypeList.get(local38);
-			if (local45.aBoolean60 && local45.getText().toLowerCase().indexOf(local9) != -1) {
-				if (local11 >= 50) {
+	public static void findQuickChatPhrases(@OriginalArg(1) boolean useArchive2, @OriginalArg(2) JagString query) {
+		@Pc(9) JagString lowerQuery = query.toLowerCase();
+		@Pc(11) int count = 0;
+		@Pc(22) short[] matches = new short[16];
+		@Pc(28) int startId = useArchive2 ? 32768 : 0;
+		@Pc(36) int endId = (useArchive2 ? QuickChatPhraseTypeList.archive2PhraseCount : QuickChatPhraseTypeList.archive1PhraseCount) + startId;
+		for (@Pc(38) int id = startId; id < endId; id++) {
+			@Pc(45) QuickChatPhraseType phrase = QuickChatPhraseTypeList.get(id);
+			if (phrase.searchable && phrase.getText().toLowerCase().indexOf(lowerQuery) != -1) {
+				if (count >= 50) {
 					index = -1;
 					results = null;
 					return;
 				}
-				if (local11 >= local22.length) {
-					@Pc(79) short[] local79 = new short[local22.length * 2];
-					for (@Pc(81) int local81 = 0; local81 < local11; local81++) {
-						local79[local81] = local22[local81];
+				if (count >= matches.length) {
+					@Pc(79) short[] expanded = new short[matches.length * 2];
+					for (@Pc(81) int i = 0; i < count; i++) {
+						expanded[i] = matches[i];
 					}
-					local22 = local79;
+					matches = expanded;
 				}
-				local22[local11++] = (short) local38;
+				matches[count++] = (short) id;
 			}
 		}
-		results = local22;
-		index = local11;
+		results = matches;
+		index = count;
 		size = 0;
-		@Pc(113) JagString[] local113 = new JagString[index];
-		for (@Pc(115) int local115 = 0; local115 < index; local115++) {
-			local113[local115] = QuickChatPhraseTypeList.get(local22[local115]).getText();
+		@Pc(113) JagString[] names = new JagString[index];
+		for (@Pc(115) int i = 0; i < index; i++) {
+			names[i] = QuickChatPhraseTypeList.get(matches[i]).getText();
 		}
-		method3656(local113, results);
+		sortResults(names, results);
 	}
 
 	@OriginalMember(owner = "client!me", name = "a", descriptor = "(ZLclient!na;I)V")
-	public static void search(@OriginalArg(0) boolean arg0, @OriginalArg(1) JagString arg1) {
-		@Pc(8) short[] local8 = new short[16];
-		@Pc(12) JagString local12 = arg1.toLowerCase();
-		@Pc(14) int local14 = 0;
-		for (@Pc(16) int local16 = 0; local16 < ObjTypeList.capacity; local16++) {
-			@Pc(27) ObjType local27 = ObjTypeList.get(local16);
-			if ((!arg0 || local27.stockMarket) && local27.certtemplate == -1 && local27.lentTemplate == -1 && local27.dummyItem == 0 && local27.name.toLowerCase().indexOf(local12) != -1) {
-				if (local14 >= 250) {
+	public static void search(@OriginalArg(0) boolean stockMarketOnly, @OriginalArg(1) JagString query) {
+		@Pc(8) short[] matches = new short[16];
+		@Pc(12) JagString lowerQuery = query.toLowerCase();
+		@Pc(14) int count = 0;
+		for (@Pc(16) int id = 0; id < ObjTypeList.capacity; id++) {
+			@Pc(27) ObjType objType = ObjTypeList.get(id);
+			if ((!stockMarketOnly || objType.stockMarket) && objType.certtemplate == -1 && objType.lentTemplate == -1 && objType.dummyItem == 0 && objType.name.toLowerCase().indexOf(lowerQuery) != -1) {
+				if (count >= 250) {
 					results = null;
 					index = -1;
 					return;
 				}
-				if (local14 >= local8.length) {
-					@Pc(83) short[] local83 = new short[local8.length * 2];
-					for (@Pc(85) int local85 = 0; local85 < local14; local85++) {
-						local83[local85] = local8[local85];
+				if (count >= matches.length) {
+					@Pc(83) short[] expanded = new short[matches.length * 2];
+					for (@Pc(85) int i = 0; i < count; i++) {
+						expanded[i] = matches[i];
 					}
-					local8 = local83;
+					matches = expanded;
 				}
-				local8[local14++] = (short) local16;
+				matches[count++] = (short) id;
 			}
 		}
-		results = local8;
+		results = matches;
 		size = 0;
-		index = local14;
-		@Pc(117) JagString[] local117 = new JagString[index];
-		for (@Pc(119) int local119 = 0; local119 < index; local119++) {
-			local117[local119] = ObjTypeList.get(local8[local119]).name;
+		index = count;
+		@Pc(117) JagString[] names = new JagString[index];
+		for (@Pc(119) int i = 0; i < index; i++) {
+			names[i] = ObjTypeList.get(matches[i]).name;
 		}
-		method3656(local117, results);
+		sortResults(names, results);
 	}
 
 	@OriginalMember(owner = "client!qg", name = "a", descriptor = "([Lclient!na;[SI)V")
-	public static void method3656(@OriginalArg(0) JagString[] arg0, @OriginalArg(1) short[] arg1) {
-		method1307(arg1, arg0.length - 1, arg0, 0);
+	public static void sortResults(@OriginalArg(0) JagString[] names, @OriginalArg(1) short[] ids) {
+		quicksort(ids, names.length - 1, names, 0);
 	}
 
 	@OriginalMember(owner = "client!ed", name = "a", descriptor = "([SI[Lclient!na;II)V")
-	public static void method1307(@OriginalArg(0) short[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) JagString[] arg2, @OriginalArg(4) int arg3) {
-		if (arg1 <= arg3) {
+	public static void quicksort(@OriginalArg(0) short[] ids, @OriginalArg(1) int right, @OriginalArg(2) JagString[] names, @OriginalArg(4) int left) {
+		if (right <= left) {
 			return;
 		}
-		@Pc(14) int local14 = arg3;
-		@Pc(21) int local21 = (arg3 + arg1) / 2;
-		@Pc(25) JagString local25 = arg2[local21];
-		arg2[local21] = arg2[arg1];
-		arg2[arg1] = local25;
-		@Pc(39) short local39 = arg0[local21];
-		arg0[local21] = arg0[arg1];
-		arg0[arg1] = local39;
-		for (@Pc(51) int local51 = arg3; local51 < arg1; local51++) {
-			if (local25 == null || arg2[local51] != null && arg2[local51].method3139(local25) < (local51 & 0x1)) {
-				@Pc(80) JagString local80 = arg2[local51];
-				arg2[local51] = arg2[local14];
-				arg2[local14] = local80;
-				@Pc(94) short local94 = arg0[local51];
-				arg0[local51] = arg0[local14];
-				arg0[local14++] = local94;
+		@Pc(14) int storeIdx = left;
+		@Pc(21) int mid = (left + right) / 2;
+		@Pc(25) JagString pivot = names[mid];
+		names[mid] = names[right];
+		names[right] = pivot;
+		@Pc(39) short pivotId = ids[mid];
+		ids[mid] = ids[right];
+		ids[right] = pivotId;
+		for (@Pc(51) int i = left; i < right; i++) {
+			if (pivot == null || names[i] != null && names[i].compareTo(pivot) < (i & 0x1)) {
+				@Pc(80) JagString tempName = names[i];
+				names[i] = names[storeIdx];
+				names[storeIdx] = tempName;
+				@Pc(94) short tempId = ids[i];
+				ids[i] = ids[storeIdx];
+				ids[storeIdx++] = tempId;
 			}
 		}
-		arg2[arg1] = arg2[local14];
-		arg2[local14] = local25;
-		arg0[arg1] = arg0[local14];
-		arg0[local14] = local39;
-		method1307(arg0, local14 - 1, arg2, arg3);
-		method1307(arg0, arg1, arg2, local14 + 1);
+		names[right] = names[storeIdx];
+		names[storeIdx] = pivot;
+		ids[right] = ids[storeIdx];
+		ids[storeIdx] = pivotId;
+		quicksort(ids, storeIdx - 1, names, left);
+		quicksort(ids, right, names, storeIdx + 1);
 	}
 }

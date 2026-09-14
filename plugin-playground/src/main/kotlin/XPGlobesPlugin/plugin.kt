@@ -157,8 +157,8 @@ class plugin : Plugin() {
         // rendering skill sprite
         val skillSprite = XPSprites.getSpriteForSkill(globe.skillId)
 
-        val spriteWidth = skillSprite?.anInt1860 ?: 0 // sprite width without trimmed pixels
-        val spriteHeight = skillSprite?.anInt1866 ?: 0 // sprite height without trimmed pixels
+        val spriteWidth = skillSprite?.innerWidth ?: 0 // sprite width without trimmed pixels
+        val spriteHeight = skillSprite?.innerHeight ?: 0 // sprite height without trimmed pixels
         val xOffset = (backgroundSize - spriteWidth) / 2
         val yOffset = (backgroundSize - spriteHeight) / 2
 
@@ -195,8 +195,8 @@ class plugin : Plugin() {
 
             val globeSize = backgroundSize + globeBorder * 2 + xpBorder * 2
 
-            val textWidth = globe.textSprite?.anInt1860 ?: 0
-            val textHeight = globe.textSprite?.anInt1866 ?: 0
+            val textWidth = globe.textSprite?.innerWidth ?: 0
+            val textHeight = globe.textSprite?.innerHeight ?: 0
             val textXOffset = (globeSize - textWidth) / 2
             val textYOffset = (globeSize - textHeight) / 2
 

@@ -36,12 +36,12 @@ public final class GlFont extends Font {
 	}
 
 	@OriginalMember(owner = "client!dj", name = "a", descriptor = "()V")
-	public static void method1173() {
+	public static void clearLineMask() {
 		masked = null;
 	}
 
 	@OriginalMember(owner = "client!dj", name = "a", descriptor = "(Lclient!cf;)V")
-	public static void method1188(@OriginalArg(0) GlSprite sprite) {
+	public static void setLineMask(@OriginalArg(0) GlSprite sprite) {
 		if (sprite.height != GlRaster.clipBottom - GlRaster.clipTop) {
 			throw new IllegalArgumentException();
 		}
@@ -70,7 +70,7 @@ public final class GlFont extends Font {
 	protected final void renderGlyph(@OriginalArg(0) int glyph, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int width, @OriginalArg(4) int height, @OriginalArg(5) int color) {
 		@Pc(4) GL2 gl;
 		if (masked == null) {
-			GlRenderer.method4151();
+			GlRenderer.begin2DModulate();
 			gl = GlRenderer.gl;
 			GlRenderer.setTextureId(this.textureId);
 			gl.glColor3ub((byte) (color >> 16), (byte) (color >> 8), (byte) color);
@@ -79,7 +79,7 @@ public final class GlFont extends Font {
 			gl.glLoadIdentity();
 			return;
 		}
-		GlRenderer.method4151();
+		GlRenderer.begin2DModulate();
 		gl = GlRenderer.gl;
 		gl.glColor3ub((byte) (color >> 16), (byte) (color >> 8), (byte) color);
 		gl.glTranslatef((float) x, (float) (GlRenderer.canvasHeight - y), 0.0F);
@@ -122,7 +122,7 @@ public final class GlFont extends Font {
 	@OriginalMember(owner = "client!mb", name = "a", descriptor = "(IIIIIIIZ)V")
 	@Override
 	protected final void renderGlyphTransparent(@OriginalArg(0) int glyph, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int width, @OriginalArg(4) int height, @OriginalArg(5) int color, @OriginalArg(6) int alpha) {
-		GlRenderer.method4151();
+		GlRenderer.begin2DModulate();
 		@Pc(2) GL2 gl = GlRenderer.gl;
 		GlRenderer.setTextureId(this.textureId);
 		gl.glColor4ub((byte) (color >> 16), (byte) (color >> 8), (byte) color, alpha > 255 ? -1 : (byte) alpha);

@@ -27,29 +27,29 @@ public class ClanChat {
 	}
 
 	@OriginalMember(owner = "client!mf", name = "a", descriptor = "(JI)V")
-	public static void join(@OriginalArg(0) long arg0) {
-		if ((long) 0 != arg0) {
+	public static void join(@OriginalArg(0) long encodedUsername) {
+		if ((long) 0 != encodedUsername) {
 			Protocol.outboundBuffer.p1isaac(ClientProt.CLAN_JOINCHAT_LEAVECHAT);
-			Protocol.outboundBuffer.p8(arg0);
+			Protocol.outboundBuffer.p8(encodedUsername);
 		}
 	}
 
 	@OriginalMember(owner = "client!od", name = "a", descriptor = "(ILclient!na;)V")
-	public static void kick(@OriginalArg(1) JagString arg0) {
+	public static void kick(@OriginalArg(1) JagString username) {
 		if (members == null) {
 			return;
 		}
-		@Pc(22) long local22 = arg0.encode37();
-		@Pc(24) int local24 = 0;
-		if (local22 == 0L) {
+		@Pc(22) long encodedName = username.encode37();
+		@Pc(24) int i = 0;
+		if (encodedName == 0L) {
 			return;
 		}
-		while (members.length > local24 && members[local24].key != local22) {
-			local24++;
+		while (members.length > i && members[i].key != encodedName) {
+			i++;
 		}
-		if (local24 < members.length && members[local24] != null) {
+		if (i < members.length && members[i] != null) {
 			Protocol.outboundBuffer.p1isaac(ClientProt.CLAN_KICKUSER);
-			Protocol.outboundBuffer.p8(members[local24].key);
+			Protocol.outboundBuffer.p8(members[i].key);
 		}
 	}
 }

@@ -284,7 +284,7 @@ public final class Keyboard implements KeyListener, FocusListener {
 	@OriginalMember(owner = "client!ag", name = "h", descriptor = "(I)V")
 	public static void quit() {
 		if (instance != null) {
-			@Pc(4) Keyboard local4 = instance;
+			@Pc(4) Keyboard keyboard = instance;
 			synchronized (instance) {
 				instance = null;
 			}

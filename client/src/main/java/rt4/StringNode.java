@@ -15,7 +15,7 @@ public final class StringNode extends Node {
 	}
 
 	@OriginalMember(owner = "client!sj", name = "<init>", descriptor = "(Lclient!na;)V")
-	public StringNode(@OriginalArg(0) JagString arg0) {
-		this.value = arg0;
+	public StringNode(@OriginalArg(0) JagString value) {
+		this.value = value;
 	}
 }

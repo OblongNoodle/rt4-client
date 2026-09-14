@@ -20,7 +20,7 @@ public class MidiPlayer {
 	@OriginalMember(owner = "client!eg", name = "t", descriptor = "I")
 	public static int volumeFadeRate;
 	@OriginalMember(owner = "client!fl", name = "u", descriptor = "Z")
-	public static boolean aBoolean116;
+	public static boolean songLoop;
 	@OriginalMember(owner = "client!rb", name = "f", descriptor = "Lclient!ve;")
 	public static Js5 instrumentsArchive;
 	@OriginalMember(owner = "client!gd", name = "m", descriptor = "Lclient!ve;")
@@ -35,7 +35,7 @@ public class MidiPlayer {
 	public static int songFileId;
 
 	@OriginalMember(owner = "client!km", name = "c", descriptor = "(Z)Z")
-	public static boolean method2699() {
+	public static boolean tryStartLoadedSong() {
 		try {
 			if (state == 2) {
 				if (song == null) {
@@ -50,7 +50,7 @@ public class MidiPlayer {
 				if (stream.isSongReady(song, instrumentsArchive, soundBank)) {
 					stream.releaseInstruments();
 					stream.setVolume(volume);
-					stream.method4431(aBoolean116, song);
+					stream.playSong(songLoop, song);
 					state = 0;
 					song = null;
 					soundBank = null;
@@ -60,7 +60,7 @@ public class MidiPlayer {
 			}
 		} catch (@Pc(68) Exception ex) {
 			ex.printStackTrace();
-			stream.method4446();
+			stream.reset();
 			songArchive = null;
 			song = null;
 			state = 0;
@@ -75,20 +75,20 @@ public class MidiPlayer {
 		songFileId = -1;
 		state = 1;
 		volumeFadeRate = 2;
-		aBoolean116 = false;
+		songLoop = false;
 		songArchive = null;
 		songGroupId = -1;
 	}
 
 	@OriginalMember(owner = "client!v", name = "a", descriptor = "(ZIILclient!ve;ZII)V")
-	public static void playFadeOut(@OriginalArg(1) int group, @OriginalArg(3) Js5 archive, @OriginalArg(5) int arg2) {
+	public static void playFadeOut(@OriginalArg(1) int group, @OriginalArg(3) Js5 archive, @OriginalArg(5) int vol) {
 		songArchive = archive;
 		songFileId = 0;
 		songGroupId = group;
-		aBoolean116 = false;
+		songLoop = false;
 		state = 1;
 		volumeFadeRate = 2;
-		volume = arg2;
+		volume = vol;
 	}
 
 	@OriginalMember(owner = "client!ck", name = "a", descriptor = "(ILclient!va;Lclient!ve;Lclient!ve;Lclient!ve;)Z")
@@ -113,7 +113,7 @@ public class MidiPlayer {
 					stream.setVolume(volume);
 					return;
 				}
-				stream.method4446();
+				stream.reset();
 				stream.clearInstruments();
 				song = null;
 				soundBank = null;
@@ -125,7 +125,7 @@ public class MidiPlayer {
 			}
 		} catch (@Pc(62) Exception ex) {
 			ex.printStackTrace();
-			stream.method4446();
+			stream.reset();
 			songArchive = null;
 			song = null;
 			state = 0;
@@ -145,23 +145,23 @@ public class MidiPlayer {
 		volume = vol;
 		songFileId = 0;
 		songGroupId = group;
-		aBoolean116 = false;
+		songLoop = false;
 		volumeFadeRate = 10000;
 	}
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(Z)V")
-	public static void method4548() {
-		stream.method4446();
+	public static void stop() {
+		stream.reset();
 		state = 1;
 		songArchive = null;
 	}
 
 	@OriginalMember(owner = "client!sj", name = "c", descriptor = "(II)V")
-	public static void method3956(@OriginalArg(0) int arg0) {
+	public static void setVolume(@OriginalArg(0) int vol) {
 		if (state == 0) {
-			stream.setVolume(arg0);
+			stream.setVolume(vol);
 		} else {
-			volume = arg0;
+			volume = vol;
 		}
 	}
 }

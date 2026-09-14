@@ -9,15 +9,15 @@ public class FontMetricsList {
 	public static final SoftLruHashTable fontMetrics = new SoftLruHashTable(4);
 
 	@OriginalMember(owner = "client!li", name = "a", descriptor = "(II)Lclient!dd;")
-	public static SoftwareFont get(@OriginalArg(1) int arg0) {
-		@Pc(16) SoftwareFont local16 = (SoftwareFont) fontMetrics.get(arg0);
-		if (local16 != null) {
-			return local16;
+	public static SoftwareFont get(@OriginalArg(1) int id) {
+		@Pc(16) SoftwareFont font = (SoftwareFont) fontMetrics.get(id);
+		if (font != null) {
+			return font;
 		}
-		@Pc(26) byte[] local26 = client.js5Archive13.fetchFile(arg0, 0);
-		local16 = new SoftwareFont(local26);
-		local16.setNameIcons(Sprites.nameIcons, null);
-		fontMetrics.put(local16, arg0);
-		return local16;
+		@Pc(26) byte[] data = client.js5Archive13.fetchFile(id, 0);
+		font = new SoftwareFont(data);
+		font.setNameIcons(Sprites.nameIcons, null);
+		fontMetrics.put(font, id);
+		return font;
 	}
 }

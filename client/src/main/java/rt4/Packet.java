@@ -18,8 +18,8 @@ public final class Packet extends Buffer {
 	private int bitOffset;
 
 	@OriginalMember(owner = "client!i", name = "<init>", descriptor = "(I)V")
-	public Packet(@OriginalArg(0) int arg0) {
-		super(arg0);
+	public Packet(@OriginalArg(0) int size) {
+		super(size);
 	}
 
 	@OriginalMember(owner = "client!i", name = "q", descriptor = "(B)V")
@@ -28,44 +28,44 @@ public final class Packet extends Buffer {
 	}
 
 	@OriginalMember(owner = "client!i", name = "a", descriptor = "(BI[BI)V")
-	public final void gBytesIsaac(@OriginalArg(2) byte[] arg0, @OriginalArg(3) int arg1) {
-		for (@Pc(17) int local17 = 0; local17 < arg1; local17++) {
-			arg0[local17] = (byte) (this.data[this.offset++] - this.isaac.getNextKey());
+	public final void gBytesIsaac(@OriginalArg(2) byte[] dest, @OriginalArg(3) int len) {
+		for (@Pc(17) int i = 0; i < len; i++) {
+			dest[i] = (byte) (this.data[this.offset++] - this.isaac.getNextKey());
 		}
 	}
 
 	@OriginalMember(owner = "client!i", name = "f", descriptor = "(BI)I")
-	public final int gBits(@OriginalArg(1) int arg0) {
-		@Pc(6) int local6 = this.bitOffset >> 3;
-		@Pc(14) int local14 = 8 - (this.bitOffset & 0x7);
-		@Pc(16) int local16 = 0;
-		this.bitOffset += arg0;
-		while (local14 < arg0) {
-			local16 += (BIT_MASKS[local14] & this.data[local6++]) << arg0 - local14;
-			arg0 -= local14;
-			local14 = 8;
+	public final int gBits(@OriginalArg(1) int numBits) {
+		@Pc(6) int byteIndex = this.bitOffset >> 3;
+		@Pc(14) int bitsRemaining = 8 - (this.bitOffset & 0x7);
+		@Pc(16) int value = 0;
+		this.bitOffset += numBits;
+		while (bitsRemaining < numBits) {
+			value += (BIT_MASKS[bitsRemaining] & this.data[byteIndex++]) << numBits - bitsRemaining;
+			numBits -= bitsRemaining;
+			bitsRemaining = 8;
 		}
-		if (local14 == arg0) {
-			local16 += this.data[local6] & BIT_MASKS[local14];
+		if (bitsRemaining == numBits) {
+			value += this.data[byteIndex] & BIT_MASKS[bitsRemaining];
 		} else {
-			local16 += this.data[local6] >> local14 - arg0 & BIT_MASKS[arg0];
+			value += this.data[byteIndex] >> bitsRemaining - numBits & BIT_MASKS[numBits];
 		}
-		return local16;
+		return value;
 	}
 
 	@OriginalMember(owner = "client!i", name = "a", descriptor = "([IZ)V")
-	public final void setKey(@OriginalArg(0) int[] arg0) {
-		this.isaac = new IsaacRandom(arg0);
+	public final void setKey(@OriginalArg(0) int[] key) {
+		this.isaac = new IsaacRandom(key);
 	}
 
 	@OriginalMember(owner = "client!i", name = "q", descriptor = "(II)I")
-	public final int method2241(@OriginalArg(0) int arg0) {
-		return arg0 * 8 - this.bitOffset;
+	public final int availableBits(@OriginalArg(0) int byteLength) {
+		return byteLength * 8 - this.bitOffset;
 	}
 
 	@OriginalMember(owner = "client!i", name = "r", descriptor = "(II)V")
-	public final void p1isaac(@OriginalArg(1) int arg0) {
-		this.data[this.offset++] = (byte) (arg0 + this.isaac.getNextKey());
+	public final void p1isaac(@OriginalArg(1) int value) {
+		this.data[this.offset++] = (byte) (value + this.isaac.getNextKey());
 	}
 
 	@OriginalMember(owner = "client!i", name = "s", descriptor = "(I)I")

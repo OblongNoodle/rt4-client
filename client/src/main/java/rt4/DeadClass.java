@@ -10,9 +10,9 @@ public final class DeadClass {
 	public static final LruHashTable cache = new LruHashTable(4);
 
 	@OriginalMember(owner = "client!ck", name = "b", descriptor = "Lclient!na;")
-	private static final JagString aClass100_195 = JagString.parse("Discard");
+	private static final JagString DISCARD_TEXT = JagString.parse("Discard");
 	@OriginalMember(owner = "client!ck", name = "o", descriptor = "Lclient!na;")
-	private static final JagString aClass100_200 = JagString.parse("Loaded world list data");
+	private static final JagString LOADED_WORLD_LIST_TEXT = JagString.parse("Loaded world list data");
 	@OriginalMember(owner = "client!cn", name = "L", descriptor = "I")
 	public static double yawAccel = 0;
 

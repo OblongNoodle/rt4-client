@@ -14,20 +14,20 @@ public class QuickChatPhraseTypeList {
 	@OriginalMember(owner = "client!te", name = "y", descriptor = "Lclient!ve;")
 	public static Js5 archive1;
 	@OriginalMember(owner = "client!le", name = "e", descriptor = "I")
-	public static int anInt3490 = 0;
+	public static int archive1PhraseCount = 0;
 	@OriginalMember(owner = "client!ck", name = "C", descriptor = "I")
-	public static int anInt1047 = 0;
+	public static int archive2PhraseCount = 0;
 
 	@OriginalMember(owner = "client!ej", name = "a", descriptor = "(Lclient!ve;ILclient!ve;Lclient!of;)V")
-	public static void init(@OriginalArg(0) Js5 arg0, @OriginalArg(2) Js5 arg1, @OriginalArg(3) QuickChatCommandDecoder arg2) {
-		archive2 = arg0;
-		decoder = arg2;
-		archive1 = arg1;
+	public static void init(@OriginalArg(0) Js5 js5Archive2, @OriginalArg(2) Js5 js5Archive1, @OriginalArg(3) QuickChatCommandDecoder commandDecoder) {
+		archive2 = js5Archive2;
+		decoder = commandDecoder;
+		archive1 = js5Archive1;
 		if (archive1 != null) {
-			anInt3490 = archive1.getGroupCapacity(1);
+			archive1PhraseCount = archive1.getGroupCapacity(1);
 		}
 		if (archive2 != null) {
-			anInt1047 = archive2.getGroupCapacity(1);
+			archive2PhraseCount = archive2.getGroupCapacity(1);
 		}
 	}
 
@@ -48,20 +48,20 @@ public class QuickChatPhraseTypeList {
 			quickChatPhrase.decode(new Buffer(data));
 		}
 		if (id >= 32768) {
-			quickChatPhrase.method763();
+			quickChatPhrase.postDecode();
 		}
 		types.put(quickChatPhrase, id);
 		return quickChatPhrase;
 	}
 
 	@OriginalMember(owner = "client!ha", name = "a", descriptor = "([IJIZ)Lclient!na;")
-	public static JagString method1838(@OriginalArg(0) int[] arg0, @OriginalArg(1) long arg1, @OriginalArg(2) int arg2) {
+	public static JagString formatDynamicValue(@OriginalArg(0) int[] params, @OriginalArg(1) long value, @OriginalArg(2) int commandType) {
 		if (decoder != null) {
-			@Pc(17) JagString local17 = decoder.decode(arg2, arg0, arg1);
-			if (local17 != null) {
-				return local17;
+			@Pc(17) JagString decoded = decoder.decode(commandType, params, value);
+			if (decoded != null) {
+				return decoded;
 			}
 		}
-		return JagString.method2929(arg1);
+		return JagString.parseLong(value);
 	}
 }

@@ -21,32 +21,32 @@ public class MsiTypeList {
 	public static int redDelta;
 
 	@OriginalMember(owner = "client!da", name = "c", descriptor = "(II)Lclient!aa;")
-	public static MsiType get(@OriginalArg(0) int arg0) {
-		@Pc(10) MsiType local10 = (MsiType) types.get(arg0);
-		if (local10 != null) {
-			return local10;
+	public static MsiType get(@OriginalArg(0) int id) {
+		@Pc(10) MsiType type = (MsiType) types.get(id);
+		if (type != null) {
+			return type;
 		}
-		@Pc(20) byte[] local20 = archive.fetchFile(34, arg0);
-		local10 = new MsiType();
-		if (local20 != null) {
-			local10.decode(new Buffer(local20), arg0);
+		@Pc(20) byte[] data = archive.fetchFile(34, id);
+		type = new MsiType();
+		if (data != null) {
+			type.decode(new Buffer(data), id);
 		}
-		types.put(local10, arg0);
-		return local10;
+		types.put(type, id);
+		return type;
 	}
 
 	@OriginalMember(owner = "client!og", name = "a", descriptor = "(Lclient!ve;Lclient!ve;B)V")
-	public static void init(@OriginalArg(0) Js5 arg0, @OriginalArg(1) Js5 arg1) {
-		spritesArchive = arg1;
-		@Pc(12) int local12 = (int) (Math.random() * 21.0D) - 10;
-		archive = arg0;
-		@Pc(21) int local21 = (int) (Math.random() * 21.0D) - 10;
+	public static void init(@OriginalArg(0) Js5 js5, @OriginalArg(1) Js5 spriteJs5) {
+		spritesArchive = spriteJs5;
+		@Pc(12) int randA = (int) (Math.random() * 21.0D) - 10;
+		archive = js5;
+		@Pc(21) int randB = (int) (Math.random() * 21.0D) - 10;
 		archive.getGroupCapacity(34);
-		@Pc(33) int local33 = (int) (Math.random() * 21.0D) - 10;
-		@Pc(40) int local40 = (int) (Math.random() * 41.0D) - 20;
-		blueDelta = local40 + local21;
-		greenDelta = local12 + local40;
-		redDelta = local40 + local33;
+		@Pc(33) int randC = (int) (Math.random() * 21.0D) - 10;
+		@Pc(40) int randBase = (int) (Math.random() * 41.0D) - 20;
+		blueDelta = randBase + randB;
+		greenDelta = randA + randBase;
+		redDelta = randBase + randC;
 	}
 
 	@OriginalMember(owner = "client!qg", name = "h", descriptor = "(I)V")

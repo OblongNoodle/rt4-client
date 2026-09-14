@@ -10,5 +10,5 @@ public final class ComponentPointer extends Node {
 	public int interfaceId;
 
 	@OriginalMember(owner = "client!wk", name = "s", descriptor = "I")
-	public int anInt5879;
+	public int type;
 }

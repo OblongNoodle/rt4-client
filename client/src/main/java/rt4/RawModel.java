@@ -15,16 +15,16 @@ public final class RawModel extends Entity {
 	public static final int[] COS = MathUtils.cos;
 
 	@OriginalMember(owner = "client!gb", name = "L", descriptor = "[I")
-	public static final int[] anIntArray194 = new int[10000];
+	public static final int[] mergedVertexTagsA = new int[10000];
 
 	@OriginalMember(owner = "client!gb", name = "Z", descriptor = "[I")
-	public static final int[] anIntArray199 = new int[10000];
+	public static final int[] mergedVertexTagsB = new int[10000];
 
 	@OriginalMember(owner = "client!gb", name = "S", descriptor = "I")
-	public static int anInt2138 = 0;
+	public static int mergeGeneration = 0;
 
 	@OriginalMember(owner = "client!ck", name = "K", descriptor = "I")
-	public static int anInt1053 = 0;
+	public static int pickScreenY = 0;
 
 	@OriginalMember(owner = "client!d", name = "db", descriptor = "Z")
 	public static boolean allowInput = false;
@@ -51,7 +51,7 @@ public final class RawModel extends Entity {
 	public short[] texturesScaleZ;
 
 	@OriginalMember(owner = "client!gb", name = "B", descriptor = "[B")
-	public byte[] aByteArray28;
+	public byte[] textureTransU;
 
 	@OriginalMember(owner = "client!gb", name = "D", descriptor = "S")
 	private short minY;
@@ -87,10 +87,10 @@ public final class RawModel extends Entity {
 	public byte[] triangleTextureIndex;
 
 	@OriginalMember(owner = "client!gb", name = "R", descriptor = "[B")
-	public byte[] aByteArray32;
+	public byte[] textureDirection;
 
 	@OriginalMember(owner = "client!gb", name = "T", descriptor = "[B")
-	public byte[] aByteArray33;
+	public byte[] textureTransV;
 
 	@OriginalMember(owner = "client!gb", name = "U", descriptor = "[S")
 	public short[] triangleColors;
@@ -105,16 +105,16 @@ public final class RawModel extends Entity {
 	private short maxZ;
 
 	@OriginalMember(owner = "client!gb", name = "ab", descriptor = "S")
-	public short aShort18;
+	public short contrast;
 
 	@OriginalMember(owner = "client!gb", name = "bb", descriptor = "[B")
-	public byte[] aByteArray34;
+	public byte[] textureSpeed;
 
 	@OriginalMember(owner = "client!gb", name = "cb", descriptor = "[I")
 	public int[] triangleVertexB;
 
 	@OriginalMember(owner = "client!gb", name = "db", descriptor = "S")
-	public short aShort19;
+	public short ambient;
 
 	@OriginalMember(owner = "client!gb", name = "eb", descriptor = "S")
 	private short minZ;
@@ -126,7 +126,7 @@ public final class RawModel extends Entity {
 	public short[] texturesScaleY;
 
 	@OriginalMember(owner = "client!gb", name = "hb", descriptor = "[Lclient!hd;")
-	public VertexNormal[] aClass57Array2;
+	public VertexNormal[] mergedNormals;
 
 	@OriginalMember(owner = "client!gb", name = "ib", descriptor = "[S")
 	public short[] textureFacesP;
@@ -181,7 +181,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "<init>", descriptor = "(III)V")
-	public RawModel(@OriginalArg(0) int vertexCount, @OriginalArg(1) int triangleCount, @OriginalArg(2) int arg2) {
+	public RawModel(@OriginalArg(0) int vertexCount, @OriginalArg(1) int triangleCount, @OriginalArg(2) int texturedTriangleCount) {
 		this.vertexX = new int[vertexCount];
 		this.vertexY = new int[vertexCount];
 		this.vertexZ = new int[vertexCount];
@@ -214,26 +214,26 @@ public final class RawModel extends Entity {
 
 		@Pc(43) int i;
 		for (i = 0; i < count; i++) {
-			@Pc(50) RawModel local50 = models[i];
-			if (local50 != null) {
-				this.vertexCount += local50.vertexCount;
-				this.triangleCount += local50.triangleCount;
-				this.texturedCount += local50.texturedCount;
-				if (local50.trianglePriorities == null) {
+			@Pc(50) RawModel model = models[i];
+			if (model != null) {
+				this.vertexCount += model.vertexCount;
+				this.triangleCount += model.triangleCount;
+				this.texturedCount += model.texturedCount;
+				if (model.trianglePriorities == null) {
 					if (this.priority == -1) {
-						this.priority = local50.priority;
+						this.priority = model.priority;
 					}
-					if (this.priority != local50.priority) {
+					if (this.priority != model.priority) {
 						keepPriorities = true;
 					}
 				} else {
 					keepPriorities = true;
 				}
-				keepInfo |= local50.triangleInfo != null;
-				keepAlpha |= local50.triangleAlpha != null;
-				keepBones |= local50.triangleBones != null;
-				keepTextures |= local50.triangleTextures != null;
-				keepTextureIndex |= local50.triangleTextureIndex != null;
+				keepInfo |= model.triangleInfo != null;
+				keepAlpha |= model.triangleAlpha != null;
+				keepBones |= model.triangleBones != null;
+				keepTextures |= model.triangleTextures != null;
+				keepTextureIndex |= model.triangleTextureIndex != null;
 			}
 		}
 
@@ -284,10 +284,10 @@ public final class RawModel extends Entity {
 			this.texturesScaleY = new short[this.texturedCount];
 			this.texturesScaleZ = new short[this.texturedCount];
 			this.textureRotationY = new byte[this.texturedCount];
-			this.aByteArray32 = new byte[this.texturedCount];
-			this.aByteArray34 = new byte[this.texturedCount];
-			this.aByteArray28 = new byte[this.texturedCount];
-			this.aByteArray33 = new byte[this.texturedCount];
+			this.textureDirection = new byte[this.texturedCount];
+			this.textureSpeed = new byte[this.texturedCount];
+			this.textureTransU = new byte[this.texturedCount];
+			this.textureTransV = new byte[this.texturedCount];
 		}
 
 		this.vertexCount = 0;
@@ -295,7 +295,7 @@ public final class RawModel extends Entity {
 		this.texturedCount = 0;
 
 		for (i = 0; i < count; i++) {
-			@Pc(323) short local323 = (short) (0x1 << i);
+			@Pc(323) short sourceBit = (short) (0x1 << i);
 			@Pc(327) RawModel other = models[i];
 
 			if (other != null) {
@@ -338,19 +338,19 @@ public final class RawModel extends Entity {
 					}
 
 					this.triangleColors[this.triangleCount] = other.triangleColors[t];
-					this.triangleSources[this.triangleCount] = local323;
-					this.triangleVertexA[this.triangleCount] = this.addVertex(other, other.triangleVertexA[t], local323);
-					this.triangleVertexB[this.triangleCount] = this.addVertex(other, other.triangleVertexB[t], local323);
-					this.triangleVertexC[this.triangleCount] = this.addVertex(other, other.triangleVertexC[t], local323);
+					this.triangleSources[this.triangleCount] = sourceBit;
+					this.triangleVertexA[this.triangleCount] = this.addVertex(other, other.triangleVertexA[t], sourceBit);
+					this.triangleVertexB[this.triangleCount] = this.addVertex(other, other.triangleVertexB[t], sourceBit);
+					this.triangleVertexC[this.triangleCount] = this.addVertex(other, other.triangleVertexC[t], sourceBit);
 					this.triangleCount++;
 				}
 
 				for (t = 0; t < other.texturedCount; t++) {
 					@Pc(530) byte type = this.textureTypes[this.texturedCount] = other.textureTypes[t];
 					if (type == 0) {
-						this.textureFacesP[this.texturedCount] = (short) this.addVertex(other, other.textureFacesP[t], local323);
-						this.textureFacesM[this.texturedCount] = (short) this.addVertex(other, other.textureFacesM[t], local323);
-						this.textureFacesN[this.texturedCount] = (short) this.addVertex(other, other.textureFacesN[t], local323);
+						this.textureFacesP[this.texturedCount] = (short) this.addVertex(other, other.textureFacesP[t], sourceBit);
+						this.textureFacesM[this.texturedCount] = (short) this.addVertex(other, other.textureFacesM[t], sourceBit);
+						this.textureFacesN[this.texturedCount] = (short) this.addVertex(other, other.textureFacesN[t], sourceBit);
 					} else if (type >= 1 && type <= 3) {
 						this.textureFacesP[this.texturedCount] = other.textureFacesP[t];
 						this.textureFacesM[this.texturedCount] = other.textureFacesM[t];
@@ -359,11 +359,11 @@ public final class RawModel extends Entity {
 						this.texturesScaleY[this.texturedCount] = other.texturesScaleY[t];
 						this.texturesScaleZ[this.texturedCount] = other.texturesScaleZ[t];
 						this.textureRotationY[this.texturedCount] = other.textureRotationY[t];
-						this.aByteArray32[this.texturedCount] = other.aByteArray32[t];
-						this.aByteArray34[this.texturedCount] = other.aByteArray34[t];
+						this.textureDirection[this.texturedCount] = other.textureDirection[t];
+						this.textureSpeed[this.texturedCount] = other.textureSpeed[t];
 					} else if (type == 2) {
-						this.aByteArray28[this.texturedCount] = other.aByteArray28[t];
-						this.aByteArray33[this.texturedCount] = other.aByteArray33[t];
+						this.textureTransU[this.texturedCount] = other.textureTransU[t];
+						this.textureTransV[this.texturedCount] = other.textureTransV[t];
 					}
 					this.texturedCount++;
 				}
@@ -372,7 +372,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "<init>", descriptor = "(Lclient!gb;ZZZZ)V")
-	public RawModel(@OriginalArg(0) RawModel other, @OriginalArg(1) boolean reuseVertices, @OriginalArg(2) boolean reuseColors, @OriginalArg(3) boolean reuseTextures, @OriginalArg(4) boolean arg4) {
+	public RawModel(@OriginalArg(0) RawModel other, @OriginalArg(1) boolean reuseVertices, @OriginalArg(2) boolean reuseColors, @OriginalArg(3) boolean reuseTextures, @OriginalArg(4) boolean reuseNormals) {
 		this.vertexCount = other.vertexCount;
 		this.triangleCount = other.triangleCount;
 		this.texturedCount = other.texturedCount;
@@ -423,33 +423,33 @@ public final class RawModel extends Entity {
 		this.texturesScaleY = other.texturesScaleY;
 		this.texturesScaleZ = other.texturesScaleZ;
 		this.textureRotationY = other.textureRotationY;
-		this.aByteArray32 = other.aByteArray32;
-		this.aByteArray34 = other.aByteArray34;
-		this.aByteArray28 = other.aByteArray28;
-		this.aByteArray33 = other.aByteArray33;
+		this.textureDirection = other.textureDirection;
+		this.textureSpeed = other.textureSpeed;
+		this.textureTransU = other.textureTransU;
+		this.textureTransV = other.textureTransV;
 		this.vertexBones = other.vertexBones;
 		this.triangleBones = other.triangleBones;
 		this.boneVertices = other.boneVertices;
 		this.boneTriangles = other.boneTriangles;
 		this.vertexNormals = other.vertexNormals;
 		this.triangleNormals = other.triangleNormals;
-		this.aClass57Array2 = other.aClass57Array2;
-		this.aShort19 = other.aShort19;
-		this.aShort18 = other.aShort18;
+		this.mergedNormals = other.mergedNormals;
+		this.ambient = other.ambient;
+		this.contrast = other.contrast;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "([[III)I")
-	public static int method1680(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(3) int local3 = arg1 >> 7;
-		@Pc(7) int local7 = arg2 >> 7;
-		if (local3 < 0 || local7 < 0 || local3 >= arg0.length || local7 >= arg0[0].length) {
+	public static int interpolateHeight(@OriginalArg(0) int[][] heightmap, @OriginalArg(1) int fineX, @OriginalArg(2) int fineZ) {
+		@Pc(3) int tileX = fineX >> 7;
+		@Pc(7) int tileZ = fineZ >> 7;
+		if (tileX < 0 || tileZ < 0 || tileX >= heightmap.length || tileZ >= heightmap[0].length) {
 			return 0;
 		}
-		@Pc(27) int local27 = arg1 & 0x7F;
-		@Pc(31) int local31 = arg2 & 0x7F;
-		@Pc(53) int local53 = arg0[local3][local7] * (128 - local27) + arg0[local3 + 1][local7] * local27 >> 7;
-		@Pc(79) int local79 = arg0[local3][local7 + 1] * (128 - local27) + arg0[local3 + 1][local7 + 1] * local27 >> 7;
-		return local53 * (128 - local31) + local79 * local31 >> 7;
+		@Pc(27) int fracX = fineX & 0x7F;
+		@Pc(31) int fracZ = fineZ & 0x7F;
+		@Pc(53) int topInterp = heightmap[tileX][tileZ] * (128 - fracX) + heightmap[tileX + 1][tileZ] * fracX >> 7;
+		@Pc(79) int bottomInterp = heightmap[tileX][tileZ + 1] * (128 - fracX) + heightmap[tileX + 1][tileZ + 1] * fracX >> 7;
+		return topInterp * (128 - fracZ) + bottomInterp * fracZ >> 7;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(Lclient!ve;II)Lclient!gb;")
@@ -469,10 +469,10 @@ public final class RawModel extends Entity {
 
 	@OriginalMember(owner = "client!gb", name = "e", descriptor = "()V")
 	public final void swapXz() {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			@Pc(10) int temp = this.vertexX[local1];
-			this.vertexX[local1] = this.vertexZ[local1];
-			this.vertexZ[local1] = -temp;
+		for (@Pc(1) int v = 0; v < this.vertexCount; v++) {
+			@Pc(10) int temp = this.vertexX[v];
+			this.vertexX[v] = this.vertexZ[v];
+			this.vertexZ[v] = -temp;
 		}
 		this.invalidate();
 	}
@@ -555,7 +555,7 @@ public final class RawModel extends Entity {
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(III)Lclient!th;")
 	@Override
 	public final Entity createModel() {
-		return this.createModel(this.aShort19, this.aShort18, -50, -10, -50);
+		return this.createModel(this.ambient, this.contrast, -50, -10, -50);
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(Lclient!gb;IS)I")
@@ -584,48 +584,48 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "([[IIIIII)V")
-	private void method1667(@OriginalArg(0) int[][] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		@Pc(10) int local10 = -arg4 / 2;
-		@Pc(15) int local15 = -arg5 / 2;
-		@Pc(24) int local24 = method1680(arg0, arg1 + local10, arg3 + local15);
-		@Pc(28) int local28 = arg4 / 2;
-		@Pc(33) int local33 = -arg5 / 2;
-		@Pc(42) int local42 = method1680(arg0, arg1 + local28, arg3 + local33);
-		@Pc(47) int local47 = -arg4 / 2;
-		@Pc(51) int local51 = arg5 / 2;
-		@Pc(60) int local60 = method1680(arg0, arg1 + local47, arg3 + local51);
-		@Pc(64) int local64 = arg4 / 2;
-		@Pc(68) int local68 = arg5 / 2;
-		@Pc(77) int local77 = method1680(arg0, arg1 + local64, arg3 + local68);
-		@Pc(84) int local84 = local24 < local42 ? local24 : local42;
-		@Pc(91) int local91 = local60 < local77 ? local60 : local77;
-		@Pc(98) int local98 = local42 < local77 ? local42 : local77;
-		@Pc(105) int local105 = local24 < local60 ? local24 : local60;
-		if (arg5 != 0) {
-			@Pc(120) int local120 = (int) (Math.atan2(local84 - local91, arg5) * 325.95D) & 0x7FF;
-			if (local120 != 0) {
-				this.method1677(local120);
+	private void alignToTerrain(@OriginalArg(0) int[][] heightmap, @OriginalArg(1) int centerX, @OriginalArg(2) int baseHeight, @OriginalArg(3) int centerZ, @OriginalArg(4) int sizeX, @OriginalArg(5) int sizeZ) {
+		@Pc(10) int negHalfX = -sizeX / 2;
+		@Pc(15) int negHalfZ = -sizeZ / 2;
+		@Pc(24) int heightSW = interpolateHeight(heightmap, centerX + negHalfX, centerZ + negHalfZ);
+		@Pc(28) int halfX = sizeX / 2;
+		@Pc(33) int negHalfZ2 = -sizeZ / 2;
+		@Pc(42) int heightSE = interpolateHeight(heightmap, centerX + halfX, centerZ + negHalfZ2);
+		@Pc(47) int negHalfX2 = -sizeX / 2;
+		@Pc(51) int halfZ = sizeZ / 2;
+		@Pc(60) int heightNW = interpolateHeight(heightmap, centerX + negHalfX2, centerZ + halfZ);
+		@Pc(64) int halfX2 = sizeX / 2;
+		@Pc(68) int halfZ2 = sizeZ / 2;
+		@Pc(77) int heightNE = interpolateHeight(heightmap, centerX + halfX2, centerZ + halfZ2);
+		@Pc(84) int minSouth = heightSW < heightSE ? heightSW : heightSE;
+		@Pc(91) int minNorth = heightNW < heightNE ? heightNW : heightNE;
+		@Pc(98) int minEast = heightSE < heightNE ? heightSE : heightNE;
+		@Pc(105) int minWest = heightSW < heightNW ? heightSW : heightNW;
+		if (sizeZ != 0) {
+			@Pc(120) int rollAngle = (int) (Math.atan2(minSouth - minNorth, sizeZ) * 325.95D) & 0x7FF;
+			if (rollAngle != 0) {
+				this.rotateX(rollAngle);
 			}
 		}
-		if (arg4 != 0) {
-			@Pc(140) int local140 = (int) (Math.atan2(local105 - local98, arg4) * 325.95D) & 0x7FF;
-			if (local140 != 0) {
-				this.rotate(local140);
+		if (sizeX != 0) {
+			@Pc(140) int pitchAngle = (int) (Math.atan2(minWest - minEast, sizeX) * 325.95D) & 0x7FF;
+			if (pitchAngle != 0) {
+				this.rotate(pitchAngle);
 			}
 		}
-		@Pc(149) int local149 = local24 + local77;
-		if (local42 + local60 < local149) {
-			local149 = local42 + local60;
+		@Pc(149) int avgHeight = heightSW + heightNE;
+		if (heightSE + heightNW < avgHeight) {
+			avgHeight = heightSE + heightNW;
 		}
-		local149 = (local149 >> 1) - arg2;
-		if (local149 != 0) {
-			this.translate(0, local149, 0);
+		avgHeight = (avgHeight >> 1) - baseHeight;
+		if (avgHeight != 0) {
+			this.translate(0, avgHeight, 0);
 		}
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIIIIIIJILclient!ga;)V")
 	@Override
-	public final void render(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) long arg8, @OriginalArg(9) int arg9, @OriginalArg(10) ParticleSystem arg10) {
+	public final void render(@OriginalArg(0) int yaw, @OriginalArg(1) int sinPitch, @OriginalArg(2) int cosPitch, @OriginalArg(3) int sinYaw, @OriginalArg(4) int cosYaw, @OriginalArg(5) int offsetX, @OriginalArg(6) int offsetY, @OriginalArg(7) int offsetZ, @OriginalArg(8) long key, @OriginalArg(9) int bitset, @OriginalArg(10) ParticleSystem particleSystem) {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "g", descriptor = "()V")
@@ -636,71 +636,71 @@ public final class RawModel extends Entity {
 
 		this.vertexNormals = new VertexNormal[this.vertexCount];
 
-		@Pc(10) int local10;
-		for (local10 = 0; local10 < this.vertexCount; local10++) {
-			this.vertexNormals[local10] = new VertexNormal();
+		@Pc(10) int i;
+		for (i = 0; i < this.vertexCount; i++) {
+			this.vertexNormals[i] = new VertexNormal();
 		}
 
-		for (local10 = 0; local10 < this.triangleCount; local10++) {
-			@Pc(34) int local34 = this.triangleVertexA[local10];
-			@Pc(39) int local39 = this.triangleVertexB[local10];
-			@Pc(44) int local44 = this.triangleVertexC[local10];
-			@Pc(54) int local54 = this.vertexX[local39] - this.vertexX[local34];
-			@Pc(64) int local64 = this.vertexY[local39] - this.vertexY[local34];
-			@Pc(74) int local74 = this.vertexZ[local39] - this.vertexZ[local34];
-			@Pc(84) int local84 = this.vertexX[local44] - this.vertexX[local34];
-			@Pc(94) int local94 = this.vertexY[local44] - this.vertexY[local34];
-			@Pc(104) int local104 = this.vertexZ[local44] - this.vertexZ[local34];
-			@Pc(112) int local112 = local64 * local104 - local94 * local74;
-			@Pc(120) int local120 = local74 * local84 - local104 * local54;
+		for (i = 0; i < this.triangleCount; i++) {
+			@Pc(34) int vA = this.triangleVertexA[i];
+			@Pc(39) int vB = this.triangleVertexB[i];
+			@Pc(44) int vC = this.triangleVertexC[i];
+			@Pc(54) int dxAB = this.vertexX[vB] - this.vertexX[vA];
+			@Pc(64) int dyAB = this.vertexY[vB] - this.vertexY[vA];
+			@Pc(74) int dzAB = this.vertexZ[vB] - this.vertexZ[vA];
+			@Pc(84) int dxAC = this.vertexX[vC] - this.vertexX[vA];
+			@Pc(94) int dyAC = this.vertexY[vC] - this.vertexY[vA];
+			@Pc(104) int dzAC = this.vertexZ[vC] - this.vertexZ[vA];
+			@Pc(112) int nx = dyAB * dzAC - dyAC * dzAB;
+			@Pc(120) int ny = dzAB * dxAC - dzAC * dxAB;
 
-			@Pc(128) int local128;
-			for (local128 = local54 * local94 - local84 * local64; local112 > 8192 || local120 > 8192 || local128 > 8192 || local112 < -8192 || local120 < -8192 || local128 < -8192; local128 >>= 0x1) {
-				local112 >>= 0x1;
-				local120 >>= 0x1;
+			@Pc(128) int nz;
+			for (nz = dxAB * dyAC - dxAC * dyAB; nx > 8192 || ny > 8192 || nz > 8192 || nx < -8192 || ny < -8192 || nz < -8192; nz >>= 0x1) {
+				nx >>= 0x1;
+				ny >>= 0x1;
 			}
 
-			@Pc(174) int local174 = (int) Math.sqrt(local112 * local112 + local120 * local120 + local128 * local128);
-			if (local174 <= 0) {
-				local174 = 1;
+			@Pc(174) int length = (int) Math.sqrt(nx * nx + ny * ny + nz * nz);
+			if (length <= 0) {
+				length = 1;
 			}
 
-			local112 = local112 * 256 / local174;
-			local120 = local120 * 256 / local174;
-			local128 = local128 * 256 / local174;
+			nx = nx * 256 / length;
+			ny = ny * 256 / length;
+			nz = nz * 256 / length;
 
 			@Pc(201) byte info;
 			if (this.triangleInfo == null) {
 				info = 0;
 			} else {
-				info = this.triangleInfo[local10];
+				info = this.triangleInfo[i];
 			}
 
 			if (info == 0) {
-				@Pc(214) VertexNormal n1 = this.vertexNormals[local34];
-				n1.x += local112;
-				n1.y += local120;
-				n1.z += local128;
+				@Pc(214) VertexNormal n1 = this.vertexNormals[vA];
+				n1.x += nx;
+				n1.y += ny;
+				n1.z += nz;
 				n1.magnitude++;
-				@Pc(243) VertexNormal n2 = this.vertexNormals[local39];
-				n2.x += local112;
-				n2.y += local120;
-				n2.z += local128;
+				@Pc(243) VertexNormal n2 = this.vertexNormals[vB];
+				n2.x += nx;
+				n2.y += ny;
+				n2.z += nz;
 				n2.magnitude++;
-				@Pc(272) VertexNormal n3 = this.vertexNormals[local44];
-				n3.x += local112;
-				n3.y += local120;
-				n3.z += local128;
+				@Pc(272) VertexNormal n3 = this.vertexNormals[vC];
+				n3.x += nx;
+				n3.y += ny;
+				n3.z += nz;
 				n3.magnitude++;
 			} else if (info == 1) {
 				if (this.triangleNormals == null) {
 					this.triangleNormals = new TriangleNormal[this.triangleCount];
 				}
 
-				@Pc(317) TriangleNormal n = this.triangleNormals[local10] = new TriangleNormal();
-				n.anInt4769 = local112;
-				n.anInt4770 = local120;
-				n.anInt4767 = local128;
+				@Pc(317) TriangleNormal n = this.triangleNormals[i] = new TriangleNormal();
+				n.x = nx;
+				n.y = ny;
+				n.z = nz;
 			}
 		}
 	}
@@ -719,28 +719,28 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(II[[I[[IIIIZZ)Lclient!gb;")
-	public final RawModel method1670(@OriginalArg(0) int orientation, @OriginalArg(1) int arg1, @OriginalArg(2) int[][] arg2, @OriginalArg(3) int[][] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	public final RawModel placeOnTerrain(@OriginalArg(0) int orientation, @OriginalArg(1) int sizeParam, @OriginalArg(2) int[][] heightmap, @OriginalArg(3) int[][] heightmap2, @OriginalArg(4) int fineX, @OriginalArg(5) int baseHeight, @OriginalArg(6) int fineZ) {
 		this.calculateBounds();
-		@Pc(6) int local6 = arg4 + this.minX;
-		@Pc(11) int local11 = arg4 + this.maxX;
-		@Pc(16) int local16 = arg6 + this.minZ;
-		@Pc(21) int local21 = arg6 + this.maxZ;
-		if ((orientation == 1 || orientation == 2 || orientation == 3 || orientation == 5) && (local6 < 0 || local11 + 128 >> 7 >= arg2.length || local16 < 0 || local21 + 128 >> 7 >= arg2[0].length)) {
+		@Pc(6) int westEdge = fineX + this.minX;
+		@Pc(11) int eastEdge = fineX + this.maxX;
+		@Pc(16) int southEdge = fineZ + this.minZ;
+		@Pc(21) int northEdge = fineZ + this.maxZ;
+		if ((orientation == 1 || orientation == 2 || orientation == 3 || orientation == 5) && (westEdge < 0 || eastEdge + 128 >> 7 >= heightmap.length || southEdge < 0 || northEdge + 128 >> 7 >= heightmap[0].length)) {
 			return this;
 		}
 		if (orientation == 4 || orientation == 5) {
-			if (arg3 == null) {
+			if (heightmap2 == null) {
 				return this;
 			}
-			if (local6 < 0 || local11 + 128 >> 7 >= arg3.length || local16 < 0 || local21 + 128 >> 7 >= arg3[0].length) {
+			if (westEdge < 0 || eastEdge + 128 >> 7 >= heightmap2.length || southEdge < 0 || northEdge + 128 >> 7 >= heightmap2[0].length) {
 				return this;
 			}
 		} else {
-			local6 >>= 0x7;
-			local11 = local11 + 127 >> 7;
-			local16 >>= 0x7;
-			local21 = local21 + 127 >> 7;
-			if (arg2[local6][local16] == arg5 && arg2[local11][local16] == arg5 && arg2[local6][local21] == arg5 && arg2[local11][local21] == arg5) {
+			westEdge >>= 0x7;
+			eastEdge = eastEdge + 127 >> 7;
+			southEdge >>= 0x7;
+			northEdge = northEdge + 127 >> 7;
+			if (heightmap[westEdge][southEdge] == baseHeight && heightmap[eastEdge][southEdge] == baseHeight && heightmap[westEdge][northEdge] == baseHeight && heightmap[eastEdge][northEdge] == baseHeight) {
 				return this;
 			}
 		}
@@ -767,19 +767,19 @@ public final class RawModel extends Entity {
 		m.texturesScaleY = this.texturesScaleY;
 		m.texturesScaleZ = this.texturesScaleZ;
 		m.textureRotationY = this.textureRotationY;
-		m.aByteArray32 = this.aByteArray32;
-		m.aByteArray34 = this.aByteArray34;
-		m.aByteArray28 = this.aByteArray28;
-		m.aByteArray33 = this.aByteArray33;
+		m.textureDirection = this.textureDirection;
+		m.textureSpeed = this.textureSpeed;
+		m.textureTransU = this.textureTransU;
+		m.textureTransV = this.textureTransV;
 		m.vertexBones = this.vertexBones;
 		m.triangleBones = this.triangleBones;
 		m.boneVertices = this.boneVertices;
 		m.boneTriangles = this.boneTriangles;
-		m.aShort19 = this.aShort19;
-		m.aShort18 = this.aShort18;
+		m.ambient = this.ambient;
+		m.contrast = this.contrast;
 		m.vertexNormals = this.vertexNormals;
 		m.triangleNormals = this.triangleNormals;
-		m.aClass57Array2 = this.aClass57Array2;
+		m.mergedNormals = this.mergedNormals;
 		if (orientation == 3) {
 			m.vertexX = ArrayUtils.copyOfNullable(this.vertexX);
 			m.vertexY = ArrayUtils.copyOfNullable(this.vertexY);
@@ -789,84 +789,84 @@ public final class RawModel extends Entity {
 			m.vertexY = new int[m.vertexCount];
 			m.vertexZ = this.vertexZ;
 		}
-		@Pc(326) int local326;
-		@Pc(337) int local337;
-		@Pc(344) int local344;
-		@Pc(348) int local348;
-		@Pc(352) int local352;
-		@Pc(356) int local356;
-		@Pc(360) int local360;
-		@Pc(382) int local382;
-		@Pc(408) int local408;
-		@Pc(420) int local420;
+		@Pc(326) int v;
+		@Pc(337) int vx;
+		@Pc(344) int vz;
+		@Pc(348) int fracX;
+		@Pc(352) int fracZ;
+		@Pc(356) int tileX;
+		@Pc(360) int tileZ;
+		@Pc(382) int topInterp;
+		@Pc(408) int bottomInterp;
+		@Pc(420) int interpHeight;
 		if (orientation == 1) {
-			for (local326 = 0; local326 < m.vertexCount; local326++) {
-				local337 = this.vertexX[local326] + arg4;
-				local344 = this.vertexZ[local326] + arg6;
-				local348 = local337 & 0x7F;
-				local352 = local344 & 0x7F;
-				local356 = local337 >> 7;
-				local360 = local344 >> 7;
-				local382 = arg2[local356][local360] * (128 - local348) + arg2[local356 + 1][local360] * local348 >> 7;
-				local408 = arg2[local356][local360 + 1] * (128 - local348) + arg2[local356 + 1][local360 + 1] * local348 >> 7;
-				local420 = local382 * (128 - local352) + local408 * local352 >> 7;
-				m.vertexY[local326] = this.vertexY[local326] + local420 - arg5;
+			for (v = 0; v < m.vertexCount; v++) {
+				vx = this.vertexX[v] + fineX;
+				vz = this.vertexZ[v] + fineZ;
+				fracX = vx & 0x7F;
+				fracZ = vz & 0x7F;
+				tileX = vx >> 7;
+				tileZ = vz >> 7;
+				topInterp = heightmap[tileX][tileZ] * (128 - fracX) + heightmap[tileX + 1][tileZ] * fracX >> 7;
+				bottomInterp = heightmap[tileX][tileZ + 1] * (128 - fracX) + heightmap[tileX + 1][tileZ + 1] * fracX >> 7;
+				interpHeight = topInterp * (128 - fracZ) + bottomInterp * fracZ >> 7;
+				m.vertexY[v] = this.vertexY[v] + interpHeight - baseHeight;
 			}
 		} else {
-			@Pc(547) int local547;
+			@Pc(547) int finalHeight;
 			if (orientation == 2) {
-				for (local326 = 0; local326 < m.vertexCount; local326++) {
-					local337 = (this.vertexY[local326] << 16) / this.minY;
-					if (local337 < arg1) {
-						local344 = this.vertexX[local326] + arg4;
-						local348 = this.vertexZ[local326] + arg6;
-						local352 = local344 & 0x7F;
-						local356 = local348 & 0x7F;
-						local360 = local344 >> 7;
-						local382 = local348 >> 7;
-						local408 = arg2[local360][local382] * (128 - local352) + arg2[local360 + 1][local382] * local352 >> 7;
-						local420 = arg2[local360][local382 + 1] * (128 - local352) + arg2[local360 + 1][local382 + 1] * local352 >> 7;
-						local547 = local408 * (128 - local356) + local420 * local356 >> 7;
-						m.vertexY[local326] = this.vertexY[local326] + (local547 - arg5) * (arg1 - local337) / arg1;
+				for (v = 0; v < m.vertexCount; v++) {
+					vx = (this.vertexY[v] << 16) / this.minY;
+					if (vx < sizeParam) {
+						vz = this.vertexX[v] + fineX;
+						fracX = this.vertexZ[v] + fineZ;
+						fracZ = vz & 0x7F;
+						tileX = fracX & 0x7F;
+						tileZ = vz >> 7;
+						topInterp = fracX >> 7;
+						bottomInterp = heightmap[tileZ][topInterp] * (128 - fracZ) + heightmap[tileZ + 1][topInterp] * fracZ >> 7;
+						interpHeight = heightmap[tileZ][topInterp + 1] * (128 - fracZ) + heightmap[tileZ + 1][topInterp + 1] * fracZ >> 7;
+						finalHeight = bottomInterp * (128 - tileX) + interpHeight * tileX >> 7;
+						m.vertexY[v] = this.vertexY[v] + (finalHeight - baseHeight) * (sizeParam - vx) / sizeParam;
 					} else {
-						m.vertexY[local326] = this.vertexY[local326];
+						m.vertexY[v] = this.vertexY[v];
 					}
 				}
 			} else if (orientation == 3) {
-				local326 = (arg1 & 0xFF) * 4;
-				local337 = (arg1 >> 8 & 0xFF) * 4;
-				this.method1667(arg2, arg4, arg5, arg6, local326, local337);
+				v = (sizeParam & 0xFF) * 4;
+				vx = (sizeParam >> 8 & 0xFF) * 4;
+				this.alignToTerrain(heightmap, fineX, baseHeight, fineZ, v, vx);
 			} else if (orientation == 4) {
-				local326 = this.maxY - this.minY;
-				for (local337 = 0; local337 < this.vertexCount; local337++) {
-					local344 = this.vertexX[local337] + arg4;
-					local348 = this.vertexZ[local337] + arg6;
-					local352 = local344 & 0x7F;
-					local356 = local348 & 0x7F;
-					local360 = local344 >> 7;
-					local382 = local348 >> 7;
-					local408 = arg3[local360][local382] * (128 - local352) + arg3[local360 + 1][local382] * local352 >> 7;
-					local420 = arg3[local360][local382 + 1] * (128 - local352) + arg3[local360 + 1][local382 + 1] * local352 >> 7;
-					local547 = local408 * (128 - local356) + local420 * local356 >> 7;
-					m.vertexY[local337] = this.vertexY[local337] + local547 + local326 - arg5;
+				v = this.maxY - this.minY;
+				for (vx = 0; vx < this.vertexCount; vx++) {
+					vz = this.vertexX[vx] + fineX;
+					fracX = this.vertexZ[vx] + fineZ;
+					fracZ = vz & 0x7F;
+					tileX = fracX & 0x7F;
+					tileZ = vz >> 7;
+					topInterp = fracX >> 7;
+					bottomInterp = heightmap2[tileZ][topInterp] * (128 - fracZ) + heightmap2[tileZ + 1][topInterp] * fracZ >> 7;
+					interpHeight = heightmap2[tileZ][topInterp + 1] * (128 - fracZ) + heightmap2[tileZ + 1][topInterp + 1] * fracZ >> 7;
+					finalHeight = bottomInterp * (128 - tileX) + interpHeight * tileX >> 7;
+					m.vertexY[vx] = this.vertexY[vx] + finalHeight + v - baseHeight;
 				}
 			} else if (orientation == 5) {
-				local326 = this.maxY - this.minY;
-				for (local337 = 0; local337 < this.vertexCount; local337++) {
-					local344 = this.vertexX[local337] + arg4;
-					local348 = this.vertexZ[local337] + arg6;
-					local352 = local344 & 0x7F;
-					local356 = local348 & 0x7F;
-					local360 = local344 >> 7;
-					local382 = local348 >> 7;
-					local408 = arg2[local360][local382] * (128 - local352) + arg2[local360 + 1][local382] * local352 >> 7;
-					local420 = arg2[local360][local382 + 1] * (128 - local352) + arg2[local360 + 1][local382 + 1] * local352 >> 7;
-					local547 = local408 * (128 - local356) + local420 * local356 >> 7;
-					local408 = arg3[local360][local382] * (128 - local352) + arg3[local360 + 1][local382] * local352 >> 7;
-					local420 = arg3[local360][local382 + 1] * (128 - local352) + arg3[local360 + 1][local382 + 1] * local352 >> 7;
-					@Pc(890) int local890 = local408 * (128 - local356) + local420 * local356 >> 7;
-					@Pc(894) int local894 = local547 - local890;
-					m.vertexY[local337] = ((this.vertexY[local337] << 8) / local326 * local894 >> 8) - (arg5 - local547);
+				v = this.maxY - this.minY;
+				for (vx = 0; vx < this.vertexCount; vx++) {
+					vz = this.vertexX[vx] + fineX;
+					fracX = this.vertexZ[vx] + fineZ;
+					fracZ = vz & 0x7F;
+					tileX = fracX & 0x7F;
+					tileZ = vz >> 7;
+					topInterp = fracX >> 7;
+					bottomInterp = heightmap[tileZ][topInterp] * (128 - fracZ) + heightmap[tileZ + 1][topInterp] * fracZ >> 7;
+					interpHeight = heightmap[tileZ][topInterp + 1] * (128 - fracZ) + heightmap[tileZ + 1][topInterp + 1] * fracZ >> 7;
+					finalHeight = bottomInterp * (128 - tileX) + interpHeight * tileX >> 7;
+					bottomInterp = heightmap2[tileZ][topInterp] * (128 - fracZ) + heightmap2[tileZ + 1][topInterp] * fracZ >> 7;
+					interpHeight = heightmap2[tileZ][topInterp + 1] * (128 - fracZ) + heightmap2[tileZ + 1][topInterp + 1] * fracZ >> 7;
+					@Pc(890) int bridgeHeight = bottomInterp * (128 - tileX) + interpHeight * tileX >> 7;
+					@Pc(894) int heightDiff = finalHeight - bridgeHeight;
+					m.vertexY[vx] = ((this.vertexY[vx] << 8) / v * heightDiff >> 8) - (baseHeight - finalHeight);
 				}
 			}
 		}
@@ -875,13 +875,13 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "b", descriptor = "(IIIII)Lclient!w;")
-	public final SoftwareModel createSoftwareModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		return new SoftwareModel(this, arg0, arg1, -50, -10, -50);
+	public final SoftwareModel createSoftwareModel(@OriginalArg(0) int ambient, @OriginalArg(1) int contrast) {
+		return new SoftwareModel(this, ambient, contrast, -50, -10, -50);
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIII)V")
 	@Override
-	public final void method4545(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final void updateModel(@OriginalArg(0) int yaw, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int z, @OriginalArg(4) int bitset) {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "c", descriptor = "(III)V")
@@ -896,22 +896,22 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "h", descriptor = "()V")
-	public final void method1673() {
-		@Pc(1) int local1;
-		for (local1 = 0; local1 < this.vertexCount; local1++) {
-			this.vertexZ[local1] = -this.vertexZ[local1];
+	public final void negateZAndReverseFaces() {
+		@Pc(1) int i;
+		for (i = 0; i < this.vertexCount; i++) {
+			this.vertexZ[i] = -this.vertexZ[i];
 		}
-		for (local1 = 0; local1 < this.triangleCount; local1++) {
-			@Pc(27) int local27 = this.triangleVertexA[local1];
-			this.triangleVertexA[local1] = this.triangleVertexC[local1];
-			this.triangleVertexC[local1] = local27;
+		for (i = 0; i < this.triangleCount; i++) {
+			@Pc(27) int temp = this.triangleVertexA[i];
+			this.triangleVertexA[i] = this.triangleVertexC[i];
+			this.triangleVertexC[i] = temp;
 		}
 		this.invalidate();
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "()Z")
 	@Override
-	public final boolean method4543() {
+	public final boolean canMerge() {
 		return true;
 	}
 
@@ -1095,13 +1095,13 @@ public final class RawModel extends Entity {
 				this.texturesScaleY = new short[complexTextureFaceCount];
 				this.texturesScaleZ = new short[complexTextureFaceCount];
 				this.textureRotationY = new byte[complexTextureFaceCount];
-				this.aByteArray32 = new byte[complexTextureFaceCount];
-				this.aByteArray34 = new byte[complexTextureFaceCount];
+				this.textureDirection = new byte[complexTextureFaceCount];
+				this.textureSpeed = new byte[complexTextureFaceCount];
 			}
 
 			if (cubeTextureFaceCount > 0) {
-				this.aByteArray28 = new byte[cubeTextureFaceCount];
-				this.aByteArray33 = new byte[cubeTextureFaceCount];
+				this.textureTransU = new byte[cubeTextureFaceCount];
+				this.textureTransV = new byte[cubeTextureFaceCount];
 			}
 		}
 
@@ -1251,8 +1251,8 @@ public final class RawModel extends Entity {
 				this.texturesScaleY[t] = (short) buffer3.g2();
 				this.texturesScaleZ[t] = (short) buffer3.g2();
 				this.textureRotationY[t] = buffer4.g1b();
-				this.aByteArray32[t] = buffer5.g1b();
-				this.aByteArray34[t] = buffer6.g1b();
+				this.textureDirection[t] = buffer5.g1b();
+				this.textureSpeed[t] = buffer6.g1b();
 			} else if (type == 2) {
 				this.textureFacesP[t] = (short) buffer2.g2();
 				this.textureFacesM[t] = (short) buffer2.g2();
@@ -1261,10 +1261,10 @@ public final class RawModel extends Entity {
 				this.texturesScaleY[t] = (short) buffer3.g2();
 				this.texturesScaleZ[t] = (short) buffer3.g2();
 				this.textureRotationY[t] = buffer4.g1b();
-				this.aByteArray32[t] = buffer5.g1b();
-				this.aByteArray34[t] = buffer6.g1b();
-				this.aByteArray28[t] = buffer6.g1b();
-				this.aByteArray33[t] = buffer6.g1b();
+				this.textureDirection[t] = buffer5.g1b();
+				this.textureSpeed[t] = buffer6.g1b();
+				this.textureTransU[t] = buffer6.g1b();
+				this.textureTransV[t] = buffer6.g1b();
 			} else if (type == 3) {
 				this.textureFacesP[t] = (short) buffer2.g2();
 				this.textureFacesM[t] = (short) buffer2.g2();
@@ -1273,8 +1273,8 @@ public final class RawModel extends Entity {
 				this.texturesScaleY[t] = (short) buffer3.g2();
 				this.texturesScaleZ[t] = (short) buffer3.g2();
 				this.textureRotationY[t] = buffer4.g1b();
-				this.aByteArray32[t] = buffer5.g1b();
-				this.aByteArray34[t] = buffer6.g1b();
+				this.textureDirection[t] = buffer5.g1b();
+				this.textureSpeed[t] = buffer6.g1b();
 			}
 		}
 
@@ -1294,7 +1294,7 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "i", descriptor = "()Lclient!gb;")
-	public final RawModel method1675() {
+	public final RawModel shallowCopy() {
 		@Pc(3) RawModel m = new RawModel();
 		if (this.triangleInfo != null) {
 			m.triangleInfo = new byte[this.triangleCount];
@@ -1324,18 +1324,18 @@ public final class RawModel extends Entity {
 		m.texturesScaleY = this.texturesScaleY;
 		m.texturesScaleZ = this.texturesScaleZ;
 		m.textureRotationY = this.textureRotationY;
-		m.aByteArray32 = this.aByteArray32;
-		m.aByteArray34 = this.aByteArray34;
-		m.aByteArray28 = this.aByteArray28;
-		m.aByteArray33 = this.aByteArray33;
+		m.textureDirection = this.textureDirection;
+		m.textureSpeed = this.textureSpeed;
+		m.textureTransU = this.textureTransU;
+		m.textureTransV = this.textureTransV;
 		m.vertexBones = this.vertexBones;
 		m.triangleBones = this.triangleBones;
 		m.boneVertices = this.boneVertices;
 		m.boneTriangles = this.boneTriangles;
 		m.vertexNormals = this.vertexNormals;
 		m.triangleNormals = this.triangleNormals;
-		m.aShort19 = this.aShort19;
-		m.aShort18 = this.aShort18;
+		m.ambient = this.ambient;
+		m.contrast = this.contrast;
 		return m;
 	}
 
@@ -1353,13 +1353,13 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "c", descriptor = "(I)V")
-	private void method1677(@OriginalArg(0) int arg0) {
-		@Pc(3) int local3 = SIN[arg0];
-		@Pc(7) int local7 = COS[arg0];
-		for (@Pc(9) int local9 = 0; local9 < this.vertexCount; local9++) {
-			@Pc(29) int local29 = this.vertexY[local9] * local7 - this.vertexZ[local9] * local3 >> 16;
-			this.vertexZ[local9] = this.vertexY[local9] * local3 + this.vertexZ[local9] * local7 >> 16;
-			this.vertexY[local9] = local29;
+	private void rotateX(@OriginalArg(0) int angle) {
+		@Pc(3) int sin = SIN[angle];
+		@Pc(7) int cos = COS[angle];
+		for (@Pc(9) int v = 0; v < this.vertexCount; v++) {
+			@Pc(29) int temp = this.vertexY[v] * cos - this.vertexZ[v] * sin >> 16;
+			this.vertexZ[v] = this.vertexY[v] * sin + this.vertexZ[v] * cos >> 16;
+			this.vertexY[v] = temp;
 		}
 		this.invalidate();
 	}
@@ -1367,19 +1367,19 @@ public final class RawModel extends Entity {
 	@OriginalMember(owner = "client!gb", name = "j", descriptor = "()V")
 	private void invalidate() {
 		this.vertexNormals = null;
-		this.aClass57Array2 = null;
+		this.mergedNormals = null;
 		this.triangleNormals = null;
 		this.boundsValid = false;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "c", descriptor = "(IIIII)Lclient!ak;")
-	public final Model createModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public final Model createModel(@OriginalArg(0) int ambient, @OriginalArg(1) int contrast, @OriginalArg(2) int lightX, @OriginalArg(3) int lightY, @OriginalArg(4) int lightZ) {
 		if (GlRenderer.enabled) {
-			@Pc(9) GlModel model = new GlModel(this, arg0, arg1, true);
+			@Pc(9) GlModel model = new GlModel(this, ambient, contrast, true);
 			model.createBones();
 			return model;
 		} else {
-			return new SoftwareModel(this, arg0, arg1, arg2, arg3, arg4);
+			return new SoftwareModel(this, ambient, contrast, lightX, lightY, lightZ);
 		}
 	}
 
@@ -1403,52 +1403,52 @@ public final class RawModel extends Entity {
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(Lclient!th;IIIZ)V")
 	@Override
-	public final void method4544(@OriginalArg(0) Entity arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
-		@Pc(2) RawModel m = (RawModel) arg0;
+	public final void mergeNormals(@OriginalArg(0) Entity other, @OriginalArg(1) int offsetX, @OriginalArg(2) int offsetY, @OriginalArg(3) int offsetZ, @OriginalArg(4) boolean markTriangles) {
+		@Pc(2) RawModel m = (RawModel) other;
 		m.calculateBounds();
 		m.calculateNormals();
-		anInt2138++;
-		@Pc(12) int local12 = 0;
-		@Pc(15) int[] local15 = m.vertexX;
-		@Pc(18) int local18 = m.vertexCount;
-		@Pc(20) int local20;
-		for (local20 = 0; local20 < this.vertexCount; local20++) {
-			@Pc(29) VertexNormal local29 = this.vertexNormals[local20];
-			if (local29.magnitude != 0) {
-				@Pc(40) int local40 = this.vertexY[local20] - arg2;
-				if (local40 >= m.minY && local40 <= m.maxY) {
-					@Pc(56) int local56 = this.vertexX[local20] - arg1;
-					if (local56 >= m.minX && local56 <= m.maxX) {
-						@Pc(72) int local72 = this.vertexZ[local20] - arg3;
-						if (local72 >= m.minZ && local72 <= m.maxZ) {
-							for (@Pc(83) int local83 = 0; local83 < local18; local83++) {
-								@Pc(91) VertexNormal local91 = m.vertexNormals[local83];
-								if (local56 == local15[local83] && local72 == m.vertexZ[local83] && local40 == m.vertexY[local83] && local91.magnitude != 0) {
-									if (this.aClass57Array2 == null) {
-										this.aClass57Array2 = new VertexNormal[this.vertexCount];
+		mergeGeneration++;
+		@Pc(12) int mergeCount = 0;
+		@Pc(15) int[] otherVertexX = m.vertexX;
+		@Pc(18) int otherVertexCount = m.vertexCount;
+		@Pc(20) int i;
+		for (i = 0; i < this.vertexCount; i++) {
+			@Pc(29) VertexNormal normal = this.vertexNormals[i];
+			if (normal.magnitude != 0) {
+				@Pc(40) int adjustedY = this.vertexY[i] - offsetY;
+				if (adjustedY >= m.minY && adjustedY <= m.maxY) {
+					@Pc(56) int adjustedX = this.vertexX[i] - offsetX;
+					if (adjustedX >= m.minX && adjustedX <= m.maxX) {
+						@Pc(72) int adjustedZ = this.vertexZ[i] - offsetZ;
+						if (adjustedZ >= m.minZ && adjustedZ <= m.maxZ) {
+							for (@Pc(83) int j = 0; j < otherVertexCount; j++) {
+								@Pc(91) VertexNormal otherNormal = m.vertexNormals[j];
+								if (adjustedX == otherVertexX[j] && adjustedZ == m.vertexZ[j] && adjustedY == m.vertexY[j] && otherNormal.magnitude != 0) {
+									if (this.mergedNormals == null) {
+										this.mergedNormals = new VertexNormal[this.vertexCount];
 									}
-									if (m.aClass57Array2 == null) {
-										m.aClass57Array2 = new VertexNormal[local18];
+									if (m.mergedNormals == null) {
+										m.mergedNormals = new VertexNormal[otherVertexCount];
 									}
-									@Pc(131) VertexNormal local131 = this.aClass57Array2[local20];
-									if (local131 == null) {
-										local131 = this.aClass57Array2[local20] = new VertexNormal(local29);
+									@Pc(131) VertexNormal merged = this.mergedNormals[i];
+									if (merged == null) {
+										merged = this.mergedNormals[i] = new VertexNormal(normal);
 									}
-									@Pc(148) VertexNormal local148 = m.aClass57Array2[local83];
-									if (local148 == null) {
-										local148 = m.aClass57Array2[local83] = new VertexNormal(local91);
+									@Pc(148) VertexNormal otherMerged = m.mergedNormals[j];
+									if (otherMerged == null) {
+										otherMerged = m.mergedNormals[j] = new VertexNormal(otherNormal);
 									}
-									local131.x += local91.x;
-									local131.y += local91.y;
-									local131.z += local91.z;
-									local131.magnitude += local91.magnitude;
-									local148.x += local29.x;
-									local148.y += local29.y;
-									local148.z += local29.z;
-									local148.magnitude += local29.magnitude;
-									local12++;
-									anIntArray194[local20] = anInt2138;
-									anIntArray199[local83] = anInt2138;
+									merged.x += otherNormal.x;
+									merged.y += otherNormal.y;
+									merged.z += otherNormal.z;
+									merged.magnitude += otherNormal.magnitude;
+									otherMerged.x += normal.x;
+									otherMerged.y += normal.y;
+									otherMerged.z += normal.z;
+									otherMerged.magnitude += normal.magnitude;
+									mergeCount++;
+									mergedVertexTagsA[i] = mergeGeneration;
+									mergedVertexTagsB[j] = mergeGeneration;
 								}
 							}
 						}
@@ -1456,29 +1456,29 @@ public final class RawModel extends Entity {
 				}
 			}
 		}
-		if (local12 < 3 || !arg4) {
+		if (mergeCount < 3 || !markTriangles) {
 			return;
 		}
-		for (local20 = 0; local20 < this.triangleCount; local20++) {
-			if (anIntArray194[this.triangleVertexA[local20]] == anInt2138 && anIntArray194[this.triangleVertexB[local20]] == anInt2138 && anIntArray194[this.triangleVertexC[local20]] == anInt2138) {
+		for (i = 0; i < this.triangleCount; i++) {
+			if (mergedVertexTagsA[this.triangleVertexA[i]] == mergeGeneration && mergedVertexTagsA[this.triangleVertexB[i]] == mergeGeneration && mergedVertexTagsA[this.triangleVertexC[i]] == mergeGeneration) {
 				if (this.triangleInfo == null) {
 					this.triangleInfo = new byte[this.triangleCount];
 				}
-				this.triangleInfo[local20] = 2;
+				this.triangleInfo[i] = 2;
 			}
 		}
-		for (local20 = 0; local20 < m.triangleCount; local20++) {
-			if (anIntArray199[m.triangleVertexA[local20]] == anInt2138 && anIntArray199[m.triangleVertexB[local20]] == anInt2138 && anIntArray199[m.triangleVertexC[local20]] == anInt2138) {
+		for (i = 0; i < m.triangleCount; i++) {
+			if (mergedVertexTagsB[m.triangleVertexA[i]] == mergeGeneration && mergedVertexTagsB[m.triangleVertexB[i]] == mergeGeneration && mergedVertexTagsB[m.triangleVertexC[i]] == mergeGeneration) {
 				if (m.triangleInfo == null) {
 					m.triangleInfo = new byte[m.triangleCount];
 				}
-				m.triangleInfo[local20] = 2;
+				m.triangleInfo[i] = 2;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!gb", name = "d", descriptor = "(I)V")
-	public final void method1682() {
+	public final void rotate256() {
 		@Pc(3) int sin = SIN[256];
 		@Pc(7) int cos = COS[256];
 		for (@Pc(9) int i = 0; i < this.vertexCount; i++) {
@@ -1544,51 +1544,51 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "d", descriptor = "(III)V")
-	public final void method1684(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(5) int local5;
-		@Pc(9) int local9;
-		@Pc(11) int local11;
-		@Pc(31) int local31;
-		if (arg2 != 0) {
-			local5 = SIN[arg2];
-			local9 = COS[arg2];
-			for (local11 = 0; local11 < this.vertexCount; local11++) {
-				local31 = this.vertexY[local11] * local5 + this.vertexX[local11] * local9 >> 16;
-				this.vertexY[local11] = this.vertexY[local11] * local9 - this.vertexX[local11] * local5 >> 16;
-				this.vertexX[local11] = local31;
+	public final void rotateXYZ(@OriginalArg(0) int rotX, @OriginalArg(1) int rotY, @OriginalArg(2) int rotZ) {
+		@Pc(5) int sin;
+		@Pc(9) int cos;
+		@Pc(11) int v;
+		@Pc(31) int temp;
+		if (rotZ != 0) {
+			sin = SIN[rotZ];
+			cos = COS[rotZ];
+			for (v = 0; v < this.vertexCount; v++) {
+				temp = this.vertexY[v] * sin + this.vertexX[v] * cos >> 16;
+				this.vertexY[v] = this.vertexY[v] * cos - this.vertexX[v] * sin >> 16;
+				this.vertexX[v] = temp;
 			}
 		}
-		if (arg0 != 0) {
-			local5 = SIN[arg0];
-			local9 = COS[arg0];
-			for (local11 = 0; local11 < this.vertexCount; local11++) {
-				local31 = this.vertexY[local11] * local9 - this.vertexZ[local11] * local5 >> 16;
-				this.vertexZ[local11] = this.vertexY[local11] * local5 + this.vertexZ[local11] * local9 >> 16;
-				this.vertexY[local11] = local31;
+		if (rotX != 0) {
+			sin = SIN[rotX];
+			cos = COS[rotX];
+			for (v = 0; v < this.vertexCount; v++) {
+				temp = this.vertexY[v] * cos - this.vertexZ[v] * sin >> 16;
+				this.vertexZ[v] = this.vertexY[v] * sin + this.vertexZ[v] * cos >> 16;
+				this.vertexY[v] = temp;
 			}
 		}
-		if (arg1 == 0) {
+		if (rotY == 0) {
 			return;
 		}
-		local5 = SIN[arg1];
-		local9 = COS[arg1];
-		for (local11 = 0; local11 < this.vertexCount; local11++) {
-			local31 = this.vertexZ[local11] * local5 + this.vertexX[local11] * local9 >> 16;
-			this.vertexZ[local11] = this.vertexZ[local11] * local9 - this.vertexX[local11] * local5 >> 16;
-			this.vertexX[local11] = local31;
+		sin = SIN[rotY];
+		cos = COS[rotY];
+		for (v = 0; v < this.vertexCount; v++) {
+			temp = this.vertexZ[v] * sin + this.vertexX[v] * cos >> 16;
+			this.vertexZ[v] = this.vertexZ[v] * cos - this.vertexX[v] * sin >> 16;
+			this.vertexX[v] = temp;
 		}
 	}
 
 	@OriginalMember(owner = "client!gb", name = "e", descriptor = "(III)I")
-	public final int method1685(@OriginalArg(0) int arg0, @OriginalArg(2) int arg1) {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			if (this.vertexX[local1] == arg0 && this.vertexY[local1] == 0 && this.vertexZ[local1] == arg1) {
-				return local1;
+	public final int addOrReuseGroundVertex(@OriginalArg(0) int x, @OriginalArg(2) int z) {
+		for (@Pc(1) int i = 0; i < this.vertexCount; i++) {
+			if (this.vertexX[i] == x && this.vertexY[i] == 0 && this.vertexZ[i] == z) {
+				return i;
 			}
 		}
-		this.vertexX[this.vertexCount] = arg0;
+		this.vertexX[this.vertexCount] = x;
 		this.vertexY[this.vertexCount] = 0;
-		this.vertexZ[this.vertexCount] = arg1;
+		this.vertexZ[this.vertexCount] = z;
 		return this.vertexCount++;
 	}
 
@@ -1887,11 +1887,11 @@ public final class RawModel extends Entity {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "m", descriptor = "()V")
-	public final void method1689() {
-		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-			@Pc(10) int local10 = this.vertexZ[local1];
-			this.vertexZ[local1] = this.vertexX[local1];
-			this.vertexX[local1] = -local10;
+	public final void rotateCounterClockwiseXY() {
+		for (@Pc(1) int v = 0; v < this.vertexCount; v++) {
+			@Pc(10) int temp = this.vertexZ[v];
+			this.vertexZ[v] = this.vertexX[v];
+			this.vertexX[v] = -temp;
 		}
 		this.invalidate();
 	}

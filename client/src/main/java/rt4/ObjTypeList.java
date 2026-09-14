@@ -12,30 +12,30 @@ public class ObjTypeList {
 	@OriginalMember(owner = "client!jd", name = "c", descriptor = "Lclient!n;")
 	public static final SoftLruHashTable objectSpriteCache = new SoftLruHashTable(100);
 	@OriginalMember(owner = "client!tg", name = "f", descriptor = "Z")
-	public static boolean aBoolean276;
+	public static boolean allowMembers;
 	@OriginalMember(owner = "client!sj", name = "r", descriptor = "Lclient!ve;")
 	public static Js5 modelsArchive;
 	@OriginalMember(owner = "client!um", name = "U", descriptor = "Lclient!dd;")
 	public static SoftwareFont font;
 	@OriginalMember(owner = "client!wa", name = "X", descriptor = "[Lclient!na;")
-	public static JagString[] aClass100Array87 = null;
+	public static JagString[] defaultOps = null;
 	@OriginalMember(owner = "client!ld", name = "g", descriptor = "[Lclient!na;")
-	public static JagString[] aClass100Array104 = null;
+	public static JagString[] defaultIops = null;
 	@OriginalMember(owner = "client!nh", name = "eb", descriptor = "I")
 	public static int capacity;
 	@OriginalMember(owner = "client!nd", name = "n", descriptor = "Lclient!ve;")
 	public static Js5 archive;
 
 	@OriginalMember(owner = "client!th", name = "a", descriptor = "(ZBLclient!ve;Lclient!dd;Lclient!ve;)V")
-	public static void init(@OriginalArg(2) Js5 arg0, @OriginalArg(3) SoftwareFont arg1, @OriginalArg(4) Js5 arg2) {
-		aBoolean276 = true;
-		modelsArchive = arg2;
-		archive = arg0;
-		@Pc(23) int local23 = archive.capacity() - 1;
-		capacity = archive.getGroupCapacity(local23) + local23 * 256;
-		aClass100Array104 = new JagString[]{null, null, null, null, LocalizedText.DROP};
-		aClass100Array87 = new JagString[]{null, null, LocalizedText.TAKE, null, null};
-		font = arg1;
+	public static void init(@OriginalArg(2) Js5 objArchive, @OriginalArg(3) SoftwareFont softwareFont, @OriginalArg(4) Js5 modelsJs5) {
+		allowMembers = true;
+		modelsArchive = modelsJs5;
+		archive = objArchive;
+		@Pc(23) int lastGroup = archive.capacity() - 1;
+		capacity = archive.getGroupCapacity(lastGroup) + lastGroup * 256;
+		defaultIops = new JagString[]{null, null, null, null, LocalizedText.DROP};
+		defaultOps = new JagString[]{null, null, LocalizedText.TAKE, null, null};
+		font = softwareFont;
 	}
 
 	@OriginalMember(owner = "client!fk", name = "a", descriptor = "(IB)Lclient!h;")
@@ -57,12 +57,12 @@ public class ObjTypeList {
 		if (obj.lentTemplate != -1) {
 			obj.generateLent(get(obj.lentLink), get(obj.lentTemplate));
 		}
-		if (!aBoolean276 && obj.members) {
+		if (!allowMembers && obj.members) {
 			obj.name = LocalizedText.MEMBERS_OBJECT;
 			obj.team = 0;
-			obj.iops = aClass100Array104;
+			obj.iops = defaultIops;
 			obj.stockMarket = false;
-			obj.ops = aClass100Array87;
+			obj.ops = defaultOps;
 		}
 		types.put(obj, id);
 		return obj;
@@ -90,9 +90,9 @@ public class ObjTypeList {
 	}
 
 	@OriginalMember(owner = "client!al", name = "a", descriptor = "(ZI)V")
-	public static void setAllowMembers(@OriginalArg(0) boolean arg0) {
-		if (arg0 != aBoolean276) {
-			aBoolean276 = arg0;
+	public static void setAllowMembers(@OriginalArg(0) boolean allow) {
+		if (allow != allowMembers) {
+			allowMembers = allow;
 			clear();
 		}
 	}

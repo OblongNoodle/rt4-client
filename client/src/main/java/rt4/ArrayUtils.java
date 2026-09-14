@@ -7,228 +7,228 @@ import org.openrs2.deob.annotation.Pc;
 public final class ArrayUtils {
 
 	@OriginalMember(owner = "client!kg", name = "a", descriptor = "([JI[JII)V")
-	public static void copy(@OriginalArg(0) long[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) long[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(15) int local15;
-		if (arg0 == arg2) {
-			if (arg1 == arg3) {
+	public static void copy(@OriginalArg(0) long[] src, @OriginalArg(1) int srcOff, @OriginalArg(2) long[] dest, @OriginalArg(3) int destOff, @OriginalArg(4) int length) {
+		@Pc(15) int end;
+		if (src == dest) {
+			if (srcOff == destOff) {
 				return;
 			}
-			if (arg3 > arg1 && arg3 < arg1 + arg4) {
-				local15 = arg4 - 1;
-				@Pc(19) int local19 = arg1 + local15;
-				@Pc(23) int local23 = arg3 + local15;
-				local15 = local19 - local15;
-				local15 += 3;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
+			if (destOff > srcOff && destOff < srcOff + length) {
+				end = length - 1;
+				@Pc(19) int si = srcOff + end;
+				@Pc(23) int di = destOff + end;
+				end = si - end;
+				end += 3;
+				while (si >= end) {
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
 				}
-				local15 -= 3;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
+				end -= 3;
+				while (si >= end) {
+					dest[di--] = src[si--];
 				}
 				return;
 			}
 		}
-		local15 = arg4 + arg1;
-		@Pc(83) int local83 = local15 - 3;
-		while (arg1 < local83) {
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
+		end = length + srcOff;
+		@Pc(83) int unrolledEnd = end - 3;
+		while (srcOff < unrolledEnd) {
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
 		}
-		local15 = local83 + 3;
-		while (arg1 < local15) {
-			arg2[arg3++] = arg0[arg1++];
+		end = unrolledEnd + 3;
+		while (srcOff < end) {
+			dest[destOff++] = src[srcOff++];
 		}
 	}
 
 	@OriginalMember(owner = "client!kg", name = "a", descriptor = "([II[III)V")
-	public static void copy(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(15) int local15;
-		if (arg0 == arg2) {
-			if (arg1 == arg3) {
+	public static void copy(@OriginalArg(0) int[] src, @OriginalArg(1) int srcOff, @OriginalArg(2) int[] dest, @OriginalArg(3) int destOff, @OriginalArg(4) int length) {
+		@Pc(15) int end;
+		if (src == dest) {
+			if (srcOff == destOff) {
 				return;
 			}
-			if (arg3 > arg1 && arg3 < arg1 + arg4) {
-				local15 = arg4 - 1;
-				@Pc(19) int local19 = arg1 + local15;
-				@Pc(23) int local23 = arg3 + local15;
-				local15 = local19 - local15;
-				local15 += 7;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
+			if (destOff > srcOff && destOff < srcOff + length) {
+				end = length - 1;
+				@Pc(19) int si = srcOff + end;
+				@Pc(23) int di = destOff + end;
+				end = si - end;
+				end += 7;
+				while (si >= end) {
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
 				}
-				local15 -= 7;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
+				end -= 7;
+				while (si >= end) {
+					dest[di--] = src[si--];
 				}
 				return;
 			}
 		}
-		local15 = arg4 + arg1;
-		@Pc(115) int local115 = local15 - 7;
-		while (arg1 < local115) {
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
+		end = length + srcOff;
+		@Pc(115) int unrolledEnd = end - 7;
+		while (srcOff < unrolledEnd) {
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
 		}
-		local15 = local115 + 7;
-		while (arg1 < local15) {
-			arg2[arg3++] = arg0[arg1++];
+		end = unrolledEnd + 7;
+		while (srcOff < end) {
+			dest[destOff++] = src[srcOff++];
 		}
 	}
 
 	@OriginalMember(owner = "client!kg", name = "a", descriptor = "([IIII)V")
-	public static void fill(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(5) int local5 = arg1 + arg2 - 7;
-		while (arg1 < local5) {
-			arg0[arg1++] = arg3;
-			arg0[arg1++] = arg3;
-			arg0[arg1++] = arg3;
-			arg0[arg1++] = arg3;
-			arg0[arg1++] = arg3;
-			arg0[arg1++] = arg3;
-			arg0[arg1++] = arg3;
-			arg0[arg1++] = arg3;
+	public static void fill(@OriginalArg(0) int[] dest, @OriginalArg(1) int off, @OriginalArg(2) int length, @OriginalArg(3) int value) {
+		@Pc(5) int unrolledEnd = off + length - 7;
+		while (off < unrolledEnd) {
+			dest[off++] = value;
+			dest[off++] = value;
+			dest[off++] = value;
+			dest[off++] = value;
+			dest[off++] = value;
+			dest[off++] = value;
+			dest[off++] = value;
+			dest[off++] = value;
 		}
-		local5 += 7;
-		while (arg1 < local5) {
-			arg0[arg1++] = arg3;
+		unrolledEnd += 7;
+		while (off < unrolledEnd) {
+			dest[off++] = value;
 		}
 	}
 
 	@OriginalMember(owner = "client!kg", name = "a", descriptor = "([FI[FII)V")
-	public static void copy(@OriginalArg(0) float[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) float[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg0 == arg2) {
+	public static void copy(@OriginalArg(0) float[] src, @OriginalArg(1) int srcOff, @OriginalArg(2) float[] dest, @OriginalArg(3) int destOff, @OriginalArg(4) int length) {
+		if (src == dest) {
 			return;
 		}
-		@Pc(114) int local114 = arg4;
-		@Pc(115) int local115 = local114 - 7;
-		while (arg1 < local115) {
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
+		@Pc(114) int end = length;
+		@Pc(115) int unrolledEnd = end - 7;
+		while (srcOff < unrolledEnd) {
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
 		}
-		local114 = local115 + 7;
-		while (arg1 < local114) {
-			arg2[arg3++] = arg0[arg1++];
+		end = unrolledEnd + 7;
+		while (srcOff < end) {
+			dest[destOff++] = src[srcOff++];
 		}
 	}
 
 	@OriginalMember(owner = "client!kg", name = "a", descriptor = "([SI[SII)V")
-	public static void copy(@OriginalArg(0) short[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) short[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(15) int local15;
-		if (arg0 == arg2) {
-			if (arg1 == arg3) {
+	public static void copy(@OriginalArg(0) short[] src, @OriginalArg(1) int srcOff, @OriginalArg(2) short[] dest, @OriginalArg(3) int destOff, @OriginalArg(4) int length) {
+		@Pc(15) int end;
+		if (src == dest) {
+			if (srcOff == destOff) {
 				return;
 			}
-			if (arg3 > arg1 && arg3 < arg1 + arg4) {
-				local15 = arg4 - 1;
-				@Pc(19) int local19 = arg1 + local15;
-				@Pc(23) int local23 = arg3 + local15;
-				local15 = local19 - local15;
-				local15 += 7;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
+			if (destOff > srcOff && destOff < srcOff + length) {
+				end = length - 1;
+				@Pc(19) int si = srcOff + end;
+				@Pc(23) int di = destOff + end;
+				end = si - end;
+				end += 7;
+				while (si >= end) {
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
 				}
-				local15 -= 7;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
+				end -= 7;
+				while (si >= end) {
+					dest[di--] = src[si--];
 				}
 				return;
 			}
 		}
-		local15 = arg4 + arg1;
-		@Pc(115) int local115 = local15 - 7;
-		while (arg1 < local115) {
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
+		end = length + srcOff;
+		@Pc(115) int unrolledEnd = end - 7;
+		while (srcOff < unrolledEnd) {
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
 		}
-		local15 = local115 + 7;
-		while (arg1 < local15) {
-			arg2[arg3++] = arg0[arg1++];
+		end = unrolledEnd + 7;
+		while (srcOff < end) {
+			dest[destOff++] = src[srcOff++];
 		}
 	}
 
 	@OriginalMember(owner = "client!kg", name = "a", descriptor = "([Ljava/lang/Object;I[Ljava/lang/Object;II)V")
-	public static void copy(@OriginalArg(0) Object[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Object[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(15) int local15;
-		if (arg0 == arg2) {
-			if (arg1 == arg3) {
+	public static void copy(@OriginalArg(0) Object[] src, @OriginalArg(1) int srcOff, @OriginalArg(2) Object[] dest, @OriginalArg(3) int destOff, @OriginalArg(4) int length) {
+		@Pc(15) int end;
+		if (src == dest) {
+			if (srcOff == destOff) {
 				return;
 			}
-			if (arg3 > arg1 && arg3 < arg1 + arg4) {
-				local15 = arg4 - 1;
-				@Pc(19) int local19 = arg1 + local15;
-				@Pc(23) int local23 = arg3 + local15;
-				local15 = local19 - local15;
-				local15 += 7;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
-					arg2[local23--] = arg0[local19--];
+			if (destOff > srcOff && destOff < srcOff + length) {
+				end = length - 1;
+				@Pc(19) int si = srcOff + end;
+				@Pc(23) int di = destOff + end;
+				end = si - end;
+				end += 7;
+				while (si >= end) {
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
+					dest[di--] = src[si--];
 				}
-				local15 -= 7;
-				while (local19 >= local15) {
-					arg2[local23--] = arg0[local19--];
+				end -= 7;
+				while (si >= end) {
+					dest[di--] = src[si--];
 				}
 				return;
 			}
 		}
-		local15 = arg4 + arg1;
-		@Pc(115) int local115 = local15 - 7;
-		while (arg1 < local115) {
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
-			arg2[arg3++] = arg0[arg1++];
+		end = length + srcOff;
+		@Pc(115) int unrolledEnd = end - 7;
+		while (srcOff < unrolledEnd) {
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
+			dest[destOff++] = src[srcOff++];
 		}
-		local15 = local115 + 7;
-		while (arg1 < local15) {
-			arg2[arg3++] = arg0[arg1++];
+		end = unrolledEnd + 7;
+		while (srcOff < end) {
+			dest[destOff++] = src[srcOff++];
 		}
 	}
 
@@ -252,8 +252,8 @@ public final class ArrayUtils {
 	}
 
 	@OriginalMember(owner = "client!nk", name = "a", descriptor = "(Z[J[I)V")
-	public static void sort(@OriginalArg(1) long[] arg0, @OriginalArg(2) int[] arg1) {
-		sort(arg0, 0, arg0.length - 1, arg1);
+	public static void sort(@OriginalArg(1) long[] keys, @OriginalArg(2) int[] values) {
+		sort(keys, 0, keys.length - 1, values);
 	}
 
 	@OriginalMember(owner = "client!gj", name = "a", descriptor = "([JII[II)V")
@@ -288,67 +288,67 @@ public final class ArrayUtils {
 	}
 
 	@OriginalMember(owner = "client!ja", name = "a", descriptor = "([II)[I")
-	public static int[] copyOfNullable(@OriginalArg(0) int[] arg0) {
-		if (arg0 == null) {
+	public static int[] copyOfNullable(@OriginalArg(0) int[] src) {
+		if (src == null) {
 			return null;
 		} else {
-			@Pc(18) int[] local18 = new int[arg0.length];
-			copy(arg0, 0, local18, 0, arg0.length);
-			return local18;
+			@Pc(18) int[] copy = new int[src.length];
+			copy(src, 0, copy, 0, src.length);
+			return copy;
 		}
 	}
 
 	@OriginalMember(owner = "client!vg", name = "a", descriptor = "(I[S)[S")
-	public static short[] copyOfNullable(@OriginalArg(1) short[] arg0) {
-		if (arg0 == null) {
+	public static short[] copyOfNullable(@OriginalArg(1) short[] src) {
+		if (src == null) {
 			return null;
 		} else {
-			@Pc(19) short[] local19 = new short[arg0.length];
-			copy(arg0, 0, local19, 0, arg0.length);
-			return local19;
+			@Pc(19) short[] copy = new short[src.length];
+			copy(src, 0, copy, 0, src.length);
+			return copy;
 		}
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "([SI)[S")
-	public static short[] copyOf(@OriginalArg(0) short[] arg0, @OriginalArg(1) int arg1) {
-		@Pc(2) short[] local2 = new short[arg1];
-		copy(arg0, 0, local2, 0, arg1);
-		return local2;
+	public static short[] copyOf(@OriginalArg(0) short[] src, @OriginalArg(1) int length) {
+		@Pc(2) short[] copy = new short[length];
+		copy(src, 0, copy, 0, length);
+		return copy;
 	}
 
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "([FI)[F")
-	public static float[] copyOf(@OriginalArg(0) float[] arg0, @OriginalArg(1) int arg1) {
-		@Pc(2) float[] local2 = new float[arg1];
-		copy(arg0, 0, local2, 0, arg1);
-		return local2;
+	public static float[] copyOf(@OriginalArg(0) float[] src, @OriginalArg(1) int length) {
+		@Pc(2) float[] copy = new float[length];
+		copy(src, 0, copy, 0, length);
+		return copy;
 	}
 
 	@OriginalMember(owner = "client!kd", name = "a", descriptor = "([IIIII)V")
-	public static void fillRange(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg2, @OriginalArg(4) int arg3) {
-		arg1--;
-		@Pc(14) int local14 = arg2 - 1;
-		@Pc(17) int local17 = local14 - 7;
-		while (local17 > arg1) {
-			@Pc(22) int local22 = arg1 + 1;
-			arg0[local22] = arg3;
-			@Pc(27) int local27 = local22 + 1;
-			arg0[local27] = arg3;
-			@Pc(32) int local32 = local27 + 1;
-			arg0[local32] = arg3;
-			@Pc(37) int local37 = local32 + 1;
-			arg0[local37] = arg3;
-			@Pc(42) int local42 = local37 + 1;
-			arg0[local42] = arg3;
-			@Pc(47) int local47 = local42 + 1;
-			arg0[local47] = arg3;
-			@Pc(52) int local52 = local47 + 1;
-			arg0[local52] = arg3;
-			arg1 = local52 + 1;
-			arg0[arg1] = arg3;
+	public static void fillRange(@OriginalArg(0) int[] dest, @OriginalArg(1) int from, @OriginalArg(3) int to, @OriginalArg(4) int value) {
+		from--;
+		@Pc(14) int end = to - 1;
+		@Pc(17) int unrolledEnd = end - 7;
+		while (unrolledEnd > from) {
+			@Pc(22) int i0 = from + 1;
+			dest[i0] = value;
+			@Pc(27) int i1 = i0 + 1;
+			dest[i1] = value;
+			@Pc(32) int i2 = i1 + 1;
+			dest[i2] = value;
+			@Pc(37) int i3 = i2 + 1;
+			dest[i3] = value;
+			@Pc(42) int i4 = i3 + 1;
+			dest[i4] = value;
+			@Pc(47) int i5 = i4 + 1;
+			dest[i5] = value;
+			@Pc(52) int i6 = i5 + 1;
+			dest[i6] = value;
+			from = i6 + 1;
+			dest[from] = value;
 		}
-		while (local14 > arg1) {
-			arg1++;
-			arg0[arg1] = arg3;
+		while (end > from) {
+			from++;
+			dest[from] = value;
 		}
 	}
 
@@ -384,8 +384,8 @@ public final class ArrayUtils {
 	}
 
 	@OriginalMember(owner = "client!oi", name = "a", descriptor = "(I[I[Ljava/lang/Object;)V")
-	public static void sort(@OriginalArg(1) int[] arg0, @OriginalArg(2) Object[] arg1) {
-		sort(arg1, arg0.length - 1, arg0, 0);
+	public static void sort(@OriginalArg(1) int[] keys, @OriginalArg(2) Object[] values) {
+		sort(values, keys.length - 1, keys, 0);
 	}
 
 	@OriginalMember(owner = "client!nj", name = "a", descriptor = "(IIZ[I[I)V")
@@ -451,7 +451,7 @@ public final class ArrayUtils {
 	}
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "([J[Ljava/lang/Object;I)V")
-	public static void sort(@OriginalArg(0) long[] arg0, @OriginalArg(1) Object[] arg1) {
-		sort(arg0.length - 1, arg0, 0, arg1);
+	public static void sort(@OriginalArg(0) long[] keys, @OriginalArg(1) Object[] values) {
+		sort(keys.length - 1, keys, 0, values);
 	}
 }

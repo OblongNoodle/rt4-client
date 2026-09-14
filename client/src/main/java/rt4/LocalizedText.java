@@ -1309,13 +1309,13 @@ public class LocalizedText {
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(II)V")
-	public static void setLanguage(@OriginalArg(1) int arg0) {
-		if (arg0 == 0) {
+	public static void setLanguage(@OriginalArg(1) int languageId) {
+		if (languageId == 0) {
 			return;
 		}
-		if (arg0 == 1) {
+		if (languageId == 1) {
 			switchToGerman();
-		} else if (arg0 == 2) {
+		} else if (languageId == 2) {
 			switchToFrench();
 		} else {
 			throw new RuntimeException();

@@ -60,9 +60,9 @@ public final class ObjType {
 	public int team = 0;
 
 	@OriginalMember(owner = "client!gd", name = "b", descriptor = "Lclient!na;")
-	public static final JagString aClass100_464 = JagString.parse("null");
+	public static final JagString DEFAULT_NAME = JagString.parse("null");
 	@OriginalMember(owner = "client!h", name = "E", descriptor = "Lclient!na;")
-	public JagString name = aClass100_464;
+	public JagString name = DEFAULT_NAME;
 
 	@OriginalMember(owner = "client!h", name = "J", descriptor = "I")
 	private int manWearZOff = 0;
@@ -177,7 +177,7 @@ public final class ObjType {
 	 * An example of this would be coins/arrows.
 	 */
 	@OriginalMember(owner = "client!h", name = "a", descriptor = "(II)Lclient!h;")
-	public final ObjType method1820(@OriginalArg(0) int count) {
+	public final ObjType getCountVariant(@OriginalArg(0) int count) {
 		if (this.countobj != null && count > 1) {
 			@Pc(23) int countId = -1;
 			for (@Pc(25) int i = 0; i < 10; i++) {
@@ -483,8 +483,8 @@ public final class ObjType {
 		this.members = link.members;
 		this.womanwear3 = link.womanwear3;
 		if (link.iops != null) {
-			for (@Pc(157) int local157 = 0; local157 < 4; local157++) {
-				this.iops[local157] = link.iops[local157];
+			for (@Pc(157) int i = 0; i < 4; i++) {
+				this.iops[i] = link.iops[i];
 			}
 		}
 		this.iops[4] = LocalizedText.LENT_ITEM_RETURN;
@@ -532,7 +532,7 @@ public final class ObjType {
 	}
 
 	@OriginalMember(owner = "client!h", name = "a", descriptor = "(IIILclient!tk;II)Lclient!ak;")
-	public final Model getModel(@OriginalArg(1) int arg0, @OriginalArg(2) int arg1, @OriginalArg(3) SeqType seqType, @OriginalArg(4) int count, @OriginalArg(5) int arg4) {
+	public final Model getModel(@OriginalArg(1) int nextFrame, @OriginalArg(2) int tweenDelta, @OriginalArg(3) SeqType seqType, @OriginalArg(4) int count, @OriginalArg(5) int frame) {
 		if (this.countobj != null && count > 1) {
 			@Pc(22) int countId = -1;
 			for (@Pc(24) int i = 0; i < 10; i++) {
@@ -541,7 +541,7 @@ public final class ObjType {
 				}
 			}
 			if (countId != -1) {
-				return ObjTypeList.get(countId).getModel(arg0, arg1, seqType, 1, arg4);
+				return ObjTypeList.get(countId).getModel(nextFrame, tweenDelta, seqType, 1, frame);
 			}
 		}
 		@Pc(76) Model model = (Model) ObjTypeList.models.get(this.id);
@@ -556,7 +556,7 @@ public final class ObjType {
 					if (this.recol_p == null || i >= this.recol_p.length) {
 						model2.recolor(this.recol_s[i], this.recol_d[i]);
 					} else {
-						model2.recolor(this.recol_s[i], client.aShortArray87[this.recol_p[i] & 0xFF]);
+						model2.recolor(this.recol_s[i], client.objRecolorPalette[this.recol_p[i] & 0xFF]);
 					}
 				}
 			}
@@ -571,12 +571,12 @@ public final class ObjType {
 			}
 			model.pickable = true;
 			if (GlRenderer.enabled) {
-				((GlModel) model).method4111(false, false, false, false, false, true);
+				((GlModel) model).uploadBuffers(false, false, false, false, false, true);
 			}
 			ObjTypeList.models.put(model, this.id);
 		}
 		if (seqType != null) {
-			model = seqType.method4215(model, arg0, arg1, arg4);
+			model = seqType.animateEntity(model, nextFrame, tweenDelta, frame);
 		}
 		return model;
 	}
@@ -593,7 +593,7 @@ public final class ObjType {
 				if (this.recol_p == null || i >= this.recol_p.length) {
 					model.recolor(this.recol_s[i], this.recol_d[i]);
 				} else {
-					model.recolor(this.recol_s[i], client.aShortArray87[this.recol_p[i] & 0xFF]);
+					model.recolor(this.recol_s[i], client.objRecolorPalette[this.recol_p[i] & 0xFF]);
 				}
 			}
 		}
