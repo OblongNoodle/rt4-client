@@ -753,7 +753,7 @@ public class InterfaceList {
 										if (Keyboard.pressedKeys[Keyboard.KEY_CTRL] && LoginManager.staffModLevel > 0) {
 											j = (int) ((double) (Mouse.clickX - absX - component.width / 2) * 2.0D / (double) WorldMap.zoom);
 											skill = (int) ((double) (Mouse.clickY - absY - component.height / 2) * 2.0D / (double) WorldMap.zoom);
-											k = WorldMap.viewX + i;
+											k = WorldMap.viewX + j;
 											@Pc(516) int mapY = WorldMap.viewY + skill;
 											@Pc(520) int tileX = k + WorldMap.originX;
 											@Pc(528) int tileY = WorldMap.length + WorldMap.originY - mapY - 1;

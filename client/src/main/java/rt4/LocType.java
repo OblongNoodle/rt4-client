@@ -856,7 +856,7 @@ public final class LocType {
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(IILclient!ek;ILclient!tk;I[[IZII[[IIII)Lclient!sm;")
-	public LocEntity getAnimatedEntity(@OriginalArg(0) int plane, @OriginalArg(1) int tileX, @OriginalArg(2) SoftwareIndexedSprite shadowSprite, @OriginalArg(3) int tileY, @OriginalArg(4) SeqType seqType, @OriginalArg(5) int rotation, @OriginalArg(6) int[][] heightmap, @OriginalArg(7) boolean castShadow, @OriginalArg(8) int currentFrame, @OriginalArg(10) int[][] overlayHeightmap, @OriginalArg(11) int shape, @OriginalArg(12) int delayClock, @OriginalArg(13) int tweenFrame) {
+	public LocEntity getAnimatedEntity(@OriginalArg(0) int plane, @OriginalArg(1) int tileX, @OriginalArg(2) SoftwareIndexedSprite shadowSprite, @OriginalArg(3) int tileY, @OriginalArg(4) SeqType seqType, @OriginalArg(5) int rotation, @OriginalArg(6) int[][] heightmap, @OriginalArg(7) boolean castShadow, @OriginalArg(8) int currentFrame, @OriginalArg(10) int[][] overlayHeightmap, @OriginalArg(11) int delayClock, @OriginalArg(12) int shape, @OriginalArg(13) int tweenFrame) {
 		@Pc(30) long cacheKey;
 		if (!GlRenderer.enabled) {
 			if (this.shapes == null) {
