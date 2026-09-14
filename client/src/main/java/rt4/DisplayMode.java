@@ -204,12 +204,12 @@ public final class DisplayMode {
 				 **/
 
 				/**
-				 @Pc(300) PrivilegedRequest local300 = GameShell.signLink.loadGlNatives(client.instance.getClass());
-				 while (local300.status == 0) {
+				 @Pc(300) PrivilegedRequest glNativesRequest = GameShell.signLink.loadGlNatives(client.instance.getClass());
+				 while (glNativesRequest.status == 0) {
 				 ThreadUtils.sleep(100L);
 				 }
-				 if (local300.status == 1) {
-				 aBoolean73 = true;
+				 if (glNativesRequest.status == 1) {
+				 start_GLRenderer = true;
 				 }
 				 */
 

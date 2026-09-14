@@ -17,5 +17,5 @@ public final class DeadClass {
 	public static double yawAccel = 0;
 
 	@OriginalMember(owner = "client!rc", name = "R", descriptor = "Z")
-	private static boolean aBoolean74;
+	private static boolean unknownDeadBoolean;
 }
