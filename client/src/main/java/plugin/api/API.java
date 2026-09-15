@@ -402,39 +402,39 @@ public class API {
      * Calculates the 2D screen position for a position in the SceneGraph.
      *
      * @param entityX The x-coordinate of the entity in the scene graph.
-     * @param entityZ The z-coordinate of the entity in the scene graph.
-     * @param yOffset The vertical displacement for positioning the entity.
-     * @return An array containing the calculated screen coordinates [x, y] or [-1, -1] if entity is not visible.
+     * @param entityY The y-coordinate of the entity in the scene graph.
+     * @param zOffset The vertical displacement for positioning the entity.
+     * @return An array containing the calculated screen coordinates [x, z] or [-1, -1] if entity is not visible.
      */
-    public static int[] CalculateSceneGraphScreenPosition(int entityX, int entityZ, int yOffset) {
+    public static int[] CalculateSceneGraphScreenPosition(int entityX, int entityY, int zOffset) {
         final int HALF_FIXED_WIDTH = 256;
         final int HALF_FIXED_HEIGHT = 167;
         final int RESIZABLE_SD_OFFSET = 500;
 
-        int elevation = SceneGraph.getTileHeight(plane, entityX, entityZ) - yOffset;
+        int elevation = SceneGraph.getTileHeight(plane, entityX, entityY) - zOffset;
         entityX -= SceneGraph.cameraX;
-        elevation -= SceneGraph.cameraY;
-        entityZ -= SceneGraph.cameraZ;
+        entityY -= SceneGraph.cameraY;
+        elevation -= SceneGraph.cameraZ;
 
         int sinPitch = MathUtils.sin[Camera.cameraPitch];
         int cosPitch = MathUtils.cos[Camera.cameraPitch];
         int sinYaw = MathUtils.sin[Camera.cameraYaw];
         int cosYaw = MathUtils.cos[Camera.cameraYaw];
 
-        int rotatedX = (entityZ * sinYaw + entityX * cosYaw) >> 16;
-        entityZ = (entityZ * cosYaw - entityX * sinYaw) >> 16;
+        int rotatedX = (entityY * sinYaw + entityX * cosYaw) >> 16;
+        entityY = (entityY * cosYaw - entityX * sinYaw) >> 16;
         entityX = rotatedX;
 
-        int rotatedY = (elevation * cosPitch - entityZ * sinPitch) >> 16;
-        entityZ = (elevation * sinPitch + entityZ * cosPitch) >> 16;
+        int rotatedY = (elevation * cosPitch - entityY * sinPitch) >> 16;
+        entityY = (elevation * sinPitch + entityY * cosPitch) >> 16;
         elevation = rotatedY;
 
         int[] screenPos = new int[2]; // X,Y
 
-        if (entityZ >= 50) {
+        if (entityY >= 50) {
             if (GetWindowMode() == WindowMode.FIXED) {
-                screenPos[0] = HALF_FIXED_WIDTH + ((entityX << 9) / entityZ);
-                screenPos[1] = HALF_FIXED_HEIGHT + ((elevation << 9) / entityZ);
+                screenPos[0] = HALF_FIXED_WIDTH + ((entityX << 9) / entityY);
+                screenPos[1] = HALF_FIXED_HEIGHT + ((elevation << 9) / entityY);
             } else {
                 Dimension canvas = GetWindowDimensions();
                 double newViewDistH;
@@ -451,8 +451,8 @@ public class API {
                     newViewDistH = (canvas.width / 2) / Math.tan(Math.toRadians(hFOV) / 2);
                     newViewDistV = (canvas.height / 2) / Math.tan(Math.toRadians(vFOV) / 2);
                 }
-                screenPos[0] = canvas.width / 2 + (int) ((entityX * newViewDistH) / entityZ);
-                screenPos[1] = canvas.height / 2 + (int) ((elevation * newViewDistV) / entityZ);
+                screenPos[0] = canvas.width / 2 + (int) ((entityX * newViewDistH) / entityY);
+                screenPos[1] = canvas.height / 2 + (int) ((elevation * newViewDistV) / entityY);
             }
         } else {
             screenPos[0] = -1;
