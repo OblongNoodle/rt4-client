@@ -1656,13 +1656,21 @@ public class SceneGraph {
 							do {
 								do {
 									while (true) {
+										// 1690:1697 waterData; 2028:2032 sceneryCount
 										@Pc(44) int var9;
+										// 1691:1694 waterColor; 1817:1852 wallDirIndex; 1970:1971 sceneryIdx; 2030:2081 sceneryBufferLen
 										@Pc(48) int var10;
+										// 1881:1888 decorDirection; 2090:2092 bestDeltaX
 										@Pc(907) int var17;
+										// 1883:1893 rotatedX; 2091:2092 bestDeltaY
 										@Pc(916) int var18;
+										// 1760:1769 linkedWall; 1977:2019 wall
 										@Pc(363) Wall var22;
+										// 1784:1909 groundVisible; 1969:1976 allSceneryDrawn
 										@Pc(469) boolean var24;
+										// 1772:1777 linkedScenery; 2033:2074 scenery
 										@Pc(425) Scenery var25;
+										// 1942:1962 neighborTile; 2037:2056 coveredTile
 										@Pc(1179) Tile var32;
 										while (true) {
 											do {

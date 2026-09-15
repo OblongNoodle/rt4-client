@@ -2,12 +2,7 @@
 
 ## Goals
 
-* Identify all classes
-  * Create new static classes by grouping related members
-* Identify all methods
-* Identify all fields
-* Identify all local variables
-* Remove any remaining obfuscation (possibly none left)
+* Create new static classes by grouping related members
 * Fix poor decompiler behavior (fernflower)
 * Replace magic numbers and bitmasks with named final fields
 * Refactor code to improve behavior/readability
