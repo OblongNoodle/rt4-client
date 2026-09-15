@@ -407,14 +407,23 @@ public class Protocol {
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "(IZ)V")
 	public static void readRebuildPacket(@OriginalArg(1) boolean dynamic) {
 		SceneGraph.dynamicMapRegion = dynamic;
+		// localTileX
 		@Pc(13) int var1;
+		// 430:451 regionCount; 452:473 regionIndex; 480:547 zoneX
 		@Pc(20) int var2;
+		// 432:434 xteaIdx; 437:547 plane
 		@Pc(26) int var3;
+		// 433:434 keyIdx; 438:476 zoneX; 482:547 localTileY
 		@Pc(31) int var4;
+		// 439:476 zoneY; 485:496 level; 498:516 regionCount; 517:541 regionIndex
 		@Pc(60) int var5;
+		// 440:476 localTileY; 486:494 chunkX; 500:502 xteaIdx; 505:547 zoneY
 		@Pc(64) int var6;
+		// 457:471 gridX; 488:492 hasChunk; 519:520 chunkX
 		@Pc(138) int var7;
+		// 458:471 gridY; 520:523 chunkY
 		@Pc(151) int var8;
+		// packedCoord
 		@Pc(169) int var9;
 		if (!SceneGraph.dynamicMapRegion) {
 			var1 = inboundBuffer.g2add();
@@ -540,8 +549,11 @@ public class Protocol {
 
 	@OriginalMember(owner = "client!gk", name = "a", descriptor = "(IIBLclient!e;)V")
 	public static void readExtendedPlayerInfo(@OriginalArg(0) int flags, @OriginalArg(1) int id, @OriginalArg(3) Player player) {
+		// 559:596 chatColorEffect; 609:611 hitDamage; 616:621 seqId; 624:627 appearanceLen; 661:663 hitDamage; 666:670 slotAnimCount; 682:692 spotAnimId
 		@Pc(13) int int1;
+		// 560:599 chatType; 610:611 hitType; 620:621 seqDelay; 662:663 hitType; 686:696 spotAnimData
 		@Pc(17) int int2;
+		// 562:606 savedOffset; 699:701 spotAnimSeqId
 		@Pc(24) int savedOffset;
 		if ((flags & 0x80) != 0) {
 			int1 = inboundBuffer.ig2();
