@@ -14,7 +14,7 @@ object XPTable {
     fun getLevelForXp(xp: Int): Pair<Int, Int> {
         for (i in 1..99) {
             if (xp < xpForLevels[i]) {
-                return Pair(i - 1, xp - xpForLevels[i - 1])
+                return Pair(i, xp - xpForLevels[i - 1])
             }
         }
         return Pair(99, 0)
@@ -23,6 +23,6 @@ object XPTable {
     fun getXpRequiredForLevel(level: Int): Int {
         if (level <= 0) return 0
         if (level >= 99) return xpForLevels[99]
-        return xpForLevels[level]
+        return xpForLevels[level - 1]
     }
 }
