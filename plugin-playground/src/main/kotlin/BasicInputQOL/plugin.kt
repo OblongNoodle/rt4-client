@@ -74,11 +74,12 @@ class plugin : Plugin() {
             e ?: return
             val forceZoom = API.IsKeyPressed(Keyboard.KEY_SHIFT) || API.IsKeyPressed(Keyboard.KEY_CTRL)
             if (forceZoom || !API.IsMouseOverScrollableInterface()) {
-                val previous = API.GetPreviousMouseWheelRotation()
-                val current = API.GetMouseWheelRotation()
-                val diff = current - previous
+                // Use the event's own delta instead of GetMouseWheelRotation()/GetPreviousMouseWheelRotation():
+                // those read a counter the core game loop also zeroes every tick (JavaMouseWheel.getRotation()),
+                // racing with this AWT callback and occasionally producing a bogus diff that stalls zoom.
+                val diff = e.wheelRotation
                 val step = instance?.zoomStep ?: 150
-                val newZoom = (API.GetCameraZoom() + diff * step).coerceIn(1, 4000)
+                val newZoom = (API.GetCameraZoom() + diff * step).coerceIn(1, 3500)
                 API.SetCameraZoom(newZoom)
             }
         }
