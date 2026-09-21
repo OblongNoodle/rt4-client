@@ -48,6 +48,13 @@ class plugin : Plugin() {
         const val SEARCH_OVERLAY_IDX = 102
         const val SCROLLBAR_IDX = 95
 
+        // Bank (762) is opened as a sub-interface hosted inside this component of
+        // the main game interface (746) - found via ::findhost 762. Its size is
+        // the actual clip boundary for the whole bank window; resizing 762's own
+        // components alone gets clipped at this container's original 512x334.
+        const val HOST_IFACE = 746
+        const val HOST_COMPONENT_IDX = 6
+
         // (index, original x, original y, original width, original height,
         //  stretchWidth, stretchHeight, anchorRight, anchorBottom)
         data class Rule(
@@ -89,6 +96,8 @@ class plugin : Plugin() {
         if (!enabled) return
         val components = InterfaceList.components[BANK_IFACE] ?: return
 
+        resizeHostContainer()
+
         apply(components, ROOT_RULE)
         for (rule in CHROME_RULES) apply(components, rule)
         apply(components, ITEM_CONTAINER_RULE)
@@ -96,6 +105,12 @@ class plugin : Plugin() {
         apply(components, SCROLLBAR_RULE)
         resizeScrollbarParts(components)
         reflowItems(components.getOrNull(ITEM_CONTAINER_IDX))
+    }
+
+    private fun resizeHostContainer() {
+        val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
+        host.width = 512 + extraColumns * SLOT
+        host.height = 334 + extraRows * SLOT
     }
 
     private fun apply(components: Array<Component?>, rule: Rule) {
