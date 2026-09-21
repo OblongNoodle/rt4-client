@@ -151,6 +151,7 @@ class plugin : Plugin() {
         var yOffset = 5
         for (child in children) {
             child ?: continue
+            if (child.hidden) continue
             if (child.width == 36 && child.height == 32) {
                 // item slot
                 child.x = 8 + col * SLOT
@@ -160,7 +161,7 @@ class plugin : Plugin() {
                     col = 0
                     yOffset += SLOT
                 }
-            } else if (child.height == 20 && !child.hidden) {
+            } else if (child.height in 15..25) {
                 // active tab-group separator (used in "view all tabs" mode) -
                 // force a row break before it, then reserve its own space so
                 // the next tab's items start below it, not overlapping.
