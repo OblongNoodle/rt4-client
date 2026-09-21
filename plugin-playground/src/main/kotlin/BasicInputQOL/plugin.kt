@@ -4,6 +4,7 @@ import plugin.Plugin
 import plugin.annotations.PluginMeta
 import plugin.api.*
 import rt4.Keyboard
+import KondoKit.Exposed
 import java.awt.event.*
 import javax.swing.SwingUtilities
 
@@ -11,13 +12,22 @@ class plugin : Plugin() {
     private var cameraDebugEnabled = false
     private var mouseDebugEnabled = false
 
+    @Exposed(description = "Zoom amount per scroll notch (Default: 150, native client is 50)")
+    var zoomStep: Int = 150
+
+    private var lastSavedZoomStep = -1
+
     companion object {
         private var lastMouseWheelX = 0
         private var lastMouseWheelY = 0
         private val defaultCameraPYZ = Triple(128.0, 0.0, 600)
+        var instance: plugin? = null
     }
 
     override fun Init() {
+        instance = this
+        zoomStep = (API.GetData("basicinputqol-zoom-step") as? Int) ?: 150
+        lastSavedZoomStep = zoomStep
         API.AddMouseListener(MouseCallbacks)
         API.AddMouseWheelListener(MouseWheelCallbacks)
     }
@@ -33,6 +43,10 @@ class plugin : Plugin() {
     }
 
     override fun Draw(timeDelta: Long) {
+        if (zoomStep != lastSavedZoomStep) {
+            lastSavedZoomStep = zoomStep
+            API.StoreData("basicinputqol-zoom-step", zoomStep)
+        }
         if (mouseDebugEnabled) {
             API.DrawText(
                 FontType.SMALL,
@@ -63,7 +77,9 @@ class plugin : Plugin() {
                 val previous = API.GetPreviousMouseWheelRotation()
                 val current = API.GetMouseWheelRotation()
                 val diff = current - previous
-                API.UpdateCameraZoom(diff)
+                val step = instance?.zoomStep ?: 150
+                val newZoom = (API.GetCameraZoom() + diff * step).coerceIn(1, 2000)
+                API.SetCameraZoom(newZoom)
             }
         }
     }
