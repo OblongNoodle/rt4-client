@@ -18,10 +18,9 @@ import rt4.InterfaceList
  * 10-columns-per-row layout, so this has to keep re-applying every frame
  * rather than running once.
  *
- * Known limitation: the "view all tabs at once" mode intersperses separator
- * headers among the item slots; this only repositions actual 36x32 item
- * slots and leaves everything else where the script put it, so that specific
- * mode may not reflow perfectly.
+ * Handles the "view all tabs at once" mode's separator headers (455x20,
+ * visible only when in use) as forced row-breaks between each tab's items,
+ * not just plain item slots.
  */
 @PluginMeta(
         author = "OblongNoodle",
@@ -79,6 +78,17 @@ class plugin : Plugin() {
                 Rule(11, 468, 294, 32, 32, anchorRight = true, anchorBottom = true),
                 Rule(12, 20, 272, 473, 32, stretchW = true, anchorBottom = true),
                 Rule(13, 19, 65, 474, 32, stretchW = true),
+                // Deposit-mode toggle buttons (inventory/equipment/etc) - pinned to
+                // the bottom row, were left floating at their original absolute y
+                // when everything below them shifted down.
+                Rule(14, 184, 287, 35, 35, anchorBottom = true),
+                Rule(15, 184, 287, 35, 35, anchorBottom = true),
+                Rule(16, 221, 287, 35, 35, anchorBottom = true),
+                Rule(17, 221, 287, 35, 35, anchorBottom = true),
+                Rule(18, 258, 287, 35, 35, anchorBottom = true),
+                Rule(19, 258, 287, 35, 35, anchorBottom = true),
+                Rule(20, 295, 287, 35, 35, anchorBottom = true),
+                Rule(21, 295, 287, 35, 35, anchorBottom = true),
                 Rule(22, 477, 23, 16, 16, anchorRight = true),
                 Rule(23, 459, 23, 16, 16, anchorRight = true),
                 Rule(24, 118, 23, 273, 15, stretchW = true),
@@ -137,20 +147,34 @@ class plugin : Plugin() {
         container ?: return
         val children = container.createdComponents ?: return
         val cols = ORIG_COLS + extraColumns
-        var visibleIndex = 0
+        var col = 0
+        var yOffset = 5
         for (child in children) {
             child ?: continue
             if (child.width == 36 && child.height == 32) {
-                val col = visibleIndex % cols
-                val row = visibleIndex / cols
+                // item slot
                 child.x = 8 + col * SLOT
-                child.y = 5 + row * SLOT
-                visibleIndex++
+                child.y = yOffset
+                col++
+                if (col >= cols) {
+                    col = 0
+                    yOffset += SLOT
+                }
+            } else if (child.height == 20 && !child.hidden) {
+                // active tab-group separator (used in "view all tabs" mode) -
+                // force a row break before it, then reserve its own space so
+                // the next tab's items start below it, not overlapping.
+                if (col != 0) {
+                    col = 0
+                    yOffset += SLOT
+                }
+                child.x = 0
+                child.y = yOffset
+                yOffset += 20
             }
         }
-        val totalRows = if (visibleIndex == 0) 0 else (visibleIndex + cols - 1) / cols
-        val neededHeight = totalRows * SLOT + 5
-        container.scrollMaxV = maxOf(neededHeight, container.height)
+        if (col != 0) yOffset += SLOT
+        container.scrollMaxV = maxOf(yOffset, container.height)
     }
 
     override fun ProcessCommand(commandStr: String?, args: Array<out String>?) {
