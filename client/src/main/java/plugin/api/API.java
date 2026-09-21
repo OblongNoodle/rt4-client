@@ -188,11 +188,11 @@ public class API {
     }
 
     public static void UpdateCameraZoom(int zoomDiff) {
-        Camera.ZOOM = clamp(1, 4000, Camera.ZOOM + (zoomDiff >= 0 ? 50 : -50));
+        Camera.ZOOM = clamp(1, 3500, Camera.ZOOM + (zoomDiff >= 0 ? 50 : -50));
     }
 
     public static void SetCameraZoom(int zoomTarget) {
-        Camera.ZOOM = clamp(1, 4000, zoomTarget);
+        Camera.ZOOM = clamp(1, 3500, zoomTarget);
     }
 
     public static int GetCameraZoom() {
@@ -516,6 +516,14 @@ public class API {
      */
     public static boolean IsMouseOverScrollableInterface() {
         return InterfaceList.hoveringScrollableComponent;
+    }
+
+    /**
+     * Debug only: identifies which component/bounds most recently set
+     * IsMouseOverScrollableInterface() true, for tracing stuck-true reports.
+     */
+    public static String GetScrollableInterfaceDebugInfo() {
+        return InterfaceList.hoveringComponentDebug;
     }
 
     public static void DrawPixels(int[] pixels, int x, int y, int width, int height) {

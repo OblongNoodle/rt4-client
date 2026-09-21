@@ -113,6 +113,10 @@ public class InterfaceList {
 	// scrollable interface component, so plugins can avoid stealing the scroll wheel
 	// from interface scrolling (see plugin.api.API.IsMouseOverScrollableInterface()).
 	public static boolean hoveringScrollableComponent = false;
+	// Debug only: identifies which component/bounds last set hoveringScrollableComponent,
+	// so a stuck-true report can be traced to the exact offending component.
+	public static int hoveringComponentId = -1;
+	public static String hoveringComponentDebug = "";
 	@OriginalMember(owner = "client!dh", name = "a", descriptor = "Z")
 	public static boolean dragSourceFound = false;
 	@OriginalMember(owner = "client!ja", name = "r", descriptor = "I")
@@ -725,7 +729,11 @@ public class InterfaceList {
 						if (component.hasEventHandlers || component.clientCode != 0) {
 							@Pc(399) HookRequest request;
 							if (isHovered && component.onScroll != null) {
-								hoveringScrollableComponent = true;
+								if (!component.hidden) {
+									hoveringScrollableComponent = true;
+									hoveringComponentId = component.id;
+									hoveringComponentDebug = "processComponents id=" + component.id + " iface=" + (component.id >> 16) + " bounds=[" + left + "," + top + "," + right + "," + bottom + "] clientCode=" + component.clientCode;
+								}
 								if (MouseWheel.wheelRotation != 0) {
 									request = new HookRequest();
 									request.cancelOnMouseExit = true;
@@ -1226,7 +1234,11 @@ public class InterfaceList {
 		}
 		thumbSize = component.width;
 		if (barX - thumbSize <= mouseX && barY <= mouseY && mouseX < barX + 16 && scrollbarH + barY >= mouseY) {
-			hoveringScrollableComponent = true;
+			if (!component.hidden) {
+				hoveringScrollableComponent = true;
+				hoveringComponentId = component.id;
+				hoveringComponentDebug = "handleScrollbar id=" + component.id + " iface=" + (component.id >> 16) + " barX=" + barX + " barY=" + barY + " scrollbarH=" + scrollbarH + " width=" + component.width + " mouse=[" + mouseX + "," + mouseY + "]";
+			}
 			if (MouseWheel.wheelRotation != 0) {
 				component.scrollY += MouseWheel.wheelRotation * 45;
 				redraw(component);

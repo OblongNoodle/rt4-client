@@ -1160,6 +1160,7 @@ public final class client extends GameShell {
 		Protocol.sceneDelta++;
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.hoveringScrollableComponent = false;
+			InterfaceList.hoveringComponentId = -1;
 			InterfaceList.processSubInterface(0, 0, 0, GameShell.canvasWidth, InterfaceList.topLevelInterface, 0, GameShell.canvasHeight);
 		}
 		InterfaceList.transmitTimer++;

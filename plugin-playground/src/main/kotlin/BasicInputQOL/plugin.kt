@@ -64,6 +64,14 @@ class plugin : Plugin() {
                 10,
                 60
             )
+            API.DrawText(
+                FontType.SMALL,
+                FontColor.YELLOW,
+                TextModifier.LEFT,
+                "Scrollable source: ${API.GetScrollableInterfaceDebugInfo()}",
+                10,
+                80
+            )
         }
         if (cameraDebugEnabled) {
             API.DrawText(
