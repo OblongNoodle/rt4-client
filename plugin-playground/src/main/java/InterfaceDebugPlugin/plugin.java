@@ -7,6 +7,7 @@ import rt4.Component;
 import rt4.ComponentPointer;
 import rt4.GameShell;
 import rt4.InterfaceList;
+import rt4.VarpDomain;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -115,6 +116,37 @@ public class plugin extends Plugin {
             } catch (NumberFormatException e) {
                 API.SendMessage("Invalid interface id: " + args[0]);
             }
+        }
+
+        if (commandStr.equalsIgnoreCase("::dumpvarbits")) {
+            int start = 4870;
+            int end = 4900;
+            if (args.length >= 2) {
+                try {
+                    start = Integer.parseInt(args[0]);
+                    end = Integer.parseInt(args[1]);
+                } catch (NumberFormatException ignored) {
+                }
+            }
+            dumpVarbits(start, end);
+        }
+    }
+
+    private void dumpVarbits(int start, int end) {
+        StringBuilder sb = new StringBuilder();
+        for (int id = start; id <= end; id++) {
+            try {
+                int value = VarpDomain.getVarbit(id);
+                sb.append("varbit ").append(id).append(" = ").append(value).append("\n");
+            } catch (Exception e) {
+                sb.append("varbit ").append(id).append(" = <error: ").append(e.getMessage()).append(">\n");
+            }
+        }
+        try (PrintWriter out = new PrintWriter(new FileWriter("varbit_dump_" + start + "_" + end + ".txt"))) {
+            out.print(sb.toString());
+            API.SendMessage("Wrote varbit_dump_" + start + "_" + end + ".txt");
+        } catch (Exception e) {
+            API.SendMessage("dumpvarbits failed: " + e.getMessage());
         }
     }
 
