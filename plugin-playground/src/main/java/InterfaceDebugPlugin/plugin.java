@@ -4,6 +4,7 @@ import plugin.Plugin;
 import plugin.annotations.PluginMeta;
 import plugin.api.*;
 import rt4.Component;
+import rt4.ComponentPointer;
 import rt4.GameShell;
 import rt4.InterfaceList;
 
@@ -101,6 +102,56 @@ public class plugin extends Plugin {
             } catch (NumberFormatException e) {
                 API.SendMessage("Invalid interface id: " + args[0]);
             }
+        }
+
+        if (commandStr.equalsIgnoreCase("::findhost")) {
+            if (args.length < 1) {
+                API.SendMessage("Usage: ::findhost <interfaceId>");
+                return;
+            }
+            try {
+                int interfaceId = Integer.parseInt(args[0]);
+                findHost(interfaceId);
+            } catch (NumberFormatException e) {
+                API.SendMessage("Invalid interface id: " + args[0]);
+            }
+        }
+    }
+
+    private void findHost(int interfaceId) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("topLevelInterface=").append(InterfaceList.topLevelInterface).append("\n");
+        int matches = 0;
+        for (ComponentPointer ptr = (ComponentPointer) InterfaceList.openInterfaces.head();
+             ptr != null;
+             ptr = (ComponentPointer) InterfaceList.openInterfaces.next()) {
+            if (ptr.interfaceId == interfaceId) {
+                long hostComponentId = ptr.key;
+                int hostInterfaceId = (int) (hostComponentId >> 16);
+                int hostComponentIndex = (int) (hostComponentId & 0xFFFF);
+                sb.append("Hosted at componentId=").append(hostComponentId)
+                        .append(" hostInterface=").append(hostInterfaceId)
+                        .append(" hostComponentIndex=").append(hostComponentIndex)
+                        .append("\n");
+                Component[] hostArr = InterfaceList.components[hostInterfaceId];
+                if (hostArr != null && hostComponentIndex < hostArr.length && hostArr[hostComponentIndex] != null) {
+                    Component h = hostArr[hostComponentIndex];
+                    sb.append("Host component: pos=(").append(h.x).append(",").append(h.y)
+                            .append(") size=(").append(h.width).append("x").append(h.height)
+                            .append(") type=").append(h.type)
+                            .append("\n");
+                }
+                matches++;
+            }
+        }
+        if (matches == 0) {
+            sb.append("No open interface entry found hosting interface ").append(interfaceId);
+        }
+        try (PrintWriter out = new PrintWriter(new FileWriter("findhost_" + interfaceId + ".txt"))) {
+            out.println(sb.toString());
+            API.SendMessage("Wrote findhost_" + interfaceId + ".txt");
+        } catch (Exception e) {
+            API.SendMessage("findhost failed: " + e.getMessage());
         }
     }
 
