@@ -109,6 +109,10 @@ public class InterfaceList {
 	public static int scrollbarDragMargin = 0;
 	@OriginalMember(owner = "client!di", name = "H", descriptor = "Z")
 	public static boolean scrollbarDragging = false;
+	// Not part of the original client - tracks whether the mouse is currently over a
+	// scrollable interface component, so plugins can avoid stealing the scroll wheel
+	// from interface scrolling (see plugin.api.API.IsMouseOverScrollableInterface()).
+	public static boolean hoveringScrollableComponent = false;
 	@OriginalMember(owner = "client!dh", name = "a", descriptor = "Z")
 	public static boolean dragSourceFound = false;
 	@OriginalMember(owner = "client!ja", name = "r", descriptor = "I")
@@ -720,13 +724,16 @@ public class InterfaceList {
 						}
 						if (component.hasEventHandlers || component.clientCode != 0) {
 							@Pc(399) HookRequest request;
-							if (isHovered && MouseWheel.wheelRotation != 0 && component.onScroll != null) {
-								request = new HookRequest();
-								request.cancelOnMouseExit = true;
-								request.source = component;
-								request.mouseY = MouseWheel.wheelRotation;
-								request.arguments = component.onScroll;
-								lowPriorityRequests.addTail(request);
+							if (isHovered && component.onScroll != null) {
+								hoveringScrollableComponent = true;
+								if (MouseWheel.wheelRotation != 0) {
+									request = new HookRequest();
+									request.cancelOnMouseExit = true;
+									request.source = component;
+									request.mouseY = MouseWheel.wheelRotation;
+									request.arguments = component.onScroll;
+									lowPriorityRequests.addTail(request);
+								}
 							}
 							if (Cs1ScriptRunner.draggedComponent != null || clickedInventoryComponent != null || Cs1ScriptRunner.isMenuOpen || component.clientCode != 1400 && worldMapDragState > 0) {
 								isClicked = false;
@@ -1217,13 +1224,13 @@ public class InterfaceList {
 				scrollbarDragging = true;
 			}
 		}
-		if (MouseWheel.wheelRotation == 0) {
-			return;
-		}
 		thumbSize = component.width;
 		if (barX - thumbSize <= mouseX && barY <= mouseY && mouseX < barX + 16 && scrollbarH + barY >= mouseY) {
-			component.scrollY += MouseWheel.wheelRotation * 45;
-			redraw(component);
+			hoveringScrollableComponent = true;
+			if (MouseWheel.wheelRotation != 0) {
+				component.scrollY += MouseWheel.wheelRotation * 45;
+				redraw(component);
+			}
 		}
 	}
 

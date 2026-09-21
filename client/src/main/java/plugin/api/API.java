@@ -509,6 +509,15 @@ public class API {
         InterfaceList.redrawActiveInterfaces();
     }
 
+    /**
+     * @return true if the mouse is currently hovering an interface component that
+     * handles its own scrolling (chat log, bank, inventory grid, etc.), so plugins
+     * can avoid also acting on the same scroll-wheel input.
+     */
+    public static boolean IsMouseOverScrollableInterface() {
+        return InterfaceList.hoveringScrollableComponent;
+    }
+
     public static void DrawPixels(int[] pixels, int x, int y, int width, int height) {
         if (IsHD()) {
             GlRaster.drawPixels(pixels, x, y, width, height);
