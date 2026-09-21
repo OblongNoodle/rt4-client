@@ -78,7 +78,7 @@ class plugin : Plugin() {
                 val current = API.GetMouseWheelRotation()
                 val diff = current - previous
                 val step = instance?.zoomStep ?: 150
-                val newZoom = (API.GetCameraZoom() + diff * step).coerceIn(1, 2000)
+                val newZoom = (API.GetCameraZoom() + diff * step).coerceIn(1, 4000)
                 API.SetCameraZoom(newZoom)
             }
         }
