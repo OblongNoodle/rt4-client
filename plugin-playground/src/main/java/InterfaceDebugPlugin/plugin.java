@@ -5,7 +5,10 @@ import plugin.annotations.PluginMeta;
 import plugin.api.*;
 import rt4.Component;
 import rt4.GameShell;
+import rt4.InterfaceList;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -75,8 +78,6 @@ public class plugin extends Plugin {
 
     @Override
     public void ProcessCommand(String commandStr, String[] args) {
-        if (!API.PlayerHasPrivilege(Privileges.JMOD)) return;
-
         if (commandStr.equalsIgnoreCase("::debug_iface")){
             isEnabled = !isEnabled;
         }
@@ -88,5 +89,63 @@ public class plugin extends Plugin {
         if (commandStr.equalsIgnoreCase("::clear_iface_varps")) {
             activeVarps.clear();
         }
+
+        if (commandStr.equalsIgnoreCase("::dumpinterface")) {
+            if (args.length < 1) {
+                API.SendMessage("Usage: ::dumpinterface <interfaceId>");
+                return;
+            }
+            try {
+                int interfaceId = Integer.parseInt(args[0]);
+                dumpInterface(interfaceId);
+            } catch (NumberFormatException e) {
+                API.SendMessage("Invalid interface id: " + args[0]);
+            }
+        }
+    }
+
+    private void dumpInterface(int interfaceId) {
+        Component[] top = InterfaceList.components[interfaceId];
+        if (top == null) {
+            API.SendMessage("Interface " + interfaceId + " is not loaded.");
+            return;
+        }
+        try (PrintWriter out = new PrintWriter(new FileWriter("interface_dump_" + interfaceId + ".txt"))) {
+            out.println("Interface " + interfaceId + " dump");
+            for (int i = 0; i < top.length; i++) {
+                dumpComponent(out, top[i], i, 0);
+            }
+            API.SendMessage("Dumped interface " + interfaceId + " to interface_dump_" + interfaceId + ".txt");
+        } catch (Exception e) {
+            API.SendMessage("Dump failed: " + e.getMessage());
+        }
+    }
+
+    private void dumpComponent(PrintWriter out, Component c, int index, int depth) {
+        if (c == null) return;
+        String indent = repeat("  ", depth);
+        out.println(indent + "[" + index + "] id=" + c.id
+                + " type=" + c.type
+                + " overlayer=" + c.overlayer
+                + " clientCode=" + c.clientCode
+                + " pos=(" + c.x + "," + c.y + ")"
+                + " size=(" + c.width + "x" + c.height + ")"
+                + " hidden=" + c.hidden
+                + " scroll=(" + c.scrollX + "," + c.scrollY + ") scrollMaxV=" + c.scrollMaxV
+                + " hasOnScroll=" + (c.onScroll != null)
+                + " noClickThrough=" + c.noClickThrough
+        );
+        if (c.createdComponents != null) {
+            out.println(indent + "  -- createdComponents (" + c.createdComponents.length + ") --");
+            for (int j = 0; j < c.createdComponents.length; j++) {
+                dumpComponent(out, c.createdComponents[j], j, depth + 2);
+            }
+        }
+    }
+
+    private String repeat(String s, int times) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < times; i++) sb.append(s);
+        return sb.toString();
     }
 }
