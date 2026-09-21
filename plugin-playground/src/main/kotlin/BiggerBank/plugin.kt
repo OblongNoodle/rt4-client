@@ -18,9 +18,11 @@ import rt4.InterfaceList
  * 10-columns-per-row layout, so this has to keep re-applying every frame
  * rather than running once.
  *
- * Handles the "view all tabs at once" mode's separator headers (455x20,
- * visible only when in use) as forced row-breaks between each tab's items,
- * not just plain item slots.
+ * "View all tabs at once" mode's "Tab N" boundary headers are separate
+ * top-level components (not nested under the item container), positioned by
+ * the script using the old 10-column math. We infer how many items precede
+ * each header from its script-assigned position, then re-place it at the
+ * correct point in our own, wider-column layout.
  */
 @PluginMeta(
         author = "OblongNoodle",
@@ -100,6 +102,16 @@ class plugin : Plugin() {
         val ITEM_CONTAINER_RULE = Rule(ITEM_CONTAINER_IDX, 26, 83, 447, 205, stretchW = true, stretchH = true)
         val SEARCH_OVERLAY_RULE = Rule(SEARCH_OVERLAY_IDX, 26, 83, 447, 205, stretchW = true, stretchH = true)
         val SCROLLBAR_RULE = Rule(SCROLLBAR_IDX, 477, 81, 16, 208, anchorRight = true, stretchH = true)
+
+        // The "Tab N" boundary labels shown in "view all tabs" mode are NOT
+        // nested inside the item container's createdComponents - they're
+        // separate top-level entries in interface 762 that share the
+        // container's overlayer scope (found via ::dumpinterface 762). The
+        // server's script positions them using the old 10-column math, so
+        // left alone they end up wherever that math put them, disconnected
+        // from our wider item layout.
+        val HEADER_INDICES = listOf(43, 44, 45, 46, 47, 48, 49, 50, 62, 63)
+        const val HEADER_HEIGHT = 15
     }
 
     override fun Draw(timeDelta: Long) {
@@ -114,7 +126,7 @@ class plugin : Plugin() {
         apply(components, SEARCH_OVERLAY_RULE)
         apply(components, SCROLLBAR_RULE)
         resizeScrollbarParts(components)
-        reflowItems(components.getOrNull(ITEM_CONTAINER_IDX))
+        reflowItems(components)
     }
 
     private fun resizeHostContainer() {
@@ -143,35 +155,54 @@ class plugin : Plugin() {
         children.getOrNull(5)?.let { it.y = 192 + extraH }
     }
 
-    private fun reflowItems(container: Component?) {
-        container ?: return
+    private fun reflowItems(components: Array<Component?>) {
+        val container = components.getOrNull(ITEM_CONTAINER_IDX) ?: return
         val children = container.createdComponents ?: return
         val cols = ORIG_COLS + extraColumns
+
+        // Read each active header's script-assigned position BEFORE moving
+        // anything, to infer how many old-layout (10-column) items precede
+        // that tab boundary: itemsBefore = (row implied by old Y) * 10.
+        data class Boundary(val headerIdx: Int, val itemsBefore: Int)
+        val boundaries = HEADER_INDICES.mapNotNull { idx ->
+            val header = components.getOrNull(idx) ?: return@mapNotNull null
+            if (header.hidden) return@mapNotNull null
+            val oldRow = (header.y - 5) / SLOT
+            Boundary(idx, (oldRow * ORIG_COLS).coerceAtLeast(0))
+        }.sortedBy { it.itemsBefore }
+
         var col = 0
         var yOffset = 5
+        var itemIndex = 0
+        var boundaryPos = 0
         for (child in children) {
             child ?: continue
             if (child.hidden) continue
-            if (child.width == 36 && child.height == 32) {
-                // item slot
-                child.x = 8 + col * SLOT
-                child.y = yOffset
-                col++
-                if (col >= cols) {
-                    col = 0
-                    yOffset += SLOT
-                }
-            } else if (child.height in 15..25) {
-                // active tab-group separator (used in "view all tabs" mode) -
-                // force a row break before it, then reserve its own space so
-                // the next tab's items start below it, not overlapping.
+            if (child.width != 36 || child.height != 32) continue
+
+            // Place any header whose boundary falls right before this item,
+            // so it reads as "here comes the next tab's items" rather than
+            // trailing the group it was actually generated for.
+            while (boundaryPos < boundaries.size && boundaries[boundaryPos].itemsBefore <= itemIndex) {
                 if (col != 0) {
                     col = 0
                     yOffset += SLOT
                 }
-                child.x = 0
-                child.y = yOffset
-                yOffset += 20
+                components.getOrNull(boundaries[boundaryPos].headerIdx)?.let {
+                    it.x = 0
+                    it.y = yOffset
+                }
+                yOffset += HEADER_HEIGHT
+                boundaryPos++
+            }
+
+            child.x = 8 + col * SLOT
+            child.y = yOffset
+            col++
+            itemIndex++
+            if (col >= cols) {
+                col = 0
+                yOffset += SLOT
             }
         }
         if (col != 0) yOffset += SLOT
