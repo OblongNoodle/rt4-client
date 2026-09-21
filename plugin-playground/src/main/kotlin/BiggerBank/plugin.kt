@@ -5,6 +5,7 @@ import plugin.annotations.PluginMeta
 import plugin.api.API
 import KondoKit.Exposed
 import rt4.Component
+import rt4.GameShell
 import rt4.InterfaceList
 import rt4.VarpDomain
 
@@ -58,11 +59,12 @@ class plugin : Plugin() {
         const val HOST_COMPONENT_IDX = 6
 
         // (index, original x, original y, original width, original height,
-        //  stretchWidth, stretchHeight, anchorRight, anchorBottom)
+        //  stretchWidth, stretchHeight, anchorRight, anchorBottom, centerH)
         data class Rule(
                 val idx: Int, val ox: Int, val oy: Int, val ow: Int, val oh: Int,
                 val stretchW: Boolean = false, val stretchH: Boolean = false,
-                val anchorRight: Boolean = false, val anchorBottom: Boolean = false
+                val anchorRight: Boolean = false, val anchorBottom: Boolean = false,
+                val centerH: Boolean = false
         )
 
         val ROOT_RULE = Rule(61, 0, 0, 512, 334, stretchW = true, stretchH = true)
@@ -82,16 +84,17 @@ class plugin : Plugin() {
                 Rule(12, 20, 272, 473, 32, stretchW = true, anchorBottom = true),
                 Rule(13, 19, 65, 474, 32, stretchW = true),
                 // Deposit-mode toggle buttons (inventory/equipment/etc) - pinned to
-                // the bottom row, were left floating at their original absolute y
-                // when everything below them shifted down.
-                Rule(14, 184, 287, 35, 35, anchorBottom = true),
-                Rule(15, 184, 287, 35, 35, anchorBottom = true),
-                Rule(16, 221, 287, 35, 35, anchorBottom = true),
-                Rule(17, 221, 287, 35, 35, anchorBottom = true),
-                Rule(18, 258, 287, 35, 35, anchorBottom = true),
-                Rule(19, 258, 287, 35, 35, anchorBottom = true),
-                Rule(20, 295, 287, 35, 35, anchorBottom = true),
-                Rule(21, 295, 287, 35, 35, anchorBottom = true),
+                // the bottom row (were left floating at their original absolute y
+                // when everything below them shifted down), and kept centered as
+                // a group within the widening bottom bar rather than left-stuck.
+                Rule(14, 184, 287, 35, 35, anchorBottom = true, centerH = true),
+                Rule(15, 184, 287, 35, 35, anchorBottom = true, centerH = true),
+                Rule(16, 221, 287, 35, 35, anchorBottom = true, centerH = true),
+                Rule(17, 221, 287, 35, 35, anchorBottom = true, centerH = true),
+                Rule(18, 258, 287, 35, 35, anchorBottom = true, centerH = true),
+                Rule(19, 258, 287, 35, 35, anchorBottom = true, centerH = true),
+                Rule(20, 295, 287, 35, 35, anchorBottom = true, centerH = true),
+                Rule(21, 295, 287, 35, 35, anchorBottom = true, centerH = true),
                 Rule(22, 477, 23, 16, 16, anchorRight = true),
                 Rule(23, 459, 23, 16, 16, anchorRight = true),
                 Rule(24, 118, 23, 273, 15, stretchW = true),
@@ -149,15 +152,22 @@ class plugin : Plugin() {
 
     private fun resizeHostContainer() {
         val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
-        host.width = 512 + extraColumns * SLOT
-        host.height = 334 + extraRows * SLOT
+        val newWidth = 512 + extraColumns * SLOT
+        val newHeight = 334 + extraRows * SLOT
+        host.width = newWidth
+        host.height = newHeight
+        // Center on the actual game canvas rather than growing from its
+        // original top-left anchor, so the window stays centered regardless
+        // of size.
+        host.x = (GameShell.canvasWidth - newWidth) / 2
+        host.y = (GameShell.canvasHeight - newHeight) / 2
     }
 
     private fun apply(components: Array<Component?>, rule: Rule) {
         val c = components.getOrNull(rule.idx) ?: return
         val extraW = extraColumns * SLOT
         val extraH = extraRows * SLOT
-        c.x = rule.ox + (if (rule.anchorRight) extraW else 0)
+        c.x = rule.ox + (if (rule.anchorRight) extraW else if (rule.centerH) extraW / 2 else 0)
         c.y = rule.oy + (if (rule.anchorBottom) extraH else 0)
         c.width = rule.ow + (if (rule.stretchW) extraW else 0)
         c.height = rule.oh + (if (rule.stretchH) extraH else 0)
