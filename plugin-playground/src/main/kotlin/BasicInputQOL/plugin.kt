@@ -36,11 +36,9 @@ class plugin : Plugin() {
 
     override fun ProcessCommand(commandStr: String?, args: Array<out String>?) {
         commandStr ?: return
-        if (API.PlayerHasPrivilege(Privileges.JMOD)) {
-            when(commandStr) {
-                "::mousedebug" -> mouseDebugEnabled = !mouseDebugEnabled
-                "::cameradebug" -> cameraDebugEnabled = !cameraDebugEnabled
-            }
+        when(commandStr) {
+            "::mousedebug" -> mouseDebugEnabled = !mouseDebugEnabled
+            "::cameradebug" -> cameraDebugEnabled = !cameraDebugEnabled
         }
     }
 
