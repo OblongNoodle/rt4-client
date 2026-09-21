@@ -6,6 +6,7 @@ import plugin.api.API
 import KondoKit.Exposed
 import rt4.Component
 import rt4.InterfaceList
+import rt4.VarpDomain
 
 /**
  * Enlarges the bank interface (762) by directly resizing/repositioning its live
@@ -106,12 +107,21 @@ class plugin : Plugin() {
         // The "Tab N" boundary labels shown in "view all tabs" mode are NOT
         // nested inside the item container's createdComponents - they're
         // separate top-level entries in interface 762 that share the
-        // container's overlayer scope (found via ::dumpinterface 762). The
-        // server's script positions them using the old 10-column math, so
-        // left alone they end up wherever that math put them, disconnected
-        // from our wider item layout.
+        // container's overlayer scope (found via ::dumpinterface 762).
+        // Component 43 = "Tab 2" header, 44 = "Tab 3", ... 49 = "Tab 8"
+        // (sequential allocation, confirmed against real varbit data - see
+        // VARBIT_IDS below). 50/62/63 are spare slots for tabs beyond 8.
         val HEADER_INDICES = listOf(43, 44, 45, 46, 47, 48, 49, 50, 62, 63)
         const val HEADER_HEIGHT = 15
+
+        // script_1467 (the bank's tab-range CS2 script) computes each tab's
+        // item-slot range as a cumulative sum of these per-tab item counts.
+        // Verified via ::dumpvarbits against known bank contents rather than
+        // trusted from decompiled pseudocode alone (which has at least one
+        // provably-impossible self-referential branch elsewhere in that
+        // script, i.e. a decompiler artifact, not real game logic).
+        // Index 0 = tab 1 (main, unlabeled), indices 1-7 = "Tab 2".."Tab 8".
+        val TAB_SIZE_VARBITS = listOf(4885, 4886, 4887, 4888, 4889, 4890, 4891, 4892)
     }
 
     override fun Draw(timeDelta: Long) {
@@ -160,16 +170,23 @@ class plugin : Plugin() {
         val children = container.createdComponents ?: return
         val cols = ORIG_COLS + extraColumns
 
-        // Read each active header's script-assigned position BEFORE moving
-        // anything, to infer how many old-layout (10-column) items precede
-        // that tab boundary: itemsBefore = (row implied by old Y) * 10.
+        // Cumulative item count before each "Tab N" boundary, read straight
+        // from the real per-tab sizes instead of inferred from screen
+        // position. TAB_SIZE_VARBITS[0] is tab 1 (main, no header); each
+        // subsequent entry's cumulative total is where that tab's header
+        // (HEADER_INDICES[i - 1]) belongs.
         data class Boundary(val headerIdx: Int, val itemsBefore: Int)
-        val boundaries = HEADER_INDICES.mapNotNull { idx ->
-            val header = components.getOrNull(idx) ?: return@mapNotNull null
-            if (header.hidden) return@mapNotNull null
-            val oldRow = (header.y - 5) / SLOT
-            Boundary(idx, (oldRow * ORIG_COLS).coerceAtLeast(0))
-        }.sortedBy { it.itemsBefore }
+        var cumulative = 0
+        val boundaries = mutableListOf<Boundary>()
+        for ((i, varbitId) in TAB_SIZE_VARBITS.withIndex()) {
+            val size = VarpDomain.getVarbit(varbitId)
+            cumulative += size
+            if (i == 0) continue // tab 1 (main) has no header
+            val headerIdx = HEADER_INDICES.getOrNull(i - 1) ?: continue
+            val header = components.getOrNull(headerIdx) ?: continue
+            if (header.hidden) continue
+            boundaries.add(Boundary(headerIdx, cumulative - size))
+        }
 
         var col = 0
         var yOffset = 5
