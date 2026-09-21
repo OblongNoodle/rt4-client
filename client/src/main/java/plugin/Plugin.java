@@ -38,6 +38,11 @@ public abstract class Plugin {
      */
     public void Draw(long timeDelta) {}
 
+    /**
+     * GL3DDraw() is called during the 3D scene render pass (HD/GL mode only),
+     * so plugins can issue raw GL draw calls positioned in world space.
+     */
+    public void GL3DDraw() {}
 
     /**
      * LateDraw() is called at the end of a finalized frame

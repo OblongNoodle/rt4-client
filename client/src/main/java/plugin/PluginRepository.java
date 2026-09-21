@@ -128,10 +128,10 @@ public class PluginRepository {
                     Plugin thisPlugin = (Plugin) clazz.newInstance();
                     thisPlugin._init();
                     registerPlugin(info, thisPlugin);
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     System.err.println("Error loading plugin " + file.getName() + ":");
                     e.printStackTrace();
-                    return;
+                    continue;
                 }
 
                 List<File> otherClasses = Arrays.stream(Objects.requireNonNull(file.listFiles()))
@@ -163,6 +163,10 @@ public class PluginRepository {
     public static void LateDraw() {
         List<Plugin> pluginsSnapshot = new ArrayList<>(loadedPlugins.values());
         pluginsSnapshot.forEach(Plugin::_lateDraw);
+    }
+
+    public static void GL3DDraw() {
+        loadedPlugins.values().forEach(Plugin::GL3DDraw);
     }
 
     public static void NPCOverheadDraw(Npc npc, int screenX, int screenY) {

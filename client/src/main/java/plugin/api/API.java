@@ -504,4 +504,29 @@ public class API {
     public static void RequestNewSong() {
         SoundPlayer.sendTrackEndPacket();
     }
+
+    public static void FullRedrawAllInterfaces() {
+        InterfaceList.redrawActiveInterfaces();
+    }
+
+    public static void DrawPixels(int[] pixels, int x, int y, int width, int height) {
+        if (IsHD()) {
+            GlRaster.drawPixels(pixels, x, y, width, height);
+        } else {
+            // Software mode fallback - write directly to framebuffer
+            for (int row = 0; row < height; row++) {
+                for (int col = 0; col < width; col++) {
+                    int pixel = pixels[col + row * width];
+                    int alpha = (pixel >> 24) & 0xFF;
+                    if (alpha > 0) {
+                        int sx = x + col;
+                        int sy = y + row;
+                        if (sx >= 0 && sy >= 0 && sx < SoftwareRaster.width && sy < SoftwareRaster.height) {
+                            SoftwareRaster.pixels[sx + sy * SoftwareRaster.width] = pixel & 0xFFFFFF;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
