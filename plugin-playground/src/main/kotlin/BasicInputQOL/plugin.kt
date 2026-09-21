@@ -22,6 +22,8 @@ class plugin : Plugin() {
         private var lastMouseWheelY = 0
         private val defaultCameraPYZ = Triple(128.0, 0.0, 600)
         var instance: plugin? = null
+        var wheelEventCount = 0
+        var lastWheelDiff = 0
     }
 
     override fun Init() {
@@ -56,6 +58,14 @@ class plugin : Plugin() {
                 10,
                 40
             )
+            API.DrawText(
+                FontType.SMALL,
+                FontColor.YELLOW,
+                TextModifier.LEFT,
+                "Wheel events: $wheelEventCount, lastDiff=$lastWheelDiff, overScrollable=${API.IsMouseOverScrollableInterface()}, zoom=${API.GetCameraZoom()}",
+                10,
+                60
+            )
         }
         if (cameraDebugEnabled) {
             API.DrawText(
@@ -72,12 +82,14 @@ class plugin : Plugin() {
     object MouseWheelCallbacks : MouseWheelListener {
         override fun mouseWheelMoved(e: MouseWheelEvent?) {
             e ?: return
+            wheelEventCount++
             val forceZoom = API.IsKeyPressed(Keyboard.KEY_SHIFT) || API.IsKeyPressed(Keyboard.KEY_CTRL)
             if (forceZoom || !API.IsMouseOverScrollableInterface()) {
                 // Use the event's own delta instead of GetMouseWheelRotation()/GetPreviousMouseWheelRotation():
                 // those read a counter the core game loop also zeroes every tick (JavaMouseWheel.getRotation()),
                 // racing with this AWT callback and occasionally producing a bogus diff that stalls zoom.
                 val diff = e.wheelRotation
+                lastWheelDiff = diff
                 val step = instance?.zoomStep ?: 150
                 val newZoom = (API.GetCameraZoom() + diff * step).coerceIn(1, 3500)
                 API.SetCameraZoom(newZoom)
