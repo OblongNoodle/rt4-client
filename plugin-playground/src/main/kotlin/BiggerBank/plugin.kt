@@ -114,6 +114,14 @@ class plugin : Plugin() {
         val HEADER_INDICES = listOf(43, 44, 45, 46, 47, 48, 49, 50, 62, 63)
         const val HEADER_HEIGHT = 15
 
+        // A separate highlight/indent graphic sits behind the first item of
+        // EVERY tab, including the unlabeled main tab (unlike the text
+        // headers, which skip it) - found via a fresh ::dumpinterface 762.
+        // [64] is an unused spare (always hidden); [65] = main tab's indent,
+        // [66] = "Tab 2", ... [72] = "Tab 8". The script positions it 2px up
+        // and left of the first item it decorates.
+        val INDENT_INDICES = listOf(64, 65, 66, 67, 68, 69, 70, 71, 72)
+
         // script_1467 (the bank's tab-range CS2 script) computes each tab's
         // item-slot range as a cumulative sum of these per-tab item counts.
         // Verified via ::dumpvarbits against known bank contents rather than
@@ -170,22 +178,27 @@ class plugin : Plugin() {
         val children = container.createdComponents ?: return
         val cols = ORIG_COLS + extraColumns
 
-        // Cumulative item count before each "Tab N" boundary, read straight
-        // from the real per-tab sizes instead of inferred from screen
-        // position. TAB_SIZE_VARBITS[0] is tab 1 (main, no header); each
-        // subsequent entry's cumulative total is where that tab's header
-        // (HEADER_INDICES[i - 1]) belongs.
-        data class Boundary(val headerIdx: Int, val itemsBefore: Int)
+        // Cumulative item count before each tab boundary, read straight from
+        // the real per-tab sizes instead of inferred from screen position.
+        // Every tab (including the unlabeled main one) gets an indent graphic;
+        // only tabs 2-8 also get a text header.
+        data class Boundary(val itemsBefore: Int, val headerIdx: Int?, val indentIdx: Int?)
         var cumulative = 0
         val boundaries = mutableListOf<Boundary>()
         for ((i, varbitId) in TAB_SIZE_VARBITS.withIndex()) {
             val size = VarpDomain.getVarbit(varbitId)
+            val itemsBefore = cumulative
             cumulative += size
-            if (i == 0) continue // tab 1 (main) has no header
-            val headerIdx = HEADER_INDICES.getOrNull(i - 1) ?: continue
-            val header = components.getOrNull(headerIdx) ?: continue
-            if (header.hidden) continue
-            boundaries.add(Boundary(headerIdx, cumulative - size))
+
+            val headerIdx = if (i == 0) null else HEADER_INDICES.getOrNull(i - 1)
+            val headerActive = headerIdx?.let { components.getOrNull(it)?.hidden == false } == true
+
+            val indentIdx = INDENT_INDICES.getOrNull(i + 1)
+            val indentActive = indentIdx?.let { components.getOrNull(it)?.hidden == false } == true
+
+            if (headerActive || indentActive) {
+                boundaries.add(Boundary(itemsBefore, headerIdx.takeIf { headerActive }, indentIdx.takeIf { indentActive }))
+            }
         }
 
         var col = 0
@@ -197,19 +210,30 @@ class plugin : Plugin() {
             if (child.hidden) continue
             if (child.width != 36 || child.height != 32) continue
 
-            // Place any header whose boundary falls right before this item,
-            // so it reads as "here comes the next tab's items" rather than
-            // trailing the group it was actually generated for.
+            // Place any header/indent whose boundary falls right before this
+            // item, so each reads as "here comes the next tab's items"
+            // rather than trailing the group it was actually generated for.
             while (boundaryPos < boundaries.size && boundaries[boundaryPos].itemsBefore <= itemIndex) {
-                if (col != 0) {
-                    col = 0
-                    yOffset += SLOT
+                val boundary = boundaries[boundaryPos]
+                boundary.headerIdx?.let { idx ->
+                    if (col != 0) {
+                        col = 0
+                        yOffset += SLOT
+                    }
+                    components.getOrNull(idx)?.let {
+                        it.x = 0
+                        it.y = yOffset
+                    }
+                    yOffset += HEADER_HEIGHT
                 }
-                components.getOrNull(boundaries[boundaryPos].headerIdx)?.let {
-                    it.x = 0
-                    it.y = yOffset
+                // Indent sits directly behind the first item it decorates,
+                // 2px up and to the left - matches the script's own offset.
+                boundary.indentIdx?.let { idx ->
+                    components.getOrNull(idx)?.let {
+                        it.x = 8 - 2
+                        it.y = yOffset - 2
+                    }
                 }
-                yOffset += HEADER_HEIGHT
                 boundaryPos++
             }
 
