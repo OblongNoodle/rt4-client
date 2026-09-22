@@ -5,6 +5,7 @@ import plugin.Plugin
 import plugin.annotations.PluginMeta
 import plugin.api.*
 import rt4.Component
+import rt4.ComponentPointer
 import rt4.InterfaceList
 import rt4.Inv
 import rt4.ObjTypeList
@@ -102,6 +103,15 @@ class plugin : Plugin() {
     }
     private var liveButtons: Map<Component, ButtonInfo> = emptyMap()
 
+    // host (component 6 of interface 746) is the MAIN GAME INTERFACE's
+    // permanent modal-docking slot, reused for the bank, shops, trade, etc.
+    // - it is NOT specific to the bank and is always present regardless of
+    // whether the bank is open. Whatever children it has when something
+    // OTHER than the bank is docked there (or nothing is) must be preserved,
+    // not overwritten - captured once per bank-open, restored on close.
+    private var nativeHostChildren: Array<Component?>? = null
+    private var trackingNativeChildren = false
+
     override fun Init() {
         instance = this
         loadTags()
@@ -175,10 +185,38 @@ class plugin : Plugin() {
 
     // ─── Building real components each frame ────────────────────────────────
 
+    private fun isBankDockedAt(host: Component): Boolean {
+        val ptr = InterfaceList.openInterfaces.get(host.id.toLong()) as? ComponentPointer
+        return ptr != null && ptr.interfaceId == BANK_IFACE
+    }
+
     override fun Draw(timeDelta: Long) {
+        val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
+
+        if (!isBankDockedAt(host)) {
+            // Bank isn't open (or something else is docked at this shared
+            // slot right now) - restore whatever was really there and stop
+            // touching it until the bank opens again.
+            if (trackingNativeChildren) {
+                host.createdComponents = nativeHostChildren
+                trackingNativeChildren = false
+                nativeHostChildren = null
+                liveButtons = emptyMap()
+            }
+            BiggerBankPlugin.externalLeftMargin = 0
+            return
+        }
+
         BiggerBankPlugin.externalLeftMargin = LEFT_MARGIN_TOTAL
 
-        val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
+        if (!trackingNativeChildren) {
+            // First frame the bank is open this session - whatever is here
+            // right now belongs to the bank's own docking, not us. Remember
+            // it so we can add to it instead of replacing it.
+            nativeHostChildren = host.createdComponents
+            trackingNativeChildren = true
+        }
+
         val bankComponents = InterfaceList.components[BANK_IFACE] ?: return
         val container = bankComponents.getOrNull(ITEM_CONTAINER_IDX) ?: return
         val frame = bankComponents.getOrNull(TAB_BUTTON_FRAME_IDX)
@@ -240,7 +278,13 @@ class plugin : Plugin() {
             }
         }
 
-        host.createdComponents = children.toTypedArray()
+        // Preserve whatever native children this shared slot actually had
+        // (captured when the bank first opened this session) instead of
+        // replacing them - that's what destroyed the window's own rendering
+        // before (this component isn't bank-specific, other things dock here
+        // too, and native content already there was silently wiped out).
+        val native = nativeHostChildren?.filterNotNull() ?: emptyList()
+        host.createdComponents = (native + children).toTypedArray()
         liveButtons = newButtons
     }
 
