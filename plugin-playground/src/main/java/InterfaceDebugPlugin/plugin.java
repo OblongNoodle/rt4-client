@@ -17,14 +17,18 @@ import java.util.Arrays;
 public class plugin extends Plugin {
     private boolean isEnabled;
     private boolean isVerbose;
-    private boolean dumpNextMenu;
+    private boolean menuLoggingEnabled;
+    private String lastLoggedSignature = "";
 
     private final ArrayList<Integer> activeVarps = new ArrayList<>();
 
     @Override
     public void OnMiniMenuCreate(MiniMenuEntry[] currentEntries) {
-        if (!dumpNextMenu || currentEntries == null || currentEntries.length == 0) return;
-        dumpNextMenu = false;
+        if (!menuLoggingEnabled || currentEntries == null || currentEntries.length == 0) return;
+        // Skip the trivial default menu (just Cancel/Walk here) so the log
+        // only fills up with builds that actually have something on them.
+        if (currentEntries.length <= 2) return;
+
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < currentEntries.length; i++) {
             MiniMenuEntry e = currentEntries[i];
@@ -42,9 +46,14 @@ public class plugin extends Plugin {
                 sb.append("[").append(i).append("] <error: ").append(ex.getMessage()).append(">\n");
             }
         }
-        try (PrintWriter out = new PrintWriter(new FileWriter("minimenu_dump.txt"))) {
-            out.print(sb.toString());
-            API.SendMessage("Wrote minimenu_dump.txt (" + currentEntries.length + " entries)");
+        String signature = sb.toString();
+        if (signature.equals(lastLoggedSignature)) return; // same menu rebuilt again, don't spam
+        lastLoggedSignature = signature;
+
+        try (PrintWriter out = new PrintWriter(new FileWriter("minimenu_dump.txt", true))) {
+            out.println("=== menu build, " + currentEntries.length + " entries ===");
+            out.print(signature);
+            out.println();
         } catch (Exception e) {
             API.SendMessage("dumpmenu failed: " + e.getMessage());
         }
@@ -149,8 +158,15 @@ public class plugin extends Plugin {
         }
 
         if (commandStr.equalsIgnoreCase("::dumpmenu")) {
-            dumpNextMenu = true;
-            API.SendMessage("Right-click something now - will dump the next non-empty menu.");
+            menuLoggingEnabled = !menuLoggingEnabled;
+            if (menuLoggingEnabled) {
+                lastLoggedSignature = "";
+                try (PrintWriter out = new PrintWriter(new FileWriter("minimenu_dump.txt", false))) {
+                    out.println("Menu log started");
+                } catch (Exception ignored) {
+                }
+            }
+            API.SendMessage("Menu logging " + (menuLoggingEnabled ? "ON - go right-click things" : "OFF") + ", writing to minimenu_dump.txt");
         }
 
         if (commandStr.equalsIgnoreCase("::dumpvarbits")) {
