@@ -133,6 +133,13 @@ class plugin : Plugin() {
         // script, i.e. a decompiler artifact, not real game logic).
         // Index 0 = tab 1 (main, unlabeled), indices 1-7 = "Tab 2".."Tab 8".
         val TAB_SIZE_VARBITS = listOf(4885, 4886, 4887, 4888, 4889, 4890, 4891, 4892)
+
+        // Other plugins (BankTagLayouts) that need genuine, non-clipped extra
+        // space to the left of the bank window set this instead of resizing
+        // the host container themselves - avoids two plugins fighting over
+        // the same shared component every frame. BiggerBank stays the single
+        // authority for host sizing/positioning; this just adds to it.
+        var externalLeftMargin: Int = 0
     }
 
     override fun Draw(timeDelta: Long) {
@@ -152,7 +159,7 @@ class plugin : Plugin() {
 
     private fun resizeHostContainer() {
         val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
-        val newWidth = 512 + extraColumns * SLOT
+        val newWidth = 512 + extraColumns * SLOT + externalLeftMargin
         val newHeight = 334 + extraRows * SLOT
         host.width = newWidth
         host.height = newHeight
@@ -167,7 +174,7 @@ class plugin : Plugin() {
         val c = components.getOrNull(rule.idx) ?: return
         val extraW = extraColumns * SLOT
         val extraH = extraRows * SLOT
-        c.x = rule.ox + (if (rule.anchorRight) extraW else if (rule.centerH) extraW / 2 else 0)
+        c.x = externalLeftMargin + rule.ox + (if (rule.anchorRight) extraW else if (rule.centerH) extraW / 2 else 0)
         c.y = rule.oy + (if (rule.anchorBottom) extraH else 0)
         c.width = rule.ow + (if (rule.stretchW) extraW else 0)
         c.height = rule.oh + (if (rule.stretchH) extraH else 0)
