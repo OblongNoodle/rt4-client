@@ -48,6 +48,14 @@ class plugin : Plugin() {
         const val BANK_INV_ID = 95
         const val MAX_BANK_SLOTS = 1000
 
+        // Bank (762) is hosted as a sub-interface inside this component of
+        // the main game interface (746) - same one BiggerBank centers on
+        // screen (see ::findhost 762). Component 61 (762's own root) always
+        // sits at LOCAL (0,0) relative to this host, since it just fills it -
+        // it does NOT give screen position, only this host component does.
+        const val HOST_IFACE = 746
+        const val HOST_COMPONENT_IDX = 6
+
         const val ICON_SIZE = 32
         const val ICON_MARGIN = 4
         const val BAR_OFFSET_X = 36 // bar sits just to the left of the window
@@ -133,15 +141,15 @@ class plugin : Plugin() {
 
     override fun Draw(timeDelta: Long) {
         val components = InterfaceList.components[BANK_IFACE] ?: return
-        val root = components.getOrNull(ROOT_IDX) ?: return
+        val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
         val container = components.getOrNull(ITEM_CONTAINER_IDX) ?: return
 
-        drawTagBar(root)
+        drawTagBar(host)
         applyFilter(container)
     }
 
-    private fun barX(root: Component) = root.x - BAR_OFFSET_X
-    private fun barTopY(root: Component) = root.y + 40
+    private fun barX(host: Component) = host.x - BAR_OFFSET_X
+    private fun barTopY(host: Component) = host.y + 40
 
     private fun drawTagBar(root: Component) {
         val x = barX(root)
@@ -212,11 +220,10 @@ class plugin : Plugin() {
         override fun mouseClicked(e: MouseEvent?) {
             e ?: return
             val p = instance ?: return
-            val components = InterfaceList.components[BANK_IFACE] ?: return
-            val root = components.getOrNull(ROOT_IDX) ?: return
+            val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
 
-            val x = p.barX(root)
-            var y = p.barTopY(root)
+            val x = p.barX(host)
+            var y = p.barTopY(host)
 
             if (e.x in x..(x + ICON_SIZE) && e.y in y..(y + ICON_SIZE)) {
                 p.promptNewTag()
