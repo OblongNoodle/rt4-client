@@ -10,6 +10,8 @@ import rt4.Mouse
 import rt4.ObjTypeList
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import java.awt.event.MouseWheelEvent
+import java.awt.event.MouseWheelListener
 import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 
@@ -19,51 +21,58 @@ import javax.swing.SwingUtilities
  * feature), so this builds tagging from scratch rather than extending
  * something that already exists.
  *
- * This phase covers: right-click "Tag" on any bank item, a vertical column
- * of tag-tab icons on the left edge of the bank window, and filtering the
- * item grid to a selected tag. Deliberately NOT yet included: drag-to-
- * reposition custom layouts, placeholder icons for absent items, custom
- * background images, and the GE/HA value header - those are real, separate
- * pieces of work for a later pass once this foundation is confirmed solid.
+ * Layout proportions (tab size, margin, icon inset, scroll behavior) are
+ * modeled directly on RuneLite's actual banktags/tabs/TabInterface.java
+ * (TAB_WIDTH=39, TAB_HEIGHT=40, MARGIN=1, scroll arrows when tags overflow
+ * available height) - not guessed. Their tab background/active/arrow sprites
+ * are custom-bundled plugin artwork (tag-tab.png etc, SpriteOverride ids),
+ * which isn't something we have access to, so this reuses 2009scape's own
+ * native tab-icon-frame sprite for the button background instead - same
+ * spacing/structure, native-to-this-client visuals.
+ *
+ * This phase covers: right-click "Tag" on any bank item, a vertical
+ * scrollable column of tag-tab icons attached to the left edge of the bank
+ * window, and filtering the item grid to a selected tag. Deliberately NOT
+ * yet included: drag-to-reposition custom layouts, placeholder icons for
+ * absent items, custom background images, and the GE/HA value header.
  *
  * Interaction with BiggerBank: filtering just sets hidden=true on
  * non-matching item components. BiggerBank's reflow already skips hidden
  * items and compacts the rest into its current column count, so tag
- * filtering "just works" at whatever size BiggerBank is set to, with no
- * coordination code needed - this only holds for auto-flowed items, though;
- * a future custom-layout phase would need to disable BiggerBank's reflow
- * for tag views specifically, since explicit saved positions and
- * auto-compaction are incompatible.
+ * filtering "just works" at whatever size BiggerBank is set to.
  */
 @PluginMeta(
         author = "OblongNoodle",
         description = "Bank Tag Layouts equivalent - tag bank items and browse by tag (phase 1: tagging + filtering).",
-        version = 1.0
+        version = 1.1
 )
 class plugin : Plugin() {
 
     companion object {
         const val BANK_IFACE = 762
-        const val ROOT_IDX = 61
         const val ITEM_CONTAINER_IDX = 73
         const val BANK_INV_ID = 95
         const val MAX_BANK_SLOTS = 1000
 
         // Bank (762) is hosted as a sub-interface inside this component of
         // the main game interface (746) - same one BiggerBank centers on
-        // screen (see ::findhost 762). Component 61 (762's own root) always
-        // sits at LOCAL (0,0) relative to this host, since it just fills it -
-        // it does NOT give screen position, only this host component does.
+        // screen (see ::findhost 762). This is the only component whose x/y
+        // reflect actual screen position; 762's own components are all local
+        // to it.
         const val HOST_IFACE = 746
         const val HOST_COMPONENT_IDX = 6
 
-        const val ICON_SIZE = 32
-        const val ICON_MARGIN = 4
-
         // One of the native tab-icon button frames (top row, size 48x48) -
-        // reused as our button background so tag icons look like a native
-        // part of the bank's own UI instead of a flat placeholder rectangle.
+        // reused as our button background so tag icons look native rather
+        // than a flat placeholder rectangle.
         const val TAB_BUTTON_FRAME_IDX = 39
+
+        // Proportions from RuneLite's real TabInterface.java, scaled down
+        // slightly to sit better against 2009scape's smaller UI scale.
+        const val TAB_SIZE = 34
+        const val MARGIN = 2
+        const val ARROW_HEIGHT = 16
+        const val TOP_MARGIN = 40 // clears the bank's title bar area
 
         var instance: plugin? = null
     }
@@ -71,11 +80,20 @@ class plugin : Plugin() {
     // tag name -> item ids tagged with it. LinkedHashMap keeps tab order stable.
     private val tags = LinkedHashMap<String, MutableSet<Int>>()
     private var activeTag: String? = null
+    private var scrollOffset = 0
+
+    private sealed class Slot(val x: Int, val y: Int, val w: Int, val h: Int) {
+        class NewTab(x: Int, y: Int, size: Int) : Slot(x, y, size, size)
+        class ScrollUp(x: Int, y: Int, w: Int, h: Int) : Slot(x, y, w, h)
+        class ScrollDown(x: Int, y: Int, w: Int, h: Int) : Slot(x, y, w, h)
+        class Tag(x: Int, y: Int, size: Int, val name: String) : Slot(x, y, size, size)
+    }
 
     override fun Init() {
         instance = this
         loadTags()
         API.AddMouseListener(ClickHandler)
+        API.AddMouseWheelListener(ScrollHandler)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -142,7 +160,42 @@ class plugin : Plugin() {
         }
     }
 
-    // ─── Drawing the tag bar + filtering ────────────────────────────────────
+    // ─── Shared layout math (used by both drawing and click handling, so ───
+    // ─── they can never drift out of sync with each other)              ───
+
+    private fun buildLayout(host: Component, container: Component): List<Slot> {
+        val x = host.x - TAB_SIZE
+        var y = host.y + TOP_MARGIN
+        val slots = mutableListOf<Slot>()
+
+        slots += Slot.NewTab(x, y, TAB_SIZE)
+        y += TAB_SIZE + MARGIN
+
+        val bottomLimit = host.y + host.height - 48 // clear the deposit button row
+        val availableForTabs = bottomLimit - y - ARROW_HEIGHT * 2
+        val visibleCount = maxOf(1, availableForTabs / (TAB_SIZE + MARGIN))
+        val names = tags.keys.toList()
+        val needsScroll = names.size > visibleCount
+
+        if (needsScroll) {
+            slots += Slot.ScrollUp(x, y, TAB_SIZE, ARROW_HEIGHT)
+            y += ARROW_HEIGHT + MARGIN
+        }
+
+        val clampedOffset = scrollOffset.coerceIn(0, maxOf(0, names.size - visibleCount))
+        for (i in clampedOffset until minOf(names.size, clampedOffset + visibleCount)) {
+            slots += Slot.Tag(x, y, TAB_SIZE, names[i])
+            y += TAB_SIZE + MARGIN
+        }
+
+        if (needsScroll) {
+            slots += Slot.ScrollDown(x, y, TAB_SIZE, ARROW_HEIGHT)
+        }
+
+        return slots
+    }
+
+    // ─── Drawing ─────────────────────────────────────────────────────────
 
     override fun Draw(timeDelta: Long) {
         val components = InterfaceList.components[BANK_IFACE] ?: return
@@ -150,50 +203,53 @@ class plugin : Plugin() {
         val container = components.getOrNull(ITEM_CONTAINER_IDX) ?: return
         val frame = components.getOrNull(TAB_BUTTON_FRAME_IDX)
 
-        drawTagBar(host, frame)
-        applyFilter(container)
-    }
-
-    // Flush against the window's left edge - no gap, so it reads as part of
-    // the frame rather than a separate floating panel.
-    private fun barX(host: Component) = host.x - ICON_SIZE
-    private fun barTopY(host: Component) = host.y + 40
-
-    private fun drawButtonFrame(frame: Component?, x: Int, y: Int) {
-        if (frame != null && frame.spriteId != -1) {
-            API.GetSprite(frame.spriteId)?.render(x, y)
-        } else {
-            // Fallback if the frame sprite isn't available for some reason -
-            // still functional, just not native-styled.
-            API.FillRect(x, y, ICON_SIZE, ICON_SIZE, 0x2b2b2b, 220)
-        }
-    }
-
-    private fun drawTagBar(host: Component, frame: Component?) {
-        val x = barX(host)
-        var y = barTopY(host)
-
-        drawButtonFrame(frame, x, y)
-        API.DrawText(FontType.SMALL, FontColor.fromColor(java.awt.Color.WHITE), TextModifier.CENTER, "+", x + ICON_SIZE / 2, y + ICON_SIZE / 2 + 4)
-        y += ICON_SIZE + ICON_MARGIN
-
-        for ((name, ids) in tags) {
-            val selected = name == activeTag
-            drawButtonFrame(frame, x, y)
-            if (selected) {
-                API.DrawRect(x, y, ICON_SIZE, ICON_SIZE, 0xffff00)
+        val slots = buildLayout(host, container)
+        for (slot in slots) {
+            when (slot) {
+                is Slot.NewTab -> {
+                    drawFrame(frame, slot.x, slot.y, slot.w)
+                    API.DrawText(FontType.SMALL, WHITE, TextModifier.CENTER, "+", slot.x + slot.w / 2, slot.y + slot.h / 2 + 4)
+                }
+                is Slot.ScrollUp -> {
+                    API.FillRect(slot.x, slot.y, slot.w, slot.h, 0x1a1a1a, 220)
+                    API.DrawText(FontType.SMALL, WHITE, TextModifier.CENTER, "^", slot.x + slot.w / 2, slot.y + slot.h - 3)
+                }
+                is Slot.ScrollDown -> {
+                    API.FillRect(slot.x, slot.y, slot.w, slot.h, 0x1a1a1a, 220)
+                    API.DrawText(FontType.SMALL, WHITE, TextModifier.CENTER, "v", slot.x + slot.w / 2, slot.y + slot.h - 3)
+                }
+                is Slot.Tag -> {
+                    drawFrame(frame, slot.x, slot.y, slot.w)
+                    if (slot.name == activeTag) {
+                        API.DrawRect(slot.x, slot.y, slot.w, slot.h, 0xffff00)
+                    }
+                    val iconItem = tags[slot.name]?.firstOrNull()
+                    if (iconItem != null) {
+                        API.GetObjSprite(iconItem, 1, false, 0, 0)?.render(slot.x, slot.y - 2)
+                    } else {
+                        API.DrawText(FontType.SMALL, FontColor.YELLOW, TextModifier.CENTER, "?", slot.x + slot.w / 2, slot.y + slot.h / 2 + 4)
+                    }
+                }
             }
-            val iconItem = ids.firstOrNull()
-            if (iconItem != null) {
-                API.GetObjSprite(iconItem, 1, false, 0, 0)?.render(x - 2, y - 2)
-            } else {
-                API.DrawText(FontType.SMALL, FontColor.YELLOW, TextModifier.CENTER, "?", x + ICON_SIZE / 2, y + ICON_SIZE / 2 + 4)
-            }
-            y += ICON_SIZE + ICON_MARGIN
         }
 
         activeTag?.let {
-            API.DrawText(FontType.SMALL, FontColor.YELLOW, TextModifier.LEFT, "Tag: $it", x, y + 10)
+            API.DrawText(FontType.SMALL, FontColor.YELLOW, TextModifier.LEFT, "Tag: $it", host.x - TAB_SIZE, host.y + TOP_MARGIN - 8)
+        }
+
+        applyFilter(container)
+    }
+
+    private val WHITE = FontColor.fromColor(java.awt.Color.WHITE)
+
+    private fun drawFrame(frame: Component?, x: Int, y: Int, size: Int) {
+        if (frame != null && frame.spriteId != -1) {
+            // The native frame sprite renders at its own native size (48x48);
+            // draw it at the same top-left so it still frames the smaller
+            // tab area reasonably rather than trying to force-scale it.
+            API.GetSprite(frame.spriteId)?.render(x - (48 - size) / 2, y - (48 - size) / 2)
+        } else {
+            API.FillRect(x, y, size, size, 0x2b2b2b, 220)
         }
     }
 
@@ -201,12 +257,7 @@ class plugin : Plugin() {
         val tag = activeTag
         val children = container.createdComponents ?: return
 
-        if (tag == null) {
-            // No tag active - make sure nothing is left hidden from a
-            // previous filter pass (native tab switching already manages
-            // hidden state for its own items, so only touch what we set).
-            return
-        }
+        if (tag == null) return
         val allowed = tags[tag] ?: return
 
         // createdComponents holds one entry per non-empty bank slot, in slot
@@ -237,6 +288,13 @@ class plugin : Plugin() {
         }
     }
 
+    private fun hostAndContainer(): Pair<Component, Component>? {
+        val components = InterfaceList.components[BANK_IFACE] ?: return null
+        val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return null
+        val container = components.getOrNull(ITEM_CONTAINER_IDX) ?: return null
+        return host to container
+    }
+
     object ClickHandler : MouseAdapter() {
         // mousePressed, not mouseClicked: the native Mouse listener (registered
         // before this plugin's, so it always runs first on the same event)
@@ -249,25 +307,34 @@ class plugin : Plugin() {
         override fun mousePressed(e: MouseEvent?) {
             e ?: return
             val p = instance ?: return
-            val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
+            val (host, container) = p.hostAndContainer() ?: return
 
-            val x = p.barX(host)
-            var y = p.barTopY(host)
-
-            if (e.x in x..(x + ICON_SIZE) && e.y in y..(y + ICON_SIZE)) {
-                Mouse.pendingClickButton = 0
-                p.promptNewTag()
-                return
-            }
-            y += ICON_SIZE + ICON_MARGIN
-
-            for (name in p.tags.keys) {
-                if (e.x in x..(x + ICON_SIZE) && e.y in y..(y + ICON_SIZE)) {
+            for (slot in p.buildLayout(host, container)) {
+                if (e.x in slot.x until (slot.x + slot.w) && e.y in slot.y until (slot.y + slot.h)) {
                     Mouse.pendingClickButton = 0
-                    p.activeTag = if (p.activeTag == name) null else name
+                    when (slot) {
+                        is Slot.NewTab -> p.promptNewTag()
+                        is Slot.ScrollUp -> p.scrollOffset = maxOf(0, p.scrollOffset - 1)
+                        is Slot.ScrollDown -> p.scrollOffset += 1
+                        is Slot.Tag -> p.activeTag = if (p.activeTag == slot.name) null else slot.name
+                    }
                     return
                 }
-                y += ICON_SIZE + ICON_MARGIN
+            }
+        }
+    }
+
+    object ScrollHandler : MouseWheelListener {
+        override fun mouseWheelMoved(e: MouseWheelEvent?) {
+            e ?: return
+            val p = instance ?: return
+            val (host, container) = p.hostAndContainer() ?: return
+            val layout = p.buildLayout(host, container)
+            val bounds = layout.firstOrNull() ?: return
+            val overBar = e.x in bounds.x until (bounds.x + TAB_SIZE) &&
+                    e.y in (host.y + TOP_MARGIN) until (host.y + host.height - 40)
+            if (overBar) {
+                p.scrollOffset = (p.scrollOffset + e.wheelRotation).coerceAtLeast(0)
             }
         }
     }
