@@ -6,6 +6,7 @@ import plugin.api.*
 import rt4.Component
 import rt4.InterfaceList
 import rt4.Inv
+import rt4.Mouse
 import rt4.ObjTypeList
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -58,7 +59,11 @@ class plugin : Plugin() {
 
         const val ICON_SIZE = 32
         const val ICON_MARGIN = 4
-        const val BAR_OFFSET_X = 36 // bar sits just to the left of the window
+
+        // One of the native tab-icon button frames (top row, size 48x48) -
+        // reused as our button background so tag icons look like a native
+        // part of the bank's own UI instead of a flat placeholder rectangle.
+        const val TAB_BUTTON_FRAME_IDX = 39
 
         var instance: plugin? = null
     }
@@ -143,28 +148,44 @@ class plugin : Plugin() {
         val components = InterfaceList.components[BANK_IFACE] ?: return
         val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
         val container = components.getOrNull(ITEM_CONTAINER_IDX) ?: return
+        val frame = components.getOrNull(TAB_BUTTON_FRAME_IDX)
 
-        drawTagBar(host)
+        drawTagBar(host, frame)
         applyFilter(container)
     }
 
-    private fun barX(host: Component) = host.x - BAR_OFFSET_X
+    // Flush against the window's left edge - no gap, so it reads as part of
+    // the frame rather than a separate floating panel.
+    private fun barX(host: Component) = host.x - ICON_SIZE
     private fun barTopY(host: Component) = host.y + 40
 
-    private fun drawTagBar(root: Component) {
-        val x = barX(root)
-        var y = barTopY(root)
+    private fun drawButtonFrame(frame: Component?, x: Int, y: Int) {
+        if (frame != null && frame.spriteId != -1) {
+            API.GetSprite(frame.spriteId)?.render(x, y)
+        } else {
+            // Fallback if the frame sprite isn't available for some reason -
+            // still functional, just not native-styled.
+            API.FillRect(x, y, ICON_SIZE, ICON_SIZE, 0x2b2b2b, 220)
+        }
+    }
 
-        API.FillRect(x, y, ICON_SIZE, ICON_SIZE, 0x2b2b2b, 220)
+    private fun drawTagBar(host: Component, frame: Component?) {
+        val x = barX(host)
+        var y = barTopY(host)
+
+        drawButtonFrame(frame, x, y)
         API.DrawText(FontType.SMALL, FontColor.fromColor(java.awt.Color.WHITE), TextModifier.CENTER, "+", x + ICON_SIZE / 2, y + ICON_SIZE / 2 + 4)
         y += ICON_SIZE + ICON_MARGIN
 
         for ((name, ids) in tags) {
             val selected = name == activeTag
-            API.FillRect(x, y, ICON_SIZE, ICON_SIZE, if (selected) 0x4a4a20 else 0x2b2b2b, 220)
+            drawButtonFrame(frame, x, y)
+            if (selected) {
+                API.DrawRect(x, y, ICON_SIZE, ICON_SIZE, 0xffff00)
+            }
             val iconItem = ids.firstOrNull()
             if (iconItem != null) {
-                API.GetObjSprite(iconItem, 1, false, 0, 0)?.render(x + 2, y + 2)
+                API.GetObjSprite(iconItem, 1, false, 0, 0)?.render(x - 2, y - 2)
             } else {
                 API.DrawText(FontType.SMALL, FontColor.YELLOW, TextModifier.CENTER, "?", x + ICON_SIZE / 2, y + ICON_SIZE / 2 + 4)
             }
@@ -217,7 +238,15 @@ class plugin : Plugin() {
     }
 
     object ClickHandler : MouseAdapter() {
-        override fun mouseClicked(e: MouseEvent?) {
+        // mousePressed, not mouseClicked: the native Mouse listener (registered
+        // before this plugin's, so it always runs first on the same event)
+        // latches the click into Mouse.pendingClickX/Y/Button on press, which
+        // the next game tick turns into a walk-here/world action. Zeroing
+        // pendingClickButton here, synchronously on the same AWT dispatch,
+        // erases it before that tick ever sees it - this is a custom-drawn
+        // overlay, not a real interface component, so the game has no other
+        // way to know a click here shouldn't reach the world.
+        override fun mousePressed(e: MouseEvent?) {
             e ?: return
             val p = instance ?: return
             val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
@@ -226,6 +255,7 @@ class plugin : Plugin() {
             var y = p.barTopY(host)
 
             if (e.x in x..(x + ICON_SIZE) && e.y in y..(y + ICON_SIZE)) {
+                Mouse.pendingClickButton = 0
                 p.promptNewTag()
                 return
             }
@@ -233,6 +263,7 @@ class plugin : Plugin() {
 
             for (name in p.tags.keys) {
                 if (e.x in x..(x + ICON_SIZE) && e.y in y..(y + ICON_SIZE)) {
+                    Mouse.pendingClickButton = 0
                     p.activeTag = if (p.activeTag == name) null else name
                     return
                 }
