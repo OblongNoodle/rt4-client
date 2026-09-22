@@ -17,8 +17,38 @@ import java.util.Arrays;
 public class plugin extends Plugin {
     private boolean isEnabled;
     private boolean isVerbose;
+    private boolean dumpNextMenu;
 
     private final ArrayList<Integer> activeVarps = new ArrayList<>();
+
+    @Override
+    public void OnMiniMenuCreate(MiniMenuEntry[] currentEntries) {
+        if (!dumpNextMenu || currentEntries == null || currentEntries.length == 0) return;
+        dumpNextMenu = false;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < currentEntries.length; i++) {
+            MiniMenuEntry e = currentEntries[i];
+            try {
+                sb.append("[").append(i).append("] verb=\"").append(e.getVerb())
+                        .append("\" subject=\"").append(e.getSubject())
+                        .append("\" type=").append(e.getType())
+                        .append(" subjectIndex=").append(e.getSubjectIndex())
+                        .append(" intArg1=").append(e.getIntArg1())
+                        .append(" intArg2=").append(e.getIntArg2())
+                        .append(" actionCode=").append(e.getActionCode())
+                        .append(" cursor=").append(e.getCursor())
+                        .append("\n");
+            } catch (Exception ex) {
+                sb.append("[").append(i).append("] <error: ").append(ex.getMessage()).append(">\n");
+            }
+        }
+        try (PrintWriter out = new PrintWriter(new FileWriter("minimenu_dump.txt"))) {
+            out.print(sb.toString());
+            API.SendMessage("Wrote minimenu_dump.txt (" + currentEntries.length + " entries)");
+        } catch (Exception e) {
+            API.SendMessage("dumpmenu failed: " + e.getMessage());
+        }
+    }
 
     @Override
     public void ComponentDraw(int componentIndex, Component component, int screenX, int screenY) {
@@ -116,6 +146,11 @@ public class plugin extends Plugin {
             } catch (NumberFormatException e) {
                 API.SendMessage("Invalid interface id: " + args[0]);
             }
+        }
+
+        if (commandStr.equalsIgnoreCase("::dumpmenu")) {
+            dumpNextMenu = true;
+            API.SendMessage("Right-click something now - will dump the next non-empty menu.");
         }
 
         if (commandStr.equalsIgnoreCase("::dumpvarbits")) {
