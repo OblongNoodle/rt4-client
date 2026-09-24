@@ -302,7 +302,7 @@ public final class ScriptRunner {
 		if (GlRenderer.enabled) {
 			GlRenderer.restoreLighting();
 			GlRenderer.setDepthTestEnabled(true);
-			GlRenderer.setFogEnabled(true);
+			GlRenderer.setFogEnabled(!GlRenderer.worldFogDisabled);
 			if (client.gameState == 10) {
 				shakeOffset = FogManager.updateAtmosphere(Protocol.sceneDelta, Camera.renderY >> 10, Preferences.brightness, Camera.renderX >> 10);
 			} else {

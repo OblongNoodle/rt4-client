@@ -199,6 +199,44 @@ public class API {
         return Camera.ZOOM;
     }
 
+    // Distance/horizon fog for 3D world rendering. This is the raw GL_FOG
+    // toggle, not FogManager's fogEnabled preference - that preference only
+    // adjusts an extra depth offset (e.g. for misty areas) on top of the
+    // baseline horizon fog, it never disables the baseline fog itself.
+    public static void SetWorldFogEnabled(boolean enabled) {
+        GlRenderer.worldFogDisabled = !enabled;
+    }
+
+    public static boolean IsWorldFogEnabled() {
+        return !GlRenderer.worldFogDisabled;
+    }
+
+    // How far back from the edge of the loaded area the fade into fog
+    // starts, as a multiple of the native distance (1.0 = native, higher =
+    // longer/more gradual fade). Does not change where the loaded area
+    // itself ends, only how gradually the approach to it is disguised.
+    public static void SetFogFadeScale(float scale) {
+        FogManager.setFadeDistanceScale(scale);
+    }
+
+    public static float GetFogFadeScale() {
+        return FogManager.fadeDistanceScale;
+    }
+
+    // Raises the actual render/clip distance (see GlobalConfig.
+    // setTileDistance's comment for why this - not fog - is what was really
+    // limiting how far you could see when zoomed out). Takes effect
+    // immediately; also forces FogManager's fog params to recompute this
+    // frame instead of waiting on an unrelated color/offset change.
+    public static void SetViewDistanceTiles(int tiles) {
+        GlobalConfig.setTileDistance(tiles);
+        FogManager.setFadeDistanceScale(FogManager.fadeDistanceScale);
+    }
+
+    public static int GetViewDistanceTiles() {
+        return GlobalConfig.TILE_DISTANCE;
+    }
+
     public static int GetMouseWheelRotation() {
         return ((JavaMouseWheel) client.mouseWheel).currentRotation;
     }
@@ -244,6 +282,21 @@ public class API {
         miniMenuCustomActions[customMiniMenuIndex++] = onClick;
         MiniMenu.size++;
         return entry;
+    }
+
+    /**
+     * Removes an entry from the current right-click menu, e.g. to hide a
+     * specific native option a plugin doesn't want offered.
+     * MiniMenuEntry.index is package-private (no public getter), so this has
+     * to live in plugin.api alongside it rather than being reproduced by
+     * calling code. If a plugin needs to remove several entries in the same
+     * OnMiniMenuCreate call, it must do so in descending index order
+     * (equivalently: iterate the currentEntries array backwards) - removing
+     * a lower index first shifts every entry after it down by one, which
+     * would invalidate any other MiniMenuEntry still queued for removal.
+     */
+    public static void RemoveMiniMenuEntry(MiniMenuEntry entry) {
+        MiniMenu.remove(entry.index);
     }
 
     public static boolean IsLoggedIn() {

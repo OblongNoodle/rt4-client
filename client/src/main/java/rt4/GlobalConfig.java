@@ -48,6 +48,22 @@ public class GlobalConfig {
 	public static int VIEW_DISTANCE = TILE_DISTANCE * 128;
 	public static float VIEW_FADE_DISTANCE = ((float) TILE_DISTANCE / 28.0f) * 256.0f;
 
+	// Not part of the original client. VIEW_DISTANCE is measured in
+	// eye-space distance from the CAMERA, not ground distance from the
+	// player, and it's what both FogManager's fog range and GlRenderer's
+	// perspective far clip plane (setupPerspectiveView) are built from
+	// every frame - so raising it pushes the real hard cutoff out, not
+	// just the fog. Deliberately does NOT touch the fixed 104x104 loaded
+	// area itself (SceneGraph.width/length) or re-run SceneGraph.init() -
+	// those stay exactly as they are; this only widens how much of that
+	// already-loaded area the camera is allowed to actually render before
+	// clipping.
+	public static void setTileDistance(int tiles) {
+		TILE_DISTANCE = tiles;
+		VIEW_DISTANCE = tiles * 128;
+		VIEW_FADE_DISTANCE = ((float) tiles / 28.0f) * 256.0f;
+	}
+
 	public static boolean USE_SHIFT_CLICK = true;
 	public static boolean USE_TWEENING = true;
 	public static boolean BILINEAR_MINIMAP = true;

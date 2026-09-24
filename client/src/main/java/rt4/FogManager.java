@@ -95,6 +95,25 @@ public final class FogManager {
 	@OriginalMember(owner = "client!mk", name = "m", descriptor = "I")
 	private static int fogColorRGB = -1;
 
+	// Not part of the original client. Native fogStart sits only
+	// VIEW_FADE_DISTANCE*2 (512 units, ~4 tiles) before fogEnd - a narrow
+	// band that reads as a fairly abrupt "wall of haze" right at the edge
+	// of the loaded 104x104 area, rather than a gradual fade into the
+	// distance. This scales that band's length; fogEnd (where geometry
+	// genuinely runs out) is untouched, only how far back the fade begins.
+	public static float fadeDistanceScale = 1.0f;
+
+	// setFogParams() below is cached on (color, offset) and skips reapplying
+	// GL state when neither changed - which happens often, since color/
+	// offset are driven by ambient fade progress, not by this scale. Forcing
+	// the cache to miss on the very next call is what makes a scale change
+	// actually visible immediately instead of silently waiting for the next
+	// unrelated color/offset change.
+	public static void setFadeDistanceScale(float scale) {
+		fadeDistanceScale = scale;
+		fogColorRGB = -1;
+	}
+
 	@OriginalMember(owner = "client!mk", name = "a", descriptor = "()V")
 	public static void applyLightPosition() {
 		@Pc(1) GL2 gl = GlRenderer.gl;
@@ -143,7 +162,7 @@ public final class FogManager {
 		gl.glFogf(GL2.GL_FOG_DENSITY, 0.95F);
 		gl.glHint(GL2.GL_FOG_HINT, GL2.GL_FASTEST);
 		int fogEnd = GlobalConfig.VIEW_DISTANCE;
-		@Pc(65) int fogStart = fogEnd - (int) (GlobalConfig.VIEW_FADE_DISTANCE * 2.0f) - offset;
+		@Pc(65) int fogStart = fogEnd - (int) (GlobalConfig.VIEW_FADE_DISTANCE * 2.0f * fadeDistanceScale) - offset;
 		if (fogStart < 50) {
 			fogStart = 50;
 		}

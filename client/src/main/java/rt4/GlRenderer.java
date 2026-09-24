@@ -129,6 +129,14 @@ public final class GlRenderer {
 	@OriginalMember(owner = "client!tf", name = "F", descriptor = "Z")
 	private static boolean fogEnabled = true;
 
+	// Not part of the original client - lets a plugin permanently suppress
+	// the distance/horizon fog for 3D world rendering (see the single call
+	// site in ScriptRunner.java that re-enables fog each frame before the
+	// world draw pass). Does not touch FogManager's own atmosphere/lighting
+	// calculations, only whether GL_FOG itself is left enabled - ambient
+	// light and sky color are unaffected.
+	public static boolean worldFogDisabled = false;
+
 	@OriginalMember(owner = "client!tf", name = "I", descriptor = "Lclient!na;")
 	private static final JagString RADEON = JagString.parse("radeon");
 
