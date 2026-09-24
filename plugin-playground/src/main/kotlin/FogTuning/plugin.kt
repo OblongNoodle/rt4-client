@@ -45,8 +45,18 @@ class plugin : Plugin() {
     @Exposed(description = "Disable world distance fog entirely (Default: false - leaves a hard edge instead of a fade, most people will prefer fadeScale)")
     var disableFogEntirely: Boolean = false
 
-    @Exposed(description = "Fade length multiplier vs. native (Default: 6.0 - higher fades earlier/more gradually, 1.0 = native)")
-    var fadeScale: Float = 6.0f
+    // VIEW_FADE_DISTANCE (what this multiplies) already scales up
+    // proportionally with viewDistanceTiles on its own - going from 56 to
+    // 200 tiles already widened the native fade band by the same ~3.6x on
+    // its own, before this multiplier even applies. 6.0 was tuned back
+    // when viewDistanceTiles was still 56 and never got re-checked against
+    // the new base - stacked together the fade band ended up ~21x native
+    // width, wide enough to cover most of the visible world in some amount
+    // of haze at almost any zoom. 1.5 keeps proportionally the same
+    // gradual-not-abrupt fade as before, just without compounding on top
+    // of the already-widened base.
+    @Exposed(description = "Fade length multiplier vs. native, AFTER accounting for viewDistanceTiles already widening it proportionally (Default: 1.5, 1.0 = pure native ratio)")
+    var fadeScale: Float = 1.5f
 
     override fun Init() {
         apply()

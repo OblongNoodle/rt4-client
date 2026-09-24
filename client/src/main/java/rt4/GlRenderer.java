@@ -335,7 +335,22 @@ public final class GlRenderer {
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(F)V")
 	public static void setDepthLayer(@OriginalArg(0) float layer) {
-		setDepthBias(3000.0F, layer * 1.5F);
+		// Not part of the original client: this used to be a hardcoded
+		// 3000.0F reference distance for the depth-bias math below (see
+		// setDepthBias) - suspiciously close to the ORIGINAL stock view
+		// distance (28 tiles * 128 = 3584), and clearly never meant to
+		// survive GlobalConfig.VIEW_DISTANCE being raised well past that at
+		// runtime (see FogTuning). Past roughly that old ~3000-unit
+		// eye-distance from the camera, the bias this produces became too
+		// weak to reliably keep flat ground decorations (paving, shadow
+		// decals - anything routed through this function) separated from
+		// the base tile underneath, causing them to z-fight or fail to
+		// draw at all - a hard, screen-locked cutoff for decorations
+		// specifically, at roughly the old native view distance, while
+		// terrain itself (unaffected by this bias trick) kept rendering
+		// out to the new, much farther one. Tracking the live view
+		// distance here keeps this proportionally correct at any range.
+		setDepthBias(GlobalConfig.VIEW_DISTANCE, layer * 1.5F);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "h", descriptor = "()V")
@@ -707,6 +722,19 @@ public final class GlRenderer {
 			}
 			GLProfile profile = GLProfile.get(GLProfile.GL3bc);
 			@Pc(8) GLCapabilities capabilities = new GLCapabilities(profile);
+			// Not part of the original client. No depth bits were requested
+			// here at all, leaving it to the driver's default (often just
+			// 16-bit) - fine for the native ~7168-unit far clip plane, but
+			// raising GlobalConfig.VIEW_DISTANCE (see FogTuning) increases
+			// the far:near ratio in the perspective projection well beyond
+			// what 16-bit precision can resolve at long distances, causing
+			// visible z-fighting - a hard, screen-locked shimmer/tear line
+			// that gets worse zoomed out/tilted, since more terrain then
+			// competes for the same starved depth range near the far plane.
+			// Explicitly requesting 24-bit gives the far end of the
+			// frustum enough precision to stop competing for the same
+			// quantized depth value.
+			capabilities.setDepthBits(24);
 			if (numSamples > 0) {
 				capabilities.setSampleBuffers(true);
 				capabilities.setNumSamples(numSamples * 4);
