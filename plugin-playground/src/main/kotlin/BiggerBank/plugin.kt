@@ -8,6 +8,7 @@ import plugin.api.FontType
 import plugin.api.TextModifier
 import KondoKit.Exposed
 import rt4.Component
+import rt4.ComponentPointer
 import rt4.GameShell
 import rt4.InterfaceList
 import rt4.VarpDomain
@@ -243,6 +244,21 @@ class plugin : Plugin() {
         API.ClipRect(0, 0, GameShell.canvasWidth, GameShell.canvasHeight)
         if (!enabled) return
         val components = InterfaceList.components[BANK_IFACE] ?: return
+        // HOST_COMPONENT_IDX is a SHARED slot other interfaces dock into too
+        // (Grand Exchange, skill guides, etc.) - not bank-specific at all.
+        // InterfaceList.components[BANK_IFACE] staying non-null just means
+        // the bank's component data has been loaded at some point THIS
+        // SESSION, not that the bank is what's currently occupying that
+        // shared slot - it stays non-null for the rest of the session after
+        // the first time the bank's opened. Without this check, every frame
+        // after that first bank-open unconditionally resized/repositioned
+        // the shared host to bank dimensions regardless of what was
+        // actually docked there, dragging unrelated windows (GE) to the
+        // bank's expected position or leaving bank chrome (its background)
+        // rendering behind whatever else was using the slot. Same check
+        // BankTagLayouts already uses for exactly this reason.
+        val host = InterfaceList.components[HOST_IFACE]?.getOrNull(HOST_COMPONENT_IDX) ?: return
+        if (!isBankDockedAt(host)) return
 
         resizeHostContainer()
         forceRedrawHost()
@@ -295,6 +311,16 @@ class plugin : Plugin() {
         val absX = host.x + root.x + container.x
         val absY = host.y + root.y + container.y
         API.ClipRect(absX, absY, absX + container.width, absY + container.height)
+    }
+
+    // Same check BankTagLayouts already relies on for the same shared-host
+    // reason: InterfaceList.openInterfaces maps a docked host component's
+    // own id to a ComponentPointer naming which interface currently
+    // occupies it - the only reliable way to tell "is this REALLY the
+    // bank" apart from "the bank's data merely still happens to be loaded."
+    private fun isBankDockedAt(host: Component): Boolean {
+        val ptr = InterfaceList.openInterfaces.get(host.id.toLong()) as? ComponentPointer
+        return ptr != null && ptr.interfaceId == BANK_IFACE
     }
 
     private fun resizeHostContainer() {
