@@ -18,6 +18,7 @@ import KondoKit.ui.theme.Themes.ThemeType
 import KondoKit.ui.theme.Themes.getTheme
 import KondoKit.ui.components.ScrollablePanel
 import plugin.Plugin
+import plugin.PluginRepository
 import plugin.api.*
 import plugin.api.API.*
 import plugin.api.FontColor.fromColor
@@ -111,6 +112,100 @@ class plugin : Plugin() {
         private val xpUpdateCallbacks = mutableListOf<OnXPUpdateCallback>()
         private val killingBlowNPCCallbacks = mutableListOf<OnKillingBlowNPCCallback>()
         private val postClientTickCallbacks = mutableListOf<OnPostClientTickCallback>()
+
+        // Generic persistence for every plugin's @Exposed fields, so none of
+        // them need to hand-roll their own API.GetData/StoreData boilerplate
+        // (SettingsPanel's "=>" button and any ::command handler that sets
+        // an @Exposed field directly both only ever touch the in-memory
+        // field via reflection or a plain assignment - neither one has ever
+        // persisted anything to plsto on its own).
+        //
+        // Keyed by instance (WeakHashMap, not by plugin name/class) rather
+        // than a plain seen-once set, since a hot-reloaded plugin (see
+        // OnPluginsReloaded) gets a genuinely new instance with its fields
+        // back at their compiled defaults - restoration needs to run again
+        // for that new instance, not be skipped because the class was
+        // "already handled" once before.
+        private val restoredFieldsByInstance = java.util.WeakHashMap<Plugin, MutableSet<String>>()
+        private val lastKnownExposedValues = mutableMapOf<String, Any?>()
+        private var lastPersistenceScan = 0L
+        private const val PERSISTENCE_SCAN_INTERVAL_MS = 2000L
+
+        private fun syncExposedSettings() {
+            val now = System.currentTimeMillis()
+            if (now - lastPersistenceScan < PERSISTENCE_SCAN_INTERVAL_MS) return
+            lastPersistenceScan = now
+
+            val loadedPlugins = try {
+                val field = PluginRepository::class.java.getDeclaredField("loadedPlugins")
+                field.isAccessible = true
+                (field.get(null) as? HashMap<*, *>)?.values ?: return
+            } catch (e: Exception) {
+                return
+            }
+
+            for (pluginObj in loadedPlugins) {
+                val p = pluginObj as? Plugin ?: continue
+                val pluginDirName = p.javaClass.`package`?.name?.substringBefore(".") ?: continue
+                val restoredFields = restoredFieldsByInstance.getOrPut(p) { mutableSetOf() }
+                var restoredAnything = false
+
+                val exposedFields = p.javaClass.declaredFields.filter { field ->
+                    field.annotations.any { it.annotationClass.simpleName == "Exposed" }
+                }
+
+                for (field in exposedFields) {
+                    field.isAccessible = true
+                    val key = "kondokit.autosave.$pluginDirName.${field.name}"
+
+                    if (field.name !in restoredFields) {
+                        restoredFields.add(field.name)
+                        try {
+                            val saved = API.GetData(key)
+                            if (saved != null) {
+                                field.set(p, saved)
+                                restoredAnything = true
+                            }
+                        } catch (e: Exception) {
+                            // A bad/incompatible saved value (e.g. after a
+                            // field's type changed between versions) must
+                            // never stop the plugin from loading with its
+                            // own compiled default instead.
+                        }
+                    }
+
+                    try {
+                        val current = field.get(p)
+                        if (lastKnownExposedValues[key] != current) {
+                            lastKnownExposedValues[key] = current
+                            API.StoreData(key, current)
+                        }
+                    } catch (e: Exception) {
+                        // Skip fields that can't be safely read/serialized.
+                    }
+                }
+
+                // Restoring a field only changes what it holds - plugins
+                // that push a setting into native/global state (anything
+                // beyond just reading the field live each time it's used)
+                // need a chance to re-apply it now that the real value is
+                // in place. Same opt-in convention FieldNotifier already
+                // uses for live GUI edits: implement a no-arg
+                // OnKondoValueUpdated() and it gets called; plugins that
+                // just read their fields live don't need it.
+                if (restoredAnything) {
+                    try {
+                        val onUpdate = p::class.java.getMethod("OnKondoValueUpdated")
+                        onUpdate.invoke(p)
+                    } catch (e: NoSuchMethodException) {
+                        // No opt-in - nothing further to do.
+                    } catch (e: Exception) {
+                        // Best-effort - a broken re-apply must never stop
+                        // restoration of other plugins/fields.
+                    }
+                }
+            }
+        }
 
         fun registerDrawAction(action: () -> Unit) {
             synchronized(drawActions) {
@@ -231,6 +326,8 @@ class plugin : Plugin() {
             }
             accumulatedTime = 0L
         }
+
+        syncExposedSettings()
 
         drawCallbacks.forEach { callback ->
             callback.onDraw(timeDelta)

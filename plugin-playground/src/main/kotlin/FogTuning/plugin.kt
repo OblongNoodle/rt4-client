@@ -62,6 +62,18 @@ class plugin : Plugin() {
         apply()
     }
 
+    // KondoKit's generic @Exposed persistence (and its own settings-panel
+    // "=>" button) only ever set these fields directly via reflection -
+    // neither one knows this plugin needs viewDistanceTiles/
+    // disableFogEntirely/fadeScale actually pushed into native state to
+    // take effect. This is the opt-in hook KondoKit looks for (by exact
+    // name, reflectively) after either one changes a field, so a restored
+    // or GUI-edited value gets re-applied instead of just sitting in the
+    // field unused.
+    fun OnKondoValueUpdated() {
+        apply()
+    }
+
     override fun ProcessCommand(commandStr: String?, args: Array<out String>?) {
         commandStr ?: return
         when {
