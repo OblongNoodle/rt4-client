@@ -205,6 +205,22 @@ class plugin : Plugin() {
                     }
                 }
             }
+
+            // PluginRepository.SaveStorage() (which writes plsto to disk)
+            // was only ever wired to a JVM shutdown hook - meaning it only
+            // saved anything on a clean exit. Given how often this whole
+            // project has run into crashes/freezes, that's a real gap: a
+            // session that ends any other way (crash, force-close, task-
+            // killed) never flushes whatever changed that session, even
+            // though it was tracked correctly in memory the whole time -
+            // confirmed as the actual cause of a report that settings
+            // "aren't saving" despite the restore/store logic above working
+            // correctly. SaveStorage() already checks its own dirty flag
+            // and no-ops when nothing changed since the last write, so
+            // calling it every sync cycle is cheap - this just means a
+            // crash can lose at most PERSISTENCE_SCAN_INTERVAL_MS worth of
+            // changes instead of the whole session's.
+            PluginRepository.SaveStorage()
         }
 
         fun registerDrawAction(action: () -> Unit) {
