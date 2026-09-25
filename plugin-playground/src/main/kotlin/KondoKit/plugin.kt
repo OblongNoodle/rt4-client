@@ -82,6 +82,9 @@ class plugin : Plugin() {
         @Exposed("Stretched/Scaled Fixed Mode Support")
         var useScaledFixed = false
 
+        @Exposed("Party: relay server URL shared by everyone in the party")
+        var partyServerUrl = KondoKit.party.PartyClient.DEFAULT_SERVER
+
         const val FIXED_WIDTH = 765
         const val FIXED_HEIGHT = 503
         private const val NAVBAR_WIDTH = 30
@@ -656,25 +659,30 @@ class plugin : Plugin() {
             val hiscoresView = HiscoresView
             val lootTrackerView = LootTrackerView
             val reflectiveEditorView = ReflectiveEditorView
+            val partyView = PartyView
             
             xpTrackerView.createView()
             hiscoresView.createView()
             lootTrackerView.createView()
+            partyView.createView()
             reflectiveEditorView.createView()
             
             views.add(xpTrackerView)
             views.add(hiscoresView)
             views.add(lootTrackerView)
+            views.add(partyView)
             views.add(reflectiveEditorView)
             
             xpTrackerView.registerFunctions()
             hiscoresView.registerFunctions()
             lootTrackerView.registerFunctions()
+            partyView.registerFunctions()
             reflectiveEditorView.registerFunctions()
 
             mainContentPanel.add(ScrollablePanel(xpTrackerView.panel), xpTrackerView.name)
             mainContentPanel.add(ScrollablePanel(hiscoresView.panel), hiscoresView.name)
             mainContentPanel.add(ScrollablePanel(lootTrackerView.panel), lootTrackerView.name)
+            mainContentPanel.add(ScrollablePanel(partyView.panel), partyView.name)
             mainContentPanel.add(ScrollablePanel(reflectiveEditorView.panel), reflectiveEditorView.name)
 
             val navPanel = Panel().apply {
@@ -686,6 +694,7 @@ class plugin : Plugin() {
             navPanel.add(createNavButton(xpTrackerView.iconSpriteId, xpTrackerView.name))
             navPanel.add(createNavButton(hiscoresView.iconSpriteId, hiscoresView.name))
             navPanel.add(createNavButton(lootTrackerView.iconSpriteId, lootTrackerView.name))
+            navPanel.add(createNavButton(partyView.iconSpriteId, partyView.name))
             navPanel.add(createNavButton(reflectiveEditorView.iconSpriteId, reflectiveEditorView.name))
 
             val rightPanel = Panel(BorderLayout()).apply {

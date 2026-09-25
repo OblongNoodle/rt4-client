@@ -1,0 +1,7 @@
+Options -Indexes
+DirectoryIndex party.php
+
+# Only party.php is served; any other path in this docroot is refused.
+# (A FilesMatch deny-all/allow-one pair 404s everything under LiteSpeed.)
+RewriteEngine On
+RewriteRule !^(party\.php)?$ - [F]
