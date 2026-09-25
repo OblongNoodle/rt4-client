@@ -131,6 +131,44 @@ class plugin : Plugin() {
         private var lastPersistenceScan = 0L
         private const val PERSISTENCE_SCAN_INTERVAL_MS = 2000L
 
+        // Confirmed live: this plugin manager reloads plugins multiple
+        // times shortly after startup (a "check for plugin updates" pass),
+        // giving each reloaded plugin a brand new instance back at its
+        // compiled defaults. The "detect a changed value and persist it"
+        // step below must never run for a field before its restore has
+        // actually had a fair chance to succeed - doing so treats a
+        // still-default, not-yet-restored value as a genuine user change
+        // and immediately overwrites the real saved value on disk with the
+        // default, which is a real, confirmed-live data-loss bug (this
+        // plugin manager's own reload path calls SaveStorage() itself,
+        // permanently flushing whatever damage was already done in
+        // memory). A field only becomes safe to track/store once its OWN
+        // restore has either succeeded, or come back empty on enough
+        // separate cycles in a row to be confident that's genuinely because
+        // nothing was ever saved - not because this cycle just landed on a
+        // short-lived instance moments before it gets replaced. Keyed by
+        // key (not instance) since what matters is "has THIS SETTING been
+        // given a fair chance yet at all", across however many instances
+        // came and went before things settled.
+        private val confirmedAbsentCounts = mutableMapOf<String, Int>()
+        private const val CONFIRM_ABSENT_THRESHOLD = 3
+
+        // Only types the JVM's bootstrap/platform classloader already knows
+        // about, unconditionally - safe to deserialize back regardless of
+        // whether any plugin classloader has been set up yet. Deliberately
+        // excludes enums and other classes defined inside a plugin (see
+        // this function's call site for why that's not just "won't work
+        // for that one field" but "breaks loading every plugin's settings
+        // until the file gets manually fixed or deleted").
+        private fun isSafeToAutoPersist(type: Class<*>): Boolean {
+            return type == Int::class.javaPrimitiveType || type == java.lang.Integer::class.java ||
+                    type == Boolean::class.javaPrimitiveType || type == java.lang.Boolean::class.java ||
+                    type == Float::class.javaPrimitiveType || type == java.lang.Float::class.java ||
+                    type == Double::class.javaPrimitiveType || type == java.lang.Double::class.java ||
+                    type == Long::class.javaPrimitiveType || type == java.lang.Long::class.java ||
+                    type == String::class.java
+        }
+
         private fun syncExposedSettings() {
             val now = System.currentTimeMillis()
             if (now - lastPersistenceScan < PERSISTENCE_SCAN_INTERVAL_MS) return
@@ -150,8 +188,25 @@ class plugin : Plugin() {
                 val restoredFields = restoredFieldsByInstance.getOrPut(p) { mutableSetOf() }
                 var restoredAnything = false
 
+                // Confirmed live (client stack trace, PluginRepository.
+                // Init:81) that saving even ONE plugin-defined type (an
+                // enum nested in a plugin class, e.g. XPDropPlugin's own
+                // Theme) permanently breaks loading plsto for EVERY plugin,
+                // not just the one that owns it: plugin classes live in a
+                // separate classloader created only after plsto is read,
+                // so ObjectInputStream can never resolve that class -
+                // deserializing the WHOLE map throws, and pluginStorage
+                // silently starts empty on every single boot from then on.
+                // This was the actual, permanent root cause behind "nothing
+                // ever restores" - not a timing/instance issue. Restricting
+                // auto-persistence to universally-resolvable JDK types
+                // avoids this entirely; a plugin whose own settings need a
+                // custom/enum type still needs to hand-roll that one field
+                // itself (matching how this already worked before this
+                // generic system existed).
                 val exposedFields = p.javaClass.declaredFields.filter { field ->
-                    field.annotations.any { it.annotationClass.simpleName == "Exposed" }
+                    field.annotations.any { it.annotationClass.simpleName == "Exposed" } &&
+                            isSafeToAutoPersist(field.type)
                 }
 
                 for (field in exposedFields) {
@@ -159,29 +214,42 @@ class plugin : Plugin() {
                     val key = "kondokit.autosave.$pluginDirName.${field.name}"
 
                     if (field.name !in restoredFields) {
-                        restoredFields.add(field.name)
                         try {
                             val saved = API.GetData(key)
                             if (saved != null) {
                                 field.set(p, saved)
+                                restoredFields.add(field.name)
                                 restoredAnything = true
+                            } else {
+                                confirmedAbsentCounts[key] = (confirmedAbsentCounts[key] ?: 0) + 1
                             }
                         } catch (e: Exception) {
                             // A bad/incompatible saved value (e.g. after a
                             // field's type changed between versions) must
                             // never stop the plugin from loading with its
-                            // own compiled default instead.
+                            // own compiled default instead. Mark as handled
+                            // regardless so a permanently-broken value
+                            // doesn't retry (and fail) forever.
+                            restoredFields.add(field.name)
                         }
                     }
 
-                    try {
-                        val current = field.get(p)
-                        if (lastKnownExposedValues[key] != current) {
-                            lastKnownExposedValues[key] = current
-                            API.StoreData(key, current)
+                    // Only track/persist this field once it's actually
+                    // settled (see confirmedAbsentCounts' own comment) -
+                    // otherwise a not-yet-restored default gets treated as
+                    // a genuine change and overwrites the real saved value.
+                    val settled = field.name in restoredFields ||
+                            (confirmedAbsentCounts[key] ?: 0) >= CONFIRM_ABSENT_THRESHOLD
+                    if (settled) {
+                        try {
+                            val current = field.get(p)
+                            if (lastKnownExposedValues[key] != current) {
+                                lastKnownExposedValues[key] = current
+                                API.StoreData(key, current)
+                            }
+                        } catch (e: Exception) {
+                            // Skip fields that can't be safely read/serialized.
                         }
-                    } catch (e: Exception) {
-                        // Skip fields that can't be safely read/serialized.
                     }
                 }
 
