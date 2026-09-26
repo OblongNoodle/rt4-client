@@ -5,7 +5,7 @@
 #
 # Usage: ./test.sh [url] [seconds]
 set -u
-URL="${1:-https://party.oblongnoodle.com/party.php}"
+URL="${1:-https://oblongnoodle.com/party/party.php}"
 SECS="${2:-60}"
 UA="RT4-PartyPanel/1.0"
 

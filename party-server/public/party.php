@@ -20,7 +20,10 @@ declare(strict_types=1);
 const MAX_BODY = 16384;          // bytes per request
 const MAX_MEMBERS = 20;          // per room
 const STALE_SECONDS = 300;       // members silent this long are removed
-const DATA_DIR = __DIR__ . '/../party-data';
+// Beside the web root, never inside it. The relay is served both from
+// party.oblongnoodle.com and oblongnoodle.com/party/; both web roots sit
+// directly in the account's home, so this is the same folder for both.
+define('DATA_DIR', dirname(realpath($_SERVER['DOCUMENT_ROOT'])) . '/party-data');
 
 // Shape of every accepted state key: [max rows, columns per row] for int
 // matrices, or 'int' for a single integer. Anything else is rejected.

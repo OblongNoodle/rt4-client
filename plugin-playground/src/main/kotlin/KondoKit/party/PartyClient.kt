@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
  * here can act on the local client - it is only drawn by PartyView.
  */
 object PartyClient {
-    const val DEFAULT_SERVER = "https://party.oblongnoodle.com/party.php"
+    const val DEFAULT_SERVER = "https://oblongnoodle.com/party/party.php"
     private const val POLL_MS = 1000L
     private const val TIMEOUT_MS = 5000
     // Resend everything this often, so a member whose row the relay expired
