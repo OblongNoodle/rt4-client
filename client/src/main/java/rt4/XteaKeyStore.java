@@ -7,14 +7,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
-// Not part of the original client. Remembers the map (loc file) decryption
-// keys the server has sent in rebuild packets, across sessions, so
+// Not part of the original client. Map (loc file) decryption keys, so
 // AsyncSceneLoader can build the next area before the server asks for it.
-// Only keys the server itself sent are ever used: a wrong key would decrypt
-// to garbage, and the cache's decompressor has no length cap.
+// Keys the server has sent in rebuild packets are remembered across sessions.
+// For regions not seen yet, 2009scape's public key list (bundled xteas.json,
+// regions missing from it use no key, as on the server) is used, but only
+// after Js5.checkKey has confirmed the key actually decrypts the file: a
+// wrong key would decrypt to garbage, and the cache's decompressor has no
+// length cap.
 public final class XteaKeyStore {
 
 	private static final HashMap<Integer, int[]> keys = new HashMap<>();
+
+	private static final HashMap<Integer, int[]> bundled = new HashMap<>();
+
+	// Bundled keys already checked: true = decrypts, false = doesn't
+	private static final HashMap<Integer, Boolean> checked = new HashMap<>();
 
 	private static boolean loaded = false;
 
@@ -31,6 +39,7 @@ public final class XteaKeyStore {
 			return;
 		}
 		loaded = true;
+		loadBundled();
 		File file = getFile();
 		if (file == null || !file.isFile()) {
 			return;
@@ -56,10 +65,53 @@ public final class XteaKeyStore {
 		}
 	}
 
-	// Region id is (regionX << 8) | regionY, as in LoginManager.regionBitPacked
-	public static int[] get(int region) {
+	private static void loadBundled() {
+		try (java.io.InputStream in = XteaKeyStore.class.getResourceAsStream("/xteas.json")) {
+			if (in == null) {
+				return;
+			}
+			com.google.gson.JsonObject root = new com.google.gson.JsonParser().parse(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+			for (com.google.gson.JsonElement element : root.getAsJsonArray("xteas")) {
+				com.google.gson.JsonObject entry = element.getAsJsonObject();
+				String[] parts = entry.get("keys").getAsString().split(",");
+				if (parts.length != 4) {
+					continue;
+				}
+				int[] key = new int[4];
+				for (int i = 0; i < 4; i++) {
+					key[i] = Integer.parseInt(parts[i].trim());
+				}
+				bundled.put(Integer.parseInt(entry.get("regionId").getAsString()), key);
+			}
+		} catch (Exception ignored) {
+		}
+	}
+
+	// Region id is (regionX << 8) | regionY, as in LoginManager.regionBitPacked.
+	// locGroup is the region's loc file in archive 5, used to check a bundled
+	// key. Returns the key, null if it's unknown or wrong, or NOT_READY while
+	// the loc file is still downloading.
+	public static final int[] NOT_READY = new int[4];
+
+	public static int[] get(int region, int locGroup) {
 		load();
-		return keys.get(region);
+		int[] key = keys.get(region);
+		if (key != null) {
+			return key;
+		}
+		key = bundled.get(region);
+		if (key == null) {
+			key = new int[4];
+		}
+		Boolean valid = checked.get(region);
+		if (valid == null) {
+			valid = client.js5Archive5.checkKey(locGroup, key);
+			if (valid == null) {
+				return NOT_READY;
+			}
+			checked.put(region, valid);
+		}
+		return valid ? key : null;
 	}
 
 	// Called with every non-dynamic rebuild packet's regions and keys

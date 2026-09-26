@@ -82,9 +82,12 @@ public class GlobalConfig {
 	// the original synchronous loading exactly.
 	public static boolean ASYNC_SCENE_LOADING = true;
 
-	// Not part of the original client. How long the background area build may
-	// run per rendered frame, in ms.
-	public static int ASYNC_LOAD_SLICE_MS = 4;
+	// Not part of the original client. How long a background area build may
+	// run per rendered frame, in ms (on top of the game loop's idle time):
+	// predicted builds, which nothing waits on, and requested ones, which hold
+	// packets back so the player stops until they finish.
+	public static int ASYNC_LOAD_SLICE_MS = 3;
+	public static int ASYNC_REQUESTED_SLICE_MS = 25;
 
 	// Not part of the original client. Start building the next area this many
 	// tiles before the player reaches the server's rebuild line, so it's ready

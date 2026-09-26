@@ -212,6 +212,81 @@ public final class AsyncSceneLoader {
 		return true;
 	}
 
+	// The turn points of the player's last walk, in world coordinates, as sent
+	// to the server (ClientProt.sendMovePacket)
+	private static final int[] walkX = new int[25];
+	private static final int[] walkY = new int[25];
+	private static int walkLength;
+
+	public static void recordWalkPath(int pathLength, int sentLength) {
+		walkLength = sentLength;
+		for (int i = 0; i < sentLength; i++) {
+			walkX[i] = Camera.originX + PathFinder.queueX[pathLength - 1 - i];
+			walkY[i] = Camera.originY + PathFinder.queueY[pathLength - 1 - i];
+		}
+	}
+
+	private static final int ROUTE_TILES = 256;
+
+	// Run toggle
+	private static final int RUN_VARP = 173;
+	private static final int[] routeX = new int[ROUTE_TILES];
+	private static final int[] routeY = new int[ROUTE_TILES];
+
+	// Walks the recorded path the way the server does (diagonally, then
+	// straight, towards each turn point) and returns the index in routeX/Y of
+	// the first tile that triggers a rebuild, measured from the player's
+	// current tile, or -1. Sets routeLength.
+	private static int routeLength;
+
+	private static int findRouteCrossing(int worldX, int worldY) {
+		if (walkLength < 1) {
+			return -1;
+		}
+		int x = walkX[0];
+		int y = walkY[0];
+		int n = 0;
+		routeX[n] = x;
+		routeY[n] = y;
+		n++;
+		for (int i = 1; i < walkLength && n < ROUTE_TILES; i++) {
+			while ((x != walkX[i] || y != walkY[i]) && n < ROUTE_TILES) {
+				x += Integer.signum(walkX[i] - x);
+				y += Integer.signum(walkY[i] - y);
+				routeX[n] = x;
+				routeY[n] = y;
+				n++;
+			}
+		}
+		routeLength = n;
+		int current = -1;
+		for (int i = 0; i < n; i++) {
+			if (routeX[i] == worldX && routeY[i] == worldY) {
+				current = i;
+				break;
+			}
+		}
+		if (current == -1) {
+			return -1;
+		}
+		for (int i = current + 1; i < n; i++) {
+			if (Math.abs((routeX[i] >> 3) - SceneGraph.centralZoneX) >= 4 || Math.abs((routeY[i] >> 3) - SceneGraph.centralZoneY) >= 4) {
+				if (i - current > GlobalConfig.PREBUILD_LEAD_TILES) {
+					return -1;
+				}
+				// Running moves 2 tiles a tick and the server only checks after
+				// both, from a tick boundary (the player's current tile), so an
+				// odd step count means it rebuilds one tile further on
+				boolean running = VarpDomain.activeVarps[RUN_VARP] == 1 && Player.runEnergy > 0;
+				if (running && ((i - current) & 1) == 1 && i + 1 < n) {
+					return i + 1;
+				}
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	// Main thread, once per logic tick after packets: if the player is heading
 	// for the server's rebuild line, start building the area it will send.
 	public static void predict() {
@@ -232,8 +307,19 @@ public final class AsyncSceneLoader {
 		int predictedZoneY = 0;
 		int crossingX = 0;
 		int crossingY = 0;
-		// Rebuild happens once the player's chunk is 4 chunks from the last one
-		if (stepX != 0) {
+		// Rebuild happens once the player's chunk is 4 chunks from the last one.
+		// Best guess: follow the path the player clicked, which is exactly
+		// what the server walks.
+		int crossing = findRouteCrossing(worldX, worldY);
+		if (crossing != -1) {
+			bestDistance = 0;
+			crossingX = routeX[crossing];
+			crossingY = routeY[crossing];
+			predictedZoneX = crossingX >> 3;
+			predictedZoneY = crossingY >> 3;
+		}
+		// Otherwise (following, pushed, ...) extrapolate the last step
+		if (stepX != 0 && bestDistance != 0) {
 			int triggerChunk = SceneGraph.centralZoneX + 4 * stepX;
 			int distance = stepX > 0 ? triggerChunk * 8 - worldX : worldX - (triggerChunk * 8 + 7);
 			if (distance > 0 && distance <= GlobalConfig.PREBUILD_LEAD_TILES) {
@@ -244,7 +330,7 @@ public final class AsyncSceneLoader {
 				predictedZoneY = crossingY >> 3;
 			}
 		}
-		if (stepY != 0) {
+		if (stepY != 0 && bestDistance != 0) {
 			int triggerChunk = SceneGraph.centralZoneY + 4 * stepY;
 			int distance = stepY > 0 ? triggerChunk * 8 - worldY : worldY - (triggerChunk * 8 + 7);
 			if (distance > 0 && distance <= GlobalConfig.PREBUILD_LEAD_TILES && distance < bestDistance) {
@@ -341,12 +427,16 @@ public final class AsyncSceneLoader {
 					files.underWaterMapFileIds[i] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.UNDERWATER_MAP_PREFIX, JagString.parseInt(regionX), LoginManager.UNDERSCORE, JagString.parseInt(regionY)}));
 					files.underWaterLocationsMapFileIds[i] = client.js5Archive5.getGroupId(JagString.concatenate(new JagString[]{LoginManager.UNDERWATER_LOC_PREFIX, JagString.parseInt(regionX), LoginManager.UNDERSCORE, JagString.parseInt(regionY)}));
 				}
-				int[] key = XteaKeyStore.get(region);
-				if (key == null) {
-					if (files.locationsMapFileIds[i] != -1) {
+				int[] key;
+				if (files.locationsMapFileIds[i] == -1) {
+					key = new int[4];
+				} else {
+					key = XteaKeyStore.get(region, files.locationsMapFileIds[i]);
+					if (key == null || key == XteaKeyStore.NOT_READY) {
+						// Unknown key, or its loc file is still downloading (the
+						// check requested it, so a later tick can try again)
 						return false;
 					}
-					key = new int[4];
 				}
 				files.regionsXteaKeys[i] = key.clone();
 				i++;
@@ -581,7 +671,7 @@ public final class AsyncSceneLoader {
 		}
 		// A requested build holds packets back, so it gets a real share of
 		// every frame; a predicted one mostly runs in idle time
-		long budget = (speculative ? GlobalConfig.ASYNC_LOAD_SLICE_MS / 2 : GlobalConfig.ASYNC_LOAD_SLICE_MS) * 1000000L;
+		long budget = (speculative ? GlobalConfig.ASYNC_LOAD_SLICE_MS : GlobalConfig.ASYNC_REQUESTED_SLICE_MS) * 1000000L;
 		if (!buildDone) {
 			runBuilderSlice(budget);
 		} else if (failure == null) {

@@ -112,6 +112,8 @@ public class ClientProt {
 		if (pathLength > 25) {
 			clampedLength = 25;
 		}
+		// Not part of the original client, see AsyncSceneLoader.predict
+		AsyncSceneLoader.recordWalkPath(pathLength, clampedLength);
 		pathLength--;
 		@Pc(23) int startX = PathFinder.queueX[pathLength];
 		@Pc(27) int startY = PathFinder.queueY[pathLength];

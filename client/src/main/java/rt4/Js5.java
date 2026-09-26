@@ -102,6 +102,43 @@ public final class Js5 {
 	}
 
 	@OriginalMember(owner = "client!ve", name = "b", descriptor = "(B)I")
+	// Not part of the original client. Whether key decrypts this group,
+	// without touching the group's cached data: null while the group is still
+	// downloading. unpackGroup can't be used to find out, since a wrong key
+	// makes it allocate whatever length the garbage header claims and replaces
+	// the group with garbage.
+	public final Boolean checkKey(int group, int[] key) {
+		if (!this.isGroupReady(group)) {
+			return this.isGroupValid(group) ? null : Boolean.FALSE;
+		}
+		byte[] data = ByteArray.unwrap(this.packed[group], true);
+		if (data == null || data.length < 9) {
+			return Boolean.FALSE;
+		}
+		if (key != null && (key[0] != 0 || key[1] != 0 || key[2] != 0 || key[3] != 0)) {
+			new Buffer(data).tinydec(key, data.length);
+		}
+		Buffer header = new Buffer(data);
+		int type = header.g1();
+		int len = header.g4();
+		if (type < 1 || type > 2 || len < 0 || len > data.length - 9) {
+			return Boolean.FALSE;
+		}
+		int uncompressedLen = header.g4();
+		if (uncompressedLen < 0 || uncompressedLen > 8 * 1024 * 1024) {
+			return Boolean.FALSE;
+		}
+		if (type == 2 && ((data[9] & 0xFF) != 0x1F || (data[10] & 0xFF) != 0x8B)) {
+			// gzip magic
+			return Boolean.FALSE;
+		}
+		try {
+			return Js5Compression.uncompress(data).length == uncompressedLen;
+		} catch (Throwable ex) {
+			return Boolean.FALSE;
+		}
+	}
+
 	public final int getChecksum() {
 		if (!this.isIndexReady()) {
 			throw new IllegalStateException("");
