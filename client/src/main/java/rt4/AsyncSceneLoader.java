@@ -717,6 +717,7 @@ public final class AsyncSceneLoader {
 		awaitMainTurn();
 		long spent = System.nanoTime() - start;
 		builderNanos += spent;
+		HitchLog.builderNanos += spent;
 		slices++;
 		if (spent > maxSliceNanos) {
 			maxSliceNanos = spent;
@@ -782,6 +783,7 @@ public final class AsyncSceneLoader {
 		LoginManager.finishMap(true);
 
 		log(prebuilt ? "prebuilt" : "async", null, swapStart);
+		HitchLog.onAreaSwapped();
 	}
 
 	private static void keepSpares(SceneState old) {
