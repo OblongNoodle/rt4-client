@@ -19,6 +19,9 @@ public final class HitchLog {
 
 	public static long minimapNanos;
 	public static long builderNanos;
+	public static long shadowNanos;
+	public static long textureNanos;
+	public static long lateBufferNanos;
 
 	private HitchLog() {
 	}
@@ -37,6 +40,9 @@ public final class HitchLog {
 	public static void begin() {
 		minimapNanos = 0L;
 		builderNanos = 0L;
+		shadowNanos = 0L;
+		textureNanos = 0L;
+		lateBufferNanos = 0L;
 	}
 
 	public static void end(String what, long startNanos) {
@@ -50,7 +56,7 @@ public final class HitchLog {
 		if (homeDir == null) {
 			return;
 		}
-		String line = "  hitch: " + what + " " + ms + "ms, " + sinceSwapMs + "ms after swap, minimap=" + minimapNanos / 1000000L + "ms builder=" + builderNanos / 1000000L + "ms\n";
+		String line = "  hitch: " + what + " " + ms + "ms, " + sinceSwapMs + "ms after swap, minimap=" + minimapNanos / 1000000L + "ms builder=" + builderNanos / 1000000L + "ms shadowTex=" + shadowNanos / 1000000L + "ms textures=" + textureNanos / 1000000L + "ms lateBuffers=" + lateBufferNanos / 1000000L + "ms\n";
 		try (FileWriter out = new FileWriter(new File(homeDir, "area_load_timing.log"), true)) {
 			out.write(line);
 		} catch (IOException ignored) {

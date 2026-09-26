@@ -89,6 +89,10 @@ public final class AsyncSceneLoader {
 
 	private static final ArrayList<GlVertexBufferObject> pendingBuffers = new ArrayList<>();
 
+	// After the build: shadow textures the first frame would otherwise
+	// upload all at once, done ahead of the swap (see prewarm)
+	private static boolean prewarmDone;
+
 	// Diagnostics
 	private static long beginNanos;
 	private static long requestNanos;
@@ -487,6 +491,7 @@ public final class AsyncSceneLoader {
 		LoginManager.mapFilesMissingCount = 0;
 
 		pendingBuffers.clear();
+		prewarmDone = false;
 		beginContextId = GlCleaner.contextId;
 		active = true;
 		buildDone = false;
@@ -675,14 +680,14 @@ public final class AsyncSceneLoader {
 		if (!buildDone) {
 			runBuilderSlice(budget);
 		} else if (failure == null) {
-			uploadBuffers(System.nanoTime() + budget);
+			finishOnMainThread(System.nanoTime() + budget);
 		}
 	}
 
 	// Main thread, from the game loop in place of its sleep between frames
 	// and ticks. Returns false if there's nothing to do (the caller sleeps).
 	public static boolean runDuringIdle(long idleMs) {
-		if (!active || idleMs < 1 || (buildDone && pendingBuffers.isEmpty())) {
+		if (!active || idleMs < 1 || (buildDone && (failure != null || prewarmDone))) {
 			return false;
 		}
 		if (!stillValid()) {
@@ -693,7 +698,7 @@ public final class AsyncSceneLoader {
 		if (!buildDone) {
 			runBuilderSlice(Math.max(deadline - System.nanoTime(), 1000000L));
 		} else if (failure == null) {
-			uploadBuffers(deadline);
+			finishOnMainThread(deadline);
 		}
 		long left = (deadline - System.nanoTime()) / 1000000L;
 		if (left > 0) {
@@ -702,10 +707,31 @@ public final class AsyncSceneLoader {
 		return true;
 	}
 
-	private static void uploadBuffers(long deadline) {
+	// The GL work for a finished build, spread over frames: the deferred
+	// vertex buffers, then the shadow textures (the renderer uploads those the
+	// first time each shadow tile is drawn, up to 169 of them in the first
+	// frame after a swap)
+	private static void finishOnMainThread(long deadline) {
 		while (!pendingBuffers.isEmpty() && System.nanoTime() < deadline) {
 			pendingBuffers.remove(pendingBuffers.size() - 1).uploadPending();
 		}
+		if (!pendingBuffers.isEmpty() || prewarmDone) {
+			return;
+		}
+		Shadow[][] shadows = builderState.shadows;
+		for (int col = 0; col < shadows.length; col++) {
+			for (int row = 0; row < shadows[col].length; row++) {
+				Shadow shadow = shadows[col][row];
+				if (shadow.outputToSprite) {
+					if (System.nanoTime() >= deadline) {
+						return;
+					}
+					shadow.updateShadowTexture(builderState.shadowMapImage, col, row);
+					shadow.outputToSprite = false;
+				}
+			}
+		}
+		prewarmDone = true;
 	}
 
 	private static void runBuilderSlice(long budgetNanos) {
@@ -754,7 +780,7 @@ public final class AsyncSceneLoader {
 			fallBackToSync(failure);
 			return;
 		}
-		if (!pendingBuffers.isEmpty()) {
+		if (!prewarmDone) {
 			return;
 		}
 		long swapStart = System.nanoTime();

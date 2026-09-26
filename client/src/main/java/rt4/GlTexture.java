@@ -192,6 +192,7 @@ public final class GlTexture extends SecondaryNode {
 			return false;
 		}
 		@Pc(22) GL2 gl = GlRenderer.gl;
+		long createStart = this.textureId == -1 ? System.nanoTime() : 0L;
 		@Pc(28) int size = lowDetail ? 64 : 128;
 		// Not part of the original client: generate at a configurable
 		// resolution. `size` stays the original value because the scroll
@@ -287,6 +288,9 @@ public final class GlTexture extends SecondaryNode {
 				@Pc(312) float scrollU = (float) (this.scrollSpeedU * GlRenderer.animationClock) / (float) size;
 				GlRenderer.translateTextureMatrix(scrollU, scrollV, 0.0F);
 			}
+		}
+		if (createStart != 0L) {
+			HitchLog.textureNanos += System.nanoTime() - createStart;
 		}
 		return true;
 	}

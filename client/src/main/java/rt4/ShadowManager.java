@@ -136,8 +136,10 @@ public final class ShadowManager {
 							if (tileY - centerY >= -radius && tileY - centerY <= radius && visibility[tileX + radius - centerX][tileY + radius - centerY]) {
 								@Pc(89) Shadow shadow = shadows[col][row];
 								if (shadow.outputToSprite) {
+									long start = System.nanoTime();
 									shadow.updateShadowTexture(shadowMapImage, col, row);
 									shadow.outputToSprite = false;
+									HitchLog.shadowNanos += System.nanoTime() - start;
 								}
 								gl.glPushMatrix();
 								gl.glTranslatef((float) (col * 1024), 0.0F, (float) (row * 1024));

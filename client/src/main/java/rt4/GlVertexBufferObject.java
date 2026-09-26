@@ -115,7 +115,9 @@ public final class GlVertexBufferObject {
 	@OriginalMember(owner = "client!vi", name = "a", descriptor = "()V")
 	public final void bindArray() {
 		if (this.id == -1 || this.pendingData != null) {
+			long start = System.nanoTime();
 			this.uploadPending();
+			HitchLog.lateBufferNanos += System.nanoTime() - start;
 		}
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, this.id);
@@ -141,7 +143,9 @@ public final class GlVertexBufferObject {
 	@OriginalMember(owner = "client!vi", name = "b", descriptor = "()V")
 	public final void bindElementArray() {
 		if (this.id == -1 || this.pendingData != null) {
+			long start = System.nanoTime();
 			this.uploadPending();
+			HitchLog.lateBufferNanos += System.nanoTime() - start;
 		}
 		@Pc(1) GL2 gl = GlRenderer.gl;
 		gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, this.id);
