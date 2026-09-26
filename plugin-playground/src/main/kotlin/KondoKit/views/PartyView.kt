@@ -180,8 +180,17 @@ object PartyView : View, OnPostClientTickCallback {
         KondoKit.plugin.registerPostClientTickCallback(this)
     }
 
+    private var serverUrlMigrated = false
+
+    /** Move a saved legacy/blank server URL to the current one, persisting it. */
+    private fun migrateServerUrl(): String {
+        val url = PartyClient.resolveServerUrl(partyServerUrl)
+        if (url != partyServerUrl) KondoKit.plugin.partyServerUrl = url
+        return url
+    }
+
     private fun joinParty(password: String) {
-        PartyClient.serverUrl = partyServerUrl
+        PartyClient.serverUrl = migrateServerUrl()
         PartyClient.join(password)
         SwingUtilities.invokeLater { clearCards() }
     }
@@ -193,6 +202,12 @@ object PartyView : View, OnPostClientTickCallback {
 
     // Game thread, once per game tick.
     override fun onPostClientTick() {
+        // Once saved settings have been restored (they load after the view
+        // is created), fix an old URL so the settings panel shows the new one.
+        if (!serverUrlMigrated && API.IsLoggedIn()) {
+            migrateServerUrl()
+            serverUrlMigrated = true
+        }
         LocalPartyState.tick()
         loadIcons()
 

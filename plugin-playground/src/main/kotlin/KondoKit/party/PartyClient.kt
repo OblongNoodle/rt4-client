@@ -22,6 +22,10 @@ import java.util.concurrent.TimeUnit
  */
 object PartyClient {
     const val DEFAULT_SERVER = "https://oblongnoodle.com/party/party.php"
+    // The relay's first home. It can never have a valid certificate (no
+    // AutoSSL on the hosting plan), so any setting still pointing there -
+    // http, or https which fails the handshake - is moved to DEFAULT_SERVER.
+    private const val LEGACY_HOST = "party.oblongnoodle.com"
     private const val POLL_MS = 1000L
     private const val TIMEOUT_MS = 5000
     // Resend everything this often, so a member whose row the relay expired
@@ -62,6 +66,16 @@ object PartyClient {
         Thread(r, "KondoKit-Party").apply { isDaemon = true }
     }
     private var pollTask: ScheduledFuture<*>? = null
+
+    /** The URL to actually use for a configured one; see LEGACY_HOST. */
+    fun resolveServerUrl(configured: String): String {
+        val host = try {
+            URL(configured.trim()).host
+        } catch (_: Exception) {
+            return DEFAULT_SERVER // blank or not a URL
+        }
+        return if (host.equals(LEGACY_HOST, ignoreCase = true)) DEFAULT_SERVER else configured.trim()
+    }
 
     fun join(password: String) {
         leave()
