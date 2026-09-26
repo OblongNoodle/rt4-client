@@ -37,6 +37,10 @@ Changes in `LoginManager.rebuildMap()`:
 
 Findings for Stage 3: server sends real (non-zero) XTEA keys for most regions, so scenery beyond the loaded area can't be read from cache directly. Terrain is unencrypted. NPCs/players beyond ~15 tiles are never sent by the server (not client-fixable).
 
+## Stage 2c - Background area loading (testing)
+
+On branch `async-scene-loading`; design, research and status in `ASYNC_SCENE_LOADING.md`. Rollback: `.ollback-graphics.ps1 before-async-loading`.
+
 ## Stage 3 - Extended draw distance (pending)
 
 - Check whether 2009scape's region XTEA keys are all zero (log `Protocol.java:431`); if so, load regions beyond 104x104 from the cache.

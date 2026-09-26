@@ -137,6 +137,15 @@ public final class GlRenderer {
 	// light and sky color are unaffected.
 	public static boolean worldFogDisabled = false;
 
+	// Not part of the original client. The thread the GL context is current
+	// on; GL calls from any other thread (AsyncSceneLoader's builder) have to
+	// be deferred, see GlVertexBufferObject.
+	private static Thread glThread;
+
+	public static boolean isGlThread() {
+		return glThread == null || Thread.currentThread() == glThread;
+	}
+
 	// Not part of the original client. Driver limit for anisotropic
 	// filtering, 1 when GL_EXT_texture_filter_anisotropic is unavailable.
 	public static float maxAnisotropy = 1.0F;
@@ -812,6 +821,7 @@ public final class GlRenderer {
 				window.unlockSurface();
 			}
 			gl = GLContext.getCurrentGL().getGL2();
+			glThread = Thread.currentThread();
 			gl.glLineWidth((float) GameShell.canvasScale);
 			enabled = true;
 			canvasWidth = canvas.getSize().width;

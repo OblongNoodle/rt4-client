@@ -31,13 +31,13 @@ public class LightingManager {
 	@OriginalMember(owner = "client!jf", name = "f", descriptor = "[Z")
 	private static boolean[] enabledLights;
 	@OriginalMember(owner = "client!jf", name = "g", descriptor = "[[[I")
-	private static int[][][] lightGrid;
+	static int[][][] lightGrid;
 	@OriginalMember(owner = "client!jf", name = "h", descriptor = "[I")
 	private static int[] activeLightIndices;
 	@OriginalMember(owner = "client!jf", name = "i", descriptor = "I")
 	private static int cachedPlane;
 	@OriginalMember(owner = "client!jf", name = "j", descriptor = "I")
-	private static int planeCount;
+	static int planeCount;
 	@OriginalMember(owner = "client!jf", name = "k", descriptor = "I")
 	private static int cachedStartTileX;
 	@OriginalMember(owner = "client!jf", name = "m", descriptor = "[Z")

@@ -76,6 +76,16 @@ public class GlobalConfig {
 	// supports; ignored if GL_EXT_texture_filter_anisotropic is missing.
 	public static float ANISOTROPIC_FILTERING = 16.0F;
 
+	// Not part of the original client. Build new areas in the background
+	// while the current one keeps rendering, instead of freezing on
+	// "Loading - please wait" (see AsyncSceneLoader). HD only; false restores
+	// the original synchronous loading exactly.
+	public static boolean ASYNC_SCENE_LOADING = true;
+
+	// Not part of the original client. How long the background area build may
+	// run per rendered frame, in ms.
+	public static int ASYNC_LOAD_SLICE_MS = 4;
+
 	public static boolean USE_SHIFT_CLICK = true;
 	public static boolean USE_TWEENING = true;
 	public static boolean BILINEAR_MINIMAP = true;

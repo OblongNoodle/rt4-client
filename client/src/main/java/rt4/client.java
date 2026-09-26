@@ -811,6 +811,9 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "f", descriptor = "(I)V")
 	@Override
 	protected final void mainRedraw() {
+		// Not part of the original client: give a background area load its
+		// slice of this frame
+		AsyncSceneLoader.step();
 		if(DisplayMode.resizableSD && !GlRenderer.enabled){
 			GameShell.fullRedraw = true;
 			InterfaceList.fullRedrawAllInterfaces();
@@ -1741,7 +1744,12 @@ public final class client extends GameShell {
 			LoginManager.loopAuto();
 			LoginManager.loop();
 		} else if (gameState == 30) {
-			Protocol.loop();
+			// Not part of the original client: swap in a finished background
+			// area load before reading packets
+			AsyncSceneLoader.finishIfReady();
+			if (gameState == 30) {
+				Protocol.loop();
+			}
 		} else if (gameState == 40) {
 			LoginManager.loop();
 			if (LoginManager.reply != -3) {

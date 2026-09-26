@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.Pc;
 public final class FogManager {
 
 	@OriginalMember(owner = "client!ph", name = "b", descriptor = "[[Lclient!li;")
-	public static final Environment[][] chunksAtmosphere = new Environment[13][13];
+	public static Environment[][] chunksAtmosphere = new Environment[13][13];
 
 	@OriginalMember(owner = "client!mk", name = "c", descriptor = "I")
 	public static int lightX;
@@ -66,7 +66,7 @@ public final class FogManager {
 	private static float lightModelAmbient;
 
 	@OriginalMember(owner = "client!mk", name = "a", descriptor = "[F")
-	public static final float[] light0Position = new float[4];
+	public static float[] light0Position = new float[4];
 
 	@OriginalMember(owner = "client!mk", name = "b", descriptor = "I")
 	private static int lightColor = -1;
@@ -84,7 +84,7 @@ public final class FogManager {
 	public static final float[] fogColor = new float[4];
 
 	@OriginalMember(owner = "client!mk", name = "j", descriptor = "[F")
-	private static final float[] light1Position = new float[4];
+	static float[] light1Position = new float[4];
 
 	@OriginalMember(owner = "client!mk", name = "k", descriptor = "I")
 	public static int defaultLightColorRgb = 16777215;

@@ -9,7 +9,7 @@ import plugin.api.API;
 public class SceneGraph {
 
 	@OriginalMember(owner = "client!bb", name = "g", descriptor = "[[[B")
-	public static final byte[][][] renderFlags = new byte[4][104][104];
+	public static byte[][][] renderFlags = new byte[4][104][104];
 	@OriginalMember(owner = "client!mi", name = "Y", descriptor = "[[[Lclient!ih;")
 	public static final LinkedList[][][] objStacks = new LinkedList[4][104][104];
 	@OriginalMember(owner = "client!te", name = "B", descriptor = "[I")
@@ -834,6 +834,7 @@ public class SceneGraph {
 		@Pc(254) int r;
 		@Pc(267) int s;
 		for (currentLevel = 0; currentLevel < levels; currentLevel++) {
+			AsyncSceneLoader.checkpoint();
 			@Pc(159) byte[][] shadowData = shadowmap[currentLevel];
 			@Pc(273) int t;
 			@Pc(326) int v;
@@ -947,6 +948,7 @@ public class SceneGraph {
 				}
 			}
 			for (i = 1; i < 103; i++) {
+				AsyncSceneLoader.checkpoint();
 				tileLoop:
 				for (j = 1; j < 103; j++) {
 					if (underwater || allLevelsAreVisible() || (renderFlags[0][i][j] & 0x2) != 0 || (renderFlags[currentLevel][i][j] & 0x10) == 0 && getRenderLevel(j, i, currentLevel) == centralPlane) {
@@ -1087,6 +1089,7 @@ public class SceneGraph {
 				m = 1;
 				while (true) {
 					if (m > 103) {
+						AsyncSceneLoader.checkpoint();
 						@Pc(2025) GlTile[] plainTiles;
 						if (underwater) {
 							plainTiles = buildGlPlainTiles(renderFlags, tileShapes[currentLevel], tileUnderlays[currentLevel], tileLightness, normalsX, tileWaterData, tileOverlays[currentLevel], tileAngles[currentLevel], normalsY, currentLevel, normalsZ, underlayColors, tileHeights[currentLevel], surfaceTileHeights[0]);
@@ -1103,6 +1106,7 @@ public class SceneGraph {
 							allTiles[plainTiles.length + z] = shapedTiles[z];
 						}
 						setUnderwaterHdTiles(currentLevel, allTiles);
+						AsyncSceneLoader.checkpoint();
 						buildGlLighting(normalsZ, tileUnderlays[currentLevel], tileAngles[currentLevel], LightingManager.lights, currentLevel, LightingManager.lightCount, normalsX, tileShapes[currentLevel], tileOverlays[currentLevel], tileHeights[currentLevel], normalsY);
 						break;
 					}
@@ -1123,7 +1127,11 @@ public class SceneGraph {
 			tileAngles[currentLevel] = null;
 			shadowmap[currentLevel] = null;
 		}
+		// Not inside mergeSceneNormals: it keeps partial state in static
+		// scratch arrays the main thread could reuse between slices
+		AsyncSceneLoader.checkpoint();
 		mergeSceneNormals();
+		AsyncSceneLoader.checkpoint();
 		if (underwater) {
 			return;
 		}
@@ -1136,6 +1144,7 @@ public class SceneGraph {
 			}
 		}
 		for (currentLevel = 0; currentLevel < 4; currentLevel++) {
+			AsyncSceneLoader.checkpoint();
 			for (col = 0; col <= 104; col++) {
 				for (i = 0; i <= 104; i++) {
 					if ((occludeFlags[currentLevel][i][col] & 0x1) != 0) {
@@ -2815,6 +2824,11 @@ public class SceneGraph {
 
 	@OriginalMember(owner = "client!ch", name = "c", descriptor = "(I)V")
 	public static void checkPlaneChange() {
+		// Not part of the original client: wait for a background area load
+		// to be swapped in first
+		if (AsyncSceneLoader.isLoading()) {
+			return;
+		}
 		if (!allLevelsAreVisible() && centralPlane != Player.plane) {
 			LoginManager.loadRegion(Player.plane, centralZoneY, centralZoneX, PlayerList.self.movementQueueY[0], false, PlayerList.self.movementQueueX[0]);
 		} else if (Player.plane != LightingManager.minimapRenderedPlane && MiniMap.renderMap(Player.plane)) {
@@ -2834,6 +2848,7 @@ public class SceneGraph {
 				return;
 			}
 			locIndex += locOffset;
+			AsyncSceneLoader.checkpoint();
 
 			@Pc(27) int position = 0;
 			while (true) {
@@ -5143,6 +5158,7 @@ public class SceneGraph {
 		@Pc(117) int z;
 		for (x = 0; x < levelCount; x++) {
 			for (y = 0; y < 64; y++) {
+				AsyncSceneLoader.checkpoint();
 				for (z = 0; z < 64; z++) {
 					readTile(baseX, tileY, underwater, buffer, z + baseY, tileX + y, 0, x);
 				}

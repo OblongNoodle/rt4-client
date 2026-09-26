@@ -20,6 +20,11 @@ public final class AreaLoadTimer {
 	}
 
 	public static void start() {
+		if (AsyncSceneLoader.isBuilderThread()) {
+			// AsyncSceneLoader logs its own timings for background loads
+			phases = null;
+			return;
+		}
 		startNanos = lastNanos = System.nanoTime();
 		phases = new StringBuilder();
 	}

@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.Pc;
 
 public class PathFinder {
 	@OriginalMember(owner = "client!li", name = "h", descriptor = "[Lclient!mj;")
-	public static final CollisionMap[] collisionMaps = new CollisionMap[4];
+	public static CollisionMap[] collisionMaps = new CollisionMap[4];
 	@OriginalMember(owner = "client!lf", name = "a", descriptor = "[[I")
 	public static final int[][] parents = new int[104][104];
 	@OriginalMember(owner = "client!nd", name = "q", descriptor = "[[I")

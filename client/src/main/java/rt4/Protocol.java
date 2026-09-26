@@ -406,6 +406,7 @@ public class Protocol {
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "(IZ)V")
 	public static void readRebuildPacket(@OriginalArg(1) boolean dynamic) {
+		AsyncSceneLoader.onRebuildPacket();
 		SceneGraph.dynamicMapRegion = dynamic;
 		// localTileX
 		@Pc(13) int var1;
@@ -2409,7 +2410,10 @@ public class Protocol {
 			handleConnectionLost();
 			return;
 		}
-		for (@Pc(34) int i = 0; i < 100 && readPacket(); i++) {
+		// Not part of the original client: while AsyncSceneLoader builds the
+		// next area, packets after the rebuild packet (already in the new
+		// area's coordinates) wait until the new scene is swapped in
+		for (@Pc(34) int i = 0; i < 100 && !AsyncSceneLoader.isLoading() && readPacket(); i++) {
 		}
 		if (client.gameState != 30) {
 			return;

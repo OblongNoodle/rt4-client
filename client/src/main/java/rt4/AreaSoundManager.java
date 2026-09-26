@@ -9,7 +9,7 @@ public class AreaSoundManager {
 	public static final HashTable playerSounds = new HashTable(16);
 
 	@OriginalMember(owner = "client!ab", name = "n", descriptor = "Lclient!ih;")
-	public static final LinkedList locSounds = new LinkedList();
+	public static LinkedList locSounds = new LinkedList();
 
 	@OriginalMember(owner = "client!ma", name = "x", descriptor = "Lclient!ih;")
 	public static final LinkedList npcSounds = new LinkedList();

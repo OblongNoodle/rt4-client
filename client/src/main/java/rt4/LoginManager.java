@@ -697,6 +697,12 @@ public class LoginManager {
 	@OriginalMember(owner = "client!k", name = "a", descriptor = "(IIIIZIZ)V")
 	public static void loadRegion(@OriginalArg(0) int plane, @OriginalArg(1) int zoneY, @OriginalArg(2) int zoneX, @OriginalArg(3) int localTileY, @OriginalArg(4) boolean fromLogin, @OriginalArg(5) int localTileX) {
 		if (SceneGraph.centralZoneX == zoneX && zoneY == SceneGraph.centralZoneY && (SceneGraph.centralPlane == plane || SceneGraph.allLevelsAreVisible())) {
+			AsyncSceneLoader.onRegionUnchanged();
+			return;
+		}
+		// Not part of the original client: build the new area in the
+		// background while the current one keeps rendering, when possible
+		if (!fromLogin && AsyncSceneLoader.begin(plane, zoneY, zoneX, localTileY, localTileX)) {
 			return;
 		}
 		SceneGraph.centralZoneX = zoneX;
@@ -719,6 +725,14 @@ public class LoginManager {
 		@Pc(81) int deltaY = Camera.originY - prevOriginY;
 		@Pc(86) int deltaX = Camera.originX - prevOriginX;
 		mapElementList = null;
+		shiftRegion(deltaX, deltaY, fromLogin, plane, localTileX, localTileY);
+	}
+
+	// Not part of the original client: second half of loadRegion(), moving
+	// every entity, ground item stack and pending loc change into the new
+	// coordinates. AsyncSceneLoader runs it at the swap instead of when the
+	// rebuild packet arrives, since the old scene keeps rendering until then.
+	public static void shiftRegion(int deltaX, int deltaY, boolean fromLogin, int plane, int localTileX, int localTileY) {
 		@Pc(96) int i;
 		@Pc(103) Npc npc;
 		@Pc(109) int j;
@@ -886,6 +900,7 @@ public class LoginManager {
 				@Pc(45) int baseX = (regionBitPacked[i] >> 8) * 64 - Camera.originX;
 				@Pc(56) int baseY = (regionBitPacked[i] & 0xFF) * 64 - Camera.originY;
 				client.audioLoop();
+				AsyncSceneLoader.checkpoint();
 				SceneGraph.readLocs(baseX, underwater, locData, baseY, PathFinder.collisionMaps);
 			}
 		}
@@ -894,6 +909,23 @@ public class LoginManager {
 	@OriginalMember(owner = "client!gd", name = "c", descriptor = "(I)V")
 	public static void rebuildMap() {
 		ClientProt.ping(false);
+		if (!prepareMapFiles()) {
+			return;
+		}
+		if (loadingScreenState != 0) {
+			Fonts.drawTextOnScreen(true, JagString.concatenate(new JagString[]{LocalizedText.LOADING, COMPLETE_PERCENT}));
+		}
+		buildMap(false);
+		finishMap(false);
+	}
+
+	// Not part of the original client: rebuildMap() split into
+	// prepareMapFiles/buildMap/finishMap so AsyncSceneLoader can run the
+	// first two on its builder thread (async = true) and the last on the main
+	// thread once the new scene is swapped in. The synchronous path runs the
+	// same statements in the same order as before. Returns false, with
+	// loadingScreenState set, while map files or loc models are still missing.
+	public static boolean prepareMapFiles() {
 		mapFilesMissingCount = 0;
 		@Pc(12) boolean fileExists = true;
 		@Pc(14) int id;
@@ -952,7 +984,7 @@ public class LoginManager {
 
 		if (!fileExists) {
 			loadingScreenState = 1;
-			return;
+			return false;
 		}
 
 		missingLocModelCount = 0;
@@ -985,15 +1017,23 @@ public class LoginManager {
 		}
 		if (!fileExists) {
 			loadingScreenState = 2;
-			return;
+			return false;
 		}
+		return true;
+	}
 
-		if (loadingScreenState != 0) {
-			Fonts.drawTextOnScreen(true, JagString.concatenate(new JagString[]{LocalizedText.LOADING, COMPLETE_PERCENT}));
-		}
-
+	// Not part of the original client, see prepareMapFiles. With async, this
+	// runs on AsyncSceneLoader's builder thread against its own copy of the
+	// scene state, so it skips the audio/ping/sound calls the main thread
+	// keeps doing, and uses the player's position from the rebuild packet
+	// (entities are only shifted into the new coordinates at the swap).
+	public static void buildMap(boolean async) {
+		@Pc(320) int chunkX;
+		@Pc(309) int chunkY;
 		AreaLoadTimer.start();
-		client.audioLoop();
+		if (!async) {
+			client.audioLoop();
+		}
 		// Not part of the original client: the original called unload() here,
 		// between readMap and buildScene, in the underwater pass, and at the
 		// end - each one wiping every definition/model cache so the whole
@@ -1002,6 +1042,7 @@ public class LoginManager {
 		// into them in place; decoded definitions stay cached.
 		clearBuiltLocModels();
 		AreaLoadTimer.mark("unload1");
+		AsyncSceneLoader.checkpoint();
 		@Pc(420) boolean hasUnderWaterMap = false;
 		@Pc(427) int i;
 		if (GlRenderer.enabled && Preferences.highWaterDetail) {
@@ -1023,7 +1064,10 @@ public class LoginManager {
 				}
 			}
 		}
-		AreaSoundManager.clear(false);
+		if (!async) {
+			// async: the main thread stops the old scene's loc sounds at the swap
+			AreaSoundManager.clear(false);
+		}
 		if (GlRenderer.enabled) {
 			ShadowManager.shadowMapImage.clear();
 			for (i = 0; i < 13; i++) {
@@ -1038,47 +1082,65 @@ public class LoginManager {
 		if (GlRenderer.enabled) {
 			FogManager.setDefaultChunksAtmosphere();
 		}
-		client.audioLoop();
+		if (!async) {
+			client.audioLoop();
+		}
 		AreaLoadTimer.mark("reset");
+		AsyncSceneLoader.checkpoint();
 		// Not part of the original client: removed a forced System.gc() here
 		// (~25ms on every area load; the JVM collects on its own)
 		AreaLoadTimer.mark("gc");
-		ClientProt.ping(true);
+		AsyncSceneLoader.checkpoint();
+		if (!async) {
+			ClientProt.ping(true);
+		}
 		SceneGraph.load(false);
 		if (!SceneGraph.dynamicMapRegion) {
 			readStaticTerrain(false);
-			ClientProt.ping(true);
+			if (!async) {
+				ClientProt.ping(true);
+			}
 			if (GlRenderer.enabled) {
-				i = PlayerList.self.movementQueueX[0] >> 3;
-				chunkX = PlayerList.self.movementQueueY[0] >> 3;
+				i = (async ? AsyncSceneLoader.targetTileX : PlayerList.self.movementQueueX[0]) >> 3;
+				chunkX = (async ? AsyncSceneLoader.targetTileY : PlayerList.self.movementQueueY[0]) >> 3;
 				FogManager.setLightPosition(chunkX, i);
 			}
 			readStaticLocs(false);
-			if (npcSpawnsFilesBuffer != null) {
+			if (!async && npcSpawnsFilesBuffer != null) {
 				decodeNpcFiles();
 			}
 		}
 		if (SceneGraph.dynamicMapRegion) {
 			readDynamicTerrain(false);
-			ClientProt.ping(true);
+			if (!async) {
+				ClientProt.ping(true);
+			}
 			if (GlRenderer.enabled) {
-				i = PlayerList.self.movementQueueX[0] >> 3;
-				chunkX = PlayerList.self.movementQueueY[0] >> 3;
+				i = (async ? AsyncSceneLoader.targetTileX : PlayerList.self.movementQueueX[0]) >> 3;
+				chunkX = (async ? AsyncSceneLoader.targetTileY : PlayerList.self.movementQueueY[0]) >> 3;
 				FogManager.setLightPosition(chunkX, i);
 			}
 			readDynamicLocs(false);
 		}
 		AreaLoadTimer.mark("readMap");
+		AsyncSceneLoader.checkpoint();
 		clearBuiltLocModels();
 		AreaLoadTimer.mark("unload2");
-		ClientProt.ping(true);
+		AsyncSceneLoader.checkpoint();
+		if (!async) {
+			ClientProt.ping(true);
+		}
 		SceneGraph.buildScene(PathFinder.collisionMaps, false);
 		AreaLoadTimer.mark("buildScene");
+		AsyncSceneLoader.checkpoint();
 		if (GlRenderer.enabled) {
 			LightingManager.buildLightGrid();
 		}
 		AreaLoadTimer.mark("lightGrid");
-		ClientProt.ping(true);
+		AsyncSceneLoader.checkpoint();
+		if (!async) {
+			ClientProt.ping(true);
+		}
 		i = SceneGraph.firstVisibleLevel;
 		if (i > Player.plane) {
 			i = Player.plane;
@@ -1092,35 +1154,58 @@ public class LoginManager {
 		}
 		SceneGraph.unload();
 		AreaLoadTimer.mark("sceneUnload");
+		AsyncSceneLoader.checkpoint();
 		if (GlRenderer.enabled && hasUnderWaterMap) {
 			SceneGraph.setUnderwater(true);
 			SceneGraph.load(true);
 			if (!SceneGraph.dynamicMapRegion) {
 				readStaticTerrain(true);
-				ClientProt.ping(true);
+				if (!async) {
+					ClientProt.ping(true);
+				}
 				readStaticLocs(true);
 			}
 			if (SceneGraph.dynamicMapRegion) {
 				readDynamicTerrain(true);
-				ClientProt.ping(true);
+				if (!async) {
+					ClientProt.ping(true);
+				}
 				readDynamicLocs(true);
 			}
 			clearBuiltLocModels();
-			ClientProt.ping(true);
+			if (!async) {
+				ClientProt.ping(true);
+			}
 			SceneGraph.buildScene(PathFinder.collisionMaps, true);
-			ClientProt.ping(true);
+			if (!async) {
+				ClientProt.ping(true);
+			}
 			SceneGraph.unload();
 			SceneGraph.setUnderwater(false);
 		}
 		AreaLoadTimer.mark("underwater");
+		AsyncSceneLoader.checkpoint();
 		if (GlRenderer.enabled) {
 			for (chunkX = 0; chunkX < 13; chunkX++) {
+				AsyncSceneLoader.checkpoint();
 				for (chunkY = 0; chunkY < 13; chunkY++) {
 					ShadowManager.shadows[chunkX][chunkY].buildShadowMesh(SceneGraph.tileHeights[0], chunkX * 8, chunkY * 8);
 				}
 			}
 		}
 		AreaLoadTimer.mark("shadows");
+		AsyncSceneLoader.checkpoint();
+	}
+
+	// Not part of the original client, see prepareMapFiles. With async, runs
+	// on the main thread right after the new scene state was swapped in and
+	// entities were shifted into the new coordinates.
+	public static void finishMap(boolean async) {
+		@Pc(320) int chunkX;
+		@Pc(309) int chunkY;
+		if (async && npcSpawnsFilesBuffer != null) {
+			decodeNpcFiles();
+		}
 		for (chunkX = 0; chunkX < 104; chunkX++) {
 			for (chunkY = 0; chunkY < 104; chunkY++) {
 				Protocol.spawnGroundObject(chunkY, chunkX);
@@ -1135,7 +1220,7 @@ public class LoginManager {
 		AreaLoadTimer.mark("unload3");
 		AreaLoadTimer.finish();
 		glModelsInvalidated = false;
-		if (GameShell.frame != null && Protocol.socket != null && client.gameState == 25) {
+		if (GameShell.frame != null && Protocol.socket != null && (async || client.gameState == 25)) {
 			Protocol.outboundBuffer.p1isaac(20);
 			Protocol.outboundBuffer.p4(1057001181);
 		}
@@ -1163,7 +1248,9 @@ public class LoginManager {
 		}
 		WorldMap.restorePreviousMap();
 		client.audioLoop();
-		GameShell.resetTimer();
+		if (!async) {
+			GameShell.resetTimer();
+		}
 	}
 
 	@OriginalMember(owner = "client!dm", name = "a", descriptor = "(BII[B)Z")
@@ -1236,6 +1323,7 @@ public class LoginManager {
 		}
 		for (@Pc(29) int level = 0; level < levelCount; level++) {
 			client.audioLoop();
+			AsyncSceneLoader.checkpoint();
 			for (@Pc(36) int chunkX = 0; chunkX < 13; chunkX++) {
 				for (@Pc(43) int chunkY = 0; chunkY < 13; chunkY++) {
 					@Pc(56) int chunkData = Protocol.buildAreaChunks[level][chunkX][chunkY];
@@ -1402,6 +1490,7 @@ public class LoginManager {
 		}
 		for (@Pc(21) int level = 0; level < levelCount; level++) {
 			client.audioLoop();
+			AsyncSceneLoader.checkpoint();
 			for (@Pc(32) int chunkX = 0; chunkX < 13; chunkX++) {
 				for (@Pc(39) int chunkY = 0; chunkY < 13; chunkY++) {
 					@Pc(52) int chunkData = Protocol.buildAreaChunks[level][chunkX][chunkY];
@@ -1551,6 +1640,7 @@ public class LoginManager {
 			terrainData = terrainFiles[i];
 			if (terrainData != null) {
 				client.audioLoop();
+				AsyncSceneLoader.checkpoint();
 				SceneGraph.readTerrain(PathFinder.collisionMaps, underwater, SceneGraph.centralZoneX * 8 - 48, baseY, baseX, (SceneGraph.centralZoneY - 6) * 8, terrainData);
 			}
 		}
@@ -1560,6 +1650,7 @@ public class LoginManager {
 			terrainData = terrainFiles[i];
 			if (terrainData == null && SceneGraph.centralZoneY < 800) {
 				client.audioLoop();
+				AsyncSceneLoader.checkpoint();
 				for (@Pc(130) int level = 0; level < levelCount; level++) {
 					SceneGraph.clearTerrainRegion(level, baseY, baseX, 64, 64);
 				}
