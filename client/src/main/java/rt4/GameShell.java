@@ -640,6 +640,7 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 						long tickStart = System.nanoTime();
 						HitchLog.begin();
 						this.mainLoopWrapper();
+						MotionTrace.onTick();
 						HitchLog.end("tick", tickStart);
 					}
 					lastUpdateTime = currentTime;
@@ -651,7 +652,9 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 					long frameStart = System.nanoTime();
 					HitchLog.begin();
 					this.mainInputLoop();
+					long motionFrameStart = System.nanoTime();
 					this.mainRedrawWrapper();
+					MotionTrace.onFrame(motionFrameStart);
 					HitchLog.end("frame", frameStart);
 					lastDrawTime = currentTime;
 					Thread.yield();

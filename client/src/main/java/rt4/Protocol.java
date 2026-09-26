@@ -406,6 +406,7 @@ public class Protocol {
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "(IZ)V")
 	public static void readRebuildPacket(@OriginalArg(1) boolean dynamic) {
+		MotionTrace.event("REBUILD packet from server" + (dynamic ? " (instance)" : ""));
 		AsyncSceneLoader.onRebuildPacket();
 		SceneGraph.dynamicMapRegion = dynamic;
 		// localTileX
@@ -753,6 +754,7 @@ public class Protocol {
 		@Pc(23) int type = inboundBuffer.gBits(2);
 		if (type == 0) {
 			extendedIds[extendedCount++] = 2047;
+			MotionTrace.onSelfUpdate(0, "");
 			return;
 		}
 		@Pc(54) int dir;
@@ -760,6 +762,7 @@ public class Protocol {
 		if (type == 1) {
 			dir = inboundBuffer.gBits(3);
 			PlayerList.self.move(1, dir);
+			MotionTrace.onSelfUpdate(1, "dir=" + dir);
 			hasExtended = inboundBuffer.gBits(1);
 			if (hasExtended == 1) {
 				extendedIds[extendedCount++] = 2047;
@@ -770,9 +773,11 @@ public class Protocol {
 				PlayerList.self.move(2, dir);
 				hasExtended = inboundBuffer.gBits(3);
 				PlayerList.self.move(2, hasExtended);
+				MotionTrace.onSelfUpdate(2, "run dirs=" + dir + "," + hasExtended);
 			} else {
 				dir = inboundBuffer.gBits(3);
 				PlayerList.self.move(0, dir);
+				MotionTrace.onSelfUpdate(2, "single step dir=" + dir);
 			}
 			dir = inboundBuffer.gBits(1);
 			if (dir == 1) {
@@ -787,7 +792,9 @@ public class Protocol {
 				extendedIds[extendedCount++] = 2047;
 			}
 			@Pc(181) int x = inboundBuffer.gBits(7);
+			String before = "from queueHead=" + (Camera.originX + PlayerList.self.movementQueueX[0]) + "," + (Camera.originY + PlayerList.self.movementQueueY[0]);
 			PlayerList.self.teleport(x, hasExtended == 1, dir);
+			MotionTrace.onSelfUpdate(3, "to local " + x + "," + dir + " world " + (Camera.originX + x) + "," + (Camera.originY + dir) + " teleportFlag=" + hasExtended + " " + before);
 		}
 	}
 
@@ -2416,6 +2423,7 @@ public class Protocol {
 		// next area, packets after the rebuild packet (already in the new
 		// area's coordinates) wait until the new scene is swapped in
 		for (@Pc(34) int i = 0; i < 100 && !AsyncSceneLoader.isLoading() && readPacket(); i++) {
+			MotionTrace.onPacket();
 		}
 		if (client.gameState != 30) {
 			return;

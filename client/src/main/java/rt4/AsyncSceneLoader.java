@@ -161,6 +161,7 @@ public final class AsyncSceneLoader {
 				AsyncSceneLoader.localTileX = localTileX;
 				AsyncSceneLoader.localTileY = localTileY;
 				requestNanos = System.nanoTime();
+				MotionTrace.event("rebuild matches prebuilt area");
 				// The packet set this for the new area; the old scene keeps its own
 				SceneGraph.dynamicMapRegion = previousDynamicMapRegion;
 				return true;
@@ -852,6 +853,7 @@ public final class AsyncSceneLoader {
 		// Drop the old scene's references so it can be collected
 		mainState.copyFrom(builderState);
 
+		MotionTrace.event("swapping in " + (prebuilt ? "prebuilt" : "background-built") + " area");
 		LoginManager.shiftRegion(deltaX, deltaY, false, plane, localTileX, localTileY);
 		LoginManager.finishMap(true);
 

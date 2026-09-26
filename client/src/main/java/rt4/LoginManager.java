@@ -711,6 +711,7 @@ public class LoginManager {
 		if (SceneGraph.allLevelsAreVisible()) {
 			SceneGraph.centralPlane = 0;
 		}
+		MotionTrace.event("area change starts (synchronous load, game freezes)");
 		if (fromLogin) {
 			client.setGameState(28);
 		} else {
@@ -1247,6 +1248,7 @@ public class LoginManager {
 				Protocol.outboundBuffer.p1isaac(110);
 			}
 		}
+		MotionTrace.event("new area live");
 		WorldMap.restorePreviousMap();
 		client.audioLoop();
 		if (!async) {
