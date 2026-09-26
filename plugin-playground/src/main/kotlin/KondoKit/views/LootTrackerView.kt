@@ -42,7 +42,8 @@ object LootTrackerView : View, OnPostClientTickCallback, OnKillingBlowNPCCallbac
     const val BAG_ICON = 900
     const val OPEN_BAG = 777
     val npcDeathSnapshots = mutableMapOf<Int, GroundSnapshot>()
-    var gePriceMap = loadGEPrices()
+    // Filled in off the game thread (see refreshGEPrices); empty until then.
+    @Volatile var gePriceMap: Map<String, String> = emptyMap()
     const val VIEW_NAME = "LOOT_TRACKER_VIEW"
     private val lootItemPanels = mutableMapOf<String, MutableMap<Int, Int>>()
     private val npcKillCounts = mutableMapOf<String, Int>()
@@ -72,6 +73,19 @@ object LootTrackerView : View, OnPostClientTickCallback, OnKillingBlowNPCCallbac
     override fun onKillingBlowNPC(npcID: Int, x: Int, z: Int) {
         val preDeathSnapshot = takeGroundSnapshot(Pair(x,z))
         npcDeathSnapshots[npcID] = GroundSnapshot(preDeathSnapshot, Pair(x, z), 0)
+    }
+
+    init {
+        refreshGEPrices()
+    }
+
+    /**
+     * Loads prices on a background thread. Loading them inline blocked the
+     * game thread while KondoKit built its panel, and with no timeout an
+     * unreachable CDN hung the client on a black screen.
+     */
+    fun refreshGEPrices() {
+        Thread({ gePriceMap = loadGEPrices() }, "LootTracker-GEPrices").apply { isDaemon = true }.start()
     }
 
     fun loadGEPrices(): Map<String, String> {

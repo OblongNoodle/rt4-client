@@ -30,7 +30,7 @@ object GEPriceService {
 
     fun loadRemotePrices(): Map<String, String> {
         return try {
-            val payload = HttpFetcher.fetchString(REMOTE_GE_URL)
+            val payload = HttpFetcher.fetchString(REMOTE_GE_URL, connectTimeoutMillis = 5000, readTimeoutMillis = 10000)
             val items = JsonParser.fromJson<Array<RemoteGEItem>>(payload)
             mapToPriceMap(items, { it.item_id }, { it.value })
         } catch (e: Exception) {

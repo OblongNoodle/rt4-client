@@ -62,7 +62,8 @@ class plugin : Plugin() {
     private lateinit var ignoredItems: List<Int>
 
     private val coinId = 995
-    private var gePriceMap: Map<String, String> = emptyMap()
+    // Filled in off the game thread (see refreshGEPrices); empty until then.
+    @Volatile private var gePriceMap: Map<String, String> = emptyMap()
     private val alertedItems = mutableSetOf<String>()
     private val FONT_H  = 14
     private val PRICE_H = 12
@@ -301,7 +302,7 @@ class plugin : Plugin() {
         displayPrices   = GetData("poe-display-price") as? Boolean ?: true
         taggedItems     = GetData("poe-tags")?.let   { it.toString().split(",").mapNotNull { s -> s.toIntOrNull() } } ?: emptyList()
         ignoredItems    = GetData("poe-ignore")?.let { it.toString().split(",").mapNotNull { s -> s.toIntOrNull() } } ?: emptyList()
-        gePriceMap      = loadGEPrices()
+        refreshGEPrices()
         alertedItems.clear()
         loadColorOverrides()
         loadAudioPaths()
@@ -2732,7 +2733,7 @@ class plugin : Plugin() {
         StoreData("poe-display-price", displayPrices)
         StoreData("poe-use-remote",    useLiveGEPrices)
         saveColorOverrides(); saveAudioPaths(); saveBeamSettings(); saveBeamEffects()
-        gePriceMap = loadGEPrices()
+        refreshGEPrices()
         SendMessage("PoE Filter: settings saved.")
         settingsOpen = false; StoreData("poe-settings-open", false); pickerOpen = false; activeField = -1; beamSlideOpen = false
     }
@@ -3003,7 +3004,7 @@ class plugin : Plugin() {
         StoreData("poe-alert-volume",  alertVolume)
         StoreData("poe-display-price", displayPrices)
         StoreData("poe-use-remote",    useLiveGEPrices)
-        gePriceMap = loadGEPrices()
+        refreshGEPrices()
     }
 
     // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -3034,12 +3035,21 @@ class plugin : Plugin() {
         SendMessage("::poesettings to open settings panel")
     }
 
+    /**
+     * Loads prices on a background thread: inline, with no timeout, an
+     * unreachable CDN hung the client on a black screen at startup.
+     */
+    private fun refreshGEPrices() {
+        Thread({ gePriceMap = loadGEPrices() }, "PoeLootFilter-GEPrices").apply { isDaemon = true }.start()
+    }
+
     fun loadGEPrices(): Map<String, String> {
         return if (useLiveGEPrices) {
             try {
                 val url  = URL("https://cdn.2009scape.org/gedata/latest.json")
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"; conn.setRequestProperty("User-Agent", "Mozilla/5.0")
+                conn.connectTimeout = 5000; conn.readTimeout = 10000
                 if (conn.responseCode != HttpURLConnection.HTTP_OK) return emptyMap()
                 val content = conn.inputStream.bufferedReader().use(BufferedReader::readText)
                 val items   = content.trim().removeSurrounding("[", "]").split("},").map { it.trim() + "}" }

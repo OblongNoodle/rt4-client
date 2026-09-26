@@ -572,7 +572,7 @@ class plugin : Plugin() {
             )
         }
         StoreData("kondoPlayerXPMultiplier", playerXPMultiplier)
-        LootTrackerView.gePriceMap = LootTrackerView.loadGEPrices()
+        LootTrackerView.refreshGEPrices()
         StoreData("kondoLaunchMinimized", launchMinimized)
         StoreData("kondoUIOffset", uiOffset)
         StoreData("kondoScaledFixed", useScaledFixed)

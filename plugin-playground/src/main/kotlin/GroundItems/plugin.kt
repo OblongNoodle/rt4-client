@@ -45,7 +45,8 @@ class plugin : Plugin() {
 
     private val coindId = 995
 
-    private var gePriceMap = loadGEPrices()
+    // Filled in off the game thread (see refreshGEPrices); empty until then.
+    @Volatile private var gePriceMap: Map<String, String> = emptyMap()
 
     private val colorMap = mapOf(
         "tagged" to "#CC66FF",
@@ -76,7 +77,21 @@ class plugin : Plugin() {
         displayGEPrice = GetData("ground-item-display-ge") as? Boolean ?: true
         taggedItems = GetData("ground-item-tags")?.let { it.toString().split(",").mapNotNull { it.toIntOrNull() } } ?: emptyList()
         ignoredItems = GetData("ground-item-ignore")?.let { it.toString().split(",").mapNotNull { it.toIntOrNull() } } ?: emptyList()
-        if (gePriceMap.isEmpty()) SendMessage("Ground Items unable to load GE Prices, Remote: $useLiveGEPrices")
+        refreshGEPrices()
+    }
+
+    /**
+     * Loads prices on a background thread. This used to run during plugin
+     * startup on the game thread with no timeout, so a CDN that never
+     * answered (seen on a player's network) hung the client on a black
+     * screen before the login screen.
+     */
+    private fun refreshGEPrices() {
+        Thread({
+            val prices = loadGEPrices()
+            gePriceMap = prices
+            if (prices.isEmpty()) println("GroundItems: unable to load GE prices, remote: $useLiveGEPrices")
+        }, "GroundItems-GEPrices").apply { isDaemon = true }.start()
     }
 
     private fun isTagged(itemId: Int): Boolean {
@@ -331,7 +346,7 @@ class plugin : Plugin() {
         StoreData("ground-item-display-price", displayPrices)
         StoreData("ground-item-display-ha", displayHAPrice)
         StoreData("ground-item-display-ge", displayGEPrice)
-        gePriceMap = loadGEPrices()
+        refreshGEPrices()
     }
 
     fun loadGEPrices(): Map<String, String> {
@@ -342,6 +357,8 @@ class plugin : Plugin() {
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                connection.connectTimeout = 5000
+                connection.readTimeout = 10000
 
                 val responseCode = connection.responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
