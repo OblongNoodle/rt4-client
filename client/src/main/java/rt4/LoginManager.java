@@ -826,6 +826,13 @@ public class LoginManager {
 			Camera.lockedLookAtY -= deltaY;
 			Camera.lockedTargetX -= deltaX;
 		} else {
+			// Not part of the original client: the follow camera's trailing
+			// position is in scene coordinates too. Left unshifted, it ended up
+			// over 500 units from the player and Camera.updatePlayerCamera
+			// snapped it onto them, jerking the view by up to a tile at every
+			// area change (hidden by the old loading freeze).
+			Camera.cameraX -= deltaX * 128;
+			Camera.cameraY -= deltaY * 128;
 			Camera.cameraType = 1;
 		}
 		SoundPlayer.size = 0;

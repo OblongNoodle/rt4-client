@@ -9,13 +9,17 @@ package rt4;
 // behind its loading freeze; with background loading there's no freeze, so the
 // player visibly runs into a dead stop. The stall is predictable: it happens
 // on the tick after the player's chunk gets 4 chunks from the last rebuild's
-// chunk. So in the last couple of ticks before it, the player's own movement
+// chunk. So in the last few ticks before it, the player's own movement
 // is slowed just enough that the steps already received last until movement
 // resumes - an ease-off instead of a stop. The client stays exactly in step
 // with the server; only the animation of steps it already has is stretched.
 public final class MovementSmoother {
 
 	private static final long TICK_MS = 600L;
+
+	// How many server ticks before the stall to start easing off: the one lost
+	// tick is spread over this many + 2, so more = a smaller slowdown
+	private static final int MAX_TICKS_AHEAD = 5;
 
 	// Fine units (1/128 tile) per logic tick (20ms); 0 when not smoothing
 	private static double pace;
@@ -64,7 +68,7 @@ public final class MovementSmoother {
 				return;
 			}
 			ticksBeforeStall = (stepsBeforeStall + stepsPerTick - 1) / stepsPerTick;
-			if (ticksBeforeStall > 2) {
+			if (ticksBeforeStall > MAX_TICKS_AHEAD) {
 				return;
 			}
 		}
@@ -75,7 +79,7 @@ public final class MovementSmoother {
 		double distance = remaining + 128.0 * stepsBeforeStall;
 		// Movement resumes with the update after the stall; aim to arrive just
 		// before it so the new steps continue without a gap
-		long timeMs = (ticksBeforeStall + 2) * TICK_MS - 100L;
+		long timeMs = (ticksBeforeStall + 2) * TICK_MS - 30L;
 		double normal = stepsPerTick == 2 ? 8.0 : 4.0;
 		double wanted = distance / (timeMs / 20.0);
 		if (wanted >= normal * 0.97) {

@@ -301,7 +301,7 @@ public final class AsyncSceneLoader {
 
 	// For MovementSmoother: steps from the given world tile along the player's
 	// route (or straight on, if not on it) to the first tile that makes the
-	// server rebuild, or -1 if that's more than 8 steps away or unknown
+	// server rebuild, or -1 if that's more than 12 steps away or unknown
 	public static int stepsUntilRebuild(int worldX, int worldY) {
 		if (findRouteCrossing(worldX, worldY) != -1 || routeLength > 0) {
 			int current = -1;
@@ -312,7 +312,7 @@ public final class AsyncSceneLoader {
 				}
 			}
 			if (current != -1) {
-				for (int i = current + 1; i < routeLength && i - current <= 8; i++) {
+				for (int i = current + 1; i < routeLength && i - current <= 12; i++) {
 					if (Math.abs((routeX[i] >> 3) - SceneGraph.centralZoneX) >= 4 || Math.abs((routeY[i] >> 3) - SceneGraph.centralZoneY) >= 4) {
 						return i - current;
 					}
@@ -329,7 +329,7 @@ public final class AsyncSceneLoader {
 		if (stepX == 0 && stepY == 0) {
 			return -1;
 		}
-		for (int i = 1; i <= 8; i++) {
+		for (int i = 1; i <= 12; i++) {
 			int x = worldX + stepX * i;
 			int y = worldY + stepY * i;
 			if (Math.abs((x >> 3) - SceneGraph.centralZoneX) >= 4 || Math.abs((y >> 3) - SceneGraph.centralZoneY) >= 4) {
