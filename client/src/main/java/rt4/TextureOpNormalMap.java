@@ -34,6 +34,7 @@ public final class TextureOpNormalMap extends TextureOp {
 	public final int[][] getColorOutput(@OriginalArg(1) int row) {
 		@Pc(11) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
+			int strength = this.strength * Texture.resolutionScale;
 			@Pc(25) int[] prevRow = this.getChildMonochromeOutput(0, Texture.heightMask & row - 1);
 			@Pc(31) int[] curRow = this.getChildMonochromeOutput(0, row);
 			@Pc(41) int[] nextRow = this.getChildMonochromeOutput(0, row + 1 & Texture.heightMask);
@@ -41,8 +42,8 @@ public final class TextureOpNormalMap extends TextureOp {
 			@Pc(49) int[] destG = output[1];
 			@Pc(53) int[] destB = output[2];
 			for (@Pc(55) int col = 0; col < Texture.width; col++) {
-				@Pc(70) int dy = this.strength * (nextRow[col] - prevRow[col]);
-				@Pc(90) int dx = this.strength * (curRow[col + 1 & Texture.widthMask] - curRow[Texture.widthMask & col - 1]);
+				@Pc(70) int dy = strength * (nextRow[col] - prevRow[col]);
+				@Pc(90) int dx = strength * (curRow[col + 1 & Texture.widthMask] - curRow[Texture.widthMask & col - 1]);
 				@Pc(94) int dyNorm = dy >> 12;
 				@Pc(98) int dxNorm = dx >> 12;
 				@Pc(104) int dySq = dyNorm * dyNorm >> 12;

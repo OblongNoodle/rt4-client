@@ -64,6 +64,18 @@ public class GlobalConfig {
 		VIEW_FADE_DISTANCE = ((float) tiles / 28.0f) * 256.0f;
 	}
 
+	// Not part of the original client. HD textures are procedural (built
+	// from TextureOp graphs in fractional coordinates), so they can be
+	// generated at any power-of-two resolution from the same cache data.
+	// The original client always used 128 (64 in low detail). Only affects
+	// the GL textures built in GlTexture.bind(); SD rendering is untouched.
+	public static int HD_TEXTURE_SIZE = 256;
+
+	// Not part of the original client. Max anisotropic filtering samples
+	// for mipmapped HD textures (1 = off). Clamped to what the driver
+	// supports; ignored if GL_EXT_texture_filter_anisotropic is missing.
+	public static float ANISOTROPIC_FILTERING = 16.0F;
+
 	public static boolean USE_SHIFT_CLICK = true;
 	public static boolean USE_TWEENING = true;
 	public static boolean BILINEAR_MINIMAP = true;

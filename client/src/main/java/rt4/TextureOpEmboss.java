@@ -21,12 +21,13 @@ public final class TextureOpEmboss extends TextureOp {
 	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
 		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
+			int bumpStrength = this.bumpStrength * Texture.resolutionScale;
 			@Pc(34) int[] prevRow = this.getChildMonochromeOutput(0, row - 1 & Texture.heightMask);
 			@Pc(40) int[] currRow = this.getChildMonochromeOutput(0, row);
 			@Pc(50) int[] nextRow = this.getChildMonochromeOutput(0, Texture.heightMask & row + 1);
 			for (@Pc(52) int i = 0; i < Texture.width; i++) {
-				@Pc(67) int dy = (nextRow[i] - prevRow[i]) * this.bumpStrength;
-				@Pc(87) int dx = this.bumpStrength * (currRow[Texture.widthMask & i + 1] - currRow[i - 1 & Texture.widthMask]);
+				@Pc(67) int dy = (nextRow[i] - prevRow[i]) * bumpStrength;
+				@Pc(87) int dx = bumpStrength * (currRow[Texture.widthMask & i + 1] - currRow[i - 1 & Texture.widthMask]);
 				@Pc(91) int dxNorm = dx >> 12;
 				@Pc(95) int dyNorm = dy >> 12;
 				@Pc(101) int dxSq = dxNorm * dxNorm >> 12;

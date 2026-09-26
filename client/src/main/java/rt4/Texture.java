@@ -30,6 +30,12 @@ public final class Texture {
 	public static int widthMask;
 	@OriginalMember(owner = "client!nb", name = "o", descriptor = "I")
 	public static int widthScale;
+
+	// Not part of the original client. How many times larger than the
+	// original 128px the current texture is (1 at 128 and below). Texture
+	// ops that work in whole pixels (neighbour differences, blur radii)
+	// multiply by this so higher resolutions look the same, just sharper.
+	public static int resolutionScale = 1;
 	@OriginalMember(owner = "client!fb", name = "h", descriptor = "[I")
 	public static int[] heightFractions;
 	@OriginalMember(owner = "client!lc", name = "k", descriptor = "[I")
@@ -219,7 +225,8 @@ public final class Texture {
 			for (@Pc(10) int x = 0; x < newWidth; x++) {
 				widthFractions[x] = (x << 12) / newWidth;
 			}
-			widthScale = newWidth == 64 ? 2048 : 4096;
+			resolutionScale = Math.max(1, newWidth / 128);
+			widthScale = newWidth == 64 ? 2048 : 4096 * resolutionScale;
 			widthMask = newWidth - 1;
 			width = newWidth;
 		}

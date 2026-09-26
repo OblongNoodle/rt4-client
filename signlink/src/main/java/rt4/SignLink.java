@@ -36,6 +36,11 @@ public final class SignLink implements Runnable {
 	@OriginalMember(owner = "signlink!ll", name = "v", descriptor = "Ljava/lang/String;")
 	private static String homeDir;
 
+	// Not part of the original client
+	public static String getHomeDir() {
+		return homeDir;
+	}
+
 	@OriginalMember(owner = "signlink!ll", name = "j", descriptor = "Ljava/lang/String;")
 	private static String osVersion;
 

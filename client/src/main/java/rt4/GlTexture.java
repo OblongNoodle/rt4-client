@@ -58,6 +58,9 @@ public final class GlTexture extends SecondaryNode {
 	@OriginalMember(owner = "client!uh", name = "S", descriptor = "I")
 	private final int mipmapMode;
 
+	// Not part of the original client, see GlTextureDiskCache
+	private final String diskCacheKey;
+
 	@OriginalMember(owner = "client!uh", name = "<init>", descriptor = "(Lclient!wa;)V")
 	public GlTexture(@OriginalArg(0) Buffer buf) {
 		this.texture = new Texture(buf);
@@ -80,6 +83,18 @@ public final class GlTexture extends SecondaryNode {
 			this.combineRgbMode = 0;
 		}
 		this.mipmapMode = mipmap >> 4 & 0xF;
+		this.diskCacheKey = GlTextureDiskCache.createKey(buf.data, this.mirrored);
+	}
+
+	// Not part of the original client. Reads the generated RGBA pixels from
+	// the disk cache, or generates and caches them on a miss.
+	private byte[] loadRgbaBytes(int size, TextureProvider provider, Js5 archive) {
+		byte[] bytes = GlTextureDiskCache.read(this.diskCacheKey, size);
+		if (bytes == null) {
+			bytes = this.texture.generateRgbaBytes(size, size, this.mirrored, provider, 0.7D, archive);
+			GlTextureDiskCache.write(this.diskCacheKey, size, bytes);
+		}
+		return bytes;
 	}
 
 	@OriginalMember(owner = "client!uh", name = "a", descriptor = "(Lclient!m;IFLclient!ve;Z)[I")
@@ -178,6 +193,10 @@ public final class GlTexture extends SecondaryNode {
 		}
 		@Pc(22) GL2 gl = GlRenderer.gl;
 		@Pc(28) int size = lowDetail ? 64 : 128;
+		// Not part of the original client: generate at a configurable
+		// resolution. `size` stays the original value because the scroll
+		// speeds below are expressed in texels of the original size.
+		int genSize = lowDetail ? 64 : GlobalConfig.HD_TEXTURE_SIZE;
 		@Pc(31) int flags = MaterialManager.getFlags();
 		if ((flags & 0x1) == 0) {
 			if (this.textureId == -1) {
@@ -186,7 +205,7 @@ public final class GlTexture extends SecondaryNode {
 				this.contextId = GlCleaner.contextId;
 				this.textureId = temp[0];
 				GlRenderer.setTextureId(this.textureId);
-				@Pc(82) ByteBuffer pixels = ByteBuffer.wrap(this.texture.generateRgbaBytes(size, size, this.mirrored, provider, 0.7D, archive));
+				@Pc(82) ByteBuffer pixels = ByteBuffer.wrap(this.loadRgbaBytes(genSize, provider, archive));
 				if (this.mipmapMode == 2) {
 					// Old GLU code:
 //					 @Pc(201) GLUgl2es1 local201 = new GLUgl2es1();
@@ -195,14 +214,17 @@ public final class GlTexture extends SecondaryNode {
 //					 gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 
 					// New code (OpenGL 4+?) w/ texStorage
-					int num_mipmaps = 4;
-					gl.glTexStorage2D(GL2.GL_TEXTURE_2D, num_mipmaps, GL2.GL_RGBA8, size, size);
-					gl.glTexSubImage2D(GL2.GL_TEXTURE_2D, 0, 0, 0, size, size, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, pixels);
+					// Full mip chain down to 1x1 (was a fixed 4 levels, which left
+					// distant textures under-filtered and shimmering)
+					int num_mipmaps = Integer.numberOfTrailingZeros(genSize) + 1;
+					gl.glTexStorage2D(GL2.GL_TEXTURE_2D, num_mipmaps, GL2.GL_RGBA8, genSize, genSize);
+					gl.glTexSubImage2D(GL2.GL_TEXTURE_2D, 0, 0, 0, genSize, genSize, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, pixels);
 					gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
 					gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_REPEAT);
 					gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_REPEAT);
 					gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 					gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR_MIPMAP_LINEAR);
+					GlRenderer.applyAnisotropicFiltering();
 
 					// New code (OpenGL 3.0+) w/o texStorage
 //					gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA8, size, size, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, pixels);
@@ -224,20 +246,22 @@ public final class GlTexture extends SecondaryNode {
 					this.textureSize = pixels.limit() * 4 / 3;
 				} else if (this.mipmapMode == 1) {
 					@Pc(129) int level = 0;
+					int levelSize = genSize;
 					while (true) {
-						gl.glTexImage2D(GL2.GL_TEXTURE_2D, level++, GL2.GL_RGBA, size, size, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, pixels);
-						size >>= 0x1;
-						if (size == 0) {
+						gl.glTexImage2D(GL2.GL_TEXTURE_2D, level++, GL2.GL_RGBA, levelSize, levelSize, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, pixels);
+						levelSize >>= 0x1;
+						if (levelSize == 0) {
 							gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR_MIPMAP_LINEAR);
 							gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+							GlRenderer.applyAnisotropicFiltering();
 							GlCleaner.onCardTexture += pixels.limit() * 4 / 3 - this.textureSize;
 							this.textureSize = pixels.limit() * 4 / 3;
 							break;
 						}
-						pixels = ByteBuffer.wrap(this.texture.generateRgbaBytes(size, size, this.mirrored, provider, 0.7D, archive));
+						pixels = ByteBuffer.wrap(this.loadRgbaBytes(levelSize, provider, archive));
 					}
 				} else {
-					gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, size, size, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, pixels);
+					gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, genSize, genSize, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, pixels);
 					gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
 					gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 					GlCleaner.onCardTexture += pixels.limit() - this.textureSize;

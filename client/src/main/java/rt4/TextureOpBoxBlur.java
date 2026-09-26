@@ -24,28 +24,30 @@ public final class TextureOpBoxBlur extends TextureOp {
 	public final int[] getMonochromeOutput(@OriginalArg(0) int row) {
 		@Pc(19) int[] output = this.monochromeImageCache.get(row);
 		if (this.monochromeImageCache.invalid) {
-			@Pc(31) int kernelH = this.radiusY + this.radiusY + 1;
+			int radiusX = this.radiusX * Texture.resolutionScale;
+			int radiusY = this.radiusY * Texture.resolutionScale;
+			@Pc(31) int kernelH = radiusY + radiusY + 1;
 			@Pc(35) int invKernelH = 65536 / kernelH;
-			@Pc(43) int kernelW = this.radiusX + this.radiusX + 1;
+			@Pc(43) int kernelW = radiusX + radiusX + 1;
 			@Pc(47) int invKernelW = 65536 / kernelW;
 			@Pc(50) int[][] blurredRows = new int[kernelH][];
 			@Pc(56) int y;
-			for (y = row - this.radiusY; y <= row + this.radiusY; y++) {
+			for (y = row - radiusY; y <= row + radiusY; y++) {
 				@Pc(75) int[] srcRow = this.getChildMonochromeOutput(0, y & Texture.heightMask);
 				@Pc(78) int[] destRow = new int[Texture.width];
 				@Pc(80) int acc = 0;
 				@Pc(84) int x;
-				for (x = -this.radiusX; x <= this.radiusX; x++) {
+				for (x = -radiusX; x <= radiusX; x++) {
 					acc += srcRow[x & Texture.widthMask];
 				}
 				x = 0;
 				while (Texture.width > x) {
 					destRow[x] = invKernelW * acc >> 16;
-					acc -= srcRow[Texture.widthMask & x - this.radiusX];
+					acc -= srcRow[Texture.widthMask & x - radiusX];
 					x++;
-					acc += srcRow[Texture.widthMask & this.radiusX + x];
+					acc += srcRow[Texture.widthMask & radiusX + x];
 				}
-				blurredRows[this.radiusY + y - row] = destRow;
+				blurredRows[radiusY + y - row] = destRow;
 			}
 			for (y = 0; y < Texture.width; y++) {
 				@Pc(169) int sum = 0;
@@ -63,15 +65,17 @@ public final class TextureOpBoxBlur extends TextureOp {
 	public final int[][] getColorOutput(@OriginalArg(1) int row) {
 		@Pc(13) int[][] output = this.colorImageCache.get(row);
 		if (this.colorImageCache.invalid) {
-			@Pc(30) int kernelW = this.radiusX + this.radiusX + 1;
+			int radiusX = this.radiusX * Texture.resolutionScale;
+			int radiusY = this.radiusY * Texture.resolutionScale;
+			@Pc(30) int kernelW = radiusX + radiusX + 1;
 			@Pc(34) int invKernelW = 65536 / kernelW;
-			@Pc(42) int kernelH = this.radiusY + this.radiusY + 1;
+			@Pc(42) int kernelH = radiusY + radiusY + 1;
 			@Pc(46) int invKernelH = 65536 / kernelH;
 			@Pc(49) int[][][] blurredRows = new int[kernelH][][];
 			@Pc(70) int accR;
 			@Pc(72) int accG;
 			@Pc(78) int accB;
-			for (@Pc(54) int y = row - this.radiusY; y <= this.radiusY + row; y++) {
+			for (@Pc(54) int y = row - radiusY; y <= radiusY + row; y++) {
 				@Pc(68) int[][] srcRow = this.getChildColorOutput(Texture.heightMask & y, 0);
 				accR = 0;
 				accG = 0;
@@ -80,7 +84,7 @@ public final class TextureOpBoxBlur extends TextureOp {
 				@Pc(82) int[] srcR = srcRow[0];
 				@Pc(86) int[] srcG = srcRow[1];
 				@Pc(90) int[] srcB = srcRow[2];
-				for (@Pc(94) int k = -this.radiusX; k <= this.radiusX; k++) {
+				for (@Pc(94) int k = -radiusX; k <= radiusX; k++) {
 					@Pc(102) int idx = k & Texture.widthMask;
 					accG += srcG[idx];
 					accR += srcR[idx];
@@ -94,17 +98,17 @@ public final class TextureOpBoxBlur extends TextureOp {
 					rowR[x] = accR * invKernelW >> 16;
 					rowG[x] = accG * invKernelW >> 16;
 					rowB[x] = invKernelW * accB >> 16;
-					@Pc(172) int trailIdx = Texture.widthMask & x - this.radiusX;
+					@Pc(172) int trailIdx = Texture.widthMask & x - radiusX;
 					accB -= srcB[trailIdx];
 					x++;
 					accR -= srcR[trailIdx];
 					accG -= srcG[trailIdx];
-					@Pc(198) int leadIdx = this.radiusX + x & Texture.widthMask;
+					@Pc(198) int leadIdx = radiusX + x & Texture.widthMask;
 					accB += srcB[leadIdx];
 					accG += srcG[leadIdx];
 					accR += srcR[leadIdx];
 				}
-				blurredRows[this.radiusY + y - row] = destRow;
+				blurredRows[radiusY + y - row] = destRow;
 			}
 			@Pc(235) int[] outR = output[0];
 			@Pc(239) int[] outG = output[1];

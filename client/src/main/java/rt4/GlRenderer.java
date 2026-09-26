@@ -137,6 +137,19 @@ public final class GlRenderer {
 	// light and sky color are unaffected.
 	public static boolean worldFogDisabled = false;
 
+	// Not part of the original client. Driver limit for anisotropic
+	// filtering, 1 when GL_EXT_texture_filter_anisotropic is unavailable.
+	public static float maxAnisotropy = 1.0F;
+
+	// Not part of the original client. Applies anisotropic filtering to the
+	// currently bound mipmapped texture, see GlobalConfig.ANISOTROPIC_FILTERING.
+	public static void applyAnisotropicFiltering() {
+		float level = Math.min(GlobalConfig.ANISOTROPIC_FILTERING, maxAnisotropy);
+		if (level > 1.0F) {
+			gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAX_ANISOTROPY_EXT, level);
+		}
+	}
+
 	@OriginalMember(owner = "client!tf", name = "I", descriptor = "Lclient!na;")
 	private static final JagString RADEON = JagString.parse("radeon");
 
@@ -493,6 +506,12 @@ public final class GlRenderer {
 		arbTextureCubeMapSupported = gl.isExtensionAvailable("GL_ARB_texture_cube_map");
 		arbVertexProgramSupported = gl.isExtensionAvailable("GL_ARB_vertex_program");
 		extTexture3dSupported = gl.isExtensionAvailable("GL_EXT_texture3D");
+		maxAnisotropy = 1.0F;
+		if (gl.isExtensionAvailable("GL_EXT_texture_filter_anisotropic")) {
+			float[] maxAniso = new float[1];
+			gl.glGetFloatv(GL2.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso, 0);
+			maxAnisotropy = maxAniso[0];
+		}
 		@Pc(176) JagString renderer = toJagString(GlRenderer.renderer).toLowerCase();
 		if (renderer.indexOf(RADEON) != -1) {
 			@Pc(184) int v = 0;
