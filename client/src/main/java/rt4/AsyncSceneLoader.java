@@ -83,6 +83,11 @@ public final class AsyncSceneLoader {
 
 	private static long lastStepNanos;
 
+	// Builder-thread only: longest stretch of work without a checkpoint
+	private static long lastCheckpointNanos;
+	private static long longestGapNanos;
+	private static String longestGapEnd;
+
 	private AsyncSceneLoader() {
 	}
 
@@ -152,6 +157,8 @@ public final class AsyncSceneLoader {
 		builderNanos = 0L;
 		maxSliceNanos = 0L;
 		slices = 0;
+		longestGapNanos = 0L;
+		longestGapEnd = null;
 		mainState.apply();
 		startBuilder();
 		return true;
@@ -261,6 +268,7 @@ public final class AsyncSceneLoader {
 	private static void builderLoop() {
 		while (true) {
 			builderTurn.acquireUninterruptibly();
+			lastCheckpointNanos = System.nanoTime();
 			try {
 				while (!LoginManager.prepareMapFiles()) {
 					// Map files or loc models still downloading: let the main
@@ -285,14 +293,24 @@ public final class AsyncSceneLoader {
 		if (abortRequested) {
 			throw new AbortedException();
 		}
-		if (System.nanoTime() >= turnDeadline) {
+		long now = System.nanoTime();
+		long gap = now - lastCheckpointNanos;
+		if (gap > longestGapNanos) {
+			// Rare (only on a new maximum), so the stack walk is affordable
+			longestGapNanos = gap;
+			StackTraceElement[] stack = new Throwable().getStackTrace();
+			longestGapEnd = stack.length > 1 ? stack[1].toString() : "?";
+		}
+		if (now >= turnDeadline) {
 			yieldToMain();
 		}
+		lastCheckpointNanos = System.nanoTime();
 	}
 
 	private static void yieldToMain() {
 		mainTurn.release();
 		builderTurn.acquireUninterruptibly();
+		lastCheckpointNanos = System.nanoTime();
 		if (abortRequested) {
 			throw new AbortedException();
 		}
@@ -330,6 +348,28 @@ public final class AsyncSceneLoader {
 				pendingBuffers.remove(pendingBuffers.size() - 1).uploadPending();
 			}
 		}
+	}
+
+	// Main thread, from the game loop in place of its sleep between frames
+	// and ticks. Returns false if there's nothing to do (the caller sleeps).
+	public static boolean runDuringIdle(long idleMs) {
+		if (!active || idleMs < 1 || client.gameState != 30 || !GlRenderer.enabled || GlCleaner.contextId != beginContextId) {
+			return false;
+		}
+		// Leave a little slack so the next frame isn't late
+		long deadline = System.nanoTime() + idleMs * 1000000L - 500000L;
+		if (!buildDone) {
+			runBuilderSlice(Math.max(deadline - System.nanoTime(), 1000000L));
+		} else if (failure == null) {
+			while (!pendingBuffers.isEmpty() && System.nanoTime() < deadline) {
+				pendingBuffers.remove(pendingBuffers.size() - 1).uploadPending();
+			}
+		}
+		long left = (deadline - System.nanoTime()) / 1000000L;
+		if (left > 0) {
+			ThreadUtils.sleep(left);
+		}
+		return true;
 	}
 
 	private static void runBuilderSlice(long budgetNanos) {
@@ -466,6 +506,7 @@ public final class AsyncSceneLoader {
 			.append(" slices=").append(slices)
 			.append(" maxSlice=").append(maxSliceNanos / 1000000L).append("ms")
 			.append(" swap=").append((now - swapStart) / 1000000L).append("ms")
+			.append(" longestStep=").append(longestGapNanos / 1000000L).append("ms before ").append(longestGapEnd)
 			.append(" | dynamic=").append(SceneGraph.dynamicMapRegion)
 			.append('\n');
 		if (ex != null) {

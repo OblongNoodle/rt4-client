@@ -5186,6 +5186,12 @@ public final class ScriptRunner {
 															int1 = 0;
 														}
 														Preferences.antiAliasingMode = int1;
+														// Not part of the original client: the options menu
+														// only calls this opcode, never 6017 which saves the
+														// setting (Preferences.windowMode is really the saved
+														// anti-aliasing mode), so it reset on every launch
+														Preferences.windowMode = int1;
+														Preferences.write(GameShell.signLink);
 														continue;
 													}
 													if (opcode == 6017) {

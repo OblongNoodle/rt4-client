@@ -1266,6 +1266,7 @@ public class LoginManager {
 			}
 			@Pc(33) int packedPos = 0;
 			locId += locIdDelta;
+			AsyncSceneLoader.checkpoint();
 			@Pc(39) boolean locFound = false;
 			while (true) {
 				@Pc(78) int locShape;

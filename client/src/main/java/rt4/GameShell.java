@@ -627,7 +627,11 @@ public abstract class GameShell extends Applet implements Runnable, FocusListene
 				nextUpdate = Math.min(FIXED_UPDATE_RATE_NS - updateDelta, VARIABLE_RENDER_RATE_NS - renderDelta);
 				// Convert from ns to ms
 				nextUpdate /= 1_000_000;
-				ThreadUtils.sleep(nextUpdate);
+				// Not part of the original client: a background area load gets
+				// the time this loop would otherwise sleep
+				if (!AsyncSceneLoader.runDuringIdle(nextUpdate)) {
+					ThreadUtils.sleep(nextUpdate);
+				}
 
 				// Game update
 				if (updateDelta >= FIXED_UPDATE_RATE_NS) {

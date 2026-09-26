@@ -142,6 +142,25 @@ public final class GlRenderer {
 	// be deferred, see GlVertexBufferObject.
 	private static Thread glThread;
 
+	// Not part of the original client. Multisampling only helps 3D polygon
+	// edges; for 2D sprites and text it makes partly covered edge pixels draw,
+	// which sample just outside the texture and (with the default repeat
+	// wrap) pick up the opposite edge - e.g. a bank item's stack number
+	// showing as dots under the item. So it's off for 2D.
+	private static boolean multisampleEnabled = true;
+
+	private static void setMultisampleEnabled(boolean enabled) {
+		if (enabled == multisampleEnabled || !arbMultisampleSupported) {
+			return;
+		}
+		if (enabled) {
+			gl.glEnable(GL2.GL_MULTISAMPLE);
+		} else {
+			gl.glDisable(GL2.GL_MULTISAMPLE);
+		}
+		multisampleEnabled = enabled;
+	}
+
 	public static boolean isGlThread() {
 		return glThread == null || Thread.currentThread() == glThread;
 	}
@@ -313,6 +332,7 @@ public final class GlRenderer {
 	@OriginalMember(owner = "client!tf", name = "f", descriptor = "()V")
 	private static void initGlState() {
 		orthographicActive = false;
+		multisampleEnabled = true;
 		gl.glDisable(GL2.GL_TEXTURE_2D);
 		textureId = -1;
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_COMBINE);
@@ -460,6 +480,7 @@ public final class GlRenderer {
 		gl.glLoadIdentity();					// Reset the projection matrix to the identity matrix so that we don't get any artifacts (cleaning up)
 		gl.glOrtho(0, canvasWidth, 0, canvasHeight, -1.0D, 1.0D);
 		setViewportBounds(0, 0, canvasWidth, canvasHeight);
+		setMultisampleEnabled(false);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);		// Switch back to the model view matrix, so that we can start drawing shapes correctly
 		gl.glLoadIdentity();					// Reset the projection matrix to the identity matrix so that we don't get any artifacts (cleaning up)
 		orthographicActive = true;
@@ -652,6 +673,7 @@ public final class GlRenderer {
 			gl.glRotatef(yawRotation, 0.0F, 1.0F, 0.0F);
 		}
 		orthographicActive = false;
+		setMultisampleEnabled(true);
 		Rasteriser.screenLowerX = screenLeft;
 		Rasteriser.screenUpperX = screenRight;
 		Rasteriser.screenLowerY = screenTop;
@@ -901,6 +923,7 @@ public final class GlRenderer {
 		gl.glLoadIdentity();
 		gl.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		orthographicActive = false;
+		setMultisampleEnabled(true);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "d", descriptor = "(I)V")
