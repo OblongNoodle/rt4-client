@@ -295,6 +295,50 @@ public final class AsyncSceneLoader {
 		return -1;
 	}
 
+	public static boolean isEnabled() {
+		return GlobalConfig.ASYNC_SCENE_LOADING && GlRenderer.enabled;
+	}
+
+	// For MovementSmoother: steps from the given world tile along the player's
+	// route (or straight on, if not on it) to the first tile that makes the
+	// server rebuild, or -1 if that's more than 8 steps away or unknown
+	public static int stepsUntilRebuild(int worldX, int worldY) {
+		if (findRouteCrossing(worldX, worldY) != -1 || routeLength > 0) {
+			int current = -1;
+			for (int i = 0; i < routeLength; i++) {
+				if (routeX[i] == worldX && routeY[i] == worldY) {
+					current = i;
+					break;
+				}
+			}
+			if (current != -1) {
+				for (int i = current + 1; i < routeLength && i - current <= 8; i++) {
+					if (Math.abs((routeX[i] >> 3) - SceneGraph.centralZoneX) >= 4 || Math.abs((routeY[i] >> 3) - SceneGraph.centralZoneY) >= 4) {
+						return i - current;
+					}
+				}
+				return -1;
+			}
+		}
+		Player self = PlayerList.self;
+		if (self == null || self.movementQueueSize == 0) {
+			return -1;
+		}
+		int stepX = Integer.signum(self.movementQueueX[0] - self.movementQueueX[1]);
+		int stepY = Integer.signum(self.movementQueueY[0] - self.movementQueueY[1]);
+		if (stepX == 0 && stepY == 0) {
+			return -1;
+		}
+		for (int i = 1; i <= 8; i++) {
+			int x = worldX + stepX * i;
+			int y = worldY + stepY * i;
+			if (Math.abs((x >> 3) - SceneGraph.centralZoneX) >= 4 || Math.abs((y >> 3) - SceneGraph.centralZoneY) >= 4) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	// Main thread, once per logic tick after packets: if the player is heading
 	// for the server's rebuild line, start building the area it will send.
 	public static void predict() {

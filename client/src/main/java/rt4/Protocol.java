@@ -763,6 +763,7 @@ public class Protocol {
 			dir = inboundBuffer.gBits(3);
 			PlayerList.self.move(1, dir);
 			MotionTrace.onSelfUpdate(1, "dir=" + dir);
+			MovementSmoother.onSelfUpdate(1, false);
 			hasExtended = inboundBuffer.gBits(1);
 			if (hasExtended == 1) {
 				extendedIds[extendedCount++] = 2047;
@@ -774,10 +775,12 @@ public class Protocol {
 				hasExtended = inboundBuffer.gBits(3);
 				PlayerList.self.move(2, hasExtended);
 				MotionTrace.onSelfUpdate(2, "run dirs=" + dir + "," + hasExtended);
+				MovementSmoother.onSelfUpdate(2, true);
 			} else {
 				dir = inboundBuffer.gBits(3);
 				PlayerList.self.move(0, dir);
 				MotionTrace.onSelfUpdate(2, "single step dir=" + dir);
+				MovementSmoother.onSelfUpdate(2, false);
 			}
 			dir = inboundBuffer.gBits(1);
 			if (dir == 1) {

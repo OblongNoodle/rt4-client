@@ -89,10 +89,10 @@ public final class MotionTrace {
 			lastWorldX = worldX;
 			lastWorldY = worldY;
 			int speed = self.movementQueueSize > 0 ? self.movementQueueSpeed[self.movementQueueSize - 1] : 0;
-			add(now, String.format("frame gap=%5.1fms draw=%5.1fms ticks=%d pkts=%2d pos=%.2f,%.2f moved=%.3f q=%d spd=%d seq=%d catchup=%d cam=%.1f,%.1f",
+			add(now, String.format("frame gap=%5.1fms draw=%5.1fms ticks=%d pkts=%2d pos=%.2f,%.2f moved=%.3f q=%d spd=%d seq=%d catchup=%d cam=%.1f,%.1f smooth=%.1f",
 				lastFrameNanos == 0L ? 0.0 : (now - lastFrameNanos) / 1e6, (now - frameStart) / 1e6, ticksSinceFrame, packetsSinceFrame,
 				worldX, worldY, moved, self.movementQueueSize, speed, self.seqId, self.movementCatchupTicks,
-				Camera.originX + Camera.renderX / 128.0, Camera.originY + Camera.renderY / 128.0));
+				Camera.originX + Camera.renderX / 128.0, Camera.originY + Camera.renderY / 128.0, MovementSmoother.getPace()));
 		}
 		lastFrameNanos = now;
 		ticksSinceFrame = 0;

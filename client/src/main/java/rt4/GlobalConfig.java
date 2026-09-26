@@ -93,6 +93,11 @@ public class GlobalConfig {
 	// tiles before the player reaches the server's rebuild line, so it's ready
 	// when the server asks (see AsyncSceneLoader.predict).
 	public static boolean ASYNC_PREBUILD = true;
+
+	// Not part of the original client. Ease the player's running off before
+	// an area boundary instead of stopping dead on the server's skipped tick
+	// (see MovementSmoother).
+	public static boolean SMOOTH_AREA_STALLS = true;
 	public static int PREBUILD_LEAD_TILES = 12;
 
 	public static boolean USE_SHIFT_CLICK = true;

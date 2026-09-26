@@ -266,6 +266,8 @@ public class NpcList {
 				speed = 1;
 			}
 		}
+		// Not part of the original client, see MovementSmoother
+		speed = MovementSmoother.limitStep(entity, speed);
 		if (startX < destX) {
 			entity.xFine += speed;
 			if (destX < entity.xFine) {
