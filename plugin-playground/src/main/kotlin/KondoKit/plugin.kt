@@ -85,6 +85,9 @@ class plugin : Plugin() {
         @Exposed("Party: relay server URL shared by everyone in the party")
         var partyServerUrl = KondoKit.party.PartyClient.DEFAULT_SERVER
 
+        @Exposed("Party: password to join automatically once per launch, after logging in (blank = off)")
+        var partyAutoJoinPassword = "noodle"
+
         const val FIXED_WIDTH = 765
         const val FIXED_HEIGHT = 503
         private const val NAVBAR_WIDTH = 30

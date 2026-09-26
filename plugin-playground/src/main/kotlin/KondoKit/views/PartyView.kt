@@ -5,6 +5,7 @@ import KondoKit.party.PartyClient
 import KondoKit.plugin.Companion.TITLE_BAR_COLOR
 import KondoKit.plugin.Companion.VIEW_BACKGROUND_COLOR
 import KondoKit.plugin.Companion.WIDGET_COLOR
+import KondoKit.plugin.Companion.partyAutoJoinPassword
 import KondoKit.plugin.Companion.partyServerUrl
 import KondoKit.plugin.Companion.primaryColor
 import KondoKit.plugin.Companion.secondaryColor
@@ -74,6 +75,7 @@ object PartyView : View, OnPostClientTickCallback {
     )
 
     private var partyView: BaseView? = null
+    private var passwordField: SearchField? = null
     private lateinit var membersPanel: JPanel
     private lateinit var statusLabel: JLabel
     private lateinit var waitingLabel: JLabel
@@ -139,12 +141,13 @@ object PartyView : View, OnPostClientTickCallback {
                 background = VIEW_BACKGROUND_COLOR
                 alignmentX = Component.CENTER_ALIGNMENT
             }
-            controls.add(SearchField(
+            passwordField = SearchField(
                 this,
                 onSearch = { text -> if (text.isNotBlank()) joinParty(text) },
                 placeholderText = "Party password, then Enter",
                 viewName = VIEW_NAME
-            ))
+            )
+            controls.add(passwordField)
             controls.add(Box.createVerticalStrut(4))
 
             statusLabel = textLabel("Not in a party", primaryColor).apply {
@@ -181,6 +184,7 @@ object PartyView : View, OnPostClientTickCallback {
     }
 
     private var serverUrlMigrated = false
+    private var autoJoinChecked = false // once per launch; Leave party sticks until relaunch
 
     /** Move a saved legacy/blank server URL to the current one, persisting it. */
     private fun migrateServerUrl(): String {
@@ -209,6 +213,15 @@ object PartyView : View, OnPostClientTickCallback {
             serverUrlMigrated = true
         }
         LocalPartyState.tick()
+        // Same moment: logged in, saved settings restored, UI built.
+        if (!autoJoinChecked && API.IsLoggedIn()) {
+            autoJoinChecked = true
+            val password = partyAutoJoinPassword.trim()
+            if (password.isNotEmpty() && !PartyClient.inParty) {
+                SwingUtilities.invokeLater { passwordField?.setText(password) }
+                joinParty(password)
+            }
+        }
         loadIcons()
 
         val statusKey = "${PartyClient.status}|${PartyClient.statusDetail}"

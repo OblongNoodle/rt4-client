@@ -34,11 +34,13 @@ object LocalPartyState {
     private val lastQueued = HashMap<String, Any>()
 
     fun tick() {
+        // Kept current even outside a party, so a join's first request
+        // already carries the right name.
+        PartyClient.displayName = PlayerList.self?.username?.toString() ?: PartyClient.displayName
         if (!PartyClient.inParty) {
             lastQueued.clear()
             return
         }
-        PartyClient.displayName = PlayerList.self?.username?.toString() ?: PartyClient.displayName
         if (!API.IsLoggedIn()) return
 
         val current = snapshot()
