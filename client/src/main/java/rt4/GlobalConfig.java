@@ -86,6 +86,12 @@ public class GlobalConfig {
 	// run per rendered frame, in ms.
 	public static int ASYNC_LOAD_SLICE_MS = 4;
 
+	// Not part of the original client. Start building the next area this many
+	// tiles before the player reaches the server's rebuild line, so it's ready
+	// when the server asks (see AsyncSceneLoader.predict).
+	public static boolean ASYNC_PREBUILD = true;
+	public static int PREBUILD_LEAD_TILES = 12;
+
 	public static boolean USE_SHIFT_CLICK = true;
 	public static boolean USE_TWEENING = true;
 	public static boolean BILINEAR_MINIMAP = true;

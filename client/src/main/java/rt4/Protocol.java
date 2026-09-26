@@ -474,6 +474,8 @@ public class Protocol {
 					var2++;
 				}
 			}
+			// Not part of the original client, see AsyncSceneLoader.predict
+			XteaKeyStore.record(LoginManager.regionBitPacked, LoginManager.regionsXteaKeys);
 			LoginManager.loadRegion(var3, var5, var4, var6, false, var1);
 			return;
 		}

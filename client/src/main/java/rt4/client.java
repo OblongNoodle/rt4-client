@@ -1749,6 +1749,7 @@ public final class client extends GameShell {
 			AsyncSceneLoader.finishIfReady();
 			if (gameState == 30) {
 				Protocol.loop();
+				AsyncSceneLoader.predict();
 			}
 		} else if (gameState == 40) {
 			LoginManager.loop();

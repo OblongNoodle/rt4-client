@@ -64,6 +64,19 @@ public final class SceneState {
 	// LoginManager
 	Map map;
 	MapElementList mapElementList;
+	// which map files to load (set by the rebuild packet, or by a prediction)
+	int[][] regionsXteaKeys;
+	int[] regionBitPacked;
+	int[] mapFileIds;
+	int[] locationsMapFileIds;
+	int[] underWaterMapFileIds;
+	int[] underWaterLocationsMapFileIds;
+	int[] npcSpawnsFileIds;
+	byte[][] mapFilesBuffer;
+	byte[][] locationMapFilesBuffer;
+	byte[][] underWaterMapFilesBuffer;
+	byte[][] underWaterLocationsMapFilesBuffer;
+	byte[][] npcSpawnsFilesBuffer;
 
 	// LightingManager
 	Light[] lights;
@@ -143,6 +156,18 @@ public final class SceneState {
 
 		this.map = LoginManager.map;
 		this.mapElementList = LoginManager.mapElementList;
+		this.regionsXteaKeys = LoginManager.regionsXteaKeys;
+		this.regionBitPacked = LoginManager.regionBitPacked;
+		this.mapFileIds = LoginManager.mapFileIds;
+		this.locationsMapFileIds = LoginManager.locationsMapFileIds;
+		this.underWaterMapFileIds = LoginManager.underWaterMapFileIds;
+		this.underWaterLocationsMapFileIds = LoginManager.underWaterLocationsMapFileIds;
+		this.npcSpawnsFileIds = LoginManager.npcSpawnsFileIds;
+		this.mapFilesBuffer = LoginManager.mapFilesBuffer;
+		this.locationMapFilesBuffer = LoginManager.locationMapFilesBuffer;
+		this.underWaterMapFilesBuffer = LoginManager.underWaterMapFilesBuffer;
+		this.underWaterLocationsMapFilesBuffer = LoginManager.underWaterLocationsMapFilesBuffer;
+		this.npcSpawnsFilesBuffer = LoginManager.npcSpawnsFilesBuffer;
 
 		this.lights = LightingManager.lights;
 		this.lightCount = LightingManager.lightCount;
@@ -218,6 +243,18 @@ public final class SceneState {
 
 		LoginManager.map = this.map;
 		LoginManager.mapElementList = this.mapElementList;
+		LoginManager.regionsXteaKeys = this.regionsXteaKeys;
+		LoginManager.regionBitPacked = this.regionBitPacked;
+		LoginManager.mapFileIds = this.mapFileIds;
+		LoginManager.locationsMapFileIds = this.locationsMapFileIds;
+		LoginManager.underWaterMapFileIds = this.underWaterMapFileIds;
+		LoginManager.underWaterLocationsMapFileIds = this.underWaterLocationsMapFileIds;
+		LoginManager.npcSpawnsFileIds = this.npcSpawnsFileIds;
+		LoginManager.mapFilesBuffer = this.mapFilesBuffer;
+		LoginManager.locationMapFilesBuffer = this.locationMapFilesBuffer;
+		LoginManager.underWaterMapFilesBuffer = this.underWaterMapFilesBuffer;
+		LoginManager.underWaterLocationsMapFilesBuffer = this.underWaterLocationsMapFilesBuffer;
+		LoginManager.npcSpawnsFilesBuffer = this.npcSpawnsFilesBuffer;
 
 		LightingManager.lights = this.lights;
 		LightingManager.lightCount = this.lightCount;
@@ -291,6 +328,18 @@ public final class SceneState {
 		this.originY = other.originY;
 		this.map = other.map;
 		this.mapElementList = other.mapElementList;
+		this.regionsXteaKeys = other.regionsXteaKeys;
+		this.regionBitPacked = other.regionBitPacked;
+		this.mapFileIds = other.mapFileIds;
+		this.locationsMapFileIds = other.locationsMapFileIds;
+		this.underWaterMapFileIds = other.underWaterMapFileIds;
+		this.underWaterLocationsMapFileIds = other.underWaterLocationsMapFileIds;
+		this.npcSpawnsFileIds = other.npcSpawnsFileIds;
+		this.mapFilesBuffer = other.mapFilesBuffer;
+		this.locationMapFilesBuffer = other.locationMapFilesBuffer;
+		this.underWaterMapFilesBuffer = other.underWaterMapFilesBuffer;
+		this.underWaterLocationsMapFilesBuffer = other.underWaterLocationsMapFilesBuffer;
+		this.npcSpawnsFilesBuffer = other.npcSpawnsFilesBuffer;
 		this.lights = other.lights;
 		this.lightCount = other.lightCount;
 		this.lightGrid = other.lightGrid;
