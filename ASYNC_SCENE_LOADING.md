@@ -75,3 +75,22 @@ Branch: `async-scene-loading`. Rollback: `.\rollback-graphics.ps1 before-async-l
 - [ ] E. In-game testing, then merge to master. (testing)
 
 Log: each background load appends an `async: wall=.. builder=.. slices=.. maxSlice=.. swap=..` line to `<home>/area_load_timing.log`; `failed`/`aborted`/`builder slow` lines include the reason.
+
+## Stage F - Build ahead of the server (testing)
+
+Round 1 result: no loading box, but the character still stopped. Packets
+are held until the swap and a build took 300-1100ms end to end, so the
+player ran out of queued steps.
+
+2009scape server (`WalkingQueue.updateRegion`, `UpdateSceneGraph`): rebuild
+when `|chunk - lastRebuildChunk| >= 4` on either axis, centred on the
+player's current chunk. So `AsyncSceneLoader.predict()` builds the next area
+while the player walks the last ~12 tiles towards that line, with packets
+still flowing, and a matching rebuild packet just swaps it in.
+
+Loc files need the server's XTEA keys. Only keys the server has actually
+sent are used (`XteaKeyStore`, `<home>/xtea_keys.txt`): a wrong key could
+decrypt to a garbage length and the cache decompressor has no length cap.
+First visit near new regions therefore falls back to the round-1 behaviour.
+Log lines: `prebuilt` (used), `prediction missed/changed` (discarded),
+`async` (not predicted); `packetsPaused` is the stop the player feels.
