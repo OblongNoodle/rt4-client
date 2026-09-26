@@ -22,6 +22,21 @@ public final class HitchLog {
 	public static long shadowNanos;
 	public static long textureNanos;
 	public static long lateBufferNanos;
+	public static long sceneNanos;
+	public static long swapNanos;
+	public static long packNanos;
+	private static long gcStartMs;
+
+	private static long gcMillis() {
+		long total = 0L;
+		for (java.lang.management.GarbageCollectorMXBean gc : java.lang.management.ManagementFactory.getGarbageCollectorMXBeans()) {
+			long t = gc.getCollectionTime();
+			if (t > 0) {
+				total += t;
+			}
+		}
+		return total;
+	}
 
 	private HitchLog() {
 	}
@@ -43,6 +58,10 @@ public final class HitchLog {
 		shadowNanos = 0L;
 		textureNanos = 0L;
 		lateBufferNanos = 0L;
+		sceneNanos = 0L;
+		swapNanos = 0L;
+		packNanos = 0L;
+		gcStartMs = gcMillis();
 	}
 
 	public static void end(String what, long startNanos) {
@@ -56,7 +75,7 @@ public final class HitchLog {
 		if (homeDir == null) {
 			return;
 		}
-		String line = "  hitch: " + what + " " + ms + "ms, " + sinceSwapMs + "ms after swap, minimap=" + minimapNanos / 1000000L + "ms builder=" + builderNanos / 1000000L + "ms shadowTex=" + shadowNanos / 1000000L + "ms textures=" + textureNanos / 1000000L + "ms lateBuffers=" + lateBufferNanos / 1000000L + "ms\n";
+		String line = "  hitch: " + what + " " + ms + "ms, " + sinceSwapMs + "ms after swap, minimap=" + minimapNanos / 1000000L + "ms builder=" + builderNanos / 1000000L + "ms shadowTex=" + shadowNanos / 1000000L + "ms textures=" + textureNanos / 1000000L + "ms lateBuffers=" + lateBufferNanos / 1000000L + "ms scene=" + sceneNanos / 1000000L + "ms modelPack=" + packNanos / 1000000L + "ms swapBuffers=" + swapNanos / 1000000L + "ms gc=" + (gcMillis() - gcStartMs) + "ms\n";
 		try (FileWriter out = new FileWriter(new File(homeDir, "area_load_timing.log"), true)) {
 			out.write(line);
 		} catch (IOException ignored) {

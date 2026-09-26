@@ -901,7 +901,9 @@ public final class client extends GameShell {
 			Fonts.drawTextOnScreen(false, JagString.concatenate(new JagString[]{LocalizedText.CONLOST, JagString.LINE_BREAK, LocalizedText.ATTEMPT_TO_REESTABLISH}));
 		}
 		if (GlRenderer.enabled && gameState != 0) {
+			long swapStart = System.nanoTime();
 			GlRenderer.swapBuffers();
+			HitchLog.swapNanos += System.nanoTime() - swapStart;
 			for (w = 0; w < InterfaceList.rectangles; w++) {
 				InterfaceList.rectangleRedraw[w] = false;
 			}

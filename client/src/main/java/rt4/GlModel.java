@@ -3298,10 +3298,12 @@ public final class GlModel extends Model {
 		if (this.updateFlags != 0) {
 			this.packInterleavedVertexData(true, !this.vertexBuffer.valid && (this.updateFlags & 0x1) != 0, !this.colorBuffer.valid && (this.updateFlags & 0x2) != 0, this.normalsBuffer != null && !this.normalsBuffer.valid && (this.updateFlags & 0x4) != 0, false);
 		}
+		long packStart = System.nanoTime();
 		this.packInterleavedVertexData(false, !this.vertexBuffer.valid, !this.colorBuffer.valid, this.normalsBuffer != null && !this.normalsBuffer.valid, !this.texCoordBuffer.valid);
 		if (!this.indexBuffer.valid) {
 			this.buildIndexBuffer();
 		}
+		HitchLog.packNanos += System.nanoTime() - packStart;
 		if (this.deferredReleaseFlags != 0) {
 			if ((this.deferredReleaseFlags & 0x1) != 0) {
 				this.vertexX = null;
