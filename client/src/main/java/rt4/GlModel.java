@@ -3289,6 +3289,19 @@ public final class GlModel extends Model {
 		return this.bounds.minX;
 	}
 
+	// Not part of the original client: the packing ensureBuffersAndDraw does on
+	// a static model's first draw, done ahead of time so the first frame of a
+	// new area doesn't pack every model at once (see AsyncSceneLoader)
+	public final void prepareBuffers() {
+		if (this.triangleCount == 0 || this.updateFlags != 0) {
+			return;
+		}
+		this.packInterleavedVertexData(false, !this.vertexBuffer.valid, !this.colorBuffer.valid, this.normalsBuffer != null && !this.normalsBuffer.valid, !this.texCoordBuffer.valid);
+		if (!this.indexBuffer.valid) {
+			this.buildIndexBuffer();
+		}
+	}
+
 	@OriginalMember(owner = "client!td", name = "w", descriptor = "()V")
 	private void ensureBuffersAndDraw() {
 		@Pc(1) GL2 gl = GlRenderer.gl;

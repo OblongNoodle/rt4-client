@@ -286,6 +286,21 @@ public abstract class PathingEntity extends Entity {
 			@Pc(32) int dx = tileX - this.movementQueueX[0];
 			@Pc(40) int dy = tileY - this.movementQueueY[0];
 			if (dx >= -8 && dx <= 8 && dy >= -8 && dy <= 8) {
+				// Not part of the original client. The server sends a placement
+				// instead of a step on the tick it rebuilds the player's area,
+				// and this queued it as a single walk-speed step: a player who
+				// ran 2 tiles that tick covered them at walking pace and visibly
+				// stalled at every area boundary. A placement exactly 2 tiles on
+				// is the two run steps it replaced; one onto the tile already
+				// queued (the area change also places the player) adds nothing.
+				if (dx == 0 && dy == 0) {
+					return;
+				}
+				if (Math.max(Math.abs(dx), Math.abs(dy)) == 2) {
+					this.queueStep(this.movementQueueX[0] + Integer.signum(dx), this.movementQueueY[0] + Integer.signum(dy), 2);
+					this.queueStep(tileX, tileY, 2);
+					return;
+				}
 				if (this.movementQueueSize < 9) {
 					this.movementQueueSize++;
 				}
@@ -310,6 +325,22 @@ public abstract class PathingEntity extends Entity {
 		if (GlRenderer.enabled && PlayerList.self == this) {
 			FogManager.setInstantFade();
 		}
+	}
+
+	// Not part of the original client: queues a step the way teleport() and
+	// move() do, see teleport()
+	private void queueStep(int tileX, int tileY, int speed) {
+		if (this.movementQueueSize < 9) {
+			this.movementQueueSize++;
+		}
+		for (int i = this.movementQueueSize; i > 0; i--) {
+			this.movementQueueX[i] = this.movementQueueX[i - 1];
+			this.movementQueueY[i] = this.movementQueueY[i - 1];
+			this.movementQueueSpeed[i] = this.movementQueueSpeed[i - 1];
+		}
+		this.movementQueueSpeed[0] = (byte) speed;
+		this.movementQueueX[0] = tileX;
+		this.movementQueueY[0] = tileY;
 	}
 
 	@OriginalMember(owner = "client!fe", name = "a", descriptor = "(IBI)V")

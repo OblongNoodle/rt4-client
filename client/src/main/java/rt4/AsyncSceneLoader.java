@@ -92,6 +92,9 @@ public final class AsyncSceneLoader {
 	// After the build: shadow textures the first frame would otherwise
 	// upload all at once, done ahead of the swap (see prewarm)
 	private static boolean prewarmDone;
+	private static boolean shadowsPrewarmed;
+	// Next tile column to prepare models on: level * 104 + x
+	private static int prewarmColumn;
 
 	// Diagnostics
 	private static long beginNanos;
@@ -492,6 +495,8 @@ public final class AsyncSceneLoader {
 
 		pendingBuffers.clear();
 		prewarmDone = false;
+		shadowsPrewarmed = false;
+		prewarmColumn = 0;
 		beginContextId = GlCleaner.contextId;
 		active = true;
 		buildDone = false;
@@ -718,20 +723,62 @@ public final class AsyncSceneLoader {
 		if (!pendingBuffers.isEmpty() || prewarmDone) {
 			return;
 		}
-		Shadow[][] shadows = builderState.shadows;
-		for (int col = 0; col < shadows.length; col++) {
-			for (int row = 0; row < shadows[col].length; row++) {
-				Shadow shadow = shadows[col][row];
-				if (shadow.outputToSprite) {
-					if (System.nanoTime() >= deadline) {
-						return;
+		if (!shadowsPrewarmed) {
+			Shadow[][] shadows = builderState.shadows;
+			for (int col = 0; col < shadows.length; col++) {
+				for (int row = 0; row < shadows[col].length; row++) {
+					Shadow shadow = shadows[col][row];
+					if (shadow.outputToSprite) {
+						if (System.nanoTime() >= deadline) {
+							return;
+						}
+						shadow.updateShadowTexture(builderState.shadowMapImage, col, row);
+						shadow.outputToSprite = false;
 					}
-					shadow.updateShadowTexture(builderState.shadowMapImage, col, row);
-					shadow.outputToSprite = false;
+				}
+			}
+			shadowsPrewarmed = true;
+		}
+		// Static scenery models pack their vertex data on first draw, which
+		// would otherwise all happen in the new area's first frame
+		Tile[][][] tiles = builderState.surfaceGroundTiles;
+		int columns = tiles.length * 104;
+		while (prewarmColumn < columns) {
+			if (System.nanoTime() >= deadline) {
+				return;
+			}
+			Tile[] column = tiles[prewarmColumn / 104][prewarmColumn % 104];
+			prewarmColumn++;
+			for (Tile tile : column) {
+				if (tile == null) {
+					continue;
+				}
+				for (int i = 0; i < tile.sceneryLen; i++) {
+					Scenery scenery = tile.scenery[i];
+					if (scenery != null) {
+						prepareModel(scenery.entity);
+					}
+				}
+				if (tile.wall != null) {
+					prepareModel(tile.wall.primary);
+					prepareModel(tile.wall.secondary);
+				}
+				if (tile.wallDecor != null) {
+					prepareModel(tile.wallDecor.primary);
+					prepareModel(tile.wallDecor.secondary);
+				}
+				if (tile.groundDecor != null) {
+					prepareModel(tile.groundDecor.entity);
 				}
 			}
 		}
 		prewarmDone = true;
+	}
+
+	private static void prepareModel(Entity entity) {
+		if (entity instanceof GlModel) {
+			((GlModel) entity).prepareBuffers();
+		}
 	}
 
 	private static void runBuilderSlice(long budgetNanos) {
