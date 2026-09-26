@@ -472,6 +472,15 @@ public final class client extends GameShell {
 			((Js5GlTextureProvider) Rasteriser.textureProvider).clear();
 		}
 		ClientScriptList.scripts.clear();
+		discardUnpackedArchives();
+		HitBarList.hitBars.clear();
+	}
+
+	// Not part of the original client. The memory-freeing half of unload():
+	// drops decompressed archive data but leaves the size-capped definition
+	// and model caches alone, so an area load doesn't re-decode everything
+	// that was already on screen.
+	public static void discardUnpackedArchives() {
 		js5Archive0.discardUnpacked();
 		js5Archive1.discardUnpacked();
 		js5Archive3.discardUnpacked();
@@ -483,7 +492,6 @@ public final class client extends GameShell {
 		js5Archive10.discardUnpacked();
 		js5Archive11.discardUnpacked();
 		js5Archive12.discardUnpacked();
-		HitBarList.hitBars.clear();
 	}
 
 	@OriginalMember(owner = "client!id", name = "b", descriptor = "(I)V")

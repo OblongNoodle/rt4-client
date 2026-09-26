@@ -141,6 +141,27 @@ public final class GlRenderer {
 	// filtering, 1 when GL_EXT_texture_filter_anisotropic is unavailable.
 	public static float maxAnisotropy = 1.0F;
 
+	// Not part of the original client. Records which optional GL features
+	// this machine actually got, to <home>/gl_info.txt
+	private static void writeGlInfo() {
+		String homeDir = SignLink.getHomeDir();
+		if (homeDir == null) {
+			return;
+		}
+		int[] samples = new int[1];
+		gl.glGetIntegerv(GL2.GL_SAMPLES, samples, 0);
+		String info = "vendor: " + vendor + "\n"
+			+ "renderer: " + renderer + "\n"
+			+ "version: " + gl.glGetString(GL2.GL_VERSION) + "\n"
+			+ "msaa samples: " + samples[0] + " (anti-aliasing option " + Preferences.antiAliasingMode + ")\n"
+			+ "max anisotropy: " + maxAnisotropy + "\n"
+			+ "hd texture size: " + GlobalConfig.HD_TEXTURE_SIZE + "\n";
+		try {
+			java.nio.file.Files.write(new java.io.File(homeDir, "gl_info.txt").toPath(), info.getBytes(StandardCharsets.UTF_8));
+		} catch (Exception ex) {
+		}
+	}
+
 	// Not part of the original client. Applies anisotropic filtering to the
 	// currently bound mipmapped texture, see GlobalConfig.ANISOTROPIC_FILTERING.
 	public static void applyAnisotropicFiltering() {
@@ -512,6 +533,7 @@ public final class GlRenderer {
 			gl.glGetFloatv(GL2.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso, 0);
 			maxAnisotropy = maxAniso[0];
 		}
+		writeGlInfo();
 		@Pc(176) JagString renderer = toJagString(GlRenderer.renderer).toLowerCase();
 		if (renderer.indexOf(RADEON) != -1) {
 			@Pc(184) int v = 0;

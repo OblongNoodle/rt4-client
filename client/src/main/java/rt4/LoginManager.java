@@ -861,6 +861,16 @@ public class LoginManager {
 		ClientProt.sendWindowDetails();
 	}
 
+	// Not part of the original client, see rebuildMap. rawModelCache holds
+	// GlModels in HD whose arrays are shared with the scene's copies (see
+	// LocType deepCopy), so it must be dropped along with the scene.
+	private static void clearBuiltLocModels() {
+		LocTypeList.rawModelCache.clear();
+		LocTypeList.staticEntityCache.clear();
+		LocTypeList.animatedEntityCache.clear();
+		ShadowModelList.clear();
+	}
+
 	@OriginalMember(owner = "client!ca", name = "a", descriptor = "(ZI)V")
 	public static void readStaticLocs(@OriginalArg(0) boolean underwater) {
 		@Pc(13) int regionCount = mapFilesBuffer.length;
@@ -982,8 +992,16 @@ public class LoginManager {
 			Fonts.drawTextOnScreen(true, JagString.concatenate(new JagString[]{LocalizedText.LOADING, COMPLETE_PERCENT}));
 		}
 
+		AreaLoadTimer.start();
 		client.audioLoop();
-		client.unload();
+		// Not part of the original client: the original called unload() here,
+		// between readMap and buildScene, in the underwater pass, and at the
+		// end - each one wiping every definition/model cache so the whole
+		// area was re-decoded from scratch. Now only the built (lit) loc
+		// models are dropped at those points, since buildScene merges normals
+		// into them in place; decoded definitions stay cached.
+		clearBuiltLocModels();
+		AreaLoadTimer.mark("unload1");
 		@Pc(420) boolean hasUnderWaterMap = false;
 		@Pc(427) int i;
 		if (GlRenderer.enabled && Preferences.highWaterDetail) {
@@ -1021,7 +1039,10 @@ public class LoginManager {
 			FogManager.setDefaultChunksAtmosphere();
 		}
 		client.audioLoop();
-		System.gc();
+		AreaLoadTimer.mark("reset");
+		// Not part of the original client: removed a forced System.gc() here
+		// (~25ms on every area load; the JVM collects on its own)
+		AreaLoadTimer.mark("gc");
 		ClientProt.ping(true);
 		SceneGraph.load(false);
 		if (!SceneGraph.dynamicMapRegion) {
@@ -1047,12 +1068,16 @@ public class LoginManager {
 			}
 			readDynamicLocs(false);
 		}
-		client.unload();
+		AreaLoadTimer.mark("readMap");
+		clearBuiltLocModels();
+		AreaLoadTimer.mark("unload2");
 		ClientProt.ping(true);
 		SceneGraph.buildScene(PathFinder.collisionMaps, false);
+		AreaLoadTimer.mark("buildScene");
 		if (GlRenderer.enabled) {
 			LightingManager.buildLightGrid();
 		}
+		AreaLoadTimer.mark("lightGrid");
 		ClientProt.ping(true);
 		i = SceneGraph.firstVisibleLevel;
 		if (i > Player.plane) {
@@ -1066,6 +1091,7 @@ public class LoginManager {
 			SceneGraph.setBaseLevel(SceneGraph.firstVisibleLevel);
 		}
 		SceneGraph.unload();
+		AreaLoadTimer.mark("sceneUnload");
 		if (GlRenderer.enabled && hasUnderWaterMap) {
 			SceneGraph.setUnderwater(true);
 			SceneGraph.load(true);
@@ -1079,13 +1105,14 @@ public class LoginManager {
 				ClientProt.ping(true);
 				readDynamicLocs(true);
 			}
-			client.unload();
+			clearBuiltLocModels();
 			ClientProt.ping(true);
 			SceneGraph.buildScene(PathFinder.collisionMaps, true);
 			ClientProt.ping(true);
 			SceneGraph.unload();
 			SceneGraph.setUnderwater(false);
 		}
+		AreaLoadTimer.mark("underwater");
 		if (GlRenderer.enabled) {
 			for (chunkX = 0; chunkX < 13; chunkX++) {
 				for (chunkY = 0; chunkY < 13; chunkY++) {
@@ -1093,6 +1120,7 @@ public class LoginManager {
 				}
 			}
 		}
+		AreaLoadTimer.mark("shadows");
 		for (chunkX = 0; chunkX < 104; chunkX++) {
 			for (chunkY = 0; chunkY < 104; chunkY++) {
 				Protocol.spawnGroundObject(chunkY, chunkX);
@@ -1101,7 +1129,11 @@ public class LoginManager {
 		ScriptRunner.updateRoofRemovalMode();
 		client.audioLoop();
 		ChangeLocRequest.flush();
-		client.unload();
+		AreaLoadTimer.mark("objects");
+		clearBuiltLocModels();
+		client.discardUnpackedArchives();
+		AreaLoadTimer.mark("unload3");
+		AreaLoadTimer.finish();
 		glModelsInvalidated = false;
 		if (GameShell.frame != null && Protocol.socket != null && client.gameState == 25) {
 			Protocol.outboundBuffer.p1isaac(20);

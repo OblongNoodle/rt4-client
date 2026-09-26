@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.Pc;
 
 public class LocTypeList {
 	@OriginalMember(owner = "client!oe", name = "j", descriptor = "Lclient!n;")
-	public static final SoftLruHashTable types = new SoftLruHashTable(64);
+	public static final SoftLruHashTable types = new SoftLruHashTable(1024); // Not part of the original client: was 64
 	@OriginalMember(owner = "client!nf", name = "f", descriptor = "Lclient!n;")
 	public static final SoftLruHashTable rawModelCache = new SoftLruHashTable(500);
 	@OriginalMember(owner = "client!he", name = "fb", descriptor = "Lclient!n;")
