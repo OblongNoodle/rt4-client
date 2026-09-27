@@ -99,6 +99,10 @@ public class GlobalConfig {
 	// (see MovementSmoother).
 	public static boolean SMOOTH_AREA_STALLS = true;
 
+	// Not part of the original client. How many tiles of ground to draw beyond
+	// the view distance and the loaded 104x104 area (see FarTerrain); 0 = off.
+	public static int FAR_TERRAIN_TILES = 64;
+
 	// Not part of the original client. Writes area load timings
 	// (area_load_timing.log) and frame-by-frame captures around area changes
 	// (motion_trace.log, Insert marks a moment) to the client's home folder.

@@ -3087,6 +3087,8 @@ public class SceneGraph {
 				}
 				UnderwaterMaterialRenderer.disableSecondaryTexCoordArray();
 			} else {
+				// Not part of the original client: ground beyond the loaded area
+				FarTerrain.render(camX, camY);
 				x = startLevel;
 				while (true) {
 					if (x >= levels) {

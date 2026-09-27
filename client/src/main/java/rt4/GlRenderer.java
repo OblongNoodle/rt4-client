@@ -661,7 +661,8 @@ public final class GlRenderer {
 		@Pc(35) int screenBottom = (y + height - centerY << 8) / scaleY;
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glLoadIdentity();
-		setPerspectiveFrustum((float) screenLeft * NEAR_PLANE_SCALE, (float) screenRight * NEAR_PLANE_SCALE, (float) -screenBottom * NEAR_PLANE_SCALE, (float) -screenTop * NEAR_PLANE_SCALE, 50.0F, (float) GlobalConfig.VIEW_DISTANCE);
+		// Not part of the original client: pushed out for FarTerrain
+		setPerspectiveFrustum((float) screenLeft * NEAR_PLANE_SCALE, (float) screenRight * NEAR_PLANE_SCALE, (float) -screenBottom * NEAR_PLANE_SCALE, (float) -screenTop * NEAR_PLANE_SCALE, 50.0F, (float) (GlobalConfig.VIEW_DISTANCE + FarTerrain.extraViewDistance()));
 		setViewportBounds(x, canvasHeight - y - height, width, height);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();

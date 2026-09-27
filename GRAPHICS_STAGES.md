@@ -46,9 +46,13 @@ the 2009scape server's skipped movement tick at every boundary is eased out on
 the client (`MovementSmoother`). Diagnostics (`area_load_timing.log`,
 `motion_trace.log`) are off by default: `GlobalConfig.DIAGNOSTICS`.
 
-## Stage 3 - Extended draw distance (pending)
+## Stage 3 - Extended draw distance (in progress)
 
-- Keys: most regions are encrypted, but `XteaKeyStore` (server-sent keys, plus verified keys from 2009scape's public xteas.json) can now supply them, and `AsyncSceneLoader` can build off the main thread. Plan: a display-only ring of lower-detail terrain/scenery beyond the 104x104 area.
+- 3a (done): `FarTerrain` draws level-0 ground for `GlobalConfig.FAR_TERRAIN_TILES` (64) tiles beyond the view distance and the loaded 104x104 area. Decoded from the unencrypted map files like `SceneGraph.readTile`, underlay colours blended 11x11 like `buildScene`, overlay colours as `buildGlShapedTiles` (base colour through `getTexturedColor`, times the texture's real average colour from its pixels; overlays without a base colour aren't drawn). Meshed per 64x64 region (one per frame, cached), drawn in 8x8 zones at depth layer 301.5 behind the real ground; zones the real scene fully covers are skipped. Far clip plane extended by the same distance. Off in instances.
+- 3b (next): ground textures on the far terrain.
+- 3c: distant scenery (trees, buildings, walls, rocks) using `XteaKeyStore` keys.
+- 3d: seam smoothing, performance, draw distance setting.
+- Known: the BasicInputQOL plugin calls camera code from the AWT thread; during a background area build it can read a half-swapped scene and throw (harmless, event dropped). Make `API.UpdateCameraYaw` safe.
 
 ## Stage 4 - Color banding (pending)
 
