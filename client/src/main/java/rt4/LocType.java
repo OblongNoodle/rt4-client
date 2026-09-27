@@ -262,6 +262,17 @@ public final class LocType {
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(III)Lclient!gb;")
 	private RawModel getRawModel(@OriginalArg(0) int rotation, @OriginalArg(1) int shape) {
+		return this.getRawModel(rotation, shape, LocTypeList.rawModelCache);
+	}
+
+	// Not part of the original client: getRawModel with its own model cache.
+	// In HD, LocTypeList.rawModelCache holds GlModels under the same keys, so
+	// FarTerrain (which wants unlit RawModels in HD) must not share it.
+	public RawModel getFarRawModel(int rotation, int shape, SoftLruHashTable cache) {
+		return this.getRawModel(rotation, shape, cache);
+	}
+
+	private RawModel getRawModel(int rotation, int shape, SoftLruHashTable cache) {
 		@Pc(7) RawModel rawModel = null;
 		@Pc(10) boolean mirrored = this.mirror;
 		if (shape == 2 && rotation > 3) {
@@ -282,7 +293,7 @@ public final class LocType {
 				if (mirrored) {
 					modelId += 65536;
 				}
-				rawModel = (RawModel) LocTypeList.rawModelCache.get(modelId);
+				rawModel = (RawModel) cache.get(modelId);
 				if (rawModel == null) {
 					rawModel = RawModel.create(LocTypeList.modelsArchive, modelId & 0xFFFF);
 					if (rawModel == null) {
@@ -291,7 +302,7 @@ public final class LocType {
 					if (mirrored) {
 						rawModel.negateZAndReverseFaces();
 					}
-					LocTypeList.rawModelCache.put(rawModel, modelId);
+					cache.put(rawModel, modelId);
 				}
 				if (modelCount > 1) {
 					tempModels[i] = rawModel;
@@ -315,7 +326,7 @@ public final class LocType {
 			if (mirrored) {
 				i += 65536;
 			}
-			rawModel = (RawModel) LocTypeList.rawModelCache.get(i);
+			rawModel = (RawModel) cache.get(i);
 			if (rawModel == null) {
 				rawModel = RawModel.create(LocTypeList.modelsArchive, i & 0xFFFF);
 				if (rawModel == null) {
@@ -324,7 +335,7 @@ public final class LocType {
 				if (mirrored) {
 					rawModel.negateZAndReverseFaces();
 				}
-				LocTypeList.rawModelCache.put(rawModel, i);
+				cache.put(rawModel, i);
 			}
 		}
 		@Pc(211) boolean resized;

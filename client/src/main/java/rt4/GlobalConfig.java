@@ -103,6 +103,20 @@ public class GlobalConfig {
 	// the view distance and the loaded 104x104 area (see FarTerrain); 0 = off.
 	public static int FAR_TERRAIN_TILES = 64;
 
+	// Not part of the original client. Texture the far terrain like the real
+	// ground (false = flat average colours, cheaper).
+	public static boolean FAR_TERRAIN_TEXTURES = true;
+
+	// Not part of the original client. Walls, trees, buildings and roofs on
+	// the far terrain (see FarScenery), and the lightness their colours get
+	// before GL lighting.
+	public static boolean FAR_SCENERY = true;
+	public static int FAR_SCENERY_LIGHTNESS = 96;
+
+	// Not part of the original client. Far centrepieces (trees, rocks,
+	// plants, ...) shorter than this (fine units, 128 = 1 tile) are skipped.
+	public static int FAR_SCENERY_MIN_HEIGHT = 96;
+
 	// Not part of the original client. Writes area load timings
 	// (area_load_timing.log) and frame-by-frame captures around area changes
 	// (motion_trace.log, Insert marks a moment) to the client's home folder.

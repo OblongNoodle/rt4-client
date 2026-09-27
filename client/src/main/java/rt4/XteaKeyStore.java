@@ -10,19 +10,18 @@ import java.util.HashMap;
 // Not part of the original client. Map (loc file) decryption keys, so
 // AsyncSceneLoader can build the next area before the server asks for it.
 // Keys the server has sent in rebuild packets are remembered across sessions.
-// For regions not seen yet, 2009scape's public key list (bundled xteas.json,
-// regions missing from it use no key, as on the server) is used, but only
-// after Js5.checkKey has confirmed the key actually decrypts the file: a
-// wrong key would decrypt to garbage, and the cache's decompressor has no
-// length cap.
+// Otherwise 2009scape's public key list (bundled xteas.json), or no key.
+// Whichever is used, Js5.checkKey first confirms it actually decrypts the
+// file: a wrong key would decrypt to garbage, and the cache's decompressor has
+// no length cap. (The server itself sends wrong keys for a few regions.)
 public final class XteaKeyStore {
 
 	private static final HashMap<Integer, int[]> keys = new HashMap<>();
 
 	private static final HashMap<Integer, int[]> bundled = new HashMap<>();
 
-	// Bundled keys already checked: true = decrypts, false = doesn't
-	private static final HashMap<Integer, Boolean> checked = new HashMap<>();
+	// Checked key per region (null = no key decrypts it)
+	private static final HashMap<Integer, int[]> resolved = new HashMap<>();
 
 	private static boolean loaded = false;
 
@@ -95,24 +94,30 @@ public final class XteaKeyStore {
 
 	public static int[] get(int region, int locGroup) {
 		load();
-		int[] key = keys.get(region);
-		if (key != null) {
-			return key;
+		if (resolved.containsKey(region)) {
+			return resolved.get(region);
 		}
-		key = bundled.get(region);
-		if (key == null) {
-			key = new int[4];
-		}
-		Boolean valid = checked.get(region);
-		if (valid == null) {
-			valid = client.js5Archive5.checkKey(locGroup, key);
+		// Every candidate is checked before use, including keys the server
+		// sent: 2009scape sends wrong keys for a few regions, and a wrong key
+		// must never reach Js5.unpackGroup (see class comment)
+		int[][] candidates = {keys.get(region), bundled.get(region), new int[4]};
+		for (int[] candidate : candidates) {
+			if (candidate == null) {
+				continue;
+			}
+			Boolean valid = client.js5Archive5.checkKey(locGroup, candidate);
 			if (valid == null) {
 				return NOT_READY;
 			}
-			checked.put(region, valid);
+			if (valid) {
+				resolved.put(region, candidate);
+				return candidate;
+			}
 		}
-		return valid ? key : null;
+		resolved.put(region, null);
+		return null;
 	}
+
 
 	// Called with every non-dynamic rebuild packet's regions and keys
 	public static void record(int[] regions, int[][] regionKeys) {
@@ -131,6 +136,7 @@ public final class XteaKeyStore {
 				continue;
 			}
 			keys.put(regions[i], key.clone());
+			resolved.remove(regions[i]);
 			added.append(regions[i]).append(',').append(key[0]).append(',').append(key[1]).append(',').append(key[2]).append(',').append(key[3]).append('\n');
 		}
 		if (added.length() == 0) {
