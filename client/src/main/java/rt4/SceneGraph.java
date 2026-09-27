@@ -2831,7 +2831,7 @@ public class SceneGraph {
 		}
 		if (!allLevelsAreVisible() && centralPlane != Player.plane) {
 			LoginManager.loadRegion(Player.plane, centralZoneY, centralZoneX, PlayerList.self.movementQueueY[0], false, PlayerList.self.movementQueueX[0]);
-		} else if (Player.plane != LightingManager.minimapRenderedPlane && HitchLog.timeMinimap(Player.plane)) {
+		} else if (Player.plane != LightingManager.minimapRenderedPlane && MiniMap.renderMap(Player.plane)) {
 			LightingManager.minimapRenderedPlane = Player.plane;
 			ScriptRunner.updateRoofRemovalMode();
 		}

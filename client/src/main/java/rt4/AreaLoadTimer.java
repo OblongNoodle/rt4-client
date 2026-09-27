@@ -20,7 +20,7 @@ public final class AreaLoadTimer {
 	}
 
 	public static void start() {
-		if (AsyncSceneLoader.isBuilderThread()) {
+		if (!GlobalConfig.DIAGNOSTICS || AsyncSceneLoader.isBuilderThread()) {
 			// AsyncSceneLoader logs its own timings for background loads
 			phases = null;
 			return;

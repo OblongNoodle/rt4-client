@@ -1227,7 +1227,6 @@ public class LoginManager {
 		client.discardUnpackedArchives();
 		AreaLoadTimer.mark("unload3");
 		AreaLoadTimer.finish();
-		HitchLog.onAreaSwapped();
 		glModelsInvalidated = false;
 		if (GameShell.frame != null && Protocol.socket != null && (async || client.gameState == 25)) {
 			Protocol.outboundBuffer.p1isaac(20);

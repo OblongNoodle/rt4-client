@@ -72,11 +72,11 @@ Branch: `async-scene-loading`. Rollback: `.\rollback-graphics.ps1 before-async-l
 - [x] C. `SceneState` + `AsyncSceneLoader` (baton, checkpoints, swap,
       fallback), wire into packet handling, plane changes and the main loop.
 - [x] D. Checkpoints inside the heavy loops so no single slice runs long.
-- [ ] E. In-game testing, then merge to master. (testing)
+- [x] E. In-game testing, then merge to master.
 
 Log: each background load appends an `async: wall=.. builder=.. slices=.. maxSlice=.. swap=..` line to `<home>/area_load_timing.log`; `failed`/`aborted`/`builder slow` lines include the reason.
 
-## Stage F - Build ahead of the server (testing)
+## Stage F - Build ahead of the server (done)
 
 Round 1 result: no loading box, but the character still stopped. Packets
 are held until the swap and a build took 300-1100ms end to end, so the
@@ -94,3 +94,22 @@ decrypt to a garbage length and the cache decompressor has no length cap.
 First visit near new regions therefore falls back to the round-1 behaviour.
 Log lines: `prebuilt` (used), `prediction missed/changed` (discarded),
 `async` (not predicted); `packetsPaused` is the stop the player feels.
+
+## Stage G - The server's skipped tick (done)
+
+Frame-by-frame captures (`MotionTrace`) against the unmodified v1.0.9 client
+showed the remaining stop was the server: `WalkingQueue.update()` returns
+before moving the player on the tick it sends the new area, so the player
+stands still on the server for one tick. v1.0.9 hid it behind its ~420ms
+loading freeze. The server can't be changed, so:
+- `PathingEntity.teleport`: the rebuild tick's placement was queued as one
+  walk-speed step (running players covered 2 tiles at walking pace); a 2-tile
+  placement is now two run steps and a same-tile placement is ignored.
+- `MovementSmoother`: predicts the skipped tick from the route and rebuild rule
+  and eases the player's own movement over the last few ticks before it, so
+  the steps already received last until movement resumes.
+- `LoginManager.shiftRegion`: the follow camera's trailing position is shifted
+  with the scene; before, `Camera.updatePlayerCamera` snapped it onto the
+  player at every area change.
+- Shadow textures and static model buffers are prepared before the swap
+  instead of in the new area's first frame.

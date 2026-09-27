@@ -5,7 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-// Not part of the original client. Diagnostic: a frame-by-frame record of
+// Not part of the original client. Diagnostic (GlobalConfig.DIAGNOSTICS): a
+// frame-by-frame record of
 // what the player sees around every area change, written to
 // <home>/motion_trace.log. Frames are kept in memory and written once each
 // capture window closes, so recording never touches the disk mid-capture.
@@ -48,14 +49,23 @@ public final class MotionTrace {
 	}
 
 	public static void onPacket() {
+		if (!GlobalConfig.DIAGNOSTICS) {
+			return;
+		}
 		packetsSinceFrame++;
 	}
 
 	public static void onTick() {
+		if (!GlobalConfig.DIAGNOSTICS) {
+			return;
+		}
 		ticksSinceFrame++;
 	}
 
 	public static void event(String what) {
+		if (!GlobalConfig.DIAGNOSTICS) {
+			return;
+		}
 		long now = System.nanoTime();
 		add(now, "EVENT " + what);
 		if (captureUntil == 0L) {
@@ -67,6 +77,9 @@ public final class MotionTrace {
 	}
 
 	public static void onSelfUpdate(int type, String detail) {
+		if (!GlobalConfig.DIAGNOSTICS) {
+			return;
+		}
 		Player self = PlayerList.self;
 		String head = self == null ? "?" : "queueHead=" + (Camera.originX + self.movementQueueX[0]) + "," + (Camera.originY + self.movementQueueY[0]) + " q=" + self.movementQueueSize;
 		add(System.nanoTime(), "SERVER self update type=" + type + (type == 0 ? "(none)" : type == 1 ? "(walk)" : type == 2 ? "(run)" : "(place)") + " " + detail + " -> " + head);
@@ -74,6 +87,9 @@ public final class MotionTrace {
 
 	// After each rendered frame
 	public static void onFrame(long frameStart) {
+		if (!GlobalConfig.DIAGNOSTICS) {
+			return;
+		}
 		long now = System.nanoTime();
 		boolean insertDown = Keyboard.getKey(KeyEvent.VK_INSERT);
 		if (insertDown && !insertWasDown) {

@@ -835,7 +835,6 @@ public final class AsyncSceneLoader {
 		awaitMainTurn();
 		long spent = System.nanoTime() - start;
 		builderNanos += spent;
-		HitchLog.builderNanos += spent;
 		slices++;
 		if (spent > maxSliceNanos) {
 			maxSliceNanos = spent;
@@ -902,7 +901,6 @@ public final class AsyncSceneLoader {
 		LoginManager.finishMap(true);
 
 		log(prebuilt ? "prebuilt" : "async", null, swapStart);
-		HitchLog.onAreaSwapped();
 	}
 
 	private static void keepSpares(SceneState old) {
@@ -973,6 +971,12 @@ public final class AsyncSceneLoader {
 	}
 
 	private static void log(String result, Throwable ex, long swapStart) {
+		long pausedSince = requestNanos;
+		requestNanos = 0L;
+		boolean problem = ex != null || result.startsWith("builder slow") || result.startsWith("left HD");
+		if (!GlobalConfig.DIAGNOSTICS && !problem) {
+			return;
+		}
 		String homeDir = SignLink.getHomeDir();
 		if (homeDir == null) {
 			return;
@@ -980,7 +984,7 @@ public final class AsyncSceneLoader {
 		long now = System.nanoTime();
 		StringBuilder line = new StringBuilder();
 		line.append(result)
-			.append(": packetsPaused=").append(requestNanos == 0L ? 0L : (now - requestNanos) / 1000000L).append("ms")
+			.append(": packetsPaused=").append(pausedSince == 0L ? 0L : (now - pausedSince) / 1000000L).append("ms")
 			.append(" wall=").append((now - beginNanos) / 1000000L).append("ms")
 			.append(" builder=").append(builderNanos / 1000000L).append("ms")
 			.append(" slices=").append(slices)
@@ -989,7 +993,6 @@ public final class AsyncSceneLoader {
 			.append(" longestStep=").append(longestGapNanos / 1000000L).append("ms before ").append(longestGapEnd)
 			.append(" | zone=").append(zoneX).append(',').append(zoneY)
 			.append('\n');
-		requestNanos = 0L;
 		if (ex != null) {
 			StringWriter trace = new StringWriter();
 			ex.printStackTrace(new PrintWriter(trace));

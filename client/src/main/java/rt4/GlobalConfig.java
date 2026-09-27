@@ -98,6 +98,12 @@ public class GlobalConfig {
 	// an area boundary instead of stopping dead on the server's skipped tick
 	// (see MovementSmoother).
 	public static boolean SMOOTH_AREA_STALLS = true;
+
+	// Not part of the original client. Writes area load timings
+	// (area_load_timing.log) and frame-by-frame captures around area changes
+	// (motion_trace.log, Insert marks a moment) to the client's home folder.
+	// Background load failures are logged either way.
+	public static boolean DIAGNOSTICS = false;
 	public static int PREBUILD_LEAD_TILES = 12;
 
 	public static boolean USE_SHIFT_CLICK = true;
