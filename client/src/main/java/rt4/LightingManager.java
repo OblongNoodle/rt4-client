@@ -309,6 +309,7 @@ public class LightingManager {
 	private static void disableLight(@OriginalArg(0) int i) {
 		if (enabledLights[i]) {
 			enabledLights[i] = false;
+			PixelLighting.setLocalLight(i, false);
 			@Pc(14) int light = i + 16384 + 4;
 			@Pc(16) GL2 gl = GlRenderer.gl;
 			gl.glDisable(light);
@@ -457,6 +458,7 @@ public class LightingManager {
 		if (!enabledLights[slot]) {
 			gl.glEnable(glLightId);
 			enabledLights[slot] = true;
+			PixelLighting.setLocalLight(slot, true);
 		}
 		gl.glLightf(glLightId, GL2.GL_QUADRATIC_ATTENUATION, light.quadraticAttenuation);
 		gl.glLightfv(glLightId, GL2.GL_DIFFUSE, light.diffuse, 0);

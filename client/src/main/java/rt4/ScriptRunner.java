@@ -312,7 +312,9 @@ public final class ScriptRunner {
 			GlRenderer.clearColorAndDepthBuffers(shakeOffset);
 			MaterialManager.setCameraTransform(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
 			GlRenderer.animationClock = client.loop;
+			PixelLighting.beginScene();
 			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, roofVisibility, roofGroupMaxHeight, roofGroupMinX, roofGroupMaxX, roofGroupMaxZ, roofGroupMinZ, Player.plane + 1, roofCycle, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
+			PixelLighting.endScene();
 			glSceneNeedsRender = true;
 			LightingManager.resetActiveLights();
 			MaterialManager.setCameraTransform(0, 0, 0, 0, 0);

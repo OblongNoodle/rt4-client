@@ -128,6 +128,10 @@ public class GlobalConfig {
 	// frame evict each other and are regenerated every frame.
 	public static int HD_TEXTURE_CACHE = 1000;
 
+	// Not part of the original client. Per-pixel lighting for the 3D scene
+	// (PixelLighting); ::pixellight toggles it in game.
+	public static boolean PIXEL_LIGHTING = true;
+
 	// Not part of the original client. Writes area load timings
 	// (area_load_timing.log) and frame-by-frame captures around area changes
 	// (motion_trace.log, Insert marks a moment) to the client's home folder.

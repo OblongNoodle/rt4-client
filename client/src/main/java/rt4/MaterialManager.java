@@ -62,6 +62,7 @@ public class MaterialManager {
 				renderer.setArgument(arg);
 			}
 			currentType = type;
+			PixelLighting.setMaterialType(type);
 			currentArg = arg;
 		} else if (type != 0 && arg != currentArg) {
 			renderers[type].setArgument(arg);

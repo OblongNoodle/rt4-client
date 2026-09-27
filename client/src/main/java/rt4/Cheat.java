@@ -99,6 +99,7 @@ public class Cheat {
 	@OriginalMember(owner = "client!jg", name = "e", descriptor = "Z")
 	public static boolean qaOpTest = false;
 	public static final JagString RELOADPLUGINS = JagString.parse("::reloadplugins");
+	public static final JagString PIXELLIGHT = JagString.parse("::pixellight");
 
 	@OriginalMember(owner = "client!en", name = "a", descriptor = "(IIIB)V")
 	public static void teleport(@OriginalArg(0) int tileX, @OriginalArg(1) int tileY, @OriginalArg(2) int plane) {
@@ -173,6 +174,11 @@ public class Cheat {
 			}
 			if (command.equalsIgnoreCase(FPSOFF)) {
 				displayFps = false;
+			}
+			// Not part of the original client: compare per-pixel lighting
+			if (command.equalsIgnoreCase(PIXELLIGHT)) {
+				GlobalConfig.PIXEL_LIGHTING = !GlobalConfig.PIXEL_LIGHTING;
+				Chat.add(null, 0, JagString.parse(GlobalConfig.PIXEL_LIGHTING ? "Per pixel lighting ON" : "Per pixel lighting OFF"));
 			}
 			if (command.equalsIgnoreCase(WM0)) {
 				DisplayMode.setWindowMode(false, 0, -1, -1);

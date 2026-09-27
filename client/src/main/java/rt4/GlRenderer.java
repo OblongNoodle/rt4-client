@@ -315,6 +315,7 @@ public final class GlRenderer {
 			gl.glDisable(GL2.GL_FOG);
 		}
 		fogEnabled = enabled;
+		PixelLighting.setFog(enabled);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "e", descriptor = "()V")
@@ -331,6 +332,8 @@ public final class GlRenderer {
 
 	@OriginalMember(owner = "client!tf", name = "f", descriptor = "()V")
 	private static void initGlState() {
+		// Not part of the original client: fresh context, fresh shader state
+		PixelLighting.reset();
 		orthographicActive = false;
 		multisampleEnabled = true;
 		gl.glDisable(GL2.GL_TEXTURE_2D);
@@ -346,6 +349,11 @@ public final class GlRenderer {
 		lightingEnabled = true;
 		depthTestEnabled = true;
 		fogEnabled = true;
+		PixelLighting.setTextured(false);
+		PixelLighting.setLighting(true);
+		PixelLighting.setFog(true);
+		PixelLighting.setRgbMode(0);
+		PixelLighting.setAlphaMode(0);
 		resetMaterial();
 		gl.glActiveTexture(GL2.GL_TEXTURE1);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_COMBINE);
@@ -497,6 +505,7 @@ public final class GlRenderer {
 			gl.glDisable(GL2.GL_LIGHTING);
 		}
 		lightingEnabled = enabled;
+		PixelLighting.setLighting(enabled);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "l", descriptor = "()F")
@@ -720,6 +729,7 @@ public final class GlRenderer {
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_ALPHA, GL2.GL_ADD);
 		}
 		textureCombineAlphaMode = mode;
+		PixelLighting.setAlphaMode(mode);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(FFFFFF)V")
@@ -775,6 +785,7 @@ public final class GlRenderer {
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, id);
 		}
 		textureId = id;
+		PixelLighting.setTextured(id != -1);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "q", descriptor = "()V")
@@ -951,6 +962,7 @@ public final class GlRenderer {
 			gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_COMBINE_RGB, GL2.GL_INTERPOLATE);
 		}
 		textureCombineRgbMode = mode;
+		PixelLighting.setRgbMode(mode);
 	}
 
 	@OriginalMember(owner = "client!tf", name = "s", descriptor = "()V")

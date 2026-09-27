@@ -3106,7 +3106,9 @@ public class SceneGraph {
 				x = startLevel;
 				while (true) {
 					if (x >= levels) {
+						PixelLighting.suspend();
 						LightingManager.renderLightMeshes(cameraTileX, cameraTileY, tiles);
+						PixelLighting.resume();
 						break;
 					}
 					for (y = 0; y < underwaterHdTiles[x].length; y++) {
@@ -3119,7 +3121,9 @@ public class SceneGraph {
 					}
 					if (x == 0 && Preferences.sceneryShadowsType > 0) {
 						GlRenderer.setDepthLayer(101.5F);
+						PixelLighting.suspend();
 						ShadowManager.renderShadowMapGL(cameraTileX, cameraTileY, visibility, camZ, visibleTiles, tileHeights[0]);
+						PixelLighting.resume();
 					}
 					x++;
 				}
