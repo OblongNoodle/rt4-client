@@ -231,7 +231,7 @@ public final class DisplayMode {
 			GameShell.thread.setPriority(5);
 			SoftwareRaster.frameBuffer = null;
 			SoftwareModel.enableDepthSortMode();
-			((Js5GlTextureProvider) Rasteriser.textureProvider).setCapacity(200);
+			((Js5GlTextureProvider) Rasteriser.textureProvider).setCapacity(GlobalConfig.HD_TEXTURE_CACHE);
 			if (Preferences.highDetailLighting) {
 				Rasteriser.setBrightness(0.7F);
 			}

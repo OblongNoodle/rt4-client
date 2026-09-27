@@ -7,6 +7,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 import plugin.PluginRepository;
+import plugin.api.API;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -1704,6 +1705,9 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(B)V")
 	@Override
 	protected final void mainLoop() {
+		// Not part of the original client: camera moves plugins made from
+		// other threads (see API.runPendingCameraChanges)
+		API.runPendingCameraChanges();
 		if (gameState == 1000) {
 			return;
 		}

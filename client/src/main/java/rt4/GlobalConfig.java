@@ -99,23 +99,34 @@ public class GlobalConfig {
 	// (see MovementSmoother).
 	public static boolean SMOOTH_AREA_STALLS = true;
 
-	// Not part of the original client. How many tiles of ground to draw beyond
-	// the view distance and the loaded 104x104 area (see FarTerrain); 0 = off.
-	public static int FAR_TERRAIN_TILES = 64;
+	// Not part of the original client. How far from the camera, in tiles, to
+	// draw distant terrain and scenery beyond the loaded 104x104 area (see
+	// FarTerrain; the FarView plugin sets this in game); 0 = off.
+	public static int FAR_TERRAIN_TILES = 200;
 
 	// Not part of the original client. Texture the far terrain like the real
 	// ground (false = flat average colours, cheaper).
 	public static boolean FAR_TERRAIN_TEXTURES = true;
 
 	// Not part of the original client. Walls, trees, buildings and roofs on
-	// the far terrain (see FarScenery), and the lightness their colours get
-	// before GL lighting.
+	// the far terrain (see FarScenery).
 	public static boolean FAR_SCENERY = true;
-	public static int FAR_SCENERY_LIGHTNESS = 96;
 
 	// Not part of the original client. Far centrepieces (trees, rocks,
 	// plants, ...) shorter than this (fine units, 128 = 1 tile) are skipped.
 	public static int FAR_SCENERY_MIN_HEIGHT = 96;
+
+	// Not part of the original client. Far scenery vertices snap to a grid
+	// this size (fine units, 128 = 1 tile) and collapsed triangles are
+	// dropped, thinning out detail far away. 0 = full detail (the default:
+	// grids large enough to matter also erase thin fence rails and branches).
+	public static int FAR_SCENERY_SIMPLIFY = 0;
+
+	// Not part of the original client (was 200). How many generated textures
+	// HD keeps. The far view shows ~180 scenery textures on top of the nearby
+	// scene's; with too small a cache, textures drawn in the same order every
+	// frame evict each other and are regenerated every frame.
+	public static int HD_TEXTURE_CACHE = 1000;
 
 	// Not part of the original client. Writes area load timings
 	// (area_load_timing.log) and frame-by-frame captures around area changes

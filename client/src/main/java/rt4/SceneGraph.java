@@ -2918,15 +2918,27 @@ public class SceneGraph {
 
 	@OriginalMember(owner = "client!mf", name = "a", descriptor = "(IIIII[[[B[I[I[I[I[IIBII)V")
 	public static void setPlainTile(@OriginalArg(0) int camX, @OriginalArg(1) int camZ, @OriginalArg(2) int camY, @OriginalArg(3) int pitch, @OriginalArg(4) int yaw, @OriginalArg(5) byte[][][] occlusionData, @OriginalArg(6) int[] roofMaxHeight, @OriginalArg(7) int[] roofMinX, @OriginalArg(8) int[] roofMaxX, @OriginalArg(9) int[] roofMaxZ, @OriginalArg(10) int[] roofMinZ, @OriginalArg(11) int occlusionLevel, @OriginalArg(12) byte occlusionFlag, @OriginalArg(13) int entityMinX, @OriginalArg(14) int entityMinY) {
-		if (camX < 0) {
-			camX = 0;
-		} else if (camX >= width * 128) {
-			camX = width * 128 - 1;
+		// Not part of the original client: in HD the camera may be outside the
+		// loaded area (zoomed far out near an area edge). It used to be
+		// clamped to the edge, so the view stopped following the player while
+		// overheads (projected from the real camera) drifted away from their
+		// models. Now only the camera tile, which indexes the per-tile arrays,
+		// is clamped; everything is drawn from the real camera position.
+		int tileCamX = camX;
+		int tileCamY = camY;
+		if (tileCamX < 0) {
+			tileCamX = 0;
+		} else if (tileCamX >= width * 128) {
+			tileCamX = width * 128 - 1;
 		}
-		if (camY < 0) {
-			camY = 0;
-		} else if (camY >= length * 128) {
-			camY = length * 128 - 1;
+		if (tileCamY < 0) {
+			tileCamY = 0;
+		} else if (tileCamY >= length * 128) {
+			tileCamY = length * 128 - 1;
+		}
+		if (!GlRenderer.enabled) {
+			camX = tileCamX;
+			camY = tileCamY;
 		}
 		sinPitch = MathUtils.sin[pitch];
 		cosPitch = MathUtils.cos[pitch];
@@ -2935,8 +2947,8 @@ public class SceneGraph {
 		cameraX = camX;
 		cameraZ = camZ;
 		cameraY = camY;
-		cameraTileX = camX / 128;
-		cameraTileY = camY / 128;
+		cameraTileX = tileCamX / 128;
+		cameraTileY = tileCamY / 128;
 		LightingManager.visibleMinX = cameraTileX - visibility;
 		if (LightingManager.visibleMinX < 0) {
 			LightingManager.visibleMinX = 0;
@@ -2963,10 +2975,12 @@ public class SceneGraph {
 		@Pc(113) int vy;
 		for (vx = 0; vx < visibility + visibility + 2; vx++) {
 			for (vy = 0; vy < visibility + visibility + 2; vy++) {
-				@Pc(130) int dx = (vx - visibility << 7) - (cameraX & 0x7F);
-				@Pc(140) int dy = (vy - visibility << 7) - (cameraY & 0x7F);
 				@Pc(146) int tx = cameraTileX + vx - visibility;
 				@Pc(152) int ty = cameraTileY + vy - visibility;
+				// Relative to the real camera (the same as the original's
+				// (vx - visibility << 7) - (cameraX & 0x7F) when it's inside)
+				@Pc(130) int dx = (tx << 7) - cameraX;
+				@Pc(140) int dy = (ty << 7) - cameraY;
 				if (tx >= 0 && ty >= 0 && tx < width && ty < length) {
 					@Pc(176) int highZ;
 					if (underwaterTileHeights == null) {

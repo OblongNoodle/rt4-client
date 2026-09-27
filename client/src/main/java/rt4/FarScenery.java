@@ -8,9 +8,10 @@ package rt4;
 // verified are used (XteaKeyStore), otherwise the region just has no far
 // scenery. Level 0 only, decorations and ground clutter skipped, first
 // animation frame, multilocs resolved as they currently are. Each model is
-// placed like SceneGraph.addLoc places it and merged, per 8x8 zone, into one
-// untextured, flat-shaded mesh per region (textured faces use the texture's
-// average colour), lit by GL like the rest of the far terrain.
+// built and lit like the real scene builds it (a GlModel with the loc's
+// lighting, see model()), placed like SceneGraph.addLoc places it and merged,
+// per texture and 8x8 zone, into a few meshes per region, so distant trees
+// and buildings are textured and shaded like nearby ones.
 final class FarScenery {
 
 	// Loc shapes drawn far away: walls (0-3, 9), centrepieces (10, 11), roofs (12-21)
@@ -18,7 +19,9 @@ final class FarScenery {
 		return shape <= 3 || shape >= 9 && shape <= 21;
 	}
 
-	private static final SoftLruHashTable models = new SoftLruHashTable(512);
+	// Unlit raw models (LocType.getFarRawModel) and the lit models built from them
+	private static final SoftLruHashTable rawModels = new SoftLruHashTable(512);
+	private static final SoftLruHashTable models = new SoftLruHashTable(256);
 
 	static final int STRIDE = 36;
 
@@ -31,12 +34,10 @@ final class FarScenery {
 		int[] locRotation;
 		int count;
 		int next;
-		final Buffer[] zones = new Buffer[64];
+		// Texture id (-1 = none) to its per-zone vertex data
+		final java.util.HashMap<Integer, Buffer[]> textures = new java.util.HashMap<>();
 		int vertices;
 		int missingModels;
-		// Textured faces whose texture wasn't downloaded yet (drawn in their
-		// plain colour, which for textured faces is usually white)
-		int missingTextures;
 	}
 
 	private FarScenery() {
@@ -141,7 +142,7 @@ final class FarScenery {
 				return;
 			}
 		}
-		RawModel model = type.getFarRawModel(rotation, shape, models);
+		GlModel model = model(type, shape, rotation);
 		if (model == null) {
 			build.missingModels++;
 			return;
@@ -182,88 +183,131 @@ final class FarScenery {
 			fineY = (y << 7) + 64;
 			height = heights.at(wx, wy) + heights.at(wx + 1, wy) + heights.at(wx, wy + 1) + heights.at(wx + 1, wy + 1) >> 2;
 		}
-		int zone = (x >> 3) * 8 + (y >> 3);
-		Buffer buf = build.zones[zone];
-		for (int f = 0; f < model.triangleCount; f++) {
-			if (model.triangleInfo != null && model.triangleInfo[f] == 2) {
-				// Hidden
-				continue;
+		sink.build = build;
+		sink.zone = (x >> 3) * 8 + (y >> 3);
+		model.exportTriangles(sink, fineX, height, fineY);
+	}
+
+	// The model the real scene would draw (LocType.getStaticEntity in HD):
+	// same raw model, rotation and lighting, cached per loc/shape/rotation
+	private static GlModel model(LocType type, int shape, int rotation) {
+		long key = (long) type.id << 8 | shape << 3 | rotation;
+		GlModel model = (GlModel) models.get(key);
+		if (model != null) {
+			return model;
+		}
+		RawModel raw;
+		if (shape == 11) {
+			// Diagonal centrepiece: the straight one turned 45 degrees
+			raw = type.getFarRawModel(rotation + 4, 10, rawModels);
+			if (raw != null) {
+				raw.rotate256();
 			}
-			if (model.triangleAlpha != null && (model.triangleAlpha[f] & 0xFF) >= 200) {
-				continue;
+		} else {
+			raw = type.getFarRawModel(rotation, shape, rawModels);
+		}
+		if (raw == null) {
+			return null;
+		}
+		model = new GlModel(raw, type.getFarAmbient(), type.getFarContrast(), false);
+		models.put(model, key);
+		return model;
+	}
+
+	// Collects exported triangles into the current build's per-texture zones.
+	// Far away, vertices snap to a grid (FAR_SCENERY_SIMPLIFY) and triangles
+	// that collapse are dropped: leaves and other small detail thin out while
+	// walls, roofs and tree shapes stay.
+	private static final class Sink implements GlModel.TriangleSink {
+		Build build;
+		int zone;
+		private int corner;
+		private final float[] data = new float[3 * 10];
+		private final int[] colours = new int[3];
+
+		@Override
+		public void vertex(int texture, float x, float y, float z, int rgba, float nx, float ny, float nz, float s, float t) {
+			int grid = GlobalConfig.FAR_SCENERY_SIMPLIFY;
+			if (grid > 1) {
+				x = snap(x, grid);
+				y = snap(y, grid);
+				z = snap(z, grid);
 			}
-			int a = model.triangleVertexA[f];
-			int b = model.triangleVertexB[f];
-			int c = model.triangleVertexC[f];
-			float ax = model.vertexX[a] + fineX, ay = model.vertexY[a] + height, az = model.vertexZ[a] + fineY;
-			float bx = model.vertexX[b] + fineX, by = model.vertexY[b] + height, bz = model.vertexZ[b] + fineY;
-			float cx = model.vertexX[c] + fineX, cy = model.vertexY[c] + height, cz = model.vertexZ[c] + fineY;
-			// Flat face normal
-			float ux = bx - ax, uy = by - ay, uz = bz - az;
-			float vx = cx - ax, vy = cy - ay, vz = cz - az;
-			float nx = uy * vz - uz * vy;
-			float ny = uz * vx - ux * vz;
-			float nz = ux * vy - uy * vx;
-			float len = (float) Math.sqrt(nx * nx + ny * ny + nz * nz);
-			if (len == 0.0F) {
-				continue;
+			int o = corner * 10;
+			data[o] = x;
+			data[o + 1] = y;
+			data[o + 2] = z;
+			data[o + 3] = nx;
+			data[o + 4] = ny;
+			data[o + 5] = nz;
+			data[o + 6] = s;
+			data[o + 7] = t;
+			colours[corner] = rgba;
+			if (++corner < 3) {
+				return;
 			}
-			nx /= len;
-			ny /= len;
-			nz /= len;
-			int texture = model.triangleTextures == null ? -1 : model.triangleTextures[f];
-			int rgb;
-			int average = texture == -1 ? -1 : FarTerrain.textureAverage(texture);
-			if (texture != -1 && average == -1) {
-				build.missingTextures++;
+			corner = 0;
+			// Nearly invisible faces aren't worth sorting out far away
+			if ((rgba & 0xFF) < 56) {
+				return;
 			}
-			int hsl = model.triangleColors[f] & 0xFFFF;
-			if (average != -1) {
-				// Most HD model textures are greyscale detail maps: the face
-				// colour (through getTexturedColor, which also handles the few
-				// coloured "brightness" textures) is multiplied by the texture
-				rgb = FarTerrain.multiply(SceneGraph.getTexturedColor(texture, hsl, GlobalConfig.FAR_SCENERY_LIGHTNESS), average);
-			} else {
-				// Untextured, or the texture isn't loaded yet
-				rgb = Rasteriser.palette[ColorUtils.multiplyLightness2(hsl, GlobalConfig.FAR_SCENERY_LIGHTNESS)];
+			if (same(0, 10) || same(0, 20) || same(10, 20)) {
+				return;
 			}
+			Buffer[] zones = build.textures.get(texture);
+			if (zones == null) {
+				zones = new Buffer[64];
+				build.textures.put(texture, zones);
+			}
+			Buffer buf = zones[zone];
 			if (buf == null || buf.offset + 3 * STRIDE > buf.data.length) {
-				Buffer bigger = new Buffer(buf == null ? 3 * STRIDE * 256 : buf.data.length * 2);
+				Buffer bigger = new Buffer(buf == null ? STRIDE * 768 : buf.data.length * 2);
 				if (buf != null) {
 					System.arraycopy(buf.data, 0, bigger.data, 0, buf.offset);
 					bigger.offset = buf.offset;
 				}
 				buf = bigger;
-				build.zones[zone] = buf;
+				zones[zone] = buf;
 			}
-			put(buf, ax, ay, az, rgb, nx, ny, nz);
-			put(buf, bx, by, bz, rgb, nx, ny, nz);
-			put(buf, cx, cy, cz, rgb, nx, ny, nz);
+			for (int c = 0; c < 3; c++) {
+				int i = c * 10;
+				put(buf, data[i], data[i + 1], data[i + 2], colours[c], data[i + 3], data[i + 4], data[i + 5], data[i + 6], data[i + 7]);
+			}
 			build.vertices += 3;
+		}
+
+		private boolean same(int a, int b) {
+			return data[a] == data[b] && data[a + 1] == data[b + 1] && data[a + 2] == data[b + 2];
+		}
+
+		private static float snap(float v, int grid) {
+			return (float) Math.floor(v / grid + 0.5F) * grid;
 		}
 	}
 
-	private static void put(Buffer buf, float x, float y, float z, int rgb, float nx, float ny, float nz) {
+	private static final Sink sink = new Sink();
+
+	private static void put(Buffer buf, float x, float y, float z, int rgba, float nx, float ny, float nz, float s, float t) {
 		if (GlRenderer.bigEndian) {
 			buf.pFloat(x);
 			buf.pFloat(y);
 			buf.pFloat(z);
-			buf.p4(rgb << 8 | 0xFF);
+			buf.p4(rgba);
 			buf.pFloat(nx);
 			buf.pFloat(ny);
 			buf.pFloat(nz);
-			buf.pFloat(0.0F);
-			buf.pFloat(0.0F);
+			buf.pFloat(s);
+			buf.pFloat(t);
 		} else {
 			buf.gFloat(x);
 			buf.gFloat(y);
 			buf.gFloat(z);
-			buf.p4(rgb << 8 | 0xFF);
+			buf.p4(rgba);
 			buf.gFloat(nx);
 			buf.gFloat(ny);
 			buf.gFloat(nz);
-			buf.gFloat(0.0F);
-			buf.gFloat(0.0F);
+			buf.gFloat(s);
+			buf.gFloat(t);
 		}
 	}
 }

@@ -946,7 +946,20 @@ public class LoginManager {
 				}
 			}
 			if (locationsMapFileIds[id] != -1 && locationMapFilesBuffer[id] == null) {
-				locationMapFilesBuffer[id] = client.js5Archive5.fetchFile(locationsMapFileIds[id], regionsXteaKeys[id], 0);
+				// Not part of the original client: 2009scape sends wrong keys for
+				// some regions, which decrypted to garbage (the region's scenery
+				// went missing, and a garbage length can exhaust the heap).
+				// XteaKeyStore tries the server's key, then 2009scape's public
+				// key list, then no key, and only returns one that decrypts.
+				int[] key = XteaKeyStore.get(regionBitPacked[id], locationsMapFileIds[id]);
+				if (key == XteaKeyStore.NOT_READY) {
+					locationMapFilesBuffer[id] = null;
+				} else if (key == null) {
+					// Nothing decrypts it: load the region without scenery
+					locationMapFilesBuffer[id] = new byte[]{0};
+				} else {
+					locationMapFilesBuffer[id] = client.js5Archive5.fetchFile(locationsMapFileIds[id], key, 0);
+				}
 				if (locationMapFilesBuffer[id] == null) {
 					fileExists = false;
 					mapFilesMissingCount++;

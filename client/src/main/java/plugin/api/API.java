@@ -159,12 +159,57 @@ public class API {
         registeredKeyListeners.add(k);
     }
 
+    // Not part of the original client. Plugins often move the camera from the
+    // AWT thread (mouse listeners). Camera.clampCameraAngle reads the scene,
+    // which a background area load (AsyncSceneLoader) may be swapping at that
+    // moment, so camera changes from other threads are queued and applied on
+    // the game thread (client.mainLoop).
+    private static final java.util.concurrent.ConcurrentLinkedQueue<Runnable> pendingCameraChanges = new java.util.concurrent.ConcurrentLinkedQueue<>();
+
+    private static boolean onGameThread() {
+        return GlRenderer.isGlThread();
+    }
+
+    public static void runPendingCameraChanges() {
+        Runnable change;
+        while ((change = pendingCameraChanges.poll()) != null) {
+            change.run();
+        }
+    }
+
+    // Not part of the original client, see FarTerrain / the FarView plugin
+    public static void SetFarView(int distanceTiles, boolean scenery, boolean textures, int sceneryMinHeight) {
+        SetFarView(distanceTiles, scenery, textures, sceneryMinHeight, GlobalConfig.FAR_SCENERY_SIMPLIFY);
+    }
+
+    // simplify: distant scenery detail grid in 1/128ths of a tile (0 = full detail)
+    public static void SetFarView(int distanceTiles, boolean scenery, boolean textures, int sceneryMinHeight, int simplify) {
+        simplify = Math.max(0, simplify);
+        boolean rebuild = textures != GlobalConfig.FAR_TERRAIN_TEXTURES || sceneryMinHeight != GlobalConfig.FAR_SCENERY_MIN_HEIGHT || simplify != GlobalConfig.FAR_SCENERY_SIMPLIFY;
+        GlobalConfig.FAR_TERRAIN_TILES = Math.max(0, distanceTiles);
+        GlobalConfig.FAR_SCENERY = scenery;
+        GlobalConfig.FAR_TERRAIN_TEXTURES = textures;
+        GlobalConfig.FAR_SCENERY_MIN_HEIGHT = Math.max(0, sceneryMinHeight);
+        GlobalConfig.FAR_SCENERY_SIMPLIFY = simplify;
+        if (rebuild) {
+            FarTerrain.requestRebuild();
+        }
+    }
+
     public static void SetCameraYaw(double targetYaw) {
+        if (!onGameThread()) {
+            pendingCameraChanges.add(() -> SetCameraYaw(targetYaw));
+            return;
+        }
         Camera.yawTarget = targetYaw;
         Camera.clampCameraAngle();
     }
 
     public static void UpdateCameraYaw(double yawDiff) {
+        if (!onGameThread()) {
+            pendingCameraChanges.add(() -> UpdateCameraYaw(yawDiff));
+            return;
+        }
         Camera.yawTarget += yawDiff;
         Camera.clampCameraAngle();
     }
@@ -174,11 +219,19 @@ public class API {
     }
 
     public static void SetCameraPitch(double targetPitch) {
+        if (!onGameThread()) {
+            pendingCameraChanges.add(() -> SetCameraPitch(targetPitch));
+            return;
+        }
         Camera.pitchTarget = targetPitch;
         Camera.clampCameraAngle();
     }
 
     public static void UpdateCameraPitch(double pitchDiff) {
+        if (!onGameThread()) {
+            pendingCameraChanges.add(() -> UpdateCameraPitch(pitchDiff));
+            return;
+        }
         Camera.pitchTarget += pitchDiff;
         Camera.clampCameraAngle();
     }

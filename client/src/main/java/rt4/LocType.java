@@ -272,6 +272,16 @@ public final class LocType {
 		return this.getRawModel(rotation, shape, cache);
 	}
 
+	// Not part of the original client: the lighting getGlModel gives this
+	// loc's models (for FarScenery)
+	public int getFarAmbient() {
+		return this.ambient + 64;
+	}
+
+	public int getFarContrast() {
+		return this.contrast * 5 + 768;
+	}
+
 	private RawModel getRawModel(int rotation, int shape, SoftLruHashTable cache) {
 		@Pc(7) RawModel rawModel = null;
 		@Pc(10) boolean mirrored = this.mirror;

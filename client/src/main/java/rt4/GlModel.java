@@ -734,6 +734,42 @@ public final class GlModel extends Model {
 		cylindricalV = v;
 	}
 
+	// Not part of the original client: FarScenery merges distant static locs
+	// into per-texture meshes. Hands over each triangle's three vertices as
+	// packInterleavedVertexData packs them with HD lighting (position plus the
+	// offset, colour, normal, texture coords). Only for a freshly built model
+	// that hasn't been rendered (rendering can release these arrays).
+	public interface TriangleSink {
+		void vertex(int texture, float x, float y, float z, int rgba, float nx, float ny, float nz, float s, float t);
+	}
+
+	public final void exportTriangles(TriangleSink sink, int offsetX, int offsetY, int offsetZ) {
+		int[] original = new int[this.uniqueVertexCount];
+		for (int i = 0; i < this.vertexCount; i++) {
+			for (int oi = this.vertexOffsets[i]; oi < this.vertexOffsets[i + 1]; oi++) {
+				int unique = this.vertexLookup[oi] - 1;
+				if (unique == -1) {
+					break;
+				}
+				original[unique] = i;
+			}
+		}
+		float normalScale = 3.0F / (float) this.contrast;
+		float normalScaleZero = 3.0F / (float) (this.contrast + this.contrast / 2);
+		for (int i = 0; i < this.triangleCount; i++) {
+			short texture = this.triangleTextures[i];
+			int rgba = packColorToRGBA(this.triangleColors[i], texture, this.ambient, this.triangleAlpha[i]);
+			for (int corner = 0; corner < 3; corner++) {
+				int u = corner == 0 ? this.triangleVertexA[i] : corner == 1 ? this.triangleVertexB[i] : this.triangleVertexC[i];
+				int v = original[u];
+				short magnitude = this.normalMagnitude[u];
+				float scale = magnitude == 0 ? normalScaleZero : normalScale / (float) magnitude;
+				sink.vertex(texture, this.vertexX[v] + offsetX, this.vertexY[v] + offsetY, this.vertexZ[v] + offsetZ, rgba,
+						this.normalX[u] * scale, this.normalY[u] * scale, this.normalZ[u] * scale, this.vertexS[u], this.vertexT[u]);
+			}
+		}
+	}
+
 	@OriginalMember(owner = "client!td", name = "a", descriptor = "(ISIB)I")
 	public static int packColorToRGBA(@OriginalArg(0) int color, @OriginalArg(1) short texture, @OriginalArg(2) int lightness, @OriginalArg(3) byte alpha) {
 		@Pc(5) int rgb = Rasteriser.palette[ColorUtils.multiplyLightness2(color, lightness)];

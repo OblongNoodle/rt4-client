@@ -41,6 +41,8 @@ public final class FarTerrain {
 		int vertexCount;
 		final int[] zoneStart = new int[ZONES];
 		final int[] zoneCount = new int[ZONES];
+		// Set for scenery batches, drawn outside their region's loop
+		Region owner;
 
 		Batch(int texture, float textureScale) {
 			this.texture = texture;
@@ -62,13 +64,19 @@ public final class FarTerrain {
 		boolean meshed;
 		// Which zones have any triangles
 		final boolean[] zoneFilled = new boolean[ZONES];
+		// This frame's visible zones
+		final boolean[] zoneVisible = new boolean[ZONES];
+		boolean anyVisible;
+		// Ground height range (negative is up)
+		int minHeight = Integer.MAX_VALUE;
+		int maxHeight = Integer.MIN_VALUE;
 		// Meshed with all 8 neighbours decoded, so its edges are final
 		boolean meshComplete;
-		// FarScenery: build in progress, then the finished batch
+		// FarScenery: build in progress, then the finished batches (one per texture)
 		FarScenery.Build sceneryBuild;
-		Batch scenery;
+		ArrayList<Batch> scenery;
 		boolean sceneryDone;
-		// Rebuilt a few times while textures are still downloading
+		// Rebuilt a few times while models are still downloading
 		int sceneryAttempts;
 		long sceneryRetryAt;
 
@@ -97,9 +105,17 @@ public final class FarTerrain {
 		return GlobalConfig.FAR_TERRAIN_TILES > 0 && GlRenderer.enabled && !SceneGraph.dynamicMapRegion && client.gameState == 30;
 	}
 
-	// Extra distance the far clip plane needs
-	public static int extraViewDistance() {
+	// How far the camera's far clip plane has to reach for the far ground
+	public static int farClipDistance() {
 		return isEnabled() ? GlobalConfig.FAR_TERRAIN_TILES * 128 : 0;
+	}
+
+	// Set from any thread (plugin settings); the rebuild happens on the next
+	// frame on the render thread
+	private static volatile boolean resetRequested;
+
+	public static void requestRebuild() {
+		resetRequested = true;
 	}
 
 	private static Region region(int worldX, int worldY) {
@@ -147,6 +163,10 @@ public final class FarTerrain {
 					}
 				}
 			}
+		}
+		for (int h : r.heights) {
+			r.minHeight = Math.min(r.minHeight, h);
+			r.maxHeight = Math.max(r.maxHeight, h);
 		}
 		r.decoded = true;
 		return true;
@@ -389,7 +409,7 @@ public final class FarTerrain {
 			for (Batch batch : byTexture.values()) {
 				batch.zoneCount[zone] = batch.vertexCount - batch.zoneStart[zone];
 			}
-			r.zoneFilled[zone] = filled || r.scenery != null && r.scenery.zoneCount[zone] > 0;
+			r.zoneFilled[zone] = filled || sceneryInZone(r, zone);
 		}
 
 		r.batches.clear();
@@ -463,7 +483,13 @@ public final class FarTerrain {
 
 	// Loads or meshes at most one region per call (once per frame)
 	private static void update(int cameraWorldX, int cameraWorldY) {
-		int reach = (GlobalConfig.VIEW_DISTANCE >> 7) + GlobalConfig.FAR_TERRAIN_TILES;
+		if (resetRequested) {
+			// Settings that change the meshes: start over (GL objects are
+			// freed as the old batches are collected)
+			resetRequested = false;
+			regions.clear();
+		}
+		int reach = GlobalConfig.FAR_TERRAIN_TILES;
 		int minRx = (cameraWorldX - reach) >> 6;
 		int maxRx = (cameraWorldX + reach) >> 6;
 		int minRy = (cameraWorldY - reach) >> 6;
@@ -542,8 +568,8 @@ public final class FarTerrain {
 		FarScenery.Build build = r.sceneryBuild;
 		r.sceneryBuild = null;
 		r.sceneryDone = true;
-		if (build.missingTextures > 0 && ++r.sceneryAttempts < 8) {
-			// Asking for the textures started their downloads: build again
+		if (build.missingModels > 0 && ++r.sceneryAttempts < 8) {
+			// Asking for the models started their downloads: build again
 			// shortly, keeping this version on screen meanwhile
 			r.sceneryDone = false;
 			r.sceneryRetryAt = System.nanoTime() + 2000000000L;
@@ -551,21 +577,45 @@ public final class FarTerrain {
 		if (build.vertices == 0) {
 			return;
 		}
-		Batch batch = new Batch(-1, 128.0F);
-		batch.building = new Buffer(build.vertices * STRIDE);
-		for (int zone = 0; zone < ZONES; zone++) {
-			batch.zoneStart[zone] = batch.vertexCount;
-			Buffer zoneData = build.zones[zone];
-			if (zoneData != null) {
-				System.arraycopy(zoneData.data, 0, batch.building.data, batch.building.offset, zoneData.offset);
-				batch.building.offset += zoneData.offset;
-				batch.vertexCount += zoneData.offset / STRIDE;
-				r.zoneFilled[zone] = true;
+		ArrayList<Batch> batches = new ArrayList<>();
+		for (java.util.Map.Entry<Integer, Buffer[]> entry : build.textures.entrySet()) {
+			Buffer[] zones = entry.getValue();
+			int bytes = 0;
+			for (Buffer zoneData : zones) {
+				if (zoneData != null) {
+					bytes += zoneData.offset;
+				}
 			}
-			batch.zoneCount[zone] = batch.vertexCount - batch.zoneStart[zone];
+			Batch batch = new Batch(entry.getKey(), 1.0F);
+			batch.owner = r;
+			batch.building = new Buffer(bytes);
+			for (int zone = 0; zone < ZONES; zone++) {
+				batch.zoneStart[zone] = batch.vertexCount;
+				Buffer zoneData = zones[zone];
+				if (zoneData != null) {
+					System.arraycopy(zoneData.data, 0, batch.building.data, batch.building.offset, zoneData.offset);
+					batch.building.offset += zoneData.offset;
+					batch.vertexCount += zoneData.offset / STRIDE;
+					r.zoneFilled[zone] = true;
+				}
+				batch.zoneCount[zone] = batch.vertexCount - batch.zoneStart[zone];
+			}
+			upload(batch);
+			batches.add(batch);
 		}
-		upload(batch);
-		r.scenery = batch;
+		// The old batches' buffers are freed with them (GlVertexBufferObject.finalize)
+		r.scenery = batches;
+	}
+
+	private static boolean sceneryInZone(Region r, int zone) {
+		if (r.scenery != null) {
+			for (Batch batch : r.scenery) {
+				if (batch.zoneCount[zone] > 0) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private static boolean neighboursDecoded(Region r) {
@@ -580,7 +630,8 @@ public final class FarTerrain {
 		return true;
 	}
 
-	private static final boolean[] zoneVisible = new boolean[ZONES];
+	// Scenery batches to draw this frame, sorted so each texture is bound once
+	private static final ArrayList<Batch> sceneryDraws = new ArrayList<>();
 
 	// SceneGraph's scene draw, after the camera transform, before the ground.
 	// camX/camY are the camera's scene coordinates in fine units.
@@ -594,17 +645,19 @@ public final class FarTerrain {
 
 		GL2 gl = GlRenderer.gl;
 		float near = GlobalConfig.VIEW_DISTANCE * 0.9F;
-		float far = GlobalConfig.VIEW_DISTANCE + GlobalConfig.FAR_TERRAIN_TILES * 128;
+		float far = GlobalConfig.FAR_TERRAIN_TILES * 128;
+		sceneryDraws.clear();
+		readFrustum(gl);
 		for (Region r : regions.values()) {
+			r.anyVisible = false;
 			if (!r.meshed || r.missing) {
 				continue;
 			}
 			// Region base in scene coordinates (fine units)
 			int sceneBaseX = (r.baseX - Camera.originX) << 7;
 			int sceneBaseY = (r.baseY - Camera.originY) << 7;
-			boolean any = false;
 			for (int zone = 0; zone < ZONES; zone++) {
-				zoneVisible[zone] = false;
+				r.zoneVisible[zone] = false;
 				if (!r.zoneFilled[zone]) {
 					continue;
 				}
@@ -626,10 +679,14 @@ public final class FarTerrain {
 						continue;
 					}
 				}
-				zoneVisible[zone] = true;
-				any = true;
+				// Off screen (tall scenery reaches ~24 tiles above the ground)
+				if (!inFrustum(zx, r.minHeight - 3072, zy, zx + span, r.maxHeight + 64, zy + span)) {
+					continue;
+				}
+				r.zoneVisible[zone] = true;
+				r.anyVisible = true;
 			}
-			if (!any) {
+			if (!r.anyVisible) {
 				continue;
 			}
 			gl.glPushMatrix();
@@ -643,28 +700,101 @@ public final class FarTerrain {
 				}
 				GlRenderer.setDepthLayer(DEPTH_LAYER);
 				bind(gl, batch);
-				for (int zone = 0; zone < ZONES; zone++) {
-					if (zoneVisible[zone] && batch.zoneCount[zone] > 0) {
-						gl.glDrawArrays(GL2.GL_TRIANGLES, batch.zoneStart[zone], batch.zoneCount[zone]);
-					}
-				}
-			}
-			if (r.scenery != null && GlobalConfig.FAR_SCENERY) {
-				GlRenderer.setTextureId(-1);
-				MaterialManager.setMaterial(0, 0);
-				GlRenderer.setDepthLayer(DEPTH_LAYER);
-				bind(gl, r.scenery);
-				for (int zone = 0; zone < ZONES; zone++) {
-					if (zoneVisible[zone] && r.scenery.zoneCount[zone] > 0) {
-						gl.glDrawArrays(GL2.GL_TRIANGLES, r.scenery.zoneStart[zone], r.scenery.zoneCount[zone]);
-					}
-				}
+				draw(gl, batch, r.zoneVisible);
 			}
 			gl.glPopMatrix();
+			if (r.scenery != null && GlobalConfig.FAR_SCENERY) {
+				sceneryDraws.addAll(r.scenery);
+			}
 		}
+		// Scenery: texture by texture across all regions, so each texture is
+		// bound once. (It needs the texture cache to hold every texture in
+		// view at once, see GlobalConfig.HD_TEXTURE_CACHE.)
+		sceneryDraws.sort((x, y) -> Integer.compare(x.texture, y.texture));
+		int boundTexture = Integer.MIN_VALUE;
+		for (Batch batch : sceneryDraws) {
+			if (batch.texture != boundTexture) {
+				boundTexture = batch.texture;
+				if (batch.texture >= 0) {
+					Rasteriser.textureProvider.bindTexture(batch.texture);
+				} else {
+					GlRenderer.setTextureId(-1);
+					MaterialManager.setMaterial(0, 0);
+				}
+				GlRenderer.setDepthLayer(DEPTH_LAYER);
+			}
+			Region r = batch.owner;
+			gl.glPushMatrix();
+			gl.glTranslatef((r.baseX - Camera.originX) << 7, 0.0F, (r.baseY - Camera.originY) << 7);
+			bind(gl, batch);
+			draw(gl, batch, r.zoneVisible);
+			gl.glPopMatrix();
+		}
+		sceneryDraws.clear();
 		GlRenderer.setTextureId(-1);
 		MaterialManager.setMaterial(0, 0);
 		GlRenderer.resetTextureMatrix();
+	}
+
+	// Left, right, bottom and top planes of the view, in scene coordinates
+	private static final float[] frustum = new float[16];
+	private static final float[] modelview = new float[16];
+	private static final float[] projection = new float[16];
+
+	private static void readFrustum(GL2 gl) {
+		gl.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, modelview, 0);
+		gl.glGetFloatv(GL2.GL_PROJECTION_MATRIX, projection, 0);
+		// clip = projection * modelview (column-major); plane rows from it
+		float[] clip = new float[16];
+		for (int col = 0; col < 4; col++) {
+			for (int row = 0; row < 4; row++) {
+				float sum = 0.0F;
+				for (int k = 0; k < 4; k++) {
+					sum += projection[k * 4 + row] * modelview[col * 4 + k];
+				}
+				clip[col * 4 + row] = sum;
+			}
+		}
+		for (int plane = 0; plane < 4; plane++) {
+			int row = plane >> 1;
+			float sign = (plane & 1) == 0 ? 1.0F : -1.0F;
+			for (int col = 0; col < 4; col++) {
+				frustum[plane * 4 + col] = clip[col * 4 + 3] + sign * clip[col * 4 + row];
+			}
+		}
+	}
+
+	private static boolean inFrustum(float x0, float y0, float z0, float x1, float y1, float z1) {
+		for (int plane = 0; plane < 4; plane++) {
+			float a = frustum[plane * 4], b = frustum[plane * 4 + 1], c = frustum[plane * 4 + 2], d = frustum[plane * 4 + 3];
+			// The box corner furthest along the plane's normal
+			if (a * (a > 0 ? x1 : x0) + b * (b > 0 ? y1 : y0) + c * (c > 0 ? z1 : z0) + d < 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// Zones are stored in order, so runs of visible zones are one draw
+	private static void draw(GL2 gl, Batch batch, boolean[] visible) {
+		int start = 0;
+		int end = 0;
+		for (int zone = 0; zone < ZONES; zone++) {
+			int count = batch.zoneCount[zone];
+			if (count == 0 || !visible[zone]) {
+				continue;
+			}
+			if (batch.zoneStart[zone] != end) {
+				if (end > start) {
+					gl.glDrawArrays(GL2.GL_TRIANGLES, start, end - start);
+				}
+				start = batch.zoneStart[zone];
+			}
+			end = batch.zoneStart[zone] + count;
+		}
+		if (end > start) {
+			gl.glDrawArrays(GL2.GL_TRIANGLES, start, end - start);
+		}
 	}
 
 	private static void bind(GL2 gl, Batch batch) {

@@ -46,13 +46,20 @@ the 2009scape server's skipped movement tick at every boundary is eased out on
 the client (`MovementSmoother`). Diagnostics (`area_load_timing.log`,
 `motion_trace.log`) are off by default: `GlobalConfig.DIAGNOSTICS`.
 
-## Stage 3 - Extended draw distance (in progress)
+## Stage 3 - Extended draw distance (confirmed)
 
 - 3a (done): `FarTerrain` draws level-0 ground for `GlobalConfig.FAR_TERRAIN_TILES` (64) tiles beyond the view distance and the loaded 104x104 area. Decoded from the unencrypted map files like `SceneGraph.readTile`, underlay colours blended 11x11 like `buildScene`, overlay colours as `buildGlShapedTiles` (base colour through `getTexturedColor`, times the texture's real average colour from its pixels; overlays without a base colour aren't drawn). Meshed per 64x64 region (one per frame, cached), drawn in 8x8 zones at depth layer 301.5 behind the real ground; zones the real scene fully covers are skipped. Far clip plane extended by the same distance. Off in instances.
 - 3b (done): far ground textured like the real ground (per-texture batches; water/special materials stay flat average colours). `GlobalConfig.FAR_TERRAIN_TEXTURES`.
 - 3c (done): `FarScenery` - level-0 walls, centrepieces and roofs merged per region/zone, flat-shaded; face colour through `getTexturedColor` times the texture's real average (most HD model textures are greyscale detail maps). Centrepieces under `FAR_SCENERY_MIN_HEIGHT` (96) skipped. Rebuilt up to 8x while textures download. Keys: every candidate (server-sent, bundled, none) verified with `Js5.checkKey` - the server sends wrong keys for some regions. Measured: 48 fps / 1.0 GB GPU zoomed out at Falador (was 34 fps / 1.3 GB before the clutter cut).
-- 3d: seam smoothing, performance, draw distance setting.
-- Known: the BasicInputQOL plugin calls camera code from the AWT thread; during a background area build it can read a half-swapped scene and throw (harmless, event dropped). Make `API.UpdateCameraYaw` safe.
+- 3d (done):
+  - Far scenery is built like the real scene builds it: a `GlModel` per loc (same raw model, rotation and lighting as `LocType.getStaticEntity`), exported with `GlModel.exportTriangles` into per-texture, per-zone meshes. Textured and smooth-shaded like nearby scenery; diagonal centrepieces (shape 11) and models still downloading (rebuilt up to 8x) now appear.
+  - Performance: frustum culling per 8x8 zone (`readFrustum`/`inFrustum`), runs of visible zones merged into one draw, scenery drawn texture by texture across all regions. HD texture cache raised 200 -> 1000 (`GlobalConfig.HD_TEXTURE_CACHE`): the far view uses ~180 scenery textures, and with the nearby scene that overflowed 200, so textures evicted each other and were regenerated every frame (37 -> 65 fps).
+  - `FAR_SCENERY_SIMPLIFY` (vertex grid, default 0 = full detail): 32 halved the cost but erased fence rails and dead-tree branches.
+  - In-game settings: the FarView plugin (KondoKit panel, or `::farview <tiles>`, `::farscenery`, `::fartextures`, `::farsimplify <grid>`) via `API.SetFarView`. `FAR_TERRAIN_TILES` is now the total distance from the camera (default 200).
+  - Plugin camera calls (`API.SetCameraYaw` etc.) made from other threads are queued for the game thread (fixes the BasicInputQOL crash during a background build).
+  - The normal area loader uses the verified keys from `XteaKeyStore` too (the server's wrong keys threw in `prepareMapFiles`); a region nothing decrypts loads without scenery.
+  - Camera clamp: `SceneGraph.setPlainTile` clamped the camera into the loaded 104x104 area. Zoomed far out near an area edge the camera is outside it, so the view stopped following the player and overheads (projected from the real camera) drifted off until the next area swap. In HD the scene is now drawn from the real camera; only the camera tile used to index per-tile arrays is clamped.
+  - Measured: ~65 fps, ~325 MB GPU zoomed out.
 
 ## Stage 4 - Color banding (pending)
 
