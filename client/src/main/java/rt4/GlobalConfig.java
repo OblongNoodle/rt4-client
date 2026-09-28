@@ -137,6 +137,12 @@ public class GlobalConfig {
 	// needs PIXEL_LIGHTING. ::smoothglow toggles it.
 	public static boolean SMOOTH_LIGHT_GLOW = true;
 
+	// Not part of the original client. Colour grade over the 3D view and a
+	// matching light balance (ColorGrading); needs PIXEL_LIGHTING. Strength
+	// 0-100. ::grade toggles, ::grade <0-100> sets the strength.
+	public static boolean COLOR_GRADING = true;
+	public static int COLOR_GRADING_STRENGTH = 100;
+
 	// Not part of the original client. Sun shadows (needs PIXEL_LIGHTING):
 	// map resolution, and how far around the player (tiles, half-width) they
 	// reach. ::shadows toggles them in game. Off by default: with this game's

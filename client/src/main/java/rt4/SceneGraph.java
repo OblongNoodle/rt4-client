@@ -3112,7 +3112,9 @@ public class SceneGraph {
 			} else {
 				// Not part of the original client: ground beyond the loaded area
 				if (!PixelLighting.shadowPass) {
+					FrameProfiler.begin(FrameProfiler.FAR);
 					FarTerrain.render(camX, camY);
+					FrameProfiler.end(FrameProfiler.FAR);
 				}
 				x = startLevel;
 				while (true) {

@@ -102,6 +102,9 @@ public class Cheat {
 	public static final JagString PIXELLIGHT = JagString.parse("::pixellight");
 	public static final JagString SHADOWS = JagString.parse("::shadows");
 	public static final JagString SMOOTHGLOW = JagString.parse("::smoothglow");
+	public static final JagString GRADE = JagString.parse("::grade");
+	public static final JagString PROFILE = JagString.parse("::profile");
+	public static final JagString GRADE_STRENGTH = JagString.parse("::grade ");
 	public static final JagString SHADOWDEBUG = JagString.parse("::shadowdebug");
 
 	@OriginalMember(owner = "client!en", name = "a", descriptor = "(IIIB)V")
@@ -185,6 +188,18 @@ public class Cheat {
 			if (command.equalsIgnoreCase(SMOOTHGLOW)) {
 				GlobalConfig.SMOOTH_LIGHT_GLOW = !GlobalConfig.SMOOTH_LIGHT_GLOW;
 				Chat.add(null, 0, JagString.parse(GlobalConfig.SMOOTH_LIGHT_GLOW ? "Smooth light glow ON" : "Smooth light glow OFF"));
+			}
+			if (command.equalsIgnoreCase(GRADE)) {
+				GlobalConfig.COLOR_GRADING = !GlobalConfig.COLOR_GRADING;
+				Chat.add(null, 0, JagString.parse(GlobalConfig.COLOR_GRADING ? "Colour grade ON" : "Colour grade OFF"));
+			} else if (command.startsWith(GRADE_STRENGTH)) {
+				GlobalConfig.COLOR_GRADING_STRENGTH = Math.max(0, Math.min(100, command.substring(8).trim().parseInt()));
+				GlobalConfig.COLOR_GRADING = true;
+				Chat.add(null, 0, JagString.concatenate(new JagString[]{JagString.parse("Colour grade strength "), JagString.parseInt(GlobalConfig.COLOR_GRADING_STRENGTH)}));
+			}
+			if (command.equalsIgnoreCase(PROFILE)) {
+				FrameProfiler.enabled = !FrameProfiler.enabled;
+				Chat.add(null, 0, JagString.parse(FrameProfiler.enabled ? "Frame profiler ON (client log)" : "Frame profiler OFF"));
 			}
 			// Not part of the original client: compare shadows
 			if (command.equalsIgnoreCase(SHADOWS)) {

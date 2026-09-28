@@ -312,12 +312,18 @@ public final class ScriptRunner {
 			GlRenderer.clearColorAndDepthBuffers(shakeOffset);
 			MaterialManager.setCameraTransform(Camera.cameraPitch, Camera.renderY, Camera.renderZ, Camera.renderX, Camera.cameraYaw);
 			GlRenderer.animationClock = client.loop;
+			FrameProfiler.frame();
+			FrameProfiler.begin(FrameProfiler.SCENE);
 			final byte roofCycleFinal = roofCycle;
 			PixelLighting.renderShadowMap(Camera.renderX, Camera.renderZ, Camera.renderY, PlayerList.self.xFine, SceneGraph.getTileHeight(Player.plane, PlayerList.self.xFine, PlayerList.self.yFine), PlayerList.self.yFine,
 				() -> SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, roofVisibility, roofGroupMaxHeight, roofGroupMinX, roofGroupMaxX, roofGroupMaxZ, roofGroupMinZ, Player.plane + 1, roofCycleFinal, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7));
 			PixelLighting.beginScene();
 			SceneGraph.setPlainTile(Camera.renderX, Camera.renderZ, Camera.renderY, Camera.cameraPitch, Camera.cameraYaw, roofVisibility, roofGroupMaxHeight, roofGroupMinX, roofGroupMaxX, roofGroupMaxZ, roofGroupMinZ, Player.plane + 1, roofCycle, PlayerList.self.xFine >> 7, PlayerList.self.yFine >> 7);
 			PixelLighting.endScene();
+			FrameProfiler.end(FrameProfiler.SCENE);
+			FrameProfiler.begin(FrameProfiler.GRADE);
+			ColorGrading.apply();
+			FrameProfiler.end(FrameProfiler.GRADE);
 			glSceneNeedsRender = true;
 			LightingManager.resetActiveLights();
 			MaterialManager.setCameraTransform(0, 0, 0, 0, 0);

@@ -338,6 +338,8 @@ public final class GlRenderer {
 	private static void initGlState() {
 		// Not part of the original client: fresh context, fresh shader state
 		PixelLighting.reset();
+		ColorGrading.reset();
+		FrameProfiler.reset();
 		orthographicActive = false;
 		multisampleEnabled = true;
 		gl.glDisable(GL2.GL_TEXTURE_2D);

@@ -61,6 +61,8 @@ public final class PixelLighting {
 		"uniform bool uLocal2;",
 		"uniform bool uLocal3;",
 		"uniform bool uShadows;",
+		"uniform float uAmbientScale;",
+		"uniform float uSunScale;",
 		"uniform sampler2D uShadowMap;",
 		"uniform float uShadowTexel;",
 		"uniform bool uShadowDebug;",
@@ -98,9 +100,10 @@ public final class PixelLighting {
 		"	vec4 colour = gl_Color;",
 		"	if (uLighting) {",
 		"		vec3 n = vNormalLength > 0.0 ? normalize(vNormal) * vNormalLength : vec3(0.0);",
-		"		vec3 light = gl_LightModel.ambient.rgb;",
+		"		vec3 light = gl_LightModel.ambient.rgb * uAmbientScale;",
 		"		vec3 sun = directional(gl_LightSource[0], n);",
 		"		if (uShadows && dot(sun, sun) > 0.0) sun *= sunVisibility();",
+		"		sun *= uSunScale;",
 		"		light += sun;",
 		"		light += directional(gl_LightSource[1], n);",
 		"		if (uLocal0) light += point(gl_LightSource[4], n);",
@@ -172,6 +175,7 @@ public final class PixelLighting {
 	private static int uTexture, uTextured, uLighting, uRgbMode, uAlphaMode, uFog;
 	private static final int[] uLocal = new int[4];
 	private static int uShadows, uShadowMap, uShadowMatrix, uShadowTexel, uShadowDebug;
+	private static int uAmbientScale, uSunScale;
 	// ::shadowdebug: red = in shadow, blue = outside the shadow map
 	public static boolean shadowDebug;
 
@@ -658,6 +662,10 @@ public final class PixelLighting {
 			gl.glUniform1i(uShadowMap, SHADOW_UNIT);
 			gl.glUniform1i(uShadows, shadowsReady ? 1 : 0);
 			gl.glUniform1i(uShadowDebug, shadowDebug ? 1 : 0);
+			// Light balance of the colour grade (ColorGrading)
+			float grade = ColorGrading.strength();
+			gl.glUniform1f(uAmbientScale, 1.0F + (ColorGrading.AMBIENT_AT_FULL - 1.0F) * grade);
+			gl.glUniform1f(uSunScale, 1.0F + (ColorGrading.SUN_AT_FULL - 1.0F) * grade);
 			if (shadowsReady) {
 				gl.glUniformMatrix4fv(uShadowMatrix, 1, false, shadowMatrix, 0);
 				gl.glUniform1f(uShadowTexel, 1.0F / shadowSize);
@@ -704,6 +712,8 @@ public final class PixelLighting {
 			uShadowMatrix = gl.glGetUniformLocation(p, "uShadowMatrix");
 			uShadowTexel = gl.glGetUniformLocation(p, "uShadowTexel");
 			uShadowDebug = gl.glGetUniformLocation(p, "uShadowDebug");
+			uAmbientScale = gl.glGetUniformLocation(p, "uAmbientScale");
+			uSunScale = gl.glGetUniformLocation(p, "uSunScale");
 			program = p;
 			int gp = link(gl, compile(gl, GL2.GL_VERTEX_SHADER, GLOW_VERTEX), compile(gl, GL2.GL_FRAGMENT_SHADER, GLOW_FRAGMENT));
 			uGlowLightPos = gl.glGetUniformLocation(gp, "uLightPos");
@@ -719,6 +729,11 @@ public final class PixelLighting {
 			System.err.println("[PixelLighting] disabled: " + e.getMessage());
 			return false;
 		}
+	}
+
+	// For other effects (ColorGrading)
+	static int buildProgram(GL2 gl, String vertex, String fragment) {
+		return link(gl, compile(gl, GL2.GL_VERTEX_SHADER, vertex), compile(gl, GL2.GL_FRAGMENT_SHADER, fragment));
 	}
 
 	private static int link(GL2 gl, int vs, int fs) {
