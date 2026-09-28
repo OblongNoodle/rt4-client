@@ -101,6 +101,7 @@ public class Cheat {
 	public static final JagString RELOADPLUGINS = JagString.parse("::reloadplugins");
 	public static final JagString PIXELLIGHT = JagString.parse("::pixellight");
 	public static final JagString SHADOWS = JagString.parse("::shadows");
+	public static final JagString SMOOTHGLOW = JagString.parse("::smoothglow");
 	public static final JagString SHADOWDEBUG = JagString.parse("::shadowdebug");
 
 	@OriginalMember(owner = "client!en", name = "a", descriptor = "(IIIB)V")
@@ -180,6 +181,10 @@ public class Cheat {
 			if (command.equalsIgnoreCase(SHADOWDEBUG)) {
 				PixelLighting.shadowDebug = !PixelLighting.shadowDebug;
 				Chat.add(null, 0, JagString.parse(PixelLighting.shadowDebug ? "Shadow debug ON" : "Shadow debug OFF"));
+			}
+			if (command.equalsIgnoreCase(SMOOTHGLOW)) {
+				GlobalConfig.SMOOTH_LIGHT_GLOW = !GlobalConfig.SMOOTH_LIGHT_GLOW;
+				Chat.add(null, 0, JagString.parse(GlobalConfig.SMOOTH_LIGHT_GLOW ? "Smooth light glow ON" : "Smooth light glow OFF"));
 			}
 			// Not part of the original client: compare shadows
 			if (command.equalsIgnoreCase(SHADOWS)) {

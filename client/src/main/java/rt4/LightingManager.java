@@ -410,6 +410,8 @@ public class LightingManager {
 		gl.glFogfv(GL2.GL_FOG_COLOR, new float[]{0.0F, 0.0F, 0.0F, 0.0F}, 0);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_CONSTANT);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_ALPHA);
+		// Not part of the original client: per-pixel falloff (PixelLighting)
+		boolean smooth = PixelLighting.beginLightMeshes();
 		nextLight:
 		for (@Pc(56) int i = 0; i < lightCount; i++) {
 			@Pc(63) Light light = lights[i];
@@ -446,12 +448,18 @@ public class LightingManager {
 						if (effectiveLevel < 0 || tile != null && tile.visible) {
 							GlRenderer.setDepthLayer(201.5F - (float) light.level * 50.0F - 1.5F);
 							gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, new float[]{0.0F, 0.0F, 0.0F, light.alpha}, 0);
+							if (smooth) {
+								PixelLighting.setLightMeshLight(light);
+							}
 							light.mesh.draw();
 							continue nextLight;
 						}
 					}
 				}
 			}
+		}
+		if (smooth) {
+			PixelLighting.endLightMeshes();
 		}
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_SRC0_RGB, GL2.GL_TEXTURE);
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_OPERAND0_RGB, GL2.GL_SRC_COLOR);

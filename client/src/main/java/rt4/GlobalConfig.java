@@ -132,6 +132,11 @@ public class GlobalConfig {
 	// (PixelLighting); ::pixellight toggles it in game.
 	public static boolean PIXEL_LIGHTING = true;
 
+	// Not part of the original client. Local lights' glow on the ground
+	// worked out per pixel (smooth circles instead of tile-grid diamonds);
+	// needs PIXEL_LIGHTING. ::smoothglow toggles it.
+	public static boolean SMOOTH_LIGHT_GLOW = true;
+
 	// Not part of the original client. Sun shadows (needs PIXEL_LIGHTING):
 	// map resolution, and how far around the player (tiles, half-width) they
 	// reach. ::shadows toggles them in game. Off by default: with this game's

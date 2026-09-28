@@ -38,6 +38,12 @@ public final class LightMesh {
 	@OriginalMember(owner = "client!fj", name = "i", descriptor = "[B")
 	private byte[] colorB;
 
+	// Not part of the original client: how directly each vertex faces the
+	// light (0-255), in the vertex colour's alpha, which the fixed-function
+	// pass ignores. PixelLighting's light-mesh shader combines it with the
+	// distance falloff per pixel.
+	private byte[] facing;
+
 	@OriginalMember(owner = "client!fj", name = "j", descriptor = "I")
 	public int indexCapacity;
 
@@ -106,6 +112,7 @@ public final class LightMesh {
 		this.colorR[this.vertexCount] = (byte) r;
 		this.colorG[this.vertexCount] = (byte) g;
 		this.colorB[this.vertexCount] = (byte) b;
+		this.facing[this.vertexCount] = (byte) Math.min(255, (int) (dot * 255.0F + 0.5F));
 		this.vertexX[this.vertexCount] = x;
 		this.vertexY[this.vertexCount] = y;
 		this.vertexZ[this.vertexCount] = z;
@@ -123,7 +130,7 @@ public final class LightMesh {
 				vtxBuf.p1(this.colorR[i]);
 				vtxBuf.p1(this.colorG[i]);
 				vtxBuf.p1(this.colorB[i]);
-				vtxBuf.p1(255);
+				vtxBuf.p1(this.facing[i]);
 				vtxBuf.pFloat((float) this.vertexX[i]);
 				vtxBuf.pFloat((float) this.vertexY[i]);
 				vtxBuf.pFloat((float) this.vertexZ[i]);
@@ -136,7 +143,7 @@ public final class LightMesh {
 				vtxBuf.p1(this.colorR[i]);
 				vtxBuf.p1(this.colorG[i]);
 				vtxBuf.p1(this.colorB[i]);
-				vtxBuf.p1(255);
+				vtxBuf.p1(this.facing[i]);
 				vtxBuf.gFloat((float) this.vertexX[i]);
 				vtxBuf.gFloat((float) this.vertexY[i]);
 				vtxBuf.gFloat((float) this.vertexZ[i]);
@@ -166,6 +173,7 @@ public final class LightMesh {
 		this.colorR = null;
 		this.colorG = null;
 		this.colorB = null;
+		this.facing = null;
 		this.indices = null;
 		this.vertexCache = null;
 	}
@@ -179,6 +187,7 @@ public final class LightMesh {
 		this.colorR = new byte[this.vertexCapacity];
 		this.colorG = new byte[this.vertexCapacity];
 		this.colorB = new byte[this.vertexCapacity];
+		this.facing = new byte[this.vertexCapacity];
 		this.vertexCache = new HashTable(IntUtils.clp2(this.vertexCapacity));
 	}
 

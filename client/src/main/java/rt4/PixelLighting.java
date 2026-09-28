@@ -130,6 +130,44 @@ public final class PixelLighting {
 		"}");
 
 	private static int program;
+
+	// Light meshes (LightingManager.renderLightMeshes): the glow local lights
+	// add to the ground. The original works the falloff out per tile corner,
+	// which shows the tile grid as diamond-shaped glows; this works it out per
+	// pixel (same formula), keeping the per-corner facing term (LightMesh).
+	private static final String GLOW_VERTEX = String.join("\n",
+		"#version 120",
+		"varying vec3 vWorld;",
+		"varying float vFacing;",
+		"varying float vFogDepth;",
+		"void main() {",
+		"	vWorld = gl_Vertex.xyz;",
+		"	vFacing = gl_Color.a;",
+		"	vec4 eye = gl_ModelViewMatrix * gl_Vertex;",
+		"	vFogDepth = abs(eye.z);",
+		"	gl_Position = gl_ProjectionMatrix * eye;",
+		"}");
+
+	private static final String GLOW_FRAGMENT = String.join("\n",
+		"#version 120",
+		"uniform vec3 uLightPos;",
+		"uniform float uRange;",
+		"uniform vec3 uLightColour;",
+		"uniform bool uFog;",
+		"varying vec3 vWorld;",
+		"varying float vFacing;",
+		"varying float vFogDepth;",
+		"void main() {",
+		"	float a = distance(vWorld, uLightPos) / uRange;",
+		"	float falloff = max(1.0 - a * a, 0.0);",
+		"	float intensity = min(vFacing * falloff * 2.0, 1.0);",
+		"	vec3 glow = uLightColour * intensity;",
+		"	if (uFog) glow *= clamp((gl_Fog.end - vFogDepth) * gl_Fog.scale, 0.0, 1.0);",
+		"	gl_FragColor = vec4(glow, 1.0);",
+		"}");
+
+	private static int glowProgram;
+	private static int uGlowLightPos, uGlowRange, uGlowLightColour, uGlowFog;
 	private static boolean failed;
 	private static int uTexture, uTextured, uLighting, uRgbMode, uAlphaMode, uFog;
 	private static final int[] uLocal = new int[4];
@@ -582,6 +620,7 @@ public final class PixelLighting {
 	// GL context (re)created: the old program is gone with it
 	public static void reset() {
 		program = 0;
+		glowProgram = 0;
 		failed = false;
 		shadowTexture = 0;
 		shadowFramebuffer = 0;
@@ -666,6 +705,12 @@ public final class PixelLighting {
 			uShadowTexel = gl.glGetUniformLocation(p, "uShadowTexel");
 			uShadowDebug = gl.glGetUniformLocation(p, "uShadowDebug");
 			program = p;
+			int gp = link(gl, compile(gl, GL2.GL_VERTEX_SHADER, GLOW_VERTEX), compile(gl, GL2.GL_FRAGMENT_SHADER, GLOW_FRAGMENT));
+			uGlowLightPos = gl.glGetUniformLocation(gp, "uLightPos");
+			uGlowRange = gl.glGetUniformLocation(gp, "uRange");
+			uGlowLightColour = gl.glGetUniformLocation(gp, "uLightColour");
+			uGlowFog = gl.glGetUniformLocation(gp, "uFog");
+			glowProgram = gp;
 			System.out.println("[PixelLighting] shader ready");
 			return true;
 		} catch (RuntimeException e) {
@@ -674,6 +719,47 @@ public final class PixelLighting {
 			System.err.println("[PixelLighting] disabled: " + e.getMessage());
 			return false;
 		}
+	}
+
+	private static int link(GL2 gl, int vs, int fs) {
+		int p = gl.glCreateProgram();
+		gl.glAttachShader(p, vs);
+		gl.glAttachShader(p, fs);
+		gl.glLinkProgram(p);
+		int[] status = new int[1];
+		gl.glGetProgramiv(p, GL2.GL_LINK_STATUS, status, 0);
+		if (status[0] == 0) {
+			throw new IllegalStateException("link failed: " + programLog(gl, p));
+		}
+		return p;
+	}
+
+	// --- light meshes ---
+
+	// True if the light meshes are drawn with the per-pixel glow program;
+	// the caller then passes each light to setLightMeshLight and finishes
+	// with endLightMeshes
+	public static boolean beginLightMeshes() {
+		if (!GlobalConfig.PIXEL_LIGHTING || !GlobalConfig.SMOOTH_LIGHT_GLOW || !ensureProgram() || glowProgram == 0) {
+			return false;
+		}
+		GL2 gl = GlRenderer.gl;
+		gl.glUseProgram(glowProgram);
+		gl.glUniform1i(uGlowFog, fog ? 1 : 0);
+		return true;
+	}
+
+	public static void setLightMeshLight(Light light) {
+		GL2 gl = GlRenderer.gl;
+		gl.glUniform3f(uGlowLightPos, light.x, light.y, light.z);
+		gl.glUniform1f(uGlowRange, (light.radius << 7) + 64);
+		int c = light.color;
+		float a = Math.max(0.0F, Math.min(light.alpha, 1.0F));
+		gl.glUniform3f(uGlowLightColour, (c >> 16 & 0xFF) * a / 255.0F, (c >> 8 & 0xFF) * a / 255.0F, (c & 0xFF) * a / 255.0F);
+	}
+
+	public static void endLightMeshes() {
+		GlRenderer.gl.glUseProgram(active ? program : 0);
 	}
 
 	private static int compile(GL2 gl, int type, String source) {
