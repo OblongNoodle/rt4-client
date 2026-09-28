@@ -44,4 +44,8 @@ public final class Scenery {
 
 	@OriginalMember(owner = "client!ec", name = "A", descriptor = "J")
 	public long key = 0L;
+
+	// Not part of the original client: added for one frame (players, NPCs,
+	// projectiles...), see PixelLighting
+	public boolean temporary;
 }

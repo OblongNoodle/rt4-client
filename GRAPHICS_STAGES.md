@@ -61,8 +61,11 @@ the client (`MovementSmoother`). Diagnostics (`area_load_timing.log`,
   - Camera clamp: `SceneGraph.setPlainTile` clamped the camera into the loaded 104x104 area. Zoomed far out near an area edge the camera is outside it, so the view stopped following the player and overheads (projected from the real camera) drifted off until the next area swap. In HD the scene is now drawn from the real camera; only the camera tile used to index per-tile arrays is clamped.
   - Measured: ~65 fps, ~325 MB GPU zoomed out.
 
-## Stage 4 - Color banding (pending)
+## Stage 4 - Color banding (skipped)
 
-## Stage 5 - Shader renderer prototype (pending)
+With high-detail lighting the HD renderer already lights in floating point (GL lighting per vertex, `GlModel`/`GlTile`); the 7-bit lightness baking only runs with it off. No visible banding in game; the remaining 16-bit HSL is how the assets are authored.
 
-- Per-pixel lighting for world models using existing `LightingManager` lights.
+## Stage 5 - Shader renderer (in progress)
+
+- Step 1 (done): `PixelLighting` - a GLSL program reproducing the fixed-function scene lighting per pixel (vertex colour material, sun + negative back light, 4 local point lights, modulate/replace texturing, linear fog), reading the existing GL light state. Active only during the scene draw and only for state it reproduces; materials (water, specular...), the light-mesh pass and baked shadows stay fixed function. `GlobalConfig.PIXEL_LIGHTING`, `::pixellight`. Visually subtle (the old lighting was already smooth almost everywhere).
+- Step 2 (built, off by default): sun shadow maps (`GlobalConfig.SHADOWS`, `::shadows`, `::shadowdebug`). The scene is drawn from the sun into a 4096 depth map: scenery into a static map redrawn only after moving 8 tiles, an area/sun change or every 5s; each frame it is blitted and players/NPCs/projectiles (`SceneGraph.scenery`, `Scenery.temporary`) are added (~0.8 ms). Depth compared in the shader, 3x3 PCF (the hardware compare mode read raw depth on this driver). Off because in this game's lighting (strong ambient, weak sun) the shadows come out fainter than the baked scenery shadows they replace, and the per-pixel map lookups cost GPU time (30-50 fps vs smoother without). Kept for experiments.

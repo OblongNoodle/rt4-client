@@ -51,6 +51,11 @@ public class LightingManager {
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIIII)V")
 	public static void updateLightsForWallPiece(@OriginalArg(0) int wallFlags, @OriginalArg(1) int cameraX, @OriginalArg(2) int cameraY, @OriginalArg(3) int cameraZ, @OriginalArg(4) int plane, @OriginalArg(5) int tileX, @OriginalArg(6) int tileY) {
+		// Not part of the original client: light positions are set in the
+		// camera's eye space; the shadow pass (PixelLighting) doesn't light
+		if (PixelLighting.shadowPass) {
+			return;
+		}
 		if (!Preferences.highDetailLighting) {
 			return;
 		}
@@ -108,6 +113,9 @@ public class LightingManager {
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIIIII)V")
 	public static void updateLightsForRegion(@OriginalArg(0) int cameraX, @OriginalArg(1) int cameraY, @OriginalArg(2) int cameraZ, @OriginalArg(3) int plane, @OriginalArg(4) int startTileX, @OriginalArg(5) int startTileY, @OriginalArg(6) int endTileX, @OriginalArg(7) int endTileY) {
+		if (PixelLighting.shadowPass) {
+			return;
+		}
 		if (!Preferences.highDetailLighting || cachedPlane == plane && cachedStartTileX == startTileX && cachedStartTileY == startTileY && cachedEndTileX == endTileX && cachedEndTileY == endTileY) {
 			return;
 		}
@@ -194,6 +202,9 @@ public class LightingManager {
 
 	@OriginalMember(owner = "client!jf", name = "a", descriptor = "(IIIIII)V")
 	public static void updateLightsForTile(@OriginalArg(0) int cameraX, @OriginalArg(1) int cameraY, @OriginalArg(2) int cameraZ, @OriginalArg(3) int plane, @OriginalArg(4) int tileX, @OriginalArg(5) int tileY) {
+		if (PixelLighting.shadowPass) {
+			return;
+		}
 		if (!Preferences.highDetailLighting || cachedPlane == plane && cachedStartTileX == tileX && cachedStartTileY == tileY && cachedEndTileX == tileX && cachedEndTileY == tileY) {
 			return;
 		}

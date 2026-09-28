@@ -252,6 +252,10 @@ public final class GlRenderer {
 
 	@OriginalMember(owner = "client!tf", name = "a", descriptor = "(FF)V")
 	public static void setDepthBias(@OriginalArg(0) float distance, @OriginalArg(1) float bias) {
+		// Not part of the original client: the shadow pass has its own projection
+		if (PixelLighting.shadowPass) {
+			return;
+		}
 		if (orthographicActive || distance == projectionDistance && bias == depthBias) {
 			return;
 		}

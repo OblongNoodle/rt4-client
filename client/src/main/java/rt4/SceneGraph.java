@@ -1401,6 +1401,7 @@ public class SceneGraph {
 			}
 		}
 		if (temporary) {
+			s.temporary = true;
 			scenery[sceneryLen++] = s;
 		}
 		return true;
@@ -1783,7 +1784,11 @@ public class SceneGraph {
 														if (GlRenderer.enabled) {
 															LightingManager.updateLightsForTile(cameraX, cameraZ, cameraY, drawLevel, tileX, tileY);
 														}
-														var25.entity.render(var25.orientation, sinPitch, cosPitch, sinYaw, cosYaw, var25.xFine - cameraX, var25.zFine - cameraZ, var25.yFine - cameraY, var25.key, drawLevel, null);
+														// Not part of the original client: moving entities are
+														// added to the shadow map per frame (PixelLighting)
+														if (!PixelLighting.shadowPass || !var25.temporary) {
+															var25.entity.render(var25.orientation, sinPitch, cosPitch, sinYaw, cosYaw, var25.xFine - cameraX, var25.zFine - cameraZ, var25.yFine - cameraY, var25.key, drawLevel, null);
+														}
 													}
 												}
 												if (GlRenderer.enabled) {
@@ -2131,7 +2136,9 @@ public class SceneGraph {
 															LightingManager.updateLightsForRegion(cameraX, cameraZ, cameraY, drawLevel, selected.xMin, selected.yMin, selected.xMax, selected.yMax);
 														}
 													}
-													selected.entity.render(selected.orientation, sinPitch, cosPitch, sinYaw, cosYaw, selected.xFine - cameraX, selected.zFine - cameraZ, selected.yFine - cameraY, selected.key, drawLevel, null);
+													if (!PixelLighting.shadowPass || !selected.temporary) {
+														selected.entity.render(selected.orientation, sinPitch, cosPitch, sinYaw, cosYaw, selected.xFine - cameraX, selected.zFine - cameraZ, selected.yFine - cameraY, selected.key, drawLevel, null);
+													}
 												}
 												for (flags = selected.xMin; flags <= selected.xMax; flags++) {
 													for (distY = selected.yMin; distY <= selected.yMax; distY++) {
@@ -2989,7 +2996,9 @@ public class SceneGraph {
 						highZ = underwaterTileHeights[0][tx][ty] + 128 - cameraZ;
 					}
 					@Pc(201) int lowZ = surfaceTileHeights[3][tx][ty] - cameraZ - 1000;
-					visibilityPoints[vx][vy] = projectToScreen(dx, lowZ, highZ, dy, viewDistance);
+					// Not part of the original client: the shadow pass
+					// (PixelLighting) draws everything near, seen or not
+					visibilityPoints[vx][vy] = PixelLighting.shadowPass ? PixelLighting.tileInShadowArea(tx, ty) : projectToScreen(dx, lowZ, highZ, dy, viewDistance);
 				} else {
 					visibilityPoints[vx][vy] = false;
 				}
@@ -3102,13 +3111,17 @@ public class SceneGraph {
 				UnderwaterMaterialRenderer.disableSecondaryTexCoordArray();
 			} else {
 				// Not part of the original client: ground beyond the loaded area
-				FarTerrain.render(camX, camY);
+				if (!PixelLighting.shadowPass) {
+					FarTerrain.render(camX, camY);
+				}
 				x = startLevel;
 				while (true) {
 					if (x >= levels) {
-						PixelLighting.suspend();
-						LightingManager.renderLightMeshes(cameraTileX, cameraTileY, tiles);
-						PixelLighting.resume();
+						if (!PixelLighting.shadowPass) {
+							PixelLighting.suspend();
+							LightingManager.renderLightMeshes(cameraTileX, cameraTileY, tiles);
+							PixelLighting.resume();
+						}
 						break;
 					}
 					for (y = 0; y < underwaterHdTiles[x].length; y++) {
@@ -3119,7 +3132,9 @@ public class SceneGraph {
 						}
 						hdTile.renderTiles(tiles, depth, false);
 					}
-					if (x == 0 && Preferences.sceneryShadowsType > 0) {
+					// Not part of the original client: real shadows replace
+					// the baked ones (PixelLighting)
+					if (x == 0 && Preferences.sceneryShadowsType > 0 && !PixelLighting.shadowPass && !PixelLighting.shadowsActive()) {
 						GlRenderer.setDepthLayer(101.5F);
 						PixelLighting.suspend();
 						ShadowManager.renderShadowMapGL(cameraTileX, cameraTileY, visibility, camZ, visibleTiles, tileHeights[0]);

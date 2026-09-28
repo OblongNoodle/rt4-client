@@ -132,6 +132,23 @@ public class GlobalConfig {
 	// (PixelLighting); ::pixellight toggles it in game.
 	public static boolean PIXEL_LIGHTING = true;
 
+	// Not part of the original client. Sun shadows (needs PIXEL_LIGHTING):
+	// map resolution, and how far around the player (tiles, half-width) they
+	// reach. ::shadows toggles them in game. Off by default: with this game's
+	// strong ambient light only the weak sun term can be shadowed, so they
+	// read fainter than the baked scenery shadows they replace, and cost GPU
+	// time.
+	public static boolean SHADOWS = false;
+	public static int SHADOW_MAP_SIZE = 4096;
+	public static int SHADOW_DISTANCE = 40;
+	// Models shorter than this (fine units, 128 = 1 tile) cast no shadow
+	public static int SHADOW_MIN_HEIGHT = 40;
+	// Scenery shadows are drawn once and reused until the player is this many
+	// tiles from where they were centred, or this long has passed (for doors
+	// and other scenery changes); moving entities are added every frame
+	public static int SHADOW_REANCHOR_TILES = 8;
+	public static int SHADOW_REFRESH_MS = 5000;
+
 	// Not part of the original client. Writes area load timings
 	// (area_load_timing.log) and frame-by-frame captures around area changes
 	// (motion_trace.log, Insert marks a moment) to the client's home folder.

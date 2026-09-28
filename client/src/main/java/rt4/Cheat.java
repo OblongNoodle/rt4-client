@@ -100,6 +100,8 @@ public class Cheat {
 	public static boolean qaOpTest = false;
 	public static final JagString RELOADPLUGINS = JagString.parse("::reloadplugins");
 	public static final JagString PIXELLIGHT = JagString.parse("::pixellight");
+	public static final JagString SHADOWS = JagString.parse("::shadows");
+	public static final JagString SHADOWDEBUG = JagString.parse("::shadowdebug");
 
 	@OriginalMember(owner = "client!en", name = "a", descriptor = "(IIIB)V")
 	public static void teleport(@OriginalArg(0) int tileX, @OriginalArg(1) int tileY, @OriginalArg(2) int plane) {
@@ -174,6 +176,15 @@ public class Cheat {
 			}
 			if (command.equalsIgnoreCase(FPSOFF)) {
 				displayFps = false;
+			}
+			if (command.equalsIgnoreCase(SHADOWDEBUG)) {
+				PixelLighting.shadowDebug = !PixelLighting.shadowDebug;
+				Chat.add(null, 0, JagString.parse(PixelLighting.shadowDebug ? "Shadow debug ON" : "Shadow debug OFF"));
+			}
+			// Not part of the original client: compare shadows
+			if (command.equalsIgnoreCase(SHADOWS)) {
+				GlobalConfig.SHADOWS = !GlobalConfig.SHADOWS;
+				Chat.add(null, 0, JagString.parse(GlobalConfig.SHADOWS ? "Shadows ON" : "Shadows OFF"));
 			}
 			// Not part of the original client: compare per-pixel lighting
 			if (command.equalsIgnoreCase(PIXELLIGHT)) {

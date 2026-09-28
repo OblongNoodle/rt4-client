@@ -975,6 +975,19 @@ public final class GlModel extends Model {
 		@Pc(13) short cylinderRadius = this.bounds.cylinderRadius;
 		@Pc(17) short minY = this.bounds.minY;
 		@Pc(21) short maxY = this.bounds.maxY;
+		// Not part of the original client: drawn from the sun (PixelLighting),
+		// culled against the shadow area instead of the camera's view
+		if (PixelLighting.shadowPass) {
+			if (PixelLighting.castsShadow(sceneX, sceneY, sceneZ, cylinderRadius, minY, maxY)) {
+				GL2 shadowGl = GlRenderer.gl;
+				shadowGl.glPushMatrix();
+				shadowGl.glTranslatef((float) sceneX, (float) sceneY, (float) sceneZ);
+				shadowGl.glRotatef((float) yaw * 0.17578125F, 0.0F, 1.0F, 0.0F);
+				this.ensureBuffersAndDraw();
+				shadowGl.glPopMatrix();
+			}
+			return;
+		}
 		@Pc(31) int rotatedZ = sceneZ * cosCameraYaw - sceneX * sinCameraYaw >> 16;
 		@Pc(41) int projectedDepth = sceneY * sinCameraPitch + rotatedZ * cosCameraPitch >> 16;
 		@Pc(53) int nearClip = projectedDepth + (cylinderRadius * cosCameraPitch + maxY * sinCameraPitch >> 16);
