@@ -47,6 +47,10 @@ public class LoginManager {
 	public static int loops = 0;
 	@OriginalMember(owner = "client!ol", name = "V", descriptor = "I")
 	public static int step = 0;
+
+	// Not part of the original client: whether the login's first packet is an
+	// instance rebuild, see step 9
+	private static boolean loginRebuildDynamic = false;
 	@OriginalMember(owner = "client!qi", name = "A", descriptor = "I")
 	public static int disallowResult = -1;
 	@OriginalMember(owner = "client!wh", name = "s", descriptor = "I")
@@ -525,6 +529,7 @@ public class LoginManager {
 					}
 				}
 				Protocol.opcode = Protocol.inboundBuffer.g1isaac();
+				loginRebuildDynamic = Protocol.opcode == ServerProt.REBUILD_REGION;
 				Protocol.length = Protocol.inboundBuffer.g2();
 				step = 9;
 			}
@@ -538,7 +543,11 @@ public class LoginManager {
 				step = 0;
 				client.resetGameSessionState();
 				SceneGraph.centralZoneX = -1;
-				Protocol.readRebuildPacket(false);
+				// Not part of the original client: the first packet is always
+				// read as a normal rebuild there, but logging in inside an
+				// instance makes the server send REBUILD_REGION instead, which
+				// then decodes to garbage coordinates and crashes the client
+				Protocol.readRebuildPacket(loginRebuildDynamic);
 				Protocol.opcode = -1;
 			}
 		} catch (@Pc(977) IOException ex) {
