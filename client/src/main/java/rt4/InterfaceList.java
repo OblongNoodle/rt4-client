@@ -59,6 +59,8 @@ public class InterfaceList {
 	public static int miscTransmitAt = 0;
 	@OriginalMember(owner = "client!je", name = "T", descriptor = "Lclient!sc;")
 	public static HashTable openInterfaces = new HashTable(8);
+	// Not part of the original client; see runPendingOnLoadScripts
+	private static final java.util.ArrayList<Integer> pendingOnLoad = new java.util.ArrayList<>();
 	@OriginalMember(owner = "client!wl", name = "h", descriptor = "Lclient!be;")
 	public static Component gameViewportComponent = null;
 	@OriginalMember(owner = "client!jd", name = "i", descriptor = "Lclient!be;")
@@ -375,9 +377,18 @@ public class InterfaceList {
 
 	@OriginalMember(owner = "client!fn", name = "c", descriptor = "(II)V")
 	public static void runOnLoadScripts(@OriginalArg(0) int interfaceId) {
-		if (interfaceId == -1 || !load(interfaceId)) {
+		if (interfaceId == -1) {
 			return;
 		}
+		if (!load(interfaceId)) {
+			// Not part of the original client, which dropped the onLoad scripts
+			// here; see runPendingOnLoadScripts.
+			if (!pendingOnLoad.contains(interfaceId)) {
+				pendingOnLoad.add(interfaceId);
+			}
+			return;
+		}
+		pendingOnLoad.remove((Integer) interfaceId);
 		@Pc(31) Component[] children = components[interfaceId];
 		for (@Pc(33) int i = 0; i < children.length; i++) {
 			@Pc(41) Component child = children[i];
@@ -388,6 +399,43 @@ public class InterfaceList {
 				ScriptRunner.run(2000000, hookRequest);
 			}
 		}
+	}
+
+	// Not part of the original client. An interface opened before its cache
+	// group finished reading from disk (the bank, the first time it's opened
+	// after launch) never got its onLoad scripts run, so it showed up empty or
+	// half built until reopened. Called once a frame: runs those scripts as
+	// soon as the group is ready, or forgets them if the interface was closed.
+	public static void runPendingOnLoadScripts() {
+		if (pendingOnLoad.isEmpty()) {
+			return;
+		}
+		// Copied, since the scripts can open interfaces that land in the list
+		Integer[] pending = pendingOnLoad.toArray(new Integer[0]);
+		for (Integer interfaceId : pending) {
+			if (!isOpen(interfaceId)) {
+				pendingOnLoad.remove(interfaceId);
+			} else if (load(interfaceId)) {
+				System.out.println("[InterfaceList] ran deferred onLoad for interface " + interfaceId);
+				runOnLoadScripts(interfaceId);
+				if (topLevelInterface != -1) {
+					runScripts(1, topLevelInterface);
+				}
+			}
+		}
+	}
+
+	private static boolean isOpen(int interfaceId) {
+		if (interfaceId == topLevelInterface) {
+			return true;
+		}
+		HashTableIterator iter = new HashTableIterator(openInterfaces);
+		for (ComponentPointer ptr = (ComponentPointer) iter.first(); ptr != null; ptr = (ComponentPointer) iter.next()) {
+			if (ptr.interfaceId == interfaceId) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@OriginalMember(owner = "client!ke", name = "a", descriptor = "(ZLclient!wk;Z)V")

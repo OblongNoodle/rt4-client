@@ -2790,6 +2790,8 @@ public class Protocol {
 			InterfaceList.keyQueueSize++;
 		}
 		WorldMap.component = null;
+		CachePreloader.tick();
+		InterfaceList.runPendingOnLoadScripts();
 		if (InterfaceList.topLevelInterface != -1) {
 			InterfaceList.hoveringScrollableComponent = false;
 			InterfaceList.hoveringComponentId = -1;
