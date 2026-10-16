@@ -228,6 +228,17 @@ class plugin : Plugin() {
         // renders. A direct callback sidesteps the ordering question
         // entirely.
         var afterReflow: ((container: Component) -> Unit)? = null
+
+        // Asked at the START of every reflowItems(), before any tab boundary
+        // is computed - true means "a filtered view (BankTagLayouts' active
+        // tag) is showing, so lay out one plain grid with no Tab N labels,
+        // divider lines or indents." Hiding those from afterReflow alone
+        // isn't enough: whenever the bank's own script re-runs (every
+        // withdraw/deposit) it un-hides the native indents, and this frame's
+        // boundary pass reads that BEFORE afterReflow gets a chance to
+        // re-hide them - so the labels/lines flashed for one frame on every
+        // withdraw.
+        var suppressTabBoundaries: (() -> Boolean)? = null
     }
 
     override fun Draw(timeDelta: Long) {
@@ -446,6 +457,7 @@ class plugin : Plugin() {
         val boundaries = mutableListOf<Boundary>()
         val nativeHeadersToHide = mutableListOf<Int>()
         val indentActiveDebug = StringBuilder()
+        val suppressBoundaries = suppressTabBoundaries?.invoke() == true
         for ((i, varbitId) in TAB_SIZE_VARBITS.withIndex()) {
             val size = VarpDomain.getVarbit(varbitId)
             val itemsBefore = cumulative
@@ -454,7 +466,7 @@ class plugin : Plugin() {
             val indentIdx = INDENT_INDICES.getOrNull(i + 1)
             val indentActive = indentIdx?.let { components.getOrNull(it)?.hidden == false } == true
             indentActiveDebug.append(if (indentActive) "1" else "0")
-            if (!indentActive) continue
+            if (!indentActive || suppressBoundaries) continue
 
             // Tab 2 (i==0) never had a native header component to begin
             // with (nothing to hide there), but gets the same custom label
@@ -507,7 +519,7 @@ class plugin : Plugin() {
         // needed a 9th indent slot before Tab 1 was recognized as its own
         // real tab - it's unhidden here since we're the one giving it a job
         // for the first time, not native.
-        val finalBoundaries = if (remainderCount > 0) {
+        val finalBoundaries = if (remainderCount > 0 && !suppressBoundaries) {
             components.getOrNull(INDENT_INDICES[0])?.hidden = false
             listOf(Boundary(0, INDENT_INDICES[0], null)) + shiftedBoundaries
         } else {
